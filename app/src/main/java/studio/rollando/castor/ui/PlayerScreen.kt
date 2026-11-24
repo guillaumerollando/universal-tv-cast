@@ -237,6 +237,17 @@ private fun FilmHeader(state: CastState) {
                 Brush.verticalGradient(0f to Color.Transparent, 0.45f to Color.Black.copy(alpha = 0.15f), 1f to Color.Black.copy(alpha = 0.85f))
             )
         )
+        // Badge « sur la télé » : la petite télé et ses ondes, comme l'ancien écran, en miniature.
+        if (state.active) {
+            Box(
+                Modifier.align(Alignment.TopEnd).padding(12.dp).size(52.dp).clip(CircleShape)
+                    .background(Color.Black.copy(alpha = 0.35f)),
+                contentAlignment = Alignment.Center,
+            ) {
+                if (state.phase == Phase.PLAYING) CastWaves(Color.White, size = 52.dp, inner = 13.dp)
+                Icon(Icons.Rounded.Tv, null, Modifier.size(22.dp), tint = Color.White)
+            }
+        }
         Column(Modifier.align(Alignment.BottomStart).padding(18.dp)) {
             RemoteImage(
                 media.logoUrl, maxSide = 600, contentScale = ContentScale.Fit, alignment = Alignment.CenterStart,
@@ -247,7 +258,8 @@ private fun FilmHeader(state: CastState) {
             }
             Spacer(Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                LiveDot(active = state.phase == Phase.PLAYING)
+                if (state.active) EqualizerBars(active = state.phase == Phase.PLAYING, color = MaterialTheme.colorScheme.primary)
+                else LiveDot(active = false)
                 Spacer(Modifier.width(8.dp))
                 Text(
                     phaseLabel(state) + (state.renderer?.let { " · " + it.name } ?: ""),

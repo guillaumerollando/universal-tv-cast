@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 
 /** Vrai si l'utilisateur a coupé les animations dans Android (accessibilité). */
 @Composable
-private fun animationsOff(): Boolean {
+fun animationsOff(): Boolean {
     val ctx = LocalContext.current
     return remember {
         runCatching { Settings.Global.getFloat(ctx.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE) == 0f }
@@ -63,5 +63,32 @@ fun Modifier.castArcs(color: Color): Modifier = drawBehind {
             topLeft = Offset(origin.x - r, origin.y - r), size = Size(r * 2, r * 2),
             style = Stroke(width = 6.dp.toPx(), cap = StrokeCap.Round),
         )
+    }
+}
+
+
+/** Petites barres d'égaliseur qui dansent pendant la lecture (immobiles en pause ou sans animations). */
+@Composable
+fun EqualizerBars(active: Boolean, color: Color, modifier: Modifier = Modifier) {
+    val still = animationsOff() || !active
+    val t = rememberInfiniteTransition(label = "egaliseur")
+    val periods = listOf(520, 680, 450, 610)
+    val heights = periods.mapIndexed { i, ms ->
+        t.animateFloat(0.25f, 1f, infiniteRepeatable(tween(ms, delayMillis = i * 90), androidx.compose.animation.core.RepeatMode.Reverse), label = "barre$i")
+    }
+    Canvas(modifier.size(width = 18.dp, height = 14.dp)) {
+        val n = heights.size
+        val gap = 2.dp.toPx()
+        val w = (this.size.width - gap * (n - 1)) / n
+        heights.forEachIndexed { i, h ->
+            val v = if (still) listOf(0.5f, 0.8f, 0.35f, 0.65f)[i] else h.value
+            val bh = this.size.height * v
+            drawRoundRect(
+                color = color,
+                topLeft = Offset(i * (w + gap), this.size.height - bh),
+                size = Size(w, bh),
+                cornerRadius = androidx.compose.ui.geometry.CornerRadius(w / 2, w / 2),
+            )
+        }
     }
 }

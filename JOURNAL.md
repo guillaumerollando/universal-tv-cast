@@ -167,3 +167,6 @@ et logo du titre (metahub ; image de l'épisode pour une série). Onglet Lecture
 (ou titre) et état de la lecture en surimpression, ambiance floutée en fond (Android 12+) ; petites affiches dans
 « Lu récemment » ; affiche dans la notification. Chargeur d'images maison (cache 24 Mo, réduction), aucune
 bibliothèque. Rien n'est envoyé à la télé. Vérifié sur émulateur (Spider-Man, Breaking Bad S03E07).
+
+## 2026-11-25 — Animation « en cours de lecture » sur l'en-tête du film
+Badge télé avec ondes (en haut à droite) et barres d'égaliseur à côté de l'état ; immobiles en pause ou sans animations.

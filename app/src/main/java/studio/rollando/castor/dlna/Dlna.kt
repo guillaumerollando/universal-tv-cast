@@ -43,6 +43,9 @@ data class Renderer(
 /** La télé a répondu par une erreur UPnP. */
 class TvError(val detail: String) : IOException(detail)
 
+/** La télé ne répond pas (occupée, en train de redémarrer ou éteinte). */
+class TvBusy(cause: Throwable) : IOException(cause)
+
 object Dlna {
     private const val SSDP_ADDR = "239.255.255.250"
     private val TARGETS = listOf(
@@ -267,7 +270,21 @@ object Dlna {
         }
     }
 
-    private fun soap(url: String, type: String, action: String, args: List<Pair<String, String>>): String {
+    /** Une seule commande à la fois : le serveur UPnP des télés (libupnp) sature vite. */
+    private val soapLock = Any()
+
+    private fun soap(url: String, type: String, action: String, args: List<Pair<String, String>>, readTimeout: Int = 8000): String =
+        synchronized(soapLock) {
+            try {
+                soapNow(url, type, action, args, readTimeout)
+            } catch (e: java.net.SocketTimeoutException) {
+                throw TvBusy(e)
+            } catch (e: java.net.ConnectException) {
+                throw TvBusy(e)
+            }
+        }
+
+    private fun soapNow(url: String, type: String, action: String, args: List<Pair<String, String>>, readTimeout: Int): String {
         val body = buildString {
             append("<?xml version=\"1.0\" encoding=\"utf-8\"?>")
             append("<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" ")
@@ -281,7 +298,7 @@ object Dlna {
             c.requestMethod = "POST"
             c.doOutput = true
             c.connectTimeout = 5000
-            c.readTimeout = 8000
+            c.readTimeout = readTimeout
             c.setRequestProperty("Content-Type", "text/xml; charset=\"utf-8\"")
             c.setRequestProperty("SOAPACTION", "\"$type#$action\"")
             c.setFixedLengthStreamingMode(body.size)
@@ -304,7 +321,9 @@ object Dlna {
             .find(xml)?.groupValues?.get(1)?.trim()
 
     private fun av(r: Renderer, action: String, vararg args: Pair<String, String>) =
-        soap(r.avUrl, r.avType, action, listOf("InstanceID" to "0") + args)
+        soap(r.avUrl, r.avType, action, listOf("InstanceID" to "0") + args,
+            // La télé interroge la vidéo (HEAD) avant de répondre à ces commandes.
+            readTimeout = if (action == "SetAVTransportURI" || action == "Play" || action == "Seek") 25_000 else 6000)
 
     private fun rc(r: Renderer, action: String, vararg args: Pair<String, String>): String {
         val url = r.rcUrl ?: throw TvError("no volume control")

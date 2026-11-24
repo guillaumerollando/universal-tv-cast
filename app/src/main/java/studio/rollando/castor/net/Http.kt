@@ -20,13 +20,14 @@ object Http {
         headers: Map<String, String>,
         range: String? = null,
         connectTimeout: Int = 15_000,
+        readTimeout: Int = 30_000,
     ): HttpURLConnection {
         var current = url
         repeat(8) {
             val c = URL(current).openConnection() as HttpURLConnection
             c.instanceFollowRedirects = false
             c.connectTimeout = connectTimeout
-            c.readTimeout = 30_000
+            c.readTimeout = readTimeout
             var hasUa = false
             for ((k, v) in headers) {
                 if (k.lowercase() in SKIPPED) continue

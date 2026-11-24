@@ -17,6 +17,8 @@
     <string name="tv_ip_help">Você encontra nas configurações de rede da TV.</string>
     <string name="action_add">Adicionar</string>
     <string name="err_ip_not_found">Nenhuma TV compatível encontrada em %1$s.</string>
+    <string name="notice_resumed">A TV interrompeu a reprodução: retomando em %1$s.</string>
+    <string name="err_tv_busy">A TV não está respondendo. Aguarde alguns segundos e tente de novo.</string>
     <string name="cd_settings">Configurações</string>
     <string name="home_title">Envie qualquer vídeo para a sua TV</string>
     <string name="home_subtitle">Grátis. Sem anúncios. Sem rastreamento.</string>

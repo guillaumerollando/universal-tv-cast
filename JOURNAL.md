@@ -44,3 +44,25 @@ du fichier (`Range: bytes=<fin>-`) avant de lire.
 - Vérifié de bout en bout : téléphone → Castor → télé, flux HLS chiffré protégé par Referer : lu jusqu'au bout.
 
 **Pas fait** : essai par le testeur sur ses vraies sources ; sous-titres sur cette télé.
+
+## 2026-11-24 — Avance qui échoue, télé qui part sur HDMI 1, télé qui plante
+**Constat** (journaux du téléphone, source Stremio) : les commandes « changer de vidéo » restaient sans réponse
+(la télé interroge la vidéo avant de répondre, et le relais réinterrogeait Stremio à chaque fois) ; Castor
+continuait à questionner la télé deux fois par seconde et laissait relancer l'envoi : la télé a fini par planter.
+Avancer loin dans un torrent : le morceau met plus de 10 s à venir, le lecteur de la télé abandonne et la télé
+repart sur la dernière source (HDMI 1). La télé refuse aussi un déplacement pendant le précédent (710) et un
+changement de vidéo pendant la lecture (« Transport locked ») mais l'accepte en pause.
+
+**Fait**
+- Relais : taille et type de la vidéo mémorisés, réponses immédiates aux questions de la télé ; attente de la
+  source jusqu'à 2 min ; journal `CastorProxy` de tout ce que demande la télé.
+- Une seule commande à la fois vers la télé ; interrogation toutes les 2 s, en pause pendant une commande et
+  ralentie si la télé ne répond plus ; message « la télé ne répond pas ».
+- Appuis ±10 s regroupés ; attente que la télé soit prête avant de la déplacer.
+- **Préchargement** : avant de déplacer la télé, Castor fait venir le morceau de la source et attend qu'il soit là.
+- Changement de vidéo par pause au lieu de Stop.
+- **Reprise automatique** (2 fois max.) si la télé quitte la lecture en plein milieu.
+- Fausse télé et faux site lent (`tools/test-tele/`) : tout vérifié sur émulateur sans toucher la vraie télé.
+
+**Pas fait** : essai par le testeur sur la vraie télé avec Stremio. Le bouton Arrêter et la fin de vidéo
+renvoient toujours sur la dernière source (choix de la télé).

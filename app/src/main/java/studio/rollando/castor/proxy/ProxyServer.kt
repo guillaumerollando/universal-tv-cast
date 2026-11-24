@@ -43,6 +43,10 @@ class ProxyServer(private val ctx: Context) {
     private val locals = ConcurrentHashMap<String, Uri>()
     private val counter = AtomicInteger(0)
 
+    /** Taille, type et prise en charge des plages d'une vidéo directe, pour répondre tout de suite à la télé. */
+    private class Meta(val total: Long, val type: String?, val ranges: Boolean)
+    private val metas = ConcurrentHashMap<String, Meta>()
+
     @Volatile var subtitle: ByteArray? = null
     @Volatile var subtitleUrl: String? = null
     /** Nom du format tel que la télé l'accepte (ex. « video/mpeg » au lieu de « video/mp2t »). */
@@ -60,7 +64,7 @@ class ProxyServer(private val ctx: Context) {
     fun baseUrl(): String = "http://${Net.localIp() ?: "127.0.0.1"}:$port"
 
     fun reset() {
-        remotes.clear(); idsByUrl.clear(); locals.clear()
+        remotes.clear(); idsByUrl.clear(); locals.clear(); metas.clear()
         subtitle = null; subtitleUrl = null; mimeOverride = null
     }
 
@@ -70,6 +74,64 @@ class ProxyServer(private val ctx: Context) {
             remotes[id] = Remote(url, headers, kind)
             id
         }
+
+    /**
+     * Interroge la source une fois (premier octet seulement) pour connaître taille et type.
+     * La télé pose ces questions (HEAD) pendant le changement de vidéo et attend la réponse :
+     * avec une source lente (torrent via Stremio…), elle restait bloquée.
+     */
+    fun prefetchMeta(id: String): Boolean {
+        val r = remotes[id] ?: return false
+        metas[id]?.let { return true }
+        val t0 = System.currentTimeMillis()
+        val conn = runCatching { Http.open(r.url, r.headers, "bytes=0-0", readTimeout = 60_000) }.getOrNull() ?: return false
+        try {
+            val code = conn.responseCode
+            val ct = conn.contentType?.substringBefore(';')?.trim()
+            if (code >= 400 || ct?.contains("mpegurl", true) == true) return false
+            val total = when (code) {
+                206 -> conn.getHeaderField("Content-Range")?.substringAfterLast('/')?.toLongOrNull() ?: -1
+                else -> conn.getHeaderField("Content-Length")?.toLongOrNull() ?: -1
+            }
+            metas[id] = Meta(total, ct, code == 206)
+            Log.i(TAG, "meta $id code=$code total=$total type=$ct en ${System.currentTimeMillis() - t0} ms")
+            return true
+        } finally {
+            conn.disconnect()
+        }
+    }
+
+    /**
+     * Fait venir à l'avance le morceau de vidéo situé à [fraction] (0..1) de la source, et attend qu'il arrive.
+     * Avec une source lente (torrent), la télé abandonne au bout d'une dizaine de secondes et quitte
+     * le lecteur ; une fois le morceau téléchargé par la source, son déplacement est immédiat.
+     */
+    fun prewarm(id: String, fraction: Double, maxMs: Int = 60_000): Boolean {
+        val r = remotes[id] ?: return false
+        val m = metas[id] ?: run { prefetchMeta(id); metas[id] } ?: return false
+        if (!m.ranges || m.total <= 0) return false
+        val off = (m.total * fraction.coerceIn(0.0, 1.0)).toLong().coerceIn(0, m.total - 1)
+        val t0 = System.currentTimeMillis()
+        val conn = runCatching { Http.open(r.url, r.headers, "bytes=$off-", readTimeout = maxMs) }.getOrNull() ?: return false
+        return try {
+            val buf = ByteArray(256 * 1024)
+            var got = 0
+            conn.inputStream.use { ins ->
+                while (got < buf.size) {
+                    val n = ins.read(buf, got, buf.size - got)
+                    if (n < 0) break
+                    got += n
+                }
+            }
+            Log.i(TAG, "préchargement $id à ${(fraction * 100).toInt()} % : ${got / 1024} Ko en ${System.currentTimeMillis() - t0} ms")
+            got > 0
+        } catch (e: IOException) {
+            Log.i(TAG, "préchargement $id échoué : ${e.message}")
+            false
+        } finally {
+            conn.disconnect()
+        }
+    }
 
     fun registerLocal(uri: Uri): String {
         val id = "l" + counter.incrementAndGet()
@@ -104,6 +166,9 @@ class ProxyServer(private val ctx: Context) {
                         .associate { it.substringBefore('=') to Uri.decode(it.substringAfter('=')) },
                     headers = headers,
                 )
+                if (req.seg.getOrNull(0) != "r" || remotes[req.seg.getOrNull(1)]?.kind == Kind.MAIN) {
+                    Log.i(TAG, "télé → ${req.method} ${target.take(80)} range=${headers["range"]}")
+                }
                 when (req.seg.getOrNull(0)) {
                     "r" -> serveRemote(req, out)
                     "ts" -> serveContinuous(req, out)
@@ -112,8 +177,9 @@ class ProxyServer(private val ctx: Context) {
                     else -> empty(out, 404, "Not Found")
                 }
                 out.flush()
-            } catch (_: IOException) {
-                // La télé a fermé la connexion : normal (avance rapide, arrêt…).
+            } catch (e: IOException) {
+                // Souvent normal (la télé ferme la connexion pour avancer ou s'arrêter), mais utile au diagnostic.
+                Log.i(TAG, "connexion close : ${e.javaClass.simpleName} ${e.message}")
             } catch (e: Exception) {
                 Log.w(TAG, "proxy", e)
             }
@@ -155,10 +221,34 @@ class ProxyServer(private val ctx: Context) {
     // ------------------------------------------------------------------ vidéo distante
 
     private fun serveRemote(req: Req, out: OutputStream) {
-        val r = remotes[req.seg.getOrNull(1)] ?: return empty(out, 404, "Not Found")
-        val conn = Http.open(r.url, r.headers, if (r.kind == Kind.MAIN) req.headers["range"] else null)
+        val id = req.seg.getOrNull(1) ?: ""
+        val r = remotes[id] ?: return empty(out, 404, "Not Found")
+        if (r.kind == Kind.MAIN && req.method == "HEAD") {
+            if (metas[id] == null) prefetchMeta(id)
+            metas[id]?.let { m ->
+                val type = mimeOverride ?: if (Mime.isMedia(m.type)) m.type!! else Mime.guess(r.url)
+                val h = mutableListOf("Content-Type" to type)
+                if (m.ranges) h += "Accept-Ranges" to "bytes"
+                val start = req.headers["range"]?.let { Regex("bytes=(\\d+)-").find(it)?.groupValues?.get(1)?.toLongOrNull() }
+                if (start != null && m.ranges && m.total > 0 && start < m.total) {
+                    h += "Content-Range" to "bytes $start-${m.total - 1}/${m.total}"
+                    h += "Content-Length" to (m.total - start).toString()
+                    head(out, 206, "Partial Content", h + dlna(seekable = true))
+                } else {
+                    if (m.total > 0) h += "Content-Length" to m.total.toString()
+                    head(out, 200, "OK", h + dlna(seekable = m.ranges))
+                }
+                Log.i(TAG, "HEAD $id -> (mémoire) total=${m.total} plage=${req.headers["range"]}")
+                return
+            }
+        }
+        val t0 = System.currentTimeMillis()
+        val range = if (r.kind == Kind.MAIN) req.headers["range"] else null
+        val conn = Http.open(r.url, r.headers, range, readTimeout = if (r.kind == Kind.MAIN) 120_000 else 30_000)
         try {
             val code = conn.responseCode
+            if (r.kind == Kind.MAIN) Log.i(TAG, "${req.method} $id range=$range -> source $code " +
+                "len=${conn.getHeaderField("Content-Length")} en ${System.currentTimeMillis() - t0} ms")
             if (code >= 400) return empty(out, code, "Upstream Error")
             val ct = conn.contentType?.substringBefore(';')?.trim()
 
@@ -439,5 +529,5 @@ class ProxyServer(private val ctx: Context) {
         fun finish() { out.write("0\r\n\r\n".toByteArray(Charsets.ISO_8859_1)); out.flush() }
     }
 
-    companion object { private const val TAG = "Castor" }
+    companion object { private const val TAG = "CastorProxy" }
 }

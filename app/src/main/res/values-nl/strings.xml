@@ -47,6 +47,15 @@
     <string name="help_hdmi_body">Sommige tv’s gaan terug naar de laatste bron (HDMI) als een video eindigt of stopt. Dat doet de tv zelf; gebruik met Castor liever pauze.</string>
     <string name="help_sleep_title">Het afspelen stopt als het scherm uitgaat</string>
     <string name="help_sleep_body">Laat Castor op de achtergrond draaien.</string>
+    <string name="help_title">Hulp</string>
+    <string name="cd_help">Hulp</string>
+    <string name="action_help">Hulp</string>
+    <string name="help_report">Probleem melden</string>
+    <string name="help_report_hint">Je e-mailapp opent met wat technische gegevens (model telefoon en tv, appversie, laatste melding). Er wordt niets verstuurd zonder jou.</string>
+    <string name="report_subject">Castor %1$s: een probleem</string>
+    <string name="report_intro">Beschrijf het probleem hier:</string>
+    <string name="settings_shake">Schudden voor hulp</string>
+    <string name="settings_shake_sub">Schud je telefoon om hulp te openen en een probleem te melden.</string>
     <string name="cd_settings">Instellingen</string>
     <string name="home_title">Stuur elke video naar je tv</string>
     <string name="home_subtitle">Gratis. Geen advertenties. Geen tracking.</string>

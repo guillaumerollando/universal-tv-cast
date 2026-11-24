@@ -6,7 +6,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.view.KeyEvent
+import studio.rollando.castor.data.Library
+import kotlin.math.sqrt
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -25,7 +31,10 @@ class CastorApplication : Application() {
     }
 }
 
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), SensorEventListener {
+    private var lastShake = 0L
+    private var shakeCount = 0
+
     private val askNotifications = registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +48,34 @@ class MainActivity : ComponentActivity() {
             checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
         ) askNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
     }
+
+    override fun onResume() {
+        super.onResume()
+        val sm = getSystemService(SensorManager::class.java)
+        sm?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.let { sm.registerListener(this, it, SensorManager.SENSOR_DELAY_UI) }
+    }
+
+    override fun onPause() {
+        getSystemService(SensorManager::class.java)?.unregisterListener(this)
+        super.onPause()
+    }
+
+    /** Secouer le téléphone (deux secousses franches en moins d'une seconde) ouvre l'aide. */
+    override fun onSensorChanged(e: SensorEvent) {
+        if (!Library.shakeHelp.value || Nav.help.value) return
+        val g = sqrt(e.values[0] * e.values[0] + e.values[1] * e.values[1] + e.values[2] * e.values[2]) / SensorManager.GRAVITY_EARTH
+        if (g < 2.7f) return
+        val now = System.currentTimeMillis()
+        if (now - lastShake < 250) return
+        shakeCount = if (now - lastShake < 1000) shakeCount + 1 else 1
+        lastShake = now
+        if (shakeCount >= 2) {
+            shakeCount = 0
+            Nav.help.value = true
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)

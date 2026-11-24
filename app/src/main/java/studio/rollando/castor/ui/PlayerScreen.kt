@@ -143,6 +143,11 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
                     )
                     IconButton(onClick = Castor::dismissNotice) { Icon(Icons.Rounded.Close, stringResource(R.string.cd_dismiss)) }
                 }
+                if (n.error) {
+                    TextButton(onClick = { Nav.help.value = true }, modifier = Modifier.padding(start = 8.dp)) {
+                        Text(stringResource(R.string.action_help))
+                    }
+                }
                 val pkg = media.sourceApp
                 if (n.res == R.string.notice_source_asleep && pkg != null) {
                     val context = LocalContext.current

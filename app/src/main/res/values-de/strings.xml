@@ -47,6 +47,15 @@
     <string name="help_hdmi_body">Manche Fernseher springen zur letzten Quelle (HDMI) zurück, wenn ein Video endet oder gestoppt wird. Das macht der Fernseher selbst; nutze mit Castor lieber Pause.</string>
     <string name="help_sleep_title">Die Wiedergabe stoppt, wenn der Bildschirm ausgeht</string>
     <string name="help_sleep_body">Erlaube Castor, im Hintergrund zu laufen.</string>
+    <string name="help_title">Hilfe</string>
+    <string name="cd_help">Hilfe</string>
+    <string name="action_help">Hilfe</string>
+    <string name="help_report">Problem melden</string>
+    <string name="help_report_hint">Deine E-Mail-App öffnet sich mit ein paar technischen Angaben (Handy- und TV-Modell, App-Version, letzte Meldung). Ohne dich wird nichts gesendet.</string>
+    <string name="report_subject">Castor %1$s: ein Problem</string>
+    <string name="report_intro">Beschreibe das Problem hier:</string>
+    <string name="settings_shake">Schütteln für Hilfe</string>
+    <string name="settings_shake_sub">Schüttle das Handy, um die Hilfe zu öffnen und ein Problem zu melden.</string>
     <string name="cd_settings">Einstellungen</string>
     <string name="home_title">Schick jedes Video auf deinen Fernseher</string>
     <string name="home_subtitle">Kostenlos. Ohne Werbung. Ohne Tracking.</string>

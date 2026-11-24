@@ -25,6 +25,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.HelpOutline
 import androidx.compose.material.icons.rounded.Cast
 import androidx.compose.material.icons.rounded.CastConnected
 import androidx.compose.material.icons.rounded.Home
@@ -95,6 +96,8 @@ enum class Tab { HOME, BROWSER, PLAYER }
 object Nav {
     val tab = MutableStateFlow(Tab.HOME)
     val openUrl = MutableStateFlow<String?>(null)
+    /** Panneau d'aide ouvert (bouton « ? », secousse, lien dans une erreur). */
+    val help = MutableStateFlow(false)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -127,6 +130,9 @@ fun CastorApp() {
                 },
                 actions = {
                     TvChip(state.renderer?.name, state.searching) { showTvs = true }
+                    IconButton(onClick = { Nav.help.value = true }) {
+                        Icon(Icons.AutoMirrored.Rounded.HelpOutline, stringResource(R.string.cd_help))
+                    }
                     IconButton(onClick = { showSettings = true }) {
                         Icon(Icons.Rounded.Settings, stringResource(R.string.cd_settings))
                     }
@@ -171,6 +177,8 @@ fun CastorApp() {
 
     if (showTvs) TvSheet(onDismiss = { showTvs = false })
     if (showSettings) SettingsSheet(onDismiss = { showSettings = false })
+    val showHelp by Nav.help.collectAsState()
+    if (showHelp) HelpSheet(onDismiss = { Nav.help.value = false })
     if (showLink) LinkDialog(onDismiss = { showLink = false })
 }
 
@@ -345,7 +353,12 @@ private fun SettingsSheet(onDismiss: () -> Unit) {
                 )
             }
             item { HorizontalDivider(Modifier.padding(vertical = 8.dp)) }
-            item { TroubleshootingSection() }
+            item {
+                val shake by Library.shakeHelp.collectAsState()
+                SwitchRow(stringResource(R.string.settings_shake), stringResource(R.string.settings_shake_sub), shake) {
+                    Library.setShakeHelp(it)
+                }
+            }
             item { HorizontalDivider(Modifier.padding(vertical = 8.dp)) }
             item {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {

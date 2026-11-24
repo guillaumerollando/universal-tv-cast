@@ -47,6 +47,15 @@
     <string name="help_hdmi_body">Certaines télés repassent sur la dernière entrée (HDMI) quand une vidéo se termine ou est arrêtée. C’est le fonctionnement de la télé ; avec Castor, préfère la pause.</string>
     <string name="help_sleep_title">La lecture s’arrête quand l’écran du téléphone s’éteint</string>
     <string name="help_sleep_body">Autorise Castor à tourner en arrière-plan.</string>
+    <string name="help_title">Aide</string>
+    <string name="cd_help">Aide</string>
+    <string name="action_help">Aide</string>
+    <string name="help_report">Signaler un problème</string>
+    <string name="help_report_hint">Ton appli e-mail s’ouvre avec quelques infos techniques (modèle du téléphone et de la télé, version de l’appli, dernier message). Rien ne part sans toi.</string>
+    <string name="report_subject">Castor %1$s : un problème</string>
+    <string name="report_intro">Décris le problème ici :</string>
+    <string name="settings_shake">Secouer pour obtenir de l’aide</string>
+    <string name="settings_shake_sub">Secoue le téléphone pour ouvrir l’aide et signaler un problème.</string>
     <string name="cd_settings">Réglages</string>
     <string name="home_title">Envoie n’importe quelle vidéo sur ta télé</string>
     <string name="home_subtitle">Gratuit. Sans pub. Sans pistage.</string>

@@ -47,6 +47,15 @@
     <string name="help_hdmi_body">Algumas TVs voltam para a última entrada (HDMI) quando um vídeo termina ou é parado. É o comportamento da TV; com o Castor, prefira pausar.</string>
     <string name="help_sleep_title">A reprodução para quando a tela do celular apaga</string>
     <string name="help_sleep_body">Permita que o Castor rode em segundo plano.</string>
+    <string name="help_title">Ajuda</string>
+    <string name="cd_help">Ajuda</string>
+    <string name="action_help">Ajuda</string>
+    <string name="help_report">Relatar um problema</string>
+    <string name="help_report_hint">Seu app de e-mail abre com alguns dados técnicos (modelo do celular e da TV, versão do app, última mensagem). Nada é enviado sem você.</string>
+    <string name="report_subject">Castor %1$s: um problema</string>
+    <string name="report_intro">Descreva o problema aqui:</string>
+    <string name="settings_shake">Agitar para obter ajuda</string>
+    <string name="settings_shake_sub">Agite o celular para abrir a ajuda e relatar um problema.</string>
     <string name="cd_settings">Configurações</string>
     <string name="home_title">Envie qualquer vídeo para a sua TV</string>
     <string name="home_subtitle">Grátis. Sem anúncios. Sem rastreamento.</string>

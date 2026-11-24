@@ -1,6 +1,11 @@
 package studio.rollando.castor.ui
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.rounded.BugReport
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -99,11 +104,40 @@ private val HELP = listOf(
     Help(R.string.help_sleep_title, R.string.help_sleep_body, ownSettings = true),
 )
 
-/** Rubrique « Dépannage » des réglages : les problèmes courants et leur solution. */
+/** Panneau d'aide : problèmes courants, puis « Signaler un problème ». */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HelpSheet(onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    val state by studio.rollando.castor.cast.Castor.state.collectAsState()
+    ModalBottomSheet(onDismissRequest = onDismiss) {
+        LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
+            item {
+                Text(stringResource(R.string.help_title), style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp).semantics { heading() })
+            }
+            item { TroubleshootingSection() }
+            item {
+                Column(Modifier.padding(horizontal = 24.dp, vertical = 12.dp)) {
+                    Text(stringResource(R.string.help_report_hint), style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Spacer(Modifier.height(8.dp))
+                    FilledTonalButton(onClick = { Report.send(context, state) }, modifier = Modifier.fillMaxWidth().height(52.dp)) {
+                        Icon(Icons.Rounded.BugReport, null)
+                        Spacer(Modifier.width(8.dp))
+                        Text(stringResource(R.string.help_report))
+                    }
+                }
+            }
+        }
+    }
+}
+
+/** Les problèmes courants et leur solution (panneau d'aide). */
 @Composable
 fun TroubleshootingSection() {
     val context = LocalContext.current
-    Column(Modifier.padding(horizontal = 16.dp)) {
+    Column(Modifier.padding(horizontal = 24.dp)) {
         Text(stringResource(R.string.help_section), style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(vertical = 8.dp).semantics { heading() })
         HELP.forEach { h ->

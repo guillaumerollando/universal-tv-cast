@@ -107,3 +107,9 @@ affiche l'affiche/le titre à la place des infos techniques ; si elle affiche de
   (Stremio…), sinon pour Castor pendant une diffusion ; bouton vers ses réglages et « Ne plus afficher ».
 - Rubrique « Dépannage » dans les réglages : télé introuvable, vidéo figée en avançant, format non pris en charge,
   sous-titres, changement de source à la fin, arrêt quand l'écran s'éteint. 7 langues. Vu sur émulateur.
+
+## 2026-11-25 — Aide à la place du dépannage dans les réglages
+**Fait** : bouton « ? » en haut, panneau Aide (problèmes courants + « Signaler un problème » qui ouvre l'appli
+e-mail vers rollandostudio@gmail.com avec modèle du téléphone et de la télé, version, dernier message), lien
+« Aide » dans les messages d'erreur, secouer le téléphone ouvre l'aide (réglage pour le couper). Vérifié sur
+émulateur (secousse simulée).

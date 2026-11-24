@@ -47,6 +47,15 @@
     <string name="help_hdmi_body">Alcune TV tornano all’ultima sorgente (HDMI) quando un video finisce o viene fermato. È un comportamento della TV; con Castor preferisci la pausa.</string>
     <string name="help_sleep_title">La riproduzione si ferma quando lo schermo si spegne</string>
     <string name="help_sleep_body">Consenti a Castor di funzionare in background.</string>
+    <string name="help_title">Aiuto</string>
+    <string name="cd_help">Aiuto</string>
+    <string name="action_help">Aiuto</string>
+    <string name="help_report">Segnala un problema</string>
+    <string name="help_report_hint">Si apre la tua app di posta con alcune info tecniche (modello di telefono e TV, versione dell’app, ultimo messaggio). Non parte nulla senza di te.</string>
+    <string name="report_subject">Castor %1$s: un problema</string>
+    <string name="report_intro">Descrivi il problema qui:</string>
+    <string name="settings_shake">Scuoti per ricevere aiuto</string>
+    <string name="settings_shake_sub">Scuoti il telefono per aprire l’aiuto e segnalare un problema.</string>
     <string name="cd_settings">Impostazioni</string>
     <string name="home_title">Manda qualsiasi video sulla tua TV</string>
     <string name="home_subtitle">Gratis. Senza pubblicità. Senza tracciamento.</string>

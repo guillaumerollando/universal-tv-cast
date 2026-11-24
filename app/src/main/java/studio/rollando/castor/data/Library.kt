@@ -33,6 +33,7 @@ object Library {
         _bookmarks.value = runCatching { readBookmarks(JSONArray(prefs.getString("bookmarks", "[]"))) }.getOrDefault(emptyList())
         _adBlock.value = prefs.getBoolean("adblock", true)
         _continuous.value = prefs.getBoolean("continuous", true)
+        _shakeHelp.value = prefs.getBoolean("shake_help", true)
         _dismissedTips.value = prefs.getStringSet("tips_dismissed", emptySet()).orEmpty().toSet()
     }
 
@@ -49,6 +50,11 @@ object Library {
     }
 
     fun setAdBlock(on: Boolean) { _adBlock.value = on; prefs.edit().putBoolean("adblock", on).apply() }
+    private val _shakeHelp = MutableStateFlow(true)
+    /** Secouer le téléphone ouvre l'aide. */
+    val shakeHelp: StateFlow<Boolean> = _shakeHelp
+    fun setShakeHelp(on: Boolean) { _shakeHelp.value = on; prefs.edit().putBoolean("shake_help", on).apply() }
+
     private val _dismissedTips = MutableStateFlow<Set<String>>(emptySet())
     /** Conseils que l'utilisateur a choisi de ne plus voir. */
     val dismissedTips: StateFlow<Set<String>> = _dismissedTips

@@ -1,0 +1,345 @@
+package studio.rollando.castor.browser
+
+import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Message
+import android.view.ViewGroup
+import android.webkit.CookieManager
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ArrowForward
+import androidx.compose.material.icons.rounded.Cast
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Movie
+import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.StarBorder
+import androidx.compose.material.icons.rounded.Stream
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import studio.rollando.castor.R
+import studio.rollando.castor.cast.Castor
+import studio.rollando.castor.cast.Media
+import studio.rollando.castor.data.Library
+import studio.rollando.castor.ui.Nav
+import studio.rollando.castor.ui.Tab
+import java.io.ByteArrayInputStream
+
+/** Le navigateur intégré, gardé en vie quand on change d'onglet. */
+@SuppressLint("SetJavaScriptEnabled")
+class BrowserController(context: Context) {
+    val sniffer = VideoSniffer()
+    var url by mutableStateOf("")
+    var title by mutableStateOf("")
+    var progress by mutableIntStateOf(100)
+    var canGoBack by mutableStateOf(false)
+    var canGoForward by mutableStateOf(false)
+    var started by mutableStateOf(false)
+    private var lastHost: String? = null
+
+    val webView: WebView = WebView(context).apply {
+        layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        with(settings) {
+            javaScriptEnabled = true
+            domStorageEnabled = true
+            mediaPlaybackRequiresUserGesture = true
+            setSupportMultipleWindows(true)
+            javaScriptCanOpenWindowsAutomatically = false
+            loadWithOverviewMode = true
+            useWideViewPort = true
+            builtInZoomControls = true
+            displayZoomControls = false
+        }
+        sniffer.userAgent = settings.userAgentString
+        CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
+        addJavascriptInterface(sniffer.Bridge(), "CastorBridge")
+        webViewClient = object : WebViewClient() {
+            override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
+                if (Library.adBlock.value && AdBlock.blocked(request.url)) {
+                    return WebResourceResponse("text/plain", "utf-8", ByteArrayInputStream(ByteArray(0)))
+                }
+                sniffer.inspect(request)
+                return null
+            }
+
+            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+                val scheme = request.url.scheme
+                if (scheme != "http" && scheme != "https") return true // intent://, market://… : on reste ici.
+                if (Library.adBlock.value && AdBlock.blocked(request.url)) return true
+                return false
+            }
+
+            override fun onPageStarted(view: WebView, u: String, favicon: Bitmap?) {
+                val host = Uri.parse(u).host
+                if (host != lastHost) sniffer.reset()
+                lastHost = host
+                this@BrowserController.url = u
+                sniffer.pageUrl = u
+                refreshNav(view)
+            }
+
+            override fun onPageFinished(view: WebView, u: String) {
+                view.evaluateJavascript(VideoSniffer.SCRIPT, null)
+                refreshNav(view)
+            }
+
+            override fun doUpdateVisitedHistory(view: WebView, u: String, isReload: Boolean) {
+                this@BrowserController.url = u
+                sniffer.pageUrl = u
+                refreshNav(view)
+            }
+        }
+        webChromeClient = object : WebChromeClient() {
+            override fun onProgressChanged(view: WebView, newProgress: Int) { this@BrowserController.progress = newProgress }
+            override fun onReceivedTitle(view: WebView, t: String?) {
+                this@BrowserController.title = t.orEmpty()
+                sniffer.pageTitle = t.orEmpty()
+            }
+            // Fenêtres surgissantes (souvent des pubs) : refusées.
+            override fun onCreateWindow(view: WebView, isDialog: Boolean, isUserGesture: Boolean, resultMsg: Message?) = false
+        }
+    }
+
+    private fun refreshNav(v: WebView) {
+        canGoBack = v.canGoBack()
+        canGoForward = v.canGoForward()
+    }
+
+    fun load(input: String) {
+        val t = input.trim()
+        if (t.isEmpty()) return
+        val target = when {
+            t.startsWith("http://") || t.startsWith("https://") -> t
+            !t.contains(' ') && t.contains('.') -> "https://$t"
+            else -> "https://duckduckgo.com/?q=" + Uri.encode(t)
+        }
+        started = true
+        webView.loadUrl(target)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BrowserScreen(b: BrowserController) {
+    val found by b.sniffer.found.collectAsState()
+    val bookmarks by Library.bookmarks.collectAsState()
+    var showFound by remember { mutableStateOf(false) }
+    var editing by remember { mutableStateOf(false) }
+    var input by remember { mutableStateOf("") }
+    val focus = LocalFocusManager.current
+    val c = MaterialTheme.colorScheme
+    val isBookmarked = bookmarks.any { it.url == b.url }
+
+    BackHandler(enabled = b.canGoBack) { b.webView.goBack() }
+
+    Column(Modifier.fillMaxSize()) {
+        Row(Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onClick = { b.webView.goBack() }, enabled = b.canGoBack) {
+                Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.cd_back))
+            }
+            TextField(
+                value = if (editing) input else (Uri.parse(b.url).host?.removePrefix("www.") ?: b.url),
+                onValueChange = { input = it },
+                singleLine = true,
+                placeholder = { Text(stringResource(R.string.browser_hint), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                leadingIcon = { Icon(Icons.Rounded.Search, null) },
+                trailingIcon = {
+                    if (editing && input.isNotEmpty()) IconButton(onClick = { input = "" }) {
+                        Icon(Icons.Rounded.Close, stringResource(R.string.cd_clear))
+                    }
+                },
+                shape = RoundedCornerShape(50),
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = Color.Transparent, unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                ),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri, imeAction = ImeAction.Go),
+                keyboardActions = KeyboardActions(onGo = { b.load(input); focus.clearFocus() }),
+                modifier = Modifier.weight(1f).height(52.dp).onFocusChanged {
+                    if (it.isFocused && !editing) input = b.url
+                    editing = it.isFocused
+                },
+            )
+            if (b.started && b.url.isNotEmpty()) {
+                IconButton(onClick = { Library.toggleBookmark(b.title, b.url) }) {
+                    Icon(
+                        if (isBookmarked) Icons.Rounded.Star else Icons.Rounded.StarBorder,
+                        stringResource(if (isBookmarked) R.string.cd_bookmark_remove else R.string.cd_bookmark_add),
+                        tint = if (isBookmarked) c.primary else c.onSurfaceVariant,
+                    )
+                }
+            }
+            if (b.canGoForward) IconButton(onClick = { b.webView.goForward() }) {
+                Icon(Icons.AutoMirrored.Rounded.ArrowForward, stringResource(R.string.cd_forward))
+            }
+            IconButton(onClick = { b.webView.reload() }, enabled = b.started) {
+                Icon(Icons.Rounded.Refresh, stringResource(R.string.cd_reload))
+            }
+        }
+        if (b.started && b.progress < 100) LinearProgressIndicator(progress = { b.progress / 100f }, modifier = Modifier.fillMaxWidth())
+
+        Box(Modifier.weight(1f).fillMaxWidth()) {
+            if (b.started) {
+                AndroidView(factory = { (b.webView.parent as? ViewGroup)?.removeView(b.webView); b.webView }, modifier = Modifier.fillMaxSize())
+            } else {
+                StartPage(onOpen = { b.load(it) })
+            }
+            androidx.compose.animation.AnimatedVisibility(
+                visible = found.isNotEmpty(),
+                enter = scaleIn(), exit = scaleOut(),
+                modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
+            ) {
+                ExtendedFloatingActionButton(
+                    onClick = { showFound = true },
+                    icon = { Icon(Icons.Rounded.Cast, null) },
+                    text = { Text(pluralStringResource(R.plurals.browser_found, found.size, found.size)) },
+                    containerColor = c.primary, contentColor = c.onPrimary,
+                )
+            }
+        }
+    }
+
+    if (showFound) {
+        ModalBottomSheet(onDismissRequest = { showFound = false }) {
+            Column(Modifier.padding(horizontal = 24.dp)) {
+                Text(stringResource(R.string.browser_sheet_title), style = MaterialTheme.typography.titleLarge)
+                Spacer(Modifier.height(4.dp))
+                Text(stringResource(R.string.browser_sheet_hint), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
+                Spacer(Modifier.height(12.dp))
+            }
+            LazyColumn(contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 32.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                itemsIndexed(found, key = { _, f -> f.url }) { i, f ->
+                    ListItem(
+                        headlineContent = { Text(f.label, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                        supportingContent = {
+                            Text(
+                                listOfNotNull(if (f.hls) "HLS" else "MP4/WebM", f.host, if (i == 0) stringResource(R.string.browser_best) else null)
+                                    .joinToString(" · "),
+                                maxLines = 1, overflow = TextOverflow.Ellipsis,
+                            )
+                        },
+                        leadingContent = {
+                            Box(Modifier.size(44.dp).clip(RoundedCornerShape(12.dp)).background(c.primary.copy(alpha = 0.16f)),
+                                contentAlignment = Alignment.Center) {
+                                Icon(if (f.hls) Icons.Rounded.Stream else Icons.Rounded.Movie, null, tint = c.primary)
+                            }
+                        },
+                        trailingContent = { Icon(Icons.Rounded.Cast, null) },
+                        colors = ListItemDefaults.colors(containerColor = c.surfaceContainerLow),
+                        modifier = Modifier.clip(RoundedCornerShape(16.dp)).clickable(role = Role.Button) {
+                            showFound = false
+                            Castor.open(
+                                Media(
+                                    url = f.url,
+                                    title = f.pageTitle.ifBlank { f.label },
+                                    mime = if (f.hls) "application/vnd.apple.mpegurl" else null,
+                                    headers = f.headers,
+                                    pageUrl = f.pageUrl,
+                                )
+                            )
+                            Nav.tab.value = Tab.PLAYER
+                        },
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun StartPage(onOpen: (String) -> Unit) {
+    val bookmarks by Library.bookmarks.collectAsState()
+    val c = MaterialTheme.colorScheme
+    LazyColumn(
+        Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        item {
+            Spacer(Modifier.height(24.dp))
+            Box(Modifier.size(96.dp).clip(RoundedCornerShape(32.dp)).background(c.primary.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                Icon(Icons.Rounded.Search, null, Modifier.size(48.dp), tint = c.primary)
+            }
+            Spacer(Modifier.height(16.dp))
+        }
+        item { Text(stringResource(R.string.browser_start_title), style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center) }
+        item {
+            Text(stringResource(R.string.browser_start_body), style = MaterialTheme.typography.bodyLarge,
+                color = c.onSurfaceVariant, textAlign = TextAlign.Center)
+            Spacer(Modifier.height(16.dp))
+        }
+        itemsIndexed(bookmarks, key = { _, b -> b.url }) { _, bm ->
+            ListItem(
+                headlineContent = { Text(bm.title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                supportingContent = { Text(Uri.parse(bm.url).host?.removePrefix("www.") ?: "", maxLines = 1) },
+                leadingContent = { Icon(Icons.Rounded.Star, null, tint = c.primary) },
+                colors = ListItemDefaults.colors(containerColor = c.surfaceContainerLow),
+                modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).clickable(role = Role.Button) { onOpen(bm.url) },
+            )
+        }
+    }
+}

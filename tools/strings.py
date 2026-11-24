@@ -1,0 +1,194 @@
+#!/usr/bin/env python3
+"""Génère res/values*/strings.xml pour les 7 langues depuis ce tableau (une seule source de vérité)."""
+import os, html
+
+LANGS = ["en", "fr", "es", "de", "it", "nl", "pt-rBR"]
+S = {
+"app_name": ["Castor"]*7,
+"intent_cast_label": ["Cast to TV", "Caster sur la télé", "Enviar a la TV", "Auf den Fernseher streamen", "Trasmetti alla TV", "Casten naar tv", "Transmitir para a TV"],
+"tab_home": ["Home", "Accueil", "Inicio", "Start", "Home", "Start", "Início"],
+"tab_browser": ["Browser", "Navigateur", "Navegador", "Browser", "Browser", "Browser", "Navegador"],
+"tab_player": ["Playing", "Lecture", "Reproducción", "Wiedergabe", "Riproduzione", "Afspelen", "Reprodução"],
+"tv_choose": ["Choose a TV", "Choisir une télé", "Elegir una TV", "Fernseher wählen", "Scegli una TV", "Kies een tv", "Escolher uma TV"],
+"cd_choose_tv": ["TV", "Télé", "TV", "Fernseher", "TV", "Tv", "TV"],
+"tv_sheet_title": ["TVs on your Wi-Fi", "Télés sur ton Wi-Fi", "TV en tu wifi", "Fernseher in deinem WLAN", "TV sulla tua rete Wi-Fi", "Tv's op je wifi", "TVs no seu Wi-Fi"],
+"tv_searching": ["Searching…", "Recherche…", "Buscando…", "Suche läuft…", "Ricerca…", "Zoeken…", "Procurando…"],
+"tv_search_again": ["Search again", "Chercher à nouveau", "Buscar de nuevo", "Erneut suchen", "Cerca di nuovo", "Opnieuw zoeken", "Procurar de novo"],
+"tv_none_title": ["No TV found", "Aucune télé trouvée", "No se encontró ninguna TV", "Kein Fernseher gefunden", "Nessuna TV trovata", "Geen tv gevonden", "Nenhuma TV encontrada"],
+"tv_none_body": [
+ "Turn on your TV and check that your phone is on the same Wi-Fi network. Castor works with TVs that support DLNA (most Philips, Samsung, LG, Sony, Panasonic, Hisense…).",
+ "Allume ta télé et vérifie que ton téléphone est sur le même Wi-Fi. Castor fonctionne avec les télés compatibles DLNA (la plupart des Philips, Samsung, LG, Sony, Panasonic, Hisense…).",
+ "Enciende la TV y comprueba que el móvil está en la misma red wifi. Castor funciona con las TV compatibles con DLNA (la mayoría de Philips, Samsung, LG, Sony, Panasonic, Hisense…).",
+ "Schalte den Fernseher ein und prüfe, ob dein Handy im selben WLAN ist. Castor funktioniert mit DLNA-fähigen Fernsehern (die meisten von Philips, Samsung, LG, Sony, Panasonic, Hisense…).",
+ "Accendi la TV e controlla che il telefono sia sulla stessa rete Wi-Fi. Castor funziona con le TV compatibili DLNA (la maggior parte di Philips, Samsung, LG, Sony, Panasonic, Hisense…).",
+ "Zet je tv aan en controleer of je telefoon op hetzelfde wifi-netwerk zit. Castor werkt met tv's die DLNA ondersteunen (de meeste van Philips, Samsung, LG, Sony, Panasonic, Hisense…).",
+ "Ligue a TV e verifique se o celular está na mesma rede Wi-Fi. O Castor funciona com TVs compatíveis com DLNA (a maioria das Philips, Samsung, LG, Sony, Panasonic, Hisense…)."],
+"cd_settings": ["Settings", "Réglages", "Ajustes", "Einstellungen", "Impostazioni", "Instellingen", "Configurações"],
+"home_title": ["Send any video to your TV", "Envoie n’importe quelle vidéo sur ta télé", "Envía cualquier vídeo a tu TV", "Schick jedes Video auf deinen Fernseher", "Manda qualsiasi video sulla tua TV", "Stuur elke video naar je tv", "Envie qualquer vídeo para a sua TV"],
+"home_subtitle": ["Free. No ads. No tracking.", "Gratuit. Sans pub. Sans pistage.", "Gratis. Sin anuncios. Sin rastreo.", "Kostenlos. Ohne Werbung. Ohne Tracking.", "Gratis. Senza pubblicità. Senza tracciamento.", "Gratis. Geen advertenties. Geen tracking.", "Grátis. Sem anúncios. Sem rastreamento."],
+"home_browse": ["Browse a website", "Naviguer sur un site", "Navegar por una web", "Eine Website öffnen", "Naviga su un sito", "Een website openen", "Navegar em um site"],
+"home_browse_sub": ["Castor spots the videos on the page", "Castor repère les vidéos de la page", "Castor detecta los vídeos de la página", "Castor findet die Videos auf der Seite", "Castor trova i video nella pagina", "Castor vindt de video's op de pagina", "O Castor encontra os vídeos da página"],
+"home_files": ["Videos on this phone", "Vidéos du téléphone", "Vídeos del móvil", "Videos auf dem Handy", "Video sul telefono", "Video's op deze telefoon", "Vídeos do celular"],
+"home_files_sub": ["Films, clips, music", "Films, clips, musique", "Películas, clips, música", "Filme, Clips, Musik", "Film, clip, musica", "Films, clips, muziek", "Filmes, clipes, música"],
+"home_link": ["Paste a link", "Coller un lien", "Pegar un enlace", "Link einfügen", "Incolla un link", "Link plakken", "Colar um link"],
+"home_link_sub": ["Direct link to a video or an .m3u8 stream", "Lien direct vers une vidéo ou un flux .m3u8", "Enlace directo a un vídeo o a un flujo .m3u8", "Direktlink zu einem Video oder .m3u8-Stream", "Link diretto a un video o a uno stream .m3u8", "Directe link naar een video of .m3u8-stream", "Link direto para um vídeo ou stream .m3u8"],
+"home_other_title": ["From another app", "Depuis une autre appli", "Desde otra app", "Aus einer anderen App", "Da un’altra app", "Vanuit een andere app", "De outro app"],
+"home_other_body": [
+ "In your video app, choose “External player”, “Open with” or “Share”, then Castor.",
+ "Dans ton appli vidéo, choisis « Lecteur externe », « Ouvrir avec » ou « Partager », puis Castor.",
+ "En tu app de vídeo, elige «Reproductor externo», «Abrir con» o «Compartir» y luego Castor.",
+ "Wähle in deiner Video-App „Externer Player“, „Öffnen mit“ oder „Teilen“ und dann Castor.",
+ "Nella tua app video scegli «Lettore esterno», «Apri con» o «Condividi», poi Castor.",
+ "Kies in je video-app ‘Externe speler’, ‘Openen met’ of ‘Delen’ en daarna Castor.",
+ "No seu app de vídeo, escolha “Player externo”, “Abrir com” ou “Compartilhar” e depois o Castor."],
+"home_bookmarks": ["Bookmarks", "Favoris", "Favoritos", "Lesezeichen", "Preferiti", "Bladwijzers", "Favoritos"],
+"home_recents": ["Recently played", "Lu récemment", "Reproducido recientemente", "Zuletzt abgespielt", "Riprodotti di recente", "Recent afgespeeld", "Reproduzidos recentemente"],
+"cd_delete": ["Remove", "Retirer", "Quitar", "Entfernen", "Rimuovi", "Verwijderen", "Remover"],
+"link_dialog_title": ["Paste a video link", "Colle un lien vidéo", "Pega un enlace de vídeo", "Videolink einfügen", "Incolla il link di un video", "Plak een videolink", "Cole um link de vídeo"],
+"action_cast": ["Cast", "Caster", "Enviar", "Streamen", "Trasmetti", "Casten", "Transmitir"],
+"action_cancel": ["Cancel", "Annuler", "Cancelar", "Abbrechen", "Annulla", "Annuleren", "Cancelar"],
+"browser_hint": ["Search or address", "Site ou recherche", "Web o búsqueda", "Suche oder Adresse", "Sito o ricerca", "Zoek of adres", "Site ou pesquisa"],
+"cd_back": ["Back", "Précédent", "Atrás", "Zurück", "Indietro", "Terug", "Voltar"],
+"cd_forward": ["Forward", "Suivant", "Adelante", "Vorwärts", "Avanti", "Vooruit", "Avançar"],
+"cd_reload": ["Reload", "Recharger", "Recargar", "Neu laden", "Ricarica", "Opnieuw laden", "Recarregar"],
+"cd_clear": ["Clear", "Effacer", "Borrar", "Löschen", "Cancella", "Wissen", "Limpar"],
+"cd_bookmark_add": ["Add to bookmarks", "Ajouter aux favoris", "Añadir a favoritos", "Zu Lesezeichen hinzufügen", "Aggiungi ai preferiti", "Toevoegen aan bladwijzers", "Adicionar aos favoritos"],
+"cd_bookmark_remove": ["Remove from bookmarks", "Retirer des favoris", "Quitar de favoritos", "Aus Lesezeichen entfernen", "Rimuovi dai preferiti", "Verwijderen uit bladwijzers", "Remover dos favoritos"],
+"browser_sheet_title": ["Videos on this page", "Vidéos de la page", "Vídeos de esta página", "Videos auf dieser Seite", "Video in questa pagina", "Video's op deze pagina", "Vídeos desta página"],
+"browser_sheet_hint": [
+ "Pick the one to send to the TV. If it doesn’t play, try the next one.",
+ "Choisis celle à envoyer sur la télé. Si elle ne se lance pas, essaie la suivante.",
+ "Elige el que quieres enviar a la TV. Si no se reproduce, prueba el siguiente.",
+ "Wähle das Video für den Fernseher. Wenn es nicht startet, probier das nächste.",
+ "Scegli quello da mandare alla TV. Se non parte, prova il successivo.",
+ "Kies welke naar de tv moet. Speelt hij niet af, probeer dan de volgende.",
+ "Escolha o que enviar para a TV. Se não tocar, tente o próximo."],
+"browser_best": ["best guess", "le plus probable", "el más probable", "wahrscheinlich", "il più probabile", "meest waarschijnlijk", "o mais provável"],
+"browser_start_title": ["Find a video on the web", "Trouve une vidéo sur le web", "Encuentra un vídeo en la web", "Finde ein Video im Web", "Trova un video sul web", "Vind een video op het web", "Encontre um vídeo na web"],
+"browser_start_body": [
+ "Open the page with the video and start playing it. A button will appear to send it to your TV.",
+ "Ouvre la page de la vidéo et lance-la. Un bouton apparaîtra pour l’envoyer sur ta télé.",
+ "Abre la página del vídeo y reprodúcelo. Aparecerá un botón para enviarlo a tu TV.",
+ "Öffne die Seite mit dem Video und starte es. Dann erscheint ein Button, um es auf den Fernseher zu schicken.",
+ "Apri la pagina del video e avvialo. Comparirà un pulsante per mandarlo sulla TV.",
+ "Open de pagina met de video en start hem. Er verschijnt een knop om hem naar je tv te sturen.",
+ "Abra a página do vídeo e dê o play. Vai aparecer um botão para enviá-lo à TV."],
+"player_empty_title": ["Nothing playing", "Rien en cours", "No se está reproduciendo nada", "Nichts wird abgespielt", "Niente in riproduzione", "Er speelt niets", "Nada tocando"],
+"player_empty_body": [
+ "Pick a video from the home screen, the browser or another app.",
+ "Choisis une vidéo depuis l’accueil, le navigateur ou une autre appli.",
+ "Elige un vídeo desde el inicio, el navegador u otra app.",
+ "Wähle ein Video auf dem Startbildschirm, im Browser oder in einer anderen App.",
+ "Scegli un video dalla home, dal browser o da un’altra app.",
+ "Kies een video via het startscherm, de browser of een andere app.",
+ "Escolha um vídeo no início, no navegador ou em outro app."],
+"phase_loading": ["Preparing the video…", "Préparation de la vidéo…", "Preparando el vídeo…", "Video wird vorbereitet…", "Preparazione del video…", "Video voorbereiden…", "Preparando o vídeo…"],
+"phase_sending": ["Sending to the TV…", "Envoi à la télé…", "Enviando a la TV…", "Wird an den Fernseher gesendet…", "Invio alla TV…", "Naar de tv sturen…", "Enviando para a TV…"],
+"phase_buffering": ["Loading on the TV…", "Chargement sur la télé…", "Cargando en la TV…", "Lädt auf dem Fernseher…", "Caricamento sulla TV…", "Laden op de tv…", "Carregando na TV…"],
+"phase_playing": ["Playing on the TV", "Lecture sur la télé", "Reproduciendo en la TV", "Läuft auf dem Fernseher", "In riproduzione sulla TV", "Speelt af op de tv", "Tocando na TV"],
+"phase_paused": ["Paused", "En pause", "En pausa", "Pausiert", "In pausa", "Gepauzeerd", "Pausado"],
+"phase_stopped": ["Stopped", "Arrêté", "Detenido", "Gestoppt", "Interrotto", "Gestopt", "Parado"],
+"phase_ready": ["Ready to cast", "Prêt à caster", "Listo para enviar", "Bereit zum Streamen", "Pronto da trasmettere", "Klaar om te casten", "Pronto para transmitir"],
+"player_on_tv": ["On %1$s", "Sur %1$s", "En %1$s", "Auf %1$s", "Su %1$s", "Op %1$s", "Em %1$s"],
+"player_live": ["Live", "En direct", "En directo", "Live", "In diretta", "Live", "Ao vivo"],
+"action_cast_to": ["Play on %1$s", "Lire sur %1$s", "Reproducir en %1$s", "Auf %1$s abspielen", "Riproduci su %1$s", "Afspelen op %1$s", "Tocar em %1$s"],
+"action_cast_pick": ["Choose a TV", "Choisir une télé", "Elegir una TV", "Fernseher wählen", "Scegli una TV", "Kies een tv", "Escolher uma TV"],
+"cd_rewind": ["Back 10 seconds", "Reculer de 10 secondes", "Retroceder 10 segundos", "10 Sekunden zurück", "Indietro di 10 secondi", "10 seconden terug", "Voltar 10 segundos"],
+"cd_forward10": ["Forward 10 seconds", "Avancer de 10 secondes", "Avanzar 10 segundos", "10 Sekunden vor", "Avanti di 10 secondi", "10 seconden vooruit", "Avançar 10 segundos"],
+"action_play": ["Play", "Lecture", "Reproducir", "Abspielen", "Riproduci", "Afspelen", "Tocar"],
+"action_pause": ["Pause", "Pause", "Pausa", "Pause", "Pausa", "Pauze", "Pausar"],
+"action_stop": ["Stop", "Arrêter", "Detener", "Stopp", "Ferma", "Stoppen", "Parar"],
+"cd_vol_down": ["TV volume down", "Baisser le son de la télé", "Bajar el volumen de la TV", "Fernseher leiser", "Abbassa il volume della TV", "Tv zachter", "Diminuir o volume da TV"],
+"cd_vol_up": ["TV volume up", "Monter le son de la télé", "Subir el volumen de la TV", "Fernseher lauter", "Alza il volume della TV", "Tv harder", "Aumentar o volume da TV"],
+"volume_label": ["Volume %1$d", "Volume %1$d", "Volumen %1$d", "Lautstärke %1$d", "Volume %1$d", "Volume %1$d", "Volume %1$d"],
+"volume_unknown": ["TV volume", "Son de la télé", "Volumen de la TV", "Lautstärke", "Volume della TV", "Tv-volume", "Volume da TV"],
+"subs_title": ["Subtitles", "Sous-titres", "Subtítulos", "Untertitel", "Sottotitoli", "Ondertiteling", "Legendas"],
+"subs_none": ["None", "Aucun", "Ninguno", "Keine", "Nessuno", "Geen", "Nenhuma"],
+"subs_add": ["Add a file", "Ajouter un fichier", "Añadir archivo", "Datei hinzufügen", "Aggiungi file", "Bestand toevoegen", "Adicionar arquivo"],
+"subs_note": [
+ "SRT, VTT and ASS files are supported. Some TVs don’t show subtitles sent this way.",
+ "Fichiers SRT, VTT et ASS acceptés. Certaines télés n’affichent pas les sous-titres envoyés ainsi.",
+ "Se admiten archivos SRT, VTT y ASS. Algunas TV no muestran los subtítulos enviados así.",
+ "SRT-, VTT- und ASS-Dateien werden unterstützt. Manche Fernseher zeigen so gesendete Untertitel nicht an.",
+ "File SRT, VTT e ASS supportati. Alcune TV non mostrano i sottotitoli inviati in questo modo.",
+ "SRT-, VTT- en ASS-bestanden worden ondersteund. Sommige tv's tonen ondertiteling die zo verstuurd wordt niet.",
+ "Arquivos SRT, VTT e ASS são aceitos. Algumas TVs não mostram legendas enviadas assim."],
+"mode_title": ["Streaming mode", "Mode de lecture", "Modo de reproducción", "Wiedergabemodus", "Modalità di riproduzione", "Afspeelmodus", "Modo de reprodução"],
+"mode_continuous": ["Continuous", "Continu", "Continuo", "Durchgehend", "Continuo", "Doorlopend", "Contínuo"],
+"mode_direct": ["Direct", "Direct", "Directo", "Direkt", "Diretto", "Direct", "Direto"],
+"mode_continuous_help": [
+ "Works with almost every TV. Skipping restarts the stream at the new position.",
+ "Marche avec presque toutes les télés. Avancer relance le flux au nouvel endroit.",
+ "Funciona con casi todas las TV. Al avanzar, el flujo se reinicia en la nueva posición.",
+ "Funktioniert mit fast jedem Fernseher. Beim Spulen startet der Stream an der neuen Stelle neu.",
+ "Funziona con quasi tutte le TV. Andando avanti, lo stream riparte dal nuovo punto.",
+ "Werkt met bijna elke tv. Bij doorspoelen start de stream opnieuw op de nieuwe plek.",
+ "Funciona com quase todas as TVs. Ao avançar, o stream recomeça na nova posição."],
+"mode_direct_help": [
+ "Sends the stream as is. Smoother skipping, if your TV can read HLS streams.",
+ "Envoie le flux tel quel. Avance plus fluide, si ta télé sait lire les flux HLS.",
+ "Envía el flujo tal cual. Avance más fluido si tu TV puede leer flujos HLS.",
+ "Sendet den Stream unverändert. Flüssigeres Spulen, wenn dein Fernseher HLS-Streams lesen kann.",
+ "Invia lo stream così com’è. Avanzamento più fluido, se la tua TV legge gli stream HLS.",
+ "Stuurt de stream zoals hij is. Soepeler doorspoelen, als je tv HLS-streams kan lezen.",
+ "Envia o stream como está. Avanço mais suave, se a sua TV lê streams HLS."],
+"mode_split_audio": [
+ "This video has its sound on a separate track, so direct mode is used to keep the sound.",
+ "Le son de cette vidéo est sur une piste à part : le mode direct est utilisé pour le garder.",
+ "El sonido de este vídeo está en una pista aparte: se usa el modo directo para conservarlo.",
+ "Der Ton dieses Videos liegt auf einer eigenen Spur, daher wird der Direktmodus verwendet.",
+ "L’audio di questo video è su una traccia separata: si usa la modalità diretta per mantenerlo.",
+ "Het geluid van deze video staat op een apart spoor, dus de directe modus wordt gebruikt.",
+ "O som deste vídeo está em uma faixa separada: o modo direto é usado para mantê-lo."],
+"notice_pick_tv": ["Choose a TV to start playback.", "Choisis une télé pour lancer la lecture.", "Elige una TV para empezar la reproducción.", "Wähle einen Fernseher, um die Wiedergabe zu starten.", "Scegli una TV per avviare la riproduzione.", "Kies een tv om het afspelen te starten.", "Escolha uma TV para começar."],
+"err_no_wifi": ["Connect your phone to the same Wi-Fi as the TV.", "Connecte ton téléphone au même Wi-Fi que la télé.", "Conecta el móvil a la misma wifi que la TV.", "Verbinde dein Handy mit demselben WLAN wie den Fernseher.", "Collega il telefono alla stessa rete Wi-Fi della TV.", "Verbind je telefoon met hetzelfde wifi-netwerk als de tv.", "Conecte o celular ao mesmo Wi-Fi da TV."],
+"err_drm": ["This video is copy-protected (DRM) and can’t be sent to the TV.", "Cette vidéo est protégée (DRM) et ne peut pas être envoyée sur la télé.", "Este vídeo está protegido (DRM) y no se puede enviar a la TV.", "Dieses Video ist kopiergeschützt (DRM) und kann nicht gesendet werden.", "Questo video è protetto (DRM) e non può essere inviato alla TV.", "Deze video is beveiligd (DRM) en kan niet naar de tv.", "Este vídeo é protegido (DRM) e não pode ser enviado à TV."],
+"err_tv": ["The TV refused the request (%1$s). It may not support this video format.", "La télé a refusé (%1$s). Elle ne lit peut-être pas ce format de vidéo.", "La TV ha rechazado la petición (%1$s). Puede que no admita este formato.", "Der Fernseher hat abgelehnt (%1$s). Vielleicht unterstützt er dieses Format nicht.", "La TV ha rifiutato la richiesta (%1$s). Forse non supporta questo formato.", "De tv weigerde (%1$s). Misschien ondersteunt hij dit formaat niet.", "A TV recusou o pedido (%1$s). Talvez ela não aceite este formato."],
+"err_source": ["The video site refused access (error %1$s). The link may have expired: reopen the page and try again.", "Le site de la vidéo refuse l’accès (erreur %1$s). Le lien a peut-être expiré : rouvre la page et réessaie.", "La web del vídeo deniega el acceso (error %1$s). El enlace puede haber caducado: vuelve a abrir la página.", "Die Video-Website verweigert den Zugriff (Fehler %1$s). Der Link ist vielleicht abgelaufen: Seite neu öffnen.", "Il sito del video nega l’accesso (errore %1$s). Il link potrebbe essere scaduto: riapri la pagina.", "De videosite weigert de toegang (fout %1$s). De link is misschien verlopen: open de pagina opnieuw.", "O site do vídeo recusou o acesso (erro %1$s). O link pode ter expirado: abra a página de novo."],
+"err_network": ["Network problem. Check your Wi-Fi connection.", "Problème de réseau. Vérifie ta connexion Wi-Fi.", "Problema de red. Comprueba tu conexión wifi.", "Netzwerkproblem. Prüfe deine WLAN-Verbindung.", "Problema di rete. Controlla la connessione Wi-Fi.", "Netwerkprobleem. Controleer je wifi-verbinding.", "Problema de rede. Verifique o Wi-Fi."],
+"err_generic": ["Something went wrong: %1$s", "Un souci est survenu : %1$s", "Algo ha fallado: %1$s", "Etwas ist schiefgelaufen: %1$s", "Qualcosa è andato storto: %1$s", "Er ging iets mis: %1$s", "Algo deu errado: %1$s"],
+"err_subtitle": ["Couldn’t read these subtitles.", "Impossible de lire ces sous-titres.", "No se pudieron leer estos subtítulos.", "Diese Untertitel konnten nicht gelesen werden.", "Impossibile leggere questi sottotitoli.", "Deze ondertiteling kon niet worden gelezen.", "Não foi possível ler estas legendas."],
+"cd_dismiss": ["Dismiss", "Fermer", "Cerrar", "Schließen", "Chiudi", "Sluiten", "Fechar"],
+"settings_title": ["Settings", "Réglages", "Ajustes", "Einstellungen", "Impostazioni", "Instellingen", "Configurações"],
+"settings_adblock": ["Block ads in the browser", "Bloquer les pubs du navigateur", "Bloquear anuncios en el navegador", "Werbung im Browser blockieren", "Blocca la pubblicità nel browser", "Advertenties in de browser blokkeren", "Bloquear anúncios no navegador"],
+"settings_adblock_sub": ["Also blocks pop-up windows.", "Bloque aussi les fenêtres surgissantes.", "También bloquea las ventanas emergentes.", "Blockiert auch Pop-up-Fenster.", "Blocca anche le finestre pop-up.", "Blokkeert ook pop-upvensters.", "Também bloqueia janelas pop-up."],
+"settings_continuous": ["Continuous mode by default", "Mode continu par défaut", "Modo continuo por defecto", "Standardmäßig durchgehend", "Modalità continua predefinita", "Standaard doorlopende modus", "Modo contínuo por padrão"],
+"settings_continuous_sub": ["For streaming sites (HLS). Works with almost every TV.", "Pour les sites de streaming (HLS). Marche avec presque toutes les télés.", "Para webs de streaming (HLS). Funciona con casi todas las TV.", "Für Streaming-Seiten (HLS). Funktioniert mit fast jedem Fernseher.", "Per i siti di streaming (HLS). Funziona con quasi tutte le TV.", "Voor streamingsites (HLS). Werkt met bijna elke tv.", "Para sites de streaming (HLS). Funciona com quase todas as TVs."],
+"settings_clear": ["Clear playback history", "Effacer l’historique de lecture", "Borrar el historial", "Wiedergabeverlauf löschen", "Cancella la cronologia", "Afspeelgeschiedenis wissen", "Limpar o histórico"],
+"about_version": ["Version %1$s", "Version %1$s", "Versión %1$s", "Version %1$s", "Versione %1$s", "Versie %1$s", "Versão %1$s"],
+"about_body": [
+ "Castor is free, with no ads and no tracking. Everything stays on your phone. Made with care by Rollando Studio.",
+ "Castor est gratuit, sans pub et sans pistage. Tout reste sur ton téléphone. Fait avec soin par Rollando Studio.",
+ "Castor es gratis, sin anuncios y sin rastreo. Todo se queda en tu móvil. Hecho con cariño por Rollando Studio.",
+ "Castor ist kostenlos, ohne Werbung und ohne Tracking. Alles bleibt auf deinem Handy. Mit Sorgfalt gemacht von Rollando Studio.",
+ "Castor è gratis, senza pubblicità e senza tracciamento. Tutto resta sul tuo telefono. Fatto con cura da Rollando Studio.",
+ "Castor is gratis, zonder advertenties en zonder tracking. Alles blijft op je telefoon. Met zorg gemaakt door Rollando Studio.",
+ "O Castor é grátis, sem anúncios e sem rastreamento. Tudo fica no seu celular. Feito com carinho pela Rollando Studio."],
+"about_more": ["Discover our other apps", "Découvrir nos autres applis", "Descubre nuestras otras apps", "Unsere anderen Apps entdecken", "Scopri le nostre altre app", "Ontdek onze andere apps", "Conheça nossos outros apps"],
+"notif_channel": ["Playback on the TV", "Lecture sur la télé", "Reproducción en la TV", "Wiedergabe auf dem Fernseher", "Riproduzione sulla TV", "Afspelen op de tv", "Reprodução na TV"],
+"notif_on_tv": ["On %1$s", "Sur %1$s", "En %1$s", "Auf %1$s", "Su %1$s", "Op %1$s", "Em %1$s"],
+}
+PLURALS = {"browser_found": [
+ ("%d video", "%d videos"), ("%d vidéo", "%d vidéos"), ("%d vídeo", "%d vídeos"), ("%d Video", "%d Videos"),
+ ("%d video", "%d video"), ("%d video", "%d video's"), ("%d vídeo", "%d vídeos")]}
+
+def esc(s):
+    s = html.escape(s, quote=False)
+    return s.replace("'", "\\'").replace('"', '\\"')
+
+root = os.path.join(os.path.dirname(__file__), "..", "app", "src", "main", "res")
+for i, lang in enumerate(LANGS):
+    d = os.path.join(root, "values" if lang == "en" else f"values-{lang}")
+    os.makedirs(d, exist_ok=True)
+    out = ['<?xml version="1.0" encoding="utf-8"?>', "<!-- Généré par tools/strings.py : ne pas modifier à la main. -->", "<resources>"]
+    for k, v in S.items():
+        assert len(v) == 7, k
+        if lang != "en" and k == "app_name":
+            continue
+        out.append(f'    <string name="{k}">{esc(v[i])}</string>')
+    for k, v in PLURALS.items():
+        one, other = v[i]
+        out.append(f'    <plurals name="{k}">\n        <item quantity="one">{esc(one)}</item>\n        <item quantity="other">{esc(other)}</item>\n    </plurals>')
+    out.append("</resources>\n")
+    open(os.path.join(d, "strings.xml"), "w").write("\n".join(out))
+print(len(S), "textes x", len(LANGS), "langues")

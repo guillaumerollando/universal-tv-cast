@@ -281,9 +281,7 @@ object Castor {
         startOffset = if (continuous) start.toLong().toDouble() else 0.0
         // N'arrêter que si la télé lit déjà quelque chose : sur certaines télés (Philips Titan OS),
         // un « Stop » à vide ferme le lecteur et renvoie sur la dernière source (HDMI…).
-        val tvState = runCatching { Dlna.transportState(r) }.getOrNull()
-        if (tvState == "PLAYING" || tvState == "PAUSED_PLAYBACK" || tvState == "TRANSITIONING") runCatching { Dlna.stop(r) }
-        Dlna.setUri(r, url, Dlna.didl(m.title, url, mime, subUrl, seekable = !continuous))
+        replaceMedia(r, url, Dlna.didl(m.title, url, mime, subUrl, seekable = !continuous))
         Dlna.play(r)
         castTime = System.currentTimeMillis()
         CastService.start(app)
@@ -318,7 +316,8 @@ object Castor {
                         }
                         s.copy(
                             phase = phase,
-                            position = if (rel > 0 || phase == Phase.PLAYING) startOffset + rel else s.position,
+                            position = if (System.currentTimeMillis() < holdPositionUntil) s.position
+                                else if (rel > 0 || phase == Phase.PLAYING) startOffset + rel else s.position,
                             duration = when {
                                 hlsDuration > 0 -> hlsDuration
                                 dur > 0 -> dur
@@ -349,18 +348,78 @@ object Castor {
         }
     }
 
-    fun seekTo(seconds: Double) = exec {
+    private var seekJob: Job? = null
+    @Volatile private var holdPositionUntil = 0L
+
+    /**
+     * Les appuis rapprochés (±10 s, glissement) sont regroupés : la télé refuse un déplacement
+     * reçu pendant qu'elle traite le précédent (erreur UPnP 710 sur les Philips Titan OS).
+     */
+    fun seekTo(seconds: Double, debounceMs: Long = 350) {
         val s = _state.value
-        val r = s.renderer ?: throw NoTv()
         val target = seconds.coerceIn(0.0, if (s.duration > 0) s.duration - 1 else Double.MAX_VALUE)
-        if (s.isHls && s.continuous) castAt(target)
-        else {
-            _state.update { it.copy(position = target) }
-            Dlna.seek(r, target)
+        _state.update { it.copy(position = target) }
+        holdPositionUntil = System.currentTimeMillis() + debounceMs + 4000
+        seekJob?.cancel()
+        seekJob = scope.launch {
+            delay(debounceMs)
+            exec { doSeek(target) }
         }
     }
 
-    fun skip(delta: Double) = seekTo(_state.value.position + delta)
+    fun skip(delta: Double) = seekTo(_state.value.position + delta, debounceMs = 700)
+
+    private suspend fun doSeek(target: Double) {
+        val s = _state.value
+        val r = s.renderer ?: throw NoTv()
+        if (s.isHls && s.continuous) { castAt(target); return }
+        waitUntilSettled(r)
+        try {
+            Dlna.seek(r, target)
+        } catch (e: TvError) {
+            // Télé encore occupée : on attend qu'elle soit prête et on réessaie une fois.
+            delay(800)
+            waitUntilSettled(r)
+            Dlna.seek(r, target)
+        }
+        castTime = System.currentTimeMillis()
+        holdPositionUntil = System.currentTimeMillis() + 1500
+    }
+
+    /** Attend (au plus quelques secondes) que la télé ait fini de charger ou de se déplacer. */
+    private suspend fun waitUntilSettled(r: Renderer, maxMs: Long = 4000) {
+        val end = System.currentTimeMillis() + maxMs
+        while (System.currentTimeMillis() < end) {
+            val st = runCatching { Dlna.transportState(r) }.getOrNull()
+            if (st != "TRANSITIONING") return
+            delay(250)
+        }
+    }
+
+    /**
+     * Change la vidéo de la télé sans « Stop » : sur les Philips Titan OS, Stop ferme le lecteur
+     * et renvoie sur la dernière source (HDMI…). La télé refuse un changement pendant la lecture
+     * (« Transport locked ») mais l'accepte en pause.
+     */
+    private suspend fun replaceMedia(r: Renderer, url: String, meta: String) {
+        val st = runCatching { Dlna.transportState(r) }.getOrNull()
+        if (st == "PLAYING" || st == "TRANSITIONING") {
+            waitUntilSettled(r, 3000)
+            runCatching { Dlna.pause(r) }
+            val end = System.currentTimeMillis() + 2000
+            while (System.currentTimeMillis() < end &&
+                runCatching { Dlna.transportState(r) }.getOrNull() !in setOf("PAUSED_PLAYBACK", "STOPPED", "NO_MEDIA_PRESENT")
+            ) delay(200)
+        }
+        try {
+            Dlna.setUri(r, url, meta)
+        } catch (e: TvError) {
+            // Dernier recours : certaines télés exigent vraiment un arrêt.
+            runCatching { Dlna.stop(r) }
+            delay(500)
+            Dlna.setUri(r, url, meta)
+        }
+    }
 
     fun stop() = exec {
         pollJob?.cancel()

@@ -279,7 +279,10 @@ object Castor {
         val subUrl = proxy.subtitle?.let { "$base/sub/$subVersion/subtitles.srt" }
         proxy.subtitleUrl = subUrl
         startOffset = if (continuous) start.toLong().toDouble() else 0.0
-        runCatching { Dlna.stop(r) }
+        // N'arrêter que si la télé lit déjà quelque chose : sur certaines télés (Philips Titan OS),
+        // un « Stop » à vide ferme le lecteur et renvoie sur la dernière source (HDMI…).
+        val tvState = runCatching { Dlna.transportState(r) }.getOrNull()
+        if (tvState == "PLAYING" || tvState == "PAUSED_PLAYBACK" || tvState == "TRANSITIONING") runCatching { Dlna.stop(r) }
         Dlna.setUri(r, url, Dlna.didl(m.title, url, mime, subUrl, seekable = !continuous))
         Dlna.play(r)
         castTime = System.currentTimeMillis()

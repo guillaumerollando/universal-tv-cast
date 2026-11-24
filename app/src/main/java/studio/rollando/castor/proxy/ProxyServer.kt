@@ -199,9 +199,17 @@ class ProxyServer(private val ctx: Context) {
                     val h = mutableListOf("Content-Type" to type, "Accept-Ranges" to "bytes")
                     conn.getHeaderField("Content-Length")?.let { h += "Content-Length" to it }
                     conn.getHeaderField("Content-Range")?.let { h += "Content-Range" to it }
+                    val chunked = conn.getHeaderField("Content-Length") == null && req.method != "HEAD"
+                    if (chunked) h += "Transfer-Encoding" to "chunked"
                     h += dlna(seekable = true)
                     if (code == 206) head(out, 206, "Partial Content", h) else head(out, 200, "OK", h)
-                    if (req.method != "HEAD") conn.inputStream.use { it.copyTo(out, 64 * 1024) }
+                    if (req.method != "HEAD") {
+                        if (chunked) {
+                            val c = ChunkedOutputStream(out)
+                            conn.inputStream.use { it.copyTo(c, 64 * 1024) }
+                            c.finish()
+                        } else conn.inputStream.use { it.copyTo(out, 64 * 1024) }
+                    }
                 }
             }
         } finally {
@@ -256,13 +264,24 @@ class ProxyServer(private val ctx: Context) {
 
     // ------------------------------------------------------------------ HLS en flux continu
 
-    private fun serveContinuous(req: Req, out: OutputStream) {
-        val r = remotes[req.seg.getOrNull(1)] ?: return empty(out, 404, "Not Found")
+    private fun serveContinuous(req: Req, out0: OutputStream) {
+        val r = remotes[req.seg.getOrNull(1)] ?: return empty(out0, 404, "Not Found")
         val start = req.query["start"]?.toDoubleOrNull() ?: 0.0
+        val fmp4Path = req.seg.lastOrNull()?.endsWith(".mp4") == true
+        val type = mimeOverride ?: if (fmp4Path) "video/mp4" else "video/mp2t"
+        // Taille inconnue d'avance : envoi « par blocs » (chunked). Sans cela, certaines télés
+        // (Philips Titan OS, lecteur GStreamer) attendent indéfiniment.
+        if (req.method == "HEAD") {
+            head(out0, 200, "OK", listOf("Content-Type" to type, "Cache-Control" to "no-cache") + dlna(false))
+            return
+        }
         var plan = Hls.load(r.url, r.headers)
-        val type = mimeOverride ?: if (plan.fmp4) "video/mp4" else "video/mp2t"
-        head(out, 200, "OK", listOf("Content-Type" to type, "Cache-Control" to "no-cache") + dlna(false))
-        if (req.method == "HEAD") return
+        head(out0, 200, "OK", listOf(
+            "Content-Type" to type,
+            "Cache-Control" to "no-cache",
+            "Transfer-Encoding" to "chunked",
+        ) + dlna(false))
+        val out = ChunkedOutputStream(out0)
 
         var idx = 0
         if (plan.endList) {
@@ -308,6 +327,7 @@ class ProxyServer(private val ctx: Context) {
                 out.flush()
                 lastSeq = seg.seq
             }
+            out.finish()
         } finally {
             queue.forEach { it.second.cancel(true) }
         }
@@ -404,6 +424,19 @@ class ProxyServer(private val ctx: Context) {
         val bytes = subtitle ?: return empty(out, 404, "Not Found")
         head(out, 200, "OK", listOf("Content-Type" to "text/srt; charset=utf-8", "Content-Length" to bytes.size.toString()))
         if (req.method != "HEAD") out.write(bytes)
+    }
+
+    /** Encodage HTTP/1.1 « chunked ». */
+    private class ChunkedOutputStream(private val out: OutputStream) : OutputStream() {
+        override fun write(b: Int) = write(byteArrayOf(b.toByte()), 0, 1)
+        override fun write(b: ByteArray, off: Int, len: Int) {
+            if (len == 0) return
+            out.write((Integer.toHexString(len) + "\r\n").toByteArray(Charsets.ISO_8859_1))
+            out.write(b, off, len)
+            out.write("\r\n".toByteArray(Charsets.ISO_8859_1))
+        }
+        override fun flush() = out.flush()
+        fun finish() { out.write("0\r\n\r\n".toByteArray(Charsets.ISO_8859_1)); out.flush() }
     }
 
     companion object { private const val TAG = "Castor" }

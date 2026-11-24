@@ -31,3 +31,16 @@ Elle n'accepte pas `video/mp2t` (mais `video/mpeg`) ni le HLS. Elle a aussi Goog
 - Vérifié depuis le PC avec le vrai code contre la télé : trouvée en 47 ms, 23 formats lus, `video/mpeg` choisi.
 
 **Pas fait** : lecture réelle sur la télé depuis le téléphone (à faire par le testeur).
+
+## 2026-11-24 — « Fichier non pris en charge » sur la télé
+**Constat** (essais depuis le PC vers la télé, lecteur GStreamer de Titan OS) : la télé lit MP4 et MPEG-TS
+(`video/mpeg`) s'ils ont une taille annoncée, ou s'ils sont envoyés **par blocs (chunked)**. Un flux sans taille
+ni blocs (fermeture de connexion), ce qu'envoyait le flux continu de Castor, la bloque. Elle sonde aussi la fin
+du fichier (`Range: bytes=<fin>-`) avant de lire.
+
+**Fait**
+- Flux continu HLS envoyé en `Transfer-Encoding: chunked` ; réponse immédiate aux requêtes HEAD.
+- Relais direct envoyé par blocs quand le site n'annonce pas de taille.
+- Vérifié de bout en bout : téléphone → Castor → télé, flux HLS chiffré protégé par Referer : lu jusqu'au bout.
+
+**Pas fait** : essai par le testeur sur ses vraies sources ; sous-titres sur cette télé.

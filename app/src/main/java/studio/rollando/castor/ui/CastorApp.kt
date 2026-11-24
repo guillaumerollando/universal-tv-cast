@@ -345,6 +345,8 @@ private fun SettingsSheet(onDismiss: () -> Unit) {
                 )
             }
             item { HorizontalDivider(Modifier.padding(vertical = 8.dp)) }
+            item { TroubleshootingSection() }
+            item { HorizontalDivider(Modifier.padding(vertical = 8.dp)) }
             item {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {

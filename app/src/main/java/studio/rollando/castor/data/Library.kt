@@ -33,6 +33,7 @@ object Library {
         _bookmarks.value = runCatching { readBookmarks(JSONArray(prefs.getString("bookmarks", "[]"))) }.getOrDefault(emptyList())
         _adBlock.value = prefs.getBoolean("adblock", true)
         _continuous.value = prefs.getBoolean("continuous", true)
+        _dismissedTips.value = prefs.getStringSet("tips_dismissed", emptySet()).orEmpty().toSet()
     }
 
     var lastTv: String?
@@ -48,6 +49,15 @@ object Library {
     }
 
     fun setAdBlock(on: Boolean) { _adBlock.value = on; prefs.edit().putBoolean("adblock", on).apply() }
+    private val _dismissedTips = MutableStateFlow<Set<String>>(emptySet())
+    /** Conseils que l'utilisateur a choisi de ne plus voir. */
+    val dismissedTips: StateFlow<Set<String>> = _dismissedTips
+
+    fun dismissTip(key: String) {
+        _dismissedTips.value = _dismissedTips.value + key
+        prefs.edit().putStringSet("tips_dismissed", _dismissedTips.value).apply()
+    }
+
     fun setContinuous(on: Boolean) { _continuous.value = on; prefs.edit().putBoolean("continuous", on).apply() }
 
     fun addRecent(m: Media) {

@@ -124,6 +124,8 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
             media.host?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant) }
         }
 
+        BackgroundTip(state)
+
         state.notice?.let { n ->
             Card(
                 colors = CardDefaults.cardColors(containerColor = if (n.error) c.errorContainer else c.secondaryContainer),

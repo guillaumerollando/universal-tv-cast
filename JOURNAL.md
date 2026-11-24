@@ -98,3 +98,12 @@ Restent : pas de sous-titres depuis Stremio ; la télé affiche des infos techni
 
 **À vérifier chez le testeur** : ce que Stremio transmet (lire `CastorIntake` après un envoi) ; si la Philips
 affiche l'affiche/le titre à la place des infos techniques ; si elle affiche des sous-titres envoyés en DLNA.
+
+## 2026-11-25 — Conseils préventifs « mise en veille »
+**Fait**
+- `data/Background.kt` : détecte si Android peut endormir une appli (liste blanche batterie) et les marques
+  connues pour être agressives (Xiaomi, Samsung, Huawei, Oppo…) ; mots exacts du réglage selon la marque.
+- Carte dans l'onglet Lecture, avant que le problème n'arrive : d'abord pour l'appli qui envoie la vidéo
+  (Stremio…), sinon pour Castor pendant une diffusion ; bouton vers ses réglages et « Ne plus afficher ».
+- Rubrique « Dépannage » dans les réglages : télé introuvable, vidéo figée en avançant, format non pris en charge,
+  sous-titres, changement de source à la fin, arrêt quand l'écran s'éteint. 7 langues. Vu sur émulateur.

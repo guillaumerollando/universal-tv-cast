@@ -127,6 +127,13 @@ class EngineTest {
         assertEquals(0.0, Dlna.parseHms("NOT_IMPLEMENTED"), 0.0)
     }
 
+    @Test fun didlCarriesPosterAndDuration() {
+        val d = Dlna.didl("Film", "http://x/v.mp4", "video/mp4", null, true, artUrl = "http://x/art/1/poster.jpg", durationSec = 3725.0)
+        assertTrue(d.contains("<upnp:albumArtURI dlna:profileID=\"JPEG_SM\">http://x/art/1/poster.jpg</upnp:albumArtURI>"))
+        assertTrue(d.contains("duration=\"1:02:05.000\""))
+        assertEquals(1, Regex("<res ").findAll(d).count())
+    }
+
     @Test fun didlIsEscapedAndCarriesSubtitles() {
         val d = Dlna.didl("Tom & Jerry <1>", "http://x/v?a=1&b=2", "video/mp4", "http://x/s.srt", true)
         assertTrue(d.contains("Tom &amp; Jerry &lt;1&gt;"))

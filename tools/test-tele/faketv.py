@@ -60,6 +60,13 @@ class H(http.server.BaseHTTPRequestHandler):
         if action == 'SetAVTransportURI':
             if S['state'] in ('PLAYING', 'TRANSITIONING'): log('   refus : Transport locked'); return err(self, 705, 'Transport locked')
             uri = html.unescape(re.search(r'<CurrentURI>(.*?)</CurrentURI>', body).group(1))
+            meta = html.unescape(re.search(r'<CurrentURIMetaData>(.*?)</CurrentURIMetaData>', body, re.S).group(1))
+            for tag in ('albumArtURI', 'CaptionInfoEx'):
+                m2 = re.search(r'<[^>]*' + tag + r'[^>]*>(.*?)<', meta)
+                if m2:
+                    try: n = len(urllib.request.urlopen(local(m2.group(1)), timeout=5).read()); log(f'   {tag} servi : {n} octets')
+                    except Exception as e: log(f'   {tag} ERREUR {e}')
+            d = re.search(r'duration="([^"]+)"', meta); log('   durée annoncée', d.group(1) if d else '—')
             t0 = time.time()
             try:  # la vraie télé interroge la vidéo AVANT de répondre
                 r = urllib.request.urlopen(urllib.request.Request(local(uri), method='HEAD'), timeout=20)

@@ -48,6 +48,8 @@ class ProxyServer(private val ctx: Context) {
     private val metas = ConcurrentHashMap<String, Meta>()
 
     @Volatile var subtitle: ByteArray? = null
+    /** Affiche JPEG montrée par la télé (titre de la vidéo sur fond Castor). */
+    @Volatile var art: ByteArray? = null
     @Volatile var subtitleUrl: String? = null
     /** Nom du format tel que la télé l'accepte (ex. « video/mpeg » au lieu de « video/mp2t »). */
     @Volatile var mimeOverride: String? = null
@@ -65,7 +67,7 @@ class ProxyServer(private val ctx: Context) {
 
     fun reset() {
         remotes.clear(); idsByUrl.clear(); locals.clear(); metas.clear()
-        subtitle = null; subtitleUrl = null; mimeOverride = null
+        subtitle = null; subtitleUrl = null; mimeOverride = null; art = null
     }
 
     fun register(url: String, headers: Map<String, String>, kind: Kind = Kind.MAIN): String =
@@ -142,6 +144,7 @@ class ProxyServer(private val ctx: Context) {
                     "ts" -> serveContinuous(req, out)
                     "l" -> serveLocal(req, out)
                     "sub" -> serveSubtitle(req, out)
+                    "art" -> art?.let { sendBytes(req, out, it, "image/jpeg") } ?: empty(out, 404, "Not Found")
                     else -> empty(out, 404, "Not Found")
                 }
                 out.flush()

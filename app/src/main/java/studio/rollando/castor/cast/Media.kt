@@ -6,6 +6,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Parcelable
 import android.provider.OpenableColumns
+import android.util.Log
+import studio.rollando.castor.net.Mime
 
 data class SubSource(val uri: String, val name: String)
 
@@ -32,8 +34,52 @@ data class Media(
 object Intake {
     private val URL_RE = Regex("https?://\\S+")
 
+    /** Note dans le journal tout ce qu'une appli nous transmet (utile pour savoir où sont ses sous-titres). */
+    private fun logExtras(intent: Intent) {
+        val b = intent.extras
+        Log.i("CastorIntake", "action=${intent.action} type=${intent.type} data=${intent.dataString?.take(120)} extras=${b?.keySet()}")
+        b?.keySet()?.forEach { k ->
+            @Suppress("DEPRECATION")
+            val v = b.get(k)
+            val txt = when (v) {
+                is Array<*> -> v.joinToString(prefix = "[", postfix = "]") { it.toString().take(150) }
+                else -> v.toString().take(200)
+            }
+            Log.i("CastorIntake", "  $k = $txt")
+        }
+    }
+
+    private val SUB_EXT = setOf("srt", "vtt", "ass", "ssa", "sub", "ttml", "dfxp")
+
+    /** Toute valeur d'un extra dont le nom évoque des sous-titres et qui ressemble à un lien ou un fichier. */
+    private fun guessSubtitles(intent: Intent, known: Set<String>): List<Uri> {
+        val b = intent.extras ?: return emptyList()
+        val out = mutableListOf<Uri>()
+        for (k in b.keySet()) {
+            if (!k.contains("sub", ignoreCase = true) || k.endsWith(".name") || k.endsWith(".enable")) continue
+            @Suppress("DEPRECATION")
+            val values: List<Any?> = when (val v = b.get(k)) {
+                is Array<*> -> v.toList()
+                is ArrayList<*> -> v
+                else -> listOf(v)
+            }
+            for (v in values) {
+                val u = when (v) {
+                    is Uri -> v
+                    is String -> if (v.startsWith("http") || v.startsWith("content:") || v.startsWith("file:")) Uri.parse(v)
+                        else if (v.startsWith("/")) Uri.fromFile(java.io.File(v)) else null
+                    else -> null
+                } ?: continue
+                val s = u.toString()
+                if (s !in known && (Mime.ext(s) in SUB_EXT || s.contains("subtitle", true) || k.contains("sub", true))) out += u
+            }
+        }
+        return out
+    }
+
     fun parse(ctx: Context, intent: Intent?): Media? {
         intent ?: return null
+        logExtras(intent)
         val uri: Uri = when (intent.action) {
             Intent.ACTION_VIEW -> intent.data ?: return null
             Intent.ACTION_SEND -> {
@@ -60,6 +106,7 @@ object Intake {
             val u = if (loc.startsWith("/")) Uri.fromFile(java.io.File(loc)) else Uri.parse(loc)
             subs += SubSource(u.toString(), nameOf(ctx, u))
         }
+        guessSubtitles(intent, subs.map { it.uri }.toSet()).forEach { u -> subs += SubSource(u.toString(), nameOf(ctx, u)) }
         val enabled = extraParcelables(intent, "subs.enable").filterIsInstance<Uri>().map { it.toString() }
         val defaultSub = subs.indexOfFirst { it.uri in enabled }.takeIf { it >= 0 } ?: if (subs.isEmpty()) -1 else 0
 

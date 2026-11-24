@@ -302,7 +302,11 @@ object Castor {
         startOffset = if (continuous) start.toLong().toDouble() else 0.0
         // N'arrêter que si la télé lit déjà quelque chose : sur certaines télés (Philips Titan OS),
         // un « Stop » à vide ferme le lecteur et renvoie sur la dernière source (HDMI…).
-        replaceMedia(r, url, Dlna.didl(m.title, url, mime, subUrl, seekable = !continuous))
+        if (proxy.art == null) proxy.art = runCatching { Poster.jpeg(app, m.title) }.getOrNull()
+        val artUrl = proxy.art?.let { "$base/art/$subVersion/poster.jpg" }
+        val knownDuration = if (hlsDuration > 0) hlsDuration else s.duration
+        replaceMedia(r, url, Dlna.didl(m.title, url, mime, subUrl, seekable = !continuous,
+            artUrl = artUrl, durationSec = if (continuous) 0.0 else knownDuration))
         Dlna.play(r)
         castTime = System.currentTimeMillis()
         CastService.start(app)

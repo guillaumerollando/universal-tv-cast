@@ -370,7 +370,10 @@ object Dlna {
     }
 
     /** Métadonnées DIDL-Lite (titre, type, sous-titres au format reconnu par la plupart des télés). */
-    fun didl(title: String, url: String, mime: String, subtitleUrl: String?, seekable: Boolean): String {
+    fun didl(
+        title: String, url: String, mime: String, subtitleUrl: String?, seekable: Boolean,
+        artUrl: String? = null, durationSec: Double = 0.0,
+    ): String {
         val op = if (seekable) "01" else "00"
         val info = "http-get:*:$mime:DLNA.ORG_OP=$op;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000"
         val cls = if (mime.startsWith("audio/")) "object.item.audioItem.musicTrack" else "object.item.videoItem"
@@ -383,7 +386,14 @@ object Dlna {
             append("<item id=\"castor\" parentID=\"0\" restricted=\"1\">")
             append("<dc:title>").append(esc(title)).append("</dc:title>")
             append("<upnp:class>$cls</upnp:class>")
-            append("<res protocolInfo=\"").append(esc(info)).append("\">").append(esc(url)).append("</res>")
+            append("<dc:creator>Castor</dc:creator>")
+            if (artUrl != null) {
+                append("<upnp:albumArtURI dlna:profileID=\"JPEG_SM\">").append(esc(artUrl)).append("</upnp:albumArtURI>")
+            }
+            append("<res protocolInfo=\"").append(esc(info)).append("\"")
+            if (durationSec > 0) append(" duration=\"").append(hms(durationSec)).append(".000\"")
+            append(">").append(esc(url)).append("</res>")
+
             if (subtitleUrl != null) {
                 val s = esc(subtitleUrl)
                 append("<res protocolInfo=\"http-get:*:text/srt:*\">$s</res>")

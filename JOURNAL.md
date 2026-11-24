@@ -84,3 +84,17 @@ Même cause pour l'erreur vue dans Web Video Cast.
 - Vérifié sur émulateur + fausse télé : message affiché ; quand la télé abandonne, Castor ne relance rien.
 
 **Pas fait** : vérifier avec Stremio réglé sur « Aucune restriction » (batterie) chez le testeur.
+
+## 2026-11-25 — « Ça fonctionne du feu de Dieu » ; sous-titres et écran de la télé
+**Retour du testeur** : avance instantanée (saut à 1h05 direct), mieux que Web Video Cast sur sa Philips.
+Restent : pas de sous-titres depuis Stremio ; la télé affiche des infos techniques peu jolies (AAC, 24 Hz, BT 709…).
+
+**Fait**
+- Journal `CastorIntake` : tout ce qu'une appli transmet à Castor (pour savoir si et comment Stremio passe ses
+  sous-titres).
+- Sous-titres repérés dans tout extra dont le nom évoque des sous-titres (en plus des conventions MX Player/VLC).
+- Affiche 640×360 (logo + titre) envoyée à la télé (`upnp:albumArtURI`), durée annoncée quand elle est connue,
+  `dc:creator` Castor. Vérifié sur émulateur + fausse télé.
+
+**À vérifier chez le testeur** : ce que Stremio transmet (lire `CastorIntake` après un envoi) ; si la Philips
+affiche l'affiche/le titre à la place des infos techniques ; si elle affiche des sous-titres envoyés en DLNA.

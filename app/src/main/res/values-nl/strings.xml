@@ -21,6 +21,7 @@
     <string name="notice_source_asleep">De tv wacht op de video, maar %1$s stuurt hem niet: Android heeft de app waarschijnlijk op de achtergrond gepauzeerd. Kies in de batterij-instellingen ‘Geen beperkingen’ en probeer het opnieuw.</string>
     <string name="action_source_settings">Instellingen van %1$s openen</string>
     <string name="source_generic">de bron-app</string>
+    <string name="tv_disconnect">Verbinding met %1$s verbreken</string>
     <string name="cd_settings">Instellingen</string>
     <string name="home_title">Stuur elke video naar je tv</string>
     <string name="home_subtitle">Gratis. Geen advertenties. Geen tracking.</string>

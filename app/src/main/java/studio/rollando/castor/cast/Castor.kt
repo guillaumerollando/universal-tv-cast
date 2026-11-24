@@ -174,6 +174,19 @@ object Castor {
         }
     }
 
+    /**
+     * Se déconnecter de la télé : on cesse de la piloter, on coupe le service et on oublie le choix,
+     * pour pouvoir repartir de zéro. Rien n'est envoyé à la télé (un « Stop » la renvoie sur HDMI).
+     */
+    fun disconnect() {
+        pollJob?.cancel()
+        seekJob?.cancel()
+        Library.lastTv = null
+        pendingCast = false
+        CastService.stop(app)
+        _state.update { it.copy(renderer = null, phase = Phase.IDLE, position = 0.0, volume = null, notice = null) }
+    }
+
     fun chooseTv(r: Renderer) {
         Library.lastTv = r.udn
         val previous = _state.value.renderer

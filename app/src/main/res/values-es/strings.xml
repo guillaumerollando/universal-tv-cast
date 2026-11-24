@@ -21,6 +21,7 @@
     <string name="notice_source_asleep">La TV espera el vídeo, pero %1$s no lo envía: Android probablemente lo ha suspendido en segundo plano. En sus ajustes de batería, elige «Sin restricciones» y vuelve a intentarlo.</string>
     <string name="action_source_settings">Abrir los ajustes de %1$s</string>
     <string name="source_generic">la app de origen</string>
+    <string name="tv_disconnect">Desconectar de %1$s</string>
     <string name="cd_settings">Ajustes</string>
     <string name="home_title">Envía cualquier vídeo a tu TV</string>
     <string name="home_subtitle">Gratis. Sin anuncios. Sin rastreo.</string>

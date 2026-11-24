@@ -21,6 +21,7 @@
     <string name="notice_source_asleep">La télé attend la vidéo, mais %1$s ne l’envoie plus : Android l’a sans doute mis en veille en arrière-plan. Dans ses réglages de batterie, choisis « Aucune restriction », puis réessaie.</string>
     <string name="action_source_settings">Ouvrir les réglages de %1$s</string>
     <string name="source_generic">l’appli source</string>
+    <string name="tv_disconnect">Se déconnecter de %1$s</string>
     <string name="cd_settings">Réglages</string>
     <string name="home_title">Envoie n’importe quelle vidéo sur ta télé</string>
     <string name="home_subtitle">Gratuit. Sans pub. Sans pistage.</string>

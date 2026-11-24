@@ -22,6 +22,7 @@
     <string name="notice_source_asleep">The TV is waiting for the video, but %1$s isn’t sending it: Android has probably put it to sleep in the background. In its battery settings, choose “No restrictions”, then try again.</string>
     <string name="action_source_settings">Open %1$s settings</string>
     <string name="source_generic">the source app</string>
+    <string name="tv_disconnect">Disconnect from %1$s</string>
     <string name="cd_settings">Settings</string>
     <string name="home_title">Send any video to your TV</string>
     <string name="home_subtitle">Free. No ads. No tracking.</string>

@@ -21,6 +21,7 @@
     <string name="notice_source_asleep">Der Fernseher wartet auf das Video, aber %1$s sendet es nicht: Android hat die App vermutlich im Hintergrund pausiert. Wähle in ihren Akku-Einstellungen „Keine Einschränkungen“ und versuch es erneut.</string>
     <string name="action_source_settings">Einstellungen von %1$s öffnen</string>
     <string name="source_generic">die Quell-App</string>
+    <string name="tv_disconnect">Von %1$s trennen</string>
     <string name="cd_settings">Einstellungen</string>
     <string name="home_title">Schick jedes Video auf deinen Fernseher</string>
     <string name="home_subtitle">Kostenlos. Ohne Werbung. Ohne Tracking.</string>

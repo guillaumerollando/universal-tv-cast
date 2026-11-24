@@ -21,6 +21,7 @@
     <string name="notice_source_asleep">La TV aspetta il video, ma %1$s non lo invia: probabilmente Android l’ha sospesa in background. Nelle sue impostazioni della batteria scegli «Nessuna restrizione», poi riprova.</string>
     <string name="action_source_settings">Apri le impostazioni di %1$s</string>
     <string name="source_generic">l’app di origine</string>
+    <string name="tv_disconnect">Disconnetti da %1$s</string>
     <string name="cd_settings">Impostazioni</string>
     <string name="home_title">Manda qualsiasi video sulla tua TV</string>
     <string name="home_subtitle">Gratis. Senza pubblicità. Senza tracciamento.</string>

@@ -39,6 +39,7 @@ S = {
  "A TV está esperando o vídeo, mas o %1$s não está enviando: o Android provavelmente o suspendeu em segundo plano. Nas configurações de bateria dele, escolha “Sem restrições” e tente de novo."],
 "action_source_settings": ["Open %1$s settings", "Ouvrir les réglages de %1$s", "Abrir los ajustes de %1$s", "Einstellungen von %1$s öffnen", "Apri le impostazioni di %1$s", "Instellingen van %1$s openen", "Abrir as configurações de %1$s"],
 "source_generic": ["the source app", "l’appli source", "la app de origen", "die Quell-App", "l’app di origine", "de bron-app", "o app de origem"],
+"tv_disconnect": ["Disconnect from %1$s", "Se déconnecter de %1$s", "Desconectar de %1$s", "Von %1$s trennen", "Disconnetti da %1$s", "Verbinding met %1$s verbreken", "Desconectar de %1$s"],
 "cd_settings": ["Settings", "Réglages", "Ajustes", "Einstellungen", "Impostazioni", "Instellingen", "Configurações"],
 "home_title": ["Send any video to your TV", "Envoie n’importe quelle vidéo sur ta télé", "Envía cualquier vídeo a tu TV", "Schick jedes Video auf deinen Fernseher", "Manda qualsiasi video sulla tua TV", "Stuur elke video naar je tv", "Envie qualquer vídeo para a sua TV"],
 "home_subtitle": ["Free. No ads. No tracking.", "Gratuit. Sans pub. Sans pistage.", "Gratis. Sin anuncios. Sin rastreo.", "Kostenlos. Ohne Werbung. Ohne Tracking.", "Gratis. Senza pubblicità. Senza tracciamento.", "Gratis. Geen advertenties. Geen tracking.", "Grátis. Sem anúncios. Sem rastreamento."],

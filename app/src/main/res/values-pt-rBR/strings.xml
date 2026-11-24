@@ -21,6 +21,7 @@
     <string name="notice_source_asleep">A TV está esperando o vídeo, mas o %1$s não está enviando: o Android provavelmente o suspendeu em segundo plano. Nas configurações de bateria dele, escolha “Sem restrições” e tente de novo.</string>
     <string name="action_source_settings">Abrir as configurações de %1$s</string>
     <string name="source_generic">o app de origem</string>
+    <string name="tv_disconnect">Desconectar de %1$s</string>
     <string name="cd_settings">Configurações</string>
     <string name="home_title">Envie qualquer vídeo para a sua TV</string>
     <string name="home_subtitle">Grátis. Sem anúncios. Sem rastreamento.</string>

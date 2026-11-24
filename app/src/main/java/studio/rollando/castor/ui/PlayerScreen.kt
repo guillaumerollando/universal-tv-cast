@@ -103,7 +103,10 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
             contentAlignment = Alignment.Center,
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(if (state.active) Icons.Rounded.Tv else Icons.Rounded.Movie, null, Modifier.size(56.dp), tint = c.onPrimaryContainer)
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.size(96.dp)) {
+                    if (state.phase == Phase.PLAYING) CastWaves(c.onPrimaryContainer, size = 150.dp)
+                    Icon(if (state.active) Icons.Rounded.Tv else Icons.Rounded.Movie, null, Modifier.size(56.dp), tint = c.onPrimaryContainer)
+                }
                 Spacer(Modifier.height(8.dp))
                 Text(
                     phaseLabel(state), style = MaterialTheme.typography.titleMedium, color = c.onPrimaryContainer,

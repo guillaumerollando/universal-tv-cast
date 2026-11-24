@@ -7,7 +7,12 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
+import studio.rollando.castor.R
 
 // Ambre « castor » sur fond nuit, sarcelle en touche secondaire.
 private val Dark = darkColorScheme(
@@ -68,13 +73,21 @@ private val Light = lightColorScheme(
     outlineVariant = Color(0xFFD6C4B5),
 )
 
+@OptIn(ExperimentalTextApi::class)
+private fun fredoka(w: Int) = Font(R.font.fredoka, FontWeight(w), variationSettings = FontVariation.Settings(FontVariation.weight(w)))
+
+/** Fredoka (déjà utilisée par les jeux du studio) pour les titres et les boutons ; le texte courant reste lisible. */
+val Fredoka = FontFamily(fredoka(400), fredoka(500), fredoka(600), fredoka(700))
+
 private val base = Typography()
 private val Type = base.copy(
-    headlineSmall = base.headlineSmall.copy(fontWeight = FontWeight.Bold),
-    headlineMedium = base.headlineMedium.copy(fontWeight = FontWeight.Bold),
-    titleLarge = base.titleLarge.copy(fontWeight = FontWeight.SemiBold),
-    titleMedium = base.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-    labelLarge = base.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+    displaySmall = base.displaySmall.copy(fontFamily = Fredoka, fontWeight = FontWeight.Bold),
+    headlineSmall = base.headlineSmall.copy(fontFamily = Fredoka, fontWeight = FontWeight.SemiBold),
+    headlineMedium = base.headlineMedium.copy(fontFamily = Fredoka, fontWeight = FontWeight.SemiBold),
+    titleLarge = base.titleLarge.copy(fontFamily = Fredoka, fontWeight = FontWeight.SemiBold),
+    titleMedium = base.titleMedium.copy(fontFamily = Fredoka, fontWeight = FontWeight.Medium),
+    titleSmall = base.titleSmall.copy(fontFamily = Fredoka, fontWeight = FontWeight.Medium),
+    labelLarge = base.labelLarge.copy(fontFamily = Fredoka, fontWeight = FontWeight.Medium, fontSize = base.labelLarge.fontSize * 1.05f),
 )
 
 @Composable

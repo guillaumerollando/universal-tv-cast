@@ -113,3 +113,16 @@ affiche l'affiche/le titre à la place des infos techniques ; si elle affiche de
 e-mail vers rollandostudio@gmail.com avec modèle du téléphone et de la télé, version, dernier message), lien
 « Aide » dans les messages d'erreur, secouer le téléphone ouvre l'aide (réglage pour le couper). Vérifié sur
 émulateur (secousse simulée).
+
+## 2026-11-25 — Design avec un peu de personnalité, carte orange moins insistante
+**Retours** : carte orange affichée alors que tout était bien réglé ; « Castor » coupé sur deux lignes ; design
+trop neutre ; avance parfois un peu « hésitante » mais qui se corrige ; toujours pas de sous-titres depuis Stremio.
+
+**Fait**
+- Carte de conseil seulement si Android peut vraiment endormir l'appli (vérifié : Stremio et Castor sont sur la
+  liste blanche du téléphone du testeur, la carte ne s'y affichera plus).
+- Barre du haut maison : « Castor » toujours sur une ligne, le nom de la télé se raccourcit.
+- Police Fredoka (celle des jeux du studio) pour titres et boutons ; ondes animées autour de la télé pendant la
+  lecture (immobiles si les animations sont coupées) ; arcs de diffusion dans la carte d'accueil.
+
+**En cours** : capture du journal pendant un envoi depuis Stremio pour voir comment il transmet les sous-titres.

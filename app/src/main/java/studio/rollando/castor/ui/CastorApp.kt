@@ -17,6 +17,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -120,25 +123,31 @@ fun CastorApp() {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(painterResource(R.drawable.ic_logo), null, Modifier.size(28.dp), tint = MaterialTheme.colorScheme.primary)
-                        Spacer(Modifier.width(10.dp))
-                        Text(stringResource(R.string.app_name))
+            // Barre maison : « Castor » ne passe jamais à la ligne, c'est le nom de la télé qui se raccourcit.
+            Surface(color = MaterialTheme.colorScheme.surface) {
+                Row(
+                    Modifier.fillMaxWidth().statusBarsPadding().height(64.dp).padding(start = 16.dp, end = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(painterResource(R.drawable.ic_logo), null, Modifier.size(30.dp), tint = MaterialTheme.colorScheme.primary)
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        stringResource(R.string.app_name), maxLines = 1, softWrap = false,
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                        modifier = Modifier.semantics { heading() },
+                    )
+                    Spacer(Modifier.width(12.dp))
+                    Box(Modifier.weight(1f), contentAlignment = Alignment.CenterEnd) {
+                        TvChip(state.renderer?.name, state.searching) { showTvs = true }
                     }
-                },
-                actions = {
-                    TvChip(state.renderer?.name, state.searching) { showTvs = true }
                     IconButton(onClick = { Nav.help.value = true }) {
                         Icon(Icons.AutoMirrored.Rounded.HelpOutline, stringResource(R.string.cd_help))
                     }
                     IconButton(onClick = { showSettings = true }) {
                         Icon(Icons.Rounded.Settings, stringResource(R.string.cd_settings))
                     }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface),
-            )
+                }
+            }
         },
         bottomBar = {
             NavigationBar {
@@ -191,14 +200,14 @@ private fun TvChip(name: String?, searching: Boolean, onClick: () -> Unit) {
         shape = RoundedCornerShape(50),
         color = if (name != null) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
         contentColor = if (name != null) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurface,
-        modifier = Modifier.padding(end = 4.dp).height(40.dp).semantics { contentDescription = "$cd : $label" },
+        modifier = Modifier.height(40.dp).semantics { contentDescription = "$cd : $label" },
     ) {
         Row(Modifier.padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             if (searching && name == null) CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp)
             else Icon(Icons.Rounded.Tv, null, Modifier.size(18.dp))
             Spacer(Modifier.width(6.dp))
             Text(label, style = MaterialTheme.typography.labelLarge, maxLines = 1, overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.widthIn(max = 140.dp))
+                modifier = Modifier.weight(1f, fill = false))
             Icon(Icons.Rounded.KeyboardArrowDown, null, Modifier.size(18.dp))
         }
     }

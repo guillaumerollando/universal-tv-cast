@@ -70,6 +70,7 @@ fun HomeScreen(onBrowse: (String?) -> Unit, onPickFile: () -> Unit, onPasteLink:
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(28.dp))
                     .background(Brush.linearGradient(listOf(c.primaryContainer, c.secondaryContainer)))
+                    .castArcs(c.onPrimaryContainer)
                     .padding(24.dp)
             ) {
                 Column {

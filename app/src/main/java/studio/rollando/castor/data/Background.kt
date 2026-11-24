@@ -24,8 +24,8 @@ object Background {
         !ctx.getSystemService(PowerManager::class.java).isIgnoringBatteryOptimizations(pkg)
     }.getOrDefault(true)
 
-    /** Faut-il prévenir pour cette appli ? */
-    fun atRisk(ctx: Context, pkg: String): Boolean = canSleep(ctx, pkg) || aggressiveBrand
+    /** Faut-il prévenir pour cette appli ? Seulement si Android a encore le droit de l'endormir. */
+    fun atRisk(ctx: Context, pkg: String): Boolean = canSleep(ctx, pkg)
 
     /** Les mots exacts du réglage selon la marque du téléphone. */
     @StringRes

@@ -37,7 +37,7 @@ def reply(h, body, code=200):
 def err(h, c, d): reply(h, f'<s:Fault><detail><UPnPError><errorCode>{c}</errorCode><errorDescription>{d}</errorDescription></UPnPError></detail></s:Fault>', 500)
 def hms(t): t = int(t); return f'{t//3600}:{t//60%60:02d}:{t%60:02d}'
 DESC = '''<?xml version="1.0"?><root xmlns="urn:schemas-upnp-org:device-1-0"><device><deviceType>urn:schemas-upnp-org:device:MediaRenderer:1</deviceType>
-<friendlyName>Fausse Philips(10.0.2.2)</friendlyName><manufacturer>Smart TV</manufacturer><modelName>Smart TV</modelName><UDN>uuid:fake-philips</UDN><serviceList>
+<friendlyName>55OLED760/12 Test(10.0.2.2)</friendlyName><manufacturer>Smart TV</manufacturer><modelName>Smart TV</modelName><UDN>uuid:fake-philips</UDN><serviceList>
 <service><serviceType>urn:schemas-upnp-org:service:RenderingControl:1</serviceType><controlURL>/rcr_control</controlURL></service>
 <service><serviceType>urn:schemas-upnp-org:service:ConnectionManager:1</serviceType><controlURL>/cmr_control</controlURL></service>
 <service><serviceType>urn:schemas-upnp-org:service:AVTransport:1</serviceType><controlURL>/avt_control</controlURL></service></serviceList></device></root>'''

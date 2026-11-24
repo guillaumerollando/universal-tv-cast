@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import studio.rollando.castor.MainActivity
 import studio.rollando.castor.R
+import studio.rollando.castor.ui.Images
 
 /** Garde le relais vidéo en vie quand l'écran est éteint ou l'appli en arrière-plan. */
 class CastService : Service() {
@@ -47,9 +48,15 @@ class CastService : Service() {
             .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "castor:stream").apply { acquire(6 * 60 * 60 * 1000L) }
         scope.launch {
             Castor.state
-                .map { Triple(it.media?.title, it.renderer?.name, it.phase) }
+                .map { listOf(it.media?.title, it.renderer?.name, it.phase, it.media?.posterUrl) }
                 .distinctUntilChanged()
-                .collect { nm.notify(ID, build(Castor.state.value)) }
+                .collect { s ->
+                    nm.notify(ID, build(Castor.state.value))
+                    val poster = Castor.state.value.media?.posterUrl
+                    if (poster != null && Images.peek(poster) == null && Images.load(poster, 400) != null) {
+                        nm.notify(ID, build(Castor.state.value))
+                    }
+                }
         }
     }
 
@@ -79,6 +86,7 @@ class CastService : Service() {
             .setContentText(s.renderer?.let { getString(R.string.notif_on_tv, it.name) } ?: "")
             .setContentIntent(open)
             .setOngoing(true)
+            .apply { Images.peek(s.media?.posterUrl)?.let { setLargeIcon(it) } }
             .setOnlyAlertOnce(true)
             .setCategory(Notification.CATEGORY_TRANSPORT)
             .setVisibility(Notification.VISIBILITY_PUBLIC)

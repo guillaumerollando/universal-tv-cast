@@ -25,7 +25,9 @@ object SubtitleFinder {
     }
 
     data class Found(val lang: String, val url: String)
-    data class Result(val name: String, val subs: List<Found>)
+    /** Images du film ou de la série (Cinemeta / metahub). */
+    data class Art(val poster: String?, val backdrop: String?, val logo: String?)
+    data class Result(val name: String, val subs: List<Found>, val art: Art?)
 
     private val SEP = Regex("[._]+")
     private val EP = Regex("(?i)\\bS(\\d{1,2})[ ._-]?E(\\d{1,3})\\b|\\b(\\d{1,2})x(\\d{2})\\b")
@@ -60,7 +62,9 @@ object SubtitleFinder {
     private fun enc(s: String) = URLEncoder.encode(s, "UTF-8").replace("+", "%20")
 
     /** Cherche l'identifiant IMDb du film ou de la série. */
-    private fun imdb(p: Parsed): Pair<String, String>? {
+    private class Meta(val id: String, val name: String, val poster: String?, val background: String?)
+
+    private fun imdb(p: Parsed): Meta? {
         val type = if (p.isSeries) "series" else "movie"
         val url = "https://v3-cinemeta.strem.io/catalog/$type/top/search=${enc(p.title)}.json"
         val metas = JSONObject(String(Http.fetch(url, emptyMap(), connectTimeout = 8000).bytes)).optJSONArray("metas") ?: return null
@@ -73,7 +77,7 @@ object SubtitleFinder {
         }
         val b = best ?: return null
         val id = b.optString("imdb_id").ifEmpty { b.optString("id") }.takeIf { it.startsWith("tt") } ?: return null
-        return id to b.optString("name", p.title)
+        return Meta(id, b.optString("name", p.title), b.optString("poster").ifEmpty { null }, b.optString("background").ifEmpty { null })
     }
 
     /** Liste des sous-titres disponibles (au plus 3 par langue), langues préférées en premier. */
@@ -81,7 +85,15 @@ object SubtitleFinder {
         val p = parse(fileName)
         if (p.title.length < 2) return null
         return try {
-            val (id, name) = imdb(p) ?: return null
+            val meta = imdb(p) ?: return null
+            val id = meta.id
+            val name = meta.name
+            val art = Art(
+                poster = meta.poster?.replace("/poster/small/", "/poster/medium/") ?: "https://images.metahub.space/poster/medium/$id/img",
+                backdrop = if (p.isSeries) "https://episodes.metahub.space/$id/${p.season}/${p.episode}/w780.jpg"
+                    else meta.background ?: "https://images.metahub.space/background/medium/$id/img",
+                logo = "https://images.metahub.space/logo/medium/$id/img",
+            )
             val type = if (p.isSeries) "series" else "movie"
             val fullId = if (p.isSeries) "$id:${p.season}:${p.episode}" else id
             val extra = buildList {
@@ -102,7 +114,7 @@ object SubtitleFinder {
                 byLang.filterKeys { it !in order }.toSortedMap().values.flatten()
             val display = if (p.isSeries) "$name S%02dE%02d".format(p.season, p.episode) else name
             Log.i("CastorSubs", "« ${p.display} » → $fullId ($display) : ${all.size} sous-titres, ${byLang.size} langues")
-            Result(display, sorted)
+            Result(display, sorted, art)
         } catch (e: Exception) {
             Log.i("CastorSubs", "recherche échouée pour « ${p.display} » : ${e.message}")
             null

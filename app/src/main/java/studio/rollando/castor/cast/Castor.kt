@@ -230,9 +230,9 @@ object Castor {
                         continuous = if (plan.splitAudio) false else it.continuous)
                 }
             }
-            Library.addRecent(media)
         }
-        if (_state.value.media?.subs.isNullOrEmpty()) findSubtitles()
+        identify()
+        _state.value.media?.let { Library.addRecent(it) }
         loadSubtitle()
         _state.update { it.copy(phase = Phase.IDLE) }
         if (autoCast) {
@@ -249,7 +249,7 @@ object Castor {
      * L'appli source n'a pas fourni de sous-titres (Stremio n'en transmet jamais) : on les cherche
      * d'après le nom du fichier, avant le premier envoi à la télé (5 s au plus).
      */
-    private suspend fun findSubtitles() {
+    private suspend fun identify() {
         val m = _state.value.media ?: return
         val name = m.fileName ?: return
         val size = remoteId?.let { id -> runCatching { proxy.prefetchMeta(id); proxy.totalOf(id) }.getOrNull() }
@@ -259,21 +259,27 @@ object Castor {
             kotlinx.coroutines.withContext(Dispatchers.IO) { SubtitleFinder.find(name, size, preferred) }
         }
         val nice = result?.name ?: SubtitleFinder.parse(name).display
+        val keepSubs = m.subs.isNotEmpty() // l'appli source en a fourni : on les garde
         val counts = HashMap<String, Int>()
-        val subs = result?.subs.orEmpty().map { f ->
+        val subs = if (keepSubs) m.subs else result?.subs.orEmpty().map { f ->
             val label = SubtitleFinder.label(f.lang)
             val n = (counts[label] ?: 0) + 1
             counts[label] = n
             SubSource(f.url, if (n == 1) label else "$label $n")
         }
         // Sélection automatique : la langue du téléphone, sinon l'anglais.
-        val auto = preferred.firstNotNullOfOrNull { lang ->
+        val auto = if (keepSubs) _state.value.subIndex else preferred.firstNotNullOfOrNull { lang ->
             result?.subs?.indexOfFirst { SubtitleFinder.norm(it.lang) == lang }?.takeIf { it >= 0 }
         } ?: -1
         val titleIsFileName = m.title == name || m.title.contains('.') && !m.title.contains(' ')
         _state.update {
             it.copy(
-                media = m.copy(subs = subs, title = if (titleIsFileName) nice else m.title),
+                media = m.copy(
+                    subs = subs, title = if (titleIsFileName) nice else m.title,
+                    posterUrl = result?.art?.poster ?: m.posterUrl,
+                    backdropUrl = result?.art?.backdrop ?: m.backdropUrl,
+                    logoUrl = result?.art?.logo ?: m.logoUrl,
+                ),
                 subIndex = auto,
             )
         }

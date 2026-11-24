@@ -26,6 +26,10 @@ data class Media(
     val startSec: Double = 0.0,
     /** Nom du fichier vidéo, pour retrouver le film et ses sous-titres. */
     val fileName: String? = null,
+    /** Images du film (affiche, fond, logo du titre), si on l'a reconnu. */
+    val posterUrl: String? = null,
+    val backdropUrl: String? = null,
+    val logoUrl: String? = null,
 ) {
     /** La vidéo est servie par une autre appli du téléphone (Stremio et son serveur local…). */
     val fromPhoneApp: Boolean get() = runCatching { Uri.parse(url).host }.getOrNull()

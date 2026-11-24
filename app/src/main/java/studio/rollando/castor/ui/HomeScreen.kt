@@ -122,7 +122,18 @@ fun HomeScreen(onBrowse: (String?) -> Unit, onPickFile: () -> Unit, onPasteLink:
                     supportingContent = {
                         Text(Uri.parse(r.pageUrl ?: r.url).host?.removePrefix("www.") ?: "", maxLines = 1)
                     },
-                    leadingContent = { Icon(Icons.Rounded.History, null) },
+                    leadingContent = {
+                        if (r.poster != null) {
+                            Box(
+                                Modifier.size(width = 40.dp, height = 58.dp).clip(RoundedCornerShape(8.dp))
+                                    .background(c.surfaceContainerHighest),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Icon(Icons.Rounded.History, null, tint = c.onSurfaceVariant)
+                                RemoteImage(r.poster, Modifier.matchParentSize(), maxSide = 300)
+                            }
+                        } else Icon(Icons.Rounded.History, null)
+                    },
                     trailingContent = {
                         IconButton(onClick = { Library.removeRecent(r) }) {
                             Icon(Icons.Rounded.Close, stringResource(R.string.cd_delete))

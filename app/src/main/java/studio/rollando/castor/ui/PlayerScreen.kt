@@ -1,6 +1,20 @@
 package studio.rollando.castor.ui
 
 import android.content.Intent
+import android.os.Build
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.semantics.contentDescription
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -89,12 +103,24 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
         return
     }
     val c = MaterialTheme.colorScheme
+    val film = media.backdropUrl != null
+    Box(Modifier.fillMaxSize()) {
+    // Ambiance : l'image du film, très floutée, teinte le haut de l'écran.
+    if (film) {
+        RemoteImage(
+            media.backdropUrl, maxSide = 480,
+            modifier = Modifier.fillMaxWidth().height(420.dp).alpha(0.45f)
+                .then(if (Build.VERSION.SDK_INT >= 31) Modifier.blur(48.dp) else Modifier),
+        )
+        Box(Modifier.fillMaxWidth().height(420.dp).background(Brush.verticalGradient(listOf(c.background.copy(alpha = 0.35f), c.background))))
+    }
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
+        if (film) FilmHeader(state)
         // « Affiche » : grand cadre qui dit ce qui se passe sur la télé.
-        Box(
+        else Box(
             Modifier
                 .fillMaxWidth()
                 .aspectRatio(16f / 9f)
@@ -122,7 +148,7 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
             }
         }
 
-        Column {
+        if (!film) Column {
             Text(media.title, style = MaterialTheme.typography.titleLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
             media.host?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant) }
         }
@@ -188,6 +214,63 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
         if (state.isHls) ModeCard(state)
         Spacer(Modifier.height(8.dp))
     }
+    }
+}
+
+/** En-tête « film » : grande image, logo du titre (ou titre), état de la lecture en surimpression. */
+@Composable
+private fun FilmHeader(state: CastState) {
+    val media = state.media ?: return
+    var logoOk by remember(media.logoUrl) { mutableStateOf(false) }
+    val desc = media.title + ", " + phaseLabel(state)
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .aspectRatio(16f / 9f)
+            .clip(RoundedCornerShape(28.dp))
+            .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+            .semantics(mergeDescendants = true) { contentDescription = desc; liveRegion = LiveRegionMode.Polite },
+    ) {
+        RemoteImage(media.backdropUrl, Modifier.matchParentSize())
+        Box(
+            Modifier.matchParentSize().background(
+                Brush.verticalGradient(0f to Color.Transparent, 0.45f to Color.Black.copy(alpha = 0.15f), 1f to Color.Black.copy(alpha = 0.85f))
+            )
+        )
+        Column(Modifier.align(Alignment.BottomStart).padding(18.dp)) {
+            RemoteImage(
+                media.logoUrl, maxSide = 600, contentScale = ContentScale.Fit, alignment = Alignment.CenterStart,
+                modifier = Modifier.heightIn(max = 64.dp).widthIn(max = 230.dp), onState = { logoOk = it },
+            )
+            if (!logoOk) {
+                Text(media.title, style = MaterialTheme.typography.headlineSmall, color = Color.White, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            }
+            Spacer(Modifier.height(8.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                LiveDot(active = state.phase == Phase.PLAYING)
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    phaseLabel(state) + (state.renderer?.let { " · " + it.name } ?: ""),
+                    style = MaterialTheme.typography.labelLarge, color = Color.White.copy(alpha = 0.9f),
+                    maxLines = 1, overflow = TextOverflow.Ellipsis,
+                )
+            }
+        }
+        if (state.phase == Phase.LOADING || state.phase == Phase.SENDING || state.phase == Phase.BUFFERING) {
+            LinearProgressIndicator(Modifier.fillMaxWidth().align(Alignment.BottomCenter))
+        }
+    }
+}
+
+/** Petit point « à l'antenne » qui pulse pendant la lecture. */
+@Composable
+private fun LiveDot(active: Boolean) {
+    val t = rememberInfiniteTransition(label = "direct")
+    val a by t.animateFloat(1f, 0.35f, infiniteRepeatable(tween(900), RepeatMode.Reverse), label = "alpha")
+    Box(
+        Modifier.size(9.dp).clip(CircleShape)
+            .background(MaterialTheme.colorScheme.primary.copy(alpha = if (active) a else 0.6f))
+    )
 }
 
 @Composable

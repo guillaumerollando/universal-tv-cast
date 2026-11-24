@@ -8,8 +8,11 @@ import org.json.JSONArray
 import org.json.JSONObject
 import studio.rollando.castor.cast.Media
 
-data class Recent(val title: String, val url: String, val mime: String?, val headers: Map<String, String>, val pageUrl: String?, val time: Long) {
-    fun toMedia() = Media(url = url, title = title, mime = mime, headers = headers, pageUrl = pageUrl)
+data class Recent(
+    val title: String, val url: String, val mime: String?, val headers: Map<String, String>, val pageUrl: String?, val time: Long,
+    val poster: String? = null, val fileName: String? = null,
+) {
+    fun toMedia() = Media(url = url, title = title, mime = mime, headers = headers, pageUrl = pageUrl, posterUrl = poster, fileName = fileName)
 }
 
 data class Bookmark(val title: String, val url: String)
@@ -68,7 +71,7 @@ object Library {
 
     fun addRecent(m: Media) {
         if (m.isLocal) return
-        val r = Recent(m.title, m.url, m.mime, m.headers, m.pageUrl, System.currentTimeMillis())
+        val r = Recent(m.title, m.url, m.mime, m.headers, m.pageUrl, System.currentTimeMillis(), m.posterUrl, m.fileName)
         _recents.value = (listOf(r) + _recents.value.filter { it.url != m.url }).take(30)
         saveRecents()
     }
@@ -89,7 +92,7 @@ object Library {
     private fun saveRecents() {
         val arr = JSONArray()
         for (r in _recents.value) arr.put(JSONObject().apply {
-            put("title", r.title); put("url", r.url); put("mime", r.mime ?: ""); put("page", r.pageUrl ?: "")
+            put("title", r.title); put("url", r.url); put("mime", r.mime ?: ""); put("page", r.pageUrl ?: ""); put("poster", r.poster ?: ""); put("file", r.fileName ?: "")
             put("time", r.time); put("headers", JSONObject(r.headers as Map<*, *>))
         })
         prefs.edit().putString("recents", arr.toString()).apply()
@@ -104,6 +107,8 @@ object Library {
             mime = o.optString("mime").ifEmpty { null },
             headers = h?.keys()?.asSequence()?.associateWith { h.getString(it) } ?: emptyMap(),
             pageUrl = o.optString("page").ifEmpty { null },
+            poster = o.optString("poster").ifEmpty { null },
+            fileName = o.optString("file").ifEmpty { null },
             time = o.optLong("time"),
         )
     }

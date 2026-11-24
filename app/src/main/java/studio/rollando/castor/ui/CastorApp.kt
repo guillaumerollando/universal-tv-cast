@@ -83,6 +83,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.flow.MutableStateFlow
 import studio.rollando.castor.BuildConfig
 import studio.rollando.castor.R
@@ -133,7 +134,7 @@ fun CastorApp() {
                     Spacer(Modifier.width(8.dp))
                     Text(
                         stringResource(R.string.app_name), maxLines = 1, softWrap = false,
-                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                        style = MaterialTheme.typography.titleLarge.copy(fontFamily = Lilita, fontWeight = FontWeight.Normal, fontSize = 26.sp),
                         modifier = Modifier.semantics { heading() },
                     )
                     Spacer(Modifier.width(12.dp))
@@ -149,27 +150,7 @@ fun CastorApp() {
                 }
             }
         },
-        bottomBar = {
-            NavigationBar {
-                NavigationBarItem(
-                    selected = tab == Tab.HOME, onClick = { Nav.tab.value = Tab.HOME },
-                    icon = { Icon(Icons.Rounded.Home, null) }, label = { Text(stringResource(R.string.tab_home)) },
-                )
-                NavigationBarItem(
-                    selected = tab == Tab.BROWSER, onClick = { Nav.tab.value = Tab.BROWSER },
-                    icon = { Icon(Icons.Rounded.Public, null) }, label = { Text(stringResource(R.string.tab_browser)) },
-                )
-                NavigationBarItem(
-                    selected = tab == Tab.PLAYER, onClick = { Nav.tab.value = Tab.PLAYER },
-                    icon = {
-                        BadgedBox(badge = { if (state.active) Badge(containerColor = MaterialTheme.colorScheme.primary) }) {
-                            Icon(if (state.active) Icons.Rounded.CastConnected else Icons.Rounded.Cast, null)
-                        }
-                    },
-                    label = { Text(stringResource(R.string.tab_player)) },
-                )
-            }
-        },
+        bottomBar = { PillTabBar(tab, state.active) { Nav.tab.value = it } },
     ) { padding ->
         Box(Modifier.padding(padding).fillMaxSize()) {
             when (tab) {

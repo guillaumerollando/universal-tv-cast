@@ -79,11 +79,14 @@ private fun fredoka(w: Int) = Font(R.font.fredoka, FontWeight(w), variationSetti
 /** Fredoka (déjà utilisée par les jeux du studio) pour les titres et les boutons ; le texte courant reste lisible. */
 val Fredoka = FontFamily(fredoka(400), fredoka(500), fredoka(600), fredoka(700))
 
+/** Lilita One (police de Jimmy's Blackout) : le nom Castor et les grands titres. */
+val Lilita = FontFamily(Font(R.font.lilita_one, FontWeight.Normal))
+
 private val base = Typography()
 private val Type = base.copy(
-    displaySmall = base.displaySmall.copy(fontFamily = Fredoka, fontWeight = FontWeight.Bold),
-    headlineSmall = base.headlineSmall.copy(fontFamily = Fredoka, fontWeight = FontWeight.SemiBold),
-    headlineMedium = base.headlineMedium.copy(fontFamily = Fredoka, fontWeight = FontWeight.SemiBold),
+    displaySmall = base.displaySmall.copy(fontFamily = Lilita, fontWeight = FontWeight.Normal),
+    headlineSmall = base.headlineSmall.copy(fontFamily = Lilita, fontWeight = FontWeight.Normal, letterSpacing = base.headlineSmall.letterSpacing),
+    headlineMedium = base.headlineMedium.copy(fontFamily = Lilita, fontWeight = FontWeight.Normal),
     titleLarge = base.titleLarge.copy(fontFamily = Fredoka, fontWeight = FontWeight.SemiBold),
     titleMedium = base.titleMedium.copy(fontFamily = Fredoka, fontWeight = FontWeight.Medium),
     titleSmall = base.titleSmall.copy(fontFamily = Fredoka, fontWeight = FontWeight.Medium),

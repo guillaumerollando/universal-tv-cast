@@ -126,3 +126,8 @@ trop neutre ; avance parfois un peu « hésitante » mais qui se corrige ; toujo
   lecture (immobiles si les animations sont coupées) ; arcs de diffusion dans la carte d'accueil.
 
 **En cours** : capture du journal pendant un envoi depuis Stremio pour voir comment il transmet les sous-titres.
+
+## 2026-11-25 — Police marquante et barre d'onglets à nous
+**Fait** : Lilita One (police de Jimmy's Blackout) pour le nom Castor et les grands titres ; barre d'onglets en
+pilule flottante (onglet actif en capsule ambrée avec son nom, les autres en icône, nom lu par les lecteurs
+d'écran, point ambré sur Lecture pendant une diffusion). Vérifié en thème sombre et clair sur émulateur.

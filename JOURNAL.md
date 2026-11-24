@@ -156,3 +156,7 @@ retirées ; 3 graisses seulement (appli à 2,1 Mo). Pilule, ondes et arcs conser
 
 **À vérifier sur la vraie télé** : plus de flashs ; la Philips affiche-t-elle les sous-titres (CaptionInfo.sec,
 DIDL, ou fichier .srt voisin) ?
+
+## 2026-11-25 — Barre d'onglets : taille fixe, indicateur qui glisse
+La pilule qui changeait de largeur faisait un effet « gluant ». Remplacée par une barre flottante de largeur fixe,
+trois emplacements égaux (icône + nom toujours visibles) et un indicateur ambré qui glisse en 0,22 s sans rebond.

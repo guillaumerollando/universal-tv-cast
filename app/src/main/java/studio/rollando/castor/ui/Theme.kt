@@ -7,10 +7,10 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontVariation
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.text.font.FontWeight
 import studio.rollando.castor.R
 
@@ -73,24 +73,33 @@ private val Light = lightColorScheme(
     outlineVariant = Color(0xFFD6C4B5),
 )
 
-@OptIn(ExperimentalTextApi::class)
-private fun fredoka(w: Int) = Font(R.font.fredoka, FontWeight(w), variationSettings = FontVariation.Settings(FontVariation.weight(w)))
-
-/** Fredoka (déjà utilisée par les jeux du studio) pour les titres et les boutons ; le texte courant reste lisible. */
-val Fredoka = FontFamily(fredoka(400), fredoka(500), fredoka(600), fredoka(700))
-
-/** Lilita One (police de Jimmy's Blackout) : le nom Castor et les grands titres. */
-val Lilita = FontFamily(Font(R.font.lilita_one, FontWeight.Normal))
+/** Inter Display (titres, extra-gras, lettres resserrées : l'esprit des applis de streaming) et Inter (le reste). */
+val InterDisplay = FontFamily(Font(R.font.inter_display_extrabold, FontWeight.ExtraBold))
+val Inter = FontFamily(
+    Font(R.font.inter_regular, FontWeight.Normal),
+    Font(R.font.inter_semibold, FontWeight.SemiBold),
+)
 
 private val base = Typography()
-private val Type = base.copy(
-    displaySmall = base.displaySmall.copy(fontFamily = Lilita, fontWeight = FontWeight.Normal),
-    headlineSmall = base.headlineSmall.copy(fontFamily = Lilita, fontWeight = FontWeight.Normal, letterSpacing = base.headlineSmall.letterSpacing),
-    headlineMedium = base.headlineMedium.copy(fontFamily = Lilita, fontWeight = FontWeight.Normal),
-    titleLarge = base.titleLarge.copy(fontFamily = Fredoka, fontWeight = FontWeight.SemiBold),
-    titleMedium = base.titleMedium.copy(fontFamily = Fredoka, fontWeight = FontWeight.Medium),
-    titleSmall = base.titleSmall.copy(fontFamily = Fredoka, fontWeight = FontWeight.Medium),
-    labelLarge = base.labelLarge.copy(fontFamily = Fredoka, fontWeight = FontWeight.Medium, fontSize = base.labelLarge.fontSize * 1.05f),
+private fun TextStyle.display() = copy(fontFamily = InterDisplay, fontWeight = FontWeight.ExtraBold, letterSpacing = (-0.02).em)
+private fun TextStyle.ui(w: FontWeight) = copy(fontFamily = Inter, fontWeight = w)
+
+private val Type = Typography(
+    displayLarge = base.displayLarge.display(),
+    displayMedium = base.displayMedium.display(),
+    displaySmall = base.displaySmall.display(),
+    headlineLarge = base.headlineLarge.display(),
+    headlineMedium = base.headlineMedium.display(),
+    headlineSmall = base.headlineSmall.display(),
+    titleLarge = base.titleLarge.display().copy(letterSpacing = (-0.01).em),
+    titleMedium = base.titleMedium.ui(FontWeight.SemiBold),
+    titleSmall = base.titleSmall.ui(FontWeight.SemiBold),
+    bodyLarge = base.bodyLarge.ui(FontWeight.Normal),
+    bodyMedium = base.bodyMedium.ui(FontWeight.Normal),
+    bodySmall = base.bodySmall.ui(FontWeight.Normal),
+    labelLarge = base.labelLarge.ui(FontWeight.SemiBold),
+    labelMedium = base.labelMedium.ui(FontWeight.SemiBold),
+    labelSmall = base.labelSmall.ui(FontWeight.SemiBold),
 )
 
 @Composable

@@ -134,7 +134,7 @@ fun CastorApp() {
                     Spacer(Modifier.width(8.dp))
                     Text(
                         stringResource(R.string.app_name), maxLines = 1, softWrap = false,
-                        style = MaterialTheme.typography.titleLarge.copy(fontFamily = Lilita, fontWeight = FontWeight.Normal, fontSize = 26.sp),
+                        style = MaterialTheme.typography.headlineSmall.copy(fontSize = 25.sp),
                         modifier = Modifier.semantics { heading() },
                     )
                     Spacer(Modifier.width(12.dp))

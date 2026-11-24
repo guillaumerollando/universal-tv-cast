@@ -131,3 +131,8 @@ trop neutre ; avance parfois un peu « hésitante » mais qui se corrige ; toujo
 **Fait** : Lilita One (police de Jimmy's Blackout) pour le nom Castor et les grands titres ; barre d'onglets en
 pilule flottante (onglet actif en capsule ambrée avec son nom, les autres en icône, nom lu par les lecteurs
 d'écran, point ambré sur Lecture pendant une diffusion). Vérifié en thème sombre et clair sur émulateur.
+
+## 2026-11-25 — Police : Inter Display / Inter
+Lilita One jugée « comics », pas pro. Planche de comparaison (Inter Display, Figtree, Fredoka) : choix de
+le testeur = **Inter Display** (titres extra-gras, lettres resserrées) + **Inter** (reste). Lilita et Fredoka
+retirées ; 3 graisses seulement (appli à 2,1 Mo). Pilule, ondes et arcs conservés. Vérifié sur émulateur.

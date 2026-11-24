@@ -18,7 +18,12 @@ data class Media(
     val subs: List<SubSource> = emptyList(),
     val defaultSub: Int = -1,
     val pageUrl: String? = null,
+    /** Appli qui nous a envoyé la vidéo (ex. com.stremio.one), si connue. */
+    val sourceApp: String? = null,
 ) {
+    /** La vidéo est servie par une autre appli du téléphone (Stremio et son serveur local…). */
+    val fromPhoneApp: Boolean get() = runCatching { Uri.parse(url).host }.getOrNull()
+        ?.let { it == "127.0.0.1" || it == "localhost" || it == "::1" } == true
     val isLocal: Boolean get() = url.startsWith("content:") || url.startsWith("file:")
     val host: String? get() = if (isLocal) null else runCatching { Uri.parse(pageUrl ?: url).host?.removePrefix("www.") }.getOrNull()
 }

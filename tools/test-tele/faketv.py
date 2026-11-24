@@ -1,6 +1,7 @@
 """Fausse télé Philips Titan OS (DMR) pour tester Castor sans la vraie télé."""
 import http.server, socketserver, threading, time, re, html, subprocess, urllib.request, sys
 DUR = float(sys.argv[1]) if len(sys.argv) > 1 else 180.0
+PATIENCE = float(sys.argv[2]) if len(sys.argv) > 2 else 10.0
 ADB = ['~/Android/Sdk/platform-tools/adb', '-s', 'emulator-5554']
 LOCK = threading.Lock()
 S = {'state': 'NO_MEDIA_PRESENT', 'uri': None, 'pos': 0.0, 't': None, 'total': None, 'gen': 0}
@@ -23,7 +24,7 @@ def player(gen, target):
     t0 = time.time()
     try:
         req = urllib.request.Request(url, headers={'Range': f'bytes={off}-', 'User-Agent': 'GStreamer souphttpsrc'})
-        r = urllib.request.urlopen(req, timeout=10); r.read(65536); r.close()
+        r = urllib.request.urlopen(req, timeout=PATIENCE); r.read(65536); r.close()
     except Exception as e:
         if gen == S['gen']: hdmi(f'vidéo pas arrivée en 10 s ({type(e).__name__}) à {target:.0f}s')
         return

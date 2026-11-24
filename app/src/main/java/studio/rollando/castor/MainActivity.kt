@@ -46,7 +46,9 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun handle(intent: Intent?) {
-        val media = Intake.parse(this, intent) ?: return
+        val parsed = Intake.parse(this, intent) ?: return
+        val from = referrer?.takeIf { it.scheme == "android-app" }?.host?.takeIf { it != packageName }
+        val media = parsed.copy(sourceApp = from)
         Castor.open(media)
         Nav.tab.value = Tab.PLAYER
     }

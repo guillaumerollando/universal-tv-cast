@@ -66,3 +66,21 @@ changement de vidéo pendant la lecture (« Transport locked ») mais l'accepte 
 
 **Pas fait** : essai par le testeur sur la vraie télé avec Stremio. Le bouton Arrêter et la fin de vidéo
 renvoient toujours sur la dernière source (choix de la télé).
+
+## 2026-11-24 — Retour arrière : c'était pire
+**Retour du testeur** : avance qui n'avance plus, appli qui mouline, télé relancée de force 3 fois quand il quittait
+le lecteur (impression de piratage). La reprise automatique ne distinguait pas une panne d'un départ volontaire,
+et le préchargement bloquait toutes les commandes jusqu'à 60 s.
+
+**Vraie cause** (journaux du téléphone) : MIUI met **Stremio** en veille (`SmartPower … background→idle`) 3 s après
+qu'on le quitte, et le tue parfois. Son serveur de torrent (127.0.0.1:11470) ne répond alors plus aux demandes
+de la télé pour un nouveau morceau : la télé attend, continue l'ancien tampon, puis abandonne → HDMI 1.
+Même cause pour l'erreur vue dans Web Video Cast.
+
+**Fait**
+- Reprise automatique et préchargement **retirés**.
+- Castor retient l'appli qui envoie la vidéo ; si la télé attend plus de 15 s une vidéo servie par le téléphone,
+  message « … Android l'a sans doute mis en veille » + bouton vers les réglages de l'appli source.
+- Vérifié sur émulateur + fausse télé : message affiché ; quand la télé abandonne, Castor ne relance rien.
+
+**Pas fait** : vérifier avec Stremio réglé sur « Aucune restriction » (batterie) chez le testeur.

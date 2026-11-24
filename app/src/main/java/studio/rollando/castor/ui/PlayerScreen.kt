@@ -141,6 +141,21 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
                     )
                     IconButton(onClick = Castor::dismissNotice) { Icon(Icons.Rounded.Close, stringResource(R.string.cd_dismiss)) }
                 }
+                val pkg = media.sourceApp
+                if (n.res == R.string.notice_source_asleep && pkg != null) {
+                    val context = LocalContext.current
+                    TextButton(
+                        onClick = {
+                            runCatching {
+                                context.startActivity(
+                                    Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$pkg"))
+                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                )
+                            }
+                        },
+                        modifier = Modifier.padding(start = 8.dp, bottom = 4.dp),
+                    ) { Text(stringResource(R.string.action_source_settings, n.arg ?: "")) }
+                }
             }
         }
 

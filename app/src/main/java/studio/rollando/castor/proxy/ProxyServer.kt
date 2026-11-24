@@ -101,38 +101,6 @@ class ProxyServer(private val ctx: Context) {
         }
     }
 
-    /**
-     * Fait venir à l'avance le morceau de vidéo situé à [fraction] (0..1) de la source, et attend qu'il arrive.
-     * Avec une source lente (torrent), la télé abandonne au bout d'une dizaine de secondes et quitte
-     * le lecteur ; une fois le morceau téléchargé par la source, son déplacement est immédiat.
-     */
-    fun prewarm(id: String, fraction: Double, maxMs: Int = 60_000): Boolean {
-        val r = remotes[id] ?: return false
-        val m = metas[id] ?: run { prefetchMeta(id); metas[id] } ?: return false
-        if (!m.ranges || m.total <= 0) return false
-        val off = (m.total * fraction.coerceIn(0.0, 1.0)).toLong().coerceIn(0, m.total - 1)
-        val t0 = System.currentTimeMillis()
-        val conn = runCatching { Http.open(r.url, r.headers, "bytes=$off-", readTimeout = maxMs) }.getOrNull() ?: return false
-        return try {
-            val buf = ByteArray(256 * 1024)
-            var got = 0
-            conn.inputStream.use { ins ->
-                while (got < buf.size) {
-                    val n = ins.read(buf, got, buf.size - got)
-                    if (n < 0) break
-                    got += n
-                }
-            }
-            Log.i(TAG, "préchargement $id à ${(fraction * 100).toInt()} % : ${got / 1024} Ko en ${System.currentTimeMillis() - t0} ms")
-            got > 0
-        } catch (e: IOException) {
-            Log.i(TAG, "préchargement $id échoué : ${e.message}")
-            false
-        } finally {
-            conn.disconnect()
-        }
-    }
-
     fun registerLocal(uri: Uri): String {
         val id = "l" + counter.incrementAndGet()
         locals[id] = uri

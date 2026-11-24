@@ -91,9 +91,6 @@ object Castor {
 
     /** Vrai pendant qu'une commande est envoyée à la télé : on ne l'interroge pas en même temps. */
     @Volatile private var busy = false
-    @Volatile private var userStopped = false
-    private var recoveries = 0
-    private var lastRecoveryAt = 0L
 
     private fun exec(block: suspend () -> Unit) = scope.launch(cmd) {
         busy = true
@@ -267,7 +264,7 @@ object Castor {
         val s = _state.value
         val m = s.media ?: return
         Net.localIp() ?: throw NoWifi()
-        _state.update { it.copy(phase = Phase.SENDING, notice = it.notice?.takeIf { n -> n.res == R.string.notice_resumed }) }
+        _state.update { it.copy(phase = Phase.SENDING, notice = null) }
         val base = proxy.baseUrl()
         val tvMimes = sinksOf(r)
         // Une télé qui ne lit pas le HLS reçoit toujours le flux continu.
@@ -296,7 +293,6 @@ object Castor {
         Dlna.play(r)
         castTime = System.currentTimeMillis()
         CastService.start(app)
-        userStopped = false
         _state.update { it.copy(phase = Phase.BUFFERING, position = start) }
         if (!continuous && start > 1) {
             delay(2500)
@@ -311,6 +307,7 @@ object Castor {
         pollJob = scope.launch {
             var stoppedTicks = 0
             var failures = 0
+            var waitingSince = 0L
             while (isActive) {
                 delay(if (failures >= 2) 10_000 else 2000)
                 if (busy) continue
@@ -340,8 +337,18 @@ object Castor {
                             },
                         )
                     }
+                    // La télé attend des données qui ne viennent pas, d'une appli du téléphone (Stremio…) :
+                    // Android l'a très probablement mise en veille.
+                    val st = _state.value
+                    if (st.phase == Phase.BUFFERING) {
+                        if (waitingSince == 0L) waitingSince = System.currentTimeMillis()
+                        if (System.currentTimeMillis() - waitingSince > 15_000 && st.media?.fromPhoneApp == true &&
+                            st.notice?.res != R.string.notice_source_asleep
+                        ) {
+                            _state.update { it.copy(notice = Notice(R.string.notice_source_asleep, sourceLabel(st.media))) }
+                        }
+                    } else waitingSince = 0L
                     if (_state.value.phase == Phase.STOPPED) {
-                        if (maybeRecover()) { stoppedTicks = 0; continue }
                         if (++stoppedTicks >= 3) { CastService.stop(app); break }
                     } else stoppedTicks = 0
                 } catch (_: Exception) {
@@ -351,29 +358,12 @@ object Castor {
         }
     }
 
-    /**
-     * La télé a quitté la lecture sans qu'on le lui demande, en plein milieu de la vidéo
-     * (source trop lente après une avance, erreur du lecteur…). Une Philips Titan OS repart alors
-     * sur la dernière source (HDMI). On relance la vidéo à la même position, deux fois au plus.
-     */
-    private fun maybeRecover(): Boolean {
-        val s = _state.value
-        if (userStopped || s.media == null) return false
-        val nearEnd = s.duration > 0 && s.position > s.duration - 20
-        if (nearEnd || s.position < 3) return false
-        val now = System.currentTimeMillis()
-        if (now - lastRecoveryAt > 120_000) recoveries = 0
-        if (recoveries >= 2) return false
-        recoveries++
-        lastRecoveryAt = now
-        val at = s.position
-        _state.update { it.copy(notice = Notice(R.string.notice_resumed, clockText(at))) }
-        exec {
-            val id = remoteId
-            if (s.media.isLocal.not() && id != null && s.duration > 0) runCatching { proxy.prewarm(id, at / s.duration) }
-            castAt(at)
-        }
-        return true
+    private fun sourceLabel(m: Media): String {
+        val pkg = m.sourceApp ?: return app.getString(R.string.source_generic)
+        return runCatching {
+            val pm = app.packageManager
+            pm.getApplicationLabel(pm.getApplicationInfo(pkg, 0)).toString()
+        }.getOrDefault(pkg)
     }
 
     private fun clockText(sec: Double): String {
@@ -427,13 +417,6 @@ object Castor {
         val s = _state.value
         val r = s.renderer ?: throw NoTv()
         if (s.isHls && s.continuous) { castAt(target); return }
-        // Source lente (torrent…) : on fait venir le morceau avant de déplacer la télé.
-        val id = remoteId
-        if (!s.media!!.isLocal && id != null && s.duration > 0) {
-            _state.update { it.copy(phase = Phase.BUFFERING) }
-            holdPositionUntil = System.currentTimeMillis() + 65_000
-            runCatching { proxy.prewarm(id, target / s.duration) }
-        }
         waitUntilSettled(r)
         try {
             Dlna.seek(r, target)
@@ -483,7 +466,6 @@ object Castor {
     }
 
     fun stop() = exec {
-        userStopped = true
         pollJob?.cancel()
         _state.value.renderer?.let { r -> runCatching { Dlna.stop(r) } }
         _state.update { it.copy(phase = Phase.STOPPED) }

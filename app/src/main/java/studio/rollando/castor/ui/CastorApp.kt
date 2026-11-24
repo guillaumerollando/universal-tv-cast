@@ -225,7 +225,7 @@ private fun TvSheet(onDismiss: () -> Unit) {
                         val selected = r.udn == state.renderer?.udn
                         ListItem(
                             headlineContent = { Text(r.name) },
-                            supportingContent = listOfNotNull(r.manufacturer, r.model).joinToString(" · ").takeIf { it.isNotBlank() }
+                            supportingContent = listOfNotNull(r.manufacturer, r.model, r.host).distinct().joinToString(" · ").takeIf { it.isNotBlank() }
                                 ?.let { { Text(it) } },
                             leadingContent = { Icon(Icons.Rounded.Tv, null) },
                             trailingContent = { RadioButton(selected = selected, onClick = null) },
@@ -242,6 +242,33 @@ private fun TvSheet(onDismiss: () -> Unit) {
                 Icon(Icons.Rounded.Refresh, null)
                 Spacer(Modifier.width(8.dp))
                 Text(stringResource(if (state.searching) R.string.tv_searching else R.string.tv_search_again))
+            }
+            var manual by rememberSaveable { mutableStateOf(false) }
+            var ip by rememberSaveable { mutableStateOf("") }
+            val ipOk = Regex("^\\d{1,3}(\\.\\d{1,3}){3}$").matches(ip.trim())
+            if (!manual) {
+                TextButton(onClick = { manual = true }, modifier = Modifier.fillMaxWidth().height(48.dp)) {
+                    Text(stringResource(R.string.tv_add_ip))
+                }
+            } else {
+                Spacer(Modifier.height(12.dp))
+                OutlinedTextField(
+                    value = ip, onValueChange = { ip = it }, singleLine = true,
+                    label = { Text(stringResource(R.string.tv_ip_label)) },
+                    placeholder = { Text("192.168.1.20") },
+                    supportingText = { Text(stringResource(R.string.tv_ip_help)) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { if (ipOk) Castor.addByIp(ip) }),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                FilledTonalButton(
+                    onClick = { Castor.addByIp(ip) }, enabled = ipOk && !state.searching,
+                    modifier = Modifier.fillMaxWidth().height(52.dp),
+                ) { Text(stringResource(R.string.action_add)) }
+                state.notice?.takeIf { it.res == R.string.err_ip_not_found }?.let { n ->
+                    Spacer(Modifier.height(8.dp))
+                    Text(stringResource(n.res, n.arg ?: ""), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
+                }
             }
         }
     }

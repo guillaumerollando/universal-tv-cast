@@ -77,6 +77,10 @@ object Castor {
     private var subVersion = 0
     private var pollJob: Job? = null
     private var pendingCast = false
+    private val sinks = java.util.concurrent.ConcurrentHashMap<String, List<String>>()
+
+    private fun sinksOf(r: Renderer): List<String> =
+        sinks.getOrPut(r.udn) { runCatching { Dlna.sinkMimes(r) }.getOrDefault(emptyList()) }
 
     fun init(ctx: Context) {
         if (::app.isInitialized) return
@@ -121,7 +125,8 @@ object Castor {
         scope.launch {
             val found = mutableListOf<Renderer>()
             try {
-                Dlna.discover(app) { r ->
+                Dlna.discover(app, Library.knownTvs) { r ->
+                    Library.rememberTv(r.location)
                     synchronized(found) { if (found.none { it.udn == r.udn }) found += r }
                     publish(synchronized(found) { found.toList() })
                 }
@@ -134,6 +139,22 @@ object Castor {
                 pendingCast = false
                 exec { castAt(0.0) }
             }
+        }
+    }
+
+    /** Ajout manuel d'une télé par son adresse IP. */
+    fun addByIp(ip: String) {
+        _state.update { it.copy(searching = true) }
+        scope.launch {
+            val r = runCatching { Dlna.probe(ip.trim()) }.getOrNull()
+            _state.update { it.copy(searching = false) }
+            if (r == null) {
+                _state.update { it.copy(notice = Notice(R.string.err_ip_not_found, ip.trim(), true)) }
+                return@launch
+            }
+            Library.rememberTv(r.location)
+            publish((_state.value.renderers.filter { it.udn != r.udn } + r))
+            chooseTv(r)
         }
     }
 
@@ -237,8 +258,11 @@ object Castor {
         Net.localIp() ?: throw NoWifi()
         _state.update { it.copy(phase = Phase.SENDING, notice = null) }
         val base = proxy.baseUrl()
-        val continuous = s.isHls && s.continuous
-        val (url, mime) = when {
+        val tvMimes = sinksOf(r)
+        // Une télé qui ne lit pas le HLS reçoit toujours le flux continu.
+        val continuous = s.isHls && (s.continuous || !Dlna.accepts(tvMimes, "application/vnd.apple.mpegurl"))
+        if (continuous != (s.isHls && s.continuous)) _state.update { it.copy(continuous = true) }
+        val (url, rawMime) = when {
             m.isLocal -> {
                 val uri = Uri.parse(m.url)
                 val type = app.contentResolver.getType(uri)?.takeIf { Mime.isMedia(it) } ?: m.mime ?: Mime.guess(m.title)
@@ -250,6 +274,8 @@ object Castor {
             else -> "$base/r/$remoteId/video.${Mime.ext(m.url).ifEmpty { "mp4" }}" to
                 (m.mime?.takeIf { Mime.isMedia(it) } ?: Mime.guess(m.url))
         }
+        val mime = Dlna.adaptMime(rawMime, tvMimes)
+        proxy.mimeOverride = mime.takeIf { it != rawMime }
         val subUrl = proxy.subtitle?.let { "$base/sub/$subVersion/subtitles.srt" }
         proxy.subtitleUrl = subUrl
         startOffset = if (continuous) start.toLong().toDouble() else 0.0

@@ -39,6 +39,14 @@ object Library {
         get() = prefs.getString("tv", null)
         set(v) { prefs.edit().putString("tv", v).apply() }
 
+    /** Adresses de description des télés déjà vues : revérifiées en premier à chaque recherche. */
+    val knownTvs: Set<String> get() = prefs.getStringSet("tvs", emptySet()).orEmpty()
+
+    fun rememberTv(location: String) {
+        if (location.isBlank() || location in knownTvs) return
+        prefs.edit().putStringSet("tvs", (knownTvs + location).toList().takeLast(10).toSet()).apply()
+    }
+
     fun setAdBlock(on: Boolean) { _adBlock.value = on; prefs.edit().putBoolean("adblock", on).apply() }
     fun setContinuous(on: Boolean) { _continuous.value = on; prefs.edit().putBoolean("continuous", on).apply() }
 

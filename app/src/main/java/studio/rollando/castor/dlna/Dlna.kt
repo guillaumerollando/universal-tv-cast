@@ -12,12 +12,16 @@ import java.net.DatagramSocket
 import java.net.HttpURLConnection
 import java.net.InetAddress
 import java.net.InetSocketAddress
+import java.net.MulticastSocket
+import java.net.Socket
 import java.net.SocketTimeoutException
 import java.net.URL
 import java.util.Locale
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import javax.xml.parsers.DocumentBuilderFactory
+import kotlin.concurrent.thread
 
 /** Une télé (ou tout lecteur DLNA / UPnP « MediaRenderer ») trouvée sur le réseau. */
 data class Renderer(
@@ -29,7 +33,12 @@ data class Renderer(
     val rcType: String?,
     val manufacturer: String?,
     val model: String?,
-)
+    val location: String = "",
+    val cmUrl: String? = null,
+    val cmType: String? = null,
+) {
+    val host: String get() = runCatching { URL(location.ifEmpty { avUrl }).host }.getOrDefault("")
+}
 
 /** La télé a répondu par une erreur UPnP. */
 class TvError(val detail: String) : IOException(detail)
@@ -42,17 +51,85 @@ object Dlna {
         "ssdp:all",
     )
 
-    /** Cherche les télés pendant [timeoutMs] ; [onFound] est appelé dès qu'une télé est décrite. */
-    fun discover(ctx: Context, timeoutMs: Long = 5000, onFound: (Renderer) -> Unit) {
+    /** Ports et chemins habituels des récepteurs DLNA, pour les télés qui ne répondent pas à la recherche SSDP. */
+    private val PROBE_PORTS = listOf(49152, 49153, 49154, 49155, 9197, 2869, 8080)
+    private val DESC_PATHS = listOf(
+        "/description.xml", "/dmr.xml", "/DeviceDescription.xml", "/rootDesc.xml", "/dmr/description.xml",
+        "/MediaRenderer/desc.xml", "/upnp/desc/aios_device/aios_device.xml", "/dd.xml",
+    )
+
+    /**
+     * Cherche les télés pendant environ [timeoutMs] ; [onFound] est appelé dès qu'une télé est décrite.
+     * Trois méthodes en parallèle : recherche SSDP, écoute des annonces, et sondage direct du réseau local
+     * (certaines télés, dont des Philips Titan OS, ne répondent jamais à la recherche SSDP).
+     * [known] : adresses de description déjà connues, vérifiées tout de suite.
+     */
+    fun discover(ctx: Context, known: Collection<String> = emptyList(), timeoutMs: Long = 5000, onFound: (Renderer) -> Unit) {
         val wifi = ctx.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         val lock = wifi.createMulticastLock("castor-ssdp").apply { setReferenceCounted(false); acquire() }
-        val pool = Executors.newFixedThreadPool(6)
-        val seen = HashSet<String>()
+        val pool = Executors.newFixedThreadPool(64)
+        val seenLocations = ConcurrentHashMap.newKeySet<String>()
+        val probedHosts = ConcurrentHashMap.newKeySet<String>()
+        val found = ConcurrentHashMap.newKeySet<String>()
+        val myIp = Net.localIp()
+
+        fun tryLocation(loc: String) {
+            if (!seenLocations.add(loc)) return
+            pool.execute {
+                runCatching { describe(loc) }.getOrNull()?.let { r -> if (found.add(r.udn)) onFound(r) }
+            }
+        }
+
+        fun probeHost(host: String, ports: List<Int> = PROBE_PORTS) {
+            if (host == myIp) return
+            for (port in ports) pool.execute {
+                if (!portOpen(host, port)) return@execute
+                for (path in DESC_PATHS) {
+                    val loc = "http://$host:$port$path"
+                    if (!seenLocations.add(loc)) continue
+                    val r = runCatching { describe(loc) }.getOrNull() ?: continue
+                    if (found.add(r.udn)) onFound(r)
+                    break
+                }
+            }
+        }
+
         try {
+            known.forEach(::tryLocation)
+
+            // Sondage direct du /24 du téléphone.
+            if (myIp != null) {
+                val prefix = myIp.substringBeforeLast('.')
+                for (i in 1..254) probeHost("$prefix.$i")
+            }
+
+            // Écoute des annonces NOTIFY (port 1900).
+            val listener = thread(isDaemon = true, name = "castor-notify") {
+                runCatching {
+                    MulticastSocket(null).use { m ->
+                        m.reuseAddress = true
+                        m.bind(InetSocketAddress(1900))
+                        @Suppress("DEPRECATION")
+                        m.joinGroup(InetAddress.getByName(SSDP_ADDR))
+                        m.soTimeout = 300
+                        val buf = ByteArray(8192)
+                        val end = System.currentTimeMillis() + timeoutMs
+                        while (System.currentTimeMillis() < end) {
+                            val p = DatagramPacket(buf, buf.size)
+                            try { m.receive(p) } catch (_: SocketTimeoutException) { continue }
+                            val text = String(p.data, 0, p.length)
+                            if (!text.startsWith("NOTIFY")) continue
+                            location(text)?.let(::tryLocation)
+                            p.address?.hostAddress?.let { if (probedHosts.add(it)) probeHost(it) }
+                        }
+                    }
+                }
+            }
+
+            // Recherche SSDP classique.
             DatagramSocket(null).use { sock ->
                 sock.reuseAddress = true
-                val ip = Net.localIp()
-                sock.bind(InetSocketAddress(ip?.let { InetAddress.getByName(it) }, 0))
+                sock.bind(InetSocketAddress(myIp?.let { InetAddress.getByName(it) }, 0))
                 sock.soTimeout = 300
                 val group = InetAddress.getByName(SSDP_ADDR)
                 val start = System.currentTimeMillis()
@@ -73,20 +150,41 @@ object Dlna {
                     } catch (_: SocketTimeoutException) {
                         continue
                     }
-                    val text = String(p.data, 0, p.length)
-                    val loc = Regex("(?im)^location:\\s*(\\S+)").find(text)?.groupValues?.get(1)?.trim() ?: continue
-                    if (seen.add(loc)) pool.execute { runCatching { describe(loc) }.getOrNull()?.let(onFound) }
+                    location(String(p.data, 0, p.length))?.let(::tryLocation)
                 }
             }
+            listener.join(1000)
         } finally {
             lock.release()
             pool.shutdown()
-            pool.awaitTermination(6, TimeUnit.SECONDS)
+            pool.awaitTermination(8, TimeUnit.SECONDS)
+            pool.shutdownNow()
         }
     }
 
+    /** Cherche une télé à une adresse IP précise (ajout manuel). */
+    fun probe(host: String): Renderer? {
+        for (port in PROBE_PORTS) {
+            if (!portOpen(host, port, 800)) continue
+            for (path in DESC_PATHS) runCatching { describe("http://$host:$port$path") }.getOrNull()?.let { return it }
+        }
+        return null
+    }
+
+    private fun location(text: String): String? =
+        Regex("(?im)^location:\\s*(\\S+)").find(text)?.groupValues?.get(1)?.trim()
+
+    private fun portOpen(host: String, port: Int, timeout: Int = 250): Boolean = try {
+        Socket().use { it.connect(InetSocketAddress(host, port), timeout); true }
+    } catch (_: Exception) {
+        false
+    }
+
     fun describe(location: String): Renderer? {
-        val f = Http.fetch(location, emptyMap(), connectTimeout = 3000)
+        val f = Http.fetch(location, emptyMap(), connectTimeout = 2000)
+        if (!String(f.bytes, 0, minOf(f.bytes.size, 512)).contains("<root", ignoreCase = true) &&
+            !String(f.bytes).contains("AVTransport")
+        ) return null
         val factory = DocumentBuilderFactory.newInstance().apply {
             isNamespaceAware = false
             isExpandEntityReferences = false
@@ -96,6 +194,7 @@ object Dlna {
         val base = text(root, "URLBase")?.trim()?.takeIf { it.isNotEmpty() } ?: f.finalUrl
         var av: Pair<String, String>? = null
         var rc: Pair<String, String>? = null
+        var cm: Pair<String, String>? = null
         val services = doc.getElementsByTagName("service")
         for (i in 0 until services.length) {
             val s = services.item(i) as? Element ?: continue
@@ -104,9 +203,13 @@ object Dlna {
             val abs = URL(URL(base), ctrl).toString()
             if (type.contains(":AVTransport:") && av == null) av = abs to type
             if (type.contains(":RenderingControl:") && rc == null) rc = abs to type
+            if (type.contains(":ConnectionManager:") && cm == null) cm = abs to type
         }
         val avp = av ?: return null
-        val name = text(root, "friendlyName")?.trim()?.takeIf { it.isNotEmpty() } ?: URL(location).host
+        val host = URL(f.finalUrl).host
+        // « 55OLED760/12(192.168.1.20) » → « 55OLED760/12 »
+        val name = text(root, "friendlyName")?.trim()?.replace(Regex("\\s*\\(${Regex.escape(host)}\\)$"), "")
+            ?.takeIf { it.isNotEmpty() } ?: host
         return Renderer(
             name = name,
             udn = text(root, "UDN")?.trim() ?: location,
@@ -116,8 +219,41 @@ object Dlna {
             rcType = rc?.second,
             manufacturer = text(root, "manufacturer")?.trim(),
             model = text(root, "modelName")?.trim(),
+            location = f.finalUrl,
+            cmUrl = cm?.first,
+            cmType = cm?.second,
         )
     }
+
+    /** Types MIME que la télé déclare savoir lire (ConnectionManager / GetProtocolInfo). */
+    fun sinkMimes(r: Renderer): List<String> {
+        val url = r.cmUrl ?: return emptyList()
+        val x = soap(url, r.cmType!!, "GetProtocolInfo", emptyList())
+        val sink = Regex("<Sink>(.*?)</Sink>", RegexOption.DOT_MATCHES_ALL).find(x)?.groupValues?.get(1) ?: return emptyList()
+        return unescape(sink).split(',').mapNotNull { it.split(':').getOrNull(2)?.trim() }.filter { it.isNotEmpty() && it != "*" }.distinct()
+    }
+
+    private val ALIASES = listOf(
+        listOf("video/mp2t", "video/mpeg", "video/MP2T", "video/x-mpegts", "video/vnd.dlna.mpeg-tts"),
+        listOf("video/x-matroska", "video/x-mkv", "video/mkv"),
+        listOf("video/x-msvideo", "video/avi", "video/x-avi"),
+        listOf("audio/mp4", "audio/x-m4a", "audio/m4a"),
+        listOf("audio/wav", "audio/x-wav", "audio/wave"),
+        listOf("application/vnd.apple.mpegurl", "application/x-mpegURL", "application/x-mpegurl", "audio/mpegurl", "audio/x-mpegurl"),
+    )
+
+    /** Choisit, parmi les noms équivalents d'un format, celui que la télé déclare accepter. */
+    fun adaptMime(mime: String, sinks: List<String>): String {
+        if (sinks.isEmpty() || sinks.any { it.equals(mime, true) }) return mime
+        val group = ALIASES.firstOrNull { g -> g.any { it.equals(mime, true) } } ?: return mime
+        return group.firstOrNull { a -> sinks.any { it.equals(a, true) } } ?: mime
+    }
+
+    fun accepts(sinks: List<String>, mime: String): Boolean =
+        sinks.isEmpty() || adaptMime(mime, sinks).let { m -> sinks.any { it.equals(m, true) } }
+
+    private fun unescape(s: String) = s.replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", "\"")
+        .replace("&apos;", "'").replace("&amp;", "&")
 
     private fun text(e: Element, tag: String): String? {
         val n = e.getElementsByTagName(tag)

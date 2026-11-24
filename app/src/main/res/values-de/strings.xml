@@ -12,6 +12,11 @@
     <string name="tv_search_again">Erneut suchen</string>
     <string name="tv_none_title">Kein Fernseher gefunden</string>
     <string name="tv_none_body">Schalte den Fernseher ein und prüfe, ob dein Handy im selben WLAN ist. Castor funktioniert mit DLNA-fähigen Fernsehern (die meisten von Philips, Samsung, LG, Sony, Panasonic, Hisense…).</string>
+    <string name="tv_add_ip">Fernseher per IP-Adresse hinzufügen</string>
+    <string name="tv_ip_label">IP-Adresse des Fernsehers</string>
+    <string name="tv_ip_help">Du findest sie in den Netzwerkeinstellungen des Fernsehers.</string>
+    <string name="action_add">Hinzufügen</string>
+    <string name="err_ip_not_found">Kein kompatibler Fernseher unter %1$s gefunden.</string>
     <string name="cd_settings">Einstellungen</string>
     <string name="home_title">Schick jedes Video auf deinen Fernseher</string>
     <string name="home_subtitle">Kostenlos. Ohne Werbung. Ohne Tracking.</string>

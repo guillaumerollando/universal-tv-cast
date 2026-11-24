@@ -45,6 +45,8 @@ class ProxyServer(private val ctx: Context) {
 
     @Volatile var subtitle: ByteArray? = null
     @Volatile var subtitleUrl: String? = null
+    /** Nom du format tel que la télé l'accepte (ex. « video/mpeg » au lieu de « video/mp2t »). */
+    @Volatile var mimeOverride: String? = null
 
     init {
         thread(isDaemon = true, name = "castor-proxy") {
@@ -59,7 +61,7 @@ class ProxyServer(private val ctx: Context) {
 
     fun reset() {
         remotes.clear(); idsByUrl.clear(); locals.clear()
-        subtitle = null; subtitleUrl = null
+        subtitle = null; subtitleUrl = null; mimeOverride = null
     }
 
     fun register(url: String, headers: Map<String, String>, kind: Kind = Kind.MAIN): String =
@@ -193,7 +195,7 @@ class ProxyServer(private val ctx: Context) {
                 }
                 Kind.KEY -> sendBytes(req, out, conn.inputStream.use { it.readBytes() }, "application/octet-stream")
                 else -> {
-                    val type = if (Mime.isMedia(ct)) ct!! else Mime.guess(r.url)
+                    val type = mimeOverride ?: if (Mime.isMedia(ct)) ct!! else Mime.guess(r.url)
                     val h = mutableListOf("Content-Type" to type, "Accept-Ranges" to "bytes")
                     conn.getHeaderField("Content-Length")?.let { h += "Content-Length" to it }
                     conn.getHeaderField("Content-Range")?.let { h += "Content-Range" to it }
@@ -258,7 +260,7 @@ class ProxyServer(private val ctx: Context) {
         val r = remotes[req.seg.getOrNull(1)] ?: return empty(out, 404, "Not Found")
         val start = req.query["start"]?.toDoubleOrNull() ?: 0.0
         var plan = Hls.load(r.url, r.headers)
-        val type = if (plan.fmp4) "video/mp4" else "video/mp2t"
+        val type = mimeOverride ?: if (plan.fmp4) "video/mp4" else "video/mp2t"
         head(out, 200, "OK", listOf("Content-Type" to type, "Cache-Control" to "no-cache") + dlna(false))
         if (req.method == "HEAD") return
 
@@ -339,7 +341,7 @@ class ProxyServer(private val ctx: Context) {
         afd.use {
             var total = afd.length
             if (total < 0) total = afd.parcelFileDescriptor.statSize
-            val type = cr.getType(uri)?.takeIf { Mime.isMedia(it) } ?: Mime.guess(uri.toString())
+            val type = mimeOverride ?: cr.getType(uri)?.takeIf { Mime.isMedia(it) } ?: Mime.guess(uri.toString())
             val range = parseRange(req.headers["range"], total)
             afd.createInputStream().use { ins ->
                 if (range == null) {

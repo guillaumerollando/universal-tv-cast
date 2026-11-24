@@ -136,3 +136,23 @@ d'écran, point ambré sur Lecture pendant une diffusion). Vérifié en thème s
 Lilita One jugée « comics », pas pro. Planche de comparaison (Inter Display, Figtree, Fredoka) : choix de
 le testeur = **Inter Display** (titres extra-gras, lettres resserrées) + **Inter** (reste). Lilita et Fredoka
 retirées ; 3 graisses seulement (appli à 2,1 Mo). Pilule, ondes et arcs conservés. Vérifié sur émulateur.
+
+## 2026-11-25 — Flashs en avançant, sous-titres Stremio, reprise à la bonne position
+**Constats** (capture du journal pendant un essai du testeur) :
+- Stremio transmet seulement l'URL (avec le nom du fichier), `position`/`startfrom` (ms) et `return_result` :
+  **aucun sous-titre**. Castor ignorait la position : il démarrait au début.
+- Flashs en avançant depuis 2 versions : la seule nouveauté côté télé était l'affiche (`albumArtURI`) et la durée
+  dans le DIDL ; la Philips affiche très probablement l'affiche pendant chaque chargement.
+
+**Fait**
+- DIDL revenu à la version qui marchait (sans affiche ni durée).
+- Démarrage à la position envoyée par l'appli source.
+- Sous-titres automatiques (`subs/SubtitleFinder.kt`) : nom du fichier → titre/année/épisode → Cinemeta (identifiant
+  IMDb) → OpenSubtitles v3 de Stremio (sans compte). Langue du téléphone puis anglais choisies d'office ; toutes les
+  langues au choix. Recherche avant le premier envoi (5 s max). Vérifié : Spider-Man (81), Breaking Bad S03E07 (64).
+- Le relais sert aussi `video.srt` (et .ass, .smi…) à côté de la vidéo, pour les télés qui cherchent un fichier de
+  sous-titres du même nom ; journalisé.
+- Titre propre (nom Cinemeta) au lieu du nom de fichier. Ondes depuis le bord de la télé. Carte du volume retirée.
+
+**À vérifier sur la vraie télé** : plus de flashs ; la Philips affiche-t-elle les sous-titres (CaptionInfo.sec,
+DIDL, ou fichier .srt voisin) ?

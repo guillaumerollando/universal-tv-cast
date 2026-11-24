@@ -48,8 +48,6 @@ class ProxyServer(private val ctx: Context) {
     private val metas = ConcurrentHashMap<String, Meta>()
 
     @Volatile var subtitle: ByteArray? = null
-    /** Affiche JPEG montrée par la télé (titre de la vidéo sur fond Castor). */
-    @Volatile var art: ByteArray? = null
     @Volatile var subtitleUrl: String? = null
     /** Nom du format tel que la télé l'accepte (ex. « video/mpeg » au lieu de « video/mp2t »). */
     @Volatile var mimeOverride: String? = null
@@ -67,7 +65,7 @@ class ProxyServer(private val ctx: Context) {
 
     fun reset() {
         remotes.clear(); idsByUrl.clear(); locals.clear(); metas.clear()
-        subtitle = null; subtitleUrl = null; mimeOverride = null; art = null
+        subtitle = null; subtitleUrl = null; mimeOverride = null
     }
 
     fun register(url: String, headers: Map<String, String>, kind: Kind = Kind.MAIN): String =
@@ -102,6 +100,9 @@ class ProxyServer(private val ctx: Context) {
             conn.disconnect()
         }
     }
+
+    /** Taille de la vidéo si connue (pour la recherche de sous-titres). */
+    fun totalOf(id: String): Long? = metas[id]?.total?.takeIf { it > 0 }
 
     fun registerLocal(uri: Uri): String {
         val id = "l" + counter.incrementAndGet()
@@ -139,12 +140,19 @@ class ProxyServer(private val ctx: Context) {
                 if (req.seg.getOrNull(0) != "r" || remotes[req.seg.getOrNull(1)]?.kind == Kind.MAIN) {
                     Log.i(TAG, "télé → ${req.method} ${target.take(80)} range=${headers["range"]}")
                 }
+                // Beaucoup de télés cherchent un fichier de sous-titres du même nom, à côté de la vidéo (video.srt…).
+                val ext = Mime.ext(req.seg.lastOrNull() ?: "")
+                if (req.seg.getOrNull(0) in setOf("r", "l") && ext in setOf("srt", "smi", "sami", "ass", "ssa", "sub", "vtt", "txt")) {
+                    Log.i(TAG, "la télé cherche des sous-titres : ${req.seg.lastOrNull()} → ${if (subtitle != null) "servis" else "aucun"}")
+                    serveSubtitle(req, out)
+                    out.flush()
+                    return
+                }
                 when (req.seg.getOrNull(0)) {
                     "r" -> serveRemote(req, out)
                     "ts" -> serveContinuous(req, out)
                     "l" -> serveLocal(req, out)
                     "sub" -> serveSubtitle(req, out)
-                    "art" -> art?.let { sendBytes(req, out, it, "image/jpeg") } ?: empty(out, 404, "Not Found")
                     else -> empty(out, 404, "Not Found")
                 }
                 out.flush()

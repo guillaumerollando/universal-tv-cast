@@ -22,6 +22,10 @@ data class Media(
     val pageUrl: String? = null,
     /** Appli qui nous a envoyé la vidéo (ex. com.stremio.one), si connue. */
     val sourceApp: String? = null,
+    /** Position de reprise demandée par l'appli source, en secondes (« position » / « startfrom »). */
+    val startSec: Double = 0.0,
+    /** Nom du fichier vidéo, pour retrouver le film et ses sous-titres. */
+    val fileName: String? = null,
 ) {
     /** La vidéo est servie par une autre appli du téléphone (Stremio et son serveur local…). */
     val fromPhoneApp: Boolean get() = runCatching { Uri.parse(url).host }.getOrNull()
@@ -115,8 +119,16 @@ object Intake {
             ?: intent.getStringExtra(Intent.EXTRA_SUBJECT)
             ?: nameOf(ctx, uri)
 
+        val startMs = listOf("position", "startfrom", "start_from", "start").firstNotNullOfOrNull { k ->
+            @Suppress("DEPRECATION")
+            when (val v = intent.extras?.get(k)) {
+                is Int -> v.toLong(); is Long -> v; is String -> v.toLongOrNull(); else -> null
+            }
+        } ?: 0L
         return Media(
             url = uri.toString(),
+            startSec = (startMs / 1000.0).coerceAtLeast(0.0),
+            fileName = Uri.decode(uri.lastPathSegment ?: "").takeIf { it.contains('.') },
             title = title,
             mime = intent.type?.takeIf { it != "text/plain" },
             headers = headers,

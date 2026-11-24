@@ -28,6 +28,7 @@ import studio.rollando.castor.net.Net
 import studio.rollando.castor.proxy.Hls
 import studio.rollando.castor.proxy.ProxyServer
 import studio.rollando.castor.proxy.Subtitles
+import studio.rollando.castor.subs.SubtitleFinder
 import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
@@ -144,7 +145,7 @@ object Castor {
             _state.update { it.copy(searching = false) }
             if (pendingCast && _state.value.renderer != null && _state.value.media != null) {
                 pendingCast = false
-                exec { castAt(0.0) }
+                exec { castAt(_state.value.media?.startSec ?: 0.0) }
             }
         }
     }
@@ -198,7 +199,7 @@ object Castor {
                 castAt(s.position)
             } else if (pendingCast && s.media != null) {
                 pendingCast = false
-                exec { castAt(0.0) }
+                exec { castAt(_state.value.media?.startSec ?: 0.0) }
             }
         }
     }
@@ -231,15 +232,50 @@ object Castor {
             }
             Library.addRecent(media)
         }
+        if (_state.value.media?.subs.isNullOrEmpty()) findSubtitles()
         loadSubtitle()
         _state.update { it.copy(phase = Phase.IDLE) }
         if (autoCast) {
-            if (_state.value.renderer != null) castAt(0.0)
+            if (_state.value.renderer != null) castAt(media.startSec)
             else {
                 pendingCast = true
                 _state.update { it.copy(notice = Notice(R.string.notice_pick_tv)) }
                 discover()
             }
+        }
+    }
+
+    /**
+     * L'appli source n'a pas fourni de sous-titres (Stremio n'en transmet jamais) : on les cherche
+     * d'après le nom du fichier, avant le premier envoi à la télé (5 s au plus).
+     */
+    private suspend fun findSubtitles() {
+        val m = _state.value.media ?: return
+        val name = m.fileName ?: return
+        val size = remoteId?.let { id -> runCatching { proxy.prefetchMeta(id); proxy.totalOf(id) }.getOrNull() }
+        val phoneLang = java.util.Locale.getDefault().language
+        val preferred = listOf(phoneLang, "en").distinct()
+        val result = kotlinx.coroutines.withTimeoutOrNull(5000) {
+            kotlinx.coroutines.withContext(Dispatchers.IO) { SubtitleFinder.find(name, size, preferred) }
+        }
+        val nice = result?.name ?: SubtitleFinder.parse(name).display
+        val counts = HashMap<String, Int>()
+        val subs = result?.subs.orEmpty().map { f ->
+            val label = SubtitleFinder.label(f.lang)
+            val n = (counts[label] ?: 0) + 1
+            counts[label] = n
+            SubSource(f.url, if (n == 1) label else "$label $n")
+        }
+        // Sélection automatique : la langue du téléphone, sinon l'anglais.
+        val auto = preferred.firstNotNullOfOrNull { lang ->
+            result?.subs?.indexOfFirst { SubtitleFinder.norm(it.lang) == lang }?.takeIf { it >= 0 }
+        } ?: -1
+        val titleIsFileName = m.title == name || m.title.contains('.') && !m.title.contains(' ')
+        _state.update {
+            it.copy(
+                media = m.copy(subs = subs, title = if (titleIsFileName) nice else m.title),
+                subIndex = auto,
+            )
         }
     }
 
@@ -302,11 +338,8 @@ object Castor {
         startOffset = if (continuous) start.toLong().toDouble() else 0.0
         // N'arrêter que si la télé lit déjà quelque chose : sur certaines télés (Philips Titan OS),
         // un « Stop » à vide ferme le lecteur et renvoie sur la dernière source (HDMI…).
-        if (proxy.art == null) proxy.art = runCatching { Poster.jpeg(app, m.title) }.getOrNull()
-        val artUrl = proxy.art?.let { "$base/art/$subVersion/poster.jpg" }
-        val knownDuration = if (hlsDuration > 0) hlsDuration else s.duration
-        replaceMedia(r, url, Dlna.didl(m.title, url, mime, subUrl, seekable = !continuous,
-            artUrl = artUrl, durationSec = if (continuous) 0.0 else knownDuration))
+        // Description minimale : une affiche (albumArtURI) faisait clignoter la Philips à chaque déplacement.
+        replaceMedia(r, url, Dlna.didl(m.title, url, mime, subUrl, seekable = !continuous))
         Dlna.play(r)
         castTime = System.currentTimeMillis()
         CastService.start(app)
@@ -393,7 +426,7 @@ object Castor {
 
     private fun sending() = _state.value.phase == Phase.SENDING || _state.value.phase == Phase.LOADING
 
-    fun cast() { if (!sending()) exec { castAt(0.0) } }
+    fun cast() { if (!sending()) exec { castAt(_state.value.media?.startSec ?: 0.0) } }
 
     fun togglePlay() {
         if (!sending()) exec { togglePlayNow() }

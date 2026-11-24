@@ -184,7 +184,6 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
 
         Progress(state)
         Controls(state)
-        Volume(state)
         SubtitlesCard(state)
         if (state.isHls) ModeCard(state)
         Spacer(Modifier.height(8.dp))

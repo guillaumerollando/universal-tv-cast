@@ -34,17 +34,18 @@ private fun animationsOff(): Boolean {
 
 /** Ondes qui partent de la télé pendant la lecture : le signal envoyé par le téléphone. */
 @Composable
-fun CastWaves(color: Color, modifier: Modifier = Modifier, size: Dp = 170.dp) {
+fun CastWaves(color: Color, modifier: Modifier = Modifier, size: Dp = 170.dp, inner: Dp = 40.dp) {
     val still = animationsOff()
     val t = rememberInfiniteTransition(label = "ondes")
     val p by t.animateFloat(0f, 1f, infiniteRepeatable(tween(2400, easing = LinearEasing)), label = "phase")
     Canvas(modifier.size(size)) {
         val maxR = this.size.minDimension / 2
+        val minR = inner.toPx() // les ondes partent du bord de la télé, jamais de l'intérieur
         for (i in 0 until 3) {
             val f = if (still) (i + 1) / 3.5f else (p + i / 3f) % 1f
             drawCircle(
                 color = color.copy(alpha = (1f - f) * 0.5f),
-                radius = maxR * (0.38f + 0.62f * f),
+                radius = minR + (maxR - minR) * f,
                 style = Stroke(width = 2.5.dp.toPx()),
             )
         }

@@ -257,6 +257,12 @@ private fun FilmHeader(state: CastState) {
             )
             if (!logoOk) {
                 Text(media.title, style = MaterialTheme.typography.headlineSmall, color = Color.White, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            } else if (media.season != null && media.episode != null) {
+                // Le logo remplace le titre : on garde l'épisode visible.
+                Text(
+                    stringResource(R.string.episode_label, media.season, media.episode),
+                    style = MaterialTheme.typography.titleMedium, color = Color.White, modifier = Modifier.padding(top = 6.dp),
+                )
             }
             Spacer(Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -382,12 +388,11 @@ private fun SubtitlesCard(s: CastState) {
         runCatching { context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
         Castor.addSubtitle(uri, Intake.nameOf(context, uri))
     }
-    // Télé DLNA + vidéo autre que MP4 (MKV, flux…) : les sous-titres de l'appli ne peuvent pas s'afficher,
-    // mais la vidéo a souvent les siens, que l'on choisit avec la télécommande.
-    val ext = studio.rollando.castor.net.Mime.ext(media.fileName ?: media.url)
-    val tvMenu = s.renderer != null && (!s.renderer.cast || Castor.usingFallback) &&
-        (s.isHls || ext !in setOf("mp4", "m4v", "mov"))
-    val none = stringResource(if (tvMenu) R.string.subs_tv_menu_short else R.string.subs_none)
+    // Sous-titres déjà dans la vidéo (MKV) : on le dit simplement, ils se choisissent sur la télé.
+    val inVideo = s.embeddedSubs.isNotEmpty()
+    val none = if (inVideo) stringResource(R.string.subs_in_video) + " (" +
+        s.embeddedSubs.distinct().joinToString { studio.rollando.castor.subs.SubtitleFinder.label(it) } + ")"
+        else stringResource(R.string.subs_none)
     val current = media.subs.getOrNull(s.subIndex)?.name ?: none
     // Repliée par défaut : une ligne discrète « Sous-titres · Français », dépliée au toucher.
     var expanded by rememberSaveable(media.url) { mutableStateOf(false) }
@@ -442,11 +447,11 @@ private fun SubtitlesCard(s: CastState) {
                     Text(stringResource(R.string.subs_add))
                 }
             }
-            if (tvMenu) {
-                Text(stringResource(R.string.subs_tv_menu_note), style = MaterialTheme.typography.bodyMedium,
+            if (inVideo && s.subIndex < 0) {
+                Text(stringResource(R.string.subs_in_video_note), style = MaterialTheme.typography.bodyMedium,
                     color = c.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp))
             }
-            if (s.subIndex >= 0 && !tvMenu) SubtitleDelay(s.subDelay)
+            if (s.subIndex >= 0) SubtitleDelay(s.subDelay)
             Spacer(Modifier.height(6.dp))
             Text(stringResource(R.string.subs_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(Modifier.height(14.dp))

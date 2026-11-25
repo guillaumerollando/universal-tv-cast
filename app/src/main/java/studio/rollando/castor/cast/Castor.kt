@@ -65,6 +65,8 @@ data class CastState(
     val subDelay: Double = 0.0,
     /** La télé affiche l'écran d'attente de l'appli (fin de vidéo, arrêt). */
     val idle: Boolean = false,
+    /** Langues des sous-titres déjà présents dans la vidéo (MKV), à choisir sur la télé. */
+    val embeddedSubs: List<String> = emptyList(),
 ) {
     val active: Boolean get() = phase in setOf(Phase.SENDING, Phase.BUFFERING, Phase.PLAYING, Phase.PAUSED)
 }
@@ -267,7 +269,8 @@ object Castor {
         stopStream()
         _state.update {
             it.copy(media = media, slides = null, phase = Phase.LOADING, isHls = false, splitAudio = false, subIndex = media.defaultSub,
-                position = 0.0, duration = 0.0, notice = null, continuous = Library.continuousHls.value, subDelay = 0.0)
+                position = 0.0, duration = 0.0, notice = null, continuous = Library.continuousHls.value, subDelay = 0.0,
+                embeddedSubs = emptyList())
         }
         proxy.reset()
         remoteId = null
@@ -288,7 +291,14 @@ object Castor {
                 }
             }
         }
+        val probe = scope.async { runCatching { embeddedSubtitles(media) }.getOrDefault(emptyList()) }
         identify()
+        val inVideo = kotlinx.coroutines.withTimeoutOrNull(3000) { probe.await() }.orEmpty()
+        if (inVideo.isNotEmpty()) {
+            // La vidéo a ses propres sous-titres (réglables sur la télé) : on n'en superpose pas d'autres.
+            Log.i("CastorSubs", "sous-titres déjà dans la vidéo : ${inVideo.joinToString()}")
+            _state.update { it.copy(embeddedSubs = inVideo, subIndex = if (media.subs.isNotEmpty()) it.subIndex else -1) }
+        }
         _state.value.media?.let { Library.addRecent(it) }
         loadSubtitle()
         _state.update { it.copy(phase = Phase.IDLE) }
@@ -315,7 +325,8 @@ object Castor {
         val result = kotlinx.coroutines.withTimeoutOrNull(5000) {
             kotlinx.coroutines.withContext(Dispatchers.IO) { SubtitleFinder.find(name, size, preferred) }
         }
-        val nice = result?.name ?: SubtitleFinder.parse(name).display
+        val parsed = SubtitleFinder.parse(name)
+        val nice = result?.name ?: parsed.display
         val keepSubs = m.subs.isNotEmpty() // l'appli source en a fourni : on les garde
         val counts = HashMap<String, Int>()
         val subs = if (keepSubs) m.subs else result?.subs.orEmpty().map { f ->
@@ -336,6 +347,8 @@ object Castor {
                     posterUrl = result?.art?.poster ?: m.posterUrl,
                     backdropUrl = result?.art?.backdrop ?: m.backdropUrl,
                     logoUrl = result?.art?.logo ?: m.logoUrl,
+                    season = if (parsed.isSeries) parsed.season else null,
+                    episode = if (parsed.isSeries) parsed.episode else null,
                 ),
                 subIndex = auto,
             )
@@ -655,6 +668,32 @@ object Castor {
             runCatching { Dlna.play(r) }
         }
         _state.update { it.copy(idle = true, phase = Phase.STOPPED) }
+    }
+
+    /** Lit le début d'un MKV/WebM (1,5 Mo au plus) pour y repérer des pistes de sous-titres. */
+    private fun embeddedSubtitles(m: Media): List<String> {
+        val ext = Mime.ext(m.fileName ?: m.title).ifEmpty { Mime.ext(m.url) }
+        if (ext !in setOf("mkv", "webm") && m.mime?.contains("matroska") != true) return emptyList()
+        val max = 1_572_864
+        val head = if (m.isLocal) {
+            app.contentResolver.openInputStream(Uri.parse(m.url))?.use { readUpTo(it, max) } ?: return emptyList()
+        } else {
+            val c = Http.open(m.url, m.headers, "bytes=0-${max - 1}", connectTimeout = 5000, readTimeout = 5000)
+            try { c.inputStream.use { readUpTo(it, max) } } finally { c.disconnect() }
+        }
+        return studio.rollando.castor.proxy.MkvProbe.subtitleLanguages(head)
+    }
+
+    /** Lit au plus [max] octets (`readNBytes` n'existe qu'à partir d'Android 13). */
+    private fun readUpTo(ins: java.io.InputStream, max: Int): ByteArray {
+        val out = java.io.ByteArrayOutputStream(64 * 1024)
+        val buf = ByteArray(64 * 1024)
+        while (out.size() < max) {
+            val n = ins.read(buf, 0, minOf(buf.size, max - out.size()))
+            if (n < 0) break
+            out.write(buf, 0, n)
+        }
+        return out.toByteArray()
     }
 
     private fun sniffHls(m: Media): Boolean = runCatching {

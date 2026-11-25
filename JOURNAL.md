@@ -436,3 +436,19 @@ Toutes les commandes répondent 403 sans appairage. Rien n'a été envoyé à la
 - Tests 17/17, lint propre. Vérif émulateur de la pause interrompue : l'émulateur ne joignait plus la fausse
   télé (réseau interne de l'émulateur).
 - Pause pour réglage : seulement si la vidéo joue (pas pendant le chargement, où la télé répond 701 — vu par le testeur en dépliant les sous-titres pendant le chargement).
+
+## 2026-11-25 (soir, 9) — Épisode visible, sous-titres « déjà dans la vidéo », vrai lecteur dans les notifications
+**Retours du testeur** : le numéro d'épisode apparaît sur la télé mais pas sur le téléphone (le logo de la série
+remplace le titre). Le MKV de Stremio avait ses propres sous-titres, bien meilleurs et réglables sur la télé ;
+le texte de l'appli était un pavé illisible. Il voudrait un vrai petit lecteur dans les notifications.
+**Fait**
+- Téléphone : « Saison 1 · Épisode 1 » sous le logo de la série (saison et épisode gardés dans `Media`).
+- Repérage des sous-titres d'un MKV/WebM : lecture du premier 1,5 Mo (`MkvProbe` : élément Tracks, en ignorant sa
+  mention dans l'index SeekHead). Si la vidéo en a, la ligne affiche « Déjà dans la vidéo (Français, Anglais) »
+  avec une phrase : « Choisis-les avec la télécommande de la télé. ». L'appli n'en superpose pas d'autres. Le
+  pavé est supprimé. Tests sur deux MKV fabriqués avec ffmpeg (avec et sans sous-titres).
+- Notification = lecteur du système (`MediaSession` + `MediaStyle`) : image du film, titre, télé, lecture/pause,
+  −10 s / +10 s, barre de progression, arrêt ; aussi sur l'écran verrouillé. Dans un album : photo précédente /
+  suivante, et lecture/pause = diaporama. Vérifié sur émulateur : pause et +10 s depuis le lecteur système
+  arrivent bien à la télé.
+- Tests 20/20, lint propre.

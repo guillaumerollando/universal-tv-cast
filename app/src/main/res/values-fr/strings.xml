@@ -185,8 +185,9 @@
     <string name="slideshow_off">Diaporama en pause</string>
     <string name="settings_smooth_slides">Diaporama fluide</string>
     <string name="settings_smooth_slides_sub">Expérimental. Envoie l’album comme une seule vidéo en direct, avec un fondu entre les photos. Beaucoup de télés l’affichent en retard : laisse désactivé si les photos changent lentement.</string>
-    <string name="subs_tv_menu_short">Avec la télécommande</string>
-    <string name="subs_tv_menu_note">Sur cette télé, les sous-titres de l’appli ne s’affichent qu’avec les vidéos MP4. Cette vidéo a souvent ses propres sous-titres : choisis-les dans le menu de la télé, avec la télécommande.</string>
+    <string name="episode_label">Saison %1$d · Épisode %2$d</string>
+    <string name="subs_in_video">Déjà dans la vidéo</string>
+    <string name="subs_in_video_note">Choisis-les avec la télécommande de la télé.</string>
     <plurals name="browser_found">
         <item quantity="one">%d vidéo</item>
         <item quantity="other">%d vidéos</item>

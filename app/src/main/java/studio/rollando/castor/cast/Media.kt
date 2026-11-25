@@ -30,6 +30,9 @@ data class Media(
     val posterUrl: String? = null,
     val backdropUrl: String? = null,
     val logoUrl: String? = null,
+    /** Saison et épisode, si c'est une série (lus dans le nom du fichier). */
+    val season: Int? = null,
+    val episode: Int? = null,
 ) {
     /** La vidéo est servie par une autre appli du téléphone (Stremio et son serveur local…). */
     val fromPhoneApp: Boolean get() = runCatching { Uri.parse(url).host }.getOrNull()

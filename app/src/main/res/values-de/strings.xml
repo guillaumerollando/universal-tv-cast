@@ -185,8 +185,9 @@
     <string name="slideshow_off">Diashow pausiert</string>
     <string name="settings_smooth_slides">Flüssige Diashow</string>
     <string name="settings_smooth_slides_sub">Experimentell. Sendet das Album als ein Live-Video mit Überblendung. Viele Fernseher zeigen es verzögert: ausgeschaltet lassen, wenn die Fotos langsam wechseln.</string>
-    <string name="subs_tv_menu_short">Über die TV-Fernbedienung</string>
-    <string name="subs_tv_menu_note">Auf diesem Fernseher erscheinen Untertitel der App nur bei MP4-Videos. Dieses Video hat oft eigene Untertitel: wähle sie im Menü des Fernsehers mit der Fernbedienung.</string>
+    <string name="episode_label">Staffel %1$d · Folge %2$d</string>
+    <string name="subs_in_video">Schon im Video</string>
+    <string name="subs_in_video_note">Wähle sie mit der TV-Fernbedienung.</string>
     <plurals name="browser_found">
         <item quantity="one">%d Video</item>
         <item quantity="other">%d Videos</item>

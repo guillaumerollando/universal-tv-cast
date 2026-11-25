@@ -453,3 +453,17 @@ le texte de l'appli était un pavé illisible. Il voudrait un vrai petit lecteur
   arrivent bien à la télé.
 - Tests 20/20, lint propre.
 - Vidéo avec ses propres sous-titres : plus de choix de piste ni d'ajout de fichier (les nôtres ne s'afficheraient pas par-dessus) ; seulement « Déjà dans la vidéo » et la phrase sur la télécommande (souhait du testeur).
+
+## 2026-11-25 (soir, 10) — Finitions visuelles
+**Retour du testeur** : lecteur des notifications « aussi bien que YouTube, voire mieux » (rendu HyperOS sur son
+Xiaomi). À peaufiner : la liste des langues coupée (« Déjà dans la vidéo (Ann… ») et illisible même dépliée ; la
+surbrillance du dépliage qui ne couvre pas toute la carte ; un en-tête plus moderne qu'un aplat noir.
+**Fait**
+- Ligne repliée : « Déjà dans la vidéo » seulement ; dépliée : les langues en entier (« Français, Anglais »),
+  puis la phrase sur la télécommande.
+- Le dépliage réagit sur toute la largeur de la carte, surbrillance comprise.
+- Ambiance derrière la barre d'état et l'en-tête, façon YouTube : l'image du film très floutée sur l'écran
+  Lecture, sinon un dégradé vert sombre ; fondu vers le fond, sans bord net, avec un fondu enchaîné quand la
+  vidéo change. Couleurs du texte de l'en-tête corrigées (fond transparent).
+- Vérifié sur émulateur : accueil, et un MKV nommé comme l'animé du testeur → « Daemons of the Shadow Realm »,
+  « Saison 1 · Épisode 1 », sous-titres « Déjà dans la vidéo » (français, anglais). Tests 20/20, lint propre.

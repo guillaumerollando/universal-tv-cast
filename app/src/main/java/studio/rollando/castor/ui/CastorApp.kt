@@ -7,6 +7,9 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.alpha
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -140,11 +143,16 @@ fun CastorApp() {
         Nav.tab.value = Tab.PLAYER
     }
 
+    // Ambiance derrière l'en-tête : l'image floutée du film en cours, sinon un dégradé vert sombre.
+    Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+    Ambient(state.media?.backdropUrl?.takeIf { tab == Tab.PLAYER && state.slides == null })
     Scaffold(
+        containerColor = androidx.compose.ui.graphics.Color.Transparent,
+        contentColor = MaterialTheme.colorScheme.onBackground,
         topBar = {
             // Barre maison : le nom en deux étages (« UNIVERSAL » au-dessus de « TV Cast ») reste compact ;
             // c'est le nom de la télé qui se raccourcit.
-            Surface(color = MaterialTheme.colorScheme.surface) {
+            Surface(color = androidx.compose.ui.graphics.Color.Transparent, contentColor = MaterialTheme.colorScheme.onSurface) {
                 Row(
                     Modifier.fillMaxWidth().statusBarsPadding().height(64.dp).padding(start = 16.dp, end = 4.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -193,6 +201,7 @@ fun CastorApp() {
                 Tab.PLAYER -> PlayerScreen(state, onChooseTv = { showTvs = true })
             }
         }
+    }
     }
 
     if (showTvs) TvSheet(onDismiss = { showTvs = false })
@@ -441,4 +450,41 @@ internal fun SectionTitle(text: String, modifier: Modifier = Modifier) {
 @Composable
 internal fun Hidden(visible: Boolean, content: @Composable () -> Unit) {
     AnimatedVisibility(visible) { content() }
+}
+
+/**
+ * Fond d'ambiance en haut de l'écran, sous la barre d'état et l'en-tête (comme YouTube) : l'image du film,
+ * très floutée, ou un dégradé vert sombre ; il se fond dans le fond de l'appli, sans bord net.
+ */
+@Composable
+private fun Ambient(backdrop: String?) {
+    val c = MaterialTheme.colorScheme
+    androidx.compose.animation.Crossfade(backdrop, animationSpec = androidx.compose.animation.core.tween(600), label = "ambiance") { url ->
+        Box(Modifier.fillMaxWidth().height(460.dp)) {
+            if (url != null) {
+                RemoteImage(
+                    url, maxSide = 480,
+                    modifier = Modifier.matchParentSize()
+                        .alpha(if (android.os.Build.VERSION.SDK_INT >= 31) 0.55f else 0.3f)
+                        .then(if (android.os.Build.VERSION.SDK_INT >= 31) Modifier.blur(56.dp) else Modifier),
+                )
+            } else {
+                Box(
+                    Modifier.matchParentSize().background(
+                        androidx.compose.ui.graphics.Brush.radialGradient(
+                            listOf(c.secondaryContainer.copy(alpha = 0.85f), androidx.compose.ui.graphics.Color.Transparent),
+                            center = androidx.compose.ui.geometry.Offset(160f, -80f), radius = 1300f,
+                        )
+                    )
+                )
+            }
+            Box(
+                Modifier.matchParentSize().background(
+                    androidx.compose.ui.graphics.Brush.verticalGradient(
+                        0f to c.background.copy(alpha = 0.15f), 0.55f to c.background.copy(alpha = 0.6f), 1f to c.background,
+                    )
+                )
+            )
+        }
+    }
 }

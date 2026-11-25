@@ -118,15 +118,7 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
     val c = MaterialTheme.colorScheme
     val film = media.backdropUrl != null
     Box(Modifier.fillMaxSize()) {
-    // Ambiance : l'image du film, très floutée, teinte le haut de l'écran.
-    if (film) {
-        RemoteImage(
-            media.backdropUrl, maxSide = 480,
-            modifier = Modifier.fillMaxWidth().height(420.dp).alpha(0.45f)
-                .then(if (Build.VERSION.SDK_INT >= 31) Modifier.blur(48.dp) else Modifier),
-        )
-        Box(Modifier.fillMaxWidth().height(420.dp).background(Brush.verticalGradient(listOf(c.background.copy(alpha = 0.35f), c.background))))
-    }
+    // L'ambiance (image du film floutée) est dessinée derrière tout l'écran, en-tête compris : voir Ambient().
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -390,9 +382,8 @@ private fun SubtitlesCard(s: CastState) {
     }
     // Sous-titres déjà dans la vidéo (MKV) : on le dit simplement, ils se choisissent sur la télé.
     val inVideo = s.embeddedSubs.isNotEmpty()
-    val none = if (inVideo) stringResource(R.string.subs_in_video) + " (" +
-        s.embeddedSubs.distinct().joinToString { studio.rollando.castor.subs.SubtitleFinder.label(it) } + ")"
-        else stringResource(R.string.subs_none)
+    val none = stringResource(if (inVideo) R.string.subs_in_video else R.string.subs_none)
+    val inVideoLangs = s.embeddedSubs.distinct().joinToString { studio.rollando.castor.subs.SubtitleFinder.label(it) }
     val current = media.subs.getOrNull(s.subIndex)?.name ?: none
     // Repliée par défaut : une ligne discrète « Sous-titres · Français », dépliée au toucher.
     var expanded by rememberSaveable(media.url) { mutableStateOf(false) }
@@ -408,13 +399,14 @@ private fun SubtitlesCard(s: CastState) {
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier.animateContentSize(),
     ) {
-        Column(Modifier.padding(horizontal = 16.dp)) {
+        Column {
+            // Toute la largeur de la carte réagit au toucher (la surbrillance aussi).
             Row(
                 Modifier
                     .fillMaxWidth()
                     .clickable(role = Role.Button) { expanded = !expanded }
                     .semantics { stateDescription = stateText }
-                    .padding(vertical = 14.dp),
+                    .padding(horizontal = 16.dp, vertical = 14.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(Icons.Rounded.Subtitles, null, tint = if (s.subIndex >= 0) c.primary else c.onSurfaceVariant, modifier = Modifier.size(22.dp))
@@ -429,7 +421,7 @@ private fun SubtitlesCard(s: CastState) {
                 )
                 Icon(if (expanded) Icons.Rounded.ExpandLess else Icons.Rounded.ExpandMore, null, tint = c.onSurfaceVariant)
             }
-            if (expanded) {
+            if (expanded) Column(Modifier.padding(horizontal = 16.dp)) {
             // Sous-titres déjà dans la vidéo : les nôtres ne pourraient pas s'afficher par-dessus, on n'en propose pas.
             if (!inVideo) Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(Modifier.weight(1f)) {
@@ -449,6 +441,8 @@ private fun SubtitlesCard(s: CastState) {
                 }
             }
             if (inVideo) {
+                // Les langues en entier (la ligne repliée ne dit que « Déjà dans la vidéo »).
+                Text(inVideoLangs, style = MaterialTheme.typography.titleSmall)
                 Text(stringResource(R.string.subs_in_video_note), style = MaterialTheme.typography.bodyMedium,
                     color = c.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp))
             }

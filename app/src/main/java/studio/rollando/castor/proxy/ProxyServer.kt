@@ -600,10 +600,14 @@ class ProxyServer(private val ctx: Context) {
     /** Photo déjà préparée (JPEG redimensionné, bien orienté) à servir à la télé. */
     fun registerImage(jpeg: ByteArray): String {
         val id = "i" + counter.incrementAndGet()
-        if (images.size > 6) images.keys.sorted().take(images.size - 6).forEach { images.remove(it) }
+        val old = images.keys.filter { it.startsWith("i") }.sortedBy { it.drop(1).toLongOrNull() ?: 0 }
+        if (old.size > 6) old.take(old.size - 6).forEach { images.remove(it) }
         images[id] = jpeg
         return id
     }
+
+    /** Image à adresse fixe (l'écran d'attente), jamais effacée. */
+    fun putImage(id: String, jpeg: ByteArray) { images[id] = jpeg }
 
     private fun serveImage(req: Req, out: OutputStream) {
         val bytes = images[req.seg.getOrNull(1)] ?: return empty(out, 404, "Not Found")

@@ -18,6 +18,35 @@ object Subtitles {
         return ("\uFEFF" + text.trim() + "\n").toByteArray(Charsets.UTF_8)
     }
 
+    private val SRT_TIME = Regex("(\\d{1,2}):(\\d{2}):(\\d{2})[,.](\\d{3})\\s*-->\\s*(\\d{1,2}):(\\d{2}):(\\d{2})[,.](\\d{3})")
+
+    /**
+     * Décale tous les sous-titres d'un SRT (déjà converti par [toSrt]) de [ms] millisecondes :
+     * positif = ils apparaissent plus tard. Ceux qui tomberaient avant le début sont retirés.
+     */
+    fun shift(srt: ByteArray, ms: Long): ByteArray {
+        if (ms == 0L) return srt
+        val text = String(srt, Charsets.UTF_8).removePrefix("\uFEFF")
+        val out = StringBuilder()
+        var n = 1
+        for (block in text.split(Regex("\n\\s*\n"))) {
+            val lines = block.trim('\n').lines()
+            val t = lines.indexOfFirst { SRT_TIME.containsMatchIn(it) }
+            if (t < 0) continue
+            val g = SRT_TIME.find(lines[t])!!.groupValues
+            fun at(o: Int) = ((g[o].toLong() * 60 + g[o + 1].toLong()) * 60 + g[o + 2].toLong()) * 1000 + g[o + 3].toLong()
+            val a = at(1) + ms
+            val b = at(5) + ms
+            if (b <= 0) continue
+            out.append(n++).append('\n').append(srtTime(a.coerceAtLeast(0))).append(" --> ").append(srtTime(b)).append('\n')
+                .append(lines.drop(t + 1).joinToString("\n")).append("\n\n")
+        }
+        return ("\uFEFF" + out.toString().trim() + "\n").toByteArray(Charsets.UTF_8)
+    }
+
+    private fun srtTime(ms: Long): String =
+        String.format(java.util.Locale.ROOT, "%02d:%02d:%02d,%03d", ms / 3_600_000, ms / 60_000 % 60, ms / 1000 % 60, ms % 1000)
+
     /** SRT (déjà converti par [toSrt]) → WebVTT, le format des sous-titres de Google Cast. */
     fun srtToVtt(srt: ByteArray): ByteArray {
         val text = String(srt, Charsets.UTF_8).removePrefix("\uFEFF")

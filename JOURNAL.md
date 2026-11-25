@@ -255,3 +255,36 @@ BubbleUPnP, demandée par une minorité ; faisable car Universal TV Cast parle d
 
 **Reste à tester sur la télé** : Cast choisi d'office avec sous-titres, sous-titres intégrés en DLNA, reprise
 après changement de sous-titres, photos, vidéos du téléphone.
+
+## 2026-11-25 (après-midi) — Retours du premier vrai essai : finitions
+**Retour du testeur** : « bluffant », marche du premier coup avec Stremio, sous-titres FR/EN, reprise à la bonne
+minute. À reprendre : sous-titres décalés, photos lentes (1-2 s), retour sur HDMI 1 à la fin d'une vidéo ou du
+diaporama, aide trop « texte ».
+
+**Fait**
+- **Décalage des sous-titres** : − / + par pas de 0,5 s (± 60 s), remise à 0. Les appuis rapprochés sont
+  regroupés (1,3 s) : la télé ne recharge qu'une fois, à la seconde près (position exacte lue sur le lecteur Cast).
+  Marche en Cast (WebVTT) et en DLNA (externe ou intégré au MP4). Test unitaire du décalage.
+- **Écran d'attente sur la télé** (image 1920 × 1080 aux couleurs de l'appli, dessinée sur le téléphone, texte
+  traduit) au lieu de laisser la télé repartir sur HDMI : à la fin d'une vidéo (Cast : fin signalée tout de suite
+  par le lecteur ; DLNA : arrêt près de la fin), et sur le bouton Arrêter (vidéo ou album). « Se déconnecter »
+  reste le moyen de libérer la télé. Vérifié sur la fausse télé : fin → écran d'attente, Arrêter → écran d'attente,
+  plus aucun « Stop ».
+- **Photos plus rapides** : les photos voisines (suivante, précédente, celle d'après) sont préparées pendant
+  l'affichage ; le délai restant est celui de la télé. (Idée d'un flux vidéo continu écartée : une télé met 2 à 5 s
+  à démarrer un flux en direct, plus lent qu'une photo, et ça coûte en batterie.)
+- **Album photos + vidéos** : la tuile « Album » prend photos et vidéos ; une vidéo est lue jusqu'au bout puis
+  l'album passe à la suite (diaporama ou non), barre d'avancement et lecture/pause, pastille ▶ sur les vignettes,
+  état du diaporama écrit sous les boutons. Vérifié : photo → photo (6 s) → vidéo 25 s → photo → boucle.
+- **Sous-titres repliés** : une ligne « Sous-titres · Français » qui se déplie au toucher.
+- **Aide** : plus aucun nom d'appli tierce. Le panneau s'ouvre en grand (déplier une réponse ne le fait plus
+  redescendre). Chaque problème montre l'état réel et les bons boutons : Wi-Fi et adresse, télés trouvées,
+  relancer la recherche, ajouter par IP ; mise en veille de notre appli et de l'appli vidéo avec bouton vers leurs
+  réglages ; vidéo en cours (format, Cast ou DLNA), renvoyer, essayer en DLNA, flux continu ; type de télé et
+  sous-titres disponibles, réglage « sous-titres intégrés » ; se déconnecter.
+- Fausse télé : simule maintenant la fin d'une vidéo.
+- Tests : 16/16, lint propre.
+
+**À vérifier sur la vraie télé (Cast)** : écran d'attente à la fin d'une vidéo et sur Arrêter (le lecteur Cast de
+Titan OS reste-t-il ouvert ?) ; vitesse des photos ; décalage des sous-titres.
+**Plus tard** : listes IPTV (M3U) — un lien de chaîne passe déjà par « Coller un lien ».

@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,7 +39,9 @@ import java.util.concurrent.Executors
 enum class Phase { IDLE, LOADING, SENDING, BUFFERING, PLAYING, PAUSED, STOPPED }
 
 /** Album photo : les photos choisies, celle affichée, et le diaporama automatique. */
-data class Slides(val uris: List<String>, val index: Int = 0, val auto: Boolean = false)
+data class Slides(val uris: List<String>, val index: Int = 0, val auto: Boolean = false, val videos: Set<Int> = emptySet()) {
+    val isVideo: Boolean get() = index in videos
+}
 
 data class Notice(@StringRes val res: Int, val arg: String? = null, val error: Boolean = false)
 
@@ -58,6 +61,10 @@ data class CastState(
     val notice: Notice? = null,
     /** Album photo en cours d'affichage sur la télé. */
     val slides: Slides? = null,
+    /** Décalage des sous-titres en secondes (positif : ils apparaissent plus tard). */
+    val subDelay: Double = 0.0,
+    /** La télé affiche l'écran d'attente de l'appli (fin de vidéo, arrêt). */
+    val idle: Boolean = false,
 ) {
     val active: Boolean get() = phase in setOf(Phase.SENDING, Phase.BUFFERING, Phase.PLAYING, Phase.PAUSED)
 }
@@ -95,6 +102,7 @@ object Castor {
         _state.update { it.copy(continuous = Library.continuousHls.value) }
         CastControl.init(app)
         CastControl.onDevices = { list -> castDevices = list; publish(allDevices()) }
+        CastControl.onFinished = { onMediaEnded() }
     }
 
     @Volatile private var dlnaDevices: List<Renderer> = emptyList()
@@ -180,7 +188,7 @@ object Castor {
             }
             if (pendingPhotos && _state.value.renderer != null && _state.value.slides != null) {
                 pendingPhotos = false
-                exec { showPhoto(_state.value.slides?.index ?: 0) }
+                exec { showItem(_state.value.slides?.index ?: 0) }
             }
         }
     }
@@ -219,6 +227,8 @@ object Castor {
     fun disconnect() {
         pollJob?.cancel()
         seekJob?.cancel()
+        slideJob?.cancel()
+        _state.update { it.copy(slides = it.slides?.copy(auto = false), idle = false) }
         Library.lastTv = null
         pendingCast = false
         if (_state.value.renderer?.cast == true) CastControl.disconnect()
@@ -250,7 +260,7 @@ object Castor {
         slideJob?.cancel()
         _state.update {
             it.copy(media = media, slides = null, phase = Phase.LOADING, isHls = false, splitAudio = false, subIndex = media.defaultSub,
-                position = 0.0, duration = 0.0, notice = null, continuous = Library.continuousHls.value)
+                position = 0.0, duration = 0.0, notice = null, continuous = Library.continuousHls.value, subDelay = 0.0)
         }
         proxy.reset()
         remoteId = null
@@ -325,36 +335,77 @@ object Castor {
         }
     }
 
-    // ------------------------------------------------------------------ album photo
+    // ------------------------------------------------------------------ album (photos et vidéos)
 
     private var slideJob: Job? = null
     private var pendingPhotos = false
+    @Volatile private var shownAt = 0L
+    /** Photos déjà préparées (ou en préparation) pour la télé : la suivante s'affiche sans attendre. */
+    private val jpegs = java.util.concurrent.ConcurrentHashMap<String, kotlinx.coroutines.Deferred<ByteArray>>()
 
-    /** Affiche sur la télé les photos choisies, une par une (diaporama possible). */
+    private fun jpegAsync(uri: String) = jpegs.getOrPut(uri) {
+        scope.async(Dispatchers.Default) { Photos.prepare(app, Uri.parse(uri)) }
+    }
+
+    /** Prépare les photos voisines pendant que celle-ci est affichée, et oublie les lointaines. */
+    private fun prefetchAround(sl: Slides, idx: Int) {
+        val n = sl.uris.size
+        val near = listOf(1, -1, 2).map { (idx + it).mod(n) }.filter { it != idx && it !in sl.videos }
+        near.forEach { jpegAsync(sl.uris[it]) }
+        val keep = (near + idx).map { sl.uris[it] }.toSet()
+        jpegs.keys.filter { it !in keep }.forEach { jpegs.remove(it) }
+    }
+
+    /** Affiche sur la télé les photos et vidéos choisies, une par une (diaporama possible). */
     fun openPhotos(uris: List<Uri>) {
         if (uris.isEmpty()) return
         pollJob?.cancel(); seekJob?.cancel(); slideJob?.cancel()
+        jpegs.clear()
+        val videos = uris.indices.filter { i ->
+            val t = runCatching { app.contentResolver.getType(uris[i]) }.getOrNull().orEmpty()
+            t.startsWith("video/") || (t.isEmpty() && Mime.isMedia(Mime.guess(uris[i].toString())))
+        }.toSet()
         _state.update {
-            it.copy(media = null, slides = Slides(uris.map(Uri::toString)), phase = Phase.LOADING, notice = null,
-                isHls = false, position = 0.0, duration = 0.0)
+            it.copy(media = null, slides = Slides(uris.map(Uri::toString), videos = videos), phase = Phase.LOADING, notice = null,
+                isHls = false, position = 0.0, duration = 0.0, idle = false, subDelay = 0.0)
         }
-        exec { showPhoto(0) }
+        exec { showItem(0) }
     }
 
-    private suspend fun showPhoto(i: Int) {
+    private suspend fun showItem(i: Int) {
         val sl = _state.value.slides ?: return
-        val chosen = _state.value.renderer
-        if (chosen == null) {
-            pendingPhotos = true
-            _state.update { it.copy(phase = Phase.IDLE, notice = Notice(R.string.notice_pick_tv)) }
-            discover()
-            return
-        }
-        Net.localIp() ?: throw NoWifi()
         val idx = i.mod(sl.uris.size)
-        _state.update { it.copy(slides = it.slides?.copy(index = idx), phase = Phase.SENDING) }
+        if (idx in sl.videos) playAlbumVideo(idx) else showPhoto(idx)
+    }
+
+    /** Pas de télé choisie : on lance la recherche, l'album s'affichera dès qu'elle est trouvée. */
+    private fun needTv(): Boolean {
+        if (_state.value.renderer != null) return false
+        pendingPhotos = true
+        _state.update { it.copy(phase = Phase.IDLE, notice = Notice(R.string.notice_pick_tv)) }
+        discover()
+        return true
+    }
+
+    private suspend fun showPhoto(idx: Int) {
+        val sl = _state.value.slides ?: return
+        if (needTv()) return
+        val chosen = _state.value.renderer ?: return
+        Net.localIp() ?: throw NoWifi()
+        pollJob?.cancel()
+        _state.update {
+            it.copy(slides = it.slides?.copy(index = idx), media = null, phase = Phase.SENDING, idle = false,
+                position = 0.0, duration = 0.0)
+        }
         val uri = Uri.parse(sl.uris[idx])
-        val jpeg = kotlinx.coroutines.withContext(Dispatchers.IO) { Photos.prepare(app, uri) }
+        val jpeg = try {
+            jpegAsync(sl.uris[idx]).await()
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            jpegs.remove(sl.uris[idx]); throw e
+        }
+        prefetchAround(sl, idx)
         val url = "${proxy.baseUrl()}/img/${proxy.registerImage(jpeg)}/photo.jpg"
         val name = Intake.nameOf(app, uri)
         var r = chosen
@@ -374,27 +425,92 @@ object Castor {
             runCatching { Dlna.play(r) }
         }
         via = if (r !== chosen) r else null
+        shownAt = System.currentTimeMillis()
         CastService.start(app)
         _state.update { it.copy(phase = Phase.PLAYING) }
     }
 
-    fun photoAt(i: Int) { if (_state.value.slides != null) exec { showPhoto(i) } }
-    fun nextPhoto(delta: Int) { _state.value.slides?.let { sl -> exec { showPhoto(sl.index + delta) } } }
+    /** Vidéo de l'album : lue en entier, puis l'album passe à l'élément suivant. */
+    private suspend fun playAlbumVideo(idx: Int) {
+        val sl = _state.value.slides ?: return
+        if (needTv()) return
+        pollJob?.cancel()
+        val uri = Uri.parse(sl.uris[idx])
+        proxy.reset()
+        remoteId = null; hlsDuration = 0.0; fmp4 = false; rawSubtitle = null
+        val m = Media(url = uri.toString(), title = Intake.nameOf(app, uri), mime = app.contentResolver.getType(uri))
+        _state.update {
+            it.copy(slides = it.slides?.copy(index = idx), media = m, isHls = false, splitAudio = false, subIndex = -1,
+                position = 0.0, duration = 0.0, subDelay = 0.0, idle = false)
+        }
+        prefetchAround(sl, idx)
+        castAt(0.0)
+    }
 
-    /** Diaporama : une photo toutes les 6 secondes. */
+    fun photoAt(i: Int) { if (_state.value.slides != null) exec { showItem(i) } }
+    fun nextPhoto(delta: Int) { _state.value.slides?.let { sl -> exec { showItem(sl.index + delta) } } }
+
+    /** Diaporama : une photo toutes les 6 secondes ; une vidéo est lue jusqu'au bout. */
     fun toggleSlideshow() {
         val sl = _state.value.slides ?: return
         val on = !sl.auto
         _state.update { it.copy(slides = it.slides?.copy(auto = on)) }
         slideJob?.cancel()
-        if (on) slideJob = scope.launch {
+        if (!on) return
+        shownAt = System.currentTimeMillis()
+        if (_state.value.idle || _state.value.phase == Phase.STOPPED) exec { showItem(sl.index + 1) }
+        slideJob = scope.launch {
             while (isActive) {
-                delay(6000)
+                delay(500)
                 val cur = _state.value.slides ?: break
                 if (!cur.auto) break
-                kotlinx.coroutines.withContext(cmd) { runCatching { showPhoto(cur.index + 1) } }
+                if (cur.isVideo || busy || _state.value.phase != Phase.PLAYING) continue
+                if (System.currentTimeMillis() - shownAt < 6000) continue
+                shownAt = System.currentTimeMillis()
+                kotlinx.coroutines.withContext(cmd) { runCatching { showItem(cur.index + 1) } }
             }
         }
+    }
+
+    // ------------------------------------------------------------------ fin de lecture et écran d'attente
+
+    @Volatile private var endHandled = -1L
+
+    /**
+     * La vidéo est arrivée au bout. Plutôt que de laisser la télé repartir sur sa dernière source (HDMI…),
+     * on enchaîne : élément suivant de l'album, sinon l'écran d'attente de l'appli.
+     */
+    private fun onMediaEnded() {
+        val s = _state.value
+        if (s.idle || s.media == null) return
+        val sl = s.slides
+        if (sl != null && !sl.isVideo) return // une photo ne « finit » pas
+        if (endHandled == castTime) return
+        endHandled = castTime
+        pollJob?.cancel()
+        Log.i("Castor", "fin de lecture : ${if (sl != null) "élément suivant de l'album" else "écran d'attente"}")
+        exec {
+            val cur = _state.value.slides
+            if (cur != null && (cur.auto || cur.index < cur.uris.size - 1)) {
+                shownAt = System.currentTimeMillis()
+                showItem(cur.index + 1)
+            } else showIdle()
+        }
+    }
+
+    /** Affiche l'écran d'attente de l'appli sur la télé (la télé reste sur le lecteur). */
+    private suspend fun showIdle() {
+        val r = target() ?: return
+        val jpeg = kotlinx.coroutines.withContext(Dispatchers.Default) { IdleScreen.jpeg(app) }
+        proxy.putImage("idle", jpeg)
+        val url = "${proxy.baseUrl()}/img/idle/attente.jpg"
+        val name = app.getString(R.string.app_name)
+        if (r.cast) CastControl.loadPhoto(r, url, name)
+        else {
+            replaceMedia(r, url, Dlna.didl(name, url, "image/jpeg", null, false))
+            runCatching { Dlna.play(r) }
+        }
+        _state.update { it.copy(idle = true, phase = Phase.STOPPED) }
     }
 
     private fun sniffHls(m: Media): Boolean = runCatching {
@@ -410,16 +526,25 @@ object Castor {
         }
     }.getOrDefault(false)
 
+    /** Sous-titres choisis, avant décalage. */
+    private var rawSubtitle: ByteArray? = null
+
+    private fun applySubtitle() {
+        proxy.subtitle = rawSubtitle?.let { Subtitles.shift(it, (_state.value.subDelay * 1000).toLong()) }
+        subVersion++
+    }
+
     private fun loadSubtitle() {
         proxy.subtitle = null
+        rawSubtitle = null
         val s = _state.value
         val sub = s.media?.subs?.getOrNull(s.subIndex) ?: return
         try {
             val uri = Uri.parse(sub.uri)
             val bytes = if (uri.scheme == "http" || uri.scheme == "https") Http.fetch(sub.uri, s.media.headers).bytes
             else app.contentResolver.openInputStream(uri)?.use { it.readBytes() } ?: throw IOException("unreadable")
-            proxy.subtitle = Subtitles.toSrt(bytes)
-            subVersion++
+            rawSubtitle = Subtitles.toSrt(bytes)
+            applySubtitle()
         } catch (e: Exception) {
             Log.w("Castor", "subtitle", e)
             _state.update { it.copy(subIndex = -1, notice = Notice(R.string.err_subtitle, error = true)) }
@@ -431,7 +556,7 @@ object Castor {
         val s = _state.value
         val m = s.media ?: return
         Net.localIp() ?: throw NoWifi()
-        _state.update { it.copy(phase = Phase.SENDING, notice = null) }
+        _state.update { it.copy(phase = Phase.SENDING, notice = null, idle = false) }
         val base = proxy.baseUrl()
         var r = chosen
         if (chosen.cast && !forceDlna) {
@@ -560,6 +685,7 @@ object Castor {
             var stoppedTicks = 0
             var failures = 0
             var waitingSince = 0L
+            var lastPlaying = 0.0 // dernière position vue en lecture, pour reconnaître la fin
             while (isActive) {
                 delay(if (failures >= 2) 10_000 else 2000)
                 if (busy) continue
@@ -589,6 +715,7 @@ object Castor {
                         rel = p; dur = d; t = Dlna.transportState(r)
                     }
                     failures = 0
+                    if (t == "PLAYING" && rel > 0) lastPlaying = startOffset + rel
                     val grace = System.currentTimeMillis() - castTime < 12_000
                     _state.update { s ->
                         if (!s.active) return@update s
@@ -602,7 +729,7 @@ object Castor {
                         s.copy(
                             phase = phase,
                             position = if (System.currentTimeMillis() < holdPositionUntil) s.position
-                                else if (rel > 0 || phase == Phase.PLAYING) startOffset + rel else s.position,
+                                else if (rel > 0 || t == "PLAYING") startOffset + rel else s.position,
                             duration = when {
                                 hlsDuration > 0 -> hlsDuration
                                 dur > 0 -> dur
@@ -621,6 +748,11 @@ object Castor {
                             _state.update { it.copy(notice = Notice(R.string.notice_source_asleep, sourceLabel(st.media))) }
                         }
                     } else waitingSince = 0L
+                    // Arrivée au bout (la télé s'arrête près de la fin) : écran d'attente ou suite de l'album.
+                    val total = _state.value.duration
+                    if ((t == "STOPPED" || t == "NO_MEDIA_PRESENT") && total > 0 && lastPlaying > 0 &&
+                        lastPlaying >= total - 20
+                    ) { onMediaEnded(); break }
                     if (_state.value.phase == Phase.STOPPED) {
                         if (++stoppedTicks >= 3) { CastService.stop(app); break }
                     } else stoppedTicks = 0
@@ -650,6 +782,18 @@ object Castor {
     private fun sending() = _state.value.phase == Phase.SENDING || _state.value.phase == Phase.LOADING
 
     fun cast() { if (!sending()) exec { castAt(_state.value.media?.startSec ?: 0.0) } }
+
+    /** Vrai si la vidéo passe par le DLNA de secours d'une télé Cast. */
+    val usingFallback: Boolean get() = via != null
+
+    /** Renvoie la vidéo par le DLNA de la télé (dépannage : format refusé par le lecteur Cast). */
+    fun castWithDlna() {
+        if (!sending()) exec {
+            val at = if (_state.value.active) currentPosition() else _state.value.media?.startSec ?: 0.0
+            if (_state.value.renderer?.cast == true) CastControl.disconnect()
+            castAt(at, forceDlna = true)
+        }
+    }
 
     fun togglePlay() {
         if (!sending()) exec { togglePlayNow() }
@@ -749,11 +893,19 @@ object Castor {
         }
     }
 
+    /**
+     * Arrêter : la télé affiche l'écran d'attente de l'appli au lieu de quitter le lecteur (un vrai
+     * « Stop » renvoie beaucoup de télés sur leur dernière source, HDMI…). « Se déconnecter » libère la télé.
+     */
     fun stop() = exec {
         slideJob?.cancel()
+        seekJob?.cancel()
         _state.update { it.copy(slides = it.slides?.copy(auto = false)) }
         pollJob?.cancel()
-        target()?.let { r -> if (r.cast) CastControl.stop(r) else runCatching { Dlna.stop(r) } }
+        val r = target()
+        if (r != null && runCatching { showIdle() }.isFailure) {
+            if (r.cast) CastControl.stop(r) else runCatching { Dlna.stop(r) }
+        }
         _state.update { it.copy(phase = Phase.STOPPED) }
         CastService.stop(app)
     }
@@ -777,7 +929,37 @@ object Castor {
         _state.update { it.copy(subIndex = index) }
         loadSubtitle()
         val s = _state.value
-        if (s.active) castAt(s.position)
+        if (s.active) castAt(currentPosition())
+    }
+
+    private var delayJob: Job? = null
+
+    /**
+     * Décale les sous-titres (±). Les appuis rapprochés sont regroupés : la télé ne recharge qu'une fois,
+     * à l'endroit où elle en est.
+     */
+    fun shiftSubtitles(delta: Double) {
+        val v = (Math.round((_state.value.subDelay + delta) * 10) / 10.0).coerceIn(-60.0, 60.0)
+        if (v == _state.value.subDelay) return
+        _state.update { it.copy(subDelay = v) }
+        delayJob?.cancel()
+        delayJob = scope.launch {
+            delay(1300)
+            exec {
+                applySubtitle()
+                val s = _state.value
+                if (s.active && rawSubtitle != null) castAt(currentPosition())
+            }
+        }
+    }
+
+    fun resetSubtitleDelay() = shiftSubtitles(-_state.value.subDelay)
+
+    /** Position exacte de la lecture (le lecteur Cast la connaît à la seconde près). */
+    private suspend fun currentPosition(): Double {
+        val r = target()
+        if (r?.cast == true) runCatching { CastControl.snapshot().first }.getOrNull()?.takeIf { it > 0 }?.let { return it }
+        return _state.value.position
     }
 
     fun addSubtitle(uri: Uri, name: String) = exec {
@@ -786,6 +968,6 @@ object Castor {
         _state.update { it.copy(media = m.copy(subs = subs), subIndex = subs.lastIndex) }
         loadSubtitle()
         val s = _state.value
-        if (s.active && s.subIndex >= 0) castAt(s.position)
+        if (s.active && s.subIndex >= 0) castAt(currentPosition())
     }
 }

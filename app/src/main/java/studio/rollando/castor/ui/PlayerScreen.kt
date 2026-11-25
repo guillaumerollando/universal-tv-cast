@@ -22,6 +22,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -35,8 +36,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.ui.semantics.Role
+import androidx.compose.material.icons.rounded.ExpandMore
+import androidx.compose.material.icons.rounded.ExpandLess
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.foundation.clickable
+import androidx.compose.animation.animateContentSize
 import androidx.compose.material.icons.automirrored.rounded.VolumeDown
 import androidx.compose.material.icons.automirrored.rounded.VolumeUp
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Cast
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.ErrorOutline
@@ -45,6 +53,7 @@ import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material.icons.rounded.Pause
 import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material.icons.rounded.Replay10
 import androidx.compose.material.icons.rounded.Stop
 import androidx.compose.material.icons.rounded.Subtitles
@@ -286,7 +295,7 @@ private fun phaseLabel(s: CastState): String = stringResource(
         Phase.BUFFERING -> R.string.phase_buffering
         Phase.PLAYING -> R.string.phase_playing
         Phase.PAUSED -> R.string.phase_paused
-        Phase.STOPPED -> R.string.phase_stopped
+        Phase.STOPPED -> if (s.idle) R.string.phase_tv_waiting else R.string.phase_stopped
         Phase.IDLE -> R.string.phase_ready
     }
 )
@@ -375,14 +384,37 @@ private fun SubtitlesCard(s: CastState) {
     }
     val none = stringResource(R.string.subs_none)
     val current = media.subs.getOrNull(s.subIndex)?.name ?: none
-    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer), shape = RoundedCornerShape(20.dp)) {
-        Column(Modifier.padding(16.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Rounded.Subtitles, null, tint = MaterialTheme.colorScheme.primary)
+    // Repliée par défaut : une ligne discrète « Sous-titres · Français », dépliée au toucher.
+    var expanded by rememberSaveable(media.url) { mutableStateOf(false) }
+    val stateText = stringResource(if (expanded) R.string.state_expanded else R.string.state_collapsed)
+    val c = MaterialTheme.colorScheme
+    Card(
+        colors = CardDefaults.cardColors(containerColor = c.surfaceContainerLow),
+        shape = RoundedCornerShape(20.dp),
+        modifier = Modifier.animateContentSize(),
+    ) {
+        Column(Modifier.padding(horizontal = 16.dp)) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .clickable(role = Role.Button) { expanded = !expanded }
+                    .semantics { stateDescription = stateText }
+                    .padding(vertical = 14.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(Icons.Rounded.Subtitles, null, tint = if (s.subIndex >= 0) c.primary else c.onSurfaceVariant, modifier = Modifier.size(22.dp))
                 Spacer(Modifier.width(10.dp))
-                Text(stringResource(R.string.subs_title), style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.subs_title), style = MaterialTheme.typography.titleSmall)
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    current + if (s.subIndex >= 0 && s.subDelay != 0.0)
+                        String.format(java.util.Locale.getDefault(), " · %+.1f s", s.subDelay) else "",
+                    style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant,
+                    maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f),
+                )
+                Icon(if (expanded) Icons.Rounded.ExpandLess else Icons.Rounded.ExpandMore, null, tint = c.onSurfaceVariant)
             }
-            Spacer(Modifier.height(10.dp))
+            if (expanded) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(Modifier.weight(1f)) {
                     OutlinedButton(onClick = { open = true }, modifier = Modifier.fillMaxWidth().height(48.dp)) {
@@ -400,8 +432,41 @@ private fun SubtitlesCard(s: CastState) {
                     Text(stringResource(R.string.subs_add))
                 }
             }
+            if (s.subIndex >= 0) SubtitleDelay(s.subDelay)
             Spacer(Modifier.height(6.dp))
             Text(stringResource(R.string.subs_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Spacer(Modifier.height(14.dp))
+            }
+        }
+    }
+}
+
+/** Décalage des sous-titres : − les avance, + les retarde, par pas d'une demi-seconde. */
+@Composable
+private fun SubtitleDelay(delay: Double) {
+    val c = MaterialTheme.colorScheme
+    val value = String.format(java.util.Locale.getDefault(), "%+.1f s", delay).replace("+0,0", "0,0").replace("+0.0", "0.0")
+    val label = stringResource(R.string.subs_delay)
+    Spacer(Modifier.height(12.dp))
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Column(Modifier.weight(1f)) {
+            Text(label, style = MaterialTheme.typography.titleSmall)
+            Text(stringResource(R.string.subs_delay_hint), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
+        }
+        FilledTonalIconButton(onClick = { Castor.shiftSubtitles(-0.5) }, modifier = Modifier.size(44.dp)) {
+            Icon(Icons.Rounded.Remove, stringResource(R.string.cd_subs_earlier))
+        }
+        Text(
+            value, style = MaterialTheme.typography.titleMedium, textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            modifier = Modifier.width(76.dp).semantics { contentDescription = "$label : $value"; liveRegion = LiveRegionMode.Polite },
+        )
+        FilledTonalIconButton(onClick = { Castor.shiftSubtitles(0.5) }, modifier = Modifier.size(44.dp)) {
+            Icon(Icons.Rounded.Add, stringResource(R.string.cd_subs_later))
+        }
+    }
+    if (delay != 0.0) {
+        TextButton(onClick = Castor::resetSubtitleDelay, contentPadding = PaddingValues(horizontal = 0.dp)) {
+            Text(stringResource(R.string.subs_delay_reset))
         }
     }
 }

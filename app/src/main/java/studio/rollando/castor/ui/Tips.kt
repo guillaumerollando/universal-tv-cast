@@ -6,6 +6,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.rounded.BugReport
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Switch
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.ErrorOutline
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.selection.toggleable
+import studio.rollando.castor.cast.Castor
+import studio.rollando.castor.net.Net
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,7 +56,7 @@ import studio.rollando.castor.data.Background
 import studio.rollando.castor.data.Library
 
 /**
- * Conseil préventif : l'appli qui sert la vidéo (Stremio…) ou Castor lui-même risque d'être mis en veille
+ * Conseil préventif : l'appli qui sert la vidéo ou la nôtre risque d'être mis en veille
  * par Android, ce qui fige la télé dès qu'on avance. Une seule carte à la fois ; « Ne plus afficher » la retire.
  */
 @Composable
@@ -93,30 +101,34 @@ fun BackgroundTip(s: CastState) {
     }
 }
 
-private data class Help(val title: Int, val body: Int, val ownSettings: Boolean = false)
+private enum class Diag { TV, FREEZE, FORMAT, SUBS, HDMI, SLEEP }
+
+private data class Help(val title: Int, val body: Int, val diag: Diag)
 
 private val HELP = listOf(
-    Help(R.string.help_tv_title, R.string.help_tv_body),
-    Help(R.string.help_freeze_title, R.string.help_freeze_body),
-    Help(R.string.help_format_title, R.string.help_format_body),
-    Help(R.string.help_subs_title, R.string.help_subs_body),
-    Help(R.string.help_hdmi_title, R.string.help_hdmi_body),
-    Help(R.string.help_sleep_title, R.string.help_sleep_body, ownSettings = true),
+    Help(R.string.help_tv_title, R.string.help_tv_body, Diag.TV),
+    Help(R.string.help_freeze_title, R.string.help_freeze_body, Diag.FREEZE),
+    Help(R.string.help_format_title, R.string.help_format_body, Diag.FORMAT),
+    Help(R.string.help_subs_title, R.string.help_subs_body, Diag.SUBS),
+    Help(R.string.help_hdmi_title, R.string.help_hdmi_body, Diag.HDMI),
+    Help(R.string.help_sleep_title, R.string.help_sleep_body, Diag.SLEEP),
 )
 
-/** Panneau d'aide : problèmes courants, puis « Signaler un problème ». */
+/** Panneau d'aide : problèmes courants (avec l'état réel et les bons boutons), puis « Signaler un problème ». */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HelpSheet(onDismiss: () -> Unit) {
     val context = LocalContext.current
     val state by studio.rollando.castor.cast.Castor.state.collectAsState()
-    ModalBottomSheet(onDismissRequest = onDismiss) {
+    // Toujours ouvert en grand : déplier une réponse ne fait plus redescendre le panneau.
+    val sheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheet) {
         LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
             item {
                 Text(stringResource(R.string.help_title), style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp).semantics { heading() })
             }
-            item { TroubleshootingSection() }
+            item { TroubleshootingSection(state, onDismiss) }
             item {
                 Column(Modifier.padding(horizontal = 24.dp, vertical = 12.dp)) {
                     Text(stringResource(R.string.help_report_hint), style = MaterialTheme.typography.bodySmall,
@@ -133,38 +145,113 @@ fun HelpSheet(onDismiss: () -> Unit) {
     }
 }
 
-/** Les problèmes courants et leur solution (panneau d'aide). */
+/** Les problèmes courants : l'explication, puis ce que l'appli constate et de quoi agir tout de suite. */
 @Composable
-fun TroubleshootingSection() {
-    val context = LocalContext.current
+fun TroubleshootingSection(state: CastState, onClose: () -> Unit = {}) {
     Column(Modifier.padding(horizontal = 24.dp)) {
         Text(stringResource(R.string.help_section), style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(vertical = 8.dp).semantics { heading() })
         HELP.forEach { h ->
             var open by rememberSaveable(h.title) { mutableStateOf(false) }
             val stateText = stringResource(if (open) R.string.state_expanded else R.string.state_collapsed)
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .animateContentSize()
-                    .clickable(role = Role.Button) { open = !open }
-                    .semantics { stateDescription = stateText }
-                    .padding(vertical = 10.dp)
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.fillMaxWidth().animateContentSize()) {
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable(role = Role.Button) { open = !open }
+                        .semantics { stateDescription = stateText }
+                        .padding(vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
                     Text(stringResource(h.title), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
                     Icon(if (open) Icons.Rounded.ExpandLess else Icons.Rounded.ExpandMore, null)
                 }
                 if (open) {
-                    Spacer(Modifier.height(4.dp))
                     Text(
-                        stringResource(h.body) + if (h.ownSettings) " " + stringResource(Background.howTo()) else "",
+                        stringResource(h.body) + if (h.diag == Diag.SLEEP) " " + stringResource(Background.howTo()) else "",
                         style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
-                    if (h.ownSettings) {
-                        TextButton(onClick = { Background.openSettings(context, context.packageName) }) {
-                            Text(stringResource(R.string.action_source_settings, stringResource(R.string.app_name)))
+                    Spacer(Modifier.height(10.dp))
+                    DiagPanel(h.diag, state, onClose)
+                    Spacer(Modifier.height(12.dp))
+                }
+            }
+        }
+    }
+}
+
+/** Ce que l'appli sait de la situation, avec les boutons utiles. */
+@Composable
+private fun DiagPanel(d: Diag, s: CastState, onClose: () -> Unit) {
+    val context = LocalContext.current
+    val c = MaterialTheme.colorScheme
+    val embed by Library.embedSubs.collectAsState()
+    Card(colors = CardDefaults.cardColors(containerColor = c.surfaceContainerHigh), shape = RoundedCornerShape(16.dp)) {
+        Column(Modifier.fillMaxWidth().padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            when (d) {
+                Diag.TV -> {
+                    val ip = Net.localIp()
+                    Status(ip != null, if (ip != null) stringResource(R.string.diag_wifi_ok, ip) else stringResource(R.string.diag_wifi_none))
+                    Status(s.renderers.isNotEmpty(), stringResource(R.string.diag_tvs_found, s.renderers.size))
+                    ActionRow {
+                        FilledTonalButton(onClick = { Castor.discover() }, enabled = !s.searching) {
+                            Text(stringResource(if (s.searching) R.string.tv_searching else R.string.tv_search_again))
                         }
+                        TextButton(onClick = { onClose(); Nav.tvs.value = true }) { Text(stringResource(R.string.tv_add_ip)) }
+                    }
+                }
+                Diag.FREEZE, Diag.SLEEP -> {
+                    val self = context.packageName
+                    AppStatus(self)
+                    val src = s.media?.sourceApp?.takeIf { s.media.fromPhoneApp && it != self }
+                    if (d == Diag.FREEZE) {
+                        if (src != null) AppStatus(src)
+                        else Text(stringResource(R.string.diag_source_unknown), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
+                    }
+                }
+                Diag.FORMAT -> {
+                    val m = s.media
+                    if (m == null) Text(stringResource(R.string.diag_no_video), style = MaterialTheme.typography.bodyMedium)
+                    else {
+                        val r = s.renderer
+                        val fmt = when {
+                            s.isHls -> "HLS"
+                            else -> studio.rollando.castor.net.Mime.ext(m.fileName ?: m.title).ifEmpty {
+                                studio.rollando.castor.net.Mime.ext(m.url)
+                            }.uppercase().ifEmpty { "?" }
+                        }
+                        val via = when {
+                            r == null -> "—"
+                            r.cast && !Castor.usingFallback -> "Google Cast"
+                            else -> "DLNA"
+                        }
+                        Text(stringResource(R.string.diag_current, fmt, via), style = MaterialTheme.typography.bodyMedium)
+                        ActionRow {
+                            FilledTonalButton(onClick = { onClose(); Castor.cast() }, enabled = r != null) { Text(stringResource(R.string.action_send_again)) }
+                            if (r?.cast == true && r.fallback != null && !Castor.usingFallback) {
+                                TextButton(onClick = { onClose(); Castor.castWithDlna() }) { Text(stringResource(R.string.action_try_dlna)) }
+                            }
+                        }
+                        if (s.isHls) SwitchLine(stringResource(R.string.settings_continuous), s.continuous) { Castor.setContinuous(it) }
+                    }
+                }
+                Diag.SUBS -> {
+                    val r = s.renderer
+                    Text(
+                        stringResource(when {
+                            r == null -> R.string.diag_no_tv
+                            r.cast && !Castor.usingFallback -> R.string.diag_tv_cast
+                            else -> R.string.diag_tv_dlna
+                        }),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                    s.media?.let { Status(it.subs.isNotEmpty(), stringResource(R.string.diag_subs_found, it.subs.size)) }
+                    SwitchLine(stringResource(R.string.settings_embed), embed) { Library.setEmbedSubs(it) }
+                }
+                Diag.HDMI -> {
+                    Status(s.renderer != null, s.renderer?.name ?: stringResource(R.string.diag_no_tv))
+                    if (s.renderer != null) ActionRow {
+                        TextButton(onClick = { onClose(); Castor.disconnect() }) { Text(stringResource(R.string.tv_disconnect)) }
                     }
                 }
             }
@@ -172,3 +259,45 @@ fun TroubleshootingSection() {
     }
 }
 
+@Composable
+private fun Status(ok: Boolean, text: String) {
+    val c = MaterialTheme.colorScheme
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            if (ok) Icons.Rounded.CheckCircle else Icons.Rounded.ErrorOutline, null,
+            tint = if (ok) c.secondary else c.primary, modifier = Modifier.size(18.dp),
+        )
+        Spacer(Modifier.width(8.dp))
+        Text(text, style = MaterialTheme.typography.bodyMedium)
+    }
+}
+
+/** État « arrière-plan » d'une appli, avec le bouton vers ses réglages si elle risque d'être endormie. */
+@Composable
+private fun AppStatus(pkg: String) {
+    val context = LocalContext.current
+    val name = Background.appLabel(context, pkg)
+    val risk = Background.atRisk(context, pkg)
+    Status(!risk, stringResource(if (risk) R.string.diag_app_risk else R.string.diag_app_ok, name))
+    if (risk) {
+        FilledTonalButton(onClick = { Background.openSettings(context, pkg) }) {
+            Text(stringResource(R.string.action_open_settings_of, name), maxLines = 1)
+        }
+    }
+}
+
+@Composable
+private fun ActionRow(content: @Composable () -> Unit) {
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) { content() }
+}
+
+@Composable
+private fun SwitchLine(label: String, on: Boolean, onChange: (Boolean) -> Unit) {
+    Row(
+        Modifier.fillMaxWidth().toggleable(on, role = Role.Switch, onValueChange = onChange),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(label, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
+        Switch(checked = on, onCheckedChange = null)
+    }
+}

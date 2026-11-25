@@ -121,6 +121,17 @@ class EngineTest {
         assertTrue(String(Subtitles.toSrt(srt), Charsets.UTF_8).contains("Été"))
     }
 
+    @Test fun subtitlesShift() {
+        val srt = Subtitles.toSrt("1\n00:00:01,000 --> 00:00:02,500\nA\n\n2\n00:59:59,800 --> 01:00:01,000\nB\nb\n".toByteArray())
+        val later = String(Subtitles.shift(srt, 1500), Charsets.UTF_8)
+        assertTrue(later, later.contains("00:00:02,500 --> 00:00:04,000\nA"))
+        assertTrue(later, later.contains("01:00:01,300 --> 01:00:02,500\nB\nb"))
+        val earlier = String(Subtitles.shift(srt, -2000), Charsets.UTF_8).removePrefix("\uFEFF")
+        assertTrue(earlier, earlier.startsWith("1\n00:00:00,000 --> 00:00:00,500\nA\n\n2\n00:59:57,800"))
+        val dropped = String(Subtitles.shift(srt, -3000), Charsets.UTF_8).removePrefix("\uFEFF")
+        assertTrue(dropped, dropped.startsWith("1\n00:59:56,800 --> 00:59:58,000\nB"))
+    }
+
     @Test fun timeHelpers() {
         assertEquals("1:02:03", Dlna.hms(3723.9))
         assertEquals(3723.5, Dlna.parseHms("01:02:03.500"), 0.001)

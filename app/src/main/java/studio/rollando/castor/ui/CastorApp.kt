@@ -67,6 +67,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -104,6 +105,8 @@ object Nav {
     val openUrl = MutableStateFlow<String?>(null)
     /** Panneau d'aide ouvert (bouton « ? », secousse, lien dans une erreur). */
     val help = MutableStateFlow(false)
+    /** Demande d'ouvrir le choix de la télé (depuis l'aide). */
+    val tvs = MutableStateFlow(false)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -113,6 +116,8 @@ fun CastorApp() {
     val state by Castor.state.collectAsState()
     val tab by Nav.tab.collectAsState()
     var showTvs by rememberSaveable { mutableStateOf(false) }
+    val tvsRequest by Nav.tvs.collectAsState()
+    LaunchedEffect(tvsRequest) { if (tvsRequest) { showTvs = true; Nav.tvs.value = false } }
     var showSettings by rememberSaveable { mutableStateOf(false) }
     var showLink by rememberSaveable { mutableStateOf(false) }
     val browser = remember { BrowserController(context) }
@@ -181,7 +186,7 @@ fun CastorApp() {
                     onBrowse = { url -> url?.let { browser.load(it) }; Nav.tab.value = Tab.BROWSER },
                     onPickFile = { pickFile.launch(arrayOf("video/*", "audio/*")) },
                     onPickVideo = { pickVideo.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly)) },
-                    onPickPhotos = { pickPhotos.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+                    onPickPhotos = { pickPhotos.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)) },
                     onPasteLink = { showLink = true },
                 )
                 Tab.BROWSER -> BrowserScreen(browser)

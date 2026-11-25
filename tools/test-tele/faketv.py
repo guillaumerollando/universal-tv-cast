@@ -8,7 +8,11 @@ S = {'state': 'NO_MEDIA_PRESENT', 'uri': None, 'pos': 0.0, 't': None, 'total': N
 STATS = {'concurrent': 0, 'max_concurrent': 0, 'soap': 0}
 def log(*a): print(time.strftime('%H:%M:%S'), *a, flush=True)
 def now_pos():
-    if S['state'] == 'PLAYING' and S['t']: return min(DUR, S['pos'] + time.time() - S['t'])
+    if S['state'] == 'PLAYING' and S['t']:
+        p = S['pos'] + time.time() - S['t']
+        if p >= DUR and not (S['uri'] or '').endswith('.jpg'):  # fin de la vidéo : la vraie télé repart sur HDMI
+            hdmi('fin de la vidéo'); S['pos'] = 0.0; return 0.0
+        return min(DUR, p)
     return S['pos']
 def local(url):
     m = re.match(r'http://[^:/]+:(\d+)(/.*)', url); port = m.group(1)
@@ -98,6 +102,7 @@ class H(http.server.BaseHTTPRequestHandler):
         if action == 'GetPositionInfo':
             return reply(self, f'<u:GetPositionInfoResponse xmlns:u="x"><TrackDuration>{hms(DUR)}</TrackDuration><RelTime>{hms(now_pos())}</RelTime></u:GetPositionInfoResponse>')
         if action == 'GetTransportInfo':
+            now_pos()
             return reply(self, f'<u:GetTransportInfoResponse xmlns:u="x"><CurrentTransportState>{S["state"]}</CurrentTransportState></u:GetTransportInfoResponse>')
         if action == 'GetVolume': return reply(self, '<u:R xmlns:u="x"><CurrentVolume>12</CurrentVolume></u:R>')
         if action == 'SetVolume': return reply(self, '<u:R xmlns:u="x"/>')

@@ -138,7 +138,27 @@ object CastControl {
     }
 
     private suspend fun client(r: Renderer): RemoteMediaClient =
-        connect(r).remoteMediaClient ?: throw TvBusy(IOException("lecteur Cast indisponible"))
+        (connect(r).remoteMediaClient ?: throw TvBusy(IOException("lecteur Cast indisponible"))).also(::watch)
+
+    /** Appelé dès que la vidéo arrive à sa fin (pas sur une erreur ni un remplacement). */
+    var onFinished: (() -> Unit)? = null
+    private var watched: RemoteMediaClient? = null
+    private val statusCallback = object : RemoteMediaClient.Callback() {
+        override fun onStatusUpdated() {
+            val st = watched?.mediaStatus ?: return
+            if (st.playerState == MediaStatus.PLAYER_STATE_IDLE && st.idleReason == MediaStatus.IDLE_REASON_FINISHED) {
+                Log.i(TAG, "fin de la vidéo")
+                onFinished?.invoke()
+            }
+        }
+    }
+
+    private fun watch(c: RemoteMediaClient) {
+        if (watched === c) return
+        runCatching { watched?.unregisterCallback(statusCallback) }
+        watched = c
+        c.registerCallback(statusCallback)
+    }
 
     private suspend fun PendingResult<RemoteMediaClient.MediaChannelResult>.awaitOk(what: String) =
         suspendCancellableCoroutine { c ->

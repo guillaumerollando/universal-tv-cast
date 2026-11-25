@@ -92,11 +92,13 @@ fun BackgroundTip(s: CastState) {
                 style = MaterialTheme.typography.bodyMedium, color = c.onTertiaryContainer,
             )
             Spacer(Modifier.height(8.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                FilledTonalButton(onClick = { Background.openSettings(context, pkg) }) {
-                    Text(stringResource(R.string.action_source_settings, name), maxLines = 1)
-                }
-                TextButton(onClick = { Library.dismissTip(key) }) { Text(stringResource(R.string.action_dont_show)) }
+            // Boutons l'un sous l'autre : le libellé (« Ouvrir les réglages de … ») est long sur un petit écran.
+            FilledTonalButton(onClick = { Background.openSettings(context, pkg) }, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.action_source_settings, name), maxLines = 2,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+            }
+            TextButton(onClick = { Library.dismissTip(key) }, modifier = Modifier.align(Alignment.End)) {
+                Text(stringResource(R.string.action_dont_show))
             }
         }
     }

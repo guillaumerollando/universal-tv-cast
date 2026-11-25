@@ -78,6 +78,9 @@ private class Drm : IOException("drm")
 private val GENERIC_NAMES = setOf(
     "index", "master", "playlist", "manifest", "stream", "video", "chunklist", "main", "live", "prog_index",
     "media", "mono", "output", "file", "default", "hls", "play", "embed",
+    // Mots qui ne désignent aucun film : sans ça, « film.mp4 » était pris pour un vrai film (affiche comprise).
+    "film", "movie", "movies", "episode", "ep", "clip", "sample", "test", "trailer", "bande-annonce", "vod",
+    "watch", "player", "source", "download", "telechargement", "fichier", "sans titre", "untitled", "new",
 )
 
 /** Le chef d'orchestre : choix de la télé, préparation de la vidéo, commandes de lecture. */
@@ -348,19 +351,18 @@ object Castor {
     class PhoneSession(val media: Media, val startSec: Double, val subtitle: ByteArray?, val hls: Boolean)
 
     /**
-     * « Regarder sur le téléphone » : la télé se met en pause (elle garde l'image), le téléphone reprend
-     * au même endroit, avec les mêmes sous-titres (décalage compris).
+     * « Regarder sur le téléphone » : la télé s'arrête sur l'écran d'attente, le téléphone reprend au même
+     * endroit, avec les mêmes sous-titres (décalage compris).
      */
     fun toPhone(): PhoneSession? {
         val s = _state.value
         val m = s.media ?: return null
         if (s.slides != null) return null
         val at = if (s.active || s.position > 1) s.position else m.startSec
-        if (s.phase == Phase.PLAYING) exec {
-            val r = target() ?: return@exec
-            runCatching { if (r.cast) CastControl.pause(r) else Dlna.pause(r) }
-                .onSuccess { _state.update { it.copy(phase = Phase.PAUSED) } }
-        }
+        // Une seule lecture à la fois : la télé s'arrête (écran d'attente), même si elle était encore en train
+        // de charger la vidéo — sinon elle démarrait de son côté pendant que le téléphone lisait.
+        pendingCast = false
+        if (s.active || s.phase == Phase.LOADING || s.phase == Phase.SENDING) stop()
         return PhoneSession(m, at, proxy.subtitle, s.isHls)
     }
 

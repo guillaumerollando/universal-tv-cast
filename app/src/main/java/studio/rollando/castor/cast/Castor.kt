@@ -1068,7 +1068,8 @@ object Castor {
                     ) { onMediaEnded(); break }
                     // DLNA, durée connue : on passe à la suite juste avant la fin. Sinon la télé ferme son lecteur
                     // et repart sur sa dernière source (HDMI) avant qu'on lui envoie quoi que ce soit.
-                    if (!r.cast && t == "PLAYING" && total > 5 && lastPlaying >= total - 2.5 && !busy &&
+                    // (Jamais pour un direct : certaines télés lui donnent une durée qui ne veut rien dire.)
+                    if (!r.cast && !_state.value.live && t == "PLAYING" && total > 5 && lastPlaying >= total - 2.5 && !busy &&
                         System.currentTimeMillis() >= holdPositionUntil
                     ) { onMediaEnded(); break }
                     // La télé a abandonné sans jamais lire (la Philips rate parfois le premier envoi, surtout en
@@ -1224,8 +1225,19 @@ object Castor {
         exec { castAt(0.0) }
     }
 
+    /** Direct : se placer à ce retard (en secondes) sur le direct, depuis la barre de lecture. */
+    fun seekLive(behind: Double) {
+        val s = _state.value
+        if (!s.live || !s.active || !s.continuous) return
+        val target = behind.coerceIn(0.0, maxLiveBack(s))
+        livePausedAt = 0L
+        _state.update { it.copy(liveBehind = target) }
+        seekJob?.cancel()
+        seekJob = scope.launch { delay(300); exec { castAt(target) } }
+    }
+
     /** On peut remonter dans tout ce que garde le flux, moins les derniers morceaux (le direct lui-même). */
-    private fun maxLiveBack(s: CastState) = (s.liveWindow - 30).coerceAtLeast(0.0)
+    fun maxLiveBack(s: CastState) = (s.liveWindow - 30).coerceAtLeast(0.0)
 
     /** Direct en pause : depuis quand (pour compter le retard pris). */
     @Volatile private var livePausedAt = 0L

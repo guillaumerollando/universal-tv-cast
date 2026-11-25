@@ -78,6 +78,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import kotlinx.coroutines.launch
+import dev.chrisbanes.haze.hazeSource
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -129,6 +130,8 @@ fun CastorApp() {
     var showSettings by rememberSaveable { mutableStateOf(false) }
     var showLink by rememberSaveable { mutableStateOf(false) }
     val browser = remember { BrowserController(context) }
+    // Ce qui défile sous la barre d'onglets, flouté derrière elle.
+    val haze = remember { dev.chrisbanes.haze.HazeState() }
     // Ouvrir une page dans le navigateur depuis un autre écran (épisode à reprendre…).
     val urlRequest by Nav.openUrl.collectAsState()
     LaunchedEffect(urlRequest) {
@@ -199,11 +202,11 @@ fun CastorApp() {
             }
             }
         },
-        bottomBar = { PillTabBar(tab, state.active) { Nav.tab.value = it } },
+        bottomBar = { PillTabBar(tab, state.active, haze) { Nav.tab.value = it } },
     ) { padding ->
         // Les écrans défilent sous la barre d'onglets (sauf le navigateur) et finissent au-dessus d'elle.
         val bottom = padding.calculateBottomPadding()
-        Box(Modifier.padding(top = padding.calculateTopPadding()).fillMaxSize()
+        Box(Modifier.padding(top = padding.calculateTopPadding()).fillMaxSize().hazeSource(haze)
             .then(if (tab == Tab.BROWSER) Modifier.padding(bottom = bottom) else Modifier)) {
             androidx.compose.runtime.CompositionLocalProvider(LocalBottomInset provides if (tab == Tab.BROWSER) 0.dp else bottom) {
             when (tab) {

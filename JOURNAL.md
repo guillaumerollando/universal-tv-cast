@@ -674,3 +674,9 @@ fait toute seule.
 - Écran « Listes de chaînes » : recherche sans accents, filtres par groupe (pays du téléphone d'abord), logos.
 - Les liens YouTube/Twitch des listes sont écartés ; User-Agent/Referer de la liste repris.
 - Une chaîne regardée apparaît dans « Chaînes » avec son logo. Listes en ligne remises à jour une fois par jour.
+
+## 2026-11-25 (nuit, 2) — Barre d'onglets floutée, barre de lecture du direct
+- Barre d'onglets : flou de ce qui défile dessous (Haze 1.6.4), teinte vert fumé ; teinte presque opaque avant Android 12.
+- Direct : la même barre que les vidéos, en rouge. Pleine au direct ; on peut la tirer pour remonter dans la fenêtre du flux
+  (Castor.seekLive → castAt(retard)). Badge EN DIRECT / −m:ss et « Revenir au direct » dessous.
+- Un direct n'est jamais considéré comme fini d'après la durée annoncée par la télé (la fausse télé en annonçait une).

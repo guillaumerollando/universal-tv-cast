@@ -377,38 +377,60 @@ private fun ChannelHeader(s: CastState) {
 }
 
 /**
- * Direct : pas de barre de temps (la fenêtre gardée par le flux ne veut rien dire). Badge rouge au direct ;
- * en retard (pause, retour en arrière), le retard « −1:24 » et « Revenir au direct ».
+ * Direct : la même barre que pour une vidéo, en rouge. Au direct, elle est pleine ; en pause ou en remontant,
+ * le curseur recule dans ce que garde le flux, et l'on voit le retard (« −1:24 ») et « Revenir au direct ».
  */
 @Composable
 private fun LiveBar(s: CastState) {
     val c = MaterialTheme.colorScheme
+    val red = Color(0xFFE53935)
     val paused = s.phase == Phase.PAUSED
     // Le retard grandit pendant la pause : on le recalcule chaque seconde.
     val pausedSince = remember(paused) { if (paused) System.currentTimeMillis() else 0L }
     var now by remember { mutableStateOf(System.currentTimeMillis()) }
     LaunchedEffect(paused) { while (paused) { now = System.currentTimeMillis(); kotlinx.coroutines.delay(1000) } }
-    val behind = (s.liveBehind + if (paused) (now - pausedSince) / 1000.0 else 0.0).toLong()
+    val max = Castor.maxLiveBack(s)
+    val seekable = s.active && s.continuous && max > 0
+    var dragging by remember { mutableStateOf(false) }
+    var dragValue by remember { mutableFloatStateOf(0f) }
+    val running = (s.liveBehind + if (paused) (now - pausedSince) / 1000.0 else 0.0)
+    val behindD = if (dragging) max - dragValue else if (seekable) running.coerceAtMost(max) else running
+    val behind = behindD.toLong()
     val atLive = behind < 5 && !paused
-    Row(Modifier.fillMaxWidth().padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-        Row(
-            Modifier.clip(RoundedCornerShape(50))
-                .background(if (atLive) Color(0xFFE53935) else c.surfaceContainerHighest)
-                .padding(horizontal = 12.dp, vertical = 6.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Box(Modifier.size(8.dp).clip(CircleShape).background(if (atLive) Color.White else c.onSurfaceVariant))
-            Spacer(Modifier.width(8.dp))
-            Text(
-                if (atLive || behind < 5) stringResource(R.string.player_live).uppercase() else "−%d:%02d".format(behind / 60, behind % 60),
-                style = MaterialTheme.typography.labelLarge, color = if (atLive) Color.White else c.onSurface,
-            )
-        }
-        Spacer(Modifier.weight(1f))
-        if (!atLive && s.active) TextButton(onClick = Castor::goLive) {
-            Text(stringResource(R.string.live_back))
-            Spacer(Modifier.width(4.dp))
-            Icon(Icons.Rounded.SkipNext, null, Modifier.size(18.dp))
+    val liveLabel = stringResource(R.string.player_live)
+    val delayText = "−%d:%02d".format(behind / 60, behind % 60)
+    Column {
+        Slider(
+            value = if (seekable) (max - behindD).toFloat().coerceIn(0f, max.toFloat()) else 1f,
+            onValueChange = { dragging = true; dragValue = it },
+            onValueChangeFinished = { dragging = false; Castor.seekLive(max - dragValue) },
+            valueRange = 0f..(if (seekable) max.toFloat() else 1f),
+            enabled = seekable,
+            colors = androidx.compose.material3.SliderDefaults.colors(
+                thumbColor = red, activeTrackColor = red, disabledThumbColor = red, disabledActiveTrackColor = red,
+            ),
+            modifier = Modifier.semantics { stateDescription = if (atLive) liveLabel else delayText },
+        )
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                Modifier.clip(RoundedCornerShape(50))
+                    .background(if (atLive) red else c.surfaceContainerHighest)
+                    .padding(horizontal = 10.dp, vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Box(Modifier.size(7.dp).clip(CircleShape).background(if (atLive) Color.White else c.onSurfaceVariant))
+                Spacer(Modifier.width(6.dp))
+                Text(
+                    if (atLive || behind < 5) liveLabel.uppercase() else delayText,
+                    style = MaterialTheme.typography.labelMedium, color = if (atLive) Color.White else c.onSurface,
+                )
+            }
+            Spacer(Modifier.weight(1f))
+            if (!atLive && s.active) TextButton(onClick = Castor::goLive) {
+                Text(stringResource(R.string.live_back))
+                Spacer(Modifier.width(4.dp))
+                Icon(Icons.Rounded.SkipNext, null, Modifier.size(18.dp))
+            }
         }
     }
 }

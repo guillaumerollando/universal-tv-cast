@@ -45,6 +45,9 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import studio.rollando.castor.R
+import dev.chrisbanes.haze.HazeStyle
+import dev.chrisbanes.haze.HazeTint
+import dev.chrisbanes.haze.hazeEffect
 
 /** Hauteur réservée par la barre d'onglets : les écrans défilent dessous et finissent au-dessus. */
 val LocalBottomInset = androidx.compose.runtime.compositionLocalOf { 0.dp }
@@ -56,7 +59,7 @@ private data class TabSpec(val tab: Tab, val icon: ImageVector, val label: Strin
  * et un indicateur ambré qui glisse d'un onglet à l'autre (≈ 0,2 s, sans rebond). Rien ne change de taille.
  */
 @Composable
-fun PillTabBar(tab: Tab, casting: Boolean, onSelect: (Tab) -> Unit) {
+fun PillTabBar(tab: Tab, casting: Boolean, haze: dev.chrisbanes.haze.HazeState, onSelect: (Tab) -> Unit) {
     val c = MaterialTheme.colorScheme
     val tabs = listOf(
         TabSpec(Tab.HOME, Icons.Rounded.Home, stringResource(R.string.tab_home)),
@@ -73,9 +76,18 @@ fun PillTabBar(tab: Tab, casting: Boolean, onSelect: (Tab) -> Unit) {
         val shape = RoundedCornerShape(50)
         Surface(
             shape = shape,
-            color = c.surfaceContainerHigh.copy(alpha = 0.84f), // assez opaque pour rester lisible sur une affiche
+            // Verre fumé vert : ce qui défile dessous est flouté puis teinté, pour que les onglets restent lisibles.
+            color = androidx.compose.ui.graphics.Color.Transparent,
             border = BorderStroke(1.dp, androidx.compose.ui.graphics.Color.White.copy(alpha = 0.12f)),
             modifier = Modifier.widthIn(max = 420.dp).fillMaxWidth()
+                .clip(shape)
+                .hazeEffect(haze, HazeStyle(
+                    backgroundColor = c.background,
+                    tint = HazeTint(androidx.compose.ui.graphics.Color(0xFF12241F).copy(alpha = 0.72f)),
+                    blurRadius = 28.dp,
+                    noiseFactor = 0.04f,
+                    fallbackTint = HazeTint(androidx.compose.ui.graphics.Color(0xFF12241F).copy(alpha = 0.95f)),
+                ))
                 .background(androidx.compose.ui.graphics.Brush.verticalGradient(
                     listOf(androidx.compose.ui.graphics.Color.White.copy(alpha = 0.07f), androidx.compose.ui.graphics.Color.Transparent)), shape),
         ) {

@@ -73,7 +73,7 @@ fun PillTabBar(tab: Tab, casting: Boolean, onSelect: (Tab) -> Unit) {
         val shape = RoundedCornerShape(50)
         Surface(
             shape = shape,
-            color = c.surfaceContainerHigh.copy(alpha = 0.72f),
+            color = c.surfaceContainerHigh.copy(alpha = 0.84f), // assez opaque pour rester lisible sur une affiche
             border = BorderStroke(1.dp, androidx.compose.ui.graphics.Color.White.copy(alpha = 0.12f)),
             modifier = Modifier.widthIn(max = 420.dp).fillMaxWidth()
                 .background(androidx.compose.ui.graphics.Brush.verticalGradient(

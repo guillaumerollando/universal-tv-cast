@@ -474,3 +474,6 @@ La pilule est translucide (72 %), avec un liseré clair et un reflet. Les écran
 au-dessus (`LocalBottomInset`), sauf le navigateur. Les variantes B et C sont retirées du code.
 Mode clair : le testeur ne le trouve pas beau ; recommandation : passer en sombre uniquement (identité ambre sur
 noir, usage le soir devant la télé, un seul thème à soigner). En attente de sa décision.
+**Décision** (testeur) : thème sombre uniquement. Le thème clair est supprimé ; les icônes des barres système
+restent claires même si le téléphone est en mode clair (vérifié sur émulateur). Opacité de la barre portée à 84 %
+pour que les noms des onglets restent lisibles au-dessus d'une affiche.

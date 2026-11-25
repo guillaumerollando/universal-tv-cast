@@ -39,7 +39,11 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        // Thème sombre uniquement : icônes claires dans les barres système, quel que soit le réglage du téléphone.
+        enableEdgeToEdge(
+            statusBarStyle = androidx.activity.SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
+            navigationBarStyle = androidx.activity.SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
+        )
         Castor.init(this)
         if (savedInstanceState == null) handle(intent)
         setContent { CastorTheme { CastorApp() } }

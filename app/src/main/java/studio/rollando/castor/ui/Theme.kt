@@ -1,10 +1,8 @@
 package studio.rollando.castor.ui
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -46,32 +44,6 @@ private val Dark = darkColorScheme(
     onErrorContainer = Color(0xFFFFDAD6),
 )
 
-private val Light = lightColorScheme(
-    primary = Color(0xFF8A4F00),
-    onPrimary = Color.White,
-    primaryContainer = Color(0xFFFFDDBA),
-    onPrimaryContainer = Color(0xFF2C1600),
-    secondary = Color(0xFF006A60),
-    onSecondary = Color.White,
-    secondaryContainer = Color(0xFFB6F0E6),
-    onSecondaryContainer = Color(0xFF00201C),
-    tertiary = Color(0xFF5B4B9A),
-    tertiaryContainer = Color(0xFFFFF0C7),
-    onTertiaryContainer = Color(0xFF3A2E00),
-    background = Color(0xFFFFFBF7),
-    onBackground = Color(0xFF1F1B16),
-    surface = Color(0xFFFFFBF7),
-    onSurface = Color(0xFF1F1B16),
-    surfaceVariant = Color(0xFFF1E4D8),
-    onSurfaceVariant = Color(0xFF51453A),
-    surfaceContainerLowest = Color.White,
-    surfaceContainerLow = Color(0xFFFBF3EC),
-    surfaceContainer = Color(0xFFF6EDE5),
-    surfaceContainerHigh = Color(0xFFF0E7DF),
-    surfaceContainerHighest = Color(0xFFEAE1D9),
-    outline = Color(0xFF84756A),
-    outlineVariant = Color(0xFFD6C4B5),
-)
 
 /** Inter Display (titres, extra-gras, lettres resserrées : l'esprit des applis de streaming) et Inter (le reste). */
 val InterDisplay = FontFamily(Font(R.font.inter_display_extrabold, FontWeight.ExtraBold))
@@ -104,5 +76,6 @@ private val Type = Typography(
 
 @Composable
 fun CastorTheme(content: @Composable () -> Unit) {
-    MaterialTheme(colorScheme = if (isSystemInDarkTheme()) Dark else Light, typography = Type, content = content)
+    // Parti pris : thème sombre uniquement (ambre sur noir, usage le soir devant la télé).
+    MaterialTheme(colorScheme = Dark, typography = Type, content = content)
 }

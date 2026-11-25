@@ -970,7 +970,8 @@ object Castor {
      */
     private fun pauseForAdjust() {
         val s = _state.value
-        if (pausedForPanel || s.slides != null || (s.phase != Phase.PLAYING && s.phase != Phase.BUFFERING)) return
+        // Seulement si la vidéo joue vraiment : pendant le chargement, la télé refuse Pause (erreur 701).
+        if (pausedForPanel || s.slides != null || s.phase != Phase.PLAYING) return
         pausedForPanel = true
         exec {
             val r = target() ?: return@exec

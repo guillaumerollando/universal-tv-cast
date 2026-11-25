@@ -435,3 +435,4 @@ Toutes les commandes répondent 403 sans appairage. Rien n'a été envoyé à la
   souvent ses propres sous-titres, à choisir dans le menu de la télé. Le décalage est masqué (sans effet).
 - Tests 17/17, lint propre. Vérif émulateur de la pause interrompue : l'émulateur ne joignait plus la fausse
   télé (réseau interne de l'émulateur).
+- Pause pour réglage : seulement si la vidéo joue (pas pendant le chargement, où la télé répond 701 — vu par le testeur en dépliant les sous-titres pendant le chargement).

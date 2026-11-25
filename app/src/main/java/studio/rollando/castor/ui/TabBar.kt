@@ -46,10 +46,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import studio.rollando.castor.R
 
+/** Hauteur réservée par la barre d'onglets : les écrans défilent dessous et finissent au-dessus. */
+val LocalBottomInset = androidx.compose.runtime.compositionLocalOf { 0.dp }
+
 private data class TabSpec(val tab: Tab, val icon: ImageVector, val label: String, val dot: Boolean = false)
 
 /**
- * Barre d'onglets flottante de largeur fixe : trois emplacements égaux, icône et nom toujours visibles,
+ * Barre d'onglets flottante de largeur fixe, en « verre fumé » : trois emplacements égaux, icône et nom toujours visibles,
  * et un indicateur ambré qui glisse d'un onglet à l'autre (≈ 0,2 s, sans rebond). Rien ne change de taille.
  */
 @Composable
@@ -62,16 +65,19 @@ fun PillTabBar(tab: Tab, casting: Boolean, onSelect: (Tab) -> Unit) {
     )
     val index = tabs.indexOfFirst { it.tab == tab }.coerceAtLeast(0)
 
+    // « Verre fumé » : pilule translucide avec liseré et reflet clair ; le contenu défile dessous.
     Box(
         Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal = 20.dp, vertical = 10.dp),
         contentAlignment = Alignment.Center,
     ) {
+        val shape = RoundedCornerShape(50)
         Surface(
-            shape = RoundedCornerShape(50),
-            color = c.surfaceContainerHigh,
-            shadowElevation = 10.dp,
-            border = BorderStroke(1.dp, c.outlineVariant.copy(alpha = 0.5f)),
-            modifier = Modifier.widthIn(max = 420.dp).fillMaxWidth(),
+            shape = shape,
+            color = c.surfaceContainerHigh.copy(alpha = 0.72f),
+            border = BorderStroke(1.dp, androidx.compose.ui.graphics.Color.White.copy(alpha = 0.12f)),
+            modifier = Modifier.widthIn(max = 420.dp).fillMaxWidth()
+                .background(androidx.compose.ui.graphics.Brush.verticalGradient(
+                    listOf(androidx.compose.ui.graphics.Color.White.copy(alpha = 0.07f), androidx.compose.ui.graphics.Color.Transparent)), shape),
         ) {
             BoxWithConstraints(Modifier.padding(5.dp).height(58.dp)) {
                 val slot = maxWidth / tabs.size

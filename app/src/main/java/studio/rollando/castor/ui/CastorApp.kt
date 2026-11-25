@@ -188,7 +188,11 @@ fun CastorApp() {
         },
         bottomBar = { PillTabBar(tab, state.active) { Nav.tab.value = it } },
     ) { padding ->
-        Box(Modifier.padding(padding).fillMaxSize()) {
+        // Les écrans défilent sous la barre d'onglets (sauf le navigateur) et finissent au-dessus d'elle.
+        val bottom = padding.calculateBottomPadding()
+        Box(Modifier.padding(top = padding.calculateTopPadding()).fillMaxSize()
+            .then(if (tab == Tab.BROWSER) Modifier.padding(bottom = bottom) else Modifier)) {
+            androidx.compose.runtime.CompositionLocalProvider(LocalBottomInset provides if (tab == Tab.BROWSER) 0.dp else bottom) {
             when (tab) {
                 Tab.HOME -> HomeScreen(
                     onBrowse = { url -> url?.let { browser.load(it) }; Nav.tab.value = Tab.BROWSER },
@@ -199,6 +203,7 @@ fun CastorApp() {
                 )
                 Tab.BROWSER -> BrowserScreen(browser)
                 Tab.PLAYER -> PlayerScreen(state, onChooseTv = { showTvs = true })
+            }
             }
         }
     }

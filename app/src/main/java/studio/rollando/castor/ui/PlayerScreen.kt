@@ -217,7 +217,7 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
         Controls(state)
         SubtitlesCard(state)
         if (state.isHls) ModeCard(state)
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(8.dp + LocalBottomInset.current))
     }
     }
 }
@@ -519,7 +519,7 @@ private fun ModeCard(s: CastState) {
 @Composable
 private fun Empty() {
     Column(
-        Modifier.fillMaxSize().padding(32.dp),
+        Modifier.fillMaxSize().padding(bottom = LocalBottomInset.current).padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {

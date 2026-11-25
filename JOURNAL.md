@@ -467,3 +467,10 @@ surbrillance du dépliage qui ne couvre pas toute la carte ; un en-tête plus mo
   vidéo change. Couleurs du texte de l'en-tête corrigées (fond transparent).
 - Vérifié sur émulateur : accueil, et un MKV nommé comme l'animé du testeur → « Daemons of the Shadow Realm »,
   « Saison 1 · Épisode 1 », sous-titres « Déjà dans la vidéo » (français, anglais). Tests 20/20, lint propre.
+
+## 2026-11-25 (soir, 11) — Barre d'onglets « verre fumé »
+Trois propositions montrées au testeur en sombre et en clair (A verre fumé, B fondu, C teinté). Choix : **A**.
+La pilule est translucide (72 %), avec un liseré clair et un reflet. Les écrans défilent dessous et finissent
+au-dessus (`LocalBottomInset`), sauf le navigateur. Les variantes B et C sont retirées du code.
+Mode clair : le testeur ne le trouve pas beau ; recommandation : passer en sombre uniquement (identité ambre sur
+noir, usage le soir devant la télé, un seul thème à soigner). En attente de sa décision.

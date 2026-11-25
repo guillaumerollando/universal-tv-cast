@@ -75,7 +75,7 @@ fun HomeScreen(
     val c = MaterialTheme.colorScheme
 
     LazyColumn(
-        contentPadding = PaddingValues(vertical = 8.dp),
+        contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp + LocalBottomInset.current),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         item {

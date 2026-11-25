@@ -240,6 +240,7 @@ private data class ResumeItem(
     val key: String, val title: String, val image: String?, val host: String,
     val season: Int?, val episode: Int?, val time: Long,
     val recent: Recent?, val bookmark: Bookmark?, val openUrl: String?,
+    val progress: Float? = null,
 )
 
 private fun resumeItems(recents: List<Recent>, bookmarks: List<Bookmark>): List<ResumeItem> {
@@ -263,6 +264,7 @@ private fun resumeItems(recents: List<Recent>, bookmarks: List<Bookmark>): List<
             host = Uri.parse(r.pageUrl ?: r.url).host?.removePrefix("www.")?.takeIf { it != "127.0.0.1" && it != "localhost" }.orEmpty(),
             season = r.season, episode = if (bookmarkAhead) b!!.episode else ep, time = maxOf(r.time, b?.time ?: 0),
             recent = r, bookmark = b, openUrl = if (bookmarkAhead) b!!.url else open,
+            progress = if (bookmarkAhead) null else r.progress,
         )
     }
     val keys = recents.map { it.key }.toSet()
@@ -329,7 +331,7 @@ private fun ResumeCard(r: ResumeItem, onBrowse: (String?) -> Unit, modifier: Mod
                 Nav.tab.value = Tab.PLAYER
             }
         },
-        menu = menu, modifier = modifier,
+        menu = menu, modifier = modifier, progress = r.progress,
     )
 }
 

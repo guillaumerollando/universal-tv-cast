@@ -421,6 +421,8 @@ fun BrowserScreen(b: BrowserController) {
                                     headers = f.headers,
                                     pageUrl = f.pageUrl,
                                     audioUrl = f.audio,
+                                    // Même épisode déjà commencé : on reprend là où on s'était arrêté.
+                                    startSec = Library.resumeAt(f.pageUrl),
                                     // L'image de la page (celle du favori) : en-tête du lecteur, fond, « Reprendre », notification.
                                     posterUrl = (b.sniffer.pageImage ?: Library.bookmarkFor(f.pageUrl)?.image),
                                     backdropUrl = (b.sniffer.pageImage ?: Library.bookmarkFor(f.pageUrl)?.image),

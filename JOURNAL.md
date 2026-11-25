@@ -607,3 +607,5 @@ fait toute seule.
 - Un favori posé sur une page sans numéro d'épisode (accueil d'un site, catalogue…) n'est plus une « série » : il va dans « Mes sites » (cas d'Otakubinge qui restait dans « Reprendre »). « Reprendre » ne montre que les séries à épisode.
 - « Mes sites » en petites tuiles (logo + nom court), « Tout voir » au-delà de 4 ; sites où l'on a casté ou suivi une série ajoutés d'office.
 - Accueil du navigateur : « Mes sites » en grille, puis les séries suivies.
+- Barre d'avancement (fine, couleur d'accent) au bas de l'image des cartes « Reprendre » commencées et pas finies.
+- Reprise au bon endroit : la carte (vidéo d'une autre appli) ou un nouveau cast depuis la même page d'épisode repart 5 s avant l'arrêt (s'il a dépassé 30 s). Même mécanisme que la reprise Stremio (DLNA : placement après le début de lecture ; flux continu : ?start=).

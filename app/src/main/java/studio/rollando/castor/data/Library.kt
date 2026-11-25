@@ -22,7 +22,11 @@ data class Recent(
     /** Page d'un site (pas une vidéo d'une autre appli). */
     val isWeb: Boolean get() = web
 
-    fun toMedia() = Media(url = url, title = title, mime = mime, headers = headers, pageUrl = pageUrl, posterUrl = poster, backdropUrl = poster, fileName = fileName)
+    fun toMedia() = Media(url = url, title = title, mime = mime, headers = headers, pageUrl = pageUrl, posterUrl = poster, backdropUrl = poster, fileName = fileName,
+        startSec = if (finished || pos < 30) 0.0 else pos - 5)
+
+    /** Avancement (0 à 1) si la vidéo est commencée et pas finie. */
+    val progress: Float? get() = if (dur > 0 && pos >= 30 && !finished) (pos / dur).toFloat() else null
 
     private val web: Boolean get() = pageUrl?.startsWith("http") == true
 
@@ -160,6 +164,12 @@ object Library {
         if (_recents.value.none { it.url == url }) return
         _recents.value = _recents.value.map { if (it.url == url) it.copy(pos = pos, dur = dur) else it }
         saveRecents()
+    }
+
+    /** Position où reprendre la vidéo de cette page (quelques secondes avant l'arrêt), ou 0. */
+    fun resumeAt(pageUrl: String): Double {
+        val r = _recents.value.firstOrNull { it.pageUrl == pageUrl } ?: return 0.0
+        return if (r.finished || r.pos < 30) 0.0 else r.pos - 5
     }
 
     fun markFinished(url: String) {

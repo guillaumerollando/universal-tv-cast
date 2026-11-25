@@ -116,6 +116,8 @@ fun FavoritesRow(bookmarks: List<Bookmark>, onOpen: (String) -> Unit) {
 fun PosterCard(
     title: String, image: String?, host: String, badge: String?, starred: Boolean,
     onClick: () -> Unit, menu: List<Pair<String, () -> Unit>>, modifier: Modifier = Modifier.width(200.dp),
+    /** Avancement dans la vidéo (0 à 1), montré par une fine barre au bas de l'image. */
+    progress: Float? = null,
 ) {
     val c = MaterialTheme.colorScheme
     var open by remember { mutableStateOf(false) }
@@ -149,6 +151,10 @@ fun PosterCard(
                     Spacer(Modifier.width(4.dp))
                     Text(badge ?: stringResource(R.string.bookmark_resume), style = MaterialTheme.typography.labelMedium, color = c.onPrimary)
                 }
+                if (progress != null) Box(
+                    Modifier.align(Alignment.BottomStart).fillMaxWidth().height(4.dp)
+                        .background(androidx.compose.ui.graphics.Color.White.copy(alpha = 0.25f)),
+                ) { Box(Modifier.fillMaxWidth(progress.coerceIn(0.02f, 1f)).height(4.dp).background(c.primary)) }
                 // Suivie en favori : elle reste ici même quand on ne la regarde plus depuis longtemps.
                 if (starred) Box(
                     Modifier.align(Alignment.TopEnd).padding(8.dp).size(26.dp).clip(CircleShape)

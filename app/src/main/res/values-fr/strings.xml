@@ -196,6 +196,10 @@
     <string name="err_protected">Ce site protège ses vidéos : seul son propre lecteur peut les lire, elles ne peuvent donc pas être envoyées sur la télé.</string>
     <string name="bookmark_open">Ouvrir</string>
     <string name="cd_browser_home">Accueil du navigateur</string>
+    <string name="bookmark_site">Site</string>
+    <string name="bookmark_followed_series">« %1$s » suivie : le marque-page avancera tout seul à chaque épisode regardé.</string>
+    <string name="bookmark_added">« %1$s » ajouté aux favoris.</string>
+    <string name="bookmark_advanced">%1$s : marque-page avancé à l’épisode %2$d.</string>
     <plurals name="browser_found">
         <item quantity="one">%d vidéo</item>
         <item quantity="other">%d vidéos</item>

@@ -196,6 +196,10 @@
     <string name="err_protected">Este sitio protege sus vídeos: solo su propio reproductor puede leerlos, así que no se pueden enviar a la TV.</string>
     <string name="bookmark_open">Abrir</string>
     <string name="cd_browser_home">Inicio del navegador</string>
+    <string name="bookmark_site">Sitio</string>
+    <string name="bookmark_followed_series">«%1$s» seguida: el marcador avanzará solo con cada episodio que veas.</string>
+    <string name="bookmark_added">«%1$s» añadido a favoritos.</string>
+    <string name="bookmark_advanced">%1$s: marcador avanzado al episodio %2$d.</string>
     <plurals name="browser_found">
         <item quantity="one">%d vídeo</item>
         <item quantity="other">%d vídeos</item>

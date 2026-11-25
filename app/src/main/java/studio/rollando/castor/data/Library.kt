@@ -19,13 +19,25 @@ data class Recent(
  * Favori = marque-page : [url] est la page où l'on en est (l'épisode en cours) ; il avance tout seul quand on
  * caste un autre épisode de la même série. [episode] : numéro lu dans l'adresse, si elle en a un.
  */
-data class Bookmark(val title: String, val url: String, val episode: Int? = null, val time: Long = 0) {
+data class Bookmark(
+    val title: String, val url: String, val episode: Int? = null, val time: Long = 0,
+    /** Image de la page (affiche, vignette d'épisode), pour une carte plus parlante. */
+    val image: String? = null,
+) {
     val host: String get() = runCatching { android.net.Uri.parse(url).host?.removePrefix("www.") }.getOrNull().orEmpty()
     val key: String get() = studio.rollando.castor.browser.Episodes.seriesKey(url)
+    /** Favori d'un site (sa page d'accueil) : il ne bouge jamais. Sinon, une série ou un film. */
+    val isSite: Boolean get() =
+        key == (runCatching { android.net.Uri.parse(url).authority }.getOrNull() ?: host).removePrefix("www.").lowercase()
 }
 
-/** Dernière page d'un site où l'on a lancé une vidéo (l'épisode où l'on en est). */
-data class SiteVisit(val url: String, val title: String, val episode: Int?, val time: Long)
+/** Ce que l'appli a fait toute seule avec un favori, pour le dire à l'utilisateur. */
+sealed class BookmarkEvent {
+    data class Followed(val title: String, val series: Boolean) : BookmarkEvent()
+    data class Advanced(val title: String, val episode: Int?) : BookmarkEvent()
+}
+
+
 
 /** Favoris, historique et réglages, gardés sur le téléphone uniquement. */
 object Library {
@@ -44,13 +56,6 @@ object Library {
         prefs = ctx.getSharedPreferences("library", Context.MODE_PRIVATE)
         _recents.value = runCatching { readRecents(JSONArray(prefs.getString("recents", "[]"))) }.getOrDefault(emptyList())
         _bookmarks.value = runCatching { readBookmarks(JSONArray(prefs.getString("bookmarks", "[]"))) }.getOrDefault(emptyList())
-        _sites.value = runCatching {
-            val o = JSONObject(prefs.getString("sites", "{}") ?: "{}")
-            o.keys().asSequence().associateWith { h ->
-                val v = o.getJSONObject(h)
-                SiteVisit(v.getString("url"), v.optString("title"), v.optInt("ep", -1).takeIf { it >= 0 }, v.optLong("time"))
-            }
-        }.getOrDefault(emptyMap())
         _adBlock.value = prefs.getBoolean("adblock", true)
         _continuous.value = prefs.getBoolean("continuous", true)
         _shakeHelp.value = prefs.getBoolean("shake_help", true)
@@ -122,12 +127,23 @@ object Library {
      * Le marque-page avance : on caste (ou on ouvre un épisode plus loin de) une série suivie. Le favori pointe
      * alors sur cette page et remonte en tête de liste. [onlyForward] : seulement si l'épisode est plus loin.
      */
-    fun advanceBookmark(url: String, onlyForward: Boolean = false) {
+    fun advanceBookmark(url: String, onlyForward: Boolean = false, image: String? = null) {
         val b = bookmarkFor(url) ?: return
-        val ep = studio.rollando.castor.browser.Episodes.find(url)?.number
+        // Un favori de site ne bouge jamais ; une série n'avance que vers un épisode de la même série.
+        if (b.isSite || b.key != studio.rollando.castor.browser.Episodes.seriesKey(url)) return
+        val ep = studio.rollando.castor.browser.Episodes.find(url)?.number ?: return
         if (b.url == url) { if (!onlyForward) touchBookmark(b); return }
-        if (onlyForward && (ep == null || b.episode == null || ep <= b.episode)) return
-        _bookmarks.value = listOf(b.copy(url = url, episode = ep, time = System.currentTimeMillis())) + (_bookmarks.value - b)
+        if (onlyForward && (b.episode == null || ep <= b.episode)) return
+        _bookmarks.value = listOf(b.copy(url = url, episode = ep, time = System.currentTimeMillis(), image = image ?: b.image)) +
+            (_bookmarks.value - b)
+        saveBookmarks()
+        _events.tryEmit(BookmarkEvent.Advanced(b.title, ep))
+    }
+
+    /** L'image de la page arrive après coup : on illustre le favori qui pointe sur cette page, s'il n'en a pas. */
+    fun setBookmarkImage(url: String, image: String) {
+        val b = _bookmarks.value.firstOrNull { it.url == url && it.image == null } ?: return
+        _bookmarks.value = _bookmarks.value.map { if (it === b) it.copy(image = image) else it }
         saveBookmarks()
     }
 
@@ -139,34 +155,26 @@ object Library {
     private fun saveBookmarks() {
         prefs.edit().putString("bookmarks", JSONArray().apply {
             _bookmarks.value.forEach {
-                put(JSONObject().put("title", it.title).put("url", it.url).put("ep", it.episode ?: -1).put("time", it.time))
+                put(JSONObject().put("title", it.title).put("url", it.url).put("ep", it.episode ?: -1).put("time", it.time).put("img", it.image ?: ""))
             }
         }.toString()).apply()
     }
-
-    private val _sites = MutableStateFlow<Map<String, SiteVisit>>(emptyMap())
-    /** Par site (domaine) : la dernière page d'où l'on a casté, pour reprendre la série là où on l'a laissée. */
-    val sites: StateFlow<Map<String, SiteVisit>> = _sites
 
     fun hostOf(url: String): String = runCatching { android.net.Uri.parse(url).host?.removePrefix("www.") }.getOrNull().orEmpty()
 
-    fun rememberSiteVisit(url: String, title: String) {
-        val host = hostOf(url).ifEmpty { return }
-        val ep = studio.rollando.castor.browser.Episodes.find(url)?.number
-        _sites.value = (_sites.value + (host to SiteVisit(url, title, ep, System.currentTimeMillis())))
-            .entries.sortedByDescending { it.value.time }.take(30).associate { it.key to it.value }
-        prefs.edit().putString("sites", JSONObject().apply {
-            _sites.value.forEach { (h, v) ->
-                put(h, JSONObject().put("url", v.url).put("title", v.title).put("ep", v.episode ?: -1).put("time", v.time))
-            }
-        }.toString()).apply()
-    }
+    private val _events = kotlinx.coroutines.flow.MutableSharedFlow<BookmarkEvent>(extraBufferCapacity = 4)
+    val events: kotlinx.coroutines.flow.SharedFlow<BookmarkEvent> = _events
 
-    fun toggleBookmark(title: String, url: String) {
+    fun toggleBookmark(title: String, url: String, image: String? = null) {
         val existing = bookmarkFor(url)
-        _bookmarks.value = if (existing != null) _bookmarks.value - existing
-        else listOf(Bookmark(title.ifBlank { url }, url, studio.rollando.castor.browser.Episodes.find(url)?.number,
-            System.currentTimeMillis())) + _bookmarks.value
+        if (existing != null) {
+            _bookmarks.value = _bookmarks.value - existing
+        } else {
+            val ep = studio.rollando.castor.browser.Episodes.find(url)
+            val b = Bookmark(title.ifBlank { url }, url, ep?.number, System.currentTimeMillis(), image)
+            _bookmarks.value = listOf(b) + _bookmarks.value
+            _events.tryEmit(BookmarkEvent.Followed(b.title, series = !b.isSite && ep != null))
+        }
         saveBookmarks()
     }
 
@@ -196,6 +204,7 @@ object Library {
 
     private fun readBookmarks(a: JSONArray) = (0 until a.length()).map { i ->
         val o = a.getJSONObject(i)
-        Bookmark(o.getString("title"), o.getString("url"), o.optInt("ep", -1).takeIf { it >= 0 }, o.optLong("time"))
+        Bookmark(o.getString("title"), o.getString("url"), o.optInt("ep", -1).takeIf { it >= 0 }, o.optLong("time"),
+            o.optString("img").ifEmpty { null })
     }
 }

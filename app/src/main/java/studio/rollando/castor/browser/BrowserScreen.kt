@@ -76,6 +76,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -302,7 +304,12 @@ fun BrowserScreen(b: BrowserController) {
                 },
             )
             if (b.started && b.url.isNotEmpty()) {
-                IconButton(onClick = { Library.toggleBookmark(PageTitle.series(PageTitle.clean(b.title, Uri.parse(b.url).host ?: "")), b.url) }) {
+                IconButton(onClick = {
+                    val clean = PageTitle.clean(b.title, Uri.parse(b.url).host ?: "")
+                    // Épisode d'une série : le favori porte le nom de la série. Site ou film : le titre tel quel.
+                    val name = if (Episodes.find(b.url) != null) PageTitle.series(clean) else clean
+                    Library.toggleBookmark(name, b.url, b.sniffer.pageImage)
+                }) {
                     Icon(
                         if (isBookmarked) Icons.Rounded.Star else Icons.Rounded.StarBorder,
                         stringResource(if (isBookmarked) R.string.cd_bookmark_remove else R.string.cd_bookmark_add),
@@ -326,6 +333,8 @@ fun BrowserScreen(b: BrowserController) {
             } else {
                 StartPage(onOpen = { b.load(it) })
             }
+            // Ce que l'appli fait toute seule avec les favoris, dit clairement (et pas de surprise).
+            BookmarkNotice(Modifier.align(Alignment.TopCenter).padding(12.dp))
             // Série : bouton « Épisode 13 → » quand l'adresse contient un numéro d'épisode.
             val ep = remember(b.url) { Episodes.find(b.url) }
             androidx.compose.animation.AnimatedVisibility(
@@ -403,8 +412,7 @@ fun BrowserScreen(b: BrowserController) {
                             .clickable(role = Role.Button) {
                             showFound = false
                             // On retient la page (l'épisode) : l'accueil proposera d'y revenir.
-                            Library.rememberSiteVisit(f.pageUrl, f.pageTitle.ifBlank { f.label })
-                            Library.advanceBookmark(f.pageUrl)
+                            Library.advanceBookmark(f.pageUrl, image = b.sniffer.pageImage)
                             Castor.open(
                                 Media(
                                     url = f.url,
@@ -427,7 +435,6 @@ fun BrowserScreen(b: BrowserController) {
 @Composable
 private fun StartPage(onOpen: (String) -> Unit) {
     val bookmarks by Library.bookmarks.collectAsState()
-    val sites by Library.sites.collectAsState()
     val c = MaterialTheme.colorScheme
     LazyColumn(
         Modifier.fillMaxSize(),
@@ -442,18 +449,7 @@ private fun StartPage(onOpen: (String) -> Unit) {
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp))
             }
             item {
-                androidx.compose.foundation.lazy.LazyRow(contentPadding = PaddingValues(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    items(bookmarks.size) { i ->
-                        val b = bookmarks[i]
-                        val siteWide = b.key == b.host.lowercase()
-                        val visit = if (siteWide) sites[b.host]?.takeIf { it.url != b.url } else null
-                        studio.rollando.castor.ui.FavoriteCard(
-                            b, resumeUrl = visit?.url ?: b.url, episode = visit?.episode ?: b.episode,
-                            onOpen = onOpen, onRemove = { Library.removeBookmark(b) },
-                        )
-                    }
-                }
+                studio.rollando.castor.ui.FavoritesRow(bookmarks, onOpen)
                 Spacer(Modifier.height(16.dp))
             }
         }
@@ -480,4 +476,40 @@ private fun durationText(d: Double?): String? = when {
     d < 60 -> "0:%02d".format(d.toInt())
     d < 3600 -> "${(d / 60).toInt()} min"
     else -> "${(d / 3600).toInt()} h %02d".format(((d % 3600) / 60).toInt())
+}
+
+/** Petit message quand on suit une série ou que son marque-page avance tout seul (4 s, lu par TalkBack). */
+@Composable
+private fun BookmarkNotice(modifier: Modifier) {
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    var text by remember { mutableStateOf<String?>(null) }
+    androidx.compose.runtime.LaunchedEffect(Unit) {
+        Library.events.collect { e ->
+            text = when (e) {
+                is studio.rollando.castor.data.BookmarkEvent.Followed ->
+                    ctx.getString(if (e.series) R.string.bookmark_followed_series else R.string.bookmark_added, e.title)
+                is studio.rollando.castor.data.BookmarkEvent.Advanced ->
+                    e.episode?.let { ctx.getString(R.string.bookmark_advanced, e.title, it) }
+            }
+        }
+    }
+    androidx.compose.runtime.LaunchedEffect(text) { if (text != null) { kotlinx.coroutines.delay(4500); text = null } }
+    androidx.compose.animation.AnimatedVisibility(
+        visible = text != null, modifier = modifier,
+        enter = androidx.compose.animation.fadeIn() + androidx.compose.animation.slideInVertically(),
+        exit = androidx.compose.animation.fadeOut() + androidx.compose.animation.slideOutVertically(),
+    ) {
+        val c = MaterialTheme.colorScheme
+        androidx.compose.material3.Surface(
+            shape = RoundedCornerShape(16.dp), color = c.secondaryContainer, contentColor = c.onSecondaryContainer,
+            shadowElevation = 6.dp,
+            modifier = Modifier.semantics { liveRegion = androidx.compose.ui.semantics.LiveRegionMode.Polite },
+        ) {
+            Row(Modifier.padding(horizontal = 14.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Rounded.Star, null, tint = c.primary, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(10.dp))
+                Text(text.orEmpty(), style = MaterialTheme.typography.bodyMedium)
+            }
+        }
+    }
 }

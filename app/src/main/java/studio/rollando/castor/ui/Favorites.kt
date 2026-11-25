@@ -19,7 +19,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -75,42 +77,102 @@ fun SiteIcon(host: String, size: Int = 28) {
     }
 }
 
+/** Rangée des favoris (accueil et accueil du navigateur) : les séries et films d'abord, les sites ensuite. */
+@Composable
+fun FavoritesRow(bookmarks: List<Bookmark>, onOpen: (String) -> Unit) {
+    val ordered = bookmarks.filter { !it.isSite } + bookmarks.filter { it.isSite }
+    androidx.compose.foundation.lazy.LazyRow(
+        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalAlignment = Alignment.Top,
+    ) {
+        items(ordered.size, key = { ordered[it].key }) { i ->
+            val b = ordered[i]
+            if (b.isSite) SiteCard(b, onOpen) { studio.rollando.castor.data.Library.removeBookmark(b) }
+            else SeriesCard(b, onOpen) { studio.rollando.castor.data.Library.removeBookmark(b) }
+        }
+    }
+}
+
 /**
- * Carte d'un favori (marque-page d'une série ou d'un site) : logo, titre, site et épisode où l'on en est.
- * Un toucher reprend là où on en était.
+ * Série ou film : grande image (affiche ou vignette de la page), titre, site et épisode où l'on en est.
+ * Le marque-page avance tout seul ; un toucher reprend là où on en est.
  */
 @Composable
-fun FavoriteCard(b: Bookmark, resumeUrl: String, episode: Int?, onOpen: (String) -> Unit, onRemove: () -> Unit) {
+fun SeriesCard(b: Bookmark, onOpen: (String) -> Unit, onRemove: () -> Unit) {
     val c = MaterialTheme.colorScheme
-    val removeCd = stringResource(R.string.cd_delete)
-    val badge = if (episode != null) stringResource(R.string.bookmark_episode, episode)
-        else if (resumeUrl != b.url) stringResource(R.string.bookmark_resume) else null
-    Box(
-        Modifier.width(176.dp).clip(RoundedCornerShape(20.dp)).background(c.surfaceContainerHigh)
-            .clickable(role = Role.Button) { onOpen(resumeUrl) }
+    val badge = b.episode?.let { stringResource(R.string.bookmark_episode, it) }
+    Column(
+        Modifier.width(200.dp).clip(RoundedCornerShape(20.dp)).background(c.surfaceContainerHigh)
+            .clickable(role = Role.Button) { onOpen(b.url) }
             .semantics { contentDescription = b.title + (badge?.let { ", $it" } ?: "") + ", " + b.host },
     ) {
-        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                SiteIcon(b.host)
-                Spacer(Modifier.width(8.dp))
-                Text(b.host, style = MaterialTheme.typography.labelMedium, color = c.onSurfaceVariant,
-                    maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f).padding(end = 18.dp))
+        Box(Modifier.fillMaxWidth().height(112.dp).background(c.surfaceContainerHighest)) {
+            if (b.image != null) RemoteImage(b.image, Modifier.matchParentSize(), maxSide = 480)
+            else Box(Modifier.matchParentSize(), contentAlignment = Alignment.Center) { SiteIcon(b.host, 44) }
+            Box(Modifier.matchParentSize().background(androidx.compose.ui.graphics.Brush.verticalGradient(
+                0.45f to androidx.compose.ui.graphics.Color.Transparent, 1f to androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.75f))))
+            // Pastille : épisode en cours (le marque-page qui avance), ou « Film / page ».
+            Row(
+                Modifier.align(Alignment.BottomStart).padding(8.dp).clip(RoundedCornerShape(50)).background(c.primary)
+                    .padding(horizontal = 10.dp, vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(if (badge != null) Icons.Rounded.Bookmark else Icons.Rounded.PlayArrow,
+                    null, tint = c.onPrimary, modifier = Modifier.size(14.dp))
+                Spacer(Modifier.width(4.dp))
+                Text(badge ?: stringResource(R.string.bookmark_open), style = MaterialTheme.typography.labelMedium, color = c.onPrimary)
             }
+            RemoveButton(Modifier.align(Alignment.TopEnd), onRemove, onImage = true)
+        }
+        Column(Modifier.padding(horizontal = 12.dp, vertical = 10.dp)) {
             Text(b.title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
                 maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.height(44.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(Modifier.size(26.dp).clip(CircleShape).background(c.primary), contentAlignment = Alignment.Center) {
-                    Icon(Icons.Rounded.PlayArrow, null, tint = c.onPrimary, modifier = Modifier.size(18.dp))
-                }
-                Spacer(Modifier.width(8.dp))
-                Text(badge ?: stringResource(R.string.bookmark_open), style = MaterialTheme.typography.labelLarge, color = c.primary)
+                SiteIcon(b.host, 18)
+                Spacer(Modifier.width(6.dp))
+                Text(b.host, style = MaterialTheme.typography.labelMedium, color = c.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }
-        Box(
-            Modifier.align(Alignment.TopEnd).padding(6.dp).size(28.dp).clip(CircleShape)
-                .clickable(role = Role.Button) { onRemove() }.semantics { contentDescription = removeCd },
-            contentAlignment = Alignment.Center,
-        ) { Icon(Icons.Rounded.Close, null, tint = c.onSurfaceVariant, modifier = Modifier.size(16.dp)) }
+    }
+}
+
+/** Site entier : son logo, son nom, l'étiquette « Site ». Ce favori ne change jamais d'adresse. */
+@Composable
+fun SiteCard(b: Bookmark, onOpen: (String) -> Unit, onRemove: () -> Unit) {
+    val c = MaterialTheme.colorScheme
+    Box(
+        Modifier.width(132.dp).height(176.dp).clip(RoundedCornerShape(20.dp)).background(c.surfaceContainerHigh)
+            .clickable(role = Role.Button) { onOpen(b.url) }
+            .semantics { contentDescription = b.title + ", " + b.host },
+    ) {
+        Column(Modifier.padding(14.dp).fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            Spacer(Modifier.height(12.dp))
+            SiteIcon(b.host, 56)
+            Spacer(Modifier.height(12.dp))
+            Text(b.title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+            Spacer(Modifier.weight(1f))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Rounded.Public, null, tint = c.secondary, modifier = Modifier.size(14.dp))
+                Spacer(Modifier.width(4.dp))
+                Text(stringResource(R.string.bookmark_site), style = MaterialTheme.typography.labelMedium, color = c.secondary)
+            }
+        }
+        RemoveButton(Modifier.align(Alignment.TopEnd), onRemove, onImage = false)
+    }
+}
+
+@Composable
+private fun RemoveButton(modifier: Modifier, onRemove: () -> Unit, onImage: Boolean) {
+    val removeCd = stringResource(R.string.cd_delete)
+    Box(
+        modifier.padding(6.dp).size(28.dp).clip(CircleShape)
+            .background(if (onImage) androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.45f) else androidx.compose.ui.graphics.Color.Transparent)
+            .clickable(role = Role.Button) { onRemove() }.semantics { contentDescription = removeCd },
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(Icons.Rounded.Close, null, modifier = Modifier.size(16.dp),
+            tint = if (onImage) androidx.compose.ui.graphics.Color.White else MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }

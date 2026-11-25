@@ -196,6 +196,10 @@
     <string name="err_protected">Deze site beschermt zijn video’s: alleen de eigen speler kan ze afspelen, dus ze kunnen niet naar de tv.</string>
     <string name="bookmark_open">Openen</string>
     <string name="cd_browser_home">Startpagina browser</string>
+    <string name="bookmark_site">Site</string>
+    <string name="bookmark_followed_series">‘%1$s’ gevolgd: de bladwijzer schuift mee met elke aflevering.</string>
+    <string name="bookmark_added">‘%1$s’ toegevoegd aan favorieten.</string>
+    <string name="bookmark_advanced">%1$s: bladwijzer naar aflevering %2$d.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video\'s</item>

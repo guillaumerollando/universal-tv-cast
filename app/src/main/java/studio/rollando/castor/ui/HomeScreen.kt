@@ -70,7 +70,6 @@ fun HomeScreen(
 ) {
     val recents by Library.recents.collectAsState()
     val bookmarks by Library.bookmarks.collectAsState()
-    val sites by Library.sites.collectAsState()
     val c = MaterialTheme.colorScheme
 
     LazyColumn(
@@ -122,18 +121,7 @@ fun HomeScreen(
         if (bookmarks.isNotEmpty()) {
             item { SectionTitle(stringResource(R.string.home_bookmarks), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
             item {
-                LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    items(bookmarks, key = { "b" + it.key }) { b ->
-                        // Favori d'une série : il pointe déjà sur l'épisode en cours. Favori d'un site entier : on
-                        // reprend à la dernière page d'où l'on a casté.
-                        val siteWide = b.key == b.host.lowercase()
-                        val visit = if (siteWide) sites[b.host]?.takeIf { it.url != b.url } else null
-                        FavoriteCard(
-                            b, resumeUrl = visit?.url ?: b.url, episode = visit?.episode ?: b.episode,
-                            onOpen = { onBrowse(it) }, onRemove = { Library.removeBookmark(b) },
-                        )
-                    }
-                }
+                FavoritesRow(bookmarks) { onBrowse(it) }
             }
         }
 

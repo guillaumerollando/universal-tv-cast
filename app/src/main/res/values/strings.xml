@@ -197,6 +197,10 @@
     <string name="err_protected">This site protects its videos: only its own player can read them, so they can’t be sent to the TV.</string>
     <string name="bookmark_open">Open</string>
     <string name="cd_browser_home">Browser home</string>
+    <string name="bookmark_site">Site</string>
+    <string name="bookmark_followed_series">“%1$s” followed: the bookmark will move to each episode you watch.</string>
+    <string name="bookmark_added">“%1$s” added to favorites.</string>
+    <string name="bookmark_advanced">%1$s: bookmark moved to episode %2$d.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videos</item>

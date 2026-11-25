@@ -38,12 +38,14 @@ class VideoSniffer {
 
     @Volatile var pageUrl: String = ""
     @Volatile var pageTitle: String = ""
+    /** Image de la page (og:image, affiche de la vidéo) : illustre le favori. */
+    @Volatile var pageImage: String? = null
     @Volatile var userAgent: String = ""
 
     private val fileExt = setOf("mp4", "webm", "mkv", "m4v", "mov", "avi", "mp3", "m4a")
 
     fun reset() {
-        _found.value = emptyList(); hidden.clear(); probed.clear(); misses.clear(); audioList = null
+        _found.value = emptyList(); hidden.clear(); probed.clear(); misses.clear(); audioList = null; pageImage = null
     }
 
     /** Dernière piste son seule repérée sur la page (pour la recoller à l'image). */
@@ -211,6 +213,16 @@ class VideoSniffer {
 
     /** Appelée par le script injecté dans la page. */
     inner class Bridge {
+        /** Image de la page principale (balise og:image ou affiche du lecteur). */
+        @JavascriptInterface
+        fun pageImage(url: String?) {
+            if (url.isNullOrBlank() || !url.startsWith("http")) return
+            if (pageImage == null) {
+                pageImage = url
+                studio.rollando.castor.data.Library.setBookmarkImage(pageUrl, url)
+            }
+        }
+
         /** Le script tourne aussi dans les cadres des lecteurs intégrés (autre site que la page). */
         @JavascriptInterface
         fun found(url: String?, duration: Double) {
@@ -231,7 +243,12 @@ class VideoSniffer {
   document.addEventListener('play', function(e){ report(e.target); }, true);
   document.addEventListener('loadedmetadata', function(e){ report(e.target); }, true);
   document.addEventListener('durationchange', function(e){ report(e.target); }, true);
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scan); else scan();
+  function image(){ try { if (window !== window.top) return;
+    var m = document.querySelector('meta[property="og:image"],meta[name="og:image"],meta[name="twitter:image"],meta[property="twitter:image"]');
+    var u = m && m.content; if (!u) { var v = document.querySelector('video[poster]'); u = v && v.poster; }
+    if (u) CastorBridge.pageImage(new URL(u, location.href).href); } catch(e){} }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ scan(); image(); }); else { scan(); image(); }
+  setTimeout(image, 2500);
   setInterval(scan, 3000);
 })();"""
     }

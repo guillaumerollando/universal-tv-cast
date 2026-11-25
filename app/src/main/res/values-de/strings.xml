@@ -196,6 +196,10 @@
     <string name="err_protected">Diese Seite schützt ihre Videos: Nur ihr eigener Player kann sie abspielen, daher lassen sie sich nicht an den Fernseher senden.</string>
     <string name="bookmark_open">Öffnen</string>
     <string name="cd_browser_home">Browser-Startseite</string>
+    <string name="bookmark_site">Website</string>
+    <string name="bookmark_followed_series">„%1$s“ wird verfolgt: Das Lesezeichen rückt mit jeder Folge mit.</string>
+    <string name="bookmark_added">„%1$s“ zu Favoriten hinzugefügt.</string>
+    <string name="bookmark_advanced">%1$s: Lesezeichen auf Folge %2$d gesetzt.</string>
     <plurals name="browser_found">
         <item quantity="one">%d Video</item>
         <item quantity="other">%d Videos</item>

@@ -566,3 +566,21 @@ accueil et accueil du navigateur qui répondent vite à cet usage.
   la sélection complète est refaite juste après le toucher. Plus d'« about:blank » affiché.
 - Vérifié sur émulateur : favori otakubinge (logo) ; favori « Mon Anime » ép. 12 → bouton Épisode 13 → la carte
   affiche « Ép. 13 ». Tests 26/26 (clé de série, nom de série), lint propre.
+
+## 2026-11-25 (soir, 17) — Favoris : site ≠ série, images, prévenir l'utilisateur
+**Demande du testeur** : ne jamais transformer un favori de site en favori de série ; ne rien perdre en allant
+sur l'accueil d'un site ; une iconographie par type, avec une image ; prévenir l'utilisateur de ce que l'appli
+fait toute seule.
+**Fait**
+- Deux sortes de favoris : **site** (page d'accueil du site : `key` = domaine) — ne bouge jamais ; **série / film**
+  (toute autre page). Seul un favori de série avance, et seulement vers un épisode de la **même** série (même
+  clé) : aller sur l'accueil, une autre série ou un film ne touche à rien. Retrait de l'ancienne reprise par site.
+- Image de la page (og:image / twitter:image / affiche du lecteur, lue par le script dans la page principale),
+  gardée avec le favori et mise à jour quand il avance.
+- Cartes : **série/film** = grande image, pastille « Ép. 13 » (signet) ou « Ouvrir », titre, logo + site ;
+  **site** = grand logo, nom, étiquette « Site ». Séries d'abord, sites ensuite, sur l'accueil et l'accueil
+  du navigateur.
+- Messages (4,5 s, lus par TalkBack) : « « Mon Anime » suivie : le marque-page avancera tout seul à chaque épisode
+  regardé », « Mon Anime : marque-page avancé à l'épisode 13 », « « X » ajouté aux favoris ».
+- Vérifié sur émulateur (faux site sans lecteur : la vidéo intégrée faisait planter l'émulateur côté PC).
+  Tests 26/26, lint propre.

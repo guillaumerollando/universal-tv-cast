@@ -686,3 +686,9 @@ fait toute seule.
 - Logo : celui fourni, sinon celui de la même chaîne (même flux, sinon même nom) dans une liste importée. Aucune autre source.
 - Fond : la couleur qui domine sur le bord du logo (logo « en carré » prolongé), marges transparentes retirées ;
   logo détouré : couleur de la chaîne si elle contraste, sinon fond neutre clair ou sombre.
+
+## 2026-11-25 (nuit, 4) — La télé ne se relance plus toute seule
+- Rouverte depuis les applis récentes, l'appli recevait de nouveau le lien d'origine (Stremio, partage…) et le relançait
+  sur la télé : on ignore désormais un lien marqué FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY. Vérifié sur l'émulateur (fausse télé).
+- Envoi en attente d'une télé (aucune trouvée au moment de l'envoi) : valable 2 minutes seulement, au lieu de partir dès que
+  la télé réapparaît, même des heures plus tard. Pareil pour les photos.

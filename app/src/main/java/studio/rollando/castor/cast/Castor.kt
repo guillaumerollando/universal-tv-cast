@@ -104,7 +104,14 @@ object Castor {
     private var castTime = 0L
     private var subVersion = 0
     private var pollJob: Job? = null
-    private var pendingCast = false
+    /**
+     * Envoi demandé alors qu'aucune télé n'était trouvée : il part dès qu'elle apparaît, mais seulement dans les
+     * 2 minutes. Plus tard, la télé retrouvée (rallumée, revenue sur le Wi-Fi) ne doit pas se lancer toute seule.
+     */
+    private var pendingSince = 0L
+    private var pendingCast: Boolean
+        get() = pendingSince > 0 && System.currentTimeMillis() - pendingSince < 120_000
+        set(v) { pendingSince = if (v) System.currentTimeMillis() else 0L }
     private val sinks = java.util.concurrent.ConcurrentHashMap<String, List<String>>()
 
     private fun sinksOf(r: Renderer): List<String> =
@@ -455,7 +462,10 @@ object Castor {
     // ------------------------------------------------------------------ album (photos et vidéos)
 
     private var slideJob: Job? = null
-    private var pendingPhotos = false
+    private var photosSince = 0L
+    private var pendingPhotos: Boolean // comme pendingCast : valable 2 minutes
+        get() = photosSince > 0 && System.currentTimeMillis() - photosSince < 120_000
+        set(v) { photosSince = if (v) System.currentTimeMillis() else 0L }
     @Volatile private var shownAt = 0L
     /** Photos déjà préparées (ou en préparation) pour la télé : la suivante s'affiche sans attendre. */
     private val jpegs = java.util.concurrent.ConcurrentHashMap<String, kotlinx.coroutines.Deferred<android.graphics.Bitmap>>()

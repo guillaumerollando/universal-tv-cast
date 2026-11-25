@@ -87,6 +87,9 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     }
 
     private fun handle(intent: Intent?) {
+        // Rouverte depuis les applis récentes : Android redonne le lien d'origine. Ce n'est pas une nouvelle demande,
+        // on ne le relance pas sur la télé.
+        if (intent != null && intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY != 0) return
         val parsed = Intake.parse(this, intent) ?: return
         val from = referrer?.takeIf { it.scheme == "android-app" }?.host?.takeIf { it != packageName }
         val media = parsed.copy(sourceApp = from)

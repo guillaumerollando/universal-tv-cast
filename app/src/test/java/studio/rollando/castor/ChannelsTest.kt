@@ -23,8 +23,22 @@ class ChannelsTest {
         assertEquals("L'Équipe", name("L'Équipe live"))
     }
 
+    @Test fun recognisesWorldChannels() {
+        assertEquals("BBC One", name("BBC One HD"))
+        assertEquals("BBC News", name("https://vs-hls.bbc.example/bbc_news/index.m3u8"))
+        assertEquals("Das Erste", name("Das Erste"))
+        assertEquals("Rai News 24", name("https://rainews1-live.akamaized.net/hls/live/598326/rainews1/rainews1/rainews_1800/chunklist.m3u8"))
+        assertEquals("Antena 3", name("Antena 3 en directo"))
+        assertEquals("NHK World", name("NHK World Japan"))
+        assertEquals("Al Jazeera English", name("Al Jazeera English"))
+        assertEquals("CNN en Español", name("CNN en Español"))
+        assertEquals("ABC News", name("ABC News Live"))
+    }
+
     @Test fun doesNotGuessFromInnocentWords() {
         assertNull(Channels.find("https://example.com/videos/cartes-departement/index.m3u8"))
         assertNull(Channels.find("Mon film de vacances"))
+        assertNull(Channels.find("https://cdn.example.com/hls/news/live/sports/one/playlist.m3u8"))
+        assertNull(Channels.find("Holiday record of the history class"))
     }
 }

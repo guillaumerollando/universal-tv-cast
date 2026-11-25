@@ -1,5 +1,6 @@
 package studio.rollando.castor.ui
 
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
@@ -122,7 +123,7 @@ fun HelpSheet(onDismiss: () -> Unit) {
     val state by studio.rollando.castor.cast.Castor.state.collectAsState()
     // Toujours ouvert en grand : déplier une réponse ne fait plus redescendre le panneau.
     val sheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheet) {
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheet, modifier = Modifier.statusBarsPadding()) {
         LazyColumn(contentPadding = PaddingValues(bottom = 32.dp)) {
             item {
                 Text(stringResource(R.string.help_title), style = MaterialTheme.typography.titleLarge,

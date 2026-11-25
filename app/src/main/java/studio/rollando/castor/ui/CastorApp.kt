@@ -1,5 +1,7 @@
 package studio.rollando.castor.ui
 
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.draw.clip
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -252,7 +254,7 @@ private fun TvChip(name: String?, searching: Boolean, onClick: () -> Unit) {
 @Composable
 private fun TvSheet(onDismiss: () -> Unit) {
     val state by Castor.state.collectAsState()
-    ModalBottomSheet(onDismissRequest = onDismiss) {
+    ModalBottomSheet(onDismissRequest = onDismiss, modifier = Modifier.statusBarsPadding()) {
         Column(Modifier.padding(horizontal = 24.dp).padding(bottom = 24.dp)) {
             Text(stringResource(R.string.tv_sheet_title), style = MaterialTheme.typography.titleLarge)
             Spacer(Modifier.height(12.dp))
@@ -377,7 +379,7 @@ private fun SettingsSheet(onDismiss: () -> Unit) {
     val context = LocalContext.current
     val adBlock by Library.adBlock.collectAsState()
     val continuous by Library.continuousHls.collectAsState()
-    ModalBottomSheet(onDismissRequest = onDismiss) {
+    ModalBottomSheet(onDismissRequest = onDismiss, modifier = Modifier.statusBarsPadding()) {
         LazyColumn(contentPadding = PaddingValues(start = 8.dp, end = 8.dp, bottom = 32.dp)) {
             item {
                 Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.titleLarge,
@@ -432,12 +434,34 @@ private fun SettingsSheet(onDismiss: () -> Unit) {
                         }
                     }
                     Text(stringResource(R.string.about_body), style = MaterialTheme.typography.bodyMedium)
-                    FilledTonalButton(onClick = {
-                        runCatching {
-                            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://rollandostudio.com"))
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-                        }
-                    }) { Text(stringResource(R.string.about_more)) }
+                }
+            }
+            // La signature du studio : bien visible, c'est notre carte de visite (« qualité en guise de promo »).
+            item {
+                val open = {
+                    runCatching {
+                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://rollandostudio.com"))
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                    }
+                    Unit
+                }
+                Column(
+                    Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 8.dp)
+                        .clip(RoundedCornerShape(24.dp))
+                        .background(MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.6f))
+                        .clickable(role = Role.Button, onClick = open)
+                        .padding(vertical = 22.dp, horizontal = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(stringResource(R.string.about_made_by), style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Spacer(Modifier.height(10.dp))
+                    androidx.compose.foundation.Image(
+                        painterResource(R.drawable.rollando_studio), "Rollando Studio",
+                        Modifier.width(210.dp),
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    FilledTonalButton(onClick = open) { Text(stringResource(R.string.about_more)) }
                 }
             }
         }

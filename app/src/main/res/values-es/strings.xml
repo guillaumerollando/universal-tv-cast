@@ -154,7 +154,8 @@
     <string name="settings_continuous_sub">Para webs de streaming (HLS). Funciona con casi todas las TV.</string>
     <string name="settings_clear">Borrar el historial</string>
     <string name="about_version">Versión %1$s</string>
-    <string name="about_body">Universal TV Cast es gratis, sin anuncios y sin rastreo. Todo se queda en tu móvil. Hecho con cariño por Rollando Studio.</string>
+    <string name="about_body">Universal TV Cast es gratis, sin anuncios y sin rastreo. Todo se queda en tu móvil.</string>
+    <string name="about_made_by">Hecho con cariño por</string>
     <string name="about_more">Descubre nuestras otras apps</string>
     <string name="notif_channel">Reproducción en la TV</string>
     <string name="notif_on_tv">En %1$s</string>

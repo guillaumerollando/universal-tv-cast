@@ -154,7 +154,8 @@
     <string name="settings_continuous_sub">Voor streamingsites (HLS). Werkt met bijna elke tv.</string>
     <string name="settings_clear">Afspeelgeschiedenis wissen</string>
     <string name="about_version">Versie %1$s</string>
-    <string name="about_body">Universal TV Cast is gratis, zonder advertenties en zonder tracking. Alles blijft op je telefoon. Met zorg gemaakt door Rollando Studio.</string>
+    <string name="about_body">Universal TV Cast is gratis, zonder advertenties en zonder tracking. Alles blijft op je telefoon.</string>
+    <string name="about_made_by">Met zorg gemaakt door</string>
     <string name="about_more">Ontdek onze andere apps</string>
     <string name="notif_channel">Afspelen op de tv</string>
     <string name="notif_on_tv">Op %1$s</string>

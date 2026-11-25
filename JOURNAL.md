@@ -620,3 +620,8 @@ fait toute seule.
 - La barre d'adresse est toujours visible en cas de problème et en revenant sur l'onglet Navigateur.
 - Vérifié sur l'émulateur : page noire servie par le PC, domaine inexistant.
 - kool.to (bloqué par le fournisseur d'accès : faux certificat « localhost » en HTTPS) reproduit sur l'émulateur. Cause de l'écran noir *complet* : la vue web en échec se dessinait par-dessus la barre d'adresse. Elle est maintenant masquée (et coupée à ses limites) tant qu'un problème est affiché ; la barre montre l'adresse demandée ; l'écran « Connexion non sécurisée » ajoute que c'est souvent le fournisseur d'accès qui bloque le site.
+
+## 2026-11-25 (soir, 22) — Réglages : poignée et signature du studio
+
+- Les panneaux du bas (réglages, télés, aide) s'arrêtent sous la barre d'état : la poignée ne passe plus derrière la caméra quand on les remonte tout en haut.
+- Bas des réglages : carte « Fait avec soin par » + vrai logo Rollando Studio (vitrine/logo, version sur fond sombre, PNG 900 px) + « Découvrir nos autres applis » ; toute la carte ouvre rollandostudio.com. « Fait avec soin par Rollando Studio » retiré du texte « À propos » (doublon). « Qualité en guise de promo. »

@@ -11,7 +11,10 @@ def now_pos():
     if S['state'] == 'PLAYING' and S['t']:
         p = S['pos'] + time.time() - S['t']
         if p >= DUR and not (S['uri'] or '').endswith('.jpg'):  # fin de la vidéo : la vraie télé repart sur HDMI
-            hdmi('fin de la vidéo'); S['pos'] = 0.0; return 0.0
+            hdmi('fin de la vidéo'); S['pos'] = 0.0
+            # Comme la Philips : le lecteur se rouvre, la prochaine commande Play se perd (FAKE_REOPEN=1).
+            if os.environ.get('FAKE_REOPEN'): S['reopen'] = True
+            return 0.0
         return min(DUR, p)
     return S['pos']
 def local(url):
@@ -81,6 +84,9 @@ class H(http.server.BaseHTTPRequestHandler):
             S.update(uri=uri, total=int(total) if total else None, state='STOPPED', pos=0.0, t=None); S['gen'] += 1
             return reply(self, '<u:SetAVTransportURIResponse xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"/>')
         if action == 'Play':
+            if S.get('reopen'):
+                S['reopen'] = False; log('   Play perdu (lecteur en réouverture)')
+                return reply(self, '<u:PlayResponse xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"/>')
             if S['state'] == 'PAUSED_PLAYBACK': S['t'] = time.time(); S['state'] = 'PLAYING'
             elif S['state'] in ('STOPPED',) and S['uri']:
                 S['gen'] += 1; S['state'] = 'TRANSITIONING'; threading.Thread(target=player, args=(S['gen'], 0.0), daemon=True).start()

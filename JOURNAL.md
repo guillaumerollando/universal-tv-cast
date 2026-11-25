@@ -353,3 +353,20 @@ avant. Il trouve le mode photo par photo d'avant satisfaisant (gardé par défau
 **Fait** : « Se déconnecter » envoie maintenant « Stop » à la télé en DLNA (en Cast, la session est fermée) : la
 télé quitte notre écran et revient à sa dernière source. L'écran d'attente affiche « by Rollando Studio ».
 Tests 17/17, lint propre.
+
+## 2026-11-25 (soir, 4) — Album : écran noir après une vidéo, appuis qui s'empilent
+**Retour du testeur** : deux vidéos se sont bien enchaînées, puis écran noir à la place de la photo suivante ;
+en changeant de photo, « tout a planté ».
+**Journal du téléphone** :
+- 14:10:12, photo après la vidéo : la télé a fait `HEAD` sans jamais `GET`. Elle n'a pas lu la photo : son lecteur
+  se rouvrait (fin de vidéo) et la commande Play s'est perdue.
+- 14:10:28, photo suivante : la télé n'a pas répondu à `SetAVTransportURI`. L'appli a attendu 25 s, délai prévu
+  pour les vidéos, et les appuis suivants se sont empilés derrière.
+**Fait**
+- Photo en DLNA : commandes à délai court (7 s), et vérification que la télé télécharge vraiment la photo
+  (`GET` reçu par le relais). Sinon, nouvel envoi au bout de 4 s, une fois.
+- Appuis rapprochés (suivante, précédente, vignettes) regroupés : le téléphone affiche tout de suite, la télé ne
+  reçoit que le dernier choix.
+- Fausse télé : `FAKE_REOPEN=1` perd la première commande Play après une fin de vidéo, comme la Philips.
+  Vérifié : photo renvoyée et affichée ; 5 appuis rapides → 2 commandes au lieu de 5.
+- Tests 17/17, lint propre.

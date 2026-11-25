@@ -332,6 +332,9 @@ object Dlna {
             // La télé interroge la vidéo (HEAD) avant de répondre à ces commandes.
             readTimeout = if (action == "SetAVTransportURI" || action == "Play" || action == "Seek") 25_000 else 6000)
 
+    private fun avQuick(r: Renderer, action: String, vararg args: Pair<String, String>) =
+        soap(r.avUrl, r.avType, action, listOf("InstanceID" to "0") + args, readTimeout = 7000)
+
     private fun rc(r: Renderer, action: String, vararg args: Pair<String, String>): String {
         val url = r.rcUrl ?: throw TvError("no volume control")
         return soap(url, r.rcType!!, action, listOf("InstanceID" to "0") + args)
@@ -340,6 +343,13 @@ object Dlna {
     fun setUri(r: Renderer, url: String, meta: String) {
         av(r, "SetAVTransportURI", "CurrentURI" to url, "CurrentURIMetaData" to meta)
     }
+
+    /** Variante pour une photo (servie par le téléphone, instantanée) : on n'attend pas la télé 25 s. */
+    fun setUriQuick(r: Renderer, url: String, meta: String) {
+        avQuick(r, "SetAVTransportURI", "CurrentURI" to url, "CurrentURIMetaData" to meta)
+    }
+
+    fun playQuick(r: Renderer) { avQuick(r, "Play", "Speed" to "1") }
 
     fun play(r: Renderer) { av(r, "Play", "Speed" to "1") }
     fun pause(r: Renderer) { av(r, "Pause") }

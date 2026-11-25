@@ -494,7 +494,8 @@ object Castor {
         }
 
         val jpeg = kotlinx.coroutines.withContext(Dispatchers.Default) { Photos.jpeg(bmp) }
-        val url = "${proxy.baseUrl()}/img/${proxy.registerImage(jpeg)}/photo.jpg"
+        val imgId = proxy.registerImage(jpeg)
+        val url = "${proxy.baseUrl()}/img/$imgId/photo.jpg"
         val name = Intake.nameOf(app, uri)
         var r = chosen
         if (chosen.cast) {
@@ -509,19 +510,43 @@ object Castor {
             }
         }
         if (!r.cast) {
-            // Photo suivante : on tente le changement direct (une seule commande) avant la pause préalable.
-            val meta = Dlna.didl(name, url, "image/jpeg", null, false)
-            try {
-                Dlna.setUri(r, url, meta)
-            } catch (e: TvError) {
-                replaceMedia(r, url, meta)
-            }
-            runCatching { Dlna.play(r) }
+            showImageDlna(r, url, imgId, Dlna.didl(name, url, "image/jpeg", null, false))
         }
         via = if (r !== chosen) r else null
         shownAt = System.currentTimeMillis()
         CastService.start(app)
         _state.update { it.copy(phase = Phase.PLAYING) }
+    }
+
+    /**
+     * Affiche une photo sur une télé DLNA et vérifie qu'elle la télécharge vraiment. Après une vidéo, certaines
+     * télés (Philips Titan OS) ferment leur lecteur : la première commande peut se perdre pendant qu'il rouvre.
+     * Sans téléchargement au bout de 4 s, on renvoie la photo une fois.
+     */
+    private suspend fun showImageDlna(r: Renderer, url: String, imgId: String, meta: String) {
+        for (attempt in 0..1) {
+            try {
+                // Changement direct (une seule commande) ; sinon pause préalable, comme pour une vidéo.
+                try {
+                    Dlna.setUriQuick(r, url, meta)
+                } catch (e: TvError) {
+                    replaceMedia(r, url, meta)
+                }
+                runCatching { Dlna.playQuick(r) }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: java.net.SocketTimeoutException) {
+                Log.i("Castor", "la télé ne répond pas pour la photo (essai ${attempt + 1})")
+                if (attempt == 1) throw e
+                delay(800)
+                continue
+            }
+            val end = System.currentTimeMillis() + 4000
+            while (System.currentTimeMillis() < end && !proxy.imageFetched(imgId)) delay(150)
+            if (proxy.imageFetched(imgId)) return
+            Log.i("Castor", "photo non téléchargée par la télé : nouvel envoi")
+            delay(500)
+        }
     }
 
     /** Vidéo de l'album : lue en entier, puis l'album passe à l'élément suivant. */
@@ -542,8 +567,31 @@ object Castor {
         castAt(0.0)
     }
 
-    fun photoAt(i: Int) { if (_state.value.slides != null) exec { showItem(i) } }
-    fun nextPhoto(delta: Int) { _state.value.slides?.let { sl -> exec { showItem(sl.index + delta) } } }
+    /** Élément demandé (le dernier appui gagne) et vrai si son affichage attend déjà son tour. */
+    @Volatile private var wantedIndex = 0
+    @Volatile private var showQueued = false
+
+    /**
+     * Les appuis rapprochés sont regroupés : si la télé est lente, on n'empile pas les photos, seule la
+     * dernière demandée est envoyée. Le téléphone affiche la nouvelle photo tout de suite.
+     */
+    fun photoAt(i: Int) {
+        val sl = _state.value.slides ?: return
+        wantedIndex = i.mod(sl.uris.size)
+        _state.update { it.copy(slides = it.slides?.copy(index = wantedIndex)) }
+        shownAt = System.currentTimeMillis()
+        if (showQueued) return
+        showQueued = true
+        exec {
+            showQueued = false
+            showItem(wantedIndex)
+        }
+    }
+
+    fun nextPhoto(delta: Int) {
+        val sl = _state.value.slides ?: return
+        photoAt((if (showQueued) wantedIndex else sl.index) + delta)
+    }
 
     /** Diaporama : une photo toutes les 6 secondes ; une vidéo est lue jusqu'au bout. */
     fun toggleSlideshow() {

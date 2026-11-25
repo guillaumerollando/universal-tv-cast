@@ -610,8 +610,13 @@ class ProxyServer(private val ctx: Context) {
     /** Image à adresse fixe (l'écran d'attente), jamais effacée. */
     fun putImage(id: String, jpeg: ByteArray) { images[id] = jpeg }
 
+    /** Photos réellement téléchargées par la télé (pas seulement vérifiées) : preuve qu'elle les affiche. */
+    private val fetched = java.util.Collections.newSetFromMap(ConcurrentHashMap<String, Boolean>())
+    fun imageFetched(id: String) = id in fetched
+
     private fun serveImage(req: Req, out: OutputStream) {
         val bytes = images[req.seg.getOrNull(1)] ?: return empty(out, 404, "Not Found")
+        if (req.method == "GET") req.seg.getOrNull(1)?.let { fetched += it }
         head(out, 200, "OK", listOf(
             "Content-Type" to "image/jpeg",
             "Content-Length" to bytes.size.toString(),

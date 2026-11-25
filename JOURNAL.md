@@ -344,3 +344,10 @@ régler pendant la lecture puis mettre pause fait beaucoup d'actions d'un coup.
 - Tests 17/17, lint propre.
 **Piste** : le noir entre deux photos vient de la télé en DLNA. On ne pourra l'enlever qu'avec un lecteur à
 nous sur la télé : un récepteur Cast personnalisé (si le Cast de la Philips en accepte un) ou une appli Titan OS.
+
+## 2026-11-25 (soir, 3) — Se déconnecter libère vraiment la télé
+**Retour du testeur** : après « Se déconnecter », la télé garde l'écran d'attente. Il veut qu'elle revienne comme
+avant. Il trouve le mode photo par photo d'avant satisfaisant (gardé par défaut).
+**Fait** : « Se déconnecter » envoie maintenant « Stop » à la télé en DLNA (en Cast, la session est fermée) : la
+télé quitte notre écran et revient à sa dernière source. L'écran d'attente affiche « by Rollando Studio ».
+Tests 17/17, lint propre.

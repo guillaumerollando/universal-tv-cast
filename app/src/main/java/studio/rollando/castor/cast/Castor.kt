@@ -222,9 +222,14 @@ object Castor {
 
     /**
      * Se déconnecter de la télé : on cesse de la piloter, on coupe le service et on oublie le choix,
-     * pour pouvoir repartir de zéro. Rien n'est envoyé à la télé (un « Stop » la renvoie sur HDMI).
+     * pour pouvoir repartir de zéro. La télé reçoit un « Stop » (ou la fin de la session Cast) : elle quitte
+     * l'écran d'attente et revient à sa dernière source, comme avant la diffusion.
      */
     fun disconnect() {
+        // Libérer vraiment la télé : on arrête son lecteur (écran d'attente, photo ou vidéo), elle revient
+        // d'elle-même à ce qu'elle affichait avant.
+        val tv = target()
+        if (tv != null && !tv.cast) scope.launch { runCatching { Dlna.stop(tv) } }
         pollJob?.cancel()
         seekJob?.cancel()
         slideJob?.cancel()

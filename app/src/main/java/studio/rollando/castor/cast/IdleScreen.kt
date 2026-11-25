@@ -20,7 +20,7 @@ import java.io.ByteArrayOutputStream
  * démarre plus vite. Image 1920 × 1080 dessinée sur le téléphone, aux couleurs de l'appli.
  */
 object IdleScreen {
-    private var cached: Pair<String, ByteArray>? = null
+    private var cached: Pair<String, ByteArray>? = null // (texte affiché, image)
 
     fun jpeg(ctx: Context): ByteArray {
         val line = ctx.getString(R.string.tv_idle_line)
@@ -75,7 +75,7 @@ object IdleScreen {
         c.drawText(line, cx, 800f, p)
         p.textSize = 30f
         p.color = Color.argb(110, 255, 255, 255)
-        c.drawText("Rollando Studio", cx, h - 70f, p)
+        c.drawText("by Rollando Studio", cx, h - 70f, p)
 
         val out = ByteArrayOutputStream()
         bmp.compress(Bitmap.CompressFormat.JPEG, 92, out)

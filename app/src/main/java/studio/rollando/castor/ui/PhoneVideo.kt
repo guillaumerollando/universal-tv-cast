@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
@@ -54,28 +55,68 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import studio.rollando.castor.R
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.runtime.key
+import androidx.compose.material.icons.rounded.Forward10
+import androidx.compose.material.icons.rounded.Replay10
+import androidx.compose.material.icons.rounded.Pause
+import androidx.compose.material.icons.rounded.PlayArrow
+import studio.rollando.castor.cast.Castor
 import studio.rollando.castor.cast.CastState
 import studio.rollando.castor.cast.Phase
 import studio.rollando.castor.cast.PhoneEngine
 
-/** La vidéo du téléphone, sans commandes (les commandes sont celles de l'écran de lecture). */
+/**
+ * La vidéo du téléphone, sans commandes (les commandes sont celles de l'écran de lecture). Un seul affichage à la
+ * fois tient la vidéo : en passant du cadre au plein écran (et retour), l'affichage est recréé pour la reprendre.
+ */
 @OptIn(UnstableApi::class)
 @Composable
-private fun VideoSurface(modifier: Modifier) {
+private fun VideoSurface(modifier: Modifier, active: Boolean = true) {
     val player by PhoneEngine.playerFlow.collectAsState()
-    AndroidView(
-        factory = { ctx ->
-            PlayerView(ctx).apply {
-                useController = false
-                keepScreenOn = true
-                resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
-                setShutterBackgroundColor(android.graphics.Color.BLACK)
-            }
-        },
-        update = { it.player = player },
-        onRelease = { it.player = null },
-        modifier = modifier,
+    if (!active) { Box(modifier.background(Color.Black)); return }
+    key(player) {
+        AndroidView(
+            factory = { ctx ->
+                PlayerView(ctx).apply {
+                    useController = false
+                    keepScreenOn = true
+                    resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
+                    setShutterBackgroundColor(android.graphics.Color.BLACK)
+                    this.player = player
+                }
+            },
+            onRelease = { it.player = null },
+            modifier = modifier,
+        )
+    }
+}
+
+/** Double-tap à gauche : −10 s ; à droite : +10 s (comme les lecteurs habituels). Simple appui : [onTap]. */
+private fun Modifier.skipGestures(onTap: () -> Unit, onSkip: (Int) -> Unit) = pointerInput(Unit) {
+    detectTapGestures(
+        onTap = { onTap() },
+        onDoubleTap = { o -> onSkip(if (o.x < size.width / 2) -10 else 10) },
     )
+}
+
+/** « −10 s » / « +10 s » affiché un instant du côté touché. */
+@Composable
+private fun SkipFlash(flash: Pair<Int, Long>?, modifier: Modifier) {
+    val (delta, _) = flash ?: return
+    // Au milieu de la moitié touchée, comme les lecteurs habituels.
+    Row(modifier.fillMaxSize()) {
+        for (side in listOf(-1, 1)) Box(Modifier.weight(1f).fillMaxHeight(), contentAlignment = Alignment.Center) {
+            if (side == if (delta < 0) -1 else 1) Box(
+                Modifier.size(88.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.45f)),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(if (delta < 0) Icons.Rounded.Replay10 else Icons.Rounded.Forward10, null, Modifier.size(40.dp), tint = Color.White)
+            }
+        }
+    }
 }
 
 private fun Activity.orientation(o: Int) { requestedOrientation = o }
@@ -84,13 +125,18 @@ private fun Activity.orientation(o: Int) { requestedOrientation = o }
 @Composable
 fun PhoneVideo(state: CastState) {
     val activity = LocalContext.current as? Activity
+    val portrait = androidx.compose.ui.platform.LocalConfiguration.current.orientation != android.content.res.Configuration.ORIENTATION_LANDSCAPE
+    var flash by remember { mutableStateOf<Pair<Int, Long>?>(null) }
+    LaunchedEffect(flash) { if (flash != null) { kotlinx.coroutines.delay(600); flash = null } }
     Box(
-        Modifier.fillMaxWidth().aspectRatio(16f / 9f).clip(RoundedCornerShape(28.dp)).background(Color.Black),
+        Modifier.fillMaxWidth().aspectRatio(16f / 9f).clip(RoundedCornerShape(28.dp)).background(Color.Black)
+            .skipGestures(onTap = {}, onSkip = { d -> Castor.skip(d.toDouble()); flash = d to System.currentTimeMillis() }),
     ) {
-        VideoSurface(Modifier.fillMaxSize())
+        VideoSurface(Modifier.fillMaxSize(), active = portrait)
         if (state.phase == Phase.SENDING || state.phase == Phase.BUFFERING || state.phase == Phase.LOADING) {
             CircularProgressIndicator(Modifier.align(Alignment.Center), color = Color.White)
         }
+        SkipFlash(flash, Modifier)
         IconButton(
             onClick = { activity?.orientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) },
             modifier = Modifier.align(Alignment.BottomEnd).padding(6.dp),
@@ -125,38 +171,66 @@ fun PhoneFullscreen(state: CastState) {
             activity?.window?.decorView?.postDelayed({ activity.orientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }, 2500)
         }
     }
+    var flash by remember { mutableStateOf<Pair<Int, Long>?>(null) }
+    LaunchedEffect(flash) { if (flash != null) { kotlinx.coroutines.delay(600); flash = null } }
+    val loading = state.phase == Phase.SENDING || state.phase == Phase.BUFFERING
     Box(
         Modifier.fillMaxSize().background(Color.Black)
-            .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null) { controls = !controls },
+            .skipGestures(onTap = { controls = !controls }, onSkip = { d -> Castor.skip(d.toDouble()); flash = d to System.currentTimeMillis() }),
     ) {
         VideoSurface(Modifier.fillMaxSize())
-        if (state.phase == Phase.SENDING || state.phase == Phase.BUFFERING) {
-            CircularProgressIndicator(Modifier.align(Alignment.Center), color = Color.White)
-        }
+        SkipFlash(flash, Modifier)
+        if (loading && !controls) CircularProgressIndicator(Modifier.align(Alignment.Center), color = Color.White)
         AnimatedVisibility(controls, enter = fadeIn(), exit = fadeOut(), modifier = Modifier.fillMaxSize()) {
-            Box(Modifier.fillMaxSize()) {
+            Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.35f))) {
+                // En haut : le titre.
+                Text(
+                    state.media?.title.orEmpty(), color = Color.White, style = MaterialTheme.typography.titleMedium,
+                    maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.align(Alignment.TopStart).safeDrawingPadding().padding(horizontal = 24.dp, vertical = 14.dp),
+                )
+                // Au centre : reculer, lecture/pause, avancer.
+                CenterControls(state, loading, Modifier.align(Alignment.Center))
+                // En bas : la barre (ou celle du direct), et la sortie du plein écran à droite.
                 Row(
-                    Modifier.fillMaxWidth().align(Alignment.TopStart)
-                        .background(Brush.verticalGradient(listOf(Color.Black.copy(alpha = 0.7f), Color.Transparent)))
-                        .safeDrawingPadding().padding(horizontal = 16.dp, vertical = 8.dp),
+                    Modifier.fillMaxWidth().align(Alignment.BottomCenter).safeDrawingPadding().padding(start = 24.dp, end = 8.dp, bottom = 4.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(state.media?.title.orEmpty(), color = Color.White, style = MaterialTheme.typography.titleMedium,
-                        maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
-                    IconButton(onClick = ::exit) { Icon(Icons.Rounded.FullscreenExit, stringResource(R.string.cd_fullscreen_exit), tint = Color.White) }
-                }
-                Column(
-                    Modifier.fillMaxWidth().align(Alignment.BottomCenter)
-                        .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(alpha = 0.75f))))
-                        .safeDrawingPadding().padding(horizontal = 24.dp, vertical = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
-                ) {
-                    Progress(state)
-                    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Box(Modifier.size(width = 420.dp, height = 88.dp)) { Controls(state) }
+                    Box(Modifier.weight(1f)) { Progress(state) }
+                    IconButton(onClick = ::exit) {
+                        Icon(Icons.Rounded.FullscreenExit, stringResource(R.string.cd_fullscreen_exit), tint = Color.White)
                     }
                 }
             }
+        }
+    }
+}
+
+/** Commandes du plein écran, au centre : petites touches rondes, lecture/pause ambrée (la patte de l'appli). */
+@Composable
+private fun CenterControls(s: CastState, loading: Boolean, modifier: Modifier) {
+    val c = MaterialTheme.colorScheme
+    val canSkip = s.active && (!s.live || s.continuous)
+    Row(modifier, horizontalArrangement = Arrangement.spacedBy(40.dp), verticalAlignment = Alignment.CenterVertically) {
+        IconButton(onClick = { Castor.skip(-10.0) }, enabled = canSkip,
+            modifier = Modifier.size(52.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.4f))) {
+            Icon(Icons.Rounded.Replay10, stringResource(R.string.cd_rewind), Modifier.size(30.dp), tint = Color.White)
+        }
+        Box(
+            Modifier.size(68.dp).clip(CircleShape).background(c.primary)
+                .clickable(enabled = !loading, role = androidx.compose.ui.semantics.Role.Button, onClick = Castor::togglePlay),
+            contentAlignment = Alignment.Center,
+        ) {
+            if (loading) CircularProgressIndicator(Modifier.size(30.dp), color = c.onPrimary, strokeWidth = 3.dp)
+            else {
+                val playing = s.phase == Phase.PLAYING
+                Icon(if (playing) Icons.Rounded.Pause else Icons.Rounded.PlayArrow,
+                    stringResource(if (playing) R.string.action_pause else R.string.action_play), Modifier.size(38.dp), tint = c.onPrimary)
+            }
+        }
+        IconButton(onClick = { Castor.skip(10.0) }, enabled = canSkip && (!s.live || s.liveBehind > 0),
+            modifier = Modifier.size(52.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.4f))) {
+            Icon(Icons.Rounded.Forward10, stringResource(R.string.cd_forward10), Modifier.size(30.dp), tint = Color.White)
         }
     }
 }

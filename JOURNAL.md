@@ -770,3 +770,10 @@ fait toute seule.
   au même endroit (le passage télé → téléphone garde l'enregistrement du direct). L'appli cachée → pause.
 - Émulateur : Africa 24 English sur téléphone : pause 10 s → −0:12 ; −10 → −0:26 (start=26) ; plein écran OK ;
   retour télé → start=26, −0:27.
+
+## 2026-11-26 — Lecteur téléphone : rotation, plein écran standard
+- Écran noir / image figée au retour en portrait : la vidéo restait accrochée à l'affichage plein écran. Un seul
+  affichage la tient à la fois (le cadre se désactive en paysage et est recréé au retour). Émulateur : portrait →
+  paysage → portrait → paysage → portrait, vidéo qui bouge à chaque étape.
+- Plein écran : −10 / lecture-pause (ambrée) / +10 au centre, plus petits ; barre en bas avec la sortie du plein écran en
+  bas à droite ; titre en haut. Double-tap gauche/droite = −10 / +10 s (plein écran et cadre), rond au milieu de la moitié.

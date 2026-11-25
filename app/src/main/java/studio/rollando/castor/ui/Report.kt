@@ -18,7 +18,7 @@ object Report {
         val source = s.media?.let { m -> listOfNotNull(m.sourceApp, m.host).joinToString(" · ").ifEmpty { "—" } } ?: "—"
         val body = buildString {
             append(ctx.getString(R.string.report_intro)).append("\n\n\n\n—\n")
-            append("Castor ").append(BuildConfig.VERSION_NAME).append("\n")
+            append("Universal TV Cast ").append(BuildConfig.VERSION_NAME).append("\n")
             append("Android ").append(Build.VERSION.RELEASE).append(" · ").append(Build.MANUFACTURER).append(' ').append(Build.MODEL).append("\n")
             append("TV : ").append(tv).append("\n")
             append("Source : ").append(source).append("\n")

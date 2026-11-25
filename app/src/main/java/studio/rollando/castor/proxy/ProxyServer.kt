@@ -186,7 +186,7 @@ class ProxyServer(private val ctx: Context) {
     private fun head(out: OutputStream, code: Int, reason: String, h: List<Pair<String, String>>) {
         val sb = StringBuilder("HTTP/1.1 $code $reason\r\n")
         for ((k, v) in h) sb.append(k).append(": ").append(v).append("\r\n")
-        sb.append("Server: Android/1.0 UPnP/1.0 DLNADOC/1.50 Castor/1.0\r\n")
+        sb.append("Server: Android/1.0 UPnP/1.0 DLNADOC/1.50 UniversalTVCast/1.0\r\n")
         // CORS : le lecteur Google Cast (une page web) exige ces en-têtes pour la vidéo, le HLS et les sous-titres.
         sb.append("Access-Control-Allow-Origin: *\r\n")
         sb.append("Access-Control-Allow-Methods: GET, HEAD, OPTIONS\r\n")

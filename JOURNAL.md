@@ -1,4 +1,4 @@
-# Journal — Castor
+# Journal — Universal TV Cast (anciennement « Universal TV Cast »)
 
 ## 2026-11-24 — Création
 **Fait**
@@ -17,7 +17,7 @@
 - Clé de signature du studio, fiche Play Store, pages légales (si publication).
 
 ## 2026-11-24 — La télé n'était pas trouvée
-**Constat** (télé Philips 55OLED760/12, Titan OS, en Ethernet, 192.168.1.20) : son récepteur DLNA
+**Constat** (télé Philips 55OLED760/12, Titan OS, en Ethernet) : son récepteur DLNA
 (`:49152/description.xml`, AVTransport + RenderingControl + ConnectionManager) **ne répond à aucune recherche SSDP**,
 ni multicast ni unicast ; la télé n'annonce qu'un service maison `urn:schemas-tpv-org:service:PhotoFrame:1`.
 Elle n'accepte pas `video/mp2t` (mais `video/mpeg`) ni le HLS. Elle a aussi Google Cast (8008/8009) et AirPlay (7000).
@@ -35,19 +35,19 @@ Elle n'accepte pas `video/mp2t` (mais `video/mpeg`) ni le HLS. Elle a aussi Goog
 ## 2026-11-24 — « Fichier non pris en charge » sur la télé
 **Constat** (essais depuis le PC vers la télé, lecteur GStreamer de Titan OS) : la télé lit MP4 et MPEG-TS
 (`video/mpeg`) s'ils ont une taille annoncée, ou s'ils sont envoyés **par blocs (chunked)**. Un flux sans taille
-ni blocs (fermeture de connexion), ce qu'envoyait le flux continu de Castor, la bloque. Elle sonde aussi la fin
+ni blocs (fermeture de connexion), ce qu'envoyait le flux continu de Universal TV Cast, la bloque. Elle sonde aussi la fin
 du fichier (`Range: bytes=<fin>-`) avant de lire.
 
 **Fait**
 - Flux continu HLS envoyé en `Transfer-Encoding: chunked` ; réponse immédiate aux requêtes HEAD.
 - Relais direct envoyé par blocs quand le site n'annonce pas de taille.
-- Vérifié de bout en bout : téléphone → Castor → télé, flux HLS chiffré protégé par Referer : lu jusqu'au bout.
+- Vérifié de bout en bout : téléphone → Universal TV Cast → télé, flux HLS chiffré protégé par Referer : lu jusqu'au bout.
 
 **Pas fait** : essai par le testeur sur ses vraies sources ; sous-titres sur cette télé.
 
 ## 2026-11-24 — Avance qui échoue, télé qui part sur HDMI 1, télé qui plante
 **Constat** (journaux du téléphone, source Stremio) : les commandes « changer de vidéo » restaient sans réponse
-(la télé interroge la vidéo avant de répondre, et le relais réinterrogeait Stremio à chaque fois) ; Castor
+(la télé interroge la vidéo avant de répondre, et le relais réinterrogeait Stremio à chaque fois) ; Universal TV Cast
 continuait à questionner la télé deux fois par seconde et laissait relancer l'envoi : la télé a fini par planter.
 Avancer loin dans un torrent : le morceau met plus de 10 s à venir, le lecteur de la télé abandonne et la télé
 repart sur la dernière source (HDMI 1). La télé refuse aussi un déplacement pendant le précédent (710) et un
@@ -59,7 +59,7 @@ changement de vidéo pendant la lecture (« Transport locked ») mais l'accepte 
 - Une seule commande à la fois vers la télé ; interrogation toutes les 2 s, en pause pendant une commande et
   ralentie si la télé ne répond plus ; message « la télé ne répond pas ».
 - Appuis ±10 s regroupés ; attente que la télé soit prête avant de la déplacer.
-- **Préchargement** : avant de déplacer la télé, Castor fait venir le morceau de la source et attend qu'il soit là.
+- **Préchargement** : avant de déplacer la télé, Universal TV Cast fait venir le morceau de la source et attend qu'il soit là.
 - Changement de vidéo par pause au lieu de Stop.
 - **Reprise automatique** (2 fois max.) si la télé quitte la lecture en plein milieu.
 - Fausse télé et faux site lent (`tools/test-tele/`) : tout vérifié sur émulateur sans toucher la vraie télé.
@@ -79,9 +79,9 @@ Même cause pour l'erreur vue dans Web Video Cast.
 
 **Fait**
 - Reprise automatique et préchargement **retirés**.
-- Castor retient l'appli qui envoie la vidéo ; si la télé attend plus de 15 s une vidéo servie par le téléphone,
+- Universal TV Cast retient l'appli qui envoie la vidéo ; si la télé attend plus de 15 s une vidéo servie par le téléphone,
   message « … Android l'a sans doute mis en veille » + bouton vers les réglages de l'appli source.
-- Vérifié sur émulateur + fausse télé : message affiché ; quand la télé abandonne, Castor ne relance rien.
+- Vérifié sur émulateur + fausse télé : message affiché ; quand la télé abandonne, Universal TV Cast ne relance rien.
 
 **Pas fait** : vérifier avec Stremio réglé sur « Aucune restriction » (batterie) chez le testeur.
 
@@ -90,11 +90,11 @@ Même cause pour l'erreur vue dans Web Video Cast.
 Restent : pas de sous-titres depuis Stremio ; la télé affiche des infos techniques peu jolies (AAC, 24 Hz, BT 709…).
 
 **Fait**
-- Journal `CastorIntake` : tout ce qu'une appli transmet à Castor (pour savoir si et comment Stremio passe ses
+- Journal `CastorIntake` : tout ce qu'une appli transmet à Universal TV Cast (pour savoir si et comment Stremio passe ses
   sous-titres).
 - Sous-titres repérés dans tout extra dont le nom évoque des sous-titres (en plus des conventions MX Player/VLC).
 - Affiche 640×360 (logo + titre) envoyée à la télé (`upnp:albumArtURI`), durée annoncée quand elle est connue,
-  `dc:creator` Castor. Vérifié sur émulateur + fausse télé.
+  `dc:creator` Universal TV Cast. Vérifié sur émulateur + fausse télé.
 
 **À vérifier chez le testeur** : ce que Stremio transmet (lire `CastorIntake` après un envoi) ; si la Philips
 affiche l'affiche/le titre à la place des infos techniques ; si elle affiche des sous-titres envoyés en DLNA.
@@ -104,7 +104,7 @@ affiche l'affiche/le titre à la place des infos techniques ; si elle affiche de
 - `data/Background.kt` : détecte si Android peut endormir une appli (liste blanche batterie) et les marques
   connues pour être agressives (Xiaomi, Samsung, Huawei, Oppo…) ; mots exacts du réglage selon la marque.
 - Carte dans l'onglet Lecture, avant que le problème n'arrive : d'abord pour l'appli qui envoie la vidéo
-  (Stremio…), sinon pour Castor pendant une diffusion ; bouton vers ses réglages et « Ne plus afficher ».
+  (Stremio…), sinon pour Universal TV Cast pendant une diffusion ; bouton vers ses réglages et « Ne plus afficher ».
 - Rubrique « Dépannage » dans les réglages : télé introuvable, vidéo figée en avançant, format non pris en charge,
   sous-titres, changement de source à la fin, arrêt quand l'écran s'éteint. 7 langues. Vu sur émulateur.
 
@@ -115,32 +115,31 @@ e-mail vers rollandostudio@gmail.com avec modèle du téléphone et de la télé
 émulateur (secousse simulée).
 
 ## 2026-11-25 — Design avec un peu de personnalité, carte orange moins insistante
-**Retours** : carte orange affichée alors que tout était bien réglé ; « Castor » coupé sur deux lignes ; design
+**Retours** : carte orange affichée alors que tout était bien réglé ; « Universal TV Cast » coupé sur deux lignes ; design
 trop neutre ; avance parfois un peu « hésitante » mais qui se corrige ; toujours pas de sous-titres depuis Stremio.
 
 **Fait**
-- Carte de conseil seulement si Android peut vraiment endormir l'appli (vérifié : Stremio et Castor sont sur la
+- Carte de conseil seulement si Android peut vraiment endormir l'appli (vérifié : Stremio et Universal TV Cast sont sur la
   liste blanche du téléphone du testeur, la carte ne s'y affichera plus).
-- Barre du haut maison : « Castor » toujours sur une ligne, le nom de la télé se raccourcit.
+- Barre du haut maison : « Universal TV Cast » toujours sur une ligne, le nom de la télé se raccourcit.
 - Police Fredoka (celle des jeux du studio) pour titres et boutons ; ondes animées autour de la télé pendant la
   lecture (immobiles si les animations sont coupées) ; arcs de diffusion dans la carte d'accueil.
 
 **En cours** : capture du journal pendant un envoi depuis Stremio pour voir comment il transmet les sous-titres.
 
 ## 2026-11-25 — Police marquante et barre d'onglets à nous
-**Fait** : Lilita One (police de Jimmy's Blackout) pour le nom Castor et les grands titres ; barre d'onglets en
+**Fait** : Lilita One (police de Jimmy's Blackout) pour le nom Universal TV Cast et les grands titres ; barre d'onglets en
 pilule flottante (onglet actif en capsule ambrée avec son nom, les autres en icône, nom lu par les lecteurs
 d'écran, point ambré sur Lecture pendant une diffusion). Vérifié en thème sombre et clair sur émulateur.
 
 ## 2026-11-25 — Police : Inter Display / Inter
-Lilita One jugée « comics », pas pro. Planche de comparaison (Inter Display, Figtree, Fredoka) : choix de
-le testeur = **Inter Display** (titres extra-gras, lettres resserrées) + **Inter** (reste). Lilita et Fredoka
+Lilita One jugée « comics », pas pro. Planche de comparaison (Inter Display, Figtree, Fredoka) : choix retenu = **Inter Display** (titres extra-gras, lettres resserrées) + **Inter** (reste). Lilita et Fredoka
 retirées ; 3 graisses seulement (appli à 2,1 Mo). Pilule, ondes et arcs conservés. Vérifié sur émulateur.
 
 ## 2026-11-25 — Flashs en avançant, sous-titres Stremio, reprise à la bonne position
 **Constats** (capture du journal pendant un essai du testeur) :
 - Stremio transmet seulement l'URL (avec le nom du fichier), `position`/`startfrom` (ms) et `return_result` :
-  **aucun sous-titre**. Castor ignorait la position : il démarrait au début.
+  **aucun sous-titre**. Universal TV Cast ignorait la position : il démarrait au début.
 - Flashs en avançant depuis 2 versions : la seule nouveauté côté télé était l'affiche (`albumArtURI`) et la durée
   dans le DIDL ; la Philips affiche très probablement l'affiche pendant chaque chargement.
 
@@ -188,7 +187,7 @@ très probablement Google Cast (la télé l'intègre, ports 8008/8009).
 s'affichent dans le lecteur Cast ; avance ; arrêt.
 
 ## 2026-11-25 (nuit) — Cast automatique, album photo, accueil, reprise après sous-titres
-**Constats** : l'essai Cast n'a rien changé car Castor a réutilisé l'entrée DLNA mémorisée (aucune connexion Cast
+**Constats** : l'essai Cast n'a rien changé car Universal TV Cast a réutilisé l'entrée DLNA mémorisée (aucune connexion Cast
 dans le journal). Changer de sous-titres repartait à 0 (déplacement demandé trop tôt, refusé en silence). Vidéos
 du téléphone : fonctionnent sur émulateur ; sur Xiaomi, sélecteur MIUI ou vidéos HEVC probablement en cause.
 
@@ -226,7 +225,7 @@ plages identique au fichier complet ; **GStreamer (le moteur de la Philips) voit
 - Aide mise à jour (sous-titres automatiques / Cast / intégrés ; vidéos HEVC du téléphone).
 
 **À tester par le testeur (télé allumée)**
-1. Castor choisit Cast d'office pour la Philips : le lecteur de la télé doit changer ; sous-titres affichés ?
+1. Universal TV Cast choisit Cast d'office pour la Philips : le lecteur de la télé doit changer ; sous-titres affichés ?
 2. Si Cast refuse la vidéo, bascule automatique en DLNA, avec **sous-titres intégrés** au MP4 : affichés ?
 3. Changer de sous-titres en cours de lecture : reprise au même endroit.
 4. Album photo et diaporama.
@@ -234,4 +233,25 @@ plages identique au fichier complet ; **GStreamer (le moteur de la Philips) voit
 6. Navigateur : sélection de l'adresse au toucher, regroupement des qualités, moins de pubs.
 
 **Idée en attente** : parcourir les serveurs du réseau (NAS, Plex, Jellyfin en DLNA) — fonction de LocalCast et
-BubbleUPnP, demandée par une minorité ; faisable car Castor parle déjà UPnP.
+BubbleUPnP, demandée par une minorité ; faisable car Universal TV Cast parle déjà UPnP.
+
+## 2026-11-25 — Nouveau nom « Universal TV Cast », licence GPL-3.0
+**Fait**
+- Nom public **Universal TV Cast** (référencement) : nom de l'appli, tous les textes des 7 langues, aide,
+  notification, e-mail de signalement, `dc:creator` et en-têtes réseau, README, docs, journal. Inchangés car
+  invisibles : `applicationId` `studio.rollando.castor`, packages Kotlin, dossier, étiquettes du journal
+  (`CastorProxy`…).
+- En-tête : nom en deux étages (« UNIVERSAL » en petites capitales ambrées au-dessus de « TV Cast »), lu
+  « Universal TV Cast » par TalkBack ; le bouton « Choisir une télé » garde sa place. Vérifié sur émulateur.
+- Dépôt `guillaumerollando/universal-tv-cast`. Licence **GPL-3.0** : fichier `LICENSE` (texte officiel) et
+  section Licence du README.
+- Données personnelles retirées des fichiers suivis : IP du réseau local, chemins personnels (fausse télé :
+  `ADB` lu dans l'environnement ; test MP4 : dossier `EMB_DIR`), nom de la pièce, prénom du testeur.
+  **Attention** : l'historique git contient encore ces éléments dans les anciens commits (IP locale de la télé
+  et du téléphone, chemin `/home/…`). Rien de secret, mais à savoir avant de rendre le dépôt public.
+- Lint : 16 erreurs corrigées (vérification d'API pour les photos, type MIME en minuscules pour les listes
+  HLS, BOM écrits en `﻿`, `app_name` non traduisible, faux positif `dispatchKeyEvent`). Lint passe.
+- Tests : 15/15. APK release 3,1 Mo.
+
+**Reste à tester sur la télé** : Cast choisi d'office avec sous-titres, sous-titres intégrés en DLNA, reprise
+après changement de sous-titres, photos, vidéos du téléphone.

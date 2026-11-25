@@ -1,8 +1,8 @@
 """Fausse télé Philips Titan OS (DMR) pour tester Castor sans la vraie télé."""
-import http.server, socketserver, threading, time, re, html, subprocess, urllib.request, sys
+import os, http.server, socketserver, threading, time, re, html, subprocess, urllib.request, sys
 DUR = float(sys.argv[1]) if len(sys.argv) > 1 else 180.0
 PATIENCE = float(sys.argv[2]) if len(sys.argv) > 2 else 10.0
-ADB = ['~/Android/Sdk/platform-tools/adb', '-s', 'emulator-5554']
+ADB = [os.environ.get('ADB', 'adb'), '-s', 'emulator-5554']
 LOCK = threading.Lock()
 S = {'state': 'NO_MEDIA_PRESENT', 'uri': None, 'pos': 0.0, 't': None, 'total': None, 'gen': 0}
 STATS = {'concurrent': 0, 'max_concurrent': 0, 'soap': 0}

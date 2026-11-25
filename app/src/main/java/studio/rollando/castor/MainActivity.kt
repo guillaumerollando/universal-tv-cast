@@ -91,6 +91,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     }
 
     /** Les boutons de volume du téléphone règlent le son de la télé pendant la diffusion. */
+    @android.annotation.SuppressLint("RestrictedApi") // faux positif connu : surcharge publique d’Activity
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         val s = Castor.state.value
         if (s.active && (s.renderer?.rcUrl != null || s.renderer?.cast == true) &&

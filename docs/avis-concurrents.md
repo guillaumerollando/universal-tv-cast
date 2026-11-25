@@ -31,7 +31,7 @@ sites les plus visités.
 ## Pièges techniques connus du DLNA
 - Sous-titres : pas de standard ; seule méthode fiable = graver dans l'image (transcodage).
 - Avance : beaucoup de télés n'avancent que si la taille du fichier est connue.
-- HLS mal lu par les télés : il faut le recoller en un flux (ce que fait Castor).
+- HLS mal lu par les télés : il faut le recoller en un flux (ce que fait Universal TV Cast).
 - Choix de la piste audio rarement possible sans remux.
 - DRM (Netflix, Disney+) : impossible.
 - Stremio a abandonné le DLNA pour ces raisons et renvoie vers les lecteurs externes : c'est notre créneau.

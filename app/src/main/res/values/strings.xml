@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Généré par tools/strings.py : ne pas modifier à la main. -->
 <resources>
-    <string name="app_name">Castor</string>
+    <string name="app_name" translatable="false">Universal TV Cast</string>
     <string name="intent_cast_label">Cast to TV</string>
     <string name="tab_home">Home</string>
     <string name="tab_browser">Browser</string>
@@ -12,7 +12,7 @@
     <string name="tv_searching">Searching…</string>
     <string name="tv_search_again">Search again</string>
     <string name="tv_none_title">No TV found</string>
-    <string name="tv_none_body">Turn on your TV and check that your phone is on the same Wi-Fi network. Castor works with TVs that support DLNA (most Philips, Samsung, LG, Sony, Panasonic, Hisense…).</string>
+    <string name="tv_none_body">Turn on your TV and check that your phone is on the same Wi-Fi network. Universal TV Cast works with TVs that support DLNA (most Philips, Samsung, LG, Sony, Panasonic, Hisense…).</string>
     <string name="tv_add_ip">Add a TV by IP address</string>
     <string name="tv_ip_label">TV IP address</string>
     <string name="tv_ip_help">You’ll find it in the TV’s network settings.</string>
@@ -43,17 +43,17 @@
     <string name="help_format_title">“File not supported” on the TV</string>
     <string name="help_format_body">The TV can’t read this format: often HEVC/x265 (the format of many phone videos), DTS sound or MKV on older TVs. Try another source or quality; for phone videos, film in “H.264” or “Most compatible” mode.</string>
     <string name="help_subs_title">No subtitles</string>
-    <string name="help_subs_body">Castor finds subtitles automatically from the video name and picks your language. On Google Cast TVs they appear directly. On other TVs, Castor builds them into MP4 videos (setting “Built-in subtitles”). For other formats on those TVs, choose a version of the video with built-in subtitles.</string>
+    <string name="help_subs_body">Universal TV Cast finds subtitles automatically from the video name and picks your language. On Google Cast TVs they appear directly. On other TVs, it builds them into MP4 videos (setting “Built-in subtitles”). For other formats on those TVs, choose a version of the video with built-in subtitles.</string>
     <string name="help_hdmi_title">The TV switches input at the end</string>
-    <string name="help_hdmi_body">Some TVs go back to the last input (HDMI) when a video ends or is stopped. That’s the TV’s own behavior; with Castor, prefer pausing.</string>
+    <string name="help_hdmi_body">Some TVs go back to the last input (HDMI) when a video ends or is stopped. That’s the TV’s own behavior; with Universal TV Cast, prefer pausing.</string>
     <string name="help_sleep_title">Playback stops when the phone screen turns off</string>
-    <string name="help_sleep_body">Let Castor run in the background.</string>
+    <string name="help_sleep_body">Let Universal TV Cast run in the background.</string>
     <string name="help_title">Help</string>
     <string name="cd_help">Help</string>
     <string name="action_help">Help</string>
     <string name="help_report">Report a problem</string>
     <string name="help_report_hint">Your e-mail app opens with a few technical details (phone and TV model, app version, last message). Nothing is sent unless you send it.</string>
-    <string name="report_subject">Castor %1$s: a problem</string>
+    <string name="report_subject">Universal TV Cast %1$s: a problem</string>
     <string name="report_intro">Describe the problem here:</string>
     <string name="settings_shake">Shake for help</string>
     <string name="settings_shake_sub">Shake the phone to open help and report a problem.</string>
@@ -82,13 +82,13 @@
     <string name="home_title">Send any video to your TV</string>
     <string name="home_subtitle">Free. No ads. No tracking.</string>
     <string name="home_browse">Browse a website</string>
-    <string name="home_browse_sub">Castor spots the videos on the page</string>
+    <string name="home_browse_sub">Universal TV Cast spots the videos on the page</string>
     <string name="home_files">Videos on this phone</string>
     <string name="home_files_sub">Films, clips, music</string>
     <string name="home_link">Paste a link</string>
     <string name="home_link_sub">Direct link to a video or an .m3u8 stream</string>
     <string name="home_other_title">From another app</string>
-    <string name="home_other_body">In your video app, choose “External player”, “Open with” or “Share”, then Castor.</string>
+    <string name="home_other_body">In your video app, choose “External player”, “Open with” or “Share”, then Universal TV Cast.</string>
     <string name="home_bookmarks">Bookmarks</string>
     <string name="home_recents">Recently played</string>
     <string name="cd_delete">Remove</string>
@@ -155,7 +155,7 @@
     <string name="settings_continuous_sub">For streaming sites (HLS). Works with almost every TV.</string>
     <string name="settings_clear">Clear playback history</string>
     <string name="about_version">Version %1$s</string>
-    <string name="about_body">Castor is free, with no ads and no tracking. Everything stays on your phone. Made with care by Rollando Studio.</string>
+    <string name="about_body">Universal TV Cast is free, with no ads and no tracking. Everything stays on your phone. Made with care by Rollando Studio.</string>
     <string name="about_more">Discover our other apps</string>
     <string name="notif_channel">Playback on the TV</string>
     <string name="notif_on_tv">On %1$s</string>

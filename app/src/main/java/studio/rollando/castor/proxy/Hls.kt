@@ -29,7 +29,7 @@ object Hls {
     fun resolve(base: String, ref: String): String = URL(URL(base), ref.trim()).toString()
 
     fun isPlaylist(bytes: ByteArray): Boolean =
-        String(bytes, 0, minOf(bytes.size, 64), Charsets.UTF_8).trimStart('﻿', ' ', '\n', '\r', '\t')
+        String(bytes, 0, minOf(bytes.size, 64), Charsets.UTF_8).trimStart('\uFEFF', ' ', '\n', '\r', '\t')
             .startsWith("#EXTM3U")
 
     /** Charge une liste ; si c'est une liste « maître », choisit la meilleure qualité avec le son. */

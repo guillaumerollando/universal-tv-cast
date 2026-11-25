@@ -8,14 +8,14 @@ import java.nio.charset.CodingErrorAction
 /** Convertit des sous-titres WebVTT, ASS/SSA ou SRT en SRT UTF-8 (le format que les télés lisent le mieux). */
 object Subtitles {
     fun toSrt(bytes: ByteArray): ByteArray {
-        var text = decode(bytes).removePrefix("﻿").replace("\r\n", "\n").replace('\r', '\n')
+        var text = decode(bytes).removePrefix("\uFEFF").replace("\r\n", "\n").replace('\r', '\n')
         val head = text.trimStart()
         text = when {
             head.startsWith("WEBVTT") -> fromVtt(text)
             head.startsWith("[Script Info]") || text.contains("\n[Events]") -> fromAss(text)
             else -> text
         }
-        return ("﻿" + text.trim() + "\n").toByteArray(Charsets.UTF_8)
+        return ("\uFEFF" + text.trim() + "\n").toByteArray(Charsets.UTF_8)
     }
 
     /** SRT (déjà converti par [toSrt]) → WebVTT, le format des sous-titres de Google Cast. */

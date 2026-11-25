@@ -149,7 +149,7 @@ object Dlna {
                     if (rounds < 3 && System.currentTimeMillis() - start >= rounds * 1200L) {
                         for (st in TARGETS) {
                             val msg = ("M-SEARCH * HTTP/1.1\r\nHOST: $SSDP_ADDR:1900\r\nMAN: \"ssdp:discover\"\r\n" +
-                                "MX: 2\r\nST: $st\r\nUSER-AGENT: Android UPnP/1.0 Castor/1.0\r\n\r\n").toByteArray()
+                                "MX: 2\r\nST: $st\r\nUSER-AGENT: Android UPnP/1.0 UniversalTVCast/1.0\r\n\r\n").toByteArray()
                             runCatching { sock.send(DatagramPacket(msg, msg.size, group, 1900)) }
                         }
                         rounds++
@@ -398,7 +398,7 @@ object Dlna {
             append("<item id=\"castor\" parentID=\"0\" restricted=\"1\">")
             append("<dc:title>").append(esc(title)).append("</dc:title>")
             append("<upnp:class>$cls</upnp:class>")
-            append("<dc:creator>Castor</dc:creator>")
+            append("<dc:creator>Universal TV Cast</dc:creator>")
             if (artUrl != null) {
                 append("<upnp:albumArtURI dlna:profileID=\"JPEG_SM\">").append(esc(artUrl)).append("</upnp:albumArtURI>")
             }

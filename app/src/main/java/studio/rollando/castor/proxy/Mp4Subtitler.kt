@@ -280,7 +280,7 @@ class Mp4Subtitler(private val size: Long, private val read: (offset: Long, leng
 
         /** Lit les répliques d'un SRT (celui produit par [Subtitles.toSrt]). */
         fun parseSrt(srt: ByteArray): List<Cue> {
-            val text = String(srt, Charsets.UTF_8).removePrefix("﻿").replace("\r", "")
+            val text = String(srt, Charsets.UTF_8).removePrefix("\uFEFF").replace("\r", "")
             val time = Regex("(\\d+):(\\d+):(\\d+)[,.](\\d+)\\s*-->\\s*(\\d+):(\\d+):(\\d+)[,.](\\d+)")
             fun ms(h: String, m: String, s: String, f: String) =
                 h.toLong() * 3600000 + m.toLong() * 60000 + s.toLong() * 1000 + f.padEnd(3, '0').take(3).toLong()

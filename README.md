@@ -1,4 +1,4 @@
-# Castor
+# Universal TV Cast
 
 Appli Android gratuite, sans pub et sans pistage, de Rollando Studio : envoie n'importe quelle vidéo
 sur une télé **DLNA / UPnP** (Philips Titan OS, Samsung, LG, Sony, Panasonic, Hisense…), y compris celles
@@ -37,3 +37,8 @@ La télé est trouvée par SSDP puis commandée en SOAP UPnP AVTransport / Rende
 ```
 APK : `app/build/outputs/apk/release/app-release.apk` (signée avec la clé de debug pour l'instant).
 Textes : `tools/strings.py` génère `res/values*/strings.xml` (ne pas modifier ces fichiers à la main).
+
+## Licence
+Universal TV Cast est un logiciel libre, publié sous la licence **GNU GPL version 3** (voir [LICENSE](LICENSE)).
+Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer ; toute version modifiée distribuée doit rester
+sous GPL-3.0 et publier son code source. © 2026 Rollando Studio.

@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.widthIn
@@ -136,7 +137,8 @@ fun CastorApp() {
 
     Scaffold(
         topBar = {
-            // Barre maison : « Castor » ne passe jamais à la ligne, c'est le nom de la télé qui se raccourcit.
+            // Barre maison : le nom en deux étages (« UNIVERSAL » au-dessus de « TV Cast ») reste compact ;
+            // c'est le nom de la télé qui se raccourcit.
             Surface(color = MaterialTheme.colorScheme.surface) {
                 Row(
                     Modifier.fillMaxWidth().statusBarsPadding().height(64.dp).padding(start = 16.dp, end = 4.dp),
@@ -144,11 +146,20 @@ fun CastorApp() {
                 ) {
                     Icon(painterResource(R.drawable.ic_logo), null, Modifier.size(30.dp), tint = MaterialTheme.colorScheme.primary)
                     Spacer(Modifier.width(8.dp))
-                    Text(
-                        stringResource(R.string.app_name), maxLines = 1, softWrap = false,
-                        style = MaterialTheme.typography.headlineSmall.copy(fontSize = 25.sp),
-                        modifier = Modifier.semantics { heading() },
-                    )
+                    val appName = stringResource(R.string.app_name)
+                    Column(Modifier.clearAndSetSemantics { heading(); contentDescription = appName }) {
+                        Text(
+                            "UNIVERSAL", maxLines = 1, softWrap = false,
+                            color = MaterialTheme.colorScheme.primary,
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontSize = 10.sp, lineHeight = 11.sp, letterSpacing = 2.2.sp, fontWeight = FontWeight.Bold,
+                            ),
+                        )
+                        Text(
+                            "TV Cast", maxLines = 1, softWrap = false,
+                            style = MaterialTheme.typography.headlineSmall.copy(fontSize = 23.sp, lineHeight = 24.sp),
+                        )
+                    }
                     Spacer(Modifier.width(12.dp))
                     Box(Modifier.weight(1f), contentAlignment = Alignment.CenterEnd) {
                         TvChip(state.renderer?.name, state.searching) { showTvs = true }

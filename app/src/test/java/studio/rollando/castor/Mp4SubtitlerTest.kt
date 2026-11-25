@@ -9,7 +9,7 @@ import java.io.RandomAccessFile
 
 /** Vérifie avec ffmpeg (s'il est installé) que la piste de sous-titres ajoutée est valide et que la vidéo reste intacte. */
 class Mp4SubtitlerTest {
-    private val dir = File("/tmp/claude-1000/emb")
+    private val dir = File(System.getenv("EMB_DIR") ?: (System.getProperty("java.io.tmpdir") + "/emb"))
 
     private fun virtualFile(src: File, out: File) {
         val raf = RandomAccessFile(src, "r")

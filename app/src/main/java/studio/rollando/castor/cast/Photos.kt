@@ -24,6 +24,7 @@ object Photos {
         return out.toByteArray()
     }
 
+    @androidx.annotation.RequiresApi(28)
     private fun decodeModern(ctx: Context, uri: Uri): Bitmap {
         val src = ImageDecoder.createSource(ctx.contentResolver, uri)
         // ImageDecoder applique l'orientation EXIF et lit le HEIC.

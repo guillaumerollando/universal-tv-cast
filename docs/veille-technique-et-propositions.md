@@ -1,4 +1,4 @@
-# Castor : veille technique et propositions (25 novembre 2026)
+# Universal TV Cast : veille technique et propositions (25 novembre 2026)
 
 Deux recherches : (1) les briques open source et SDK pour caster vers toutes les télés, (2) les bonnes pratiques
 des « télécommandes » DLNA éprouvées (Universal Media Server et ses 221 profils de télés, go2tv, Gerbera,
@@ -21,7 +21,7 @@ recollé, fichiers locaux), le navigateur qui repère les vidéos, l'entrée « 
 
 Aucune preuve publique de ce qu'utilisent Web Video Cast, LocalCast ou BubbleUPnP en interne.
 
-## 2. Ce que font les applis éprouvées et que Castor ne fait pas encore
+## 2. Ce que font les applis éprouvées et que Universal TV Cast ne fait pas encore
 
 1. **Ne jamais faire attendre la télé.** Le lecteur des télés (GStreamer sur la Philips) abandonne après
    **15 s sans recevoir d'octets**. Les serveurs sérieux envoient les en-têtes tout de suite et lisent
@@ -30,7 +30,7 @@ Aucune preuve publique de ce qu'utilisent Web Video Cast, LocalCast ou BubbleUPn
 2. **« Arrêter » = Pause par défaut.** Aucune appli ne documente le problème HDMI, mais le même cas existe sur
    des amplis (Denon) : Stop fait changer de source, Pause non. Le changement de source vient du logiciel de la
    télé : on ne peut que l'éviter. Stop seulement sur demande explicite.
-3. **Vidéo suivante** : Pause → nouvelle vidéo → Play (ce que fait déjà Castor), Stop en secours.
+3. **Vidéo suivante** : Pause → nouvelle vidéo → Play (ce que fait déjà Universal TV Cast), Stop en secours.
 4. **Avance sur un flux sans taille** : c'est l'appli qui relance le flux au bon endroit (go2tv) ou le serveur
    qui accepte une demande « à partir de telle minute » (`TimeSeekRange.dlna.org`, Universal Media Server).
 5. **Profil par défaut le plus sûr** : MPEG-TS H.264 + AAC, `video/mpeg`, envoi par blocs (jamais « sans taille
@@ -46,13 +46,13 @@ Aucune preuve publique de ce qu'utilisent Web Video Cast, LocalCast ou BubbleUPn
   explicite.
 - **Relais qui ne fait plus attendre la télé** : en-têtes envoyés tout de suite, lecture anticipée de la source
   (ce qui garde aussi Stremio réveillé tant que la télé lit).
-- **Premier lancement** : un écran court qui explique d'autoriser Castor (et Stremio) à tourner en arrière-plan,
+- **Premier lancement** : un écran court qui explique d'autoriser Universal TV Cast (et Stremio) à tourner en arrière-plan,
   avec les boutons vers les bons réglages ; c'est la cause n°3 des plaintes chez les concurrents.
 - **Commandes sur l'écran verrouillé et dans la notification** (lecture/pause, ±10 s).
 - **Sockets liés au Wi-Fi** (marche avec un VPN actif).
 
 ### Lot B : caster sur toutes les télés
-- **Google Cast** (Chromecast, Google TV, télés avec Cast intégré, dont la Philips du testeur qui a un récepteur
+- **Google Cast** (Chromecast, Google TV, télés avec Cast intégré, dont la Philips Titan OS de test, qui a un récepteur
   Cast) : on garde notre relais, on ajoute le CORS.
 - **Roku**.
 - Un seul bouton « Choisir une télé » qui liste tout, avec le type d'appareil.

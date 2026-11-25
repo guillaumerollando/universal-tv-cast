@@ -40,9 +40,9 @@
     <string name="help_freeze_title">Il video si blocca quando vado avanti</string>
     <string name="help_freeze_body">Android ha sospeso l’app che fornisce il video (spesso Stremio): consentile di funzionare in background (vedi la scheda in Riproduzione). Con un torrent, la parte scelta deve anche essere scaricata: attendi qualche secondo.</string>
     <string name="help_format_title">«File non supportato» sulla TV</string>
-    <string name="help_format_body">La TV non legge questo formato (spesso HEVC/x265, audio DTS o MKV sulle TV più vecchie). Prova un’altra fonte o un’altra qualità.</string>
+    <string name="help_format_body">La TV non legge questo formato: spesso HEVC/x265 (quello di molti video girati col telefono), audio DTS o MKV sulle TV più vecchie. Prova un’altra fonte o qualità; per i tuoi video, registra in modalità «H.264» o «Più compatibile».</string>
     <string name="help_subs_title">Niente sottotitoli</string>
-    <string name="help_subs_body">Sceglili in Riproduzione (Sottotitoli) o aggiungi un file. Molte TV ignorano i sottotitoli inviati in rete: in quel caso scegli una versione del video con sottotitoli integrati.</string>
+    <string name="help_subs_body">Castor trova i sottotitoli da solo a partire dal nome del video e sceglie la tua lingua. Sulle TV Google Cast compaiono direttamente. Sulle altre, Castor li integra nei video MP4 (impostazione «Sottotitoli integrati»). Per gli altri formati su quelle TV, scegli una versione del video con sottotitoli integrati.</string>
     <string name="help_hdmi_title">La TV cambia sorgente alla fine</string>
     <string name="help_hdmi_body">Alcune TV tornano all’ultima sorgente (HDMI) quando un video finisce o viene fermato. È un comportamento della TV; con Castor preferisci la pausa.</string>
     <string name="help_sleep_title">La riproduzione si ferma quando lo schermo si spegne</string>

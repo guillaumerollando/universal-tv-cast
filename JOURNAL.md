@@ -223,3 +223,15 @@ plages identique au fichier complet ; **GStreamer (le moteur de la Philips) voit
 - Testé : Internet Archive (MP4 repéré et lu par la fausse télé via le relais), démo hls.js (HLS repéré et
   regroupé). YouTube : pubs servies par ses propres serveurs, non filtrables sans casser la vidéo (et ses
   vidéos ne sont pas « castables » depuis une page web : flux protégés).
+- Aide mise à jour (sous-titres automatiques / Cast / intégrés ; vidéos HEVC du téléphone).
+
+**À tester par le testeur (télé allumée)**
+1. Castor choisit Cast d'office pour la Philips : le lecteur de la télé doit changer ; sous-titres affichés ?
+2. Si Cast refuse la vidéo, bascule automatique en DLNA, avec **sous-titres intégrés** au MP4 : affichés ?
+3. Changer de sous-titres en cours de lecture : reprise au même endroit.
+4. Album photo et diaporama.
+5. Vidéos du téléphone (nouveau sélecteur) ; si échec, regarder `CastorProxy` (méthode d'ouverture, format).
+6. Navigateur : sélection de l'adresse au toucher, regroupement des qualités, moins de pubs.
+
+**Idée en attente** : parcourir les serveurs du réseau (NAS, Plex, Jellyfin en DLNA) — fonction de LocalCast et
+BubbleUPnP, demandée par une minorité ; faisable car Castor parle déjà UPnP.

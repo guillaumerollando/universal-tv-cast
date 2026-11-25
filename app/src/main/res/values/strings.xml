@@ -41,9 +41,9 @@
     <string name="help_freeze_title">The video freezes when I skip ahead</string>
     <string name="help_freeze_body">The app serving the video (often Stremio) was put to sleep by Android: let it run in the background (see the card in the Playing tab). With a torrent, the part you jump to must also be downloaded first: give it a few seconds.</string>
     <string name="help_format_title">“File not supported” on the TV</string>
-    <string name="help_format_body">The TV can’t read this format (often HEVC/x265, DTS sound or MKV on older TVs). Try another source or another quality.</string>
+    <string name="help_format_body">The TV can’t read this format: often HEVC/x265 (the format of many phone videos), DTS sound or MKV on older TVs. Try another source or quality; for phone videos, film in “H.264” or “Most compatible” mode.</string>
     <string name="help_subs_title">No subtitles</string>
-    <string name="help_subs_body">Choose them in the Playing tab (Subtitles), or add a file. Many TVs ignore subtitles sent over the network: in that case, pick a version of the video with built-in subtitles.</string>
+    <string name="help_subs_body">Castor finds subtitles automatically from the video name and picks your language. On Google Cast TVs they appear directly. On other TVs, Castor builds them into MP4 videos (setting “Built-in subtitles”). For other formats on those TVs, choose a version of the video with built-in subtitles.</string>
     <string name="help_hdmi_title">The TV switches input at the end</string>
     <string name="help_hdmi_body">Some TVs go back to the last input (HDMI) when a video ends or is stopped. That’s the TV’s own behavior; with Castor, prefer pausing.</string>
     <string name="help_sleep_title">Playback stops when the phone screen turns off</string>

@@ -40,9 +40,9 @@
     <string name="help_freeze_title">De video bevriest bij doorspoelen</string>
     <string name="help_freeze_body">Android heeft de app die de video levert (vaak Stremio) gepauzeerd: laat hem op de achtergrond draaien (zie de kaart bij Afspelen). Bij een torrent moet het gekozen stuk ook eerst gedownload worden: geef het een paar seconden.</string>
     <string name="help_format_title">‘Bestand niet ondersteund’ op de tv</string>
-    <string name="help_format_body">De tv kan dit formaat niet lezen (vaak HEVC/x265, DTS-geluid of MKV op oudere tv’s). Probeer een andere bron of kwaliteit.</string>
+    <string name="help_format_body">De tv kan dit formaat niet lezen: vaak HEVC/x265 (het formaat van veel telefoonvideo’s), DTS-geluid of MKV op oudere tv’s. Probeer een andere bron of kwaliteit; film je eigen video’s in ‘H.264’ of ‘Meest compatibel’.</string>
     <string name="help_subs_title">Geen ondertiteling</string>
-    <string name="help_subs_body">Kies ze bij Afspelen (Ondertiteling) of voeg een bestand toe. Veel tv’s negeren ondertiteling die via het netwerk komt: kies dan een versie van de video met ingebouwde ondertiteling.</string>
+    <string name="help_subs_body">Castor zoekt de ondertiteling zelf op basis van de videonaam en kiest jouw taal. Op tv’s met Google Cast verschijnt ze meteen. Op andere tv’s bouwt Castor ze in MP4-video’s in (instelling ‘Ingebouwde ondertiteling’). Kies voor andere formaten op die tv’s een versie met ingebouwde ondertiteling.</string>
     <string name="help_hdmi_title">De tv wisselt aan het eind van bron</string>
     <string name="help_hdmi_body">Sommige tv’s gaan terug naar de laatste bron (HDMI) als een video eindigt of stopt. Dat doet de tv zelf; gebruik met Castor liever pauze.</string>
     <string name="help_sleep_title">Het afspelen stopt als het scherm uitgaat</string>

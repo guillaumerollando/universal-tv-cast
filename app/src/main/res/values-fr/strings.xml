@@ -40,9 +40,9 @@
     <string name="help_freeze_title">La vidéo se fige quand j’avance</string>
     <string name="help_freeze_body">L’appli qui sert la vidéo (souvent Stremio) a été mise en veille par Android : autorise-la à tourner en arrière-plan (voir la carte dans l’onglet Lecture). Avec un torrent, le passage demandé doit aussi être téléchargé : patiente quelques secondes.</string>
     <string name="help_format_title">« Fichier non pris en charge » sur la télé</string>
-    <string name="help_format_body">La télé ne sait pas lire ce format (souvent HEVC/x265, son DTS ou MKV sur les télés anciennes). Essaie une autre source ou une autre qualité.</string>
+    <string name="help_format_body">La télé ne sait pas lire ce format : souvent HEVC/x265 (le format de beaucoup de vidéos filmées au téléphone), son DTS ou MKV sur les télés anciennes. Essaie une autre source ou qualité ; pour tes vidéos, filme en mode « H.264 » ou « Plus compatible ».</string>
     <string name="help_subs_title">Pas de sous-titres</string>
-    <string name="help_subs_body">Choisis-les dans l’onglet Lecture (Sous-titres) ou ajoute un fichier. Beaucoup de télés ignorent les sous-titres envoyés par le réseau : dans ce cas, prends une version de la vidéo avec sous-titres intégrés.</string>
+    <string name="help_subs_body">Castor trouve les sous-titres tout seul à partir du nom de la vidéo et choisit ta langue. Sur les télés Google Cast, ils s’affichent directement. Sur les autres, Castor les intègre aux vidéos MP4 (réglage « Sous-titres intégrés »). Pour les autres formats sur ces télés, prends une version de la vidéo avec sous-titres intégrés.</string>
     <string name="help_hdmi_title">La télé change de source à la fin</string>
     <string name="help_hdmi_body">Certaines télés repassent sur la dernière entrée (HDMI) quand une vidéo se termine ou est arrêtée. C’est le fonctionnement de la télé ; avec Castor, préfère la pause.</string>
     <string name="help_sleep_title">La lecture s’arrête quand l’écran du téléphone s’éteint</string>

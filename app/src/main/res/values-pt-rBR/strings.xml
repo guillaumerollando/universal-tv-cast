@@ -40,9 +40,9 @@
     <string name="help_freeze_title">O vídeo trava quando avanço</string>
     <string name="help_freeze_body">O Android suspendeu o app que fornece o vídeo (geralmente o Stremio): deixe-o rodar em segundo plano (veja o cartão em Reprodução). Com torrent, o trecho escolhido também precisa ser baixado: aguarde alguns segundos.</string>
     <string name="help_format_title">“Arquivo não suportado” na TV</string>
-    <string name="help_format_body">A TV não lê este formato (geralmente HEVC/x265, som DTS ou MKV em TVs antigas). Tente outra fonte ou outra qualidade.</string>
+    <string name="help_format_body">A TV não lê este formato: geralmente HEVC/x265 (o formato de muitos vídeos gravados no celular), som DTS ou MKV em TVs antigas. Tente outra fonte ou qualidade; para seus vídeos, grave no modo “H.264” ou “Mais compatível”.</string>
     <string name="help_subs_title">Sem legendas</string>
-    <string name="help_subs_body">Escolha em Reprodução (Legendas) ou adicione um arquivo. Muitas TVs ignoram legendas enviadas pela rede: nesse caso, use uma versão do vídeo com legendas embutidas.</string>
+    <string name="help_subs_body">O Castor encontra as legendas sozinho pelo nome do vídeo e escolhe seu idioma. Nas TVs com Google Cast, elas aparecem direto. Nas outras, o Castor as embute nos vídeos MP4 (configuração “Legendas embutidas”). Para outros formatos nessas TVs, use uma versão do vídeo com legendas embutidas.</string>
     <string name="help_hdmi_title">A TV muda de entrada no final</string>
     <string name="help_hdmi_body">Algumas TVs voltam para a última entrada (HDMI) quando um vídeo termina ou é parado. É o comportamento da TV; com o Castor, prefira pausar.</string>
     <string name="help_sleep_title">A reprodução para quando a tela do celular apaga</string>

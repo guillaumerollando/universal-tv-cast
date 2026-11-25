@@ -319,6 +319,14 @@ object Castor {
      * L'appli source n'a pas fourni de sous-titres (Stremio n'en transmet jamais) : on les cherche
      * d'après le nom du fichier, avant le premier envoi à la télé (5 s au plus).
      */
+    /** L'image de la page arrive après le lancement : la vidéo en cours venue de cette page en profite. */
+    fun setPageImage(page: String, image: String) {
+        val m = _state.value.media ?: return
+        if (m.pageUrl != page || m.backdropUrl != null) return
+        _state.update { it.copy(media = m.copy(posterUrl = m.posterUrl ?: image, backdropUrl = image)) }
+        Library.setRecentImage(page, image)
+    }
+
     private suspend fun identify() {
         val m = _state.value.media ?: return
         val name = m.fileName ?: return

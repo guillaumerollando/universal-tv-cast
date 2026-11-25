@@ -421,7 +421,9 @@ fun BrowserScreen(b: BrowserController) {
                                     headers = f.headers,
                                     pageUrl = f.pageUrl,
                                     audioUrl = f.audio,
-                                    posterUrl = b.sniffer.pageImage,
+                                    // L'image de la page (celle du favori) : en-tête du lecteur, fond, « Reprendre », notification.
+                                    posterUrl = (b.sniffer.pageImage ?: Library.bookmarkFor(f.pageUrl)?.image),
+                                    backdropUrl = (b.sniffer.pageImage ?: Library.bookmarkFor(f.pageUrl)?.image),
                                 )
                             )
                             Nav.tab.value = Tab.PLAYER

@@ -592,3 +592,4 @@ fait toute seule.
 - Appui long sur une carte (reprendre, favoris, sites) : menu « Garder ici (favori) » / « Retirer des favoris » / « Retirer de « Reprendre » » ; les croix disparaissent. Actions d'accessibilité équivalentes.
 - Accueil : dès qu'il y a de l'historique ou des favoris, plus de grand bandeau ni de carte « Depuis une autre appli » ; « Reprendre » en premier, les quatre façons de caster en une rangée compacte. Le nouveau venu garde l'accueil complet.
 - Vérifié sur l'émulateur avec des données d'exemple (3 épisodes → 1 carte, The Office S2E4/E5 → 1 carte, film, retrait, mise en favori).
+- L'image de la page (celle des favoris) sert partout : en-tête « film » et fond flouté du lecteur, carte « Reprendre », notification et écran de la télé (Cast). Si elle arrive après le lancement, le lecteur et « Reprendre » la prennent au vol. « Reprendre » garde l'image large (fond) plutôt que l'affiche verticale.

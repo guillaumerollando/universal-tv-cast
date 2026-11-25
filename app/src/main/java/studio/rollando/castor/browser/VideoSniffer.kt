@@ -220,6 +220,7 @@ class VideoSniffer {
             if (pageImage == null) {
                 pageImage = url
                 studio.rollando.castor.data.Library.setBookmarkImage(pageUrl, url)
+                studio.rollando.castor.cast.Castor.setPageImage(pageUrl, url)
             }
         }
 

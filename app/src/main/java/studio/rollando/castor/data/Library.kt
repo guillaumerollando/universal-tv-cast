@@ -14,7 +14,7 @@ data class Recent(
     /** Saison et épisode (fichier reconnu, ex. Stremio) ; pour un site, l'épisode est lu dans l'adresse de la page. */
     val season: Int? = null, val episode: Int? = null,
 ) {
-    fun toMedia() = Media(url = url, title = title, mime = mime, headers = headers, pageUrl = pageUrl, posterUrl = poster, fileName = fileName)
+    fun toMedia() = Media(url = url, title = title, mime = mime, headers = headers, pageUrl = pageUrl, posterUrl = poster, backdropUrl = poster, fileName = fileName)
 
     private val web: Boolean get() = pageUrl?.startsWith("http") == true
 
@@ -127,7 +127,8 @@ object Library {
 
     fun addRecent(m: Media) {
         if (m.isLocal) return
-        val r0 = Recent(m.title, m.url, m.mime, m.headers, m.pageUrl, System.currentTimeMillis(), m.posterUrl, m.fileName, m.season, m.episode)
+        val r0 = Recent(m.title, m.url, m.mime, m.headers, m.pageUrl, System.currentTimeMillis(),
+            m.backdropUrl ?: m.posterUrl, m.fileName, m.season, m.episode) // image large : elle remplit la carte
         // Même série : le nouvel épisode remplace l'ancien (et garde son image si celui-ci n'en a pas).
         val old = _recents.value.filter { it.key == r0.key || it.url == r0.url }
         val r = if (r0.poster == null) r0.copy(poster = old.firstNotNullOfOrNull { it.poster } ?: bookmarkFor(m.pageUrl ?: "")?.image) else r0
@@ -169,6 +170,12 @@ object Library {
             (_bookmarks.value - b)
         saveBookmarks()
         _events.tryEmit(BookmarkEvent.Advanced(b.title, ep))
+    }
+
+    fun setRecentImage(page: String, image: String) {
+        if (_recents.value.none { it.pageUrl == page && it.poster == null }) return
+        _recents.value = _recents.value.map { if (it.pageUrl == page && it.poster == null) it.copy(poster = image) else it }
+        saveRecents()
     }
 
     /** L'image de la page arrive après coup : on illustre le favori qui pointe sur cette page, s'il n'en a pas. */

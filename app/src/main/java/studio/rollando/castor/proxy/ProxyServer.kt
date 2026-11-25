@@ -64,7 +64,7 @@ class ProxyServer(private val ctx: Context) {
     fun baseUrl(): String = "http://${Net.localIp() ?: "127.0.0.1"}:$port"
 
     fun reset() {
-        remotes.clear(); idsByUrl.clear(); locals.clear(); metas.clear()
+        remotes.clear(); idsByUrl.clear(); locals.clear(); metas.clear(); embedded.clear()
         subtitle = null; subtitleUrl = null; mimeOverride = null
     }
 
@@ -158,6 +158,7 @@ class ProxyServer(private val ctx: Context) {
                     "ts" -> serveContinuous(req, out)
                     "l" -> serveLocal(req, out)
                     "img" -> serveImage(req, out)
+                    "v" -> serveEmbedded(req, out)
                     "sub" -> serveSubtitle(req, out)
                     else -> empty(out, 404, "Not Found")
                 }
@@ -506,6 +507,89 @@ class ProxyServer(private val ctx: Context) {
                 "Content-Length" to (b - a + 1).toString(),
             ) + dlna(true))
             if (req.method != "HEAD") f.open(a).use { ins -> copyLimited(ins, out, b - a + 1) }
+        }
+    }
+
+    // ------------------------------------------------------------------ sous-titres intégrés (MP4)
+
+    private class Embedded(val plan: Mp4Subtitler.Plan, val read: (Long, Long) -> InputStream)
+    private val embedded = ConcurrentHashMap<String, Embedded>()
+
+    /** Lit une plage d'octets de la source (vidéo distante ou fichier du téléphone). */
+    private fun sourceReader(id: String): Pair<Long, (Long, Long) -> InputStream>? {
+        remotes[id]?.let { r ->
+            if (metas[id] == null) prefetchMeta(id)
+            val m = metas[id] ?: return null
+            if (!m.ranges || m.total <= 0) return null
+            return m.total to { off: Long, len: Long ->
+                val c = Http.open(r.url, r.headers, "bytes=$off-${off + len - 1}", readTimeout = 120_000)
+                if (c.responseCode != 206) { c.disconnect(); throw IOException("plage refusée (${c.responseCode})") }
+                c.inputStream
+            }
+        }
+        locals[id]?.let { uri ->
+            val f = openLocal(uri)
+            if (f.total <= 0) return null
+            return f.total to { off: Long, len: Long -> LimitedStream(f.open(off), len) }
+        }
+        return null
+    }
+
+    /**
+     * Prépare un MP4 « avec sous-titres intégrés » pour les télés DLNA qui ignorent les sous-titres externes.
+     * Renvoie vrai si c'est possible (MP4 classique, source qui accepte les plages).
+     */
+    fun prepareEmbedded(id: String, srt: ByteArray, lang: String): Boolean = try {
+        val (size, read) = sourceReader(id) ?: throw IOException("source sans plages")
+        val plan = Mp4Subtitler(size) { off, len -> read(off, len.toLong()).use { it.readNBytesCompat(len) } }
+            .build(Mp4Subtitler.parseSrt(srt), lang)
+        embedded[id] = Embedded(plan, read)
+        Log.i(TAG, "sous-titres intégrés prêts pour $id : ${plan.total} octets")
+        true
+    } catch (e: Exception) {
+        Log.i(TAG, "intégration des sous-titres impossible : ${e.message}")
+        false
+    }
+
+    private fun InputStream.readNBytesCompat(n: Int): ByteArray {
+        val buf = ByteArray(n)
+        var got = 0
+        while (got < n) { val k = read(buf, got, n - got); if (k < 0) break; got += k }
+        return if (got == n) buf else buf.copyOf(got)
+    }
+
+    private class LimitedStream(private val inner: InputStream, private var left: Long) : InputStream() {
+        override fun read(): Int = if (left <= 0) -1 else inner.read().also { if (it >= 0) left-- }
+        override fun read(b: ByteArray, off: Int, len: Int): Int {
+            if (left <= 0) return -1
+            val n = inner.read(b, off, minOf(len.toLong(), left).toInt())
+            if (n > 0) left -= n
+            return n
+        }
+        override fun close() = inner.close()
+    }
+
+    private fun serveEmbedded(req: Req, out: OutputStream) {
+        val e = embedded[req.seg.getOrNull(1)] ?: return empty(out, 404, "Not Found")
+        val total = e.plan.total
+        val range = parseRange(req.headers["range"], total)
+        val (a, b) = range ?: (0L to total - 1)
+        val h = mutableListOf("Content-Type" to "video/mp4", "Accept-Ranges" to "bytes", "Content-Length" to (b - a + 1).toString())
+        if (range != null) h += "Content-Range" to "bytes $a-$b/$total"
+        head(out, if (range != null) 206 else 200, if (range != null) "Partial Content" else "OK", h + dlna(true))
+        if (req.method == "HEAD") return
+        var pos = 0L
+        for (seg in e.plan.segments) {
+            val segStart = pos
+            val segEnd = pos + seg.length - 1
+            pos += seg.length
+            if (segEnd < a || segStart > b) continue
+            val from = maxOf(a, segStart) - segStart
+            val to = minOf(b, segEnd) - segStart
+            when (seg) {
+                is Mp4Subtitler.Segment.Mem -> out.write(seg.bytes, from.toInt(), (to - from + 1).toInt())
+                is Mp4Subtitler.Segment.Src -> e.read(seg.from + from, to - from + 1).use { it.copyTo(out, 64 * 1024) }
+            }
         }
     }
 

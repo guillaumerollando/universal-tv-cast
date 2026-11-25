@@ -201,3 +201,14 @@ du téléphone : fonctionnent sur émulateur ; sur Xiaomi, sélecteur MIUI ou vi
   précédente/suivante, diaporama 6 s, vignettes. Vérifié sur émulateur + fausse télé.
 - Accueil : grille de 4 tuiles (Sites web, Vidéos, Photos, Lien), carrousel « Reprendre » avec affiches,
   favoris toujours visibles (explication si vide), lien « Parcourir les fichiers ».
+
+## 2026-11-25 (nuit) — Sous-titres intégrés au MP4 pour les télés DLNA
+**Fait** : `proxy/Mp4Subtitler.kt` ajoute une piste de texte tx3g (mov_text) à un MP4 **sans le recopier ni le
+réencoder** : l'index moov est lu une fois, réécrit (piste en plus, stco→co64 décalés), et la télé reçoit un fichier
+virtuel (morceaux de l'original + index et sous-titres en mémoire), plages d'octets comprises. MP4 classiques
+(moov au début ou à la fin) ; fragmentés refusés → envoi habituel. Utilisé pour les télés DLNA quand des sous-titres
+sont choisis et que la vidéo est un MP4 (réglage « Sous-titres intégrés », activé par défaut).
+**Vérifié** : test unitaire avec ffmpeg (moov début et fin : 3 pistes, sous-titres relus à l'identique, décodage sans
+erreur) ; émulateur + fausse télé avec Breaking Bad et sous-titres français réels : fichier servi valide, lecture par
+plages identique au fichier complet ; **GStreamer (le moteur de la Philips) voit la piste « subtitles : Timed Text, fr »**.
+**À vérifier** : affichage sur la vraie Philips.

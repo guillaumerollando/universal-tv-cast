@@ -74,6 +74,8 @@
     <string name="cd_slideshow_start">Lancer le diaporama</string>
     <string name="cd_slideshow_stop">Mettre le diaporama en pause</string>
     <string name="home_browse_tile">Sites web</string>
+    <string name="settings_embed">Sous-titres intégrés (télés DLNA)</string>
+    <string name="settings_embed_sub">Ajoute les sous-titres dans les vidéos MP4, pour les télés qui ignorent les sous-titres séparés. Sans réencodage, sans surconsommation.</string>
     <string name="cd_settings">Réglages</string>
     <string name="home_title">Envoie n’importe quelle vidéo sur ta télé</string>
     <string name="home_subtitle">Gratuit. Sans pub. Sans pistage.</string>

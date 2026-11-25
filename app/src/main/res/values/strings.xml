@@ -75,6 +75,8 @@
     <string name="cd_slideshow_start">Start slideshow</string>
     <string name="cd_slideshow_stop">Pause slideshow</string>
     <string name="home_browse_tile">Websites</string>
+    <string name="settings_embed">Built-in subtitles (DLNA TVs)</string>
+    <string name="settings_embed_sub">Adds the subtitles inside MP4 videos, for TVs that ignore separate subtitles. No re-encoding, no extra battery use.</string>
     <string name="cd_settings">Settings</string>
     <string name="home_title">Send any video to your TV</string>
     <string name="home_subtitle">Free. No ads. No tracking.</string>

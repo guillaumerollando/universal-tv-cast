@@ -37,6 +37,7 @@ object Library {
         _adBlock.value = prefs.getBoolean("adblock", true)
         _continuous.value = prefs.getBoolean("continuous", true)
         _shakeHelp.value = prefs.getBoolean("shake_help", true)
+        _embedSubs.value = prefs.getBoolean("embed_subs", true)
         _dismissedTips.value = prefs.getStringSet("tips_dismissed", emptySet()).orEmpty().toSet()
     }
 
@@ -53,6 +54,11 @@ object Library {
     }
 
     fun setAdBlock(on: Boolean) { _adBlock.value = on; prefs.edit().putBoolean("adblock", on).apply() }
+    private val _embedSubs = MutableStateFlow(true)
+    /** Intégrer les sous-titres au MP4 pour les télés DLNA (qui ignorent souvent les sous-titres externes). */
+    val embedSubs: StateFlow<Boolean> = _embedSubs
+    fun setEmbedSubs(on: Boolean) { _embedSubs.value = on; prefs.edit().putBoolean("embed_subs", on).apply() }
+
     private val _shakeHelp = MutableStateFlow(true)
     /** Secouer le téléphone ouvre l'aide. */
     val shakeHelp: StateFlow<Boolean> = _shakeHelp

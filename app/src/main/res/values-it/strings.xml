@@ -74,6 +74,8 @@
     <string name="cd_slideshow_start">Avvia presentazione</string>
     <string name="cd_slideshow_stop">Metti in pausa la presentazione</string>
     <string name="home_browse_tile">Siti web</string>
+    <string name="settings_embed">Sottotitoli integrati (TV DLNA)</string>
+    <string name="settings_embed_sub">Inserisce i sottotitoli nei video MP4, per le TV che ignorano i sottotitoli separati. Senza ricodifica né consumo extra.</string>
     <string name="cd_settings">Impostazioni</string>
     <string name="home_title">Manda qualsiasi video sulla tua TV</string>
     <string name="home_subtitle">Gratis. Senza pubblicità. Senza tracciamento.</string>

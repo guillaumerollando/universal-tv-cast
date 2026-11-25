@@ -455,7 +455,10 @@ object Castor {
         // Une télé qui ne lit pas le HLS reçoit toujours le flux continu.
         val continuous = s.isHls && (s.continuous || !Dlna.accepts(tvMimes, "application/vnd.apple.mpegurl"))
         if (continuous != (s.isHls && s.continuous)) _state.update { it.copy(continuous = true) }
+        // Télé DLNA qui ignore les sous-titres externes : on les intègre au MP4 (piste texte), sans réencodage.
+        val embedUrl = embeddedUrl(m, s, continuous, base)
         val (url, rawMime) = when {
+            embedUrl != null -> embedUrl to "video/mp4"
             m.isLocal -> {
                 val uri = Uri.parse(m.url)
                 val type = app.contentResolver.getType(uri)?.takeIf { Mime.isMedia(it) } ?: m.mime ?: Mime.guess(m.title)
@@ -501,6 +504,28 @@ object Castor {
         if (_state.value.volume == null) runCatching { Dlna.getVolume(r) }.onSuccess { v -> _state.update { it.copy(volume = v) } }
         startPolling()
     }
+
+    private var embeddedKey: String? = null
+
+    private fun embeddedUrl(m: Media, s: CastState, continuous: Boolean, base: String): String? {
+        val srt = proxy.subtitle ?: return null
+        if (continuous || s.isHls || !Library.embedSubs.value) return null
+        val mp4 = Mime.ext(m.url) in setOf("mp4", "m4v", "mov") || Mime.ext(m.title) in setOf("mp4", "m4v", "mov") ||
+            m.mime?.contains("mp4") == true || (m.isLocal && app.contentResolver.getType(Uri.parse(m.url))?.contains("mp4") == true)
+        if (!mp4) return null
+        val id = if (m.isLocal) proxy.registerLocal(Uri.parse(m.url)) else remoteId ?: return null
+        val lang = m.subs.getOrNull(s.subIndex)?.let { langOf(it.name) } ?: "und"
+        if (!proxy.prepareEmbedded(id, srt, lang)) return null
+        embeddedKey = id
+        return "$base/v/$id/video-st$subVersion.mp4"
+    }
+
+    /** Code de langue ISO 639-2 à partir du nom affiché (« Français » → fre). */
+    private fun langOf(label: String): String = runCatching {
+        java.util.Locale.getAvailableLocales().firstOrNull {
+            it.getDisplayLanguage(java.util.Locale.getDefault()).equals(label.substringBefore(' '), true)
+        }?.isO3Language
+    }.getOrNull() ?: "und"
 
     /** Envoi vers un appareil Google Cast : vidéo par le relais, sous-titres en piste WebVTT, titre et affiche. */
     private suspend fun castViaGoogleCast(r: Renderer, s: CastState, m: Media, start: Double, base: String) {

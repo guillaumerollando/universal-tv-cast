@@ -364,6 +364,12 @@ private fun SettingsSheet(onDismiss: () -> Unit) {
             }
             item { HorizontalDivider(Modifier.padding(vertical = 8.dp)) }
             item {
+                val embed by Library.embedSubs.collectAsState()
+                SwitchRow(stringResource(R.string.settings_embed), stringResource(R.string.settings_embed_sub), embed) {
+                    Library.setEmbedSubs(it)
+                }
+            }
+            item {
                 val shake by Library.shakeHelp.collectAsState()
                 SwitchRow(stringResource(R.string.settings_shake), stringResource(R.string.settings_shake_sub), shake) {
                     Library.setShakeHelp(it)

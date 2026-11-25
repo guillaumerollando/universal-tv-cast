@@ -74,6 +74,8 @@
     <string name="cd_slideshow_start">Iniciar apresentação</string>
     <string name="cd_slideshow_stop">Pausar apresentação</string>
     <string name="home_browse_tile">Sites</string>
+    <string name="settings_embed">Legendas embutidas (TVs DLNA)</string>
+    <string name="settings_embed_sub">Adiciona as legendas dentro dos vídeos MP4, para TVs que ignoram legendas separadas. Sem recodificar, sem gastar mais bateria.</string>
     <string name="cd_settings">Configurações</string>
     <string name="home_title">Envie qualquer vídeo para a sua TV</string>
     <string name="home_subtitle">Grátis. Sem anúncios. Sem rastreamento.</string>

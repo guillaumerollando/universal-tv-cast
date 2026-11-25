@@ -185,6 +185,8 @@
     <string name="slideshow_off">Presentación en pausa</string>
     <string name="settings_smooth_slides">Presentación fluida</string>
     <string name="settings_smooth_slides_sub">Experimental. Envía el álbum como un solo vídeo en directo, con fundido entre fotos. Muchas TV lo muestran con retraso: déjalo desactivado si las fotos cambian lento.</string>
+    <string name="subs_tv_menu_short">Con el mando de la TV</string>
+    <string name="subs_tv_menu_note">En esta TV, los subtítulos de la app solo se ven con vídeos MP4. Este vídeo suele traer los suyos: elígelos en el menú de la TV, con el mando.</string>
     <plurals name="browser_found">
         <item quantity="one">%d vídeo</item>
         <item quantity="other">%d vídeos</item>

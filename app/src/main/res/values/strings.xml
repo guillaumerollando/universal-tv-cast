@@ -186,6 +186,8 @@
     <string name="slideshow_off">Slideshow paused</string>
     <string name="settings_smooth_slides">Smooth slideshow</string>
     <string name="settings_smooth_slides_sub">Experimental. Sends the album as one live video, with a fade between photos. Many TVs show it late: leave off if photos change slowly.</string>
+    <string name="subs_tv_menu_short">Use the TV remote</string>
+    <string name="subs_tv_menu_note">On this TV, subtitles from the app only show with MP4 videos. This video often has its own subtitles: pick them in the TV’s menu, with the remote.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videos</item>

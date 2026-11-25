@@ -30,7 +30,8 @@ object SubtitleFinder {
     data class Result(val name: String, val subs: List<Found>, val art: Art?)
 
     private val SEP = Regex("[._]+")
-    private val EP = Regex("(?i)\\bS(\\d{1,2})[ ._-]?E(\\d{1,3})\\b|\\b(\\d{1,2})x(\\d{2})\\b")
+    // « S01E05 », « S01E05v2 » (version corrigée d'un épisode, courant pour les animés), « 1x05 ».
+    private val EP = Regex("(?i)\\bS(\\d{1,2})[ ._-]?E(\\d{1,3})(?:v\\d)?\\b|\\b(\\d{1,2})x(\\d{2})\\b")
     /**
      * Nommage des animés : « [Groupe] Titre - 05 (1080p) », « Titre 2nd Season - 05 », « Titre S2 - 05 »,
      * « Titre E05 », « Titre Episode 5 » (pas de SxxEyy).

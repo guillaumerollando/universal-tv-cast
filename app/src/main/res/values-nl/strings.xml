@@ -185,6 +185,8 @@
     <string name="slideshow_off">Diashow gepauzeerd</string>
     <string name="settings_smooth_slides">Vloeiende diashow</string>
     <string name="settings_smooth_slides_sub">Experimenteel. Stuurt het album als één livevideo, met een overgang tussen foto’s. Veel tv’s tonen het met vertraging: laat uit als foto’s traag wisselen.</string>
+    <string name="subs_tv_menu_short">Met de afstandsbediening</string>
+    <string name="subs_tv_menu_note">Op deze tv verschijnt ondertiteling van de app alleen bij MP4-video’s. Deze video heeft vaak eigen ondertiteling: kies die in het menu van de tv, met de afstandsbediening.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video\'s</item>

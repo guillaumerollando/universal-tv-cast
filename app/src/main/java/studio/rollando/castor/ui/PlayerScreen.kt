@@ -382,14 +382,18 @@ private fun SubtitlesCard(s: CastState) {
         runCatching { context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
         Castor.addSubtitle(uri, Intake.nameOf(context, uri))
     }
-    val none = stringResource(R.string.subs_none)
+    // Télé DLNA + vidéo autre que MP4 (MKV, flux…) : les sous-titres de l'appli ne peuvent pas s'afficher,
+    // mais la vidéo a souvent les siens, que l'on choisit avec la télécommande.
+    val ext = studio.rollando.castor.net.Mime.ext(media.fileName ?: media.url)
+    val tvMenu = s.renderer != null && (!s.renderer.cast || Castor.usingFallback) &&
+        (s.isHls || ext !in setOf("mp4", "m4v", "mov"))
+    val none = stringResource(if (tvMenu) R.string.subs_tv_menu_short else R.string.subs_none)
     val current = media.subs.getOrNull(s.subIndex)?.name ?: none
     // Repliée par défaut : une ligne discrète « Sous-titres · Français », dépliée au toucher.
     var expanded by rememberSaveable(media.url) { mutableStateOf(false) }
-    // Ouvrir le réglage met d'abord la vidéo en pause ; le refermer la relance.
+    // Changer les sous-titres met la vidéo en pause ; refermer le réglage la relance.
     androidx.compose.runtime.DisposableEffect(expanded) {
         val open = expanded // valeur figée : à la fermeture, `expanded` vaut déjà false
-        if (open) Castor.panelOpened()
         onDispose { if (open) Castor.panelClosed() }
     }
     val stateText = stringResource(if (expanded) R.string.state_expanded else R.string.state_collapsed)
@@ -438,7 +442,11 @@ private fun SubtitlesCard(s: CastState) {
                     Text(stringResource(R.string.subs_add))
                 }
             }
-            if (s.subIndex >= 0) SubtitleDelay(s.subDelay)
+            if (tvMenu) {
+                Text(stringResource(R.string.subs_tv_menu_note), style = MaterialTheme.typography.bodyMedium,
+                    color = c.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp))
+            }
+            if (s.subIndex >= 0 && !tvMenu) SubtitleDelay(s.subDelay)
             Spacer(Modifier.height(6.dp))
             Text(stringResource(R.string.subs_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(Modifier.height(14.dp))

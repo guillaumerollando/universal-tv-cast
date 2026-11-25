@@ -37,6 +37,7 @@ class SubtitleFinderTest {
         check("One Piece - 1120 [1080p].mkv", "One Piece", 1, 1120)
         check("Frieren Episode 7 VOSTFR.mp4", "Frieren", 1, 7)
         check("[Judas] Dandadan - 12v2.mkv", "Dandadan", 1, 12)
+        check("[Judas] Yomi no Tsugai - S01E01v2.mkv", "Yomi no Tsugai", 1, 1)
         // Pas des épisodes :
         assertEquals(false, SubtitleFinder.parse("Spider-Man - Into the Spider-Verse 2018 1080p.mkv").isSeries)
         assertEquals(false, SubtitleFinder.parse("Some Film - 2019 1080p.mkv").isSeries)

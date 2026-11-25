@@ -417,3 +417,21 @@ de la télé. Ce que la télé offre en lecture seule : l'API JointSpace v6.1 (p
 Toutes les commandes répondent 403 sans appairage. Rien n'a été envoyé à la télé.
 **Décision** (testeur) : pas d'appairage par code PIN, trop lourd pour ce seul gain. Le retour sur HDMI après
 « Se déconnecter » reste tel quel (comportement de la Philips en DLNA).
+
+## 2026-11-25 (soir, 8) — Animé « Yomi no Tsugai » : pas d'épisode, pas de sous-titres ; pause trop tôt
+**Journal** : fichier transmis par Stremio : `[Judas] Yomi no Tsugai - S01E01v2.mkv`.
+- Le « v2 » collé à l'épisode cassait la lecture de « S01E01 ». L'appli l'a pris pour un film : pas de numéro
+  d'épisode dans le titre, et la recherche de sous-titres a renvoyé 0 résultat (`tt37532356` en film).
+- « 701 Transition not available » : Play envoyé pendant que la télé chargeait encore → erreur affichée.
+- Ce MKV contenait ses propres sous-titres, que le testeur a choisis avec la télécommande. Les sous-titres de
+  l'appli faisaient donc doublon (et la Philips ignore de toute façon les sous-titres externes en DLNA).
+**Fait**
+- « S01E01v2 » reconnu (test ajouté). Titre : « Daemons of the Shadow Realm S01E01 », sur la télé comme dans
+  l'appli.
+- Play : sur une erreur 7xx, on attend que la télé soit prête et on réessaie (3 fois).
+- Pause : plus au dépliage des sous-titres, seulement au premier changement (piste, décalage, fichier).
+  Replier relance la lecture.
+- Télé DLNA + vidéo non MP4 : la ligne indique « Avec la télécommande » et une note explique que la vidéo a
+  souvent ses propres sous-titres, à choisir dans le menu de la télé. Le décalage est masqué (sans effet).
+- Tests 17/17, lint propre. Vérif émulateur de la pause interrompue : l'émulateur ne joignait plus la fausse
+  télé (réseau interne de l'émulateur).

@@ -185,6 +185,8 @@
     <string name="slideshow_off">Apresentação pausada</string>
     <string name="settings_smooth_slides">Apresentação fluida</string>
     <string name="settings_smooth_slides_sub">Experimental. Envia o álbum como um único vídeo ao vivo, com transição entre as fotos. Muitas TVs mostram com atraso: deixe desativado se as fotos trocarem devagar.</string>
+    <string name="subs_tv_menu_short">Pelo controle da TV</string>
+    <string name="subs_tv_menu_note">Nesta TV, as legendas do app só aparecem em vídeos MP4. Este vídeo costuma ter as próprias legendas: escolha no menu da TV, pelo controle.</string>
     <plurals name="browser_found">
         <item quantity="one">%d vídeo</item>
         <item quantity="other">%d vídeos</item>

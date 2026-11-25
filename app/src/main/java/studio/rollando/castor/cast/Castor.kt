@@ -748,7 +748,7 @@ object Castor {
         // un « Stop » à vide ferme le lecteur et renvoie sur la dernière source (HDMI…).
         // Description minimale : une affiche (albumArtURI) faisait clignoter la Philips à chaque déplacement.
         replaceMedia(r, url, Dlna.didl(m.title, url, mime, subUrl, seekable = !continuous))
-        Dlna.play(r)
+        playWhenReady(r)
         castTime = System.currentTimeMillis()
         CastService.start(app)
         _state.update { it.copy(phase = Phase.BUFFERING, position = start) }
@@ -964,14 +964,18 @@ object Castor {
     @Volatile private var pausedForPanel = false
 
     /** On ouvre le réglage des sous-titres : la vidéo se met d'abord en pause, puis on règle tranquillement. */
-    fun panelOpened() {
+    /**
+     * Juste avant de changer les sous-titres : la vidéo se met en pause (une fois), le temps du réglage.
+     * Ouvrir le panneau sans rien changer ne coupe pas la lecture.
+     */
+    private fun pauseForAdjust() {
         val s = _state.value
-        if (s.slides != null || (s.phase != Phase.PLAYING && s.phase != Phase.BUFFERING)) return
+        if (pausedForPanel || s.slides != null || (s.phase != Phase.PLAYING && s.phase != Phase.BUFFERING)) return
         pausedForPanel = true
         exec {
             val r = target() ?: return@exec
-            if (r.cast) CastControl.pause(r) else Dlna.pause(r)
-            _state.update { it.copy(phase = Phase.PAUSED) }
+            runCatching { if (r.cast) CastControl.pause(r) else Dlna.pause(r) }
+                .onSuccess { _state.update { it.copy(phase = Phase.PAUSED) } }
         }
     }
 
@@ -1046,6 +1050,26 @@ object Castor {
         holdPositionUntil = System.currentTimeMillis() + 1500
     }
 
+    /**
+     * Play juste après un changement de vidéo : certaines télés répondent « 701 Transition not available »
+     * tant qu'elles chargent encore. On attend qu'elles soient prêtes et on réessaie, au lieu d'échouer.
+     */
+    private suspend fun playWhenReady(r: Renderer) {
+        repeat(3) { attempt ->
+            try {
+                Dlna.play(r)
+                return
+            } catch (e: TvError) {
+                val st = runCatching { Dlna.transportState(r) }.getOrNull()
+                if (st == "PLAYING") return
+                if (attempt == 2) throw e
+                Log.i("Castor", "télé pas prête pour Play (${e.detail}), nouvel essai")
+                delay(700)
+                waitUntilSettled(r, 4000)
+            }
+        }
+    }
+
     /** Attend (au plus quelques secondes) que la télé ait fini de charger ou de se déplacer. */
     private suspend fun waitUntilSettled(r: Renderer, maxMs: Long = 4000) {
         val end = System.currentTimeMillis() + maxMs
@@ -1114,7 +1138,12 @@ object Castor {
         if (s.active && s.isHls && s.continuous != on) castAt(s.position)
     }
 
-    fun selectSubtitle(index: Int) = exec {
+    fun selectSubtitle(index: Int) {
+        pauseForAdjust()
+        selectSubtitleNow(index)
+    }
+
+    private fun selectSubtitleNow(index: Int) = exec {
         _state.update { it.copy(subIndex = index) }
         loadSubtitle()
         val s = _state.value
@@ -1130,6 +1159,7 @@ object Castor {
     fun shiftSubtitles(delta: Double) {
         val v = (Math.round((_state.value.subDelay + delta) * 10) / 10.0).coerceIn(-60.0, 60.0)
         if (v == _state.value.subDelay) return
+        pauseForAdjust()
         _state.update { it.copy(subDelay = v) }
         delayJob?.cancel()
         delayJob = scope.launch {
@@ -1151,7 +1181,12 @@ object Castor {
         return _state.value.position
     }
 
-    fun addSubtitle(uri: Uri, name: String) = exec {
+    fun addSubtitle(uri: Uri, name: String) {
+        pauseForAdjust()
+        addSubtitleNow(uri, name)
+    }
+
+    private fun addSubtitleNow(uri: Uri, name: String) = exec {
         val m = _state.value.media ?: return@exec
         val subs = m.subs + SubSource(uri.toString(), name)
         _state.update { it.copy(media = m.copy(subs = subs), subIndex = subs.lastIndex) }

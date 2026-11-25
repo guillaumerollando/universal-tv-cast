@@ -452,3 +452,4 @@ le texte de l'appli était un pavé illisible. Il voudrait un vrai petit lecteur
   suivante, et lecture/pause = diaporama. Vérifié sur émulateur : pause et +10 s depuis le lecteur système
   arrivent bien à la télé.
 - Tests 20/20, lint propre.
+- Vidéo avec ses propres sous-titres : plus de choix de piste ni d'ajout de fichier (les nôtres ne s'afficheraient pas par-dessus) ; seulement « Déjà dans la vidéo » et la phrase sur la télécommande (souhait du testeur).

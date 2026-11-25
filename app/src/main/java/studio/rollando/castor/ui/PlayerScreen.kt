@@ -430,7 +430,8 @@ private fun SubtitlesCard(s: CastState) {
                 Icon(if (expanded) Icons.Rounded.ExpandLess else Icons.Rounded.ExpandMore, null, tint = c.onSurfaceVariant)
             }
             if (expanded) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            // Sous-titres déjà dans la vidéo : les nôtres ne pourraient pas s'afficher par-dessus, on n'en propose pas.
+            if (!inVideo) Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(Modifier.weight(1f)) {
                     OutlinedButton(onClick = { open = true }, modifier = Modifier.fillMaxWidth().height(48.dp)) {
                         Text(current, maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -447,13 +448,13 @@ private fun SubtitlesCard(s: CastState) {
                     Text(stringResource(R.string.subs_add))
                 }
             }
-            if (inVideo && s.subIndex < 0) {
+            if (inVideo) {
                 Text(stringResource(R.string.subs_in_video_note), style = MaterialTheme.typography.bodyMedium,
                     color = c.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp))
             }
-            if (s.subIndex >= 0) SubtitleDelay(s.subDelay)
+            if (s.subIndex >= 0 && !inVideo) SubtitleDelay(s.subDelay)
             Spacer(Modifier.height(6.dp))
-            Text(stringResource(R.string.subs_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            if (!inVideo) Text(stringResource(R.string.subs_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(Modifier.height(14.dp))
             }
         }

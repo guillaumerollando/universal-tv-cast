@@ -297,7 +297,7 @@ object Castor {
         if (inVideo.isNotEmpty()) {
             // La vidéo a ses propres sous-titres (réglables sur la télé) : on n'en superpose pas d'autres.
             Log.i("CastorSubs", "sous-titres déjà dans la vidéo : ${inVideo.joinToString()}")
-            _state.update { it.copy(embeddedSubs = inVideo, subIndex = if (media.subs.isNotEmpty()) it.subIndex else -1) }
+            _state.update { it.copy(embeddedSubs = inVideo, subIndex = -1) }
         }
         _state.value.media?.let { Library.addRecent(it) }
         loadSubtitle()

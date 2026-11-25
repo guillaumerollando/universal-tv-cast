@@ -38,7 +38,7 @@ class VideoSniffer {
 
     private val fileExt = setOf("mp4", "webm", "mkv", "m4v", "mov", "avi", "mp3", "m4a")
 
-    fun reset() { _found.value = emptyList(); hidden.clear(); probed.clear() }
+    fun reset() { _found.value = emptyList(); hidden.clear(); probed.clear(); misses.clear() }
 
     /** Extensions qui ne sont jamais des vidéos : inutile de les vérifier. */
     private val notMedia = setOf("js", "css", "png", "jpg", "jpeg", "gif", "webp", "svg", "ico", "woff", "woff2", "ttf",
@@ -46,6 +46,11 @@ class VideoSniffer {
     /** Mots qui trahissent une vidéo servie sans extension (lecteurs de streaming). */
     private val hint = Regex("(?i)(m3u8|/hls|playlist|master|manifest|/video|/stream|/play|/get_?file|/mp4|/media)")
     private val probed = java.util.Collections.synchronizedSet(HashSet<String>())
+    /** Adresse « jeton » opaque (ex. /v/kPZ3OslEkQ5-qlc_…) : beaucoup de lecteurs servent ainsi leurs listes HLS. */
+    private val token = Regex("^/[A-Za-z0-9_-]{1,12}/[A-Za-z0-9_-]{24,}$|^/[A-Za-z0-9_-]{32,}$")
+    /** Préfixes déjà vérifiés : réponses non vidéo (morceaux, API…) et vidéo trouvée. Au-delà, on ne vérifie plus. */
+    private val misses = java.util.concurrent.ConcurrentHashMap<String, Int>()
+    private fun prefixOf(u: Uri) = (u.host ?: "") + "/" + (u.pathSegments.firstOrNull() ?: "")
 
     fun inspect(req: WebResourceRequest) {
         val url = req.url.toString()
@@ -58,12 +63,18 @@ class VideoSniffer {
         // qui y ressemble. On vérifie ce que c'est (quelques octets) avant de la proposer.
         if (ext in notMedia) return
         val range = req.requestHeaders.entries.firstOrNull { it.key.equals("range", true) }?.value
-        if (range?.startsWith("bytes=0-") == true || hint.containsMatchIn(req.url.path ?: "")) probe(url, req.requestHeaders)
+        val path = req.url.path ?: ""
+        if (path.contains("/api/")) return
+        if (range?.startsWith("bytes=0-") == true || hint.containsMatchIn(path) || token.matches(path)) {
+            val prefix = prefixOf(req.url)
+            if ((misses[prefix] ?: 0) >= 4) return
+            probe(url, req.requestHeaders, prefix)
+        }
     }
 
     /** Regarde les premiers octets : liste HLS (#EXTM3U), MP4 (ftyp), WebM/MKV, ou type annoncé vidéo. */
-    private fun probe(url: String, headers: Map<String, String>) {
-        if (probed.size > 60 || !probed.add(url) || _found.value.any { it.url == url }) return
+    private fun probe(url: String, headers: Map<String, String>, prefix: String) {
+        if (probed.size > 80 || !probed.add(url) || _found.value.any { it.url == url }) return
         kotlin.concurrent.thread(isDaemon = true) {
             runCatching {
                 val clean = headers.filterKeys { !it.equals("range", true) && !it.equals("accept-encoding", true) }
@@ -75,7 +86,14 @@ class VideoSniffer {
                     val isHls = type.contains("mpegurl") || text.trimStart().startsWith("#EXTM3U")
                     val isFile = type.startsWith("video/") || (head.size > 8 && text.substring(4, 8) == "ftyp") ||
                         (head.size > 4 && head[0] == 0x1A.toByte() && head[1] == 0x45.toByte() && head[2] == 0xDF.toByte())
-                    if (isHls || isFile) add(url, isHls, headers)
+                    // Morceaux d'un flux déjà trouvé (listes de variantes, fragments vidéo), ou fichier trop petit pour
+                    // être un épisode : ce n'est pas une vidéo à proposer. Au bout de 4, on laisse ce préfixe.
+                    val sameAsHls = _found.value.any { it.hls && prefixOf(Uri.parse(it.url)) == prefix }
+                    val total = c.getHeaderField("Content-Range")?.substringAfterLast('/')?.toLongOrNull()
+                    val tiny = total != null && total < 8_000_000
+                    val keep = (isHls && !(sameAsHls && text.contains("#EXTINF"))) || (isFile && !sameAsHls && !tiny)
+                    if (keep) add(url, isHls, headers)
+                    else misses.merge(prefix, 1, Int::plus)
                 } finally { c.disconnect() }
             }
         }

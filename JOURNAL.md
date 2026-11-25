@@ -498,3 +498,11 @@ extension), et le script de repérage ne tournait que dans la page, pas dans le 
 - Vérifié sur émulateur avec un faux site (lecteur dans un cadre d'un autre domaine, vidéo /get?id=… sans
   extension, pub de 12 s) : 1 vidéo, « 25 min », titre de la page, pub masquée, bouton Épisode 13, en-tête caché
   au défilement. Tests : 22 (dont les formes d'adresses d'épisodes), lint propre.
+**Essai sur le vrai site du testeur (émulateur, nouvelle version)** : la page d'épisode sert la vidéo en HLS
+par des adresses opaques « /v/<jeton> » (sans extension ni mot-clé, chargées par le lecteur sans « Range »).
+Les 3 vidéos de 12 s vues par le testeur étaient des clips d'aperçu du site (« …/clips/…-1080.mp4 »).
+- Ajout : vérification des adresses « jeton » (/x/<24+ caractères>), sauf /api/. Les morceaux d'un flux déjà
+  trouvé (listes de variantes, fragments fMP4) et les fichiers de moins de 8 Mo ne sont pas proposés ; après
+  4 réponses non vidéo, on cesse de vérifier ce préfixe.
+- Résultat : une seule vidéo proposée, « Regarder maintenant : Black Clover Season 2 », HLS, « 23 min ». Le flux
+  s'ouvre dans l'appli (23:50, pas de protection). Pas casté (pas de télé sur l'émulateur).

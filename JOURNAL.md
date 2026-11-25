@@ -699,3 +699,14 @@ fait toute seule.
   répond avant d'envoyer ; sinon « Stremio ne répond plus : l'appli a sans doute été fermée… », rien n'est envoyé.
 - Chargement / envoi : les boutons de lecture (inutiles) sont remplacés par « Annuler ». L'écran revient tout de suite à
   l'arrêt ; la commande en cours est annulée, la télé passe ensuite sur l'écran d'attente. Vérifié sur l'émulateur.
+
+## 2026-11-25 (nuit, 6) — Contrôle du direct, chaînes récentes
+- Cause des soucis du direct sur la vraie télé : beaucoup de chaînes ne gardent que 30 s à 1 min en ligne. En pause, le
+  relais ne téléchargeait plus ; à la reprise, les morceaux suivants avaient disparu → saut près du direct, retard
+  recalculé à 0 (barre pleine, pas de « −x », pas de « Revenir au direct » en lecture).
+- proxy/LiveBuffer.kt : le téléphone enregistre le direct en continu dans son cache (45 min / 1 Go max, effacé à l'arrêt),
+  la télé lit à son rythme. Retard réel et plage disponible remontés à l'appli chaque seconde (journal « direct : … »).
+  Test émulateur (Africa 24 English, fenêtre de 3 morceaux) : pause 60 s → reprise à la suite, retard 76 s.
+- Barre du direct : déplaçable dès qu'il y a de quoi remonter ; sinon pas de barre. « Revenir au direct » dès 8 s de
+  retard, en lecture comme en pause.
+- Listes de chaînes : « Regardées récemment » en tête (sans recherche ni filtre). Historique porté à 60 éléments.

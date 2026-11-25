@@ -390,6 +390,8 @@ S = {
  "%1$s non risponde più: probabilmente l’app è stata chiusa. Riaprila e riavvia il video da lì.",
  "%1$s reageert niet meer: de app is waarschijnlijk gesloten. Open hem opnieuw en start de video daar.",
  "%1$s não está respondendo: o app provavelmente foi fechado. Abra de novo e reinicie o vídeo por ele."],
+"iptv_recent": ["Watched recently", "Regardées récemment", "Vistos recientemente", "Zuletzt angesehen", "Visti di recente", "Onlangs bekeken", "Vistos recentemente"],
+"iptv_all_channels": ["All channels", "Toutes les chaînes", "Todos los canales", "Alle Sender", "Tutti i canali", "Alle zenders", "Todos os canais"],
 "iptv_title": ["Channel lists", "Listes de chaînes", "Listas de canales", "Senderlisten", "Liste di canali", "Zenderlijsten", "Listas de canais"],
 "iptv_intro": [
  "A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.",

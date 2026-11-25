@@ -377,40 +377,33 @@ private fun ChannelHeader(s: CastState) {
 
 /**
  * Direct : la même barre que pour une vidéo, en rouge. Au direct, elle est pleine ; en pause ou en remontant,
- * le curseur recule dans ce que garde le flux, et l'on voit le retard (« −1:24 ») et « Revenir au direct ».
+ * le curseur recule dans ce que le téléphone a enregistré, et l'on voit le retard (« −1:24 ») et « Revenir au direct ».
+ * Sans rien à parcourir (flux lu directement par la télé), pas de barre : seulement l'état du direct.
  */
 @Composable
 private fun LiveBar(s: CastState) {
     val c = MaterialTheme.colorScheme
     val red = Color(0xFFE53935)
-    val paused = s.phase == Phase.PAUSED
-    // Le retard grandit pendant la pause : on le recalcule chaque seconde.
-    val pausedSince = remember(paused) { if (paused) System.currentTimeMillis() else 0L }
-    var now by remember { mutableStateOf(System.currentTimeMillis()) }
-    LaunchedEffect(paused) { while (paused) { now = System.currentTimeMillis(); kotlinx.coroutines.delay(1000) } }
     val max = Castor.maxLiveBack(s)
-    val seekable = s.active && s.continuous && max > 0
+    val seekable = s.active && s.continuous && max > 5
     var dragging by remember { mutableStateOf(false) }
     var dragValue by remember { mutableFloatStateOf(0f) }
-    val running = (s.liveBehind + if (paused) (now - pausedSince) / 1000.0 else 0.0)
-    val behindD = if (dragging) max - dragValue else if (seekable) running.coerceAtMost(max) else running
+    val behindD = if (dragging) max - dragValue else s.liveBehind
     val behind = behindD.toLong()
-    val atLive = behind < 5 && !paused
+    val paused = s.phase == Phase.PAUSED
+    val atLive = behind < 8 && !paused
     val liveLabel = stringResource(R.string.player_live)
     val delayText = "−%d:%02d".format(behind / 60, behind % 60)
     Column {
-        Slider(
-            value = if (seekable) (max - behindD).toFloat().coerceIn(0f, max.toFloat()) else 1f,
+        if (seekable) Slider(
+            value = (max - behindD).toFloat().coerceIn(0f, max.toFloat()),
             onValueChange = { dragging = true; dragValue = it },
             onValueChangeFinished = { dragging = false; Castor.seekLive(max - dragValue) },
-            valueRange = 0f..(if (seekable) max.toFloat() else 1f),
-            enabled = seekable,
-            colors = androidx.compose.material3.SliderDefaults.colors(
-                thumbColor = red, activeTrackColor = red, disabledThumbColor = red, disabledActiveTrackColor = red,
-            ),
+            valueRange = 0f..max.toFloat(),
+            colors = androidx.compose.material3.SliderDefaults.colors(thumbColor = red, activeTrackColor = red),
             modifier = Modifier.semantics { stateDescription = if (atLive) liveLabel else delayText },
         )
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().padding(top = if (seekable) 0.dp else 4.dp), verticalAlignment = Alignment.CenterVertically) {
             Row(
                 Modifier.clip(RoundedCornerShape(50))
                     .background(if (atLive) red else c.surfaceContainerHighest)
@@ -420,12 +413,13 @@ private fun LiveBar(s: CastState) {
                 Box(Modifier.size(7.dp).clip(CircleShape).background(if (atLive) Color.White else c.onSurfaceVariant))
                 Spacer(Modifier.width(6.dp))
                 Text(
-                    if (atLive || behind < 5) liveLabel.uppercase() else delayText,
+                    if (behind < 8) liveLabel.uppercase() else delayText,
                     style = MaterialTheme.typography.labelMedium, color = if (atLive) Color.White else c.onSurface,
                 )
             }
             Spacer(Modifier.weight(1f))
-            if (!atLive && s.active) TextButton(onClick = Castor::goLive) {
+            // Disponible en lecture comme en pause, dès qu'on a du retard.
+            if (behind >= 8 && s.active) TextButton(onClick = Castor::goLive) {
                 Text(stringResource(R.string.live_back))
                 Spacer(Modifier.width(4.dp))
                 Icon(Icons.Rounded.SkipNext, null, Modifier.size(18.dp))

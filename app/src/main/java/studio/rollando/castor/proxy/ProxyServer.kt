@@ -67,6 +67,7 @@ class ProxyServer(private val ctx: Context) {
     fun baseUrl(): String = "http://${Net.localIp() ?: "127.0.0.1"}:$port"
 
     fun reset() {
+        stopLive()
         remotes.clear(); idsByUrl.clear(); locals.clear(); metas.clear(); embedded.clear()
         subtitle = null; subtitleUrl = null; mimeOverride = null
     }
@@ -374,6 +375,11 @@ class ProxyServer(private val ctx: Context) {
             "Transfer-Encoding" to "chunked",
         ) + dlna(false))
         val out = ChunkedOutputStream(out0)
+        // Direct (image et son ensemble) : lu depuis l'enregistrement du téléphone (contrôle du direct).
+        if (!plan.endList && r.audio == null) {
+            serveLive(req.seg[1], r, plan, start, out)
+            return
+        }
 
         var idx = 0
         var vTime = 0.0 // début du prochain morceau d'image, en secondes
@@ -447,6 +453,38 @@ class ProxyServer(private val ctx: Context) {
         } finally {
             queue.forEach { it.second.cancel(true) }
         }
+    }
+
+    private val liveBuffers = ConcurrentHashMap<String, LiveBuffer>()
+
+    /** Arrête d'enregistrer le direct et efface ce qui l'a été. */
+    fun stopLive() { liveBuffers.values.forEach { it.close() }; liveBuffers.clear() }
+
+    /** Retard de la télé sur le direct et jusqu'où on peut remonter (secondes), pour ce flux. */
+    fun liveStatus(id: String): Pair<Double, Double>? = liveBuffers[id]?.let { it.behind to it.window }
+
+    private fun serveLive(id: String, r: Remote, plan: Hls.Plan, start: Double, out: ChunkedOutputStream) {
+        val buf = liveBuffers.computeIfAbsent(id) {
+            val keys = ConcurrentHashMap<String, ByteArray>()
+            LiveBuffer(r.headers, plan, java.io.File(ctx.cacheDir, "direct/$id")) { s -> fetchSegment(s, r.headers, keys, !plan.fmp4) }
+        }
+        var seq = buf.startFor(start)
+        var currentMap: String? = null
+        while (true) {
+            val e = buf.await(seq) ?: break
+            seq = e.seg.seq + 1
+            val data = runCatching { e.file?.readBytes() }.getOrNull() ?: continue // effacé entre-temps : suivant
+            val map = e.seg.map
+            if (map != null && map != currentMap) {
+                out.write(Http.fetch(map, r.headers).bytes)
+                currentMap = map
+            }
+            out.write(data)
+            out.flush()
+            buf.readerEnd = e.end
+            if (e.seg.seq % 5 == 0L) Log.i(TAG, "direct : morceau ${e.seg.seq}, retard ${buf.behind.toInt()} s, remontée possible ${buf.window.toInt()} s")
+        }
+        out.finish()
     }
 
     private fun fetchSegment(s: Hls.Seg, headers: Map<String, String>, keys: MutableMap<String, ByteArray>, ts: Boolean): ByteArray? {

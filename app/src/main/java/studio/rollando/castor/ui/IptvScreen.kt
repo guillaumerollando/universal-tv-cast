@@ -237,6 +237,11 @@ private fun ChannelBrowser(list: IptvStore.Playlist, refreshTick: Int, onClose: 
             .sortedWith(compareByDescending<Map.Entry<String, Int>> { fold(it.key) in here }.thenByDescending { it.value })
             .map { it.key }.take(60)
     }
+    val recents by studio.rollando.castor.data.Library.recents.collectAsState()
+    val recent = remember(all, recents) {
+        val byUrl = all.associateBy { it.url }
+        recents.filter { it.live }.mapNotNull { byUrl[it.url] }.distinctBy { it.url }.take(12)
+    }
     val shown = remember(all, query, group) {
         val q = fold(query.trim())
         all.filter { (group == null || it.group == group) && (q.isEmpty() || fold(it.name).contains(q)) }
@@ -265,16 +270,38 @@ private fun ChannelBrowser(list: IptvStore.Playlist, refreshTick: Int, onClose: 
             shown.isEmpty() -> Text(stringResource(R.string.iptv_none_found), modifier = Modifier.padding(16.dp),
                 color = MaterialTheme.colorScheme.onSurfaceVariant)
             else -> LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 24.dp)) {
-                items(shown, key = { it.url }) { ch ->
-                    ChannelRow(ch) {
-                        Castor.open(Media(
-                            url = ch.url, title = ch.name, headers = ch.headers, posterUrl = ch.logo, channel = ch.name,
-                            mime = if (ch.url.substringBefore('?').endsWith(".m3u8", true)) "application/vnd.apple.mpegurl" else null,
-                        ))
-                        Nav.tab.value = Tab.PLAYER
-                        onClose()
+                fun play(ch: Iptv.Channel) {
+                    Castor.open(Media(
+                        url = ch.url, title = ch.name, headers = ch.headers, posterUrl = ch.logo, channel = ch.name,
+                        mime = if (ch.url.substringBefore('?').endsWith(".m3u8", true)) "application/vnd.apple.mpegurl" else null,
+                    ))
+                    Nav.tab.value = Tab.PLAYER
+                    onClose()
+                }
+                // Les chaînes qu'on regarde, en premier (sans recherche ni filtre en cours).
+                if (recent.isNotEmpty() && query.isBlank() && group == null) {
+                    item {
+                        Text(stringResource(R.string.iptv_recent), style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier.padding(16.dp, 4.dp).semantics { heading() })
+                    }
+                    item {
+                        LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            items(recent, key = { "r" + it.url }) { ch ->
+                                Column(Modifier.width(112.dp).clip(RoundedCornerShape(12.dp)).clickable(role = Role.Button) { play(ch) }.padding(2.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally) {
+                                    ChannelLogo(ch.name, ch.logo, Modifier.size(width = 108.dp, height = 68.dp))
+                                    Spacer(Modifier.height(6.dp))
+                                    Text(ch.name, style = MaterialTheme.typography.labelLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                                }
+                            }
+                        }
+                    }
+                    item {
+                        Text(stringResource(R.string.iptv_all_channels), style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 4.dp).semantics { heading() })
                     }
                 }
+                items(shown, key = { it.url }) { ch -> ChannelRow(ch) { play(ch) } }
                 item { Spacer(Modifier.navigationBarsPadding()) }
             }
         }

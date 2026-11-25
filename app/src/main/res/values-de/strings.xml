@@ -239,6 +239,8 @@
     <string name="home_cast_more">Etwas anderes senden</string>
     <string name="home_long_press_hint">Karte gedrückt halten, um sie zu entfernen oder als Lesezeichen zu behalten.</string>
     <string name="err_source_app_closed">%1$s antwortet nicht mehr: Die App wurde wahrscheinlich geschlossen. Öffne sie erneut und starte das Video dort.</string>
+    <string name="iptv_recent">Zuletzt angesehen</string>
+    <string name="iptv_all_channels">Alle Sender</string>
     <string name="iptv_title">Senderlisten</string>
     <string name="iptv_intro">Eine Senderliste (M3U- oder IPTV-Liste) fasst TV-Sender in einem einzigen Link zusammen. Füge ihre Adresse ein oder öffne die Datei: Hier findest du alle Sender mit ihrem Logo.</string>
     <string name="iptv_url_hint">Adresse der Liste (.m3u)</string>

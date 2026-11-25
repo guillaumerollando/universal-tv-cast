@@ -239,6 +239,8 @@
     <string name="home_cast_more">Trasmetti altro</string>
     <string name="home_long_press_hint">Tieni premuta una scheda per rimuoverla o tenerla nei preferiti.</string>
     <string name="err_source_app_closed">%1$s non risponde più: probabilmente l’app è stata chiusa. Riaprila e riavvia il video da lì.</string>
+    <string name="iptv_recent">Visti di recente</string>
+    <string name="iptv_all_channels">Tutti i canali</string>
     <string name="iptv_title">Liste di canali</string>
     <string name="iptv_intro">Una lista di canali (lista M3U o IPTV) riunisce canali TV in un solo link. Incolla il suo indirizzo o apri il file: qui troverai tutti i canali, con il loro logo.</string>
     <string name="iptv_url_hint">Indirizzo della lista (.m3u)</string>

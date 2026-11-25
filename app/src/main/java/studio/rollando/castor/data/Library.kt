@@ -187,7 +187,7 @@ object Library {
         // Même série : le nouvel épisode remplace l'ancien (et garde son image si celui-ci n'en a pas).
         val old = _recents.value.filter { it.key == r0.key || it.url == r0.url }
         val r = if (r0.poster == null) r0.copy(poster = old.firstNotNullOfOrNull { it.poster } ?: bookmarkFor(m.pageUrl ?: "")?.image) else r0
-        _recents.value = (listOf(r) + (_recents.value - old.toSet())).take(30)
+        _recents.value = (listOf(r) + (_recents.value - old.toSet())).take(60)
         saveRecents()
     }
 

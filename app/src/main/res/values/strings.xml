@@ -242,6 +242,11 @@
     <string name="err_source_app_closed">%1$s isn’t responding anymore: it was probably closed. Open it again and restart the video from it.</string>
     <string name="iptv_recent">Watched recently</string>
     <string name="iptv_all_channels">All channels</string>
+    <string name="iptv_hide">Hide this channel</string>
+    <string name="iptv_hidden_done">Channel hidden</string>
+    <string name="iptv_unhide_all">Show hidden channels</string>
+    <string name="iptv_remove_recent">Remove from recent</string>
+    <string name="action_undo">Undo</string>
     <string name="iptv_title">Channel lists</string>
     <string name="iptv_intro">A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.</string>
     <string name="iptv_url_hint">List address (.m3u)</string>

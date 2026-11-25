@@ -40,6 +40,7 @@ object IptvStore {
                 Playlist(o.getString("id"), o.getString("name"), o.getString("source"), o.optInt("count"), o.optLong("updated"))
             }
         }.getOrDefault(emptyList())
+        _hidden.value = prefs.getStringSet("hidden", emptySet()).orEmpty().toSet()
     }
 
     private fun save() {
@@ -128,6 +129,16 @@ object IptvStore {
         }
         url?.let { idx.first[it] } ?: name?.let { n -> fold(n).takeIf { it.isNotEmpty() }?.let { idx.second[it] } }
     }
+
+    // ---------------------------------------------------------------- chaînes masquées (lien mort, pas envie…)
+
+    private val _hidden = MutableStateFlow<Set<String>>(emptySet())
+    /** Adresses des chaînes masquées par l'utilisateur, dans toutes les listes. Réversible. */
+    val hidden: StateFlow<Set<String>> = _hidden
+
+    fun hide(url: String) { _hidden.value = _hidden.value + url; prefs.edit().putStringSet("hidden", _hidden.value).apply() }
+    fun unhide(url: String) { _hidden.value = _hidden.value - url; prefs.edit().putStringSet("hidden", _hidden.value).apply() }
+    fun unhideAll(urls: Collection<String>) { _hidden.value = _hidden.value - urls.toSet(); prefs.edit().putStringSet("hidden", _hidden.value).apply() }
 
     fun rename(id: String, name: String) {
         if (name.isBlank()) return

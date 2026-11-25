@@ -241,6 +241,11 @@
     <string name="err_source_app_closed">%1$s reageert niet meer: de app is waarschijnlijk gesloten. Open hem opnieuw en start de video daar.</string>
     <string name="iptv_recent">Onlangs bekeken</string>
     <string name="iptv_all_channels">Alle zenders</string>
+    <string name="iptv_hide">Deze zender verbergen</string>
+    <string name="iptv_hidden_done">Zender verborgen</string>
+    <string name="iptv_unhide_all">Verborgen zenders tonen</string>
+    <string name="iptv_remove_recent">Uit recent verwijderen</string>
+    <string name="action_undo">Ongedaan maken</string>
     <string name="iptv_title">Zenderlijsten</string>
     <string name="iptv_intro">Een zenderlijst (M3U- of IPTV-lijst) bundelt tv-zenders in één link. Plak het adres of open het bestand: hier vind je alle zenders, met hun logo.</string>
     <string name="iptv_url_hint">Adres van de lijst (.m3u)</string>

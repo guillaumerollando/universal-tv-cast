@@ -24,6 +24,13 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -237,15 +244,29 @@ private fun ChannelBrowser(list: IptvStore.Playlist, refreshTick: Int, onClose: 
             .sortedWith(compareByDescending<Map.Entry<String, Int>> { fold(it.key) in here }.thenByDescending { it.value })
             .map { it.key }.take(60)
     }
+    val hidden by IptvStore.hidden.collectAsState()
     val recents by studio.rollando.castor.data.Library.recents.collectAsState()
-    val recent = remember(all, recents) {
+    val recent = remember(all, recents, hidden) {
         val byUrl = all.associateBy { it.url }
-        recents.filter { it.live }.mapNotNull { byUrl[it.url] }.distinctBy { it.url }.take(12)
+        recents.filter { it.live }.mapNotNull { byUrl[it.url] }.filter { it.url !in hidden }.distinctBy { it.url }.take(12)
     }
-    val shown = remember(all, query, group) {
+    val shown = remember(all, query, group, hidden) {
         val q = fold(query.trim())
-        all.filter { (group == null || it.group == group) && (q.isEmpty() || fold(it.name).contains(q)) }
+        all.filter { it.url !in hidden && (group == null || it.group == group) && (q.isEmpty() || fold(it.name).contains(q)) }
     }
+    val hiddenHere = remember(all, hidden) { all.filter { it.url in hidden }.map { it.url } }
+    var lastHidden by remember { mutableStateOf<String?>(null) }
+    LaunchedEffect(lastHidden) { if (lastHidden != null) { kotlinx.coroutines.delay(5000); lastHidden = null } }
+    fun play(ch: Iptv.Channel) {
+        Castor.open(Media(
+            url = ch.url, title = ch.name, headers = ch.headers, posterUrl = ch.logo, channel = ch.name,
+            mime = if (ch.url.substringBefore('?').endsWith(".m3u8", true)) "application/vnd.apple.mpegurl" else null,
+        ))
+        Nav.tab.value = Tab.PLAYER
+        onClose()
+    }
+    fun hide(ch: Iptv.Channel) { IptvStore.hide(ch.url); lastHidden = ch.url }
+    Box(Modifier.fillMaxSize()) {
     Column(Modifier.fillMaxSize()) {
         OutlinedTextField(
             value = query, onValueChange = { query = it }, singleLine = true,
@@ -260,68 +281,104 @@ private fun ChannelBrowser(list: IptvStore.Playlist, refreshTick: Int, onClose: 
             item { FilterChip(selected = group == null, onClick = { group = null }, label = { Text(stringResource(R.string.iptv_all)) }) }
             items(groups) { g -> FilterChip(selected = group == g, onClick = { group = if (group == g) null else g }, label = { Text(g) }) }
         }
-        Text(
-            "${list.name} · " + pluralStringResource(R.plurals.iptv_count, shown.size, shown.size),
-            style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(16.dp, 8.dp),
-        )
+        Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                "${list.name} · " + pluralStringResource(R.plurals.iptv_count, shown.size, shown.size),
+                style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.weight(1f).padding(vertical = 12.dp),
+            )
+            if (hiddenHere.isNotEmpty()) TextButton(onClick = { IptvStore.unhideAll(hiddenHere) }) {
+                Text(stringResource(R.string.iptv_unhide_all) + " (${hiddenHere.size})", style = MaterialTheme.typography.labelLarge)
+            }
+        }
         when {
             channels == null -> Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
             shown.isEmpty() -> Text(stringResource(R.string.iptv_none_found), modifier = Modifier.padding(16.dp),
                 color = MaterialTheme.colorScheme.onSurfaceVariant)
-            else -> LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 24.dp)) {
-                fun play(ch: Iptv.Channel) {
-                    Castor.open(Media(
-                        url = ch.url, title = ch.name, headers = ch.headers, posterUrl = ch.logo, channel = ch.name,
-                        mime = if (ch.url.substringBefore('?').endsWith(".m3u8", true)) "application/vnd.apple.mpegurl" else null,
-                    ))
-                    Nav.tab.value = Tab.PLAYER
-                    onClose()
-                }
+            else -> LazyVerticalGrid(
+                columns = GridCells.Adaptive(80.dp),
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 96.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
                 // Les chaînes qu'on regarde, en premier (sans recherche ni filtre en cours).
                 if (recent.isNotEmpty() && query.isBlank() && group == null) {
-                    item {
+                    item(span = { GridItemSpan(maxLineSpan) }) {
                         Text(stringResource(R.string.iptv_recent), style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.padding(16.dp, 4.dp).semantics { heading() })
+                            modifier = Modifier.padding(4.dp, 4.dp).semantics { heading() })
                     }
-                    item {
-                        LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             items(recent, key = { "r" + it.url }) { ch ->
-                                Column(Modifier.width(112.dp).clip(RoundedCornerShape(12.dp)).clickable(role = Role.Button) { play(ch) }.padding(2.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally) {
-                                    ChannelLogo(ch.name, ch.logo, Modifier.size(width = 108.dp, height = 68.dp))
-                                    Spacer(Modifier.height(6.dp))
-                                    Text(ch.name, style = MaterialTheme.typography.labelLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                                }
+                                ChannelTile(ch, Modifier.width(92.dp), onClick = { play(ch) }, onHide = { hide(ch) }, onForget = {
+                                    recents.firstOrNull { it.url == ch.url }?.let { studio.rollando.castor.data.Library.removeRecent(it.key) }
+                                })
                             }
                         }
                     }
-                    item {
+                    item(span = { GridItemSpan(maxLineSpan) }) {
                         Text(stringResource(R.string.iptv_all_channels), style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 4.dp).semantics { heading() })
+                            modifier = Modifier.padding(4.dp, 12.dp, 4.dp, 0.dp).semantics { heading() })
                     }
                 }
-                items(shown, key = { it.url }) { ch -> ChannelRow(ch) { play(ch) } }
-                item { Spacer(Modifier.navigationBarsPadding()) }
+                items(shown, key = { it.url }) { ch -> ChannelTile(ch, Modifier, onClick = { play(ch) }, onHide = { hide(ch) }) }
+            }
+        }
+    }
+        // « Chaîne masquée · Annuler », quelques secondes.
+        lastHidden?.let { url ->
+            Surface(
+                shape = RoundedCornerShape(16.dp), color = MaterialTheme.colorScheme.inverseSurface,
+                modifier = Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(16.dp).fillMaxWidth(),
+            ) {
+                Row(Modifier.padding(start = 16.dp, end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(R.string.iptv_hidden_done), color = MaterialTheme.colorScheme.inverseOnSurface,
+                        modifier = Modifier.weight(1f))
+                    TextButton(onClick = { IptvStore.unhide(url); lastHidden = null }) {
+                        Text(stringResource(R.string.action_undo), color = MaterialTheme.colorScheme.inversePrimary)
+                    }
+                }
             }
         }
     }
 }
 
+/** Case de la mosaïque : le logo (ou le nom) et le nom dessous. Appui long : masquer, ou retirer des récentes. */
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
-private fun ChannelRow(ch: Iptv.Channel, onClick: () -> Unit) {
-    Row(
-        Modifier.fillMaxWidth().clickable(role = Role.Button, onClick = onClick).padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        ChannelLogo(ch.name, ch.logo)
-        Spacer(Modifier.width(16.dp))
-        Column(Modifier.weight(1f)) {
-            Text(ch.name, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            ch.group?.let {
-                Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1, overflow = TextOverflow.Ellipsis)
-            }
+private fun ChannelTile(ch: Iptv.Channel, modifier: Modifier, onClick: () -> Unit, onHide: () -> Unit, onForget: (() -> Unit)? = null) {
+    var menu by remember { mutableStateOf(false) }
+    val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
+    val hideLabel = stringResource(R.string.iptv_hide)
+    val forgetLabel = stringResource(R.string.iptv_remove_recent)
+    Box(modifier) {
+        Column(
+            Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp))
+                .combinedClickable(role = Role.Button, onClick = onClick, onLongClick = {
+                    haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); menu = true
+                })
+                .semantics {
+                    customActions = listOfNotNull(
+                        androidx.compose.ui.semantics.CustomAccessibilityAction(hideLabel) { onHide(); true },
+                        onForget?.let { f -> androidx.compose.ui.semantics.CustomAccessibilityAction(forgetLabel) { f(); true } },
+                    )
+                }
+                .padding(2.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            ChannelArt(
+                name = ch.name, logo = ch.logo, streamUrl = null, pad = 8.dp,
+                textStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold),
+                modifier = Modifier.fillMaxWidth().aspectRatio(16f / 10f).clip(RoundedCornerShape(12.dp)),
+            )
+            Spacer(Modifier.height(5.dp))
+            Text(ch.name, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(horizontal = 2.dp))
+        }
+        DropdownMenu(menu, onDismissRequest = { menu = false }, shape = RoundedCornerShape(16.dp)) {
+            if (onForget != null) DropdownMenuItem(text = { Text(forgetLabel) }, onClick = { menu = false; onForget() })
+            DropdownMenuItem(text = { Text(hideLabel) }, onClick = { menu = false; onHide() })
         }
     }
 }

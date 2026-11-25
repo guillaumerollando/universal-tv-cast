@@ -392,6 +392,11 @@ S = {
  "%1$s não está respondendo: o app provavelmente foi fechado. Abra de novo e reinicie o vídeo por ele."],
 "iptv_recent": ["Watched recently", "Regardées récemment", "Vistos recientemente", "Zuletzt angesehen", "Visti di recente", "Onlangs bekeken", "Vistos recentemente"],
 "iptv_all_channels": ["All channels", "Toutes les chaînes", "Todos los canales", "Alle Sender", "Tutti i canali", "Alle zenders", "Todos os canais"],
+"iptv_hide": ["Hide this channel", "Masquer cette chaîne", "Ocultar este canal", "Diesen Sender ausblenden", "Nascondi questo canale", "Deze zender verbergen", "Ocultar este canal"],
+"iptv_hidden_done": ["Channel hidden", "Chaîne masquée", "Canal oculto", "Sender ausgeblendet", "Canale nascosto", "Zender verborgen", "Canal ocultado"],
+"iptv_unhide_all": ["Show hidden channels", "Réafficher les chaînes masquées", "Mostrar canales ocultos", "Ausgeblendete Sender zeigen", "Mostra canali nascosti", "Verborgen zenders tonen", "Mostrar canais ocultos"],
+"iptv_remove_recent": ["Remove from recent", "Retirer des récentes", "Quitar de recientes", "Aus „Zuletzt“ entfernen", "Rimuovi dai recenti", "Uit recent verwijderen", "Remover dos recentes"],
+"action_undo": ["Undo", "Annuler", "Deshacer", "Rückgängig", "Annulla", "Ongedaan maken", "Desfazer"],
 "iptv_title": ["Channel lists", "Listes de chaînes", "Listas de canales", "Senderlisten", "Liste di canali", "Zenderlijsten", "Listas de canais"],
 "iptv_intro": [
  "A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.",

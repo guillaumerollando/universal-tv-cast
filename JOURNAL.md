@@ -710,3 +710,8 @@ fait toute seule.
 - Barre du direct : déplaçable dès qu'il y a de quoi remonter ; sinon pas de barre. « Revenir au direct » dès 8 s de
   retard, en lecture comme en pause.
 - Listes de chaînes : « Regardées récemment » en tête (sans recherche ni filtre). Historique porté à 60 éléments.
+
+## 2026-11-25 (nuit, 7) — Mosaïque de chaînes, masquer
+- Listes de chaînes en mosaïque de logos (4 colonnes sur téléphone), nom dessous, sans catégorie.
+- Appui long : « Masquer cette chaîne » (lien mort…), avec « Annuler » quelques secondes ; « Réafficher les chaînes
+  masquées (N) » à côté du nombre de chaînes. Sur une récente : « Retirer des récentes » (elle revient si on la regarde).

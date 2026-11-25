@@ -241,6 +241,11 @@
     <string name="err_source_app_closed">%1$s antwortet nicht mehr: Die App wurde wahrscheinlich geschlossen. Öffne sie erneut und starte das Video dort.</string>
     <string name="iptv_recent">Zuletzt angesehen</string>
     <string name="iptv_all_channels">Alle Sender</string>
+    <string name="iptv_hide">Diesen Sender ausblenden</string>
+    <string name="iptv_hidden_done">Sender ausgeblendet</string>
+    <string name="iptv_unhide_all">Ausgeblendete Sender zeigen</string>
+    <string name="iptv_remove_recent">Aus „Zuletzt“ entfernen</string>
+    <string name="action_undo">Rückgängig</string>
     <string name="iptv_title">Senderlisten</string>
     <string name="iptv_intro">Eine Senderliste (M3U- oder IPTV-Liste) fasst TV-Sender in einem einzigen Link zusammen. Füge ihre Adresse ein oder öffne die Datei: Hier findest du alle Sender mit ihrem Logo.</string>
     <string name="iptv_url_hint">Adresse der Liste (.m3u)</string>

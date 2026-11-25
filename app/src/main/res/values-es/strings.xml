@@ -241,6 +241,11 @@
     <string name="err_source_app_closed">%1$s ya no responde: probablemente la app se cerró. Vuelve a abrirla e inicia el vídeo desde ahí.</string>
     <string name="iptv_recent">Vistos recientemente</string>
     <string name="iptv_all_channels">Todos los canales</string>
+    <string name="iptv_hide">Ocultar este canal</string>
+    <string name="iptv_hidden_done">Canal oculto</string>
+    <string name="iptv_unhide_all">Mostrar canales ocultos</string>
+    <string name="iptv_remove_recent">Quitar de recientes</string>
+    <string name="action_undo">Deshacer</string>
     <string name="iptv_title">Listas de canales</string>
     <string name="iptv_intro">Una lista de canales (lista M3U o IPTV) reúne canales de TV en un solo enlace. Pega su dirección o abre el archivo: aquí tendrás todos sus canales, con su logotipo.</string>
     <string name="iptv_url_hint">Dirección de la lista (.m3u)</string>

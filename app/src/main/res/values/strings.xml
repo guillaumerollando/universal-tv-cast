@@ -201,6 +201,8 @@
     <string name="resume_remove">Remove from “Pick up”</string>
     <string name="resume_follow">Keep it here (bookmark)</string>
     <string name="home_link_tile">Link</string>
+    <string name="home_see_all">See all</string>
+    <string name="site_hide">Stop suggesting</string>
     <string name="home_sites">My sites</string>
     <string name="home_cast_more">Cast something else</string>
     <string name="home_long_press_hint">Press and hold a card to remove it or keep it in bookmarks.</string>

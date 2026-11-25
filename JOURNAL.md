@@ -593,3 +593,11 @@ fait toute seule.
 - Accueil : dès qu'il y a de l'historique ou des favoris, plus de grand bandeau ni de carte « Depuis une autre appli » ; « Reprendre » en premier, les quatre façons de caster en une rangée compacte. Le nouveau venu garde l'accueil complet.
 - Vérifié sur l'émulateur avec des données d'exemple (3 épisodes → 1 carte, The Office S2E4/E5 → 1 carte, film, retrait, mise en favori).
 - L'image de la page (celle des favoris) sert partout : en-tête « film » et fond flouté du lecteur, carte « Reprendre », notification et écran de la télé (Cast). Si elle arrive après le lancement, le lecteur et « Reprendre » la prennent au vol. « Reprendre » garde l'image large (fond) plutôt que l'affiche verticale.
+
+## 2026-11-25 (soir, 19) — Retours sur « Reprendre » et « Mes sites »
+
+- « Mes sites » propose aussi les sites déjà utilisés pour caster (pas seulement les favoris) ; appui long : « Garder ici (favori) » / « Ne plus proposer ». Les sites en favori ont une étoile et passent devant.
+- « Reprendre » : seulement les épisodes (page de site avec numéro d'épisode) ou les vidéos des autres applis ; plus les pages d'accueil ou sans épisode, dont le titre ne voulait rien dire.
+- Avancement noté toutes les 15 s (et la fin de lecture) : un film fini ou à moins de 5 min de la fin disparaît ; un épisode fini (≈ 8 % de la fin) propose l'épisode suivant (« Ép. 6 », adresse suivante).
+- Cartes allégées : titre seul, sans le nom du site.
+- « Tout voir → » à côté de « Reprendre » (dès 3 cartes) : grille de tout ce qui est à reprendre, retour par la flèche ou le geste retour.

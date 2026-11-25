@@ -105,6 +105,18 @@ object Castor {
         CastControl.init(app)
         CastControl.onDevices = { list -> castDevices = list; publish(allDevices()) }
         CastControl.onFinished = { onMediaEnded() }
+        // Avancement noté toutes les 15 s : « Reprendre » saura ce qui est fini.
+        scope.launch {
+            var last = 0L
+            _state.collect { s ->
+                val m = s.media ?: return@collect
+                if (s.slides != null || s.duration <= 0 || s.position <= 0) return@collect
+                val now = System.currentTimeMillis()
+                if (now - last < 15_000) return@collect
+                last = now
+                Library.setProgress(m.url, s.position, s.duration)
+            }
+        }
         proxy.onSourceDenied = { _ ->
             _state.update { it.copy(notice = Notice(R.string.err_protected, error = true)) }
         }
@@ -655,6 +667,7 @@ object Castor {
         if (endHandled == castTime) return
         endHandled = castTime
         pollJob?.cancel()
+        if (sl == null) Library.markFinished(s.media.url)
         Log.i("Castor", "fin de lecture : ${if (sl != null) "élément suivant de l'album" else "écran d'attente"}")
         exec {
             val cur = _state.value.slides

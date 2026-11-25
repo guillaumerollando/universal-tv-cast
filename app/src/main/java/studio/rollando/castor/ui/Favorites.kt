@@ -115,14 +115,14 @@ fun FavoritesRow(bookmarks: List<Bookmark>, onOpen: (String) -> Unit) {
 @Composable
 fun PosterCard(
     title: String, image: String?, host: String, badge: String?, starred: Boolean,
-    onClick: () -> Unit, menu: List<Pair<String, () -> Unit>>,
+    onClick: () -> Unit, menu: List<Pair<String, () -> Unit>>, modifier: Modifier = Modifier.width(200.dp),
 ) {
     val c = MaterialTheme.colorScheme
     var open by remember { mutableStateOf(false) }
     val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
     Box {
         Column(
-            Modifier.width(200.dp).clip(RoundedCornerShape(20.dp)).background(c.surfaceContainerHigh)
+            modifier.clip(RoundedCornerShape(20.dp)).background(c.surfaceContainerHigh)
                 .combinedClickable(
                     role = Role.Button, onClick = onClick,
                     onLongClick = { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); open = true },
@@ -156,15 +156,10 @@ fun PosterCard(
                     contentAlignment = Alignment.Center,
                 ) { Icon(Icons.Rounded.Star, null, tint = c.primary, modifier = Modifier.size(16.dp)) }
             }
-            Column(Modifier.padding(horizontal = 12.dp, vertical = 10.dp)) {
-                Text(title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                    maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.height(44.dp))
-                if (host.isNotEmpty()) Row(verticalAlignment = Alignment.CenterVertically) {
-                    SiteIcon(host, 18)
-                    Spacer(Modifier.width(6.dp))
-                    Text(host, style = MaterialTheme.typography.labelMedium, color = c.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                }
-            }
+            // Le titre seul : on voit le site en ouvrant la carte (et son logo quand il n'y a pas d'image).
+            Text(title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                maxLines = 2, overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp).height(40.dp))
         }
         CardMenu(open, { open = false }, menu)
     }
@@ -173,11 +168,13 @@ fun PosterCard(
 /** Site entier : son logo, son nom, l'étiquette « Site ». Ce favori ne change jamais d'adresse. */
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
-fun SiteCard(b: Bookmark, onOpen: (String) -> Unit) {
+fun SiteCard(
+    b: Bookmark, onOpen: (String) -> Unit, starred: Boolean = false,
+    menu: List<Pair<String, () -> Unit>> = listOf(stringResource(R.string.cd_bookmark_remove) to { Library.removeBookmark(b) }),
+) {
     val c = MaterialTheme.colorScheme
     var open by remember { mutableStateOf(false) }
     val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
-    val menu = listOf(stringResource(R.string.cd_bookmark_remove) to { Library.removeBookmark(b) })
     Box {
         Box(
             Modifier.width(132.dp).height(176.dp).clip(RoundedCornerShape(20.dp)).background(c.surfaceContainerHigh)
@@ -203,6 +200,8 @@ fun SiteCard(b: Bookmark, onOpen: (String) -> Unit) {
                     Text(stringResource(R.string.bookmark_site), style = MaterialTheme.typography.labelMedium, color = c.secondary)
                 }
             }
+            if (starred) Icon(Icons.Rounded.Star, null, tint = c.primary,
+                modifier = Modifier.align(Alignment.TopEnd).padding(10.dp).size(16.dp))
         }
         CardMenu(open, { open = false }, menu)
     }

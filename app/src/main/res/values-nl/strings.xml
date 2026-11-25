@@ -200,6 +200,8 @@
     <string name="resume_remove">Verwijderen uit ‘Verder kijken’</string>
     <string name="resume_follow">Hier houden (bladwijzer)</string>
     <string name="home_link_tile">Link</string>
+    <string name="home_see_all">Alles bekijken</string>
+    <string name="site_hide">Niet meer voorstellen</string>
     <string name="home_sites">Mijn sites</string>
     <string name="home_cast_more">Iets anders casten</string>
     <string name="home_long_press_hint">Houd een kaart ingedrukt om ze te verwijderen of als bladwijzer te bewaren.</string>

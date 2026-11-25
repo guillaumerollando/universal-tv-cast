@@ -200,6 +200,8 @@
     <string name="resume_remove">Remover de “Continuar”</string>
     <string name="resume_follow">Manter aqui (favorito)</string>
     <string name="home_link_tile">Link</string>
+    <string name="home_see_all">Ver tudo</string>
+    <string name="site_hide">Não sugerir mais</string>
     <string name="home_sites">Meus sites</string>
     <string name="home_cast_more">Transmitir outra coisa</string>
     <string name="home_long_press_hint">Mantenha um cartão pressionado para removê-lo ou mantê-lo nos favoritos.</string>

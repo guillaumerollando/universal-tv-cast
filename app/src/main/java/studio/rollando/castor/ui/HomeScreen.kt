@@ -16,6 +16,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items as gridItems
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ArrowForward
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import studio.rollando.castor.browser.Episodes
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -73,8 +84,15 @@ fun HomeScreen(
     val bookmarks by Library.bookmarks.collectAsState()
     val c = MaterialTheme.colorScheme
 
+    val hidden by Library.hiddenSites.collectAsState()
     val resume = resumeItems(recents, bookmarks)
-    val sites = bookmarks.filter { it.isSite }
+    val sites = siteItems(recents, bookmarks, hidden)
+    var showAll by rememberSaveable { mutableStateOf(false) }
+    if (showAll && resume.isNotEmpty()) {
+        BackHandler { showAll = false }
+        AllResume(resume, onBrowse) { showAll = false }
+        return
+    }
 
     // Habitué (des séries en cours, des sites en favori) : ce qu'il regarde d'abord, les façons de caster en
     // une rangée compacte. Nouveau venu : la présentation et les grandes tuiles.
@@ -84,7 +102,16 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             if (resume.isNotEmpty()) {
-                item { SectionTitle(stringResource(R.string.home_resume), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
+                item {
+                    Row(Modifier.padding(start = 16.dp, end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                        SectionTitle(stringResource(R.string.home_resume), Modifier.weight(1f).semantics { heading() })
+                        if (resume.size > 2) TextButton(onClick = { showAll = true }) {
+                            Text(stringResource(R.string.home_see_all))
+                            Spacer(Modifier.width(4.dp))
+                            Icon(Icons.AutoMirrored.Rounded.ArrowForward, null, Modifier.size(18.dp))
+                        }
+                    }
+                }
                 item {
                     LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         items(resume, key = { "r" + it.key }) { r -> ResumeCard(r, onBrowse) }
@@ -93,7 +120,11 @@ fun HomeScreen(
             }
             if (sites.isNotEmpty()) {
                 item { SectionTitle(stringResource(R.string.home_sites), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
-                item { FavoritesRow(sites) { onBrowse(it) } }
+                item {
+                    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        items(sites, key = { "s" + it.host }) { s -> SiteItemCard(s, onBrowse) }
+                    }
+                }
             }
             item { SectionTitle(stringResource(R.string.home_cast_more), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
             item {
@@ -202,27 +233,81 @@ private data class ResumeItem(
 
 private fun resumeItems(recents: List<Recent>, bookmarks: List<Bookmark>): List<ResumeItem> {
     val series = bookmarks.filter { !it.isSite }
-    val fromRecents = recents.map { r ->
+    val fromRecents = recents.mapNotNull { r ->
         val b = series.firstOrNull { it.key == r.key }
-        val ep = r.episodeNumber
+        // Une page de site sans numéro d'épisode (accueil, bande-annonce…) : son titre ne dirait rien.
+        if (r.isWeb && r.episodeNumber == null && b == null) return@mapNotNull null
+        var ep = r.episodeNumber
+        var open = r.pageUrl?.takeIf { r.isWeb }
+        if (r.finished) {
+            // Épisode fini : on propose le suivant ; un film (ou un épisode sans suite connue) fini disparaît.
+            val cur = if (r.isWeb) r.pageUrl?.let { Episodes.find(it) } else null
+            if (cur != null) { ep = cur.number + 1; open = cur.next }
+            else if (b == null) return@mapNotNull null
+        }
         // Le favori a pu avancer plus loin (épisode ouvert sans être casté) : on reprend au plus loin.
         val bookmarkAhead = b != null && (b.episode ?: 0) > (ep ?: 0)
         ResumeItem(
             key = r.key, title = b?.title ?: r.seriesTitle, image = r.poster ?: b?.image,
             host = Uri.parse(r.pageUrl ?: r.url).host?.removePrefix("www.")?.takeIf { it != "127.0.0.1" && it != "localhost" }.orEmpty(),
             season = r.season, episode = if (bookmarkAhead) b!!.episode else ep, time = maxOf(r.time, b?.time ?: 0),
-            recent = r, bookmark = b, openUrl = if (bookmarkAhead) b!!.url else r.pageUrl?.takeIf { it.startsWith("http") },
+            recent = r, bookmark = b, openUrl = if (bookmarkAhead) b!!.url else open,
         )
     }
-    val keys = fromRecents.map { it.key }.toSet()
+    val keys = recents.map { it.key }.toSet()
     val onlyBookmarked = series.filter { it.key !in keys }.map { b ->
         ResumeItem(b.key, b.title, b.image, b.host, null, b.episode, b.time, null, b, b.url)
     }
     return (fromRecents + onlyBookmarked).sortedByDescending { it.time }
 }
 
+/** Un site de « Mes sites » : en favori, ou simplement déjà utilisé pour caster. */
+private data class SiteItem(val host: String, val url: String, val bookmark: Bookmark?, val time: Long)
+
+private fun siteItems(recents: List<Recent>, bookmarks: List<Bookmark>, hidden: Set<String>): List<SiteItem> {
+    val fav = bookmarks.filter { it.isSite && it.host !in hidden }.map { SiteItem(it.host, it.url, it, it.time) }
+    val used = recents.filter { it.isWeb }.groupBy { Library.hostOf(it.pageUrl!!) }
+        .filter { (h, _) -> h.isNotEmpty() && h !in hidden && fav.none { f -> f.host == h } }
+        .map { (h, l) ->
+            val p = Uri.parse(l.first().pageUrl)
+            SiteItem(h, "${p.scheme}://${p.authority}/", null, l.maxOf { it.time })
+        }
+    return fav + used.sortedByDescending { it.time }
+}
+
 @Composable
-private fun ResumeCard(r: ResumeItem, onBrowse: (String?) -> Unit) {
+private fun SiteItemCard(s: SiteItem, onBrowse: (String?) -> Unit) {
+    val b = s.bookmark ?: Bookmark(s.host.substringBefore('.').replaceFirstChar { it.uppercase() }, s.url)
+    val menu = buildList {
+        if (s.bookmark != null) add(stringResource(R.string.cd_bookmark_remove) to { Library.removeBookmark(s.bookmark) })
+        else add(stringResource(R.string.resume_follow) to { Library.toggleBookmark(b.title, b.url) })
+        add(stringResource(R.string.site_hide) to { Library.hideSite(s.host) })
+    }
+    SiteCard(b, { onBrowse(it) }, starred = s.bookmark != null, menu = menu)
+}
+
+/** « Tout voir » : toutes les séries et vidéos à reprendre, en grille. */
+@Composable
+private fun AllResume(items: List<ResumeItem>, onBrowse: (String?) -> Unit, onClose: () -> Unit) {
+    Column(Modifier.fillMaxSize()) {
+        Row(Modifier.padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onClick = onClose) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.cd_back)) }
+            Text(stringResource(R.string.home_resume), style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.semantics { heading() })
+        }
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(160.dp),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp + LocalBottomInset.current),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            gridItems(items, key = { "a" + it.key }) { r -> ResumeCard(r, onBrowse, Modifier.fillMaxWidth()) }
+        }
+    }
+}
+
+@Composable
+private fun ResumeCard(r: ResumeItem, onBrowse: (String?) -> Unit, modifier: Modifier = Modifier.width(200.dp)) {
     val badge = when {
         r.season != null && r.episode != null -> stringResource(R.string.resume_season_episode, r.season, r.episode)
         r.episode != null -> stringResource(R.string.bookmark_episode, r.episode)
@@ -245,7 +330,7 @@ private fun ResumeCard(r: ResumeItem, onBrowse: (String?) -> Unit) {
                 Nav.tab.value = Tab.PLAYER
             }
         },
-        menu = menu,
+        menu = menu, modifier = modifier,
     )
 }
 

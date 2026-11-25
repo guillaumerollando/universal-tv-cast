@@ -13,7 +13,15 @@ data class Recent(
     val poster: String? = null, val fileName: String? = null,
     /** Saison et épisode (fichier reconnu, ex. Stremio) ; pour un site, l'épisode est lu dans l'adresse de la page. */
     val season: Int? = null, val episode: Int? = null,
+    /** Où l'on s'est arrêté (secondes) et durée totale ; [done] : la lecture est allée jusqu'au bout. */
+    val pos: Double = 0.0, val dur: Double = 0.0, val done: Boolean = false,
 ) {
+    /** Fini, ou presque (le générique) : 5 minutes avant la fin d'un film, environ 8 % pour un épisode. */
+    val finished: Boolean get() = done || (dur > 60 && pos >= dur - minOf(300.0, dur * 0.08))
+
+    /** Page d'un site (pas une vidéo d'une autre appli). */
+    val isWeb: Boolean get() = web
+
     fun toMedia() = Media(url = url, title = title, mime = mime, headers = headers, pageUrl = pageUrl, posterUrl = poster, backdropUrl = poster, fileName = fileName)
 
     private val web: Boolean get() = pageUrl?.startsWith("http") == true
@@ -83,6 +91,7 @@ object Library {
         _shakeHelp.value = prefs.getBoolean("shake_help", true)
         _embedSubs.value = prefs.getBoolean("embed_subs", true)
         _smoothSlides.value = prefs.getBoolean("smooth_slides_v2", false)
+        _hiddenSites.value = prefs.getStringSet("hidden_sites", emptySet()).orEmpty().toSet()
         _dismissedTips.value = prefs.getStringSet("tips_dismissed", emptySet()).orEmpty().toSet()
     }
 
@@ -143,6 +152,28 @@ object Library {
         _bookmarks.value.filter { !it.isSite && it.key == key }.forEach { removeBookmark(it) }
     }
     fun removeRecent(r: Recent) = removeRecent(r.key)
+
+    /** Avancement de la lecture en cours (noté régulièrement), pour ne pas proposer de reprendre ce qui est fini. */
+    fun setProgress(url: String, pos: Double, dur: Double) {
+        if (_recents.value.none { it.url == url }) return
+        _recents.value = _recents.value.map { if (it.url == url) it.copy(pos = pos, dur = dur) else it }
+        saveRecents()
+    }
+
+    fun markFinished(url: String) {
+        if (_recents.value.none { it.url == url }) return
+        _recents.value = _recents.value.map { if (it.url == url) it.copy(done = true) else it }
+        saveRecents()
+    }
+
+    private val _hiddenSites = MutableStateFlow<Set<String>>(emptySet())
+    /** Sites que l'utilisateur ne veut plus voir proposés dans « Mes sites ». */
+    val hiddenSites: StateFlow<Set<String>> = _hiddenSites
+    fun hideSite(host: String) {
+        _hiddenSites.value = _hiddenSites.value + host
+        prefs.edit().putStringSet("hidden_sites", _hiddenSites.value).apply()
+        _bookmarks.value.filter { it.isSite && it.host == host }.forEach { removeBookmark(it) }
+    }
     fun clearRecents() { _recents.value = emptyList(); saveRecents() }
 
     /** La page appartient-elle à une série (ou un site) déjà en favori ? */
@@ -214,6 +245,10 @@ object Library {
             _bookmarks.value = _bookmarks.value - existing
         } else {
             val ep = studio.rollando.castor.browser.Episodes.find(url)
+            hostOf(url).let { h -> if (h in _hiddenSites.value) {
+                _hiddenSites.value = _hiddenSites.value - h
+                prefs.edit().putStringSet("hidden_sites", _hiddenSites.value).apply()
+            } }
             val b = Bookmark(title.ifBlank { url }, url, ep?.number, System.currentTimeMillis(), image)
             _bookmarks.value = listOf(b) + _bookmarks.value
             _events.tryEmit(BookmarkEvent.Followed(b.title, series = !b.isSite && ep != null))
@@ -226,6 +261,7 @@ object Library {
         for (r in _recents.value) arr.put(JSONObject().apply {
             put("title", r.title); put("url", r.url); put("mime", r.mime ?: ""); put("page", r.pageUrl ?: ""); put("poster", r.poster ?: ""); put("file", r.fileName ?: "")
             put("season", r.season ?: -1); put("ep", r.episode ?: -1)
+            put("pos", r.pos); put("dur", r.dur); put("done", r.done)
             put("time", r.time); put("headers", JSONObject(r.headers as Map<*, *>))
         })
         prefs.edit().putString("recents", arr.toString()).apply()
@@ -245,6 +281,7 @@ object Library {
             time = o.optLong("time"),
             season = o.optInt("season", -1).takeIf { it >= 0 },
             episode = o.optInt("ep", -1).takeIf { it >= 0 },
+            pos = o.optDouble("pos", 0.0), dur = o.optDouble("dur", 0.0), done = o.optBoolean("done", false),
         )
     }.distinctBy { it.key } // anciennes listes : un épisode par entrée
 

@@ -625,4 +625,4 @@ fait toute seule.
 
 - Les panneaux du bas (réglages, télés, aide) s'arrêtent sous la barre d'état : la poignée ne passe plus derrière la caméra quand on les remonte tout en haut.
 - Bas des réglages : carte « Fait avec soin par » + vrai logo Rollando Studio (vitrine/logo, version sur fond sombre, PNG 900 px) + « Découvrir nos autres applis » ; toute la carte ouvre rollandostudio.com. « Fait avec soin par Rollando Studio » retiré du texte « À propos » (doublon). « Qualité en guise de promo. »
-- Écran d'attente de la télé : « by Rollando Studio » remplacé par le logo du studio, petit (180 px sur 1920) et semi-transparent, en bas au centre. Rendu jugé sur une maquette à l'échelle (pas de télé joignable depuis l'émulateur).
+- Écran d'attente de la télé : signature « by » + logo du studio, petite (logo 180 px sur 1920) et semi-transparente, en bas au centre. Rendu jugé sur une maquette à l'échelle (pas de télé joignable depuis l'émulateur).

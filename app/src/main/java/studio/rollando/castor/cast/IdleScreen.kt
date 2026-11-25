@@ -79,7 +79,16 @@ object IdleScreen {
             val lw = 180f
             val lh = lw * studio.height / studio.width
             val sp = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG).apply { alpha = 150 }
-            c.drawBitmap(studio, null, RectF(cx - lw / 2, h - 60f - lh, cx + lw / 2, h - 60f), sp)
+            // « by » devant le logo, posé sur la ligne de « Rollando. » ; l'ensemble est centré.
+            p.textSize = 30f
+            p.textAlign = Paint.Align.LEFT
+            p.color = Color.argb(150, 255, 255, 255)
+            val byW = p.measureText("by")
+            val gap = 14f
+            val left = cx - (byW + gap + lw) / 2
+            val top = h - 60f - lh
+            c.drawText("by", left, top + lh * 0.6f, p)
+            c.drawBitmap(studio, null, RectF(left + byW + gap, top, left + byW + gap + lw, h - 60f), sp)
             studio.recycle()
         } else {
             p.textSize = 30f

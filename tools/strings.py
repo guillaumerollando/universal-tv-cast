@@ -397,6 +397,14 @@ S = {
 "iptv_unhide_all": ["Show hidden channels", "Réafficher les chaînes masquées", "Mostrar canales ocultos", "Ausgeblendete Sender zeigen", "Mostra canali nascosti", "Verborgen zenders tonen", "Mostrar canais ocultos"],
 "iptv_remove_recent": ["Remove from recent", "Retirer des récentes", "Quitar de recientes", "Aus „Zuletzt“ entfernen", "Rimuovi dai recenti", "Uit recent verwijderen", "Remover dos recentes"],
 "action_undo": ["Undo", "Annuler", "Deshacer", "Rückgängig", "Annulla", "Ongedaan maken", "Desfazer"],
+"err_channel_denied": [
+ "This channel isn’t responding (error %1$s): its link may no longer work, or it may only be available in its own country. Press and hold it in the list to hide it.",
+ "Cette chaîne ne répond pas (erreur %1$s) : son lien ne marche peut-être plus, ou elle n’est visible que dans son pays. Appui long dans la liste pour la masquer.",
+ "Este canal no responde (error %1$s): puede que su enlace ya no funcione o que solo se vea en su país. Mantenlo pulsado en la lista para ocultarlo.",
+ "Dieser Sender antwortet nicht (Fehler %1$s): Der Link funktioniert vielleicht nicht mehr, oder er ist nur in seinem Land verfügbar. In der Liste gedrückt halten, um ihn auszublenden.",
+ "Questo canale non risponde (errore %1$s): il link potrebbe non funzionare più o essere visibile solo nel suo paese. Tienilo premuto nella lista per nasconderlo.",
+ "Deze zender reageert niet (fout %1$s): de link werkt misschien niet meer, of hij is alleen in zijn eigen land te zien. Houd hem ingedrukt in de lijst om hem te verbergen.",
+ "Este canal não responde (erro %1$s): o link pode não funcionar mais ou ele só é visível no próprio país. Mantenha pressionado na lista para ocultá-lo."],
 "iptv_title": ["Channel lists", "Listes de chaînes", "Listas de canales", "Senderlisten", "Liste di canali", "Zenderlijsten", "Listas de canais"],
 "iptv_intro": [
  "A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.",

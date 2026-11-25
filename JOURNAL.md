@@ -715,3 +715,10 @@ fait toute seule.
 - Listes de chaînes en mosaïque de logos (4 colonnes sur téléphone), nom dessous, sans catégorie.
 - Appui long : « Masquer cette chaîne » (lien mort…), avec « Annuler » quelques secondes ; « Réafficher les chaînes
   masquées (N) » à côté du nombre de chaînes. Sur une récente : « Retirer des récentes » (elle revient si on la regarde).
+
+## 2026-11-25 (nuit, 8) — Source qui refuse : on s'arrête
+- Journal du téléphone : une chaîne répondait 403 ; la télé échouait, l'appli renvoyait automatiquement (allers-retours).
+- Le relais signale désormais tout refus net de la source (401, 403, 404, 410) quand la télé demande la vidéo :
+  l'appli arrête (écran d'attente), sans renvoi, et l'explique. Pour une chaîne : « Cette chaîne ne répond pas
+  (erreur 403) : lien mort ou réservée à son pays. Appui long dans la liste pour la masquer. » Vérifié sur l'émulateur
+  (faux site qui passe en 403).

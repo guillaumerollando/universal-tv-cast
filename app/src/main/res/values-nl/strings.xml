@@ -246,6 +246,7 @@
     <string name="iptv_unhide_all">Verborgen zenders tonen</string>
     <string name="iptv_remove_recent">Uit recent verwijderen</string>
     <string name="action_undo">Ongedaan maken</string>
+    <string name="err_channel_denied">Deze zender reageert niet (fout %1$s): de link werkt misschien niet meer, of hij is alleen in zijn eigen land te zien. Houd hem ingedrukt in de lijst om hem te verbergen.</string>
     <string name="iptv_title">Zenderlijsten</string>
     <string name="iptv_intro">Een zenderlijst (M3U- of IPTV-lijst) bundelt tv-zenders in één link. Plak het adres of open het bestand: hier vind je alle zenders, met hun logo.</string>
     <string name="iptv_url_hint">Adres van de lijst (.m3u)</string>

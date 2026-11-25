@@ -246,6 +246,7 @@
     <string name="iptv_unhide_all">Mostrar canais ocultos</string>
     <string name="iptv_remove_recent">Remover dos recentes</string>
     <string name="action_undo">Desfazer</string>
+    <string name="err_channel_denied">Este canal não responde (erro %1$s): o link pode não funcionar mais ou ele só é visível no próprio país. Mantenha pressionado na lista para ocultá-lo.</string>
     <string name="iptv_title">Listas de canais</string>
     <string name="iptv_intro">Uma lista de canais (lista M3U ou IPTV) reúne canais de TV em um só link. Cole o endereço ou abra o arquivo: aqui você encontra todos os canais, com o logotipo.</string>
     <string name="iptv_url_hint">Endereço da lista (.m3u)</string>

@@ -52,6 +52,8 @@ class ProxyServer(private val ctx: Context) {
     @Volatile var subtitleUrl: String? = null
     /** Appelé quand le site refuse de redonner la vidéo à la télé (403 / 401). */
     @Volatile var onSourceDenied: ((Int) -> Unit)? = null
+    /** La source de la vidéo principale répond par une erreur (403, 404…) quand la télé la demande. */
+    @Volatile var onSourceError: ((Int) -> Unit)? = null
     /** Nom du format tel que la télé l'accepte (ex. « video/mpeg » au lieu de « video/mp2t »). */
     @Volatile var mimeOverride: String? = null
 
@@ -245,7 +247,10 @@ class ProxyServer(private val ctx: Context) {
             val code = conn.responseCode
             if (r.kind == Kind.MAIN) Log.i(TAG, "${req.method} $id range=$range -> source $code " +
                 "len=${conn.getHeaderField("Content-Length")} en ${System.currentTimeMillis() - t0} ms")
-            if (code >= 400) return empty(out, code, "Upstream Error")
+            if (code >= 400) {
+                if (r.kind == Kind.MAIN) onSourceError?.invoke(code)
+                return empty(out, code, "Upstream Error")
+            }
             val ct = conn.contentType?.substringBefore(';')?.trim()
 
             if (r.kind == Kind.PLAYLIST || ct?.contains("mpegurl", true) == true ||
@@ -366,6 +371,7 @@ class ProxyServer(private val ctx: Context) {
         } catch (e: studio.rollando.castor.net.HttpError) {
             // Le site refuse (liens à usage unique, protection) : on le dit à l'appli plutôt qu'un échec muet.
             if (e.code == 401 || e.code == 403) onSourceDenied?.invoke(e.code)
+            onSourceError?.invoke(e.code)
             throw e
         }
         var plan = plan0

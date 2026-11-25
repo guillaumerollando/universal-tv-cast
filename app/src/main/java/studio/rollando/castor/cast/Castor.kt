@@ -139,7 +139,21 @@ object Castor {
             }
         }
         proxy.onSourceDenied = { _ ->
-            _state.update { it.copy(notice = Notice(R.string.err_protected, error = true)) }
+            if (!isChannel()) _state.update { it.copy(notice = Notice(R.string.err_protected, error = true)) }
+        }
+        // La source refuse la vidéo quand la télé la demande : inutile d'insister (la télé échouerait, on renverrait,
+        // allers-retours sur l'écran) ; on arrête et on dit pourquoi.
+        proxy.onSourceError = { code ->
+            val s = _state.value
+            // Seulement les refus nets (pas une panne passagère du site, 5xx, qui peut se rattraper).
+            if (code in setOf(401, 403, 404, 410) && (s.active || s.phase == Phase.SENDING || s.phase == Phase.BUFFERING)) {
+                Log.w("Castor", "la source refuse la vidéo (erreur $code) : arrêt")
+                pollJob?.cancel()
+                val n = if (isChannel()) Notice(R.string.err_channel_denied, code.toString(), true)
+                    else Notice(R.string.err_source, code.toString(), true)
+                stop()
+                scope.launch { delay(600); _state.update { it.copy(notice = n) } }
+            }
         }
     }
 
@@ -184,6 +198,9 @@ object Castor {
         }
     }
 
+    /** Une chaîne (liste IPTV, ou direct) plutôt qu'une vidéo de site. */
+    private fun isChannel(): Boolean = _state.value.media?.channel != null || _state.value.live
+
     private fun fail(e: Exception) {
         val n = when (e) {
             is NoTv -> Notice(R.string.notice_pick_tv, error = true)
@@ -192,7 +209,7 @@ object Castor {
             is Drm -> Notice(R.string.err_drm, error = true)
             is TvError -> Notice(R.string.err_tv, e.detail, true)
             is studio.rollando.castor.dlna.TvBusy -> Notice(R.string.err_tv_busy, error = true)
-            is HttpError -> Notice(R.string.err_source, e.code.toString(), true)
+            is HttpError -> Notice(if (isChannel()) R.string.err_channel_denied else R.string.err_source, e.code.toString(), true)
             is UnknownHostException, is ConnectException, is SocketTimeoutException -> Notice(R.string.err_network, error = true)
             else -> Notice(R.string.err_generic, e.message ?: e.javaClass.simpleName, true)
         }

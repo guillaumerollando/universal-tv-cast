@@ -39,8 +39,12 @@ data class Renderer(
     /** Appareil Google Cast (Chromecast, Google TV, télé avec Cast intégré) plutôt que DLNA. */
     val cast: Boolean = false,
     val routeId: String? = null,
+    /** Pour une télé qui a Cast et DLNA : l'entrée DLNA de secours si le lecteur Cast refuse la vidéo. */
+    val fallback: Renderer? = null,
 ) {
-    val host: String get() = runCatching { URL(location.ifEmpty { avUrl }).host }.getOrDefault("")
+    val host: String
+        get() = if (location.startsWith("cast://")) location.removePrefix("cast://")
+        else runCatching { URL(location.ifEmpty { avUrl }).host }.getOrDefault("")
 }
 
 /** La télé a répondu par une erreur UPnP. */
@@ -378,8 +382,13 @@ object Dlna {
         artUrl: String? = null, durationSec: Double = 0.0,
     ): String {
         val op = if (seekable) "01" else "00"
-        val info = "http-get:*:$mime:DLNA.ORG_OP=$op;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000"
-        val cls = if (mime.startsWith("audio/")) "object.item.audioItem.musicTrack" else "object.item.videoItem"
+        val info = if (mime.startsWith("image/")) "http-get:*:image/jpeg:DLNA.ORG_PN=JPEG_LRG;DLNA.ORG_OP=00;DLNA.ORG_FLAGS=00900000000000000000000000000000"
+            else "http-get:*:$mime:DLNA.ORG_OP=$op;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000"
+        val cls = when {
+            mime.startsWith("audio/") -> "object.item.audioItem.musicTrack"
+            mime.startsWith("image/") -> "object.item.imageItem.photo"
+            else -> "object.item.videoItem"
+        }
         return buildString {
             append("<DIDL-Lite xmlns=\"urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/\" ")
             append("xmlns:dc=\"http://purl.org/dc/elements/1.1/\" ")

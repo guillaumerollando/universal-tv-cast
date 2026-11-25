@@ -97,6 +97,7 @@ object CastControl {
                     cast = true, routeId = route.id,
                 )
             }
+        Log.i(TAG, "appareils Cast : ${list.joinToString { it.name + " (" + it.host + ")" }.ifEmpty { "aucun" }}")
         onDevices?.invoke(list)
     }
 
@@ -109,7 +110,8 @@ object CastControl {
         val wanted = r.udn.removePrefix("cast:")
         session()?.let { s -> if (s.castDevice?.deviceId == wanted) return@withContext s }
         val route = rt.routes.firstOrNull { it.id == r.routeId } ?: throw TvBusy(IOException("appareil Cast introuvable"))
-        withTimeout(20_000) {
+        Log.i(TAG, "connexion à ${r.name}…")
+        withTimeout(12_000) {
             suspendCancellableCoroutine { cont ->
                 val sm = ctx.sessionManager
                 val l = object : SessionManagerListener<CastSession> {
@@ -183,6 +185,15 @@ object CastControl {
             Log.i(TAG, "chargement $mime sous-titres=${sub != null} départ=${startSec.toInt()} s")
             c.load(req).awaitOk("chargement")
         }
+
+    /** Affiche une photo avec le lecteur Cast. */
+    suspend fun loadPhoto(r: Renderer, url: String, title: String) = withContext(Dispatchers.Main) {
+        val c = client(r)
+        val md = MediaMetadata(MediaMetadata.MEDIA_TYPE_PHOTO).apply { putString(MediaMetadata.KEY_TITLE, title) }
+        val info = MediaInfo.Builder(url).setContentUrl(url).setStreamType(MediaInfo.STREAM_TYPE_NONE)
+            .setContentType("image/jpeg").setMetadata(md).build()
+        c.load(MediaLoadRequestData.Builder().setMediaInfo(info).setAutoplay(true).build()).awaitOk("photo")
+    }
 
     suspend fun play(r: Renderer) = withContext(Dispatchers.Main) { client(r).play().awaitOk("lecture") }
     suspend fun pause(r: Renderer) = withContext(Dispatchers.Main) { client(r).pause().awaitOk("pause") }

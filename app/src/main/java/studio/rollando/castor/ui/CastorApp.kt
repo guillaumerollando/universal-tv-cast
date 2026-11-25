@@ -3,6 +3,7 @@ package studio.rollando.castor.ui
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
@@ -121,6 +122,17 @@ fun CastorApp() {
         Castor.open(Media(url = uri.toString(), title = Intake.nameOf(context, uri), mime = context.contentResolver.getType(uri)))
         Nav.tab.value = Tab.PLAYER
     }
+    // Sélecteur de photos et vidéos d'Android : fiable sur tous les téléphones, sans autorisation à demander.
+    val pickVideo = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
+        uri ?: return@rememberLauncherForActivityResult
+        Castor.open(Media(url = uri.toString(), title = Intake.nameOf(context, uri), mime = context.contentResolver.getType(uri)))
+        Nav.tab.value = Tab.PLAYER
+    }
+    val pickPhotos = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(100)) { uris: List<Uri> ->
+        if (uris.isEmpty()) return@rememberLauncherForActivityResult
+        Castor.openPhotos(uris)
+        Nav.tab.value = Tab.PLAYER
+    }
 
     Scaffold(
         topBar = {
@@ -157,6 +169,8 @@ fun CastorApp() {
                 Tab.HOME -> HomeScreen(
                     onBrowse = { url -> url?.let { browser.load(it) }; Nav.tab.value = Tab.BROWSER },
                     onPickFile = { pickFile.launch(arrayOf("video/*", "audio/*")) },
+                    onPickVideo = { pickVideo.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly)) },
+                    onPickPhotos = { pickPhotos.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
                     onPasteLink = { showLink = true },
                 )
                 Tab.BROWSER -> BrowserScreen(browser)

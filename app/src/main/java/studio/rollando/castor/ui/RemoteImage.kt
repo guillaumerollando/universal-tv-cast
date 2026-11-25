@@ -44,6 +44,31 @@ object Images {
     }
 }
 
+/** Vignette d'une photo ou vidéo du téléphone. */
+suspend fun loadLocalThumb(ctx: android.content.Context, uri: android.net.Uri, side: Int): Bitmap? = withContext(Dispatchers.IO) {
+    runCatching {
+        if (android.os.Build.VERSION.SDK_INT >= 29) ctx.contentResolver.loadThumbnail(uri, android.util.Size(side, side), null)
+        else {
+            val b = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+            ctx.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, b) }
+            var k = 1
+            while (maxOf(b.outWidth, b.outHeight) / (k * 2) >= side) k *= 2
+            ctx.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, BitmapFactory.Options().apply { inSampleSize = k }) }
+        }
+    }.getOrNull()
+}
+
+@Composable
+fun LocalImage(uri: String, modifier: Modifier = Modifier, side: Int = 512, contentScale: ContentScale = ContentScale.Crop) {
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    val img: ImageBitmap? by produceState<ImageBitmap?>(null, uri) {
+        value = loadLocalThumb(ctx, android.net.Uri.parse(uri), side)?.asImageBitmap()
+    }
+    AnimatedVisibility(img != null, modifier = modifier, enter = fadeIn(tween(250))) {
+        img?.let { Image(it, contentDescription = null, contentScale = contentScale) }
+    }
+}
+
 /** Image distante qui apparaît en fondu une fois chargée ; rien n'est affiché si elle est introuvable. */
 @Composable
 fun RemoteImage(

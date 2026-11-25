@@ -97,6 +97,10 @@ import java.util.Locale
 
 @Composable
 fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
+    if (state.slides != null) {
+        SlideshowScreen(state)
+        return
+    }
     val media = state.media
     if (media == null) {
         Empty()

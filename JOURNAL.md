@@ -186,3 +186,18 @@ très probablement Google Cast (la télé l'intègre, ports 8008/8009).
 
 **À vérifier sur la vraie télé** : l'entrée Cast de la Philips apparaît ; la vidéo Stremio et ses sous-titres
 s'affichent dans le lecteur Cast ; avance ; arrêt.
+
+## 2026-11-25 (nuit) — Cast automatique, album photo, accueil, reprise après sous-titres
+**Constats** : l'essai Cast n'a rien changé car Castor a réutilisé l'entrée DLNA mémorisée (aucune connexion Cast
+dans le journal). Changer de sous-titres repartait à 0 (déplacement demandé trop tôt, refusé en silence). Vidéos
+du téléphone : fonctionnent sur émulateur ; sur Xiaomi, sélecteur MIUI ou vidéos HEVC probablement en cause.
+
+**Fait**
+- Une seule entrée par télé : Cast + DLNA d'une même adresse fusionnés, **Cast choisi d'office**, DLNA en secours
+  automatique (échec de connexion ou format refusé, au même endroit). Journal `CastorCast`.
+- Reprise fiable après changement de sous-titres (attendre la lecture, puis se placer, 3 essais). Vérifié : 1:55.
+- Fichiers du téléphone : sélecteur photos/vidéos d'Android ; ouverture en 3 méthodes de secours.
+- **Album photo** : sélection multiple, photos préparées (1920 px, orientation, HEIC→JPEG), envoi Cast/DLNA,
+  précédente/suivante, diaporama 6 s, vignettes. Vérifié sur émulateur + fausse télé.
+- Accueil : grille de 4 tuiles (Sites web, Vidéos, Photos, Lien), carrousel « Reprendre » avec affiches,
+  favoris toujours visibles (explication si vide), lien « Parcourir les fichiers ».

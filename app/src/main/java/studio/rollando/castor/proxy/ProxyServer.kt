@@ -157,6 +157,7 @@ class ProxyServer(private val ctx: Context) {
                     "r" -> serveRemote(req, out)
                     "ts" -> serveContinuous(req, out)
                     "l" -> serveLocal(req, out)
+                    "img" -> serveImage(req, out)
                     "sub" -> serveSubtitle(req, out)
                     else -> empty(out, 404, "Not Found")
                 }
@@ -433,41 +434,102 @@ class ProxyServer(private val ctx: Context) {
 
     // ------------------------------------------------------------------ fichiers du téléphone
 
-    private fun serveLocal(req: Req, out: OutputStream) {
-        val uri = locals[req.seg.getOrNull(1)] ?: return empty(out, 404, "Not Found")
+    /** Un fichier du téléphone : sa taille et une façon de le lire à partir d'un octet donné. */
+    private class LocalFile(val total: Long, val type: String?, val open: (Long) -> InputStream)
+
+    /**
+     * Ouvre un fichier du téléphone de la façon la plus robuste : trois méthodes essayées l'une après l'autre
+     * (certains sélecteurs, dont celui de MIUI, renvoient des fichiers que la première ne sait pas ouvrir).
+     */
+    private fun openLocal(uri: Uri): LocalFile {
         val cr = ctx.contentResolver
-        val afd = cr.openAssetFileDescriptor(uri, "r") ?: return empty(out, 404, "Not Found")
-        afd.use {
-            var total = afd.length
-            if (total < 0) total = afd.parcelFileDescriptor.statSize
-            val type = mimeOverride ?: cr.getType(uri)?.takeIf { Mime.isMedia(it) } ?: Mime.guess(uri.toString())
-            val range = parseRange(req.headers["range"], total)
-            afd.createInputStream().use { ins ->
-                if (range == null) {
-                    val h = mutableListOf("Content-Type" to type, "Accept-Ranges" to "bytes")
-                    if (total > 0) h += "Content-Length" to total.toString()
-                    head(out, 200, "OK", h + dlna(true))
-                    if (req.method != "HEAD") ins.copyTo(out, 64 * 1024)
-                } else {
-                    val (a, b) = range
-                    head(out, 206, "Partial Content", listOf(
-                        "Content-Type" to type,
-                        "Accept-Ranges" to "bytes",
-                        "Content-Range" to "bytes $a-$b/$total",
-                        "Content-Length" to (b - a + 1).toString(),
-                    ) + dlna(true))
-                    if (req.method != "HEAD") {
-                        var toSkip = a
-                        while (toSkip > 0) {
-                            val n = ins.skip(toSkip)
-                            if (n <= 0) break
-                            toSkip -= n
-                        }
-                        copyLimited(ins, out, b - a + 1)
-                    }
+        val type = runCatching { cr.getType(uri) }.getOrNull()
+        runCatching {
+            cr.openAssetFileDescriptor(uri, "r")!!.use { afd ->
+                val total = afd.length.takeIf { it >= 0 } ?: afd.parcelFileDescriptor.statSize
+                LocalFile(total, type) { off ->
+                    val a = cr.openAssetFileDescriptor(uri, "r")!!
+                    a.createInputStream().also { skipFully(it, off) }
                 }
             }
+        }.onSuccess { return it }.onFailure { Log.i(TAG, "fichier local (méthode 1) : ${it.message}") }
+        runCatching {
+            cr.openFileDescriptor(uri, "r")!!.use { pfd ->
+                LocalFile(pfd.statSize, type) { off ->
+                    java.io.FileInputStream(cr.openFileDescriptor(uri, "r")!!.fileDescriptor).also { skipFully(it, off) }
+                }
+            }
+        }.onSuccess { return it }.onFailure { Log.i(TAG, "fichier local (méthode 2) : ${it.message}") }
+        val size = runCatching {
+            cr.query(uri, arrayOf(android.provider.OpenableColumns.SIZE), null, null, null)?.use { c ->
+                if (c.moveToFirst() && !c.isNull(0)) c.getLong(0) else -1L
+            }
+        }.getOrNull() ?: -1L
+        return LocalFile(size, type) { off -> (cr.openInputStream(uri) ?: throw IOException("unreadable")).also { skipFully(it, off) } }
+    }
+
+    private fun skipFully(ins: InputStream, n: Long) {
+        var left = n
+        while (left > 0) {
+            val k = ins.skip(left)
+            if (k > 0) { left -= k; continue }
+            if (ins.read() < 0) break
+            left--
         }
+    }
+
+    private fun serveLocal(req: Req, out: OutputStream) {
+        val uri = locals[req.seg.getOrNull(1)] ?: return empty(out, 404, "Not Found")
+        val f = try {
+            openLocal(uri)
+        } catch (e: Exception) {
+            Log.i(TAG, "fichier local illisible : ${e.message}")
+            return empty(out, 404, "Not Found")
+        }
+        val total = f.total
+        val type = mimeOverride ?: f.type?.takeIf { Mime.isMedia(it) } ?: Mime.guess(uri.toString())
+        val range = parseRange(req.headers["range"], total)
+        if (range == null) {
+            val h = mutableListOf("Content-Type" to type, "Accept-Ranges" to "bytes")
+            if (total > 0) h += "Content-Length" to total.toString() else h += "Transfer-Encoding" to "chunked"
+            head(out, 200, "OK", h + dlna(total > 0))
+            if (req.method != "HEAD") f.open(0).use { ins ->
+                if (total > 0) ins.copyTo(out, 64 * 1024)
+                else ChunkedOutputStream(out).let { c -> ins.copyTo(c, 64 * 1024); c.finish() }
+            }
+        } else {
+            val (a, b) = range
+            head(out, 206, "Partial Content", listOf(
+                "Content-Type" to type,
+                "Accept-Ranges" to "bytes",
+                "Content-Range" to "bytes $a-$b/$total",
+                "Content-Length" to (b - a + 1).toString(),
+            ) + dlna(true))
+            if (req.method != "HEAD") f.open(a).use { ins -> copyLimited(ins, out, b - a + 1) }
+        }
+    }
+
+    // ------------------------------------------------------------------ photos
+
+    private val images = ConcurrentHashMap<String, ByteArray>()
+
+    /** Photo déjà préparée (JPEG redimensionné, bien orienté) à servir à la télé. */
+    fun registerImage(jpeg: ByteArray): String {
+        val id = "i" + counter.incrementAndGet()
+        if (images.size > 6) images.keys.sorted().take(images.size - 6).forEach { images.remove(it) }
+        images[id] = jpeg
+        return id
+    }
+
+    private fun serveImage(req: Req, out: OutputStream) {
+        val bytes = images[req.seg.getOrNull(1)] ?: return empty(out, 404, "Not Found")
+        head(out, 200, "OK", listOf(
+            "Content-Type" to "image/jpeg",
+            "Content-Length" to bytes.size.toString(),
+            "transferMode.dlna.org" to "Interactive",
+            "contentFeatures.dlna.org" to "DLNA.ORG_PN=JPEG_LRG;DLNA.ORG_OP=00;DLNA.ORG_FLAGS=00900000000000000000000000000000",
+        ))
+        if (req.method != "HEAD") out.write(bytes)
     }
 
     private fun parseRange(h: String?, total: Long): Pair<Long, Long>? {

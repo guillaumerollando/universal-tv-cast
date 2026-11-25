@@ -37,6 +37,9 @@ import java.util.concurrent.Executors
 
 enum class Phase { IDLE, LOADING, SENDING, BUFFERING, PLAYING, PAUSED, STOPPED }
 
+/** Album photo : les photos choisies, celle affichée, et le diaporama automatique. */
+data class Slides(val uris: List<String>, val index: Int = 0, val auto: Boolean = false)
+
 data class Notice(@StringRes val res: Int, val arg: String? = null, val error: Boolean = false)
 
 data class CastState(
@@ -53,6 +56,8 @@ data class CastState(
     val duration: Double = 0.0,
     val volume: Int? = null,
     val notice: Notice? = null,
+    /** Album photo en cours d'affichage sur la télé. */
+    val slides: Slides? = null,
 ) {
     val active: Boolean get() = phase in setOf(Phase.SENDING, Phase.BUFFERING, Phase.PLAYING, Phase.PAUSED)
 }
@@ -94,7 +99,23 @@ object Castor {
 
     @Volatile private var dlnaDevices: List<Renderer> = emptyList()
     @Volatile private var castDevices: List<Renderer> = emptyList()
-    private fun allDevices() = dlnaDevices + castDevices
+    /**
+     * Une seule entrée par télé : si elle a Cast et DLNA (même adresse IP), on garde Cast — il affiche
+     * les sous-titres — avec le DLNA en secours.
+     */
+    private fun allDevices(): List<Renderer> {
+        val dlna = dlnaDevices
+        val merged = castDevices.map { c ->
+            val twin = dlna.firstOrNull { it.host.isNotEmpty() && it.host == c.host }
+            if (twin == null) c else c.copy(name = twin.name, fallback = twin)
+        }
+        val twins = merged.mapNotNull { it.fallback?.udn }.toSet()
+        return merged + dlna.filter { it.udn !in twins }
+    }
+
+    /** L'appareil réellement piloté (l'entrée DLNA de secours si Cast a été abandonné pour cette vidéo). */
+    @Volatile private var via: Renderer? = null
+    private fun target(): Renderer? = via ?: _state.value.renderer
 
     /** Vrai pendant qu'une commande est envoyée à la télé : on ne l'interroge pas en même temps. */
     @Volatile private var busy = false
@@ -157,6 +178,10 @@ object Castor {
                 pendingCast = false
                 exec { castAt(_state.value.media?.startSec ?: 0.0) }
             }
+            if (pendingPhotos && _state.value.renderer != null && _state.value.slides != null) {
+                pendingPhotos = false
+                exec { showPhoto(_state.value.slides?.index ?: 0) }
+            }
         }
     }
 
@@ -180,8 +205,9 @@ object Castor {
     private fun publish(list: List<Renderer>) {
         val sorted = list.sortedBy { it.name.lowercase() }
         _state.update { s ->
-            val keep = s.renderer?.let { cur -> sorted.firstOrNull { it.udn == cur.udn } ?: cur }
-            val sel = keep ?: sorted.firstOrNull { it.udn == Library.lastTv } ?: sorted.singleOrNull()
+            fun matches(r: Renderer, udn: String?) = udn != null && (r.udn == udn || r.fallback?.udn == udn)
+            val keep = s.renderer?.let { cur -> sorted.firstOrNull { matches(it, cur.udn) } ?: cur }
+            val sel = keep ?: sorted.firstOrNull { matches(it, Library.lastTv) } ?: sorted.singleOrNull()
             s.copy(renderers = sorted, renderer = sel)
         }
     }
@@ -196,6 +222,7 @@ object Castor {
         Library.lastTv = null
         pendingCast = false
         if (_state.value.renderer?.cast == true) CastControl.disconnect()
+        via = null
         CastService.stop(app)
         _state.update { it.copy(renderer = null, phase = Phase.IDLE, position = 0.0, volume = null, notice = null) }
     }
@@ -220,8 +247,9 @@ object Castor {
 
     fun open(media: Media, autoCast: Boolean = true) = exec {
         pollJob?.cancel()
+        slideJob?.cancel()
         _state.update {
-            it.copy(media = media, phase = Phase.LOADING, isHls = false, splitAudio = false, subIndex = media.defaultSub,
+            it.copy(media = media, slides = null, phase = Phase.LOADING, isHls = false, splitAudio = false, subIndex = media.defaultSub,
                 position = 0.0, duration = 0.0, notice = null, continuous = Library.continuousHls.value)
         }
         proxy.reset()
@@ -297,6 +325,78 @@ object Castor {
         }
     }
 
+    // ------------------------------------------------------------------ album photo
+
+    private var slideJob: Job? = null
+    private var pendingPhotos = false
+
+    /** Affiche sur la télé les photos choisies, une par une (diaporama possible). */
+    fun openPhotos(uris: List<Uri>) {
+        if (uris.isEmpty()) return
+        pollJob?.cancel(); seekJob?.cancel(); slideJob?.cancel()
+        _state.update {
+            it.copy(media = null, slides = Slides(uris.map(Uri::toString)), phase = Phase.LOADING, notice = null,
+                isHls = false, position = 0.0, duration = 0.0)
+        }
+        exec { showPhoto(0) }
+    }
+
+    private suspend fun showPhoto(i: Int) {
+        val sl = _state.value.slides ?: return
+        val chosen = _state.value.renderer
+        if (chosen == null) {
+            pendingPhotos = true
+            _state.update { it.copy(phase = Phase.IDLE, notice = Notice(R.string.notice_pick_tv)) }
+            discover()
+            return
+        }
+        Net.localIp() ?: throw NoWifi()
+        val idx = i.mod(sl.uris.size)
+        _state.update { it.copy(slides = it.slides?.copy(index = idx), phase = Phase.SENDING) }
+        val uri = Uri.parse(sl.uris[idx])
+        val jpeg = kotlinx.coroutines.withContext(Dispatchers.IO) { Photos.prepare(app, uri) }
+        val url = "${proxy.baseUrl()}/img/${proxy.registerImage(jpeg)}/photo.jpg"
+        val name = Intake.nameOf(app, uri)
+        var r = chosen
+        if (chosen.cast) {
+            try {
+                CastControl.loadPhoto(chosen, url, name)
+                r = chosen
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                r = chosen.fallback ?: throw e
+                CastControl.disconnect()
+            }
+        }
+        if (!r.cast) {
+            replaceMedia(r, url, Dlna.didl(name, url, "image/jpeg", null, false))
+            runCatching { Dlna.play(r) }
+        }
+        via = if (r !== chosen) r else null
+        CastService.start(app)
+        _state.update { it.copy(phase = Phase.PLAYING) }
+    }
+
+    fun photoAt(i: Int) { if (_state.value.slides != null) exec { showPhoto(i) } }
+    fun nextPhoto(delta: Int) { _state.value.slides?.let { sl -> exec { showPhoto(sl.index + delta) } } }
+
+    /** Diaporama : une photo toutes les 6 secondes. */
+    fun toggleSlideshow() {
+        val sl = _state.value.slides ?: return
+        val on = !sl.auto
+        _state.update { it.copy(slides = it.slides?.copy(auto = on)) }
+        slideJob?.cancel()
+        if (on) slideJob = scope.launch {
+            while (isActive) {
+                delay(6000)
+                val cur = _state.value.slides ?: break
+                if (!cur.auto) break
+                kotlinx.coroutines.withContext(cmd) { runCatching { showPhoto(cur.index + 1) } }
+            }
+        }
+    }
+
     private fun sniffHls(m: Media): Boolean = runCatching {
         val c = Http.open(m.url, m.headers, "bytes=0-63", connectTimeout = 8000)
         try {
@@ -326,14 +426,31 @@ object Castor {
         }
     }
 
-    private suspend fun castAt(start: Double) {
-        val r = _state.value.renderer ?: throw NoTv()
+    private suspend fun castAt(start: Double, forceDlna: Boolean = false) {
+        val chosen = _state.value.renderer ?: throw NoTv()
         val s = _state.value
         val m = s.media ?: return
         Net.localIp() ?: throw NoWifi()
         _state.update { it.copy(phase = Phase.SENDING, notice = null) }
         val base = proxy.baseUrl()
-        if (r.cast) { castViaGoogleCast(r, s, m, start, base); return }
+        var r = chosen
+        if (chosen.cast && !forceDlna) {
+            try {
+                via = null
+                castViaGoogleCast(chosen, s, m, start, base)
+                return
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                val fb = chosen.fallback ?: throw e
+                Log.i("CastorCast", "Cast a échoué (${e.message}) : repli sur le DLNA de ${fb.name}")
+                CastControl.disconnect()
+                r = fb
+            }
+        } else if (chosen.cast) {
+            r = chosen.fallback ?: throw NoTv()
+        }
+        via = if (r !== chosen) r else null
         val tvMimes = sinksOf(r)
         // Une télé qui ne lit pas le HLS reçoit toujours le flux continu.
         val continuous = s.isHls && (s.continuous || !Dlna.accepts(tvMimes, "application/vnd.apple.mpegurl"))
@@ -364,8 +481,22 @@ object Castor {
         CastService.start(app)
         _state.update { it.copy(phase = Phase.BUFFERING, position = start) }
         if (!continuous && start > 1) {
-            delay(2500)
-            runCatching { Dlna.seek(r, start) }
+            // Reprendre au bon endroit : attendre que la télé lise vraiment, puis s'y placer (2 essais).
+            holdPositionUntil = System.currentTimeMillis() + 20_000
+            val end = System.currentTimeMillis() + 15_000
+            while (System.currentTimeMillis() < end &&
+                runCatching { Dlna.transportState(r) }.getOrNull() != "PLAYING"
+            ) delay(400)
+            delay(600)
+            var ok = false
+            for (attempt in 0 until 3) {
+                ok = runCatching { Dlna.seek(r, start) }.isSuccess
+                if (ok) break
+                delay(1200)
+                waitUntilSettled(r, 4000)
+            }
+            Log.i("Castor", "reprise à ${start.toInt()} s : ${if (ok) "faite" else "refusée par la télé"}")
+            holdPositionUntil = System.currentTimeMillis() + 2000
         }
         if (_state.value.volume == null) runCatching { Dlna.getVolume(r) }.onSuccess { v -> _state.update { it.copy(volume = v) } }
         startPolling()
@@ -407,7 +538,7 @@ object Castor {
             while (isActive) {
                 delay(if (failures >= 2) 10_000 else 2000)
                 if (busy) continue
-                val r = _state.value.renderer ?: break
+                val r = target() ?: break
                 try {
                     val rel: Double
                     val dur: Double
@@ -415,8 +546,18 @@ object Castor {
                     if (r.cast) {
                         val snap = CastControl.snapshot()
                         rel = snap.first; dur = snap.second; t = snap.third
-                        if (CastControl.lastError() != null && _state.value.notice?.res != R.string.err_cast_format) {
-                            _state.update { it.copy(notice = Notice(R.string.err_cast_format, error = true)) }
+                        if (CastControl.lastError() != null) {
+                            val fb = r.fallback
+                            if (fb != null) {
+                                // Le lecteur Cast refuse ce format : on repasse en DLNA, au même endroit.
+                                Log.i("CastorCast", "format refusé par Cast : repli sur le DLNA")
+                                CastControl.disconnect()
+                                val at = _state.value.position
+                                exec { castAt(at, forceDlna = true) }
+                                break
+                            } else if (_state.value.notice?.res != R.string.err_cast_format) {
+                                _state.update { it.copy(notice = Notice(R.string.err_cast_format, error = true)) }
+                            }
                         }
                     } else {
                         val (p, d) = Dlna.position(r)
@@ -491,7 +632,7 @@ object Castor {
 
     private suspend fun togglePlayNow() {
         val s = _state.value
-        val r = s.renderer ?: throw NoTv()
+        val r = target() ?: throw NoTv()
         when (s.phase) {
             Phase.PLAYING, Phase.BUFFERING -> {
                 if (r.cast) CastControl.pause(r) else Dlna.pause(r)
@@ -528,7 +669,7 @@ object Castor {
 
     private suspend fun doSeek(target: Double) {
         val s = _state.value
-        val r = s.renderer ?: throw NoTv()
+        val r = target() ?: throw NoTv()
         if (r.cast) {
             CastControl.seek(r, target)
             holdPositionUntil = System.currentTimeMillis() + 1500
@@ -584,14 +725,16 @@ object Castor {
     }
 
     fun stop() = exec {
+        slideJob?.cancel()
+        _state.update { it.copy(slides = it.slides?.copy(auto = false)) }
         pollJob?.cancel()
-        _state.value.renderer?.let { r -> if (r.cast) CastControl.stop(r) else runCatching { Dlna.stop(r) } }
+        target()?.let { r -> if (r.cast) CastControl.stop(r) else runCatching { Dlna.stop(r) } }
         _state.update { it.copy(phase = Phase.STOPPED) }
         CastService.stop(app)
     }
 
     fun changeVolume(delta: Int) = exec {
-        val r = _state.value.renderer ?: throw NoTv()
+        val r = target() ?: throw NoTv()
         val current = _state.value.volume ?: if (r.cast) CastControl.volume() else Dlna.getVolume(r)
         val v = (current + delta).coerceIn(0, 100)
         _state.update { it.copy(volume = v) }

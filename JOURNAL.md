@@ -601,3 +601,9 @@ fait toute seule.
 - Avancement noté toutes les 15 s (et la fin de lecture) : un film fini ou à moins de 5 min de la fin disparaît ; un épisode fini (≈ 8 % de la fin) propose l'épisode suivant (« Ép. 6 », adresse suivante).
 - Cartes allégées : titre seul, sans le nom du site.
 - « Tout voir → » à côté de « Reprendre » (dès 3 cartes) : grille de tout ce qui est à reprendre, retour par la flèche ou le geste retour.
+
+## 2026-11-25 (soir, 20) — Sites compacts, partout
+
+- Un favori posé sur une page sans numéro d'épisode (accueil d'un site, catalogue…) n'est plus une « série » : il va dans « Mes sites » (cas d'Otakubinge qui restait dans « Reprendre »). « Reprendre » ne montre que les séries à épisode.
+- « Mes sites » en petites tuiles (logo + nom court), « Tout voir » au-delà de 4 ; sites où l'on a casté ou suivi une série ajoutés d'office.
+- Accueil du navigateur : « Mes sites » en grille, puis les séries suivies.

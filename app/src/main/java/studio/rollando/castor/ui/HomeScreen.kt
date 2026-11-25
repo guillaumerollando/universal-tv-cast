@@ -87,10 +87,12 @@ fun HomeScreen(
     val hidden by Library.hiddenSites.collectAsState()
     val resume = resumeItems(recents, bookmarks)
     val sites = siteItems(recents, bookmarks, hidden)
-    var showAll by rememberSaveable { mutableStateOf(false) }
-    if (showAll && resume.isNotEmpty()) {
-        BackHandler { showAll = false }
-        AllResume(resume, onBrowse) { showAll = false }
+    // « Tout voir » : 1 = tout « Reprendre », 2 = tous les sites.
+    var showAll by rememberSaveable { mutableStateOf(0) }
+    if (showAll == 1 && resume.isNotEmpty() || showAll == 2 && sites.isNotEmpty()) {
+        BackHandler { showAll = 0 }
+        if (showAll == 1) AllResume(resume, onBrowse) { showAll = 0 }
+        else AllSites(sites, onBrowse) { showAll = 0 }
         return
     }
 
@@ -105,7 +107,7 @@ fun HomeScreen(
                 item {
                     Row(Modifier.padding(start = 16.dp, end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                         SectionTitle(stringResource(R.string.home_resume), Modifier.weight(1f).semantics { heading() })
-                        if (resume.size > 2) TextButton(onClick = { showAll = true }) {
+                        if (resume.size > 2) TextButton(onClick = { showAll = 1 }) {
                             Text(stringResource(R.string.home_see_all))
                             Spacer(Modifier.width(4.dp))
                             Icon(Icons.AutoMirrored.Rounded.ArrowForward, null, Modifier.size(18.dp))
@@ -119,10 +121,19 @@ fun HomeScreen(
                 }
             }
             if (sites.isNotEmpty()) {
-                item { SectionTitle(stringResource(R.string.home_sites), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
                 item {
-                    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        items(sites, key = { "s" + it.host }) { s -> SiteItemCard(s, onBrowse) }
+                    Row(Modifier.padding(start = 16.dp, end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                        SectionTitle(stringResource(R.string.home_sites), Modifier.weight(1f).semantics { heading() })
+                        if (sites.size > 4) TextButton(onClick = { showAll = 2 }) {
+                            Text(stringResource(R.string.home_see_all))
+                            Spacer(Modifier.width(4.dp))
+                            Icon(Icons.AutoMirrored.Rounded.ArrowForward, null, Modifier.size(18.dp))
+                        }
+                    }
+                }
+                item {
+                    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        items(sites, key = { "s" + it.id }) { s -> SiteTile(s) { onBrowse(it) } }
                     }
                 }
             }
@@ -232,7 +243,7 @@ private data class ResumeItem(
 )
 
 private fun resumeItems(recents: List<Recent>, bookmarks: List<Bookmark>): List<ResumeItem> {
-    val series = bookmarks.filter { !it.isSite }
+    val series = bookmarks.filter { it.isSeries }
     val fromRecents = recents.mapNotNull { r ->
         val b = series.firstOrNull { it.key == r.key }
         // Une page de site sans numéro d'épisode (accueil, bande-annonce…) : son titre ne dirait rien.
@@ -261,29 +272,17 @@ private fun resumeItems(recents: List<Recent>, bookmarks: List<Bookmark>): List<
     return (fromRecents + onlyBookmarked).sortedByDescending { it.time }
 }
 
-/** Un site de « Mes sites » : en favori, ou simplement déjà utilisé pour caster. */
-private data class SiteItem(val host: String, val url: String, val bookmark: Bookmark?, val time: Long)
-
-private fun siteItems(recents: List<Recent>, bookmarks: List<Bookmark>, hidden: Set<String>): List<SiteItem> {
-    val fav = bookmarks.filter { it.isSite && it.host !in hidden }.map { SiteItem(it.host, it.url, it, it.time) }
-    val used = recents.filter { it.isWeb }.groupBy { Library.hostOf(it.pageUrl!!) }
-        .filter { (h, _) -> h.isNotEmpty() && h !in hidden && fav.none { f -> f.host == h } }
-        .map { (h, l) ->
-            val p = Uri.parse(l.first().pageUrl)
-            SiteItem(h, "${p.scheme}://${p.authority}/", null, l.maxOf { it.time })
-        }
-    return fav + used.sortedByDescending { it.time }
-}
-
+/** « Tout voir » des sites. */
 @Composable
-private fun SiteItemCard(s: SiteItem, onBrowse: (String?) -> Unit) {
-    val b = s.bookmark ?: Bookmark(s.host.substringBefore('.').replaceFirstChar { it.uppercase() }, s.url)
-    val menu = buildList {
-        if (s.bookmark != null) add(stringResource(R.string.cd_bookmark_remove) to { Library.removeBookmark(s.bookmark) })
-        else add(stringResource(R.string.resume_follow) to { Library.toggleBookmark(b.title, b.url) })
-        add(stringResource(R.string.site_hide) to { Library.hideSite(s.host) })
+private fun AllSites(sites: List<SiteItem>, onBrowse: (String?) -> Unit, onClose: () -> Unit) {
+    Column(Modifier.fillMaxSize()) {
+        Row(Modifier.padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onClick = onClose) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.cd_back)) }
+            Text(stringResource(R.string.home_sites), style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.semantics { heading() })
+        }
+        SitesGrid(sites, Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) { onBrowse(it) }
     }
-    SiteCard(b, { onBrowse(it) }, starred = s.bookmark != null, menu = menu)
 }
 
 /** « Tout voir » : toutes les séries et vidéos à reprendre, en grille. */

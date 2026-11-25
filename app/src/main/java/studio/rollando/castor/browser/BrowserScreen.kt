@@ -438,6 +438,10 @@ fun BrowserScreen(b: BrowserController) {
 @Composable
 private fun StartPage(onOpen: (String) -> Unit) {
     val bookmarks by Library.bookmarks.collectAsState()
+    val recents by Library.recents.collectAsState()
+    val hidden by Library.hiddenSites.collectAsState()
+    val sites = studio.rollando.castor.ui.siteItems(recents, bookmarks, hidden)
+    val series = bookmarks.filter { it.isSeries }
     val c = MaterialTheme.colorScheme
     LazyColumn(
         Modifier.fillMaxSize(),
@@ -445,19 +449,29 @@ private fun StartPage(onOpen: (String) -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        // Mes séries et sites d'abord : un toucher reprend là où on en est.
-        if (bookmarks.isNotEmpty()) {
+        // Mes sites d'abord (c'est l'accueil du navigateur), puis les séries suivies.
+        if (sites.isNotEmpty()) {
+            item {
+                Text(stringResource(R.string.home_sites), style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp))
+            }
+            item {
+                studio.rollando.castor.ui.SitesGrid(sites, Modifier.padding(horizontal = 16.dp), onOpen)
+                Spacer(Modifier.height(16.dp))
+            }
+        }
+        if (series.isNotEmpty()) {
             item {
                 Text(stringResource(R.string.home_bookmarks), style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp))
             }
             item {
-                studio.rollando.castor.ui.FavoritesRow(bookmarks, onOpen)
+                studio.rollando.castor.ui.FavoritesRow(series, onOpen)
                 Spacer(Modifier.height(16.dp))
             }
         }
         item {
-            Spacer(Modifier.height(if (bookmarks.isEmpty()) 24.dp else 8.dp))
+            Spacer(Modifier.height(if (sites.isEmpty() && series.isEmpty()) 24.dp else 8.dp))
             Box(Modifier.size(96.dp).clip(RoundedCornerShape(32.dp)).background(c.primary.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                 Icon(Icons.Rounded.Search, null, Modifier.size(48.dp), tint = c.primary)
             }

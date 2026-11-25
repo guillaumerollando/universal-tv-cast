@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -88,7 +89,7 @@ fun SiteIcon(host: String, size: Int = 28) {
 /** Rangée des favoris (accueil du navigateur, et sites sur l'accueil) : les séries et films d'abord, les sites ensuite. */
 @Composable
 fun FavoritesRow(bookmarks: List<Bookmark>, onOpen: (String) -> Unit) {
-    val ordered = bookmarks.filter { !it.isSite } + bookmarks.filter { it.isSite }
+    val ordered = bookmarks.filter { it.isSeries }
     androidx.compose.foundation.lazy.LazyRow(
         contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -96,8 +97,7 @@ fun FavoritesRow(bookmarks: List<Bookmark>, onOpen: (String) -> Unit) {
     ) {
         items(ordered.size, key = { ordered[it].key }) { i ->
             val b = ordered[i]
-            if (b.isSite) SiteCard(b, onOpen)
-            else PosterCard(
+            PosterCard(
                 title = b.title, image = b.image, host = b.host,
                 badge = b.episode?.let { stringResource(R.string.bookmark_episode, it) }, starred = true,
                 onClick = { onOpen(b.url) },
@@ -165,53 +165,84 @@ fun PosterCard(
     }
 }
 
-/** Site entier : son logo, son nom, l'étiquette « Site ». Ce favori ne change jamais d'adresse. */
-@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
-@Composable
-fun SiteCard(
-    b: Bookmark, onOpen: (String) -> Unit, starred: Boolean = false,
-    menu: List<Pair<String, () -> Unit>> = listOf(stringResource(R.string.cd_bookmark_remove) to { Library.removeBookmark(b) }),
-) {
-    val c = MaterialTheme.colorScheme
-    var open by remember { mutableStateOf(false) }
-    val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
-    Box {
-        Box(
-            Modifier.width(132.dp).height(176.dp).clip(RoundedCornerShape(20.dp)).background(c.surfaceContainerHigh)
-                .combinedClickable(
-                    role = Role.Button, onClick = { onOpen(b.url) },
-                    onLongClick = { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); open = true },
-                )
-                .semantics {
-                    contentDescription = b.title + ", " + b.host
-                    customActions = menu.map { (label, action) -> CustomAccessibilityAction(label) { action(); true } }
-                },
-        ) {
-            Column(Modifier.padding(14.dp).fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                Spacer(Modifier.height(12.dp))
-                SiteIcon(b.host, 56)
-                Spacer(Modifier.height(12.dp))
-                Text(b.title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                    maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
-                Spacer(Modifier.weight(1f))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Rounded.Public, null, tint = c.secondary, modifier = Modifier.size(14.dp))
-                    Spacer(Modifier.width(4.dp))
-                    Text(stringResource(R.string.bookmark_site), style = MaterialTheme.typography.labelMedium, color = c.secondary)
-                }
-            }
-            if (starred) Icon(Icons.Rounded.Star, null, tint = c.primary,
-                modifier = Modifier.align(Alignment.TopEnd).padding(10.dp).size(16.dp))
-        }
-        CardMenu(open, { open = false }, menu)
-    }
-}
-
 @Composable
 private fun CardMenu(open: Boolean, onDismiss: () -> Unit, menu: List<Pair<String, () -> Unit>>) {
     DropdownMenu(expanded = open, onDismissRequest = onDismiss, shape = RoundedCornerShape(16.dp)) {
         menu.forEach { (label, action) ->
             DropdownMenuItem(text = { Text(label) }, onClick = { onDismiss(); action() })
         }
+    }
+}
+
+/** Un site de « Mes sites » : en favori (site ou page sans épisode), ou simplement déjà utilisé pour caster. */
+data class SiteItem(val id: String, val host: String, val title: String, val url: String, val bookmark: Bookmark?, val time: Long)
+
+fun siteItems(recents: List<studio.rollando.castor.data.Recent>, bookmarks: List<Bookmark>, hidden: Set<String>): List<SiteItem> {
+    val fav = bookmarks.filter { !it.isSeries && it.host !in hidden }.map {
+        // Nom court sur la tuile : « Otakubinge - Accueil » → « Otakubinge ».
+        SiteItem(it.key, it.host, it.title.split(Regex("\\s+[-|·•–—:]\\s+")).first().trim().ifBlank { it.host }, it.url, it, it.time)
+    }
+    // Sites où l'on a casté, ou suivi une série, sans les avoir mis en favori.
+    val pages = recents.filter { it.isWeb }.map { it.pageUrl!! to it.time } + bookmarks.filter { it.isSeries }.map { it.url to it.time }
+    val used = pages.groupBy { Library.hostOf(it.first) }
+        .filter { (h, _) -> h.isNotEmpty() && h !in hidden && fav.none { f -> f.host == h } }
+        .map { (h, l) ->
+            val p = android.net.Uri.parse(l.first().first)
+            SiteItem(h, h, h.substringBefore('.').replaceFirstChar { it.uppercase() }, "${p.scheme}://${p.authority}/", null, l.maxOf { it.second })
+        }
+    return fav.sortedByDescending { it.time } + used.sortedByDescending { it.time }
+}
+
+/** Petite tuile de site : son logo et son nom. Appui long : favori, ne plus proposer. */
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+@Composable
+fun SiteTile(s: SiteItem, modifier: Modifier = Modifier.width(80.dp), onOpen: (String) -> Unit) {
+    val c = MaterialTheme.colorScheme
+    var open by remember { mutableStateOf(false) }
+    val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
+    val menu = buildList {
+        if (s.bookmark != null) add(stringResource(R.string.cd_bookmark_remove) to { Library.removeBookmark(s.bookmark) })
+        else add(stringResource(R.string.resume_follow) to { Library.toggleBookmark(s.title, s.url) })
+        add(stringResource(R.string.site_hide) to { Library.hideSite(s.host) })
+    }
+    Box(modifier) {
+        Column(
+            Modifier.fillMaxWidth().clip(RoundedCornerShape(18.dp))
+                .combinedClickable(
+                    role = Role.Button, onClick = { onOpen(s.url) },
+                    onLongClick = { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); open = true },
+                )
+                .semantics {
+                    contentDescription = s.title + ", " + s.host
+                    customActions = menu.map { (label, action) -> CustomAccessibilityAction(label) { action(); true } }
+                }
+                .padding(vertical = 6.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Box {
+                SiteIcon(s.host, 52)
+                if (s.bookmark != null) Box(
+                    Modifier.align(Alignment.TopEnd).offset(x = 6.dp, y = (-6).dp).size(20.dp).clip(CircleShape).background(c.surface),
+                    contentAlignment = Alignment.Center,
+                ) { Icon(Icons.Rounded.Star, null, tint = c.primary, modifier = Modifier.size(14.dp)) }
+            }
+            Spacer(Modifier.height(6.dp))
+            Text(s.title, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(horizontal = 2.dp))
+        }
+        CardMenu(open, { open = false }, menu)
+    }
+}
+
+/** Tous les sites, en grille (accueil du navigateur, « Tout voir »). */
+@OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
+@Composable
+fun SitesGrid(sites: List<SiteItem>, modifier: Modifier = Modifier, onOpen: (String) -> Unit) {
+    androidx.compose.foundation.layout.FlowRow(
+        modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        sites.forEach { s -> SiteTile(s, onOpen = onOpen) }
     }
 }

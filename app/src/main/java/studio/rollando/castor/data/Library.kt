@@ -59,6 +59,8 @@ data class Bookmark(
     /** Favori d'un site (sa page d'accueil) : il ne bouge jamais. Sinon, une série ou un film. */
     val isSite: Boolean get() =
         key == (runCatching { android.net.Uri.parse(url).authority }.getOrNull() ?: host).removePrefix("www.").lowercase()
+    /** Série suivie (une page d'épisode) ; sinon c'est un site ou une page de site, rangé dans « Mes sites ». */
+    val isSeries: Boolean get() = !isSite && episode != null
 }
 
 /** Ce que l'appli a fait toute seule avec un favori, pour le dire à l'utilisateur. */

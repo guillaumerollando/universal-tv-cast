@@ -73,9 +73,19 @@ object IdleScreen {
         p.letterSpacing = 0.01f
         p.color = 0xFFBDB6AD.toInt()
         c.drawText(line, cx, 800f, p)
-        p.textSize = 30f
-        p.color = Color.argb(110, 255, 255, 255)
-        c.drawText("by Rollando Studio", cx, h - 70f, p)
+        // Signature du studio en bas, petite et discrète (le logo, à défaut le nom).
+        val studio = runCatching { android.graphics.BitmapFactory.decodeResource(ctx.resources, R.drawable.rollando_studio) }.getOrNull()
+        if (studio != null) {
+            val lw = 180f
+            val lh = lw * studio.height / studio.width
+            val sp = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG).apply { alpha = 150 }
+            c.drawBitmap(studio, null, RectF(cx - lw / 2, h - 60f - lh, cx + lw / 2, h - 60f), sp)
+            studio.recycle()
+        } else {
+            p.textSize = 30f
+            p.color = Color.argb(110, 255, 255, 255)
+            c.drawText("by Rollando Studio", cx, h - 70f, p)
+        }
 
         val out = ByteArrayOutputStream()
         bmp.compress(Bitmap.CompressFormat.JPEG, 92, out)

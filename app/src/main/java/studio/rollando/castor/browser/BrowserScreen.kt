@@ -105,7 +105,7 @@ class BrowserController(context: Context) {
     var barVisible by mutableStateOf(true)
     /** Nombre de pubs bloquées depuis le lancement (pour le journal). */
     @Volatile var blockedCount = 0
-    private var lastHost: String? = null
+    private var lastPage: String? = null
 
     val webView: WebView = WebView(context).apply {
         layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
@@ -156,9 +156,7 @@ class BrowserController(context: Context) {
 
             override fun onPageStarted(view: WebView, u: String, favicon: Bitmap?) {
                 barVisible = true
-                val host = Uri.parse(u).host
-                if (host != lastHost) sniffer.reset()
-                lastHost = host
+                newPage(u)
                 this@BrowserController.url = u
                 sniffer.pageUrl = u
                 refreshNav(view)
@@ -171,6 +169,8 @@ class BrowserController(context: Context) {
             }
 
             override fun doUpdateVisitedHistory(view: WebView, u: String, isReload: Boolean) {
+                // Sites « une seule page » : l'adresse change sans rechargement ; la liste doit suivre.
+                newPage(u)
                 this@BrowserController.url = u
                 sniffer.pageUrl = u
                 refreshNav(view)
@@ -185,6 +185,14 @@ class BrowserController(context: Context) {
             // Fenêtres surgissantes (souvent des pubs) : refusées.
             override fun onCreateWindow(view: WebView, isDialog: Boolean, isUserGesture: Boolean, resultMsg: Message?) = false
         }
+    }
+
+    /** Nouvelle page (adresse différente, hors #ancre) : on oublie les vidéos de la précédente. */
+    private fun newPage(u: String) {
+        // On ignore l'ancre et les paramètres de position (?t=…) que certains lecteurs ajoutent en cours de lecture.
+        val page = u.substringBefore('#').replace(Regex("([?&])(t|time|start|pos|position)=[^&]*&?"), "$1").trimEnd('?', '&')
+        if (page != lastPage) sniffer.reset()
+        lastPage = page
     }
 
     private fun refreshNav(v: WebView) {

@@ -742,6 +742,7 @@ object Castor {
         val s = _state.value
         val m = s.media ?: return
         Net.localIp() ?: throw NoWifi()
+        pendingPause = false
         _state.update { it.copy(phase = Phase.SENDING, notice = null, idle = false) }
         val base = proxy.baseUrl()
         var r = chosen
@@ -910,11 +911,14 @@ object Castor {
                     }
                     failures = 0
                     if (t == "PLAYING") sawPlaying = true
+                    if (pendingPause && !r.cast && t == "PLAYING" && !busy) {
+                        runCatching { Dlna.pause(r) }.onSuccess { pendingPause = false }
+                    }
                     if (t == "PLAYING" && rel > 0) lastPlaying = startOffset + rel
                     val grace = System.currentTimeMillis() - castTime < 12_000
                     _state.update { s ->
                         if (!s.active) return@update s
-                        val phase = when (t) {
+                        val phase = if (pendingPause) Phase.PAUSED else when (t) {
                             "PLAYING" -> Phase.PLAYING
                             "PAUSED_PLAYBACK", "PAUSED_RECORDING" -> Phase.PAUSED
                             "TRANSITIONING" -> Phase.BUFFERING
@@ -1041,11 +1045,17 @@ object Castor {
         val r = target() ?: throw NoTv()
         when (s.phase) {
             Phase.PLAYING, Phase.BUFFERING -> {
-                if (r.cast) CastControl.pause(r) else Dlna.pause(r)
+                if (r.cast) CastControl.pause(r) else pauseWhenReady(r)
                 _state.update { it.copy(phase = Phase.PAUSED) }
             }
             Phase.PAUSED -> {
-                if (r.cast) CastControl.play(r) else Dlna.play(r)
+                if (pendingPause) {
+                    // La pause n'avait pas encore été appliquée (télé en chargement) : on l'annule simplement.
+                    pendingPause = false
+                    _state.update { it.copy(phase = Phase.BUFFERING) }
+                    return
+                }
+                if (r.cast) CastControl.play(r) else playWhenReady(r)
                 _state.update { it.copy(phase = Phase.PLAYING) }
             }
             else -> castAt(if (s.phase == Phase.STOPPED && s.duration > 0 && s.position < s.duration - 5) s.position else 0.0)
@@ -1112,6 +1122,25 @@ object Castor {
                 delay(700)
                 waitUntilSettled(r, 4000)
             }
+        }
+    }
+
+    /** Pause demandée pendant que la télé chargeait : appliquée dès qu'elle lit (voir le suivi). */
+    @Volatile private var pendingPause = false
+
+    /**
+     * Pause : pendant un chargement, certaines télés répondent « 701 Transition not available ». On attend
+     * qu'elle soit prête ; si elle charge encore, la pause est mise de côté et appliquée dès qu'elle lit.
+     */
+    private suspend fun pauseWhenReady(r: Renderer) {
+        try {
+            Dlna.pause(r)
+            pendingPause = false
+        } catch (e: TvError) {
+            waitUntilSettled(r, 5000)
+            runCatching { Dlna.pause(r) }
+                .onSuccess { pendingPause = false }
+                .onFailure { pendingPause = true; Log.i("Castor", "pause mise de côté : la télé charge encore") }
         }
     }
 

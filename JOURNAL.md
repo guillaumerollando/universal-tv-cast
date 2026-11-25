@@ -535,3 +535,15 @@ propose de retirer l'en-tête « Universal TV Cast » de l'onglet Navigateur (la
 d'adresse glisse (260 ms, avec fondu) : plus de saut. Le clavier se ferme quand on valide une adresse, et le
 fermer libère le champ (sinon la barre restait affichée). Vérifié sur émulateur (otakubinge) : en haut → on
 descend, la barre disparaît → on remonte, elle revient. Tests 23/23, lint propre.
+
+## 2026-11-25 (soir, 15) — Pause pendant le chargement, liste qui suivait l'ancienne page
+**Retour du testeur** : sur otakubinge, ça marche (mieux que le lecteur du site), mais l'appli s'est « bloquée »
+(il a dû la quitter) ; et après avoir changé d'animé, la liste proposait encore Black Clover.
+**Journal** : `Dlna.pause` → « 701 Transition not available » à répétition (pause demandée pendant que la télé
+chargeait), avec un message d'erreur à chaque appui.
+**Fait**
+- Pause pendant un chargement : on attend la télé (5 s) ; si elle charge encore, la pause est mise de côté,
+  affichée tout de suite, et appliquée dès que la télé lit. Rappuyer l'annule. Play passe aussi par l'attente.
+- La liste des vidéos se vide à chaque nouvelle page, y compris quand un site « une seule page » change d'adresse
+  sans recharger (on ignore l'ancre et les paramètres de position ?t=…). Avant : seulement en changeant de site.
+- Tests 23/23, lint propre.

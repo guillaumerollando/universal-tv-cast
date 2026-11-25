@@ -45,6 +45,8 @@ import androidx.compose.material.icons.rounded.FolderOpen
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Shuffle
+import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -258,14 +260,7 @@ private fun ChannelBrowser(list: IptvStore.Playlist, refreshTick: Int, onClose: 
     val hiddenHere = remember(all, hidden) { all.filter { it.url in hidden }.map { it.url } }
     var lastHidden by remember { mutableStateOf<String?>(null) }
     LaunchedEffect(lastHidden) { if (lastHidden != null) { kotlinx.coroutines.delay(5000); lastHidden = null } }
-    fun play(ch: Iptv.Channel) {
-        Castor.open(Media(
-            url = ch.url, title = ch.name, headers = ch.headers, posterUrl = ch.logo, channel = ch.name,
-            mime = if (ch.url.substringBefore('?').endsWith(".m3u8", true)) "application/vnd.apple.mpegurl" else null,
-        ))
-        Nav.tab.value = Tab.PLAYER
-        onClose()
-    }
+    fun play(ch: Iptv.Channel) { playChannel(ch); onClose() }
     fun hide(ch: Iptv.Channel) { IptvStore.hide(ch.url); lastHidden = ch.url }
     Box(Modifier.fillMaxSize()) {
     Column(Modifier.fillMaxSize()) {
@@ -340,6 +335,77 @@ private fun ChannelBrowser(list: IptvStore.Playlist, refreshTick: Int, onClose: 
                         Text(stringResource(R.string.action_undo), color = MaterialTheme.colorScheme.inversePrimary)
                     }
                 }
+            }
+        }
+    }
+}
+
+/** Lance une chaîne d'une liste sur la télé et passe à l'écran de lecture. */
+fun playChannel(ch: Iptv.Channel) {
+    Castor.open(Media(
+        url = ch.url, title = ch.name, headers = ch.headers, posterUrl = ch.logo, channel = ch.name,
+        mime = if (ch.url.substringBefore('?').endsWith(".m3u8", true)) "application/vnd.apple.mpegurl" else null,
+    ))
+    Nav.tab.value = Tab.PLAYER
+}
+
+/**
+ * Sous l'écran de lecture d'un direct : zapper sans repasser par la liste. Les chaînes proches (même catégorie,
+ * dans la même liste), une chaîne au hasard, et toutes les chaînes.
+ */
+@Composable
+fun ZapSection(media: Media) {
+    val lists by IptvStore.lists.collectAsState()
+    val hidden by IptvStore.hidden.collectAsState()
+    val recents by studio.rollando.castor.data.Library.recents.collectAsState()
+    val found by produceState<Pair<IptvStore.Playlist, Iptv.Channel>?>(null, media.url, lists) {
+        value = IptvStore.locate(media.url, media.channel ?: media.title)
+    }
+    val pool by produceState<List<Iptv.Channel>>(emptyList(), found, lists) {
+        value = found?.first?.let { IptvStore.channels(it.id) } ?: lists.firstOrNull()?.let { IptvStore.channels(it.id) }.orEmpty()
+    }
+    val current = found?.second
+    val suggestions = remember(pool, current, hidden, recents) {
+        val ok = pool.filter { it.url !in hidden && it.url != media.url }
+        if (ok.isEmpty()) return@remember emptyList()
+        // Même catégorie, à partir de la chaîne en cours (comme « chaîne suivante »), sinon les voisines dans la liste.
+        val same = current?.group?.let { g -> ok.filter { it.group == g } }.orEmpty()
+        val base = same.ifEmpty { ok }
+        val start = current?.let { c -> pool.indexOf(c) }?.coerceAtLeast(0) ?: 0
+        val after = base.filter { pool.indexOf(it) > start } + base.filter { pool.indexOf(it) <= start }
+        // Les chaînes regardées récemment passent devant.
+        val recentUrls = recents.filter { it.live }.map { it.url }.toSet()
+        (after.filter { it.url in recentUrls } + after.filterNot { it.url in recentUrls }).take(12)
+    }
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(stringResource(R.string.zap_title), style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.weight(1f).semantics { heading() })
+            TextButton(onClick = { Nav.iptv.value = found?.first?.id ?: "" }) {
+                Text(stringResource(if (lists.isEmpty()) R.string.iptv_title else R.string.iptv_all_channels))
+                Spacer(Modifier.width(4.dp))
+                Icon(Icons.AutoMirrored.Rounded.ArrowForward, null, Modifier.size(18.dp))
+            }
+        }
+        if (suggestions.isNotEmpty()) {
+            LazyRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                items(suggestions, key = { "z" + it.url }) { ch ->
+                    ChannelArt(
+                        name = ch.name, logo = ch.logo, streamUrl = null, pad = 9.dp,
+                        textStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold),
+                        modifier = Modifier.width(96.dp).aspectRatio(16f / 10f).clip(RoundedCornerShape(12.dp))
+                            .clickable(role = Role.Button, onClickLabel = ch.name) { playChannel(ch) }
+                            .semantics { contentDescription = ch.name },
+                    )
+                }
+            }
+            OutlinedButton(
+                onClick = { pool.filter { it.url !in hidden && it.url != media.url }.randomOrNull()?.let(::playChannel) },
+                modifier = Modifier.fillMaxWidth().height(52.dp),
+            ) {
+                Icon(Icons.Rounded.Shuffle, null)
+                Spacer(Modifier.width(10.dp))
+                Text(stringResource(R.string.zap_random))
             }
         }
     }

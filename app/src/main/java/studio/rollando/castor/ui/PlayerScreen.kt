@@ -236,8 +236,9 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
             Spacer(Modifier.width(10.dp))
             Text(stringResource(R.string.phone_watch))
         }
-        SubtitlesCard(state)
-        if (state.isHls) ModeCard(state)
+        // Direct : pas de sous-titres à régler ; à la place, de quoi zapper. Le mode de lecture des listes HLS
+        // (flux continu ou non) se règle seulement dans les Réglages.
+        if (state.live) ZapSection(media) else SubtitlesCard(state)
         Spacer(Modifier.height(8.dp + LocalBottomInset.current))
     }
     }

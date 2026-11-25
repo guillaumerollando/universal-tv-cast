@@ -729,3 +729,9 @@ fait toute seule.
   (« La vidéo ne répond pas : … hors ligne », refus avec code, appli source fermée). Source lente (> 8 s) : on envoie
   quand même, comme avant. Vérification gardée 60 s (déplacements dans la vidéo sans délai).
 - Émulateur (fausse télé) : injoignable 0 envoi + message ; 403 0 envoi + message ; lente → envoyée ; Arte 1 envoi, lecture.
+
+## 2026-11-25 (nuit, 10) — Zapper depuis l'écran de lecture
+- Direct : plus de carte « Sous-titres » ni de « Mode de lecture » (ce dernier retiré de l'écran de lecture partout ;
+  il reste dans les Réglages). À la place, « Zapper » : chaînes proches (même catégorie de la même liste, à partir de la
+  chaîne en cours, récentes d'abord), « Une chaîne au hasard », « Toutes les chaînes → ».
+- Accueil : le lien « Listes de chaînes » du bas n'apparaît plus quand la rangée « Chaînes » (qui l'a déjà) est là.

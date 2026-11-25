@@ -140,6 +140,14 @@ object IptvStore {
     fun unhide(url: String) { _hidden.value = _hidden.value - url; prefs.edit().putStringSet("hidden", _hidden.value).apply() }
     fun unhideAll(urls: Collection<String>) { _hidden.value = _hidden.value - urls.toSet(); prefs.edit().putStringSet("hidden", _hidden.value).apply() }
 
+    /** La liste et la chaîne qui correspondent à ce flux (ou, à défaut, à ce nom), parmi les listes importées. */
+    suspend fun locate(url: String, name: String?): Pair<Playlist, Iptv.Channel>? {
+        for (p in _lists.value) channels(p.id).firstOrNull { it.url == url }?.let { return p to it }
+        val n = name?.let { fold(it) }?.takeIf { it.isNotEmpty() } ?: return null
+        for (p in _lists.value) channels(p.id).firstOrNull { fold(it.name) == n }?.let { return p to it }
+        return null
+    }
+
     fun rename(id: String, name: String) {
         if (name.isBlank()) return
         _lists.value = _lists.value.map { if (it.id == id) it.copy(name = name.trim()) else it }

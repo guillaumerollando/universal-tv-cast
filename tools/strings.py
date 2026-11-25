@@ -413,6 +413,8 @@ S = {
  "Il video non risponde: il sito o il canale potrebbe essere offline. Riprova più tardi.",
  "De video reageert niet: de site of zender is misschien offline. Probeer het later opnieuw.",
  "O vídeo não responde: o site ou o canal pode estar fora do ar. Tente de novo mais tarde."],
+"zap_title": ["Channel surfing", "Zapper", "Hacer zapping", "Zappen", "Fare zapping", "Zappen", "Zapear"],
+"zap_random": ["Random channel", "Une chaîne au hasard", "Un canal al azar", "Zufälliger Sender", "Un canale a caso", "Willekeurige zender", "Um canal aleatório"],
 "iptv_title": ["Channel lists", "Listes de chaînes", "Listas de canales", "Senderlisten", "Liste di canali", "Zenderlijsten", "Listas de canais"],
 "iptv_intro": [
  "A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.",

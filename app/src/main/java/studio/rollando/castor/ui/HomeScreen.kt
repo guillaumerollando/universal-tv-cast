@@ -169,7 +169,7 @@ fun HomeScreen(
                         SmallTile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), Modifier.weight(1f), onPickPhotos)
                         SmallTile(Icons.Rounded.Link, stringResource(R.string.home_link_tile), Modifier.weight(1f), onPasteLink)
                     }
-                    MoreSources(onPickFile)
+                    MoreSources(onPickFile, showLists = channels.isEmpty()) // sinon, déjà en tête de « Chaînes »
                 }
             }
             item {
@@ -459,9 +459,9 @@ private fun Tile(icon: ImageVector, title: String, sub: String, modifier: Modifi
 
 /** Les autres sources, en liens discrets : listes de chaînes (IPTV) et fichiers d'autres applis. */
 @Composable
-private fun MoreSources(onPickFile: () -> Unit) {
+private fun MoreSources(onPickFile: () -> Unit, showLists: Boolean = true) {
     Column(Modifier.fillMaxWidth()) {
-        TextButton(onClick = { Nav.iptv.value = "" }) {
+        if (showLists) TextButton(onClick = { Nav.iptv.value = "" }) {
             Icon(Icons.Rounded.LiveTv, null, Modifier.size(18.dp))
             Spacer(Modifier.width(6.dp))
             Text(stringResource(R.string.iptv_title))

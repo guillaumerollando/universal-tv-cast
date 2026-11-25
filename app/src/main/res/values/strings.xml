@@ -249,6 +249,8 @@
     <string name="action_undo">Undo</string>
     <string name="err_channel_denied">This channel isn’t responding (error %1$s): its link may no longer work, or it may only be available in its own country. Press and hold it in the list to hide it.</string>
     <string name="err_source_unreachable">The video isn’t responding: the site or channel may be offline. Try again later.</string>
+    <string name="zap_title">Channel surfing</string>
+    <string name="zap_random">Random channel</string>
     <string name="iptv_title">Channel lists</string>
     <string name="iptv_intro">A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.</string>
     <string name="iptv_url_hint">List address (.m3u)</string>

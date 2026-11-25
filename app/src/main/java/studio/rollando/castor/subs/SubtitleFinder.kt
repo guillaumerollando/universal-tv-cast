@@ -31,6 +31,14 @@ object SubtitleFinder {
 
     private val SEP = Regex("[._]+")
     private val EP = Regex("(?i)\\bS(\\d{1,2})[ ._-]?E(\\d{1,3})\\b|\\b(\\d{1,2})x(\\d{2})\\b")
+    /**
+     * Nommage des animés : « [Groupe] Titre - 05 (1080p) », « Titre 2nd Season - 05 », « Titre S2 - 05 »,
+     * « Titre E05 », « Titre Episode 5 » (pas de SxxEyy).
+     */
+    private val ANIME = Regex(
+        "(?i)^(.+?)(?:\\s+(?:S(\\d{1,2})|Season\\s*(\\d{1,2})|(\\d{1,2})(?:st|nd|rd|th)\\s+Season))?" +
+            "\\s*(?:-\\s*|\\s(?:E|Ep|Episode)\\.?\\s*)(\\d{1,4})(?:v\\d)?(?=\\s|$)"
+    )
     private val YEAR = Regex("\\b(19[3-9]\\d|20[0-4]\\d)\\b")
     private val NOISE = Regex(
         "(?i)\\b(2160p|1080p|720p|480p|4k|uhd|hdr\\d*|dv|bluray|blu-ray|brrip|bdrip|web[- ]?dl|webrip|web|hdtv|dvdrip|remux|" +
@@ -51,6 +59,15 @@ object SubtitleFinder {
             season = (ep.groupValues[1].ifEmpty { ep.groupValues[3] }).toIntOrNull()
             episode = (ep.groupValues[2].ifEmpty { ep.groupValues[4] }).toIntOrNull()
             title = clean.substring(0, ep.range.first)
+        } else {
+            val a = ANIME.find(clean)
+            val n = a?.groupValues?.get(5)?.toIntOrNull()
+            // Un nombre qui ressemble à une année n'est pas un épisode (« Titre - 2019 »).
+            if (a != null && n != null && n in 1..1899) {
+                title = a.groupValues[1]
+                season = listOf(2, 3, 4).firstNotNullOfOrNull { a.groupValues[it].toIntOrNull() } ?: 1
+                episode = n
+            }
         }
         val y = YEAR.findAll(title).lastOrNull()
         val year = y?.value?.toIntOrNull()
@@ -64,8 +81,24 @@ object SubtitleFinder {
     /** Cherche l'identifiant IMDb du film ou de la série. */
     private class Meta(val id: String, val name: String, val poster: String?, val background: String?)
 
-    private fun imdb(p: Parsed): Meta? {
-        val type = if (p.isSeries) "series" else "movie"
+    /** Identifiant IMDb : Cinemeta (le bon type, puis l'autre), puis l'annuaire des animés (Kitsu, titres japonais). */
+    private fun imdb(p: Parsed): Meta? =
+        cinemeta(p, if (p.isSeries) "series" else "movie")
+            ?: cinemeta(p, if (p.isSeries) "movie" else "series")
+            ?: runCatching { kitsu(p) }.getOrNull()
+
+    private fun kitsu(p: Parsed): Meta? {
+        val url = "https://anime-kitsu.strem.fun/catalog/anime/kitsu-anime-list/search=${enc(p.title)}.json"
+        val metas = JSONObject(String(Http.fetch(url, emptyMap(), connectTimeout = 8000).bytes)).optJSONArray("metas") ?: return null
+        for (i in 0 until metas.length()) {
+            val m = metas.getJSONObject(i)
+            val id = m.optString("imdb_id").takeIf { it.startsWith("tt") } ?: continue
+            return Meta(id, m.optString("name", p.title), m.optString("poster").ifEmpty { null }, m.optString("background").ifEmpty { null })
+        }
+        return null
+    }
+
+    private fun cinemeta(p: Parsed, type: String): Meta? {
         val url = "https://v3-cinemeta.strem.io/catalog/$type/top/search=${enc(p.title)}.json"
         val metas = JSONObject(String(Http.fetch(url, emptyMap(), connectTimeout = 8000).bytes)).optJSONArray("metas") ?: return null
         var best: JSONObject? = null
@@ -85,7 +118,10 @@ object SubtitleFinder {
         val p = parse(fileName)
         if (p.title.length < 2) return null
         return try {
-            val meta = imdb(p) ?: return null
+            val meta = imdb(p) ?: run {
+                Log.i("CastorSubs", "« ${p.display} » : titre introuvable dans les annuaires")
+                return null
+            }
             val id = meta.id
             val name = meta.name
             val art = Art(

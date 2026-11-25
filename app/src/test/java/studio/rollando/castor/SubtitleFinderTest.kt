@@ -26,6 +26,22 @@ class SubtitleFinderTest {
         assertEquals("Le Fabuleux Destin d Amélie Poulain", SubtitleFinder.parse("Le.Fabuleux.Destin.d.Amélie.Poulain.2001.FRENCH.1080p.mkv").title)
     }
 
+    @Test fun animeNames() {
+        fun check(name: String, title: String, season: Int, episode: Int) {
+            val p = SubtitleFinder.parse(name)
+            assertEquals(name, title, p.title); assertEquals(name, season, p.season); assertEquals(name, episode, p.episode)
+        }
+        check("[SubsPlease] Yomi no Tsugai - 05 (1080p) [A1B2C3D4].mkv", "Yomi no Tsugai", 1, 5)
+        check("[Erai-raws] Tsue to Tsurugi no Wistoria 2nd Season - 05 [1080p CR WEB-DL AVC AAC][MultiSub][ABCD].mkv", "Tsue to Tsurugi no Wistoria", 2, 5)
+        check("[ASW] Kaiju No. 8 S2 - 03 [1080p HEVC x265 10Bit][AAC].mkv", "Kaiju No 8", 2, 3)
+        check("One Piece - 1120 [1080p].mkv", "One Piece", 1, 1120)
+        check("Frieren Episode 7 VOSTFR.mp4", "Frieren", 1, 7)
+        check("[Judas] Dandadan - 12v2.mkv", "Dandadan", 1, 12)
+        // Pas des épisodes :
+        assertEquals(false, SubtitleFinder.parse("Spider-Man - Into the Spider-Verse 2018 1080p.mkv").isSeries)
+        assertEquals(false, SubtitleFinder.parse("Some Film - 2019 1080p.mkv").isSeries)
+    }
+
     @Test fun languageCodes() {
         assertEquals("en", SubtitleFinder.norm("eng")); assertEquals("fr", SubtitleFinder.norm("fre"))
         assertEquals("fr", SubtitleFinder.norm("fra")); assertEquals("pt-BR", SubtitleFinder.norm("pob"))

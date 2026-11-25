@@ -399,3 +399,19 @@ vidéo en DLNA sur la Philips.
 **En plus** : en DLNA, quand la durée est connue, l'appli passe à la suite 2,5 s avant la fin : la télé
 ne ferme pas son lecteur et ne repasse pas par HDMI. Sans durée connue, la télé passe par HDMI puis revient dès
 que l'appli envoie la suite. Vérifié sur la fausse télé : passage à la photo à 24 s sur 25, sans « LECTEUR FERMÉ ».
+
+## 2026-11-25 (soir, 7) — Sous-titres des animés ; pourquoi la déconnexion repart sur HDMI
+**Retour du testeur** : sur un animé (« Yomi no Tsugai »), aucun sous-titre trouvé ; sur les films, impeccable.
+Le journal du téléphone avait déjà effacé la séance : MIUI le remplit en 25 min environ.
+**Cause** : les animés sont nommés « [Groupe] Titre - 05 (1080p) », sans SxxEyy. L'appli croyait à un film et
+cherchait au mauvais endroit. Les sous-titres existent bien : `tt37532356:1:5` → 13 pistes, dont l'anglais.
+**Fait** : reconnaissance des formats d'animés (« - 05 », « 2nd Season - 05 », « S2 - 03 », « Episode 7 », « 12v2 »,
+numéros absolus « One Piece - 1120 »), sans confondre « Film - 2019 » ni les tirets d'un titre. Recherche de
+secours : l'autre type (film/série), puis l'annuaire des animés Kitsu (titres japonais → IMDb). Journal clair
+quand le titre est introuvable. Tests : 6 formats d'animés + 2 cas « pas un épisode ».
+
+**Déconnexion → HDMI 1** : le « Stop » DLNA ferme le lecteur de la Philips, qui repart sur sa dernière source.
+Les applis Cast partenaires (YouTube, Twitch) reviennent à l'accueil, parce que c'est la fermeture d'une appli
+de la télé. Ce que la télé offre en lecture seule : l'API JointSpace v6.1 (ports 1925/1926) avec la touche
+« Home », mais protégée par un appairage (`digest_auth_pairing` : code PIN affiché une fois sur la télé).
+Toutes les commandes répondent 403 sans appairage. Rien n'a été envoyé à la télé.

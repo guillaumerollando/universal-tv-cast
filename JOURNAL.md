@@ -415,3 +415,5 @@ Les applis Cast partenaires (YouTube, Twitch) reviennent à l'accueil, parce que
 de la télé. Ce que la télé offre en lecture seule : l'API JointSpace v6.1 (ports 1925/1926) avec la touche
 « Home », mais protégée par un appairage (`digest_auth_pairing` : code PIN affiché une fois sur la télé).
 Toutes les commandes répondent 403 sans appairage. Rien n'a été envoyé à la télé.
+**Décision** (testeur) : pas d'appairage par code PIN, trop lourd pour ce seul gain. Le retour sur HDMI après
+« Se déconnecter » reste tel quel (comportement de la Philips en DLNA).

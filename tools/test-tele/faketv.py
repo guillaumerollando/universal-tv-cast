@@ -106,7 +106,7 @@ class H(http.server.BaseHTTPRequestHandler):
             threading.Thread(target=player, args=(S['gen'], float(target)), daemon=True).start()
             return reply(self, '<u:SeekResponse xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"/>')
         if action == 'GetPositionInfo':
-            return reply(self, f'<u:GetPositionInfoResponse xmlns:u="x"><TrackDuration>{hms(DUR)}</TrackDuration><RelTime>{hms(now_pos())}</RelTime></u:GetPositionInfoResponse>')
+            return reply(self, f'<u:GetPositionInfoResponse xmlns:u="x"><TrackDuration>{'0:00:00' if os.environ.get('FAKE_NODUR') else hms(DUR)}</TrackDuration><RelTime>{hms(now_pos())}</RelTime></u:GetPositionInfoResponse>')
         if action == 'GetTransportInfo':
             now_pos()
             return reply(self, f'<u:GetTransportInfoResponse xmlns:u="x"><CurrentTransportState>{S["state"]}</CurrentTransportState></u:GetTransportInfoResponse>')

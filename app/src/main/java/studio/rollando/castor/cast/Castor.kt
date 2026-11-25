@@ -835,6 +835,7 @@ object Castor {
             var failures = 0
             var waitingSince = 0L
             var lastPlaying = 0.0 // dernière position vue en lecture, pour reconnaître la fin
+            var sawPlaying = false // la télé a vraiment lu cette vidéo
             while (isActive) {
                 delay(if (failures >= 2) 10_000 else 2000)
                 if (busy) continue
@@ -864,6 +865,7 @@ object Castor {
                         rel = p; dur = d; t = Dlna.transportState(r)
                     }
                     failures = 0
+                    if (t == "PLAYING") sawPlaying = true
                     if (t == "PLAYING" && rel > 0) lastPlaying = startOffset + rel
                     val grace = System.currentTimeMillis() - castTime < 12_000
                     _state.update { s ->
@@ -898,9 +900,13 @@ object Castor {
                         }
                     } else waitingSince = 0L
                     // Arrivée au bout (la télé s'arrête près de la fin) : écran d'attente ou suite de l'album.
+                    // Dans un album, la télé qui s'arrête après avoir lu la vidéo = fin : on enchaîne, même si
+                    // elle n'a jamais annoncé de durée. Sinon, il faut être près de la fin connue (ou sans durée).
                     val total = _state.value.duration
-                    if ((t == "STOPPED" || t == "NO_MEDIA_PRESENT") && total > 0 && lastPlaying > 0 &&
-                        lastPlaying >= total - 20
+                    val stopped = t == "STOPPED" || t == "NO_MEDIA_PRESENT"
+                    val inAlbum = _state.value.slides?.isVideo == true
+                    if (stopped && sawPlaying && !busy &&
+                        (inAlbum || total <= 0 || lastPlaying >= total - 20)
                     ) { onMediaEnded(); break }
                     if (_state.value.phase == Phase.STOPPED) {
                         if (++stoppedTicks >= 3) { CastService.stop(app); break }

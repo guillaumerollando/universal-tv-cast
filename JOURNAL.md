@@ -385,3 +385,12 @@ lecteur standard de Google ni un lecteur personnalisé ne seraient acceptés : s
 bonne voie, et l'appli la prend déjà d'office (aucune route Cast proposée). Il ne manque rien côté appli. Sur
 les autres télés Cast (Chromecast, Google TV, Sony, TCL…), le lecteur standard est disponible et l'appli
 l'utilise.
+
+## 2026-11-25 (soir, 6) — Album : la diffusion s'arrêtait à la fin d'une vidéo
+**Retour du testeur** : diaporama lancé sur une vidéo ; à la fin de la vidéo, la diffusion s'est arrêtée au lieu
+de passer à la suite (l'appli, elle, est restée ouverte).
+**Journal** : vidéo lue à 14:22:01, aucune « fin de lecture » ensuite. La fin n'était reconnue que si la télé
+annonçait la durée de la vidéo (et la position atteinte) ; sinon l'appli croyait à un arrêt et coupait tout.
+**Fait** : une vidéo est terminée dès que la télé s'arrête après l'avoir vraiment lue : toujours dans un album,
+et pour une vidéo seule si sa durée est inconnue ou presque atteinte. Fausse télé : `FAKE_NODUR=1` (pas de
+durée annoncée). Vérifié : vidéo → fin reconnue → photo, renvoyée une fois, affichée. Tests 17/17, lint propre.

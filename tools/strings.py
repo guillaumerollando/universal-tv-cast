@@ -405,6 +405,14 @@ S = {
  "Questo canale non risponde (errore %1$s): il link potrebbe non funzionare più o essere visibile solo nel suo paese. Tienilo premuto nella lista per nasconderlo.",
  "Deze zender reageert niet (fout %1$s): de link werkt misschien niet meer, of hij is alleen in zijn eigen land te zien. Houd hem ingedrukt in de lijst om hem te verbergen.",
  "Este canal não responde (erro %1$s): o link pode não funcionar mais ou ele só é visível no próprio país. Mantenha pressionado na lista para ocultá-lo."],
+"err_source_unreachable": [
+ "The video isn’t responding: the site or channel may be offline. Try again later.",
+ "La vidéo ne répond pas : le site ou la chaîne est peut-être hors ligne. Réessaie plus tard.",
+ "El vídeo no responde: puede que la web o el canal estén sin conexión. Inténtalo más tarde.",
+ "Das Video antwortet nicht: Die Seite oder der Sender ist vielleicht offline. Versuch es später erneut.",
+ "Il video non risponde: il sito o il canale potrebbe essere offline. Riprova più tardi.",
+ "De video reageert niet: de site of zender is misschien offline. Probeer het later opnieuw.",
+ "O vídeo não responde: o site ou o canal pode estar fora do ar. Tente de novo mais tarde."],
 "iptv_title": ["Channel lists", "Listes de chaînes", "Listas de canales", "Senderlisten", "Liste di canali", "Zenderlijsten", "Listas de canais"],
 "iptv_intro": [
  "A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.",

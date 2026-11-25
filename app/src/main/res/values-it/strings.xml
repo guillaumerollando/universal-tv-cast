@@ -247,6 +247,7 @@
     <string name="iptv_remove_recent">Rimuovi dai recenti</string>
     <string name="action_undo">Annulla</string>
     <string name="err_channel_denied">Questo canale non risponde (errore %1$s): il link potrebbe non funzionare più o essere visibile solo nel suo paese. Tienilo premuto nella lista per nasconderlo.</string>
+    <string name="err_source_unreachable">Il video non risponde: il sito o il canale potrebbe essere offline. Riprova più tardi.</string>
     <string name="iptv_title">Liste di canali</string>
     <string name="iptv_intro">Una lista di canali (lista M3U o IPTV) riunisce canali TV in un solo link. Incolla il suo indirizzo o apri il file: qui troverai tutti i canali, con il loro logo.</string>
     <string name="iptv_url_hint">Indirizzo della lista (.m3u)</string>

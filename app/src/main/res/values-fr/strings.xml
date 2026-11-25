@@ -247,6 +247,7 @@
     <string name="iptv_remove_recent">Retirer des récentes</string>
     <string name="action_undo">Annuler</string>
     <string name="err_channel_denied">Cette chaîne ne répond pas (erreur %1$s) : son lien ne marche peut-être plus, ou elle n’est visible que dans son pays. Appui long dans la liste pour la masquer.</string>
+    <string name="err_source_unreachable">La vidéo ne répond pas : le site ou la chaîne est peut-être hors ligne. Réessaie plus tard.</string>
     <string name="iptv_title">Listes de chaînes</string>
     <string name="iptv_intro">Une liste de chaînes (liste M3U ou IPTV) regroupe des chaînes télé dans un seul lien. Colle son adresse ou ouvre le fichier : tu retrouves ici toutes ses chaînes, avec leur logo.</string>
     <string name="iptv_url_hint">Adresse de la liste (.m3u)</string>

@@ -722,3 +722,10 @@ fait toute seule.
   l'appli arrête (écran d'attente), sans renvoi, et l'explique. Pour une chaîne : « Cette chaîne ne répond pas
   (erreur 403) : lien mort ou réservée à son pays. Appui long dans la liste pour la masquer. » Vérifié sur l'émulateur
   (faux site qui passe en 403).
+
+## 2026-11-25 (nuit, 9) — Vérifier la source avant d'envoyer
+- castAt : avant tout envoi à la télé, petite demande à la source (début du fichier, ou un morceau du flux HLS :
+  le dernier pour un direct). Refus net (401/403/404/410/451) ou serveur injoignable → rien n'est envoyé, message
+  (« La vidéo ne répond pas : … hors ligne », refus avec code, appli source fermée). Source lente (> 8 s) : on envoie
+  quand même, comme avant. Vérification gardée 60 s (déplacements dans la vidéo sans délai).
+- Émulateur (fausse télé) : injoignable 0 envoi + message ; 403 0 envoi + message ; lente → envoyée ; Arte 1 envoi, lecture.

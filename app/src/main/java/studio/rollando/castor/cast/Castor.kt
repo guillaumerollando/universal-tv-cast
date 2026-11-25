@@ -206,6 +206,7 @@ object Castor {
             is NoTv -> Notice(R.string.notice_pick_tv, error = true)
             is NoWifi -> Notice(R.string.err_no_wifi, error = true)
             is SourceGone -> Notice(R.string.err_source_app_closed, sourceLabel(_state.value.media ?: return), true)
+            is SourceUnreachable -> Notice(R.string.err_source_unreachable, error = true)
             is Drm -> Notice(R.string.err_drm, error = true)
             is TvError -> Notice(R.string.err_tv, e.detail, true)
             is studio.rollando.castor.dlna.TvBusy -> Notice(R.string.err_tv_busy, error = true)
@@ -880,11 +881,11 @@ object Castor {
         Net.localIp() ?: throw NoWifi()
         // Vidéo servie par une autre appli du téléphone (Stremio…) : si elle a été fermée, rien ne sert d'envoyer
         // (la télé tenterait, échouerait, et on renverrait) ; on le dit tout de suite.
-        if (m.fromPhoneApp && !sourceAlive(m)) throw SourceGone()
         pendingPause = false
         livePausedAt = 0L
         // Direct : « start » est le retard voulu sur le direct.
         _state.update { it.copy(phase = Phase.SENDING, notice = null, idle = false, liveBehind = if (it.live) start else it.liveBehind) }
+        verifySource(m)
         val base = proxy.baseUrl()
         var r = chosen
         // Cast ne lit pas notre flux fusionné : on passe par le DLNA de la télé si elle en a un.
@@ -1397,15 +1398,54 @@ object Castor {
      */
     private class SourceGone : Exception()
 
-    private suspend fun sourceAlive(m: Media): Boolean = kotlinx.coroutines.withContext(Dispatchers.IO) {
-        try {
-            val c = studio.rollando.castor.net.Http.open(m.url, m.headers, range = "bytes=0-0", connectTimeout = 3000, readTimeout = 6000)
-            c.disconnect()
-            true
-        } catch (e: ConnectException) {
-            false
-        } catch (e: Exception) {
-            true // autre souci : on laisse la suite le signaler comme avant
+    private class SourceUnreachable : Exception()
+
+    /** Dernière source vérifiée (pour ne pas refaire la vérification à chaque déplacement dans la vidéo). */
+    @Volatile private var verified: Pair<String, Long>? = null
+
+    /**
+     * Avant d'envoyer quoi que ce soit à la télé : la source donne-t-elle bien la vidéo ? On demande le tout début
+     * du fichier (ou un morceau du flux). Seuls les refus nets arrêtent l'envoi : une source lente à répondre
+     * (Stremio qui prépare un torrent…) part comme avant.
+     */
+    private suspend fun verifySource(m: Media) = kotlinx.coroutines.withContext(Dispatchers.IO) {
+        if (m.isLocal) return@withContext
+        verified?.let { (u, t) -> if (u == m.url && System.currentTimeMillis() - t < 60_000) return@withContext }
+        val probe = if (_state.value.isHls) {
+            val plan = try { Hls.load(m.url, m.headers) } catch (e: HttpError) {
+                if (e.code in DEFINITE) throw e else null
+            } catch (e: java.io.IOException) { unreachable(m, e); null }
+            if (plan != null && plan.segs.isEmpty()) throw SourceUnreachable()
+            // Direct : le dernier morceau (le plus récent) ; vidéo : le premier.
+            plan?.let { if (it.endList) it.segs.first().url else it.segs.last().url }
+        } else m.url
+        if (probe != null) try {
+            val c = studio.rollando.castor.net.Http.open(probe, m.headers, range = "bytes=0-1023", connectTimeout = 5000, readTimeout = 8000)
+            try {
+                val code = c.responseCode
+                if (code in DEFINITE) throw HttpError(code)
+            } finally { c.disconnect() }
+        } catch (e: HttpError) {
+            throw e
+        } catch (e: SocketTimeoutException) {
+            // Impossible de joindre le serveur : hors ligne. Joint mais lent à répondre : on laisse la télé essayer.
+            if (e.message?.contains("connect", true) == true) unreachable(m, ConnectException(e.message))
+        } catch (e: java.io.IOException) {
+            unreachable(m, e)
+        }
+        verified = m.url to System.currentTimeMillis()
+    }
+
+    /** Refus nets : la source ne donnera pas la vidéo, inutile de l'envoyer à la télé. */
+    private val DEFINITE = setOf(401, 403, 404, 410, 451)
+
+    private fun unreachable(m: Media, e: Exception) {
+        if (e is ConnectException || e is UnknownHostException) {
+            Log.w("Castor", "source injoignable (${e.javaClass.simpleName}) : rien n'est envoyé à la télé")
+            if (m.fromPhoneApp) throw SourceGone()
+            // Pas de réseau du tout ? Le message Wi-Fi habituel ; sinon, la source elle-même est hors ligne.
+            if (Net.localIp() == null) throw NoWifi()
+            throw SourceUnreachable()
         }
     }
 

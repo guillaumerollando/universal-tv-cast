@@ -297,11 +297,11 @@ private fun ChannelBrowser(list: IptvStore.Playlist, refreshTick: Int, onClose: 
             shown.isEmpty() -> Text(stringResource(R.string.iptv_none_found), modifier = Modifier.padding(16.dp),
                 color = MaterialTheme.colorScheme.onSurfaceVariant)
             else -> LazyVerticalGrid(
-                columns = GridCells.Adaptive(80.dp),
+                columns = GridCells.Adaptive(108.dp),
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 96.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(start = 10.dp, end = 10.dp, bottom = 96.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
             ) {
                 // Les chaînes qu'on regarde, en premier (sans recherche ni filtre en cours).
                 if (recent.isNotEmpty() && query.isBlank() && group == null) {
@@ -310,9 +310,9 @@ private fun ChannelBrowser(list: IptvStore.Playlist, refreshTick: Int, onClose: 
                             modifier = Modifier.padding(4.dp, 4.dp).semantics { heading() })
                     }
                     item(span = { GridItemSpan(maxLineSpan) }) {
-                        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             items(recent, key = { "r" + it.url }) { ch ->
-                                ChannelTile(ch, Modifier.width(92.dp), onClick = { play(ch) }, onHide = { hide(ch) }, onForget = {
+                                ChannelTile(ch, Modifier.width(128.dp), onClick = { play(ch) }, onHide = { hide(ch) }, onForget = {
                                     recents.firstOrNull { it.url == ch.url }?.let { studio.rollando.castor.data.Library.removeRecent(it.key) }
                                 })
                             }
@@ -367,11 +367,11 @@ private fun ChannelTile(ch: Iptv.Channel, modifier: Modifier, onClick: () -> Uni
                         onForget?.let { f -> androidx.compose.ui.semantics.CustomAccessibilityAction(forgetLabel) { f(); true } },
                     )
                 }
-                .padding(2.dp),
+                .padding(0.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             ChannelArt(
-                name = ch.name, logo = ch.logo, streamUrl = null, pad = 8.dp,
+                name = ch.name, logo = ch.logo, streamUrl = null, pad = 12.dp,
                 textStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold),
                 modifier = Modifier.fillMaxWidth().aspectRatio(16f / 10f).clip(RoundedCornerShape(12.dp)),
             )

@@ -370,3 +370,18 @@ en changeant de photo, « tout a planté ».
 - Fausse télé : `FAKE_REOPEN=1` perd la première commande Play après une fin de vidéo, comme la Philips.
   Vérifié : photo renvoyée et affichée ; 5 appuis rapides → 2 commandes au lieu de 5.
 - Tests 17/17, lint propre.
+
+## 2026-11-25 (soir, 5) — Pourquoi Twitch caste sur la Philips et pas nous
+Essai demandé par le testeur, sur son téléphone : un live Twitch casté vers la télé.
+- Twitch lance **son propre lecteur Cast**, `B3DCF968` « Twitch Chromecast Player » (journal des services
+  Google : `launchApplicationWithOptions: B3DCF968`).
+- Question posée à la télé en Cast v2, en lecture seule (`GET_APP_AVAILABILITY` sur le port 8009, rien n'est
+  lancé) :
+  - `B3DCF968` (Twitch) : `APP_AVAILABLE` ;
+  - `CC1AD845` (lecteur standard de Google, celui de l'appli) : `APP_UNAVAILABLE` ;
+  - deux autres identifiants testés : `APP_UNAVAILABLE`.
+**Conclusion** : le Cast de Titan OS n'accepte qu'une liste d'applis partenaires (YouTube, Twitch…). Ni le
+lecteur standard de Google ni un lecteur personnalisé ne seraient acceptés : sur cette télé, le DLNA est la
+bonne voie, et l'appli la prend déjà d'office (aucune route Cast proposée). Il ne manque rien côté appli. Sur
+les autres télés Cast (Chromecast, Google TV, Sony, TCL…), le lecteur standard est disponible et l'appli
+l'utilise.

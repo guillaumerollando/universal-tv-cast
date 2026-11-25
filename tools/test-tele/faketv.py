@@ -36,6 +36,9 @@ def player(gen, target):
         if gen == S['gen']: hdmi(f'vidéo pas arrivée en 10 s ({type(e).__name__}) à {target:.0f}s')
         return
     if gen != S['gen']: return
+    # FAKE_DROPFIRST : comme la vraie Philips parfois, le tout premier envoi est abandonné sans jamais lire.
+    if os.environ.get('FAKE_DROPFIRST') and not S.get('dropped'):
+        S['dropped'] = True; hdmi('premier envoi abandonné (FAKE_DROPFIRST)'); return
     log(f'   lecture à {target:.0f}s (octet {off}) prête en {time.time()-t0:.1f}s')
     S['pos'] = target; S['t'] = time.time(); S['state'] = 'PLAYING'
 def reply(h, body, code=200):

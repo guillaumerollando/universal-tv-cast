@@ -826,9 +826,14 @@ object Castor {
 
     /** Direct : un renvoi automatique a déjà été tenté pour ce cast. */
     @Volatile private var liveRetried = false
+    /** La vidéo a déjà été renvoyée parce que la télé n'avait pas démarré. */
+    @Volatile private var startRetried = false
+    /** Position demandée au dernier envoi (pour le renvoyer à l'identique). */
+    @Volatile private var lastCastStart = 0.0
 
     private suspend fun castAt(start: Double, forceDlna: Boolean = false, paused: Boolean = false, keepRetry: Boolean = false) {
-        if (!keepRetry) liveRetried = false
+        if (!keepRetry) { liveRetried = false; startRetried = false }
+        lastCastStart = start
         val chosen = _state.value.renderer ?: throw NoTv()
         val s = _state.value
         val m = s.media ?: return
@@ -1065,6 +1070,15 @@ object Castor {
                     if (!r.cast && t == "PLAYING" && total > 5 && lastPlaying >= total - 2.5 && !busy &&
                         System.currentTimeMillis() >= holdPositionUntil
                     ) { onMediaEnded(); break }
+                    // La télé a abandonné sans jamais lire (la Philips rate parfois le premier envoi, surtout en
+                    // passant de l'écran d'attente au lecteur vidéo) : on renvoie une fois, comme on le ferait à la main.
+                    if (stopped && !sawPlaying && !busy && !grace && !startRetried && !r.cast) {
+                        startRetried = true
+                        Log.w("Castor", "la télé n'a pas démarré la lecture : nouvel envoi")
+                        val again = lastCastStart
+                        exec { castAt(again, keepRetry = true) }
+                        break
+                    }
                     if (_state.value.phase == Phase.STOPPED) {
                         if (++stoppedTicks >= 3) { CastService.stop(app); break }
                     } else stoppedTicks = 0

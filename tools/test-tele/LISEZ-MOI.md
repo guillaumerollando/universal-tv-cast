@@ -4,6 +4,7 @@
   HEAD de la vidéo avant de répondre à SetAVTransportURI, « Transport locked » pendant la lecture, 710 si on la
   déplace pendant un déplacement, lecteur qui abandonne si la vidéo n'arrive pas en 10 s (noté « → HDMI »),
   « Stop » noté « → HDMI ». Elle fait elle-même l'`adb forward` vers le relais de Universal TV Cast sur l'émulateur.
+- `FAKE_DROPFIRST=1` : abandonne le tout premier envoi sans lire (la Philips le fait parfois, surtout en quittant l'écran d'attente).
 - `slowsite.py <dossier> <délai_s>` : faux site façon torrent (Referer `https://site.example/` exigé), un morceau
   lointain met `délai` secondes la première fois puis devient immédiat.
 

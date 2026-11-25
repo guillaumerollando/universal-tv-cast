@@ -225,6 +225,13 @@
     <string name="link_copied">Link copiato</string>
     <string name="video_live">Diretta</string>
     <string name="video_generic">Video</string>
+    <string name="channel_remove">Rimuovi il canale</string>
+    <string name="home_channels">Canali</string>
+    <string name="channel_rename">Rinomina</string>
+    <string name="channel_name">Nome del canale</string>
+    <string name="action_ok">OK</string>
+    <string name="live_back">Torna alla diretta</string>
+    <string name="live_paused">In pausa · Riproduci torna alla diretta</string>
     <string name="home_see_all">Vedi tutto</string>
     <string name="site_hide">Non proporre più</string>
     <string name="home_sites">I miei siti</string>

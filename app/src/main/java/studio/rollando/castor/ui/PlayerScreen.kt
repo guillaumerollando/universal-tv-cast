@@ -317,6 +317,7 @@ private fun phaseLabel(s: CastState): String = stringResource(
 
 @Composable
 private fun Progress(s: CastState) {
+    if (s.live) { LiveBar(s); return }
     var dragging by remember { mutableStateOf(false) }
     var dragValue by remember { mutableFloatStateOf(0f) }
     val hasDuration = s.duration > 0
@@ -341,11 +342,35 @@ private fun Progress(s: CastState) {
     }
 }
 
+/** Direct : pas de barre de temps (elle ne voudrait rien dire), un badge clair et ce que fait « Lecture ». */
+@Composable
+private fun LiveBar(s: CastState) {
+    val c = MaterialTheme.colorScheme
+    val paused = s.phase == Phase.PAUSED
+    Row(Modifier.fillMaxWidth().padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            Modifier.clip(RoundedCornerShape(50))
+                .background(if (paused) c.surfaceContainerHighest else Color(0xFFE53935))
+                .padding(horizontal = 12.dp, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(Modifier.size(8.dp).clip(CircleShape).background(if (paused) c.onSurfaceVariant else Color.White))
+            Spacer(Modifier.width(8.dp))
+            Text(stringResource(R.string.player_live).uppercase(), style = MaterialTheme.typography.labelLarge,
+                color = if (paused) c.onSurfaceVariant else Color.White)
+        }
+        if (paused) {
+            Spacer(Modifier.width(12.dp))
+            Text(stringResource(R.string.live_paused), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
+        }
+    }
+}
+
 @Composable
 private fun Controls(s: CastState) {
     val enabled = s.renderer != null && s.phase != Phase.LOADING
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
-        FilledTonalIconButton(onClick = { Castor.skip(-10.0) }, enabled = enabled && s.active, modifier = Modifier.size(56.dp)) {
+        FilledTonalIconButton(onClick = { Castor.skip(-10.0) }, enabled = enabled && s.active && !s.live, modifier = Modifier.size(56.dp)) {
             Icon(Icons.Rounded.Replay10, stringResource(R.string.cd_rewind), Modifier.size(28.dp))
         }
         val playing = s.phase == Phase.PLAYING || s.phase == Phase.BUFFERING || s.phase == Phase.SENDING
@@ -358,7 +383,7 @@ private fun Controls(s: CastState) {
                 stringResource(if (playing) R.string.action_pause else R.string.action_play), Modifier.size(44.dp),
             )
         }
-        FilledTonalIconButton(onClick = { Castor.skip(10.0) }, enabled = enabled && s.active, modifier = Modifier.size(56.dp)) {
+        FilledTonalIconButton(onClick = { Castor.skip(10.0) }, enabled = enabled && s.active && !s.live, modifier = Modifier.size(56.dp)) {
             Icon(Icons.Rounded.Forward10, stringResource(R.string.cd_forward10), Modifier.size(28.dp))
         }
         FilledTonalIconButton(onClick = Castor::stop, enabled = enabled && s.active, modifier = Modifier.size(56.dp)) {

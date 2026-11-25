@@ -225,6 +225,13 @@
     <string name="link_copied">Link copiado</string>
     <string name="video_live">Ao vivo</string>
     <string name="video_generic">Vídeo</string>
+    <string name="channel_remove">Remover o canal</string>
+    <string name="home_channels">Canais</string>
+    <string name="channel_rename">Renomear</string>
+    <string name="channel_name">Nome do canal</string>
+    <string name="action_ok">OK</string>
+    <string name="live_back">Voltar ao vivo</string>
+    <string name="live_paused">Pausado · Reproduzir volta ao vivo</string>
     <string name="home_see_all">Ver tudo</string>
     <string name="site_hide">Não sugerir mais</string>
     <string name="home_sites">Meus sites</string>

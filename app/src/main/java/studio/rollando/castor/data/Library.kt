@@ -15,7 +15,15 @@ data class Recent(
     val season: Int? = null, val episode: Int? = null,
     /** Où l'on s'est arrêté (secondes) et durée totale ; [done] : la lecture est allée jusqu'au bout. */
     val pos: Double = 0.0, val dur: Double = 0.0, val done: Boolean = false,
+    /** Chaîne en direct (rangée « Chaînes », pas « Reprendre ») et le nom que l'utilisateur lui a donné. */
+    val live: Boolean = false, val channel: String? = null,
 ) {
+    /** Nom de la chaîne : celui choisi, sinon une chaîne connue (Arte…), sinon le titre, sinon le site. */
+    val channelName: String get() = channel
+        ?: Channels.find("$url $pageUrl $title")?.name
+        ?: title.takeIf { t -> t.length > 2 && !t.contains(".m3u8") && t.lowercase() !in GENERIC_LIVE_TITLES }
+        ?: Library.hostOf(pageUrl ?: url).substringBefore('.').replaceFirstChar { it.uppercase() }
+
     /** Fini, ou presque (le générique) : 5 minutes avant la fin d'un film, environ 8 % pour un épisode. */
     val finished: Boolean get() = done || (dur > 60 && pos >= dur - minOf(300.0, dur * 0.08))
 
@@ -32,6 +40,7 @@ data class Recent(
 
     /** Une seule entrée par série : l'adresse de la page sans le numéro d'épisode, ou le nom de la série et sa saison. */
     val key: String get() = when {
+        live -> "live:" + (pageUrl?.takeIf { web } ?: url.substringBefore('?'))
         // L'adresse ne dit pas l'épisode (site qui donne un identifiant par vidéo) : la série, d'après le titre.
         web && urlEpisode == null && titleEpisode != null ->
             "t:" + Library.hostOf(pageUrl!!) + "|" + studio.rollando.castor.browser.PageTitle.series(title).lowercase()
@@ -90,6 +99,33 @@ data class Bookmark(
     /** Même série qu'une entrée de « Reprendre » (même adresse de série, même page, ou même nom sur le même site). */
     fun sameSeries(r: Recent): Boolean = key == r.key || url == r.pageUrl ||
         (r.isWeb && host == Library.hostOf(r.pageUrl!!) && seriesTitle.equals(r.seriesTitle, ignoreCase = true))
+}
+
+private val GENERIC_LIVE_TITLES = setOf("live", "direct", "en direct", "en directo", "diretta", "ao vivo", "video", "vidéo", "vídeo", "index", "stream")
+
+/** Chaînes connues, reconnues dans l'adresse ou le titre du flux : un vrai nom et leur couleur. */
+object Channels {
+    data class Known(val name: String, val color: Long)
+    private val LIST = listOf(
+        "arte" to Known("Arte", 0xFFFA481C), "tv5monde" to Known("TV5Monde", 0xFF0091D2), "tv5" to Known("TV5Monde", 0xFF0091D2),
+        "france24" to Known("France 24", 0xFF0E70B6), "franceinfo" to Known("franceinfo:", 0xFFF5A300),
+        "euronews" to Known("Euronews", 0xFF1E4FA3), "bfmtv" to Known("BFMTV", 0xFF0A3D8F), "bfm" to Known("BFMTV", 0xFF0A3D8F),
+        "lci" to Known("LCI", 0xFF233C8C), "cnews" to Known("CNews", 0xFFD6001C), "lequipe" to Known("L'Équipe", 0xFFE30613),
+        "france2" to Known("France 2", 0xFFE4002B), "france3" to Known("France 3", 0xFF1F5AA8), "france4" to Known("France 4", 0xFF6E2C8F),
+        "france5" to Known("France 5", 0xFF00A24E), "tf1" to Known("TF1", 0xFF1C3F94), "m6" to Known("M6", 0xFF4A4A4A),
+        "w9" to Known("W9", 0xFF7B2D8E), "tmc" to Known("TMC", 0xFF0072BC), "gulli" to Known("Gulli", 0xFFF39200),
+        "publicsenat" to Known("Public Sénat", 0xFFB3122E), "lcp" to Known("LCP", 0xFF003A70), "nrj12" to Known("NRJ 12", 0xFFD50032),
+        "rmc" to Known("RMC", 0xFF1D1D1B), "cgtn" to Known("CGTN", 0xFF0C4C8A), "africanews" to Known("Africanews", 0xFFC8102E),
+        "aljazeera" to Known("Al Jazeera", 0xFFC8902E), "dw" to Known("DW", 0xFF05B2FC), "bbc" to Known("BBC", 0xFF1D1D1B),
+        "cnn" to Known("CNN", 0xFFCC0000), "skynews" to Known("Sky News", 0xFFC8102E), "nasa" to Known("NASA TV", 0xFF0B3D91),
+        "redbull" to Known("Red Bull TV", 0xFF1E2A5A),
+    )
+
+    fun find(text: String): Known? {
+        val tokens = text.lowercase().split(Regex("[^a-z0-9]+")).filter { it.isNotEmpty() }
+        for ((kw, k) in LIST) if (tokens.any { it == kw || (kw.length >= 4 && it.startsWith(kw)) }) return k
+        return null
+    }
 }
 
 private val HOME_PATHS = setOf("", "home", "accueil", "index", "index.html", "index.php", "fr", "en")
@@ -167,14 +203,21 @@ object Library {
 
     fun setContinuous(on: Boolean) { _continuous.value = on; prefs.edit().putBoolean("continuous", on).apply() }
 
-    fun addRecent(m: Media) {
+    fun addRecent(m: Media, live: Boolean = false) {
         if (m.isLocal) return
-        val r0 = Recent(m.title, m.url, m.mime, m.headers, m.pageUrl, System.currentTimeMillis(),
-            m.backdropUrl ?: m.posterUrl, m.fileName, m.season, m.episode) // image large : elle remplit la carte
+        val r00 = Recent(m.title, m.url, m.mime, m.headers, m.pageUrl, System.currentTimeMillis(),
+            m.backdropUrl ?: m.posterUrl, m.fileName, m.season, m.episode, live = live) // image large : elle remplit la carte
+        // Une chaîne garde le nom qu'on lui a donné.
+        val r0 = r00.copy(channel = _recents.value.firstOrNull { it.key == r00.key || it.url == r00.url }?.channel)
         // Même série : le nouvel épisode remplace l'ancien (et garde son image si celui-ci n'en a pas).
         val old = _recents.value.filter { it.key == r0.key || it.url == r0.url }
         val r = if (r0.poster == null) r0.copy(poster = old.firstNotNullOfOrNull { it.poster } ?: bookmarkFor(m.pageUrl ?: "")?.image) else r0
         _recents.value = (listOf(r) + (_recents.value - old.toSet())).take(30)
+        saveRecents()
+    }
+
+    fun renameChannel(key: String, name: String) {
+        _recents.value = _recents.value.map { if (it.key == key) it.copy(channel = name.trim().ifBlank { null }) else it }
         saveRecents()
     }
 
@@ -303,6 +346,7 @@ object Library {
             put("title", r.title); put("url", r.url); put("mime", r.mime ?: ""); put("page", r.pageUrl ?: ""); put("poster", r.poster ?: ""); put("file", r.fileName ?: "")
             put("season", r.season ?: -1); put("ep", r.episode ?: -1)
             put("pos", r.pos); put("dur", r.dur); put("done", r.done)
+            put("live", r.live); put("channel", r.channel ?: "")
             put("time", r.time); put("headers", JSONObject(r.headers as Map<*, *>))
         })
         prefs.edit().putString("recents", arr.toString()).apply()
@@ -323,6 +367,7 @@ object Library {
             season = o.optInt("season", -1).takeIf { it >= 0 },
             episode = o.optInt("ep", -1).takeIf { it >= 0 },
             pos = o.optDouble("pos", 0.0), dur = o.optDouble("dur", 0.0), done = o.optBoolean("done", false),
+            live = o.optBoolean("live", false), channel = o.optString("channel").ifEmpty { null },
         )
     }.distinctBy { it.key } // anciennes listes : un épisode par entrée
 

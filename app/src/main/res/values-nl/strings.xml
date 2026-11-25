@@ -225,6 +225,13 @@
     <string name="link_copied">Link gekopieerd</string>
     <string name="video_live">Live</string>
     <string name="video_generic">Video</string>
+    <string name="channel_remove">Zender verwijderen</string>
+    <string name="home_channels">Zenders</string>
+    <string name="channel_rename">Hernoemen</string>
+    <string name="channel_name">Naam van de zender</string>
+    <string name="action_ok">OK</string>
+    <string name="live_back">Terug naar live</string>
+    <string name="live_paused">Gepauzeerd · Afspelen gaat naar live</string>
     <string name="home_see_all">Alles bekijken</string>
     <string name="site_hide">Niet meer voorstellen</string>
     <string name="home_sites">Mijn sites</string>

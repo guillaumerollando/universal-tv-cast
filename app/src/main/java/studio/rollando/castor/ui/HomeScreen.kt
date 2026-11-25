@@ -1,5 +1,9 @@
 package studio.rollando.castor.ui
 
+import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.runtime.remember
+import androidx.compose.foundation.combinedClickable
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -87,6 +91,7 @@ fun HomeScreen(
     val hidden by Library.hiddenSites.collectAsState()
     val resume = resumeItems(recents, bookmarks)
     val sites = siteItems(recents, bookmarks, hidden)
+    val channels = recents.filter { it.live }
     // « Tout voir » : 1 = tout « Reprendre », 2 = tous les sites.
     var showAll by rememberSaveable { mutableStateOf(0) }
     if (showAll == 1 && resume.isNotEmpty() || showAll == 2 && sites.isNotEmpty()) {
@@ -98,7 +103,7 @@ fun HomeScreen(
 
     // Habitué (des séries en cours, des sites en favori) : ce qu'il regarde d'abord, les façons de caster en
     // une rangée compacte. Nouveau venu : la présentation et les grandes tuiles.
-    if (resume.isNotEmpty() || sites.isNotEmpty()) {
+    if (resume.isNotEmpty() || sites.isNotEmpty() || channels.isNotEmpty()) {
         LazyColumn(
             contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp + LocalBottomInset.current),
             verticalArrangement = Arrangement.spacedBy(14.dp),
@@ -117,6 +122,14 @@ fun HomeScreen(
                 item {
                     LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         items(resume, key = { "r" + it.key }) { r -> ResumeCard(r, onBrowse) }
+                    }
+                }
+            }
+            if (channels.isNotEmpty()) {
+                item { SectionTitle(stringResource(R.string.home_channels), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
+                item {
+                    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        items(channels, key = { "c" + it.key }) { ch -> ChannelTile(ch, onBrowse) }
                     }
                 }
             }
@@ -245,7 +258,7 @@ private data class ResumeItem(
 
 private fun resumeItems(recents: List<Recent>, bookmarks: List<Bookmark>): List<ResumeItem> {
     val series = bookmarks.filter { it.isSeries }
-    val fromRecents = recents.mapNotNull { r ->
+    val fromRecents = recents.filter { !it.live }.mapNotNull { r ->
         val b = series.firstOrNull { it.sameSeries(r) }
         // Une page de site sans numéro d'épisode (accueil, bande-annonce…) : son titre ne dirait rien.
         // Page de site sans épisode : on la garde (film, vidéo à identifiant), sauf l'accueil d'un site et les
@@ -335,6 +348,87 @@ private fun ResumeCard(r: ResumeItem, onBrowse: (String?) -> Unit, modifier: Mod
         menu = menu, modifier = modifier, progress = r.progress,
     )
 }
+
+/**
+ * Chaîne en direct : tuile à sa couleur (connue, sinon tirée de son nom), son nom, « ● Direct ».
+ * Un toucher la relance au direct ; appui long : renommer, retirer.
+ */
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+@Composable
+private fun ChannelTile(r: Recent, onBrowse: (String?) -> Unit) {
+    val c = MaterialTheme.colorScheme
+    val name = r.channelName
+    val known = remember(r.url, r.title) { studio.rollando.castor.data.Channels.find("${r.url} ${r.pageUrl} ${r.title}") }
+    val base = androidx.compose.ui.graphics.Color(known?.color ?: PALETTE[(name.hashCode() and 0x7fffffff) % PALETTE.size])
+    var menu by remember { mutableStateOf(false) }
+    var rename by remember { mutableStateOf(false) }
+    val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
+    val renameLabel = stringResource(R.string.channel_rename)
+    val removeLabel = stringResource(R.string.channel_remove)
+    val liveLabel = stringResource(R.string.player_live)
+    Box {
+        Column(
+            Modifier.width(112.dp).clip(RoundedCornerShape(20.dp))
+                .combinedClickable(
+                    role = Role.Button,
+                    onClick = {
+                        val page = r.pageUrl
+                        if (page != null && page.startsWith("http")) onBrowse(page)
+                        else { Castor.open(r.toMedia().copy(startSec = 0.0, title = name)); Nav.tab.value = Tab.PLAYER }
+                    },
+                    onLongClick = { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); menu = true },
+                )
+                .semantics {
+                    contentDescription = "$name, $liveLabel"
+                    customActions = listOf(
+                        androidx.compose.ui.semantics.CustomAccessibilityAction(renameLabel) { rename = true; true },
+                        androidx.compose.ui.semantics.CustomAccessibilityAction(removeLabel) { Library.removeRecent(r.key); true },
+                    )
+                }
+                .padding(6.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Box(
+                Modifier.fillMaxWidth().aspectRatio(16f / 10f).clip(RoundedCornerShape(16.dp))
+                    .background(Brush.linearGradient(listOf(base, base.copy(alpha = 0.55f).compositeOver(androidx.compose.ui.graphics.Color.Black)))),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(name, color = androidx.compose.ui.graphics.Color.White, maxLines = 2, overflow = TextOverflow.Ellipsis,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
+                    modifier = Modifier.padding(horizontal = 8.dp))
+                // Petit point rouge « à l'antenne » dans le coin.
+                Box(Modifier.align(Alignment.TopEnd).padding(8.dp).size(8.dp).clip(CircleShape)
+                    .background(androidx.compose.ui.graphics.Color(0xFFFF4D4D)))
+            }
+            Spacer(Modifier.height(6.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(Modifier.size(6.dp).clip(CircleShape).background(androidx.compose.ui.graphics.Color(0xFFFF4D4D)))
+                Spacer(Modifier.width(5.dp))
+                Text(liveLabel, style = MaterialTheme.typography.labelMedium, color = c.onSurfaceVariant, maxLines = 1)
+            }
+        }
+        androidx.compose.material3.DropdownMenu(expanded = menu, onDismissRequest = { menu = false }, shape = RoundedCornerShape(16.dp)) {
+            androidx.compose.material3.DropdownMenuItem(text = { Text(renameLabel) }, onClick = { menu = false; rename = true })
+            androidx.compose.material3.DropdownMenuItem(text = { Text(removeLabel) }, onClick = { menu = false; Library.removeRecent(r.key) })
+        }
+    }
+    if (rename) {
+        var text by remember { mutableStateOf(name) }
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { rename = false },
+            title = { Text(renameLabel) },
+            text = {
+                androidx.compose.material3.OutlinedTextField(text, { text = it }, singleLine = true,
+                    label = { Text(stringResource(R.string.channel_name)) })
+            },
+            confirmButton = { TextButton(onClick = { Library.renameChannel(r.key, text); rename = false }) { Text(stringResource(R.string.action_ok)) } },
+            dismissButton = { TextButton(onClick = { rename = false }) { Text(stringResource(R.string.action_cancel)) } },
+        )
+    }
+}
+
+private val PALETTE = listOf(0xFF2E6F8E, 0xFF7A3E9D, 0xFF2F8F6B, 0xFFB5523B, 0xFF3A5BA0, 0xFF8E6A2E, 0xFF9C2F5A)
 
 /** Une façon de caster, en petit (accueil des habitués). */
 @Composable

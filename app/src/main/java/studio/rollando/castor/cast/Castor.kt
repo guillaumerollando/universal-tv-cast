@@ -67,6 +67,8 @@ data class CastState(
     val idle: Boolean = false,
     /** Langues des sous-titres déjà présents dans la vidéo (MKV), à choisir sur la télé. */
     val embeddedSubs: List<String> = emptyList(),
+    /** Chaîne ou flux en direct (liste HLS sans fin) : pas de durée, la lecture reprend toujours au direct. */
+    val live: Boolean = false,
 ) {
     val active: Boolean get() = phase in setOf(Phase.SENDING, Phase.BUFFERING, Phase.PLAYING, Phase.PAUSED)
 }
@@ -118,7 +120,7 @@ object Castor {
             var last = 0L
             _state.collect { s ->
                 val m = s.media ?: return@collect
-                if (s.slides != null || s.duration <= 0 || s.position <= 0) return@collect
+                if (s.slides != null || s.live || s.duration <= 0 || s.position <= 0) return@collect
                 val now = System.currentTimeMillis()
                 if (now - last < 15_000) return@collect
                 last = now
@@ -293,7 +295,7 @@ object Castor {
         _state.update {
             it.copy(media = media, slides = null, phase = Phase.LOADING, isHls = false, splitAudio = false, subIndex = media.defaultSub,
                 position = 0.0, duration = 0.0, notice = null, continuous = Library.continuousHls.value, subDelay = 0.0,
-                embeddedSubs = emptyList())
+                embeddedSubs = emptyList(), live = false)
         }
         proxy.reset()
         remoteId = null
@@ -309,7 +311,7 @@ object Castor {
                 hlsDuration = if (plan.endList) plan.duration else 0.0
                 fmp4 = plan.fmp4
                 _state.update {
-                    it.copy(isHls = true, splitAudio = plan.splitAudio, duration = hlsDuration,
+                    it.copy(isHls = true, splitAudio = plan.splitAudio, duration = hlsDuration, live = !plan.endList,
                         continuous = if (plan.splitAudio) false else it.continuous)
                 }
             }
@@ -322,7 +324,7 @@ object Castor {
             Log.i("CastorSubs", "sous-titres déjà dans la vidéo : ${inVideo.joinToString()}")
             _state.update { it.copy(embeddedSubs = inVideo, subIndex = -1) }
         }
-        _state.value.media?.let { Library.addRecent(it) }
+        _state.value.media?.let { Library.addRecent(it, live = _state.value.live) }
         loadSubtitle()
         _state.update { it.copy(phase = Phase.IDLE) }
         if (autoCast) {
@@ -348,7 +350,7 @@ object Castor {
     }
 
     /** Ce qu'il faut au lecteur du téléphone pour reprendre la vidéo en cours, au même endroit. */
-    class PhoneSession(val media: Media, val startSec: Double, val subtitle: ByteArray?, val hls: Boolean)
+    class PhoneSession(val media: Media, val startSec: Double, val subtitle: ByteArray?, val hls: Boolean, val live: Boolean = false)
 
     /**
      * « Regarder sur le téléphone » : la télé s'arrête sur l'écran d'attente, le téléphone reprend au même
@@ -363,7 +365,7 @@ object Castor {
         // de charger la vidéo — sinon elle démarrait de son côté pendant que le téléphone lisait.
         pendingCast = false
         if (s.active || s.phase == Phase.LOADING || s.phase == Phase.SENDING) stop()
-        return PhoneSession(m, at, proxy.subtitle, s.isHls)
+        return PhoneSession(m, if (s.live) 0.0 else at, proxy.subtitle, s.isHls, s.live)
     }
 
     /** Retour du téléphone vers la télé : la vidéo y reprend là où le téléphone s'est arrêté. */
@@ -376,7 +378,7 @@ object Castor {
             discover()
             return
         }
-        if (!sending()) exec { castAt(pos) }
+        if (!sending()) exec { castAt(if (_state.value.live) 0.0 else pos) }
     }
 
     private suspend fun identify() {
@@ -388,7 +390,10 @@ object Castor {
         if (base in GENERIC_NAMES || (_state.value.isHls && hlsDuration <= 0.0)) {
             // Titre lisible à la place de « index.m3u8 » : « Direct » ou « Vidéo ».
             if (m.title == name || m.title.substringAfterLast('/') == name) _state.update {
-                it.copy(media = m.copy(title = app.getString(if (it.isHls && hlsDuration <= 0.0) R.string.video_live else R.string.video_generic)))
+                val live = it.isHls && hlsDuration <= 0.0
+                // Chaîne connue (Arte, France 24…) : son nom ; sinon « Direct » / « Vidéo ».
+                val known = if (live) studio.rollando.castor.data.Channels.find("${m.url} ${m.pageUrl}")?.name else null
+                it.copy(media = m.copy(title = known ?: app.getString(if (live) R.string.video_live else R.string.video_generic)))
             }
             return
         }
@@ -1126,6 +1131,8 @@ object Castor {
                     _state.update { it.copy(phase = Phase.BUFFERING) }
                     return
                 }
+                // Direct en pause : on repart au direct (et pas là où l'image s'était figée).
+                if (s.live) { castAt(0.0); return }
                 if (r.cast) CastControl.play(r) else playWhenReady(r)
                 _state.update { it.copy(phase = Phase.PLAYING) }
             }

@@ -91,6 +91,21 @@ class PhonePlayerActivity : ComponentActivity() {
     }
     private var controlsVisible by mutableStateOf(true)
     private var failed by mutableStateOf(false)
+    /** Direct : en retard sur le direct (pause, retour en arrière) — le badge propose d'y revenir. */
+    private var behindLive by mutableStateOf(false)
+    private val liveWatch = object : Runnable {
+        override fun run() {
+            val p = player
+            if (p != null && p.isCurrentMediaItemLive) {
+                val offset = p.currentLiveOffset
+                // Le lecteur se tient volontairement à quelques segments du direct (sa « cible ») : on n'est en
+                // retard que bien au-delà.
+                val target = p.currentMediaItem?.liveConfiguration?.targetOffsetMs?.takeIf { it != C.TIME_UNSET } ?: 30_000L
+                behindLive = !p.isPlaying || (offset != C.TIME_UNSET && offset > target + 15_000)
+            }
+            handler.postDelayed(this, 1000)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -133,7 +148,28 @@ class PhonePlayerActivity : ComponentActivity() {
                                 Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.cd_back), tint = Color.White)
                             }
                             Text(s.media.title, color = Color.White, style = MaterialTheme.typography.titleMedium,
-                                maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+                                maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
+                            if (s.live) {
+                                Spacer(Modifier.width(10.dp))
+                                // Badge du direct : rouge au direct ; sinon « Revenir au direct », qui y ramène.
+                                androidx.compose.material3.Surface(
+                                    onClick = { player?.seekToDefaultPosition(); player?.play(); behindLive = false },
+                                    shape = androidx.compose.foundation.shape.RoundedCornerShape(50),
+                                    color = if (behindLive) Color.White.copy(alpha = 0.18f) else Color(0xFFE53935),
+                                ) {
+                                    Row(Modifier.padding(horizontal = 12.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+                                        Box(Modifier.width(8.dp).height(8.dp).background(
+                                            if (behindLive) Color.White.copy(alpha = 0.6f) else Color.White,
+                                            androidx.compose.foundation.shape.CircleShape))
+                                        Spacer(Modifier.width(8.dp))
+                                        Text(
+                                            if (behindLive) stringResource(R.string.live_back) else stringResource(R.string.player_live).uppercase(),
+                                            color = Color.White, style = MaterialTheme.typography.labelLarge,
+                                        )
+                                    }
+                                }
+                            }
+                            Spacer(Modifier.weight(1f))
                             FilledTonalButton(onClick = ::sendToTv, modifier = Modifier.padding(end = 8.dp)) {
                                 Icon(Icons.Rounded.Cast, null)
                                 Spacer(Modifier.width(8.dp))
@@ -222,7 +258,7 @@ class PhonePlayerActivity : ComponentActivity() {
         val p = player ?: return
         val m = session?.media ?: return
         val dur = p.duration
-        if (dur == C.TIME_UNSET || dur <= 0 || p.currentPosition <= 0) return
+        if (session?.live == true || dur == C.TIME_UNSET || dur <= 0 || p.currentPosition <= 0) return
         Library.setProgress(m.url, p.currentPosition / 1000.0, dur / 1000.0)
     }
 
@@ -235,11 +271,12 @@ class PhonePlayerActivity : ComponentActivity() {
         finish()
     }
 
-    override fun onStart() { super.onStart(); handler.post(saver) }
+    override fun onStart() { super.onStart(); handler.post(saver); if (session?.live == true) handler.post(liveWatch) }
 
     override fun onStop() {
         super.onStop()
         handler.removeCallbacks(saver)
+        handler.removeCallbacks(liveWatch)
         saveProgress()
         player?.pause()
     }

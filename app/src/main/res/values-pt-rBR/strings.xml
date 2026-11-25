@@ -207,6 +207,7 @@
     <string name="web_err_timeout">O site está demorando demais</string>
     <string name="web_err_ssl">Conexão não segura</string>
     <string name="web_err_ssl_body">O certificado de %1$s não é válido: a página não foi aberta.</string>
+    <string name="web_err_ssl_hint">Geralmente significa que sua operadora bloqueia o site.</string>
     <string name="web_err_generic">Não foi possível abrir a página</string>
     <string name="web_blank">A página continua vazia</string>
     <string name="web_blank_body">Alguns sites não aparecem com o bloqueador de anúncios ou recusam navegadores integrados.</string>

@@ -208,6 +208,7 @@
     <string name="web_err_timeout">The site is taking too long</string>
     <string name="web_err_ssl">Connection not secure</string>
     <string name="web_err_ssl_body">The certificate of %1$s isn’t valid, so the page wasn’t opened.</string>
+    <string name="web_err_ssl_hint">This often means your internet provider blocks the site.</string>
     <string name="web_err_generic">The page couldn’t open</string>
     <string name="web_blank">The page stays blank</string>
     <string name="web_blank_body">Some sites don’t show with the ad blocker, or refuse in-app browsers.</string>

@@ -207,6 +207,7 @@
     <string name="web_err_timeout">De site reageert te traag</string>
     <string name="web_err_ssl">Verbinding niet veilig</string>
     <string name="web_err_ssl_body">Het certificaat van %1$s is ongeldig: de pagina is niet geopend.</string>
+    <string name="web_err_ssl_hint">Vaak blokkeert je provider dan de site.</string>
     <string name="web_err_generic">De pagina kon niet worden geopend</string>
     <string name="web_blank">De pagina blijft leeg</string>
     <string name="web_blank_body">Sommige sites werken niet met de adblocker of weigeren ingebouwde browsers.</string>

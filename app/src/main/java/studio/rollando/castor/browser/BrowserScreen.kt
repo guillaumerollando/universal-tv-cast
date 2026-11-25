@@ -81,6 +81,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
@@ -117,6 +118,11 @@ class BrowserController(context: Context) {
     val sniffer = VideoSniffer()
     /** Problème de la page en cours (erreur de chargement, page restée vide), ou null. */
     var problem by mutableStateOf<WebProblem?>(null)
+    /** Signale un problème ; la barre montre l'adresse demandée (sinon elle resterait vide). */
+    private fun report(p: WebProblem) {
+        problem = p
+        if (url.isEmpty() || url.startsWith("about:")) url = p.url
+    }
     /** Site pour lequel l'utilisateur a demandé de réessayer sans bloqueur de pubs. */
     private var adsAllowedHost: String? = null
     private var mainStatus = 0
@@ -191,7 +197,7 @@ class BrowserController(context: Context) {
                     else -> if (isOffline(view.context)) WebProblem.Kind.OFFLINE else WebProblem.Kind.OTHER
                 }
                 android.util.Log.i("CastorWeb", "erreur de page ${request.url.host} : ${error.errorCode} ${error.description}")
-                problem = WebProblem(kind, request.url.toString())
+                report(WebProblem(kind, request.url.toString()))
             }
 
             override fun onReceivedHttpError(view: WebView, request: WebResourceRequest, response: WebResourceResponse) {
@@ -202,7 +208,7 @@ class BrowserController(context: Context) {
             override fun onReceivedSslError(view: WebView, handler: android.webkit.SslErrorHandler, error: android.net.http.SslError) {
                 handler.cancel() // jamais de passe-droit sur un certificat invalide
                 if (error.url == view.url || problem == null && Uri.parse(error.url).host == Uri.parse(view.url ?: "").host)
-                    problem = WebProblem(WebProblem.Kind.SSL, error.url)
+                    report(WebProblem(WebProblem.Kind.SSL, error.url))
             }
 
             override fun onPageStarted(view: WebView, u: String, favicon: Bitmap?) {
@@ -270,7 +276,7 @@ class BrowserController(context: Context) {
             ) { v ->
                 if (v?.trim('"')?.toIntOrNull() == 0 && view.url == u && problem == null) {
                     android.util.Log.i("CastorWeb", "page vide : ${Uri.parse(u).host} (statut $mainStatus)")
-                    problem = WebProblem(WebProblem.Kind.BLANK, u, mainStatus)
+                    report(WebProblem(WebProblem.Kind.BLANK, u, mainStatus))
                 }
             }
         }
@@ -432,7 +438,12 @@ fun BrowserScreen(b: BrowserController) {
 
         Box(Modifier.weight(1f).fillMaxWidth()) {
             if (b.started) {
-                AndroidView(factory = { (b.webView.parent as? ViewGroup)?.removeView(b.webView); b.webView }, modifier = Modifier.fillMaxSize())
+                AndroidView(
+                    factory = { (b.webView.parent as? ViewGroup)?.removeView(b.webView); b.webView },
+                    // Page en échec : la vue web (restée noire) est masquée, sinon elle recouvre la barre d'adresse.
+                    update = { it.visibility = if (b.problem != null) android.view.View.INVISIBLE else android.view.View.VISIBLE },
+                    modifier = Modifier.fillMaxSize().clipToBounds(),
+                )
             } else {
                 StartPage(onOpen = { b.load(it) })
             }
@@ -646,7 +657,8 @@ private fun ProblemPanel(p: WebProblem, b: BrowserController) {
         WebProblem.Kind.OFFLINE -> stringResource(R.string.web_err_offline) to stringResource(R.string.web_err_offline_body)
         WebProblem.Kind.NOT_FOUND -> stringResource(R.string.web_err_notfound) to stringResource(R.string.web_err_notfound_body, p.host)
         WebProblem.Kind.TIMEOUT -> stringResource(R.string.web_err_timeout) to p.host
-        WebProblem.Kind.SSL -> stringResource(R.string.web_err_ssl) to stringResource(R.string.web_err_ssl_body, p.host)
+        WebProblem.Kind.SSL -> stringResource(R.string.web_err_ssl) to
+            stringResource(R.string.web_err_ssl_body, p.host) + " " + stringResource(R.string.web_err_ssl_hint)
         WebProblem.Kind.OTHER -> stringResource(R.string.web_err_generic) to p.host
         WebProblem.Kind.BLANK -> stringResource(R.string.web_blank) to stringResource(R.string.web_blank_body)
     }

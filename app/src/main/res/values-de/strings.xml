@@ -207,6 +207,7 @@
     <string name="web_err_timeout">Die Seite braucht zu lange</string>
     <string name="web_err_ssl">Verbindung nicht sicher</string>
     <string name="web_err_ssl_body">Das Zertifikat von %1$s ist ungültig: Die Seite wurde nicht geöffnet.</string>
+    <string name="web_err_ssl_hint">Oft blockiert dann dein Internetanbieter die Seite.</string>
     <string name="web_err_generic">Die Seite konnte nicht geöffnet werden</string>
     <string name="web_blank">Die Seite bleibt leer</string>
     <string name="web_blank_body">Manche Seiten laden nicht mit Werbeblocker oder lehnen eingebaute Browser ab.</string>

@@ -619,3 +619,4 @@ fait toute seule.
 - Page chargée mais vide (ni texte, ni image, ni lecteur après 4 s, ou en revenant sur l'onglet) : « La page reste vide » + « Réessayer sans bloqueur de pubs » (pour ce site, le temps de la visite) et ouverture dans le navigateur du téléphone ; code HTTP affiché s'il y en a un.
 - La barre d'adresse est toujours visible en cas de problème et en revenant sur l'onglet Navigateur.
 - Vérifié sur l'émulateur : page noire servie par le PC, domaine inexistant.
+- kool.to (bloqué par le fournisseur d'accès : faux certificat « localhost » en HTTPS) reproduit sur l'émulateur. Cause de l'écran noir *complet* : la vue web en échec se dessinait par-dessus la barre d'adresse. Elle est maintenant masquée (et coupée à ses limites) tant qu'un problème est affiché ; la barre montre l'adresse demandée ; l'écran « Connexion non sécurisée » ajoute que c'est souvent le fournisseur d'accès qui bloque le site.

@@ -238,6 +238,7 @@
     <string name="home_sites">Mijn sites</string>
     <string name="home_cast_more">Iets anders casten</string>
     <string name="home_long_press_hint">Houd een kaart ingedrukt om ze te verwijderen of als bladwijzer te bewaren.</string>
+    <string name="err_source_app_closed">%1$s reageert niet meer: de app is waarschijnlijk gesloten. Open hem opnieuw en start de video daar.</string>
     <string name="iptv_title">Zenderlijsten</string>
     <string name="iptv_intro">Een zenderlijst (M3U- of IPTV-lijst) bundelt tv-zenders in één link. Plak het adres of open het bestand: hier vind je alle zenders, met hun logo.</string>
     <string name="iptv_url_hint">Adres van de lijst (.m3u)</string>

@@ -238,6 +238,7 @@
     <string name="home_sites">Mis sitios</string>
     <string name="home_cast_more">Enviar otra cosa</string>
     <string name="home_long_press_hint">Mantén pulsada una tarjeta para quitarla o guardarla en favoritos.</string>
+    <string name="err_source_app_closed">%1$s ya no responde: probablemente la app se cerró. Vuelve a abrirla e inicia el vídeo desde ahí.</string>
     <string name="iptv_title">Listas de canales</string>
     <string name="iptv_intro">Una lista de canales (lista M3U o IPTV) reúne canales de TV en un solo enlace. Pega su dirección o abre el archivo: aquí tendrás todos sus canales, con su logotipo.</string>
     <string name="iptv_url_hint">Dirección de la lista (.m3u)</string>

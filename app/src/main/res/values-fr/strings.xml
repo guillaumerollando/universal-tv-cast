@@ -238,6 +238,7 @@
     <string name="home_sites">Mes sites</string>
     <string name="home_cast_more">Caster autre chose</string>
     <string name="home_long_press_hint">Appui long sur une carte pour la retirer ou la garder en favori.</string>
+    <string name="err_source_app_closed">%1$s ne répond plus : l’appli a sans doute été fermée. Rouvre-la et relance la vidéo depuis elle.</string>
     <string name="iptv_title">Listes de chaînes</string>
     <string name="iptv_intro">Une liste de chaînes (liste M3U ou IPTV) regroupe des chaînes télé dans un seul lien. Colle son adresse ou ouvre le fichier : tu retrouves ici toutes ses chaînes, avec leur logo.</string>
     <string name="iptv_url_hint">Adresse de la liste (.m3u)</string>

@@ -382,6 +382,14 @@ S = {
 "home_sites": ["My sites", "Mes sites", "Mis sitios", "Meine Seiten", "I miei siti", "Mijn sites", "Meus sites"],
 "home_cast_more": ["Cast something else", "Caster autre chose", "Enviar otra cosa", "Etwas anderes senden", "Trasmetti altro", "Iets anders casten", "Transmitir outra coisa"],
 "home_long_press_hint": ["Press and hold a card to remove it or keep it in bookmarks.", "Appui long sur une carte pour la retirer ou la garder en favori.", "Mantén pulsada una tarjeta para quitarla o guardarla en favoritos.", "Karte gedrückt halten, um sie zu entfernen oder als Lesezeichen zu behalten.", "Tieni premuta una scheda per rimuoverla o tenerla nei preferiti.", "Houd een kaart ingedrukt om ze te verwijderen of als bladwijzer te bewaren.", "Mantenha um cartão pressionado para removê-lo ou mantê-lo nos favoritos."],
+"err_source_app_closed": [
+ "%1$s isn’t responding anymore: it was probably closed. Open it again and restart the video from it.",
+ "%1$s ne répond plus : l’appli a sans doute été fermée. Rouvre-la et relance la vidéo depuis elle.",
+ "%1$s ya no responde: probablemente la app se cerró. Vuelve a abrirla e inicia el vídeo desde ahí.",
+ "%1$s antwortet nicht mehr: Die App wurde wahrscheinlich geschlossen. Öffne sie erneut und starte das Video dort.",
+ "%1$s non risponde più: probabilmente l’app è stata chiusa. Riaprila e riavvia il video da lì.",
+ "%1$s reageert niet meer: de app is waarschijnlijk gesloten. Open hem opnieuw en start de video daar.",
+ "%1$s não está respondendo: o app provavelmente foi fechado. Abra de novo e reinicie o vídeo por ele."],
 "iptv_title": ["Channel lists", "Listes de chaînes", "Listas de canales", "Senderlisten", "Liste di canali", "Zenderlijsten", "Listas de canais"],
 "iptv_intro": [
  "A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.",

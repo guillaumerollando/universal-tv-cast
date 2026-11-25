@@ -436,6 +436,17 @@ private fun LiveBar(s: CastState) {
 
 @Composable
 private fun Controls(s: CastState) {
+    // Pendant le chargement ou l'envoi, lecture, pause et ±10 s ne font rien : un seul bouton, pour annuler.
+    if (s.phase == Phase.LOADING || s.phase == Phase.SENDING) {
+        Box(Modifier.fillMaxWidth().height(80.dp), contentAlignment = Alignment.Center) {
+            OutlinedButton(onClick = Castor::cancel, modifier = Modifier.height(56.dp)) {
+                Icon(Icons.Rounded.Close, null, Modifier.size(20.dp))
+                Spacer(Modifier.width(8.dp))
+                Text(stringResource(R.string.action_cancel), style = MaterialTheme.typography.titleMedium)
+            }
+        }
+        return
+    }
     val enabled = s.renderer != null && s.phase != Phase.LOADING
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
         FilledTonalIconButton(onClick = { Castor.skip(-10.0) }, enabled = enabled && s.active && (!s.live || s.continuous), modifier = Modifier.size(56.dp)) {

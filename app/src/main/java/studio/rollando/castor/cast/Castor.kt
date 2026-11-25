@@ -166,7 +166,11 @@ object Castor {
     /** Vrai pendant qu'une commande est envoyée à la télé : on ne l'interroge pas en même temps. */
     @Volatile private var busy = false
 
+    /** Commande en cours (pour pouvoir l'annuler pendant un chargement). */
+    @Volatile private var running: kotlinx.coroutines.Job? = null
+
     private fun exec(block: suspend () -> Unit) = scope.launch(cmd) {
+        running = coroutineContext[kotlinx.coroutines.Job]
         busy = true
         try {
             block()
@@ -184,6 +188,7 @@ object Castor {
         val n = when (e) {
             is NoTv -> Notice(R.string.notice_pick_tv, error = true)
             is NoWifi -> Notice(R.string.err_no_wifi, error = true)
+            is SourceGone -> Notice(R.string.err_source_app_closed, sourceLabel(_state.value.media ?: return), true)
             is Drm -> Notice(R.string.err_drm, error = true)
             is TvError -> Notice(R.string.err_tv, e.detail, true)
             is studio.rollando.castor.dlna.TvBusy -> Notice(R.string.err_tv_busy, error = true)
@@ -856,6 +861,9 @@ object Castor {
         val s = _state.value
         val m = s.media ?: return
         Net.localIp() ?: throw NoWifi()
+        // Vidéo servie par une autre appli du téléphone (Stremio…) : si elle a été fermée, rien ne sert d'envoyer
+        // (la télé tenterait, échouerait, et on renverrait) ; on le dit tout de suite.
+        if (m.fromPhoneApp && !sourceAlive(m)) throw SourceGone()
         pendingPause = false
         livePausedAt = 0L
         // Direct : « start » est le retard voulu sur le direct.
@@ -1359,6 +1367,31 @@ object Castor {
      * Arrêter : la télé affiche l'écran d'attente de l'appli au lieu de quitter le lecteur (un vrai
      * « Stop » renvoie beaucoup de télés sur leur dernière source, HDMI…). « Se déconnecter » libère la télé.
      */
+    private class SourceGone : Exception()
+
+    private suspend fun sourceAlive(m: Media): Boolean = kotlinx.coroutines.withContext(Dispatchers.IO) {
+        try {
+            val c = studio.rollando.castor.net.Http.open(m.url, m.headers, range = "bytes=0-0", connectTimeout = 3000, readTimeout = 6000)
+            c.disconnect()
+            true
+        } catch (e: ConnectException) {
+            false
+        } catch (e: Exception) {
+            true // autre souci : on laisse la suite le signaler comme avant
+        }
+    }
+
+    /** Annule le chargement ou l'envoi en cours, et revient à l'arrêt. */
+    fun cancel() {
+        pendingCast = false
+        running?.cancel()
+        // Tout de suite à l'écran, même si la télé ou la source met du temps à répondre à la demande annulée
+        // (la commande annulée s'arrête dès qu'elle reprend la main ; l'arrêt de la télé suit derrière).
+        pollJob?.cancel()
+        _state.update { it.copy(phase = Phase.IDLE, notice = null, position = 0.0) }
+        stop()
+    }
+
     fun stop() = exec {
         slideJob?.cancel()
         seekJob?.cancel()

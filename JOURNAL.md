@@ -692,3 +692,10 @@ fait toute seule.
   sur la télé : on ignore désormais un lien marqué FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY. Vérifié sur l'émulateur (fausse télé).
 - Envoi en attente d'une télé (aucune trouvée au moment de l'envoi) : valable 2 minutes seulement, au lieu de partir dès que
   la télé réapparaît, même des heures plus tard. Pareil pour les photos.
+
+## 2026-11-25 (nuit, 5) — Source fermée, bouton Annuler
+- Journal du téléphone : film Stremio repris à 2773 s alors que Stremio était fermé (127.0.0.1:11470 refusé) → la télé
+  tentait, échouait, on renvoyait, sans erreur. Désormais, vidéo servie par une appli du téléphone : on vérifie qu'elle
+  répond avant d'envoyer ; sinon « Stremio ne répond plus : l'appli a sans doute été fermée… », rien n'est envoyé.
+- Chargement / envoi : les boutons de lecture (inutiles) sont remplacés par « Annuler ». L'écran revient tout de suite à
+  l'arrêt ; la commande en cours est annulée, la télé passe ensuite sur l'écran d'attente. Vérifié sur l'émulateur.

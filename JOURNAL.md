@@ -750,3 +750,11 @@ fait toute seule.
 - ChannelTiles (ChannelArt.kt) : un seul format de tuile (96 dp, écart 4 dp, coins 12 dp, marge du logo 9 dp) pour
   l'accueil, la mosaïque, les récentes et le zapping.
 - Récentes de la page Chaînes : retrouvées aussi par le nom (chaîne présente dans deux listes).
+
+## 2026-11-26 — Direct : retard compté à l'horloge
+- Le retard était déduit de ce que le relais avait envoyé à la télé ; la télé garde une réserve d'avance remplie par
+  à-coups → chiffre instable, pause qui ne comptait pas, retour à « direct » après la reprise.
+- Désormais (LiveClock) : retard = retard demandé à l'envoi + temps passé sans lecture (pause, chargement). ±10 s et la
+  barre visent le moment du programme vu à l'instant de l'appui (le temps de l'attente est rattrapé).
+- LiveBuffer : « direct » = 3 morceaux avant le plus récent, pour startFor comme pour la plage disponible (cohérents).
+- Émulateur (fausse télé, Africa 24 English) : pause 10 s → −0:11 ; reprise stable −0:15 ; −10 → −0:27 stable, flux demandé start=26.

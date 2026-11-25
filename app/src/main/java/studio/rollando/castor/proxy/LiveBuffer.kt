@@ -53,20 +53,22 @@ class LiveBuffer(
     /** Ce qu'on peut encore lire : enregistré, ou toujours en ligne chez la chaîne. */
     private fun available(e: Entry): Boolean = e.file != null || plan.segs.any { it.seq == e.seg.seq }
 
+    /** Le « direct » tel qu'on le sert : 3 morceaux avant le plus récent (la marge habituelle des lecteurs). */
+    private fun livePoint(): Double = entries.getOrNull(entries.size - 3)?.time ?: (entries.firstOrNull()?.time ?: 0.0)
+
     /** Jusqu'où on peut remonter, en secondes avant le direct. */
     val window: Double get() = synchronized(lock) {
         val first = entries.firstOrNull { available(it) } ?: return 0.0
-        (entries.last().end - first.time).coerceAtLeast(0.0)
+        (livePoint() - first.time).coerceAtLeast(0.0)
     }
 
-    /** Retard de la télé sur le direct (ce qu'elle a reçu, à quelques secondes près). */
+    /** Retard de ce que la télé a reçu sur le direct (indicatif : la télé garde une réserve d'avance). */
     val behind: Double get() = if (readerEnd < 0) 0.0 else (head - readerEnd).coerceAtLeast(0.0)
 
-    /** Morceau où commencer pour être « retard » secondes avant le direct (en gardant 3 morceaux de marge). */
+    /** Morceau où commencer pour être « retard » secondes avant le direct. */
     fun startFor(behindWanted: Double): Long = synchronized(lock) {
-        val live = entries.size - 3
-        val target = head - behindWanted
-        var i = if (behindWanted <= 0) live else entries.indexOfLast { it.time <= target - entries.last().seg.duration * 2 }
+        val target = livePoint() - behindWanted
+        var i = if (behindWanted <= 0) entries.size - 3 else entries.indexOfLast { it.time <= target + 0.01 }
         i = i.coerceIn(0, maxOf(0, entries.size - 1))
         // Pas plus loin que ce qui est encore lisible.
         while (i < entries.size - 1 && !available(entries[i])) i++

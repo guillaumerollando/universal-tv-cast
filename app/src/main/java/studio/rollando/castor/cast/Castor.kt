@@ -885,6 +885,7 @@ object Castor {
         livePausedAt = 0L
         // Direct : « start » est le retard voulu sur le direct.
         _state.update { it.copy(phase = Phase.SENDING, notice = null, idle = false, liveBehind = if (it.live) start else it.liveBehind) }
+        if (_state.value.live) liveClock.start(start)
         verifySource(m)
         val base = proxy.baseUrl()
         var r = chosen
@@ -1028,7 +1029,11 @@ object Castor {
                 if (busy) continue
                 val r = target() ?: break
                 // Direct : retard réel de la télé et plage enregistrée, d'après l'enregistrement du téléphone.
-                liveRecording()?.let { (b, w) -> _state.update { it.copy(liveBehind = b, liveWindow = w) } }
+                if (_state.value.live) {
+                    val b = liveClock.update(_state.value.phase == Phase.PLAYING)
+                    val w = liveRecording()?.second
+                    _state.update { it.copy(liveBehind = b, liveWindow = w ?: it.liveWindow) }
+                }
                 try {
                     val rel: Double
                     val dur: Double
@@ -1211,7 +1216,7 @@ object Castor {
         when (s.phase) {
             Phase.PLAYING, Phase.BUFFERING -> {
                 if (r.cast) CastControl.pause(r) else pauseWhenReady(r)
-                if (s.live) livePausedAt = System.currentTimeMillis()
+                if (s.live) { livePausedAt = System.currentTimeMillis(); liveClock.update(true) }
                 _state.update { it.copy(phase = Phase.PAUSED) }
             }
             Phase.PAUSED -> {
@@ -1223,13 +1228,10 @@ object Castor {
                 }
                 if (r.cast) CastControl.play(r) else playWhenReady(r)
                 // Direct : la lecture reprend là où elle s'était figée ; le retard sur le direct a grandi d'autant.
-                val paused = if (s.live && livePausedAt > 0) (System.currentTimeMillis() - livePausedAt) / 1000.0 else 0.0
                 livePausedAt = 0L
-                val rec = liveRecording()
-                _state.update {
-                    if (rec != null) it.copy(phase = Phase.PLAYING, liveBehind = rec.first, liveWindow = rec.second)
-                    else it.copy(phase = Phase.PLAYING, liveBehind = (it.liveBehind + paused).coerceAtMost(maxLiveBack(it)))
-                }
+                // Direct : la télé reprend là où elle s'était figée ; la pause compte dans le retard.
+                val b = if (s.live) liveClock.update(false) else s.liveBehind
+                _state.update { it.copy(phase = Phase.PLAYING, liveBehind = b) }
             }
             else -> castAt(if (s.phase == Phase.STOPPED && s.duration > 0 && s.position < s.duration - 5) s.position else 0.0)
         }
@@ -1259,12 +1261,8 @@ object Castor {
         if (!s.live) { seekTo(s.position + delta, debounceMs = 700); return }
         // Direct : on remonte (ou redescend) dans ce que garde le flux ; le flux est renvoyé avec ce retard.
         if (!s.active || !s.continuous) return
-        // Avec l'enregistrement du direct, le retard affiché est déjà le vrai ; sinon on ajoute la pause en cours.
-        val running = if (liveRecording() == null && s.phase == Phase.PAUSED && livePausedAt > 0) (System.currentTimeMillis() - livePausedAt) / 1000.0 else 0.0
-        val target = (s.liveBehind + running - delta).coerceIn(0.0, maxLiveBack(s))
-        _state.update { it.copy(liveBehind = target) }
-        seekJob?.cancel()
-        seekJob = scope.launch { delay(700); exec { castAt(_state.value.liveBehind) } }
+        // Par rapport à ce qu'on regarde à l'instant de l'appui (et pas une fois le chargement fait).
+        liveSeek((currentBehind() - delta).coerceIn(0.0, maxLiveBack(s)), 700)
     }
 
     /** Direct : retour au direct. */
@@ -1279,15 +1277,55 @@ object Castor {
     fun seekLive(behind: Double) {
         val s = _state.value
         if (!s.live || !s.active || !s.continuous) return
-        val target = behind.coerceIn(0.0, maxLiveBack(s))
+        liveSeek(behind.coerceIn(0.0, maxLiveBack(s)), 300)
+    }
+
+    /** Déplacement demandé dans le direct, pas encore envoyé : (retard voulu, moment de l'appui). */
+    @Volatile private var pendingLive: Pair<Double, Long>? = null
+
+    /** Retard de ce qu'on regarde, maintenant (y compris un déplacement demandé à l'instant). */
+    private fun currentBehind(): Double = pendingLive?.let { (b, at) -> b + (System.currentTimeMillis() - at) / 1000.0 }
+        ?: liveClock.update(_state.value.phase == Phase.PLAYING)
+
+    private fun liveSeek(target: Double, debounceMs: Long) {
+        val at = System.currentTimeMillis()
+        pendingLive = target to at
         livePausedAt = 0L
         _state.update { it.copy(liveBehind = target) }
         seekJob?.cancel()
-        seekJob = scope.launch { delay(300); exec { castAt(target) } }
+        seekJob = scope.launch {
+            delay(debounceMs)
+            // Le direct a avancé pendant l'attente : on vise toujours le même moment du programme.
+            val (b, t) = pendingLive ?: return@launch
+            pendingLive = null
+            exec { castAt(b + (System.currentTimeMillis() - t) / 1000.0) }
+        }
     }
 
+    /**
+     * Retard sur le direct, compté à l'horloge : celui demandé au départ, plus tout le temps passé sans lecture
+     * (pause, chargement). Stable, et juste à la seconde ; le téléphone n'a pas à deviner ce que la télé a en réserve.
+     */
+    private class LiveClock {
+        private var base = 0.0
+        private var since = 0L
+        private var played = 0.0
+        private var tick = 0L
+        @Synchronized fun start(behind: Double) {
+            val n = System.currentTimeMillis(); base = behind; since = n; played = 0.0; tick = n
+        }
+        @Synchronized fun update(playing: Boolean): Double {
+            val n = System.currentTimeMillis()
+            if (since == 0L) return 0.0
+            if (playing) played += (n - tick) / 1000.0
+            tick = n
+            return (base + (n - since) / 1000.0 - played).coerceAtLeast(0.0)
+        }
+    }
+    private val liveClock = LiveClock()
+
     /** On peut remonter dans tout ce que garde le flux (ou l'enregistrement), moins les derniers morceaux. */
-    fun maxLiveBack(s: CastState) = (s.liveWindow - 20).coerceAtLeast(0.0)
+    fun maxLiveBack(s: CastState) = (s.liveWindow - 5).coerceAtLeast(0.0)
 
     /** Direct enregistré par le téléphone : (retard de la télé, jusqu'où on peut remonter), en secondes. */
     private fun liveRecording(): Pair<Double, Double>? =

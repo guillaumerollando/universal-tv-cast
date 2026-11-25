@@ -11,8 +11,30 @@ import studio.rollando.castor.cast.Media
 data class Recent(
     val title: String, val url: String, val mime: String?, val headers: Map<String, String>, val pageUrl: String?, val time: Long,
     val poster: String? = null, val fileName: String? = null,
+    /** Saison et épisode (fichier reconnu, ex. Stremio) ; pour un site, l'épisode est lu dans l'adresse de la page. */
+    val season: Int? = null, val episode: Int? = null,
 ) {
     fun toMedia() = Media(url = url, title = title, mime = mime, headers = headers, pageUrl = pageUrl, posterUrl = poster, fileName = fileName)
+
+    private val web: Boolean get() = pageUrl?.startsWith("http") == true
+
+    /** Une seule entrée par série : l'adresse de la page sans le numéro d'épisode, ou le nom de la série et sa saison. */
+    val key: String get() = when {
+        web -> studio.rollando.castor.browser.Episodes.seriesKey(pageUrl!!)
+        season != null && fileName != null ->
+            "f:" + studio.rollando.castor.subs.SubtitleFinder.parse(fileName).title.lowercase() + "#" + season
+        else -> url
+    }
+
+    /** Épisode où l'on en est (pour la pastille), s'il est connu. */
+    val episodeNumber: Int? get() = episode ?: pageUrl?.takeIf { web }?.let { studio.rollando.castor.browser.Episodes.find(it)?.number }
+
+    /** Titre de la série seule (« Jujutsu Kaisen » plutôt que « Jujutsu Kaisen – Épisode 5 »). */
+    val seriesTitle: String get() = when {
+        season != null && fileName != null -> studio.rollando.castor.subs.SubtitleFinder.parse(fileName).title
+        episodeNumber != null -> studio.rollando.castor.browser.PageTitle.series(title)
+        else -> title
+    }
 }
 
 /**
@@ -105,12 +127,21 @@ object Library {
 
     fun addRecent(m: Media) {
         if (m.isLocal) return
-        val r = Recent(m.title, m.url, m.mime, m.headers, m.pageUrl, System.currentTimeMillis(), m.posterUrl, m.fileName)
-        _recents.value = (listOf(r) + _recents.value.filter { it.url != m.url }).take(30)
+        val r0 = Recent(m.title, m.url, m.mime, m.headers, m.pageUrl, System.currentTimeMillis(), m.posterUrl, m.fileName, m.season, m.episode)
+        // Même série : le nouvel épisode remplace l'ancien (et garde son image si celui-ci n'en a pas).
+        val old = _recents.value.filter { it.key == r0.key || it.url == r0.url }
+        val r = if (r0.poster == null) r0.copy(poster = old.firstNotNullOfOrNull { it.poster } ?: bookmarkFor(m.pageUrl ?: "")?.image) else r0
+        _recents.value = (listOf(r) + (_recents.value - old.toSet())).take(30)
         saveRecents()
     }
 
-    fun removeRecent(r: Recent) { _recents.value = _recents.value - r; saveRecents() }
+    /** Retire de « Reprendre » toute la série (et son favori, s'il y en a un, sinon elle y reviendrait). */
+    fun removeRecent(key: String) {
+        _recents.value = _recents.value.filter { it.key != key }
+        saveRecents()
+        _bookmarks.value.filter { !it.isSite && it.key == key }.forEach { removeBookmark(it) }
+    }
+    fun removeRecent(r: Recent) = removeRecent(r.key)
     fun clearRecents() { _recents.value = emptyList(); saveRecents() }
 
     /** La page appartient-elle à une série (ou un site) déjà en favori ? */
@@ -142,6 +173,11 @@ object Library {
 
     /** L'image de la page arrive après coup : on illustre le favori qui pointe sur cette page, s'il n'en a pas. */
     fun setBookmarkImage(url: String, image: String) {
+        // La carte « Reprendre » de cette page en profite aussi.
+        if (_recents.value.any { it.pageUrl == url && it.poster == null }) {
+            _recents.value = _recents.value.map { if (it.pageUrl == url && it.poster == null) it.copy(poster = image) else it }
+            saveRecents()
+        }
         val b = _bookmarks.value.firstOrNull { it.url == url && it.image == null } ?: return
         _bookmarks.value = _bookmarks.value.map { if (it === b) it.copy(image = image) else it }
         saveBookmarks()
@@ -182,6 +218,7 @@ object Library {
         val arr = JSONArray()
         for (r in _recents.value) arr.put(JSONObject().apply {
             put("title", r.title); put("url", r.url); put("mime", r.mime ?: ""); put("page", r.pageUrl ?: ""); put("poster", r.poster ?: ""); put("file", r.fileName ?: "")
+            put("season", r.season ?: -1); put("ep", r.episode ?: -1)
             put("time", r.time); put("headers", JSONObject(r.headers as Map<*, *>))
         })
         prefs.edit().putString("recents", arr.toString()).apply()
@@ -199,8 +236,10 @@ object Library {
             poster = o.optString("poster").ifEmpty { null },
             fileName = o.optString("file").ifEmpty { null },
             time = o.optLong("time"),
+            season = o.optInt("season", -1).takeIf { it >= 0 },
+            episode = o.optInt("ep", -1).takeIf { it >= 0 },
         )
-    }
+    }.distinctBy { it.key } // anciennes listes : un épisode par entrée
 
     private fun readBookmarks(a: JSONArray) = (0 until a.length()).map { i ->
         val o = a.getJSONObject(i)

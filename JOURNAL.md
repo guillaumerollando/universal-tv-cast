@@ -584,3 +584,11 @@ fait toute seule.
   regardé », « Mon Anime : marque-page avancé à l'épisode 13 », « « X » ajouté aux favoris ».
 - Vérifié sur émulateur (faux site sans lecteur : la vidéo intégrée faisait planter l'émulateur côté PC).
   Tests 26/26, lint propre.
+
+## 2026-11-25 (soir, 18) — « Reprendre » par série, accueil des habitués
+
+- « Reprendre » : une seule carte par série (adresse de la page sans le numéro d'épisode ; pour Stremio, nom de la série + saison), avec la pastille de l'épisode (« Ép. 5 », « S2 · Ép. 5 ») et l'image de la page, comme les favoris. Les anciennes listes sont regroupées à la lecture.
+- Les séries en favori sont dans « Reprendre » (étoile) et y restent : le favori, c'est « reprendre plus tard ». La rangée de l'accueil ne garde que les sites (« Mes sites »).
+- Appui long sur une carte (reprendre, favoris, sites) : menu « Garder ici (favori) » / « Retirer des favoris » / « Retirer de « Reprendre » » ; les croix disparaissent. Actions d'accessibilité équivalentes.
+- Accueil : dès qu'il y a de l'historique ou des favoris, plus de grand bandeau ni de carte « Depuis une autre appli » ; « Reprendre » en premier, les quatre façons de caster en une rangée compacte. Le nouveau venu garde l'accueil complet.
+- Vérifié sur l'émulateur avec des données d'exemple (3 épisodes → 1 carte, The Office S2E4/E5 → 1 carte, film, retrait, mise en favori).

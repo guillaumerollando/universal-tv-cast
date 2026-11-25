@@ -57,6 +57,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import studio.rollando.castor.R
 import studio.rollando.castor.cast.Castor
+import studio.rollando.castor.data.Bookmark
 import studio.rollando.castor.data.Library
 import studio.rollando.castor.data.Recent
 
@@ -71,6 +72,52 @@ fun HomeScreen(
     val recents by Library.recents.collectAsState()
     val bookmarks by Library.bookmarks.collectAsState()
     val c = MaterialTheme.colorScheme
+
+    val resume = resumeItems(recents, bookmarks)
+    val sites = bookmarks.filter { it.isSite }
+
+    // Habitué (des séries en cours, des sites en favori) : ce qu'il regarde d'abord, les façons de caster en
+    // une rangée compacte. Nouveau venu : la présentation et les grandes tuiles.
+    if (resume.isNotEmpty() || sites.isNotEmpty()) {
+        LazyColumn(
+            contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp + LocalBottomInset.current),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+        ) {
+            if (resume.isNotEmpty()) {
+                item { SectionTitle(stringResource(R.string.home_resume), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
+                item {
+                    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        items(resume, key = { "r" + it.key }) { r -> ResumeCard(r, onBrowse) }
+                    }
+                }
+            }
+            if (sites.isNotEmpty()) {
+                item { SectionTitle(stringResource(R.string.home_sites), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
+                item { FavoritesRow(sites) { onBrowse(it) } }
+            }
+            item { SectionTitle(stringResource(R.string.home_cast_more), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
+            item {
+                Column(Modifier.padding(horizontal = 16.dp)) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        SmallTile(Icons.Rounded.Public, stringResource(R.string.home_browse_tile), Modifier.weight(1f)) { onBrowse(null) }
+                        SmallTile(Icons.Rounded.VideoLibrary, stringResource(R.string.home_videos), Modifier.weight(1f), onPickVideo)
+                        SmallTile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), Modifier.weight(1f), onPickPhotos)
+                        SmallTile(Icons.Rounded.Link, stringResource(R.string.home_link_tile), Modifier.weight(1f), onPasteLink)
+                    }
+                    TextButton(onClick = onPickFile, modifier = Modifier.align(Alignment.End)) {
+                        Icon(Icons.Rounded.FolderOpen, null, Modifier.size(18.dp))
+                        Spacer(Modifier.width(6.dp))
+                        Text(stringResource(R.string.home_files_other))
+                    }
+                }
+            }
+            item {
+                Text(stringResource(R.string.home_long_press_hint), style = MaterialTheme.typography.bodySmall,
+                    color = c.onSurfaceVariant, modifier = Modifier.padding(horizontal = 16.dp))
+            }
+        }
+        return
+    }
 
     LazyColumn(
         contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp + LocalBottomInset.current),
@@ -117,29 +164,10 @@ fun HomeScreen(
             }
         }
 
-        // Mes séries et sites : en premier, un toucher reprend là où on en est.
-        if (bookmarks.isNotEmpty()) {
-            item { SectionTitle(stringResource(R.string.home_bookmarks), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
-            item {
-                FavoritesRow(bookmarks) { onBrowse(it) }
-            }
-        }
-
-        if (recents.isNotEmpty()) {
-            item { SectionTitle(stringResource(R.string.home_resume), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
-            item {
-                LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    items(recents, key = { "r" + it.url }) { r -> RecentCard(r) }
-                }
-            }
-        }
-
-        if (bookmarks.isEmpty()) {
-            item { SectionTitle(stringResource(R.string.home_bookmarks), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
-            item {
-                Text(stringResource(R.string.home_bookmarks_empty), style = MaterialTheme.typography.bodyMedium,
-                    color = c.onSurfaceVariant, modifier = Modifier.padding(horizontal = 16.dp))
-            }
+        item { SectionTitle(stringResource(R.string.home_bookmarks), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
+        item {
+            Text(stringResource(R.string.home_bookmarks_empty), style = MaterialTheme.typography.bodyMedium,
+                color = c.onSurfaceVariant, modifier = Modifier.padding(horizontal = 16.dp))
         }
 
         item {
@@ -162,6 +190,80 @@ fun HomeScreen(
     }
 }
 
+/**
+ * Une carte « Reprendre » : une série (ou un film) avec l'épisode où l'on en est. Réunit l'historique (une entrée
+ * par série) et les séries en favori, qui y restent même sans avoir été regardées récemment.
+ */
+private data class ResumeItem(
+    val key: String, val title: String, val image: String?, val host: String,
+    val season: Int?, val episode: Int?, val time: Long,
+    val recent: Recent?, val bookmark: Bookmark?, val openUrl: String?,
+)
+
+private fun resumeItems(recents: List<Recent>, bookmarks: List<Bookmark>): List<ResumeItem> {
+    val series = bookmarks.filter { !it.isSite }
+    val fromRecents = recents.map { r ->
+        val b = series.firstOrNull { it.key == r.key }
+        val ep = r.episodeNumber
+        // Le favori a pu avancer plus loin (épisode ouvert sans être casté) : on reprend au plus loin.
+        val bookmarkAhead = b != null && (b.episode ?: 0) > (ep ?: 0)
+        ResumeItem(
+            key = r.key, title = b?.title ?: r.seriesTitle, image = r.poster ?: b?.image,
+            host = Uri.parse(r.pageUrl ?: r.url).host?.removePrefix("www.")?.takeIf { it != "127.0.0.1" && it != "localhost" }.orEmpty(),
+            season = r.season, episode = if (bookmarkAhead) b!!.episode else ep, time = maxOf(r.time, b?.time ?: 0),
+            recent = r, bookmark = b, openUrl = if (bookmarkAhead) b!!.url else r.pageUrl?.takeIf { it.startsWith("http") },
+        )
+    }
+    val keys = fromRecents.map { it.key }.toSet()
+    val onlyBookmarked = series.filter { it.key !in keys }.map { b ->
+        ResumeItem(b.key, b.title, b.image, b.host, null, b.episode, b.time, null, b, b.url)
+    }
+    return (fromRecents + onlyBookmarked).sortedByDescending { it.time }
+}
+
+@Composable
+private fun ResumeCard(r: ResumeItem, onBrowse: (String?) -> Unit) {
+    val badge = when {
+        r.season != null && r.episode != null -> stringResource(R.string.resume_season_episode, r.season, r.episode)
+        r.episode != null -> stringResource(R.string.bookmark_episode, r.episode)
+        else -> null
+    }
+    val menu = buildList {
+        val page = r.openUrl
+        if (r.bookmark != null) add(stringResource(R.string.cd_bookmark_remove) to { Library.removeBookmark(r.bookmark) })
+        else if (page != null) add(stringResource(R.string.resume_follow) to { Library.toggleBookmark(r.title, page, r.image) })
+        if (r.recent != null) add(stringResource(R.string.resume_remove) to { Library.removeRecent(r.key) })
+    }
+    PosterCard(
+        title = r.title, image = r.image, host = r.host, badge = badge, starred = r.bookmark != null,
+        onClick = {
+            val page = r.openUrl
+            // Vidéo trouvée sur un site : son lien a souvent expiré, on rouvre la page de l'épisode.
+            if (page != null) onBrowse(page)
+            else r.recent?.let {
+                Castor.open(it.toMedia())
+                Nav.tab.value = Tab.PLAYER
+            }
+        },
+        menu = menu,
+    )
+}
+
+/** Une façon de caster, en petit (accueil des habitués). */
+@Composable
+private fun SmallTile(icon: ImageVector, title: String, modifier: Modifier, onClick: () -> Unit) {
+    val c = MaterialTheme.colorScheme
+    Surface(onClick = onClick, shape = RoundedCornerShape(18.dp), color = c.surfaceContainerHigh, modifier = modifier.height(84.dp)) {
+        Column(Modifier.padding(horizontal = 4.dp, vertical = 10.dp), horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween) {
+            Box(Modifier.size(36.dp).clip(CircleShape).background(c.primary.copy(alpha = 0.16f)), contentAlignment = Alignment.Center) {
+                Icon(icon, null, tint = c.primary, modifier = Modifier.size(20.dp))
+            }
+            Text(title, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        }
+    }
+}
+
 @Composable
 private fun Tile(icon: ImageVector, title: String, sub: String, modifier: Modifier, onClick: () -> Unit) {
     val c = MaterialTheme.colorScheme
@@ -178,40 +280,3 @@ private fun Tile(icon: ImageVector, title: String, sub: String, modifier: Modifi
     }
 }
 
-/** Carte « Reprendre » : l'affiche du film (ou une icône), le titre, et une croix pour retirer. */
-@Composable
-private fun RecentCard(r: Recent) {
-    val c = MaterialTheme.colorScheme
-    val removeCd = stringResource(R.string.cd_delete)
-    Column(Modifier.width(118.dp)) {
-        Box(
-            Modifier.fillMaxWidth().aspectRatio(2f / 3f).clip(RoundedCornerShape(16.dp)).background(c.surfaceContainerHigh)
-                .clickable(role = Role.Button) {
-                    // Vidéo trouvée sur un site : son lien a souvent expiré, on rouvre la page (l'épisode).
-                    val page = r.pageUrl
-                    if (page != null && page.startsWith("http")) Nav.openUrl.value = page
-                    else {
-                        Castor.open(r.toMedia())
-                        Nav.tab.value = Tab.PLAYER
-                    }
-                }
-                .semantics { contentDescription = r.title },
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(Icons.Rounded.Movie, null, Modifier.size(36.dp), tint = c.onSurfaceVariant)
-            if (r.poster != null) RemoteImage(r.poster, Modifier.fillMaxSize(), maxSide = 400)
-            IconButton(
-                onClick = { Library.removeRecent(r) },
-                modifier = Modifier.align(Alignment.TopEnd).size(36.dp),
-            ) {
-                Box(Modifier.size(24.dp).clip(CircleShape).background(c.surface.copy(alpha = 0.75f)), contentAlignment = Alignment.Center) {
-                    Icon(Icons.Rounded.Close, removeCd, Modifier.size(16.dp))
-                }
-            }
-        }
-        Spacer(Modifier.height(6.dp))
-        Text(r.title, style = MaterialTheme.typography.labelLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
-        Text(Uri.parse(r.pageUrl ?: r.url).host?.removePrefix("www.")?.takeIf { it != "127.0.0.1" } ?: "",
-            style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant, maxLines = 1)
-    }
-}

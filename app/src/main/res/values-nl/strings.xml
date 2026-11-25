@@ -196,6 +196,13 @@
     <string name="err_protected">Deze site beschermt zijn video’s: alleen de eigen speler kan ze afspelen, dus ze kunnen niet naar de tv.</string>
     <string name="bookmark_open">Openen</string>
     <string name="cd_browser_home">Startpagina browser</string>
+    <string name="resume_season_episode">S%1$d · Afl. %2$d</string>
+    <string name="resume_remove">Verwijderen uit ‘Verder kijken’</string>
+    <string name="resume_follow">Hier houden (bladwijzer)</string>
+    <string name="home_link_tile">Link</string>
+    <string name="home_sites">Mijn sites</string>
+    <string name="home_cast_more">Iets anders casten</string>
+    <string name="home_long_press_hint">Houd een kaart ingedrukt om ze te verwijderen of als bladwijzer te bewaren.</string>
     <string name="bookmark_site">Site</string>
     <string name="bookmark_followed_series">‘%1$s’ gevolgd: de bladwijzer schuift mee met elke aflevering.</string>
     <string name="bookmark_added">‘%1$s’ toegevoegd aan favorieten.</string>

@@ -5,7 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,15 +19,20 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Bookmark
-import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Movie
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,7 +41,9 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -45,6 +52,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import studio.rollando.castor.R
 import studio.rollando.castor.data.Bookmark
+import studio.rollando.castor.data.Library
 import java.io.File
 
 /** Logos des sites (favicons), donnés par le navigateur lui-même et gardés sur le téléphone. */
@@ -77,7 +85,7 @@ fun SiteIcon(host: String, size: Int = 28) {
     }
 }
 
-/** Rangée des favoris (accueil et accueil du navigateur) : les séries et films d'abord, les sites ensuite. */
+/** Rangée des favoris (accueil du navigateur, et sites sur l'accueil) : les séries et films d'abord, les sites ensuite. */
 @Composable
 fun FavoritesRow(bookmarks: List<Bookmark>, onOpen: (String) -> Unit) {
     val ordered = bookmarks.filter { !it.isSite } + bookmarks.filter { it.isSite }
@@ -88,91 +96,123 @@ fun FavoritesRow(bookmarks: List<Bookmark>, onOpen: (String) -> Unit) {
     ) {
         items(ordered.size, key = { ordered[it].key }) { i ->
             val b = ordered[i]
-            if (b.isSite) SiteCard(b, onOpen) { studio.rollando.castor.data.Library.removeBookmark(b) }
-            else SeriesCard(b, onOpen) { studio.rollando.castor.data.Library.removeBookmark(b) }
+            if (b.isSite) SiteCard(b, onOpen)
+            else PosterCard(
+                title = b.title, image = b.image, host = b.host,
+                badge = b.episode?.let { stringResource(R.string.bookmark_episode, it) }, starred = true,
+                onClick = { onOpen(b.url) },
+                menu = listOf(stringResource(R.string.cd_bookmark_remove) to { Library.removeBookmark(b) }),
+            )
         }
     }
 }
 
 /**
- * Série ou film : grande image (affiche ou vignette de la page), titre, site et épisode où l'on en est.
- * Le marque-page avance tout seul ; un toucher reprend là où on en est.
+ * Carte d'une série ou d'un film (« Reprendre » et favoris) : grande image, pastille de l'épisode où l'on en est,
+ * titre et site. Un toucher reprend ; un appui long propose de la suivre en favori ou de la retirer.
  */
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
-fun SeriesCard(b: Bookmark, onOpen: (String) -> Unit, onRemove: () -> Unit) {
+fun PosterCard(
+    title: String, image: String?, host: String, badge: String?, starred: Boolean,
+    onClick: () -> Unit, menu: List<Pair<String, () -> Unit>>,
+) {
     val c = MaterialTheme.colorScheme
-    val badge = b.episode?.let { stringResource(R.string.bookmark_episode, it) }
-    Column(
-        Modifier.width(200.dp).clip(RoundedCornerShape(20.dp)).background(c.surfaceContainerHigh)
-            .clickable(role = Role.Button) { onOpen(b.url) }
-            .semantics { contentDescription = b.title + (badge?.let { ", $it" } ?: "") + ", " + b.host },
-    ) {
-        Box(Modifier.fillMaxWidth().height(112.dp).background(c.surfaceContainerHighest)) {
-            if (b.image != null) RemoteImage(b.image, Modifier.matchParentSize(), maxSide = 480)
-            else Box(Modifier.matchParentSize(), contentAlignment = Alignment.Center) { SiteIcon(b.host, 44) }
-            Box(Modifier.matchParentSize().background(androidx.compose.ui.graphics.Brush.verticalGradient(
-                0.45f to androidx.compose.ui.graphics.Color.Transparent, 1f to androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.75f))))
-            // Pastille : épisode en cours (le marque-page qui avance), ou « Film / page ».
-            Row(
-                Modifier.align(Alignment.BottomStart).padding(8.dp).clip(RoundedCornerShape(50)).background(c.primary)
-                    .padding(horizontal = 10.dp, vertical = 4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(if (badge != null) Icons.Rounded.Bookmark else Icons.Rounded.PlayArrow,
-                    null, tint = c.onPrimary, modifier = Modifier.size(14.dp))
-                Spacer(Modifier.width(4.dp))
-                Text(badge ?: stringResource(R.string.bookmark_open), style = MaterialTheme.typography.labelMedium, color = c.onPrimary)
+    var open by remember { mutableStateOf(false) }
+    val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
+    Box {
+        Column(
+            Modifier.width(200.dp).clip(RoundedCornerShape(20.dp)).background(c.surfaceContainerHigh)
+                .combinedClickable(
+                    role = Role.Button, onClick = onClick,
+                    onLongClick = { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); open = true },
+                )
+                .semantics {
+                    contentDescription = title + (badge?.let { ", $it" } ?: "") + (if (host.isNotEmpty()) ", $host" else "")
+                    customActions = menu.map { (label, action) -> CustomAccessibilityAction(label) { action(); true } }
+                },
+        ) {
+            Box(Modifier.fillMaxWidth().height(112.dp).background(c.surfaceContainerHighest)) {
+                if (image != null) RemoteImage(image, Modifier.matchParentSize(), maxSide = 480)
+                else Box(Modifier.matchParentSize(), contentAlignment = Alignment.Center) {
+                    if (host.isNotEmpty()) SiteIcon(host, 44) else Icon(Icons.Rounded.Movie, null, Modifier.size(40.dp), tint = c.onSurfaceVariant)
+                }
+                Box(Modifier.matchParentSize().background(androidx.compose.ui.graphics.Brush.verticalGradient(
+                    0.45f to androidx.compose.ui.graphics.Color.Transparent, 1f to androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.75f))))
+                // Pastille : épisode où l'on en est, ou « Reprendre » pour un film.
+                Row(
+                    Modifier.align(Alignment.BottomStart).padding(8.dp).clip(RoundedCornerShape(50)).background(c.primary)
+                        .padding(horizontal = 10.dp, vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(Icons.Rounded.PlayArrow, null, tint = c.onPrimary, modifier = Modifier.size(14.dp))
+                    Spacer(Modifier.width(4.dp))
+                    Text(badge ?: stringResource(R.string.bookmark_resume), style = MaterialTheme.typography.labelMedium, color = c.onPrimary)
+                }
+                // Suivie en favori : elle reste ici même quand on ne la regarde plus depuis longtemps.
+                if (starred) Box(
+                    Modifier.align(Alignment.TopEnd).padding(8.dp).size(26.dp).clip(CircleShape)
+                        .background(androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.45f)),
+                    contentAlignment = Alignment.Center,
+                ) { Icon(Icons.Rounded.Star, null, tint = c.primary, modifier = Modifier.size(16.dp)) }
             }
-            RemoveButton(Modifier.align(Alignment.TopEnd), onRemove, onImage = true)
-        }
-        Column(Modifier.padding(horizontal = 12.dp, vertical = 10.dp)) {
-            Text(b.title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.height(44.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                SiteIcon(b.host, 18)
-                Spacer(Modifier.width(6.dp))
-                Text(b.host, style = MaterialTheme.typography.labelMedium, color = c.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Column(Modifier.padding(horizontal = 12.dp, vertical = 10.dp)) {
+                Text(title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                    maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.height(44.dp))
+                if (host.isNotEmpty()) Row(verticalAlignment = Alignment.CenterVertically) {
+                    SiteIcon(host, 18)
+                    Spacer(Modifier.width(6.dp))
+                    Text(host, style = MaterialTheme.typography.labelMedium, color = c.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
             }
         }
+        CardMenu(open, { open = false }, menu)
     }
 }
 
 /** Site entier : son logo, son nom, l'étiquette « Site ». Ce favori ne change jamais d'adresse. */
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
-fun SiteCard(b: Bookmark, onOpen: (String) -> Unit, onRemove: () -> Unit) {
+fun SiteCard(b: Bookmark, onOpen: (String) -> Unit) {
     val c = MaterialTheme.colorScheme
-    Box(
-        Modifier.width(132.dp).height(176.dp).clip(RoundedCornerShape(20.dp)).background(c.surfaceContainerHigh)
-            .clickable(role = Role.Button) { onOpen(b.url) }
-            .semantics { contentDescription = b.title + ", " + b.host },
-    ) {
-        Column(Modifier.padding(14.dp).fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Spacer(Modifier.height(12.dp))
-            SiteIcon(b.host, 56)
-            Spacer(Modifier.height(12.dp))
-            Text(b.title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
-            Spacer(Modifier.weight(1f))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Rounded.Public, null, tint = c.secondary, modifier = Modifier.size(14.dp))
-                Spacer(Modifier.width(4.dp))
-                Text(stringResource(R.string.bookmark_site), style = MaterialTheme.typography.labelMedium, color = c.secondary)
+    var open by remember { mutableStateOf(false) }
+    val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
+    val menu = listOf(stringResource(R.string.cd_bookmark_remove) to { Library.removeBookmark(b) })
+    Box {
+        Box(
+            Modifier.width(132.dp).height(176.dp).clip(RoundedCornerShape(20.dp)).background(c.surfaceContainerHigh)
+                .combinedClickable(
+                    role = Role.Button, onClick = { onOpen(b.url) },
+                    onLongClick = { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); open = true },
+                )
+                .semantics {
+                    contentDescription = b.title + ", " + b.host
+                    customActions = menu.map { (label, action) -> CustomAccessibilityAction(label) { action(); true } }
+                },
+        ) {
+            Column(Modifier.padding(14.dp).fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                Spacer(Modifier.height(12.dp))
+                SiteIcon(b.host, 56)
+                Spacer(Modifier.height(12.dp))
+                Text(b.title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                    maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+                Spacer(Modifier.weight(1f))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Rounded.Public, null, tint = c.secondary, modifier = Modifier.size(14.dp))
+                    Spacer(Modifier.width(4.dp))
+                    Text(stringResource(R.string.bookmark_site), style = MaterialTheme.typography.labelMedium, color = c.secondary)
+                }
             }
         }
-        RemoveButton(Modifier.align(Alignment.TopEnd), onRemove, onImage = false)
+        CardMenu(open, { open = false }, menu)
     }
 }
 
 @Composable
-private fun RemoveButton(modifier: Modifier, onRemove: () -> Unit, onImage: Boolean) {
-    val removeCd = stringResource(R.string.cd_delete)
-    Box(
-        modifier.padding(6.dp).size(28.dp).clip(CircleShape)
-            .background(if (onImage) androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.45f) else androidx.compose.ui.graphics.Color.Transparent)
-            .clickable(role = Role.Button) { onRemove() }.semantics { contentDescription = removeCd },
-        contentAlignment = Alignment.Center,
-    ) {
-        Icon(Icons.Rounded.Close, null, modifier = Modifier.size(16.dp),
-            tint = if (onImage) androidx.compose.ui.graphics.Color.White else MaterialTheme.colorScheme.onSurfaceVariant)
+private fun CardMenu(open: Boolean, onDismiss: () -> Unit, menu: List<Pair<String, () -> Unit>>) {
+    DropdownMenu(expanded = open, onDismissRequest = onDismiss, shape = RoundedCornerShape(16.dp)) {
+        menu.forEach { (label, action) ->
+            DropdownMenuItem(text = { Text(label) }, onClick = { onDismiss(); action() })
+        }
     }
 }

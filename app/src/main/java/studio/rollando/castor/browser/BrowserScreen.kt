@@ -421,6 +421,7 @@ fun BrowserScreen(b: BrowserController) {
                                     headers = f.headers,
                                     pageUrl = f.pageUrl,
                                     audioUrl = f.audio,
+                                    posterUrl = b.sniffer.pageImage,
                                 )
                             )
                             Nav.tab.value = Tab.PLAYER

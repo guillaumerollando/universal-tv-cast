@@ -196,6 +196,13 @@
     <string name="err_protected">Este sitio protege sus vídeos: solo su propio reproductor puede leerlos, así que no se pueden enviar a la TV.</string>
     <string name="bookmark_open">Abrir</string>
     <string name="cd_browser_home">Inicio del navegador</string>
+    <string name="resume_season_episode">T%1$d · Ep. %2$d</string>
+    <string name="resume_remove">Quitar de «Continuar»</string>
+    <string name="resume_follow">Guardar aquí (favorito)</string>
+    <string name="home_link_tile">Enlace</string>
+    <string name="home_sites">Mis sitios</string>
+    <string name="home_cast_more">Enviar otra cosa</string>
+    <string name="home_long_press_hint">Mantén pulsada una tarjeta para quitarla o guardarla en favoritos.</string>
     <string name="bookmark_site">Sitio</string>
     <string name="bookmark_followed_series">«%1$s» seguida: el marcador avanzará solo con cada episodio que veas.</string>
     <string name="bookmark_added">«%1$s» añadido a favoritos.</string>

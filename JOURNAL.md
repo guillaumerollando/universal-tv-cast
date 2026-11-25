@@ -527,3 +527,11 @@ répond 403 sur le flux.
 - Site qui refuse la vidéo à la télé (403/401) : message clair « Ce site protège ses vidéos… » au lieu d'un échec
   muet. Retrait des vérifications en double (pour ne pas consommer les jetons du lecteur du site).
 - Tests 23/23, lint propre.
+
+## 2026-11-25 (soir, 14) — Navigateur : plus d'en-tête d'appli, barre d'adresse fluide
+**Retour du testeur** : la barre qui se rétracte est brutale (la page monte tout en haut puis redescend) ; il
+propose de retirer l'en-tête « Universal TV Cast » de l'onglet Navigateur (la barre d'onglets suffit pour en sortir).
+**Fait** : pas d'en-tête d'appli dans le Navigateur. La marge de la barre d'état reste fixe, et seule la barre
+d'adresse glisse (260 ms, avec fondu) : plus de saut. Le clavier se ferme quand on valide une adresse, et le
+fermer libère le champ (sinon la barre restait affichée). Vérifié sur émulateur (otakubinge) : en haut → on
+descend, la barre disparaît → on remonte, elle revient. Tests 23/23, lint propre.

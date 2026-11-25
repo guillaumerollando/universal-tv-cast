@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -128,10 +129,7 @@ class BrowserController(context: Context) {
                 dy < -14 -> true
                 else -> barVisible
             }
-            if (show != barVisible) {
-                barVisible = show
-                studio.rollando.castor.ui.Nav.compact.value = !show
-            }
+            if (show != barVisible) barVisible = show
         }
         CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
         addJavascriptInterface(sniffer.Bridge(), "CastorBridge")
@@ -158,7 +156,6 @@ class BrowserController(context: Context) {
 
             override fun onPageStarted(view: WebView, u: String, favicon: Bitmap?) {
                 barVisible = true
-                studio.rollando.castor.ui.Nav.compact.value = false
                 val host = Uri.parse(u).host
                 if (host != lastHost) sniffer.reset()
                 lastHost = host
@@ -208,7 +205,7 @@ class BrowserController(context: Context) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
 fun BrowserScreen(b: BrowserController) {
     // Les vidéos de moins d'une minute (pubs, aperçus) ne sont pas proposées : personne ne veut les caster.
@@ -223,11 +220,20 @@ fun BrowserScreen(b: BrowserController) {
     val isBookmarked = bookmarks.any { it.url == b.url }
 
     BackHandler(enabled = b.canGoBack) { b.webView.goBack() }
+    // Clavier fermé (touche retour) : le champ d'adresse se libère, la barre peut de nouveau se cacher.
+    val imeVisible = androidx.compose.foundation.layout.WindowInsets.isImeVisible
+    val keyboard = androidx.compose.ui.platform.LocalSoftwareKeyboardController.current
+    androidx.compose.runtime.LaunchedEffect(imeVisible) { if (!imeVisible && editing) focus.clearFocus() }
 
+    // La marge sous la barre d'état (donnée par l'écran) reste fixe ; seule la barre d'adresse glisse.
+    val slide = androidx.compose.animation.core.tween<androidx.compose.ui.unit.IntSize>(260, easing = androidx.compose.animation.core.FastOutSlowInEasing)
     Column(Modifier.fillMaxSize()) {
         androidx.compose.animation.AnimatedVisibility(
-            visible = b.barVisible || editing || !b.started,
-            enter = androidx.compose.animation.expandVertically(), exit = androidx.compose.animation.shrinkVertically(),
+            visible = b.barVisible || (editing && imeVisible) || !b.started,
+            enter = androidx.compose.animation.expandVertically(slide, expandFrom = Alignment.Top) +
+                androidx.compose.animation.fadeIn(androidx.compose.animation.core.tween(200)),
+            exit = androidx.compose.animation.shrinkVertically(slide, shrinkTowards = Alignment.Top) +
+                androidx.compose.animation.fadeOut(androidx.compose.animation.core.tween(160)),
         ) {
         Row(Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = { b.webView.goBack() }, enabled = b.canGoBack) {
@@ -250,7 +256,7 @@ fun BrowserScreen(b: BrowserController) {
                     disabledIndicatorColor = Color.Transparent,
                 ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri, imeAction = ImeAction.Go),
-                keyboardActions = KeyboardActions(onGo = { b.load(input.text); focus.clearFocus() }),
+                keyboardActions = KeyboardActions(onGo = { b.load(input.text); keyboard?.hide(); focus.clearFocus(force = true) }),
                 modifier = Modifier.weight(1f).height(52.dp).onFocusChanged {
                     // Comme dans tout navigateur : toucher la barre sélectionne l'adresse, taper la remplace.
                     if (it.isFocused && !editing) input = TextFieldValue(b.url, TextRange(0, b.url.length))

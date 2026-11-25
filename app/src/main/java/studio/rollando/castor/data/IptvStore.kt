@@ -80,7 +80,7 @@ object IptvStore {
         val p = Playlist(id, old?.name ?: name ?: Iptv.nameFor(source), source, channels.size, System.currentTimeMillis())
         _lists.value = listOf(p) + _lists.value.filter { it.id != id }
         save()
-        logoIndex = null
+        logoIndex = null; allCache = null
         p
     }
 
@@ -140,6 +140,25 @@ object IptvStore {
     fun unhide(url: String) { _hidden.value = _hidden.value - url; prefs.edit().putStringSet("hidden", _hidden.value).apply() }
     fun unhideAll(urls: Collection<String>) { _hidden.value = _hidden.value - urls.toSet(); prefs.edit().putStringSet("hidden", _hidden.value).apply() }
 
+    @Volatile private var allCache: List<Iptv.Channel>? = null
+
+    /**
+     * Toutes les chaînes de toutes les listes, en une seule : peu importe d'où elles viennent. Une chaîne présente
+     * dans plusieurs listes (même flux, ou même nom) n'apparaît qu'une fois, de préférence avec son logo.
+     */
+    suspend fun allChannels(): List<Iptv.Channel> = withContext(Dispatchers.IO) {
+        allCache?.let { return@withContext it }
+        val out = LinkedHashMap<String, Iptv.Channel>()
+        val urls = HashSet<String>()
+        for (p in _lists.value) for (c in channels(p.id)) {
+            if (!urls.add(c.url)) continue
+            val k = fold(c.name)
+            val prev = out[k]
+            if (prev == null) out[k] = c else if (prev.logo == null && c.logo != null) out[k] = c
+        }
+        out.values.toList().also { allCache = it }
+    }
+
     /** La liste et la chaîne qui correspondent à ce flux (ou, à défaut, à ce nom), parmi les listes importées. */
     suspend fun locate(url: String, name: String?): Pair<Playlist, Iptv.Channel>? {
         for (p in _lists.value) channels(p.id).firstOrNull { it.url == url }?.let { return p to it }
@@ -159,6 +178,6 @@ object IptvStore {
         synchronized(cache) { cache.remove(id) }
         runCatching { File(dir, "$id.m3u").delete() }
         save()
-        logoIndex = null
+        logoIndex = null; allCache = null
     }
 }

@@ -394,7 +394,7 @@ S = {
 "iptv_all_channels": ["All channels", "Toutes les chaînes", "Todos los canales", "Alle Sender", "Tutti i canali", "Alle zenders", "Todos os canais"],
 "iptv_hide": ["Hide this channel", "Masquer cette chaîne", "Ocultar este canal", "Diesen Sender ausblenden", "Nascondi questo canale", "Deze zender verbergen", "Ocultar este canal"],
 "iptv_hidden_done": ["Channel hidden", "Chaîne masquée", "Canal oculto", "Sender ausgeblendet", "Canale nascosto", "Zender verborgen", "Canal ocultado"],
-"iptv_unhide_all": ["Show hidden channels", "Réafficher les chaînes masquées", "Mostrar canales ocultos", "Ausgeblendete Sender zeigen", "Mostra canali nascosti", "Verborgen zenders tonen", "Mostrar canais ocultos"],
+"iptv_unhide_all": ["Show all again", "Tout réafficher", "Mostrar todos", "Alle wieder zeigen", "Mostra tutti", "Alles weer tonen", "Mostrar todos"],
 "iptv_remove_recent": ["Remove from recent", "Retirer des récentes", "Quitar de recientes", "Aus „Zuletzt“ entfernen", "Rimuovi dai recenti", "Uit recent verwijderen", "Remover dos recentes"],
 "action_undo": ["Undo", "Annuler", "Deshacer", "Rückgängig", "Annulla", "Ongedaan maken", "Desfazer"],
 "err_channel_denied": [
@@ -415,6 +415,10 @@ S = {
  "O vídeo não responde: o site ou o canal pode estar fora do ar. Tente de novo mais tarde."],
 "zap_title": ["Channel surfing", "Zapper", "Hacer zapping", "Zappen", "Fare zapping", "Zappen", "Zapear"],
 "zap_random": ["Random channel", "Une chaîne au hasard", "Un canal al azar", "Zufälliger Sender", "Un canale a caso", "Willekeurige zender", "Um canal aleatório"],
+"iptv_my_lists": ["My channel lists", "Mes listes de chaînes", "Mis listas de canales", "Meine Senderlisten", "Le mie liste di canali", "Mijn zenderlijsten", "Minhas listas de canais"],
+"iptv_hidden_title": ["Hidden channels", "Chaînes masquées", "Canales ocultos", "Ausgeblendete Sender", "Canali nascosti", "Verborgen zenders", "Canais ocultos"],
+"iptv_unhide": ["Show again", "Réafficher", "Mostrar de nuevo", "Wieder zeigen", "Mostra di nuovo", "Weer tonen", "Mostrar de novo"],
+"action_close": ["Close", "Fermer", "Cerrar", "Schließen", "Chiudi", "Sluiten", "Fechar"],
 "iptv_title": ["Channel lists", "Listes de chaînes", "Listas de canales", "Senderlisten", "Liste di canali", "Zenderlijsten", "Listas de canais"],
 "iptv_intro": [
  "A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.",

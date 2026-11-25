@@ -131,7 +131,7 @@ fun HomeScreen(
                     Row(Modifier.padding(start = 16.dp, end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                         SectionTitle(stringResource(R.string.home_channels), Modifier.weight(1f).semantics { heading() })
                         TextButton(onClick = { Nav.iptv.value = "" }) {
-                            Text(stringResource(R.string.iptv_title))
+                            Text(stringResource(R.string.iptv_all_channels))
                             Spacer(Modifier.width(4.dp))
                             Icon(Icons.AutoMirrored.Rounded.ArrowForward, null, Modifier.size(18.dp))
                         }
@@ -394,16 +394,6 @@ private fun ChannelTile(r: Recent, onBrowse: (String?) -> Unit) {
                     textStyle = MaterialTheme.typography.titleMedium.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
                     modifier = Modifier.matchParentSize(),
                 )
-                // Petit point rouge « à l'antenne » dans le coin.
-                Box(Modifier.align(Alignment.TopEnd).padding(8.dp).size(8.dp).clip(CircleShape)
-                    .background(androidx.compose.ui.graphics.Color(0xFFFF4D4D)))
-            }
-            Spacer(Modifier.height(6.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(Modifier.size(6.dp).clip(CircleShape).background(androidx.compose.ui.graphics.Color(0xFFFF4D4D)))
-                Spacer(Modifier.width(5.dp))
-                Text(name, style = MaterialTheme.typography.labelMedium, color = c.onSurfaceVariant,
-                    maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }
         androidx.compose.material3.DropdownMenu(expanded = menu, onDismissRequest = { menu = false }, shape = RoundedCornerShape(16.dp)) {

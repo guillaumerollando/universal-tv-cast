@@ -103,21 +103,44 @@ const val FREE_TV_LIST = "https://raw.githubusercontent.com/Free-TV/IPTV/master/
 
 private fun fold(s: String) = Normalizer.normalize(s, Normalizer.Form.NFD).replace(Regex("\\p{M}+"), "").lowercase()
 
-/** Les listes de chaînes importées : on en choisit une, on cherche, on touche une chaîne pour l'envoyer à la télé. */
+/**
+ * Toutes les chaînes, quelle que soit la liste d'où elles viennent, plus celles regardées par leur lien.
+ * Null tant que les listes se lisent.
+ */
+@Composable
+fun rememberAllChannels(tick: Int = 0): List<Iptv.Channel>? {
+    val lists by IptvStore.lists.collectAsState()
+    val recents by studio.rollando.castor.data.Library.recents.collectAsState()
+    val fromLists by produceState<List<Iptv.Channel>?>(null, lists, tick) { value = IptvStore.allChannels() }
+    return remember(fromLists, recents) {
+        fromLists?.let { base ->
+            val urls = base.map { it.url }.toHashSet()
+            val names = base.map { fold(it.name).filter(Char::isLetterOrDigit) }.toHashSet()
+            val extra = recents.filter { it.live && it.url !in urls && fold(it.channelName).filter(Char::isLetterOrDigit) !in names }
+                .distinctBy { it.url }
+                .map { Iptv.Channel(it.channelName, it.url, it.poster, null, it.headers) }
+            extra + base
+        }
+    }
+}
+
+/** Les chaînes : toutes ensemble, une recherche, une mosaïque. Les listes et les chaînes masquées se gèrent dans ⋮. */
 @Composable
 fun IptvScreen(onClose: () -> Unit, startWith: String? = null) {
     BackHandler(onBack = onClose)
     val ctx = LocalContext.current
     val scope = rememberCoroutineScope()
     val lists by IptvStore.lists.collectAsState()
-    var selected by rememberSaveable { mutableStateOf(startWith) }
-    val current = lists.firstOrNull { it.id == selected } ?: lists.firstOrNull()
+    val hidden by IptvStore.hidden.collectAsState()
     var busy by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }
     var adding by remember { mutableStateOf(false) }
+    var showLists by remember { mutableStateOf(false) }
+    var showHidden by remember { mutableStateOf(false) }
     var refreshTick by remember { mutableStateOf(0) }
     val errNotList = stringResource(R.string.iptv_err_not_list)
     val errLoad = stringResource(R.string.iptv_err_load)
+    val all = rememberAllChannels(refreshTick)
 
     fun import(source: String) {
         if (busy) return
@@ -125,7 +148,7 @@ fun IptvScreen(onClose: () -> Unit, startWith: String? = null) {
         error = null
         scope.launch {
             runCatching { IptvStore.import(ctx, source) }
-                .onSuccess { selected = it.id; adding = false; refreshTick++ }
+                .onSuccess { adding = false; refreshTick++ }
                 .onFailure { error = if (it is IptvStore.NotAList) errNotList else errLoad }
             busy = false
         }
@@ -135,23 +158,25 @@ fun IptvScreen(onClose: () -> Unit, startWith: String? = null) {
     }
     // Les listes en ligne se remettent à jour toutes seules une fois par jour.
     LaunchedEffect(Unit) { IptvStore.refreshStale(ctx); refreshTick++ }
+    val hiddenChannels = remember(all, hidden) { all.orEmpty().filter { it.url in hidden } }
 
     Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Column(Modifier.fillMaxSize().statusBarsPadding().imePadding()) {
             Row(Modifier.fillMaxWidth().height(64.dp).padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = onClose) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.cd_back)) }
-                Text(stringResource(R.string.iptv_title), style = MaterialTheme.typography.titleLarge,
+                Text(stringResource(R.string.home_channels), style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.weight(1f).semantics { heading() })
-                if (current != null) {
+                if (lists.isNotEmpty()) {
                     IconButton(onClick = { adding = true }) { Icon(Icons.Rounded.Add, stringResource(R.string.iptv_add)) }
                     var menu by remember { mutableStateOf(false) }
                     Box {
-                        IconButton(onClick = { menu = true }) { Icon(Icons.Rounded.MoreVert, current.name) }
-                        DropdownMenu(menu, onDismissRequest = { menu = false }) {
-                            if (current.isRemote) DropdownMenuItem(text = { Text(stringResource(R.string.iptv_update)) },
-                                onClick = { menu = false; import(current.source) })
-                            DropdownMenuItem(text = { Text(stringResource(R.string.iptv_remove)) },
-                                onClick = { menu = false; IptvStore.remove(current.id); selected = null })
+                        IconButton(onClick = { menu = true }) { Icon(Icons.Rounded.MoreVert, stringResource(R.string.iptv_my_lists)) }
+                        DropdownMenu(menu, onDismissRequest = { menu = false }, shape = RoundedCornerShape(16.dp)) {
+                            DropdownMenuItem(text = { Text(stringResource(R.string.iptv_my_lists)) }, onClick = { menu = false; showLists = true })
+                            if (hiddenChannels.isNotEmpty()) DropdownMenuItem(
+                                text = { Text(stringResource(R.string.iptv_hidden_title) + " (${hiddenChannels.size})") },
+                                onClick = { menu = false; showHidden = true },
+                            )
                         }
                     }
                 }
@@ -165,16 +190,8 @@ fun IptvScreen(onClose: () -> Unit, startWith: String? = null) {
                 Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(16.dp, 4.dp))
             }
-            if (current == null) {
-                AddListPanel(busy, onImport = ::import, onPickFile = { pickFile.launch(arrayOf("*/*")) })
-            } else {
-                if (lists.size > 1) LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(lists, key = { it.id }) { p ->
-                        FilterChip(selected = p.id == current.id, onClick = { selected = p.id }, label = { Text(p.name) })
-                    }
-                }
-                ChannelBrowser(current, refreshTick, onClose)
-            }
+            if (lists.isEmpty()) AddListPanel(busy, onImport = ::import, onPickFile = { pickFile.launch(arrayOf("*/*")) })
+            else ChannelBrowser(all, onClose)
         }
     }
     if (adding) AlertDialog(
@@ -184,6 +201,60 @@ fun IptvScreen(onClose: () -> Unit, startWith: String? = null) {
         confirmButton = {},
         dismissButton = { TextButton(onClick = { adding = false }) { Text(stringResource(R.string.action_cancel)) } },
     )
+    // Mes listes : d'où viennent les chaînes ; mettre à jour, supprimer.
+    if (showLists) AlertDialog(
+        onDismissRequest = { showLists = false },
+        title = { Text(stringResource(R.string.iptv_my_lists)) },
+        text = {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                items(lists, key = { it.id }) { p ->
+                    var m by remember { mutableStateOf(false) }
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f)) {
+                            Text(p.name, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            Text(pluralStringResource(R.plurals.iptv_count, p.count, p.count), style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Box {
+                            IconButton(onClick = { m = true }) { Icon(Icons.Rounded.MoreVert, p.name) }
+                            DropdownMenu(m, onDismissRequest = { m = false }) {
+                                if (p.isRemote) DropdownMenuItem(text = { Text(stringResource(R.string.iptv_update)) },
+                                    onClick = { m = false; import(p.source) })
+                                DropdownMenuItem(text = { Text(stringResource(R.string.iptv_remove)) },
+                                    onClick = { m = false; IptvStore.remove(p.id); refreshTick++ })
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = { showLists = false; adding = true }) { Text(stringResource(R.string.iptv_add)) } },
+        dismissButton = { TextButton(onClick = { showLists = false }) { Text(stringResource(R.string.action_close)) } },
+    )
+    // Chaînes masquées : les réafficher une par une, ou toutes.
+    if (showHidden) AlertDialog(
+        onDismissRequest = { showHidden = false },
+        title = { Text(stringResource(R.string.iptv_hidden_title)) },
+        text = {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                items(hiddenChannels, key = { it.url }) { ch ->
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        ChannelLogo(ch.name, ch.logo, Modifier.size(width = 64.dp, height = 40.dp))
+                        Spacer(Modifier.width(12.dp))
+                        Text(ch.name, Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        TextButton(onClick = { IptvStore.unhide(ch.url) }) { Text(stringResource(R.string.iptv_unhide)) }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { IptvStore.unhideAll(hiddenChannels.map { it.url }); showHidden = false }) {
+                Text(stringResource(R.string.iptv_unhide_all))
+            }
+        },
+        dismissButton = { TextButton(onClick = { showHidden = false }) { Text(stringResource(R.string.action_close)) } },
+    )
+    LaunchedEffect(hiddenChannels.isEmpty()) { if (hiddenChannels.isEmpty()) showHidden = false }
 }
 
 @Composable
@@ -234,10 +305,9 @@ private fun AddListPanel(busy: Boolean, onImport: (String) -> Unit, onPickFile: 
 }
 
 @Composable
-private fun ChannelBrowser(list: IptvStore.Playlist, refreshTick: Int, onClose: () -> Unit) {
-    val channels by produceState<List<Iptv.Channel>?>(null, list.id, refreshTick) { value = IptvStore.channels(list.id) }
-    var query by rememberSaveable(list.id) { mutableStateOf("") }
-    var group by rememberSaveable(list.id) { mutableStateOf<String?>(null) }
+private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
+    var query by rememberSaveable { mutableStateOf("") }
+    var group by rememberSaveable { mutableStateOf<String?>(null) }
     val all = channels.orEmpty()
     val groups = remember(all) {
         // Le pays du téléphone en premier (les listes classées par pays les nomment en anglais), puis les plus fournis.
@@ -257,7 +327,6 @@ private fun ChannelBrowser(list: IptvStore.Playlist, refreshTick: Int, onClose: 
         val q = fold(query.trim())
         all.filter { it.url !in hidden && (group == null || it.group == group) && (q.isEmpty() || fold(it.name).contains(q)) }
     }
-    val hiddenHere = remember(all, hidden) { all.filter { it.url in hidden }.map { it.url } }
     var lastHidden by remember { mutableStateOf<String?>(null) }
     LaunchedEffect(lastHidden) { if (lastHidden != null) { kotlinx.coroutines.delay(5000); lastHidden = null } }
     fun play(ch: Iptv.Channel) { playChannel(ch); onClose() }
@@ -277,16 +346,7 @@ private fun ChannelBrowser(list: IptvStore.Playlist, refreshTick: Int, onClose: 
             item { FilterChip(selected = group == null, onClick = { group = null }, label = { Text(stringResource(R.string.iptv_all)) }) }
             items(groups) { g -> FilterChip(selected = group == g, onClick = { group = if (group == g) null else g }, label = { Text(g) }) }
         }
-        Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                "${list.name} · " + pluralStringResource(R.plurals.iptv_count, shown.size, shown.size),
-                style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.weight(1f).padding(vertical = 12.dp),
-            )
-            if (hiddenHere.isNotEmpty()) TextButton(onClick = { IptvStore.unhideAll(hiddenHere) }) {
-                Text(stringResource(R.string.iptv_unhide_all) + " (${hiddenHere.size})", style = MaterialTheme.typography.labelLarge)
-            }
-        }
+        Spacer(Modifier.height(8.dp))
         when {
             channels == null -> Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
             shown.isEmpty() -> Text(stringResource(R.string.iptv_none_found), modifier = Modifier.padding(16.dp),
@@ -358,13 +418,10 @@ fun ZapSection(media: Media) {
     val lists by IptvStore.lists.collectAsState()
     val hidden by IptvStore.hidden.collectAsState()
     val recents by studio.rollando.castor.data.Library.recents.collectAsState()
-    val found by produceState<Pair<IptvStore.Playlist, Iptv.Channel>?>(null, media.url, lists) {
-        value = IptvStore.locate(media.url, media.channel ?: media.title)
-    }
-    val pool by produceState<List<Iptv.Channel>>(emptyList(), found, lists) {
-        value = found?.first?.let { IptvStore.channels(it.id) } ?: lists.firstOrNull()?.let { IptvStore.channels(it.id) }.orEmpty()
-    }
-    val current = found?.second
+    // Toutes les chaînes, d'où qu'elles viennent ; la chaîne en cours retrouvée par son flux ou son nom.
+    val pool = rememberAllChannels().orEmpty()
+    val currentName = fold(media.channel ?: media.title)
+    val current = remember(pool, media.url) { pool.firstOrNull { it.url == media.url } ?: pool.firstOrNull { fold(it.name) == currentName } }
     val suggestions = remember(pool, current, hidden, recents) {
         val ok = pool.filter { it.url !in hidden && it.url != media.url }
         if (ok.isEmpty()) return@remember emptyList()
@@ -381,7 +438,7 @@ fun ZapSection(media: Media) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(stringResource(R.string.zap_title), style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.weight(1f).semantics { heading() })
-            TextButton(onClick = { Nav.iptv.value = found?.first?.id ?: "" }) {
+            TextButton(onClick = { Nav.iptv.value = "" }) {
                 Text(stringResource(if (lists.isEmpty()) R.string.iptv_title else R.string.iptv_all_channels))
                 Spacer(Modifier.width(4.dp))
                 Icon(Icons.AutoMirrored.Rounded.ArrowForward, null, Modifier.size(18.dp))

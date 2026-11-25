@@ -735,3 +735,10 @@ fait toute seule.
   il reste dans les Réglages). À la place, « Zapper » : chaînes proches (même catégorie de la même liste, à partir de la
   chaîne en cours, récentes d'abord), « Une chaîne au hasard », « Toutes les chaînes → ».
 - Accueil : le lien « Listes de chaînes » du bas n'apparaît plus quand la rangée « Chaînes » (qui l'a déjà) est là.
+
+## 2026-11-25 (nuit, 11) — Chaînes : tout ensemble, écran épuré
+- Accueil : tuiles de chaînes sans point rouge ni nom (le logo suffit ; nom lu par le lecteur d'écran) ; lien « Toutes les chaînes ».
+- Écran « Chaînes » : toutes les chaînes de toutes les listes en une seule mosaïque (doublons fusionnés par flux ou nom,
+  logo préféré), plus celles regardées par leur lien (Arte…). Plus de boutons de listes ni de « iptv-org · France · 230 ».
+- ⋮ : « Mes listes de chaînes » (nombre, mettre à jour, supprimer, ajouter) et « Chaînes masquées (N) » (réafficher
+  une à une, ou tout). Le zapping puise aussi dans toutes les chaînes.

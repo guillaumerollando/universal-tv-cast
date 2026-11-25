@@ -74,7 +74,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -98,6 +100,8 @@ class BrowserController(context: Context) {
     var canGoBack by mutableStateOf(false)
     var canGoForward by mutableStateOf(false)
     var started by mutableStateOf(false)
+    /** Nombre de pubs bloquées depuis le lancement (pour le journal). */
+    @Volatile var blockedCount = 0
     private var lastHost: String? = null
 
     val webView: WebView = WebView(context).apply {
@@ -118,7 +122,8 @@ class BrowserController(context: Context) {
         addJavascriptInterface(sniffer.Bridge(), "CastorBridge")
         webViewClient = object : WebViewClient() {
             override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
-                if (Library.adBlock.value && AdBlock.blocked(request.url)) {
+                if (Library.adBlock.value && AdBlock.isAd(request.url)) {
+                    blockedCount++
                     return WebResourceResponse("text/plain", "utf-8", ByteArrayInputStream(ByteArray(0)))
                 }
                 sniffer.inspect(request)
@@ -142,6 +147,7 @@ class BrowserController(context: Context) {
             }
 
             override fun onPageFinished(view: WebView, u: String) {
+                android.util.Log.i("CastorWeb", "page chargée : ${Uri.parse(u).host} · vidéos repérées ${sniffer.found.value.size} · pubs bloquées $blockedCount")
                 view.evaluateJavascript(VideoSniffer.SCRIPT, null)
                 refreshNav(view)
             }
@@ -188,7 +194,7 @@ fun BrowserScreen(b: BrowserController) {
     val bookmarks by Library.bookmarks.collectAsState()
     var showFound by remember { mutableStateOf(false) }
     var editing by remember { mutableStateOf(false) }
-    var input by remember { mutableStateOf("") }
+    var input by remember { mutableStateOf(TextFieldValue("")) }
     val focus = LocalFocusManager.current
     val c = MaterialTheme.colorScheme
     val isBookmarked = bookmarks.any { it.url == b.url }
@@ -201,13 +207,13 @@ fun BrowserScreen(b: BrowserController) {
                 Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.cd_back))
             }
             TextField(
-                value = if (editing) input else (Uri.parse(b.url).host?.removePrefix("www.") ?: b.url),
+                value = if (editing) input else TextFieldValue(Uri.parse(b.url).host?.removePrefix("www.") ?: b.url),
                 onValueChange = { input = it },
                 singleLine = true,
                 placeholder = { Text(stringResource(R.string.browser_hint), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                 leadingIcon = { Icon(Icons.Rounded.Search, null) },
                 trailingIcon = {
-                    if (editing && input.isNotEmpty()) IconButton(onClick = { input = "" }) {
+                    if (editing && input.text.isNotEmpty()) IconButton(onClick = { input = TextFieldValue("") }) {
                         Icon(Icons.Rounded.Close, stringResource(R.string.cd_clear))
                     }
                 },
@@ -217,9 +223,10 @@ fun BrowserScreen(b: BrowserController) {
                     disabledIndicatorColor = Color.Transparent,
                 ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri, imeAction = ImeAction.Go),
-                keyboardActions = KeyboardActions(onGo = { b.load(input); focus.clearFocus() }),
+                keyboardActions = KeyboardActions(onGo = { b.load(input.text); focus.clearFocus() }),
                 modifier = Modifier.weight(1f).height(52.dp).onFocusChanged {
-                    if (it.isFocused && !editing) input = b.url
+                    // Comme dans tout navigateur : toucher la barre sélectionne l'adresse, taper la remplace.
+                    if (it.isFocused && !editing) input = TextFieldValue(b.url, TextRange(0, b.url.length))
                     editing = it.isFocused
                 },
             )
@@ -276,7 +283,12 @@ fun BrowserScreen(b: BrowserController) {
                         headlineContent = { Text(f.label, maxLines = 1, overflow = TextOverflow.Ellipsis) },
                         supportingContent = {
                             Text(
-                                listOfNotNull(if (f.hls) "HLS" else "MP4/WebM", f.host, if (i == 0) stringResource(R.string.browser_best) else null)
+                                listOfNotNull(
+                                    if (f.qualities > 0) stringResource(R.string.browser_auto_quality, f.qualities) +
+                                        (if (f.maxHeight > 0) " · ${f.maxHeight}p" else "")
+                                    else if (f.hls) "HLS" else "MP4/WebM",
+                                    f.host, if (i == 0) stringResource(R.string.browser_best) else null,
+                                )
                                     .joinToString(" · "),
                                 maxLines = 1, overflow = TextOverflow.Ellipsis,
                             )

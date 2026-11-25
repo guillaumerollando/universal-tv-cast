@@ -164,6 +164,7 @@ S = {
  "Inserisce i sottotitoli nei video MP4, per le TV che ignorano i sottotitoli separati. Senza ricodifica né consumo extra.",
  "Voegt de ondertiteling toe in MP4-video’s, voor tv’s die losse ondertiteling negeren. Zonder hercodering, zonder extra verbruik.",
  "Adiciona as legendas dentro dos vídeos MP4, para TVs que ignoram legendas separadas. Sem recodificar, sem gastar mais bateria."],
+"browser_auto_quality": ["Auto · %1$d qualities", "Auto · %1$d qualités", "Auto · %1$d calidades", "Auto · %1$d Qualitäten", "Auto · %1$d qualità", "Auto · %1$d kwaliteiten", "Auto · %1$d qualidades"],
 "cd_settings": ["Settings", "Réglages", "Ajustes", "Einstellungen", "Impostazioni", "Instellingen", "Configurações"],
 "home_title": ["Send any video to your TV", "Envoie n’importe quelle vidéo sur ta télé", "Envía cualquier vídeo a tu TV", "Schick jedes Video auf deinen Fernseher", "Manda qualsiasi video sulla tua TV", "Stuur elke video naar je tv", "Envie qualquer vídeo para a sua TV"],
 "home_subtitle": ["Free. No ads. No tracking.", "Gratuit. Sans pub. Sans pistage.", "Gratis. Sin anuncios. Sin rastreo.", "Kostenlos. Ohne Werbung. Ohne Tracking.", "Gratis. Senza pubblicità. Senza tracciamento.", "Gratis. Geen advertenties. Geen tracking.", "Grátis. Sem anúncios. Sem rastreamento."],

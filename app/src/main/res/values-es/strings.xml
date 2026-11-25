@@ -76,6 +76,7 @@
     <string name="home_browse_tile">Sitios web</string>
     <string name="settings_embed">Subtítulos integrados (TV DLNA)</string>
     <string name="settings_embed_sub">Añade los subtítulos dentro de los vídeos MP4, para las TV que ignoran los subtítulos separados. Sin recodificar ni gastar más batería.</string>
+    <string name="browser_auto_quality">Auto · %1$d calidades</string>
     <string name="cd_settings">Ajustes</string>
     <string name="home_title">Envía cualquier vídeo a tu TV</string>
     <string name="home_subtitle">Gratis. Sin anuncios. Sin rastreo.</string>

@@ -76,6 +76,7 @@
     <string name="home_browse_tile">Websites</string>
     <string name="settings_embed">Ingebouwde ondertiteling (DLNA-tv’s)</string>
     <string name="settings_embed_sub">Voegt de ondertiteling toe in MP4-video’s, voor tv’s die losse ondertiteling negeren. Zonder hercodering, zonder extra verbruik.</string>
+    <string name="browser_auto_quality">Auto · %1$d kwaliteiten</string>
     <string name="cd_settings">Instellingen</string>
     <string name="home_title">Stuur elke video naar je tv</string>
     <string name="home_subtitle">Gratis. Geen advertenties. Geen tracking.</string>

@@ -212,3 +212,14 @@ sont choisis et que la vidéo est un MP4 (réglage « Sous-titres intégrés »,
 erreur) ; émulateur + fausse télé avec Breaking Bad et sous-titres français réels : fichier servi valide, lecture par
 plages identique au fichier complet ; **GStreamer (le moteur de la Philips) voit la piste « subtitles : Timed Text, fr »**.
 **À vérifier** : affichage sur la vraie Philips.
+
+## 2026-11-25 (nuit) — Navigateur
+**Fait**
+- Bloqueur renforcé : régies de pub vidéo (IMA SDK de Google, FreeWheel, SpotX, Teads…) et motifs d'adresses
+  (/pagead/, /pubads, /vast…). Les pubs ne sont plus proposées comme « vidéos de la page ».
+- HLS : une liste principale masque ses variantes ; affichage « Auto · 5 qualités · 1080p ».
+- Barre d'adresse : la toucher sélectionne l'adresse, taper la remplace (avant, le texte s'ajoutait à l'ancienne
+  adresse — défaut révélé par les tests).
+- Testé : Internet Archive (MP4 repéré et lu par la fausse télé via le relais), démo hls.js (HLS repéré et
+  regroupé). YouTube : pubs servies par ses propres serveurs, non filtrables sans casser la vidéo (et ses
+  vidéos ne sont pas « castables » depuis une page web : flux protégés).

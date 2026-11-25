@@ -76,6 +76,7 @@
     <string name="home_browse_tile">Websites</string>
     <string name="settings_embed">Eingebettete Untertitel (DLNA-Fernseher)</string>
     <string name="settings_embed_sub">Fügt die Untertitel in MP4-Videos ein, für Fernseher, die separate Untertitel ignorieren. Ohne Neukodierung, ohne Mehrverbrauch.</string>
+    <string name="browser_auto_quality">Auto · %1$d Qualitäten</string>
     <string name="cd_settings">Einstellungen</string>
     <string name="home_title">Schick jedes Video auf deinen Fernseher</string>
     <string name="home_subtitle">Kostenlos. Ohne Werbung. Ohne Tracking.</string>

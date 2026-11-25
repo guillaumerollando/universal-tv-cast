@@ -394,3 +394,8 @@ annonçait la durée de la vidéo (et la position atteinte) ; sinon l'appli croy
 **Fait** : une vidéo est terminée dès que la télé s'arrête après l'avoir vraiment lue : toujours dans un album,
 et pour une vidéo seule si sa durée est inconnue ou presque atteinte. Fausse télé : `FAKE_NODUR=1` (pas de
 durée annoncée). Vérifié : vidéo → fin reconnue → photo, renvoyée une fois, affichée. Tests 17/17, lint propre.
+**Précision du testeur** : c'est la télé qui a quitté la diffusion pour repartir sur HDMI, comme à chaque fin de
+vidéo en DLNA sur la Philips.
+**En plus** : en DLNA, quand la durée est connue, l'appli passe à la suite 2,5 s avant la fin : la télé
+ne ferme pas son lecteur et ne repasse pas par HDMI. Sans durée connue, la télé passe par HDMI puis revient dès
+que l'appli envoie la suite. Vérifié sur la fausse télé : passage à la photo à 24 s sur 25, sans « LECTEUR FERMÉ ».

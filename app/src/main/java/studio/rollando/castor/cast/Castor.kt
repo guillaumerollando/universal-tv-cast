@@ -908,6 +908,11 @@ object Castor {
                     if (stopped && sawPlaying && !busy &&
                         (inAlbum || total <= 0 || lastPlaying >= total - 20)
                     ) { onMediaEnded(); break }
+                    // DLNA, durée connue : on passe à la suite juste avant la fin. Sinon la télé ferme son lecteur
+                    // et repart sur sa dernière source (HDMI) avant qu'on lui envoie quoi que ce soit.
+                    if (!r.cast && t == "PLAYING" && total > 5 && lastPlaying >= total - 2.5 && !busy &&
+                        System.currentTimeMillis() >= holdPositionUntil
+                    ) { onMediaEnded(); break }
                     if (_state.value.phase == Phase.STOPPED) {
                         if (++stoppedTicks >= 3) { CastService.stop(app); break }
                     } else stoppedTicks = 0

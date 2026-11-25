@@ -1,5 +1,7 @@
 package studio.rollando.castor.browser
 
+import androidx.compose.material.icons.rounded.Share
+import androidx.compose.material.icons.rounded.ContentCopy
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
@@ -412,7 +414,26 @@ fun BrowserScreen(b: BrowserController) {
                     editing = it.isFocused
                 },
             )
-            if (b.started && b.url.isNotEmpty()) {
+            if (editing && b.started && b.url.isNotEmpty()) {
+                // Barre touchée : copier ou partager l'adresse de la page (pour la finir ailleurs, l'envoyer…).
+                val ctx = androidx.compose.ui.platform.LocalContext.current
+                IconButton(onClick = {
+                    val cm = ctx.getSystemService(android.content.ClipboardManager::class.java)
+                    cm?.setPrimaryClip(android.content.ClipData.newRawUri(b.title, Uri.parse(b.url)))
+                    if (android.os.Build.VERSION.SDK_INT < 33)
+                        android.widget.Toast.makeText(ctx, R.string.link_copied, android.widget.Toast.LENGTH_SHORT).show()
+                    keyboard?.hide(); focus.clearFocus(force = true)
+                }) { Icon(Icons.Rounded.ContentCopy, stringResource(R.string.cd_copy_link)) }
+                IconButton(onClick = {
+                    keyboard?.hide(); focus.clearFocus(force = true)
+                    runCatching {
+                        ctx.startActivity(android.content.Intent.createChooser(
+                            android.content.Intent(android.content.Intent.ACTION_SEND).setType("text/plain")
+                                .putExtra(android.content.Intent.EXTRA_TEXT, b.url).putExtra(android.content.Intent.EXTRA_SUBJECT, b.title),
+                            null))
+                    }
+                }) { Icon(Icons.Rounded.Share, stringResource(R.string.cd_share_link)) }
+            } else if (b.started && b.url.isNotEmpty()) {
                 IconButton(onClick = {
                     val clean = PageTitle.clean(b.title, Uri.parse(b.url).host ?: "")
                     // Épisode d'une série : le favori porte le nom de la série. Site ou film : le titre tel quel.
@@ -426,10 +447,10 @@ fun BrowserScreen(b: BrowserController) {
                     )
                 }
             }
-            if (b.canGoForward) IconButton(onClick = { b.webView.goForward() }) {
+            if (!editing && b.canGoForward) IconButton(onClick = { b.webView.goForward() }) {
                 Icon(Icons.AutoMirrored.Rounded.ArrowForward, stringResource(R.string.cd_forward))
             }
-            IconButton(onClick = { b.webView.reload() }, enabled = b.started) {
+            if (!editing || !b.started) IconButton(onClick = { b.webView.reload() }, enabled = b.started) {
                 Icon(Icons.Rounded.Refresh, stringResource(R.string.cd_reload))
             }
         }

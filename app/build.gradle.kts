@@ -56,6 +56,10 @@ dependencies {
     implementation("com.google.android.gms:play-services-cast-framework:22.1.0")
     implementation("androidx.mediarouter:mediarouter:1.7.0")
     implementation("androidx.fragment:fragment-ktx:1.8.6")
+    // Lecture sur le téléphone (vidéos du web, HLS, sous-titres) : le lecteur standard d'Android.
+    implementation("androidx.media3:media3-exoplayer:1.6.1")
+    implementation("androidx.media3:media3-exoplayer-hls:1.6.1")
+    implementation("androidx.media3:media3-ui:1.6.1")
     debugImplementation("androidx.compose.ui:ui-tooling")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.json:json:20240303")

@@ -217,6 +217,14 @@
     <string name="web_retry_noads">Opnieuw zonder adblocker</string>
     <string name="web_open_outside">Openen in de browser van de telefoon</string>
     <string name="web_back_home">Terug naar startpagina</string>
+    <string name="phone_watch">Op deze telefoon kijken</string>
+    <string name="phone_to_tv">Naar de tv sturen</string>
+    <string name="phone_error">Deze telefoon kan deze video niet afspelen. Op de tv lukt het misschien wel.</string>
+    <string name="cd_copy_link">Link kopiëren</string>
+    <string name="cd_share_link">Link delen</string>
+    <string name="link_copied">Link gekopieerd</string>
+    <string name="video_live">Live</string>
+    <string name="video_generic">Video</string>
     <string name="home_see_all">Alles bekijken</string>
     <string name="site_hide">Niet meer voorstellen</string>
     <string name="home_sites">Mijn sites</string>

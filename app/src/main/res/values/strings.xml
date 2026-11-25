@@ -218,6 +218,14 @@
     <string name="web_retry_noads">Try again without the ad blocker</string>
     <string name="web_open_outside">Open in the phone’s browser</string>
     <string name="web_back_home">Back to start page</string>
+    <string name="phone_watch">Watch on this phone</string>
+    <string name="phone_to_tv">Send to the TV</string>
+    <string name="phone_error">This phone can’t play this video. It may still work on the TV.</string>
+    <string name="cd_copy_link">Copy the link</string>
+    <string name="cd_share_link">Share the link</string>
+    <string name="link_copied">Link copied</string>
+    <string name="video_live">Live</string>
+    <string name="video_generic">Video</string>
     <string name="home_see_all">See all</string>
     <string name="site_hide">Stop suggesting</string>
     <string name="home_sites">My sites</string>

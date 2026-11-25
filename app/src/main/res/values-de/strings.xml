@@ -217,6 +217,14 @@
     <string name="web_retry_noads">Ohne Werbeblocker erneut versuchen</string>
     <string name="web_open_outside">Im Browser des Handys öffnen</string>
     <string name="web_back_home">Zur Startseite</string>
+    <string name="phone_watch">Auf dem Handy ansehen</string>
+    <string name="phone_to_tv">An den Fernseher senden</string>
+    <string name="phone_error">Das Handy kann dieses Video nicht abspielen. Auf dem Fernseher klappt es vielleicht.</string>
+    <string name="cd_copy_link">Link kopieren</string>
+    <string name="cd_share_link">Link teilen</string>
+    <string name="link_copied">Link kopiert</string>
+    <string name="video_live">Live</string>
+    <string name="video_generic">Video</string>
     <string name="home_see_all">Alle ansehen</string>
     <string name="site_hide">Nicht mehr vorschlagen</string>
     <string name="home_sites">Meine Seiten</string>

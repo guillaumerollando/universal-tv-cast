@@ -1,5 +1,6 @@
 package studio.rollando.castor.ui
 
+import androidx.compose.material.icons.rounded.Smartphone
 import android.content.Intent
 import android.os.Build
 import androidx.compose.animation.core.RepeatMode
@@ -215,6 +216,22 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
 
         Progress(state)
         Controls(state)
+        // Finir l'épisode dans son lit : même vidéo, même endroit, sur le téléphone (la télé se met en pause).
+        val ctx = LocalContext.current
+        OutlinedButton(
+            onClick = {
+                Castor.toPhone()?.let {
+                    studio.rollando.castor.cast.PhonePlayback.pending = it
+                    ctx.startActivity(Intent(ctx, studio.rollando.castor.cast.PhonePlayerActivity::class.java))
+                }
+            },
+            enabled = state.phase != Phase.LOADING,
+            modifier = Modifier.fillMaxWidth().height(52.dp),
+        ) {
+            Icon(Icons.Rounded.Smartphone, null)
+            Spacer(Modifier.width(10.dp))
+            Text(stringResource(R.string.phone_watch))
+        }
         SubtitlesCard(state)
         if (state.isHls) ModeCard(state)
         Spacer(Modifier.height(8.dp + LocalBottomInset.current))

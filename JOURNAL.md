@@ -626,3 +626,12 @@ fait toute seule.
 - Les panneaux du bas (réglages, télés, aide) s'arrêtent sous la barre d'état : la poignée ne passe plus derrière la caméra quand on les remonte tout en haut.
 - Bas des réglages : carte « Fait avec soin par » + vrai logo Rollando Studio (vitrine/logo, version sur fond sombre, PNG 900 px) + « Découvrir nos autres applis » ; toute la carte ouvre rollandostudio.com. « Fait avec soin par Rollando Studio » retiré du texte « À propos » (doublon). « Qualité en guise de promo. »
 - Écran d'attente de la télé : signature « by » + logo du studio, petite (logo 180 px sur 1920) et semi-transparente, en bas au centre. Rendu jugé sur une maquette à l'échelle (pas de télé joignable depuis l'émulateur).
+
+## 2026-11-25 (soir, 23) — Regarder sur le téléphone
+
+- « Regarder sur le téléphone » (onglet Lecture) : lecteur plein écran Media3/ExoPlayer 1.6.1 (+0,8 Mo). Même vidéo que pour la télé : en-têtes du site (Referer, User-Agent de la WebView), son séparé fusionné (MergingMediaSource), HLS chiffré AES, sous-titres choisis dans l'appli avec leur décalage (SRT), sinon pistes intégrées dans la langue du téléphone. Paysage/portrait selon la vidéo, plein écran, ±10 s.
+- Bascule : la télé se met en pause et le téléphone reprend au même endroit ; « Envoyer sur la télé » renvoie la vidéo à l'endroit atteint (sans télé choisie : recherche + « Choisis une télé »). L'avancement (toutes les 15 s, à la sortie, à la fin) nourrit « Reprendre ».
+- Barre d'adresse touchée : boutons Copier le lien / Partager (à la place de l'étoile et du rechargement).
+- Correctif ancien : une adresse générique (« index.m3u8 »…) ou un direct déclenchait une recherche de sous-titres qui trouvait un film « Index » (sous-titres anglais appliqués à Arte en direct). Plus de recherche dans ces cas, et titre « Direct » / « Vidéo » au lieu du nom de fichier.
+- Vérifié sur l'émulateur avec le direct officiel d'Arte (liste Free-TV/IPTV) : lecture, bascule retour à 29:28.
+- IPTV légales pour tester plus tard : github.com/Free-TV/IPTV (chaînes gratuites, flux officiels : Arte, TV5Monde, franceinfo…).

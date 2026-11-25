@@ -75,6 +75,11 @@ private class NoTv : IOException("no tv")
 private class NoWifi : IOException("no wifi")
 private class Drm : IOException("drm")
 
+private val GENERIC_NAMES = setOf(
+    "index", "master", "playlist", "manifest", "stream", "video", "chunklist", "main", "live", "prog_index",
+    "media", "mono", "output", "file", "default", "hls", "play", "embed",
+)
+
 /** Le chef d'orchestre : choix de la télé, préparation de la vidéo, commandes de lecture. */
 object Castor {
     private lateinit var app: Context
@@ -339,9 +344,52 @@ object Castor {
         Library.setRecentImage(page, image)
     }
 
+    /** Ce qu'il faut au lecteur du téléphone pour reprendre la vidéo en cours, au même endroit. */
+    class PhoneSession(val media: Media, val startSec: Double, val subtitle: ByteArray?, val hls: Boolean)
+
+    /**
+     * « Regarder sur le téléphone » : la télé se met en pause (elle garde l'image), le téléphone reprend
+     * au même endroit, avec les mêmes sous-titres (décalage compris).
+     */
+    fun toPhone(): PhoneSession? {
+        val s = _state.value
+        val m = s.media ?: return null
+        if (s.slides != null) return null
+        val at = if (s.active || s.position > 1) s.position else m.startSec
+        if (s.phase == Phase.PLAYING) exec {
+            val r = target() ?: return@exec
+            runCatching { if (r.cast) CastControl.pause(r) else Dlna.pause(r) }
+                .onSuccess { _state.update { it.copy(phase = Phase.PAUSED) } }
+        }
+        return PhoneSession(m, at, proxy.subtitle, s.isHls)
+    }
+
+    /** Retour du téléphone vers la télé : la vidéo y reprend là où le téléphone s'est arrêté. */
+    fun resumeOnTv(pos: Double) {
+        val m = _state.value.media ?: return
+        _state.update { it.copy(media = m.copy(startSec = pos), position = pos) }
+        if (_state.value.renderer == null) {
+            pendingCast = true
+            _state.update { it.copy(notice = Notice(R.string.notice_pick_tv)) }
+            discover()
+            return
+        }
+        if (!sending()) exec { castAt(pos) }
+    }
+
     private suspend fun identify() {
         val m = _state.value.media ?: return
         val name = m.fileName ?: return
+        // Nom de fichier générique (« index.m3u8 », « master.m3u8 »…) ou direct : il ne dit rien du film, et
+        // chercher des sous-titres trouverait n'importe quel film du même nom.
+        val base = name.substringAfterLast('/').substringBeforeLast('.').lowercase()
+        if (base in GENERIC_NAMES || (_state.value.isHls && hlsDuration <= 0.0)) {
+            // Titre lisible à la place de « index.m3u8 » : « Direct » ou « Vidéo ».
+            if (m.title == name || m.title.substringAfterLast('/') == name) _state.update {
+                it.copy(media = m.copy(title = app.getString(if (it.isHls && hlsDuration <= 0.0) R.string.video_live else R.string.video_generic)))
+            }
+            return
+        }
         val size = remoteId?.let { id -> runCatching { proxy.prefetchMeta(id); proxy.totalOf(id) }.getOrNull() }
         val phoneLang = java.util.Locale.getDefault().language
         val preferred = listOf(phoneLang, "en").distinct()

@@ -217,6 +217,14 @@
     <string name="web_retry_noads">Reintentar sin bloqueador</string>
     <string name="web_open_outside">Abrir en el navegador del móvil</string>
     <string name="web_back_home">Volver al inicio</string>
+    <string name="phone_watch">Ver en este móvil</string>
+    <string name="phone_to_tv">Enviar a la TV</string>
+    <string name="phone_error">Este móvil no puede reproducir este vídeo. Quizá funcione en la TV.</string>
+    <string name="cd_copy_link">Copiar el enlace</string>
+    <string name="cd_share_link">Compartir el enlace</string>
+    <string name="link_copied">Enlace copiado</string>
+    <string name="video_live">En directo</string>
+    <string name="video_generic">Vídeo</string>
     <string name="home_see_all">Ver todo</string>
     <string name="site_hide">No volver a sugerir</string>
     <string name="home_sites">Mis sitios</string>

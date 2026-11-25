@@ -217,6 +217,14 @@
     <string name="web_retry_noads">Tentar sem bloqueador</string>
     <string name="web_open_outside">Abrir no navegador do celular</string>
     <string name="web_back_home">Voltar ao início</string>
+    <string name="phone_watch">Assistir no celular</string>
+    <string name="phone_to_tv">Enviar para a TV</string>
+    <string name="phone_error">O celular não consegue reproduzir este vídeo. Talvez funcione na TV.</string>
+    <string name="cd_copy_link">Copiar o link</string>
+    <string name="cd_share_link">Compartilhar o link</string>
+    <string name="link_copied">Link copiado</string>
+    <string name="video_live">Ao vivo</string>
+    <string name="video_generic">Vídeo</string>
     <string name="home_see_all">Ver tudo</string>
     <string name="site_hide">Não sugerir mais</string>
     <string name="home_sites">Meus sites</string>

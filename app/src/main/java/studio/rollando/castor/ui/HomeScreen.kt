@@ -138,7 +138,7 @@ fun HomeScreen(
                     }
                 }
                 item {
-                    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    LazyRow(contentPadding = PaddingValues(horizontal = 14.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         items(channels, key = { "c" + it.key }) { ch -> ChannelTile(ch, onBrowse) }
                     }
                 }
@@ -155,8 +155,8 @@ fun HomeScreen(
                     }
                 }
                 item {
-                    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        items(sites, key = { "s" + it.id }) { s -> SiteTile(s) { onBrowse(it) } }
+                    LazyRow(contentPadding = PaddingValues(horizontal = 12.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        items(sites, key = { "s" + it.id }) { s -> SiteTile(s, Modifier.width(72.dp)) { onBrowse(it) } }
                     }
                 }
             }
@@ -385,7 +385,7 @@ private fun ChannelTile(r: Recent, onBrowse: (String?) -> Unit) {
                         androidx.compose.ui.semantics.CustomAccessibilityAction(removeLabel) { Library.removeRecent(r.key); true },
                     )
                 }
-                .padding(6.dp),
+                .padding(2.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Box(Modifier.fillMaxWidth().aspectRatio(16f / 10f).clip(RoundedCornerShape(16.dp))) {

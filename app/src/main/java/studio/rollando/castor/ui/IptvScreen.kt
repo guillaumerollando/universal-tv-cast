@@ -297,11 +297,11 @@ private fun ChannelBrowser(list: IptvStore.Playlist, refreshTick: Int, onClose: 
             shown.isEmpty() -> Text(stringResource(R.string.iptv_none_found), modifier = Modifier.padding(16.dp),
                 color = MaterialTheme.colorScheme.onSurfaceVariant)
             else -> LazyVerticalGrid(
-                columns = GridCells.Adaptive(108.dp),
+                columns = GridCells.Adaptive(84.dp),
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(start = 10.dp, end = 10.dp, bottom = 96.dp),
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
-                verticalArrangement = Arrangement.spacedBy(6.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 // Les chaînes qu'on regarde, en premier (sans recherche ni filtre en cours).
                 if (recent.isNotEmpty() && query.isBlank() && group == null) {
@@ -310,9 +310,9 @@ private fun ChannelBrowser(list: IptvStore.Playlist, refreshTick: Int, onClose: 
                             modifier = Modifier.padding(4.dp, 4.dp).semantics { heading() })
                     }
                     item(span = { GridItemSpan(maxLineSpan) }) {
-                        LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        LazyRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             items(recent, key = { "r" + it.url }) { ch ->
-                                ChannelTile(ch, Modifier.width(128.dp), onClick = { play(ch) }, onHide = { hide(ch) }, onForget = {
+                                ChannelTile(ch, Modifier.width(96.dp), onClick = { play(ch) }, onHide = { hide(ch) }, onForget = {
                                     recents.firstOrNull { it.url == ch.url }?.let { studio.rollando.castor.data.Library.removeRecent(it.key) }
                                 })
                             }
@@ -371,7 +371,7 @@ private fun ChannelTile(ch: Iptv.Channel, modifier: Modifier, onClick: () -> Uni
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             ChannelArt(
-                name = ch.name, logo = ch.logo, streamUrl = null, pad = 12.dp,
+                name = ch.name, logo = ch.logo, streamUrl = null, pad = 9.dp,
                 textStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold),
                 modifier = Modifier.fillMaxWidth().aspectRatio(16f / 10f).clip(RoundedCornerShape(12.dp)),
             )

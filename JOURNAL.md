@@ -288,3 +288,40 @@ diaporama, aide trop « texte ».
 **À vérifier sur la vraie télé (Cast)** : écran d'attente à la fin d'une vidéo et sur Arrêter (le lecteur Cast de
 Titan OS reste-t-il ouvert ?) ; vitesse des photos ; décalage des sous-titres.
 **Plus tard** : listes IPTV (M3U) — un lien de chaîne passe déjà par « Coller un lien ».
+
+## 2026-11-25 (soir) — Diaporama en flux vidéo, pause pendant le réglage des sous-titres
+**Retour du testeur** : à chaque photo, la télé met environ 2 s d'écran noir, comme si elle changeait de fichier.
+Il propose d'envoyer le diaporama comme un flux vidéo continu. Le sens du décalage des sous-titres n'est pas
+clair (il s'est trompé). Il veut aussi que la vidéo se mette en pause pendant le réglage des sous-titres, car
+régler pendant la lecture puis mettre pause fait beaucoup d'actions d'un coup.
+
+**Fait**
+- **Diaporama fluide** (réglage, activé par défaut) : le téléphone dessine la photo 25 fois par seconde dans
+  l'encodeur H.264 matériel (1920 × 1080, 6 Mb/s, une image clé par seconde). Le passage d'une photo à l'autre se
+  fait par un fondu de 0,45 s, puis le flux est mis en MPEG-TS par un multiplexeur maison (`TsMuxer`, PAT/PMT,
+  PTS/PCR). La télé ouvre son lecteur une seule fois par album :
+  - Cast : HLS en direct, segments d'une seconde, 4 en ligne ;
+  - DLNA : MPEG-TS continu envoyé par blocs (`video/mpeg`).
+  Changer de photo ne demande plus rien à la télé. Si la télé refuse le flux (erreur au chargement, ou erreur
+  Cast dans les 7 s), l'appli revient toute seule aux photos une par une. Les vidéos de l'album se lisent
+  toujours en direct ; le flux reprend sur la photo suivante. L'écran d'attente et l'arrêt coupent le flux.
+  Les photos sont gardées en 16 bits pour ménager la mémoire.
+  Vérifié :
+  - fausse télé DLNA : le flux est lu ;
+  - ffprobe : H.264 1920 × 1080 ;
+  - ffmpeg : flux continu et HLS décodés, segments de 25 images sans erreur, bande d'images photo 1 → photo 2 ;
+  - test unitaire : aller-retour du multiplexeur pour des tailles d'image de 1 à 70 000 octets.
+  Une erreur de décodage isolée est apparue au moment d'un fondu, avec l'encodeur logiciel de l'émulateur ;
+  à surveiller avec l'encodeur matériel du téléphone.
+- **Sous-titres** : phrase claire (« Les sous-titres arrivent avant la voix ? Appuie sur +. Après la voix ?
+  Appuie sur −. ») sur toute la largeur.
+- **Pause pendant le réglage** : déplier les sous-titres met d'abord la vidéo en pause. Les changements (piste,
+  décalage) rechargent au même endroit en restant en pause (Cast : chargement sans lecture automatique ;
+  DLNA : pause après la reprise). Replier relance la lecture, si c'est l'appli qui l'avait mise en pause.
+  Vérifié sur la fausse télé : Pause → (+0,5 s) rechargement, déplacement à 7 s, Pause → repli → Play.
+- Tests : 17/17, lint propre.
+
+**À vérifier sur la vraie télé** :
+- Cast : le lecteur accepte-t-il le HLS en direct sans piste son ?
+- Délai entre l'appui et la photo affichée (le flux en direct a un peu de retard, mais plus d'écran noir).
+- Batterie pendant un long diaporama.

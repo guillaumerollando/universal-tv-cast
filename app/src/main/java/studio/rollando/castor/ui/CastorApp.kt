@@ -386,6 +386,12 @@ private fun SettingsSheet(onDismiss: () -> Unit) {
                 }
             }
             item {
+                val smooth by Library.smoothSlides.collectAsState()
+                SwitchRow(stringResource(R.string.settings_smooth_slides), stringResource(R.string.settings_smooth_slides_sub), smooth) {
+                    Library.setSmoothSlides(it)
+                }
+            }
+            item {
                 val shake by Library.shakeHelp.collectAsState()
                 SwitchRow(stringResource(R.string.settings_shake), stringResource(R.string.settings_shake_sub), shake) {
                     Library.setShakeHelp(it)

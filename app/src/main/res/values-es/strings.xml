@@ -161,7 +161,7 @@
     <string name="tv_idle_line">Listo. Elige qué ver en tu móvil.</string>
     <string name="phase_tv_waiting">Pantalla de espera en la TV</string>
     <string name="subs_delay">Desfase</string>
-    <string name="subs_delay_hint">Demasiado pronto: +. Demasiado tarde: −.</string>
+    <string name="subs_delay_hint">¿Los subtítulos salen antes de la voz? Pulsa +. ¿Después? Pulsa −. El vídeo espera en pausa mientras ajustas.</string>
     <string name="cd_subs_earlier">Mostrar subtítulos antes</string>
     <string name="cd_subs_later">Mostrar subtítulos después</string>
     <string name="subs_delay_reset">Volver a 0</string>
@@ -183,6 +183,8 @@
     <string name="action_open_settings_of">Ajustes de %1$s</string>
     <string name="slideshow_on">Presentación activa · una foto cada 6 s</string>
     <string name="slideshow_off">Presentación en pausa</string>
+    <string name="settings_smooth_slides">Presentación fluida</string>
+    <string name="settings_smooth_slides_sub">Envía el álbum como un solo vídeo: sin pantalla negra entre fotos, con un fundido. Desactívalo si tu TV muestra las fotos con retraso.</string>
     <plurals name="browser_found">
         <item quantity="one">%d vídeo</item>
         <item quantity="other">%d vídeos</item>

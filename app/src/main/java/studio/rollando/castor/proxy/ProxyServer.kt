@@ -160,6 +160,7 @@ class ProxyServer(private val ctx: Context) {
                     "img" -> serveImage(req, out)
                     "v" -> serveEmbedded(req, out)
                     "sub" -> serveSubtitle(req, out)
+                    "s" -> serveSlides(req, out)
                     else -> empty(out, 404, "Not Found")
                 }
                 out.flush()
@@ -644,6 +645,54 @@ class ProxyServer(private val ctx: Context) {
             if (n < 0) break
             out.write(buf, 0, n)
             left -= n
+        }
+    }
+
+    // ------------------------------------------------------------------ diaporama en flux vidéo
+
+    /** Flux du diaporama en cours (une seule vidéo en direct pour tout l'album). */
+    @Volatile var slides: studio.rollando.castor.cast.SlideStream? = null
+
+    private fun serveSlides(req: Req, out: OutputStream) {
+        val st = slides ?: return empty(out, 404, "Not Found")
+        val name = req.seg.getOrNull(1) ?: ""
+        when {
+            name.endsWith(".m3u8") -> {
+                val b = st.playlist().toByteArray()
+                head(out, 200, "OK", listOf("Content-Type" to "application/vnd.apple.mpegurl",
+                    "Cache-Control" to "no-cache", "Content-Length" to b.size.toString()))
+                if (req.method != "HEAD") out.write(b)
+            }
+            name.startsWith("seg") -> {
+                val b = name.removePrefix("seg").substringBefore('.').toIntOrNull()?.let(st::segment)
+                    ?: return empty(out, 404, "Not Found")
+                head(out, 200, "OK", listOf("Content-Type" to "video/mp2t", "Content-Length" to b.size.toString()))
+                if (req.method != "HEAD") out.write(b)
+            }
+            else -> {
+                // Flux MPEG-TS continu (télés DLNA) : envoyé par blocs, sans fin, tant que la télé lit.
+                head(out, 200, "OK", listOf(
+                    "Content-Type" to "video/mpeg",
+                    "Transfer-Encoding" to "chunked",
+                    "transferMode.dlna.org" to "Streaming",
+                    "contentFeatures.dlna.org" to "DLNA.ORG_OP=00;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000",
+                ))
+                if (req.method == "HEAD") return
+                out.flush()
+                val q = st.subscribe()
+                val c = ChunkedOutputStream(out)
+                try {
+                    while (true) {
+                        val b = q.poll(5, java.util.concurrent.TimeUnit.SECONDS) ?: if (st.alive) continue else break
+                        if (b.isEmpty()) break
+                        c.write(b, 0, b.size)
+                        if (q.isEmpty()) c.flush()
+                    }
+                    c.finish()
+                } finally {
+                    st.unsubscribe(q)
+                }
+            }
         }
     }
 

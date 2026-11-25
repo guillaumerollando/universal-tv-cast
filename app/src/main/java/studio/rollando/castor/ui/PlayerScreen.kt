@@ -386,6 +386,12 @@ private fun SubtitlesCard(s: CastState) {
     val current = media.subs.getOrNull(s.subIndex)?.name ?: none
     // Repliée par défaut : une ligne discrète « Sous-titres · Français », dépliée au toucher.
     var expanded by rememberSaveable(media.url) { mutableStateOf(false) }
+    // Ouvrir le réglage met d'abord la vidéo en pause ; le refermer la relance.
+    androidx.compose.runtime.DisposableEffect(expanded) {
+        val open = expanded // valeur figée : à la fermeture, `expanded` vaut déjà false
+        if (open) Castor.panelOpened()
+        onDispose { if (open) Castor.panelClosed() }
+    }
     val stateText = stringResource(if (expanded) R.string.state_expanded else R.string.state_collapsed)
     val c = MaterialTheme.colorScheme
     Card(
@@ -449,10 +455,7 @@ private fun SubtitleDelay(delay: Double) {
     val label = stringResource(R.string.subs_delay)
     Spacer(Modifier.height(12.dp))
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Column(Modifier.weight(1f)) {
-            Text(label, style = MaterialTheme.typography.titleSmall)
-            Text(stringResource(R.string.subs_delay_hint), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
-        }
+        Text(label, style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
         FilledTonalIconButton(onClick = { Castor.shiftSubtitles(-0.5) }, modifier = Modifier.size(44.dp)) {
             Icon(Icons.Rounded.Remove, stringResource(R.string.cd_subs_earlier))
         }
@@ -464,6 +467,8 @@ private fun SubtitleDelay(delay: Double) {
             Icon(Icons.Rounded.Add, stringResource(R.string.cd_subs_later))
         }
     }
+    Text(stringResource(R.string.subs_delay_hint), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant,
+        modifier = Modifier.padding(top = 6.dp))
     if (delay != 0.0) {
         TextButton(onClick = Castor::resetSubtitleDelay, contentPadding = PaddingValues(horizontal = 0.dp)) {
             Text(stringResource(R.string.subs_delay_reset))

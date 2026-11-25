@@ -161,7 +161,7 @@
     <string name="tv_idle_line">Pronto. Escolha o que assistir no celular.</string>
     <string name="phase_tv_waiting">Tela de espera na TV</string>
     <string name="subs_delay">Atraso</string>
-    <string name="subs_delay_hint">Cedo demais: +. Tarde demais: −.</string>
+    <string name="subs_delay_hint">As legendas aparecem antes da voz? Toque em +. Depois? Toque em −. O vídeo espera pausado enquanto você ajusta.</string>
     <string name="cd_subs_earlier">Mostrar legendas antes</string>
     <string name="cd_subs_later">Mostrar legendas depois</string>
     <string name="subs_delay_reset">Voltar a 0</string>
@@ -183,6 +183,8 @@
     <string name="action_open_settings_of">Configurações de %1$s</string>
     <string name="slideshow_on">Apresentação ativa · uma foto a cada 6 s</string>
     <string name="slideshow_off">Apresentação pausada</string>
+    <string name="settings_smooth_slides">Apresentação fluida</string>
+    <string name="settings_smooth_slides_sub">Envia o álbum como um único vídeo: sem tela preta entre as fotos, com transição suave. Desative se sua TV mostrar as fotos com atraso.</string>
     <plurals name="browser_found">
         <item quantity="one">%d vídeo</item>
         <item quantity="other">%d vídeos</item>

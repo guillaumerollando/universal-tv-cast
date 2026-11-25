@@ -161,7 +161,7 @@
     <string name="tv_idle_line">Bereit. Wähle auf deinem Handy, was du sehen willst.</string>
     <string name="phase_tv_waiting">Warteseite auf dem Fernseher</string>
     <string name="subs_delay">Versatz</string>
-    <string name="subs_delay_hint">Zu früh: +. Zu spät: −.</string>
+    <string name="subs_delay_hint">Untertitel kommen vor der Stimme? Tippe auf +. Danach? Tippe auf −. Das Video wartet pausiert, während du einstellst.</string>
     <string name="cd_subs_earlier">Untertitel früher zeigen</string>
     <string name="cd_subs_later">Untertitel später zeigen</string>
     <string name="subs_delay_reset">Auf 0 zurücksetzen</string>
@@ -183,6 +183,8 @@
     <string name="action_open_settings_of">Einstellungen von %1$s</string>
     <string name="slideshow_on">Diashow läuft · alle 6 s ein Foto</string>
     <string name="slideshow_off">Diashow pausiert</string>
+    <string name="settings_smooth_slides">Flüssige Diashow</string>
+    <string name="settings_smooth_slides_sub">Sendet das Album als ein Video: kein schwarzes Bild zwischen den Fotos, mit Überblendung. Schalte es aus, wenn dein Fernseher die Fotos verspätet zeigt.</string>
     <plurals name="browser_found">
         <item quantity="one">%d Video</item>
         <item quantity="other">%d Videos</item>

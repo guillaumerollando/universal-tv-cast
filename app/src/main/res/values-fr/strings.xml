@@ -161,7 +161,7 @@
     <string name="tv_idle_line">Prêt. Choisis quoi regarder sur ton téléphone.</string>
     <string name="phase_tv_waiting">Écran d’attente sur la télé</string>
     <string name="subs_delay">Décalage</string>
-    <string name="subs_delay_hint">Trop tôt : +. Trop tard : −.</string>
+    <string name="subs_delay_hint">Les sous-titres arrivent avant la voix ? Appuie sur +. Après la voix ? Appuie sur −. La vidéo attend en pause pendant le réglage.</string>
     <string name="cd_subs_earlier">Afficher les sous-titres plus tôt</string>
     <string name="cd_subs_later">Afficher les sous-titres plus tard</string>
     <string name="subs_delay_reset">Remettre à 0</string>
@@ -183,6 +183,8 @@
     <string name="action_open_settings_of">Réglages de %1$s</string>
     <string name="slideshow_on">Diaporama en cours · une photo toutes les 6 s</string>
     <string name="slideshow_off">Diaporama en pause</string>
+    <string name="settings_smooth_slides">Diaporama fluide</string>
+    <string name="settings_smooth_slides_sub">Envoie l’album comme une seule vidéo : plus d’écran noir entre les photos, avec un fondu. Désactive-le si ta télé affiche les photos en retard.</string>
     <plurals name="browser_found">
         <item quantity="one">%d vidéo</item>
         <item quantity="other">%d vidéos</item>

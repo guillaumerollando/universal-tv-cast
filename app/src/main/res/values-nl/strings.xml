@@ -161,7 +161,7 @@
     <string name="tv_idle_line">Klaar. Kies op je telefoon wat je wilt kijken.</string>
     <string name="phase_tv_waiting">Wachtscherm op de tv</string>
     <string name="subs_delay">Timing</string>
-    <string name="subs_delay_hint">Te vroeg: +. Te laat: −.</string>
+    <string name="subs_delay_hint">Ondertiteling vóór de stem? Tik op +. Erna? Tik op −. De video wacht gepauzeerd terwijl je instelt.</string>
     <string name="cd_subs_earlier">Ondertiteling eerder tonen</string>
     <string name="cd_subs_later">Ondertiteling later tonen</string>
     <string name="subs_delay_reset">Terug naar 0</string>
@@ -183,6 +183,8 @@
     <string name="action_open_settings_of">Instellingen van %1$s</string>
     <string name="slideshow_on">Diashow aan · elke 6 s een foto</string>
     <string name="slideshow_off">Diashow gepauzeerd</string>
+    <string name="settings_smooth_slides">Vloeiende diashow</string>
+    <string name="settings_smooth_slides_sub">Stuurt het album als één video: geen zwart beeld tussen foto’s, met een overgang. Zet uit als je tv de foto’s te laat toont.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video\'s</item>

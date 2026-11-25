@@ -171,7 +171,7 @@ object CastControl {
     data class Sub(val url: String, val name: String, val lang: String?)
 
     /** Envoie la vidéo au lecteur Cast, avec titre, affiche et piste de sous-titres. */
-    suspend fun load(r: Renderer, url: String, mime: String, title: String, poster: String?, sub: Sub?, startSec: Double, live: Boolean) =
+    suspend fun load(r: Renderer, url: String, mime: String, title: String, poster: String?, sub: Sub?, startSec: Double, live: Boolean, autoplay: Boolean = true) =
         withContext(Dispatchers.Main) {
             val c = client(r)
             val md = MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE).apply {
@@ -198,7 +198,7 @@ object CastControl {
                 .build()
             val req = MediaLoadRequestData.Builder()
                 .setMediaInfo(info)
-                .setAutoplay(true)
+                .setAutoplay(autoplay)
                 .setCurrentTime((startSec * 1000).toLong())
                 .apply { if (tracks.isNotEmpty()) setActiveTrackIds(longArrayOf(1)) }
                 .build()

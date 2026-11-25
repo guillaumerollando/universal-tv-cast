@@ -370,6 +370,7 @@ S = {
 "video_live": ["Live", "Direct", "En directo", "Live", "Diretta", "Live", "Ao vivo"],
 "video_generic": ["Video", "Vidéo", "Vídeo", "Video", "Video", "Video", "Vídeo"],
 "channel_remove": ["Remove channel", "Retirer la chaîne", "Quitar el canal", "Sender entfernen", "Rimuovi il canale", "Zender verwijderen", "Remover o canal"],
+"err_live_stopped": ["The TV stopped this live stream. Try again, or watch it on the phone.", "La télé a arrêté ce direct. Réessaie, ou regarde-le sur le téléphone.", "La TV detuvo este directo. Inténtalo de nuevo o míralo en el móvil.", "Der Fernseher hat den Livestream gestoppt. Versuch es erneut oder schau ihn auf dem Handy.", "La TV ha interrotto la diretta. Riprova o guardala sul telefono.", "De tv heeft deze livestream gestopt. Probeer opnieuw of kijk op de telefoon.", "A TV parou esta transmissão ao vivo. Tente de novo ou assista no celular."],
 "home_channels": ["Channels", "Chaînes", "Canales", "Sender", "Canali", "Zenders", "Canais"],
 "channel_rename": ["Rename", "Renommer", "Renombrar", "Umbenennen", "Rinomina", "Hernoemen", "Renomear"],
 "channel_name": ["Channel name", "Nom de la chaîne", "Nombre del canal", "Name des Senders", "Nome del canale", "Naam van de zender", "Nome do canal"],

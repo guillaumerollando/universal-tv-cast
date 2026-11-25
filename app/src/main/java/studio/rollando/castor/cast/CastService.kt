@@ -114,6 +114,46 @@ class CastService : Service() {
         if (photoShown(Castor.state.value)) Castor.toggleSlideshow() else Castor.togglePlay()
     }
 
+    private var tileKey: String? = null
+    private var tile: android.graphics.Bitmap? = null
+
+    /**
+     * Image du lecteur du système : l'affiche s'il y en a une ; sinon une vignette à la couleur de la chaîne (ou
+     * tirée du titre) avec son nom. Sans image, Android met l'icône de l'appli en grand (double logo) et le fond
+     * prend une couleur au hasard.
+     */
+    private fun artwork(s: CastState): android.graphics.Bitmap? {
+        Images.peek(s.media?.posterUrl)?.let { return it }
+        val m = s.media ?: return null
+        val key = m.title + "|" + m.url
+        if (key == tileKey) return tile
+        val known = studio.rollando.castor.data.Channels.find("${m.url} ${m.pageUrl} ${m.title}")
+        val color = (known?.color ?: studio.rollando.castor.data.Channels.colorFor(m.title)).toInt()
+        val size = 512
+        val bmp = android.graphics.Bitmap.createBitmap(size, size, android.graphics.Bitmap.Config.ARGB_8888)
+        val c = android.graphics.Canvas(bmp)
+        val p = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG)
+        val dark = android.graphics.Color.rgb(
+            (android.graphics.Color.red(color) * 0.45).toInt(), (android.graphics.Color.green(color) * 0.45).toInt(),
+            (android.graphics.Color.blue(color) * 0.45).toInt(),
+        )
+        p.shader = android.graphics.LinearGradient(0f, 0f, size.toFloat(), size.toFloat(), color, dark, android.graphics.Shader.TileMode.CLAMP)
+        c.drawRect(0f, 0f, size.toFloat(), size.toFloat(), p)
+        p.shader = null
+        p.color = android.graphics.Color.WHITE
+        p.textAlign = android.graphics.Paint.Align.CENTER
+        p.typeface = runCatching { androidx.core.content.res.ResourcesCompat.getFont(this, R.font.inter_display_extrabold) }.getOrNull()
+            ?: android.graphics.Typeface.DEFAULT_BOLD
+        val name = known?.name ?: m.title
+        p.textSize = 120f
+        while (p.measureText(name) > size * 0.82f && p.textSize > 40f) p.textSize -= 6f
+        val fm = p.fontMetrics
+        c.drawText(name, size / 2f, size / 2f - (fm.ascent + fm.descent) / 2f, p)
+        tileKey = key
+        tile = bmp
+        return bmp
+    }
+
     /** Titre, durée, position et état, pour le lecteur du système (notification, écran verrouillé). */
     private fun updateSession(s: CastState) {
         val ss = session ?: return
@@ -122,7 +162,7 @@ class CastService : Service() {
             .putString(MediaMetadata.METADATA_KEY_TITLE, title)
             .putString(MediaMetadata.METADATA_KEY_ARTIST, s.renderer?.let { getString(R.string.notif_on_tv, it.name) } ?: "")
             .putLong(MediaMetadata.METADATA_KEY_DURATION, if (s.media != null && s.duration > 0) (s.duration * 1000).toLong() else -1L)
-            .apply { Images.peek(s.media?.posterUrl)?.let { putBitmap(MediaMetadata.METADATA_KEY_ART, it) } }
+            .apply { artwork(s)?.let { putBitmap(MediaMetadata.METADATA_KEY_ART, it) } }
             .build())
         val state = if (photoShown(s)) {
             if (s.slides?.auto == true) PlaybackState.STATE_PLAYING else PlaybackState.STATE_PAUSED
@@ -136,7 +176,9 @@ class CastService : Service() {
         val seekable = s.media != null && s.duration > 0
         val photo = photoShown(s)
         ss.setPlaybackState(PlaybackState.Builder()
-            .setState(state, (s.position * 1000).toLong(), if (state == PlaybackState.STATE_PLAYING && !photo) 1f else 0f)
+            // Direct : pas de position (le lecteur du système n'affiche alors pas de « 00:00 … 00:00 »).
+            .setState(state, if (s.live) PlaybackState.PLAYBACK_POSITION_UNKNOWN else (s.position * 1000).toLong(),
+                if (state == PlaybackState.STATE_PLAYING && !photo) 1f else 0f)
             .setActions(PlaybackState.ACTION_PLAY or PlaybackState.ACTION_PAUSE or PlaybackState.ACTION_PLAY_PAUSE or
                 PlaybackState.ACTION_STOP or
                 // Album : photo précédente / suivante. Vidéo : −10 s / +10 s (boutons personnalisés ci-dessous).
@@ -167,7 +209,7 @@ class CastService : Service() {
             .setContentText(s.renderer?.let { getString(R.string.notif_on_tv, it.name) } ?: "")
             .setContentIntent(open)
             .setOngoing(true)
-            .apply { Images.peek(s.media?.posterUrl)?.let { setLargeIcon(it) } }
+            .apply { artwork(s)?.let { setLargeIcon(it) } }
             .setOnlyAlertOnce(true)
             .setCategory(Notification.CATEGORY_TRANSPORT)
             .setVisibility(Notification.VISIBILITY_PUBLIC)

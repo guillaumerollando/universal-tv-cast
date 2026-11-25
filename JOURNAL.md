@@ -658,3 +658,9 @@ fait toute seule.
 - Vérifié avec la fausse télé et le direct d'Arte : Pause puis Play (pas de renvoi), −0:10 affiché, −10 s → start=20, Revenir au direct → start=0 et badge rouge.
 - Retiré à la demande de Guillaume : la ligne d'infos techniques du flux (720p · 25 i/s · H.264…), qu'on ne peut pas changer et qui encombre (« il met son lien, il envoie, ça marche »). Code de lecture de ces infos supprimé aussi.
 - Chaînes légales vérifiées (liste + morceaux vidéo téléchargés depuis la France, 25/11) pour ses tests : Arte, TV5Monde Info, TV5Monde FBS, ICI RDI, ICI Montréal, Savoir Média, TV Monaco, MonacoInfo, BX1. Écartées : rediffusions sur IP brutes (France 3, Gulli…), CGTN, RTL, TVM3 (pas de vidéo).
+
+## 2026-11-25 (soir, 26) — Notification et direct arrêté par la télé
+
+- Retour de Guillaume : plus moyen de lancer sur la télé (« tourne dans le vide »). Journaux du téléphone : la télé demande le flux continu, puis ~3 s après l'appli bascule sur l'écran d'attente (fin de vidéo détectée : un direct n'a pas de durée, donc tout arrêt après lecture = « fin ») ; les essais suivants : 716 Invalid CurrentURI. Chaîne en cause non identifiée dans les journaux ; pas reproduit avec la fausse télé (TV5Monde et Arte passent). Essai sur la vraie télé à faire avec son accord.
+- Défense : un direct arrêté par la télé est renvoyé une fois (même retard) ; s'il est encore arrêté, message clair « La télé a arrêté ce direct. Réessaie, ou regarde-le sur le téléphone. » au lieu de l'écran d'attente silencieux.
+- Notification (capture de Guillaume) : double logo (icône de l'appli en grand + icône de diffusion) et fond bleu au hasard. Sans affiche, image générée à la couleur de la chaîne (connue, sinon tirée du titre) avec son nom → fond orange pour Arte, plus de double logo. Direct : position inconnue → plus de « 00:00 … 00:00 ».

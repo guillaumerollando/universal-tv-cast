@@ -226,6 +226,7 @@
     <string name="video_live">Live</string>
     <string name="video_generic">Video</string>
     <string name="channel_remove">Sender entfernen</string>
+    <string name="err_live_stopped">Der Fernseher hat den Livestream gestoppt. Versuch es erneut oder schau ihn auf dem Handy.</string>
     <string name="home_channels">Sender</string>
     <string name="channel_rename">Umbenennen</string>
     <string name="channel_name">Name des Senders</string>

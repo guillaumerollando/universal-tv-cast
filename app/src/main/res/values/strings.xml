@@ -227,6 +227,7 @@
     <string name="video_live">Live</string>
     <string name="video_generic">Video</string>
     <string name="channel_remove">Remove channel</string>
+    <string name="err_live_stopped">The TV stopped this live stream. Try again, or watch it on the phone.</string>
     <string name="home_channels">Channels</string>
     <string name="channel_rename">Rename</string>
     <string name="channel_name">Channel name</string>

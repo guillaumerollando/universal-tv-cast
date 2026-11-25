@@ -226,6 +226,7 @@
     <string name="video_live">Ao vivo</string>
     <string name="video_generic">Vídeo</string>
     <string name="channel_remove">Remover o canal</string>
+    <string name="err_live_stopped">A TV parou esta transmissão ao vivo. Tente de novo ou assista no celular.</string>
     <string name="home_channels">Canais</string>
     <string name="channel_rename">Renomear</string>
     <string name="channel_name">Nome do canal</string>

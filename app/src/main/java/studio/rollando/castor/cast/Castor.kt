@@ -824,7 +824,11 @@ object Castor {
         }
     }
 
-    private suspend fun castAt(start: Double, forceDlna: Boolean = false, paused: Boolean = false) {
+    /** Direct : un renvoi automatique a déjà été tenté pour ce cast. */
+    @Volatile private var liveRetried = false
+
+    private suspend fun castAt(start: Double, forceDlna: Boolean = false, paused: Boolean = false, keepRetry: Boolean = false) {
+        if (!keepRetry) liveRetried = false
         val chosen = _state.value.renderer ?: throw NoTv()
         val s = _state.value
         val m = s.media ?: return
@@ -1042,6 +1046,17 @@ object Castor {
                     val total = _state.value.duration
                     val stopped = t == "STOPPED" || t == "NO_MEDIA_PRESENT"
                     val inAlbum = _state.value.slides?.isVideo == true
+                    // Un direct ne finit jamais : si la télé l'arrête, on le renvoie une fois ; si elle l'arrête
+                    // encore, on le dit (au lieu de basculer en silence sur l'écran d'attente).
+                    if (stopped && sawPlaying && !busy && _state.value.live && !inAlbum) {
+                        Log.w("Castor", "la télé a arrêté le direct (nouvel essai : ${!liveRetried})")
+                        if (!liveRetried) {
+                            liveRetried = true
+                            val back = _state.value.liveBehind
+                            exec { castAt(back, keepRetry = true) }
+                        } else _state.update { it.copy(phase = Phase.STOPPED, notice = Notice(R.string.err_live_stopped, error = true)) }
+                        break
+                    }
                     if (stopped && sawPlaying && !busy &&
                         (inAlbum || total <= 0 || lastPlaying >= total - 20)
                     ) { onMediaEnded(); break }

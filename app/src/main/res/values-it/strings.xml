@@ -226,6 +226,7 @@
     <string name="video_live">Diretta</string>
     <string name="video_generic">Video</string>
     <string name="channel_remove">Rimuovi il canale</string>
+    <string name="err_live_stopped">La TV ha interrotto la diretta. Riprova o guardala sul telefono.</string>
     <string name="home_channels">Canali</string>
     <string name="channel_rename">Rinomina</string>
     <string name="channel_name">Nome del canale</string>

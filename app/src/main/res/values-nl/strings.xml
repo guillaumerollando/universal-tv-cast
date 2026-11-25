@@ -226,6 +226,7 @@
     <string name="video_live">Live</string>
     <string name="video_generic">Video</string>
     <string name="channel_remove">Zender verwijderen</string>
+    <string name="err_live_stopped">De tv heeft deze livestream gestopt. Probeer opnieuw of kijk op de telefoon.</string>
     <string name="home_channels">Zenders</string>
     <string name="channel_rename">Hernoemen</string>
     <string name="channel_name">Naam van de zender</string>

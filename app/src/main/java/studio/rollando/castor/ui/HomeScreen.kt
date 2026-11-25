@@ -359,7 +359,7 @@ private fun ChannelTile(r: Recent, onBrowse: (String?) -> Unit) {
     val c = MaterialTheme.colorScheme
     val name = r.channelName
     val known = remember(r.url, r.title) { studio.rollando.castor.data.Channels.find("${r.url} ${r.pageUrl} ${r.title}") }
-    val base = androidx.compose.ui.graphics.Color(known?.color ?: PALETTE[(name.hashCode() and 0x7fffffff) % PALETTE.size])
+    val base = androidx.compose.ui.graphics.Color(known?.color ?: studio.rollando.castor.data.Channels.colorFor(name))
     var menu by remember { mutableStateOf(false) }
     var rename by remember { mutableStateOf(false) }
     val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
@@ -427,8 +427,6 @@ private fun ChannelTile(r: Recent, onBrowse: (String?) -> Unit) {
         )
     }
 }
-
-private val PALETTE = listOf(0xFF2E6F8E, 0xFF7A3E9D, 0xFF2F8F6B, 0xFFB5523B, 0xFF3A5BA0, 0xFF8E6A2E, 0xFF9C2F5A)
 
 /** Une façon de caster, en petit (accueil des habitués). */
 @Composable

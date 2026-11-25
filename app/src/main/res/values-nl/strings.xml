@@ -226,6 +226,9 @@
     <string name="video_live">Live</string>
     <string name="video_generic">Video</string>
     <string name="channel_remove">Zender verwijderen</string>
+    <string name="info_fps">%1$s fps</string>
+    <string name="info_audio">Audio: %1$s</string>
+    <string name="info_subs">Ondertitels: %1$s</string>
     <string name="home_channels">Zenders</string>
     <string name="channel_rename">Hernoemen</string>
     <string name="channel_name">Naam van de zender</string>

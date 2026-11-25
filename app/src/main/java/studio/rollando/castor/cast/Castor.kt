@@ -69,6 +69,11 @@ data class CastState(
     val embeddedSubs: List<String> = emptyList(),
     /** Chaîne ou flux en direct (liste HLS sans fin) : pas de durée, la lecture reprend toujours au direct. */
     val live: Boolean = false,
+    /** Direct : retard voulu sur le direct (secondes) et ce que le flux garde en arrière. */
+    val liveBehind: Double = 0.0,
+    val liveWindow: Double = 0.0,
+    /** Ce que le flux dit de lui-même : qualité, codec, langues. */
+    val streamInfo: studio.rollando.castor.proxy.Hls.StreamInfo? = null,
 ) {
     val active: Boolean get() = phase in setOf(Phase.SENDING, Phase.BUFFERING, Phase.PLAYING, Phase.PAUSED)
 }
@@ -295,7 +300,7 @@ object Castor {
         _state.update {
             it.copy(media = media, slides = null, phase = Phase.LOADING, isHls = false, splitAudio = false, subIndex = media.defaultSub,
                 position = 0.0, duration = 0.0, notice = null, continuous = Library.continuousHls.value, subDelay = 0.0,
-                embeddedSubs = emptyList(), live = false)
+                embeddedSubs = emptyList(), live = false, liveBehind = 0.0, liveWindow = 0.0, streamInfo = null)
         }
         proxy.reset()
         remoteId = null
@@ -312,7 +317,14 @@ object Castor {
                 fmp4 = plan.fmp4
                 _state.update {
                     it.copy(isHls = true, splitAudio = plan.splitAudio, duration = hlsDuration, live = !plan.endList,
+                        liveWindow = if (plan.endList) 0.0 else plan.duration, streamInfo = plan.info,
                         continuous = if (plan.splitAudio) false else it.continuous)
+                }
+                // Titre lisible pour un direct ouvert par son lien (« index.m3u8 ») : le nom de la chaîne.
+                val t = _state.value.media?.title.orEmpty()
+                if (!plan.endList && (t.isBlank() || t.contains(".m3u8", true) || t.startsWith("http"))) {
+                    val name = studio.rollando.castor.data.Channels.find("${media.url} ${media.pageUrl}")?.name ?: app.getString(R.string.video_live)
+                    _state.update { it.copy(media = it.media?.copy(title = name)) }
                 }
             }
         }
@@ -378,7 +390,8 @@ object Castor {
             discover()
             return
         }
-        if (!sending()) exec { castAt(if (_state.value.live) 0.0 else pos) }
+        // Direct : [pos] est le retard du téléphone sur le direct ; la télé reprend avec le même.
+        if (!sending()) exec { castAt(pos) }
     }
 
     private suspend fun identify() {
@@ -819,7 +832,9 @@ object Castor {
         val m = s.media ?: return
         Net.localIp() ?: throw NoWifi()
         pendingPause = false
-        _state.update { it.copy(phase = Phase.SENDING, notice = null, idle = false) }
+        livePausedAt = 0L
+        // Direct : « start » est le retard voulu sur le direct.
+        _state.update { it.copy(phase = Phase.SENDING, notice = null, idle = false, liveBehind = if (it.live) start else it.liveBehind) }
         val base = proxy.baseUrl()
         var r = chosen
         // Cast ne lit pas notre flux fusionné : on passe par le DLNA de la télé si elle en a un.
@@ -1122,6 +1137,7 @@ object Castor {
         when (s.phase) {
             Phase.PLAYING, Phase.BUFFERING -> {
                 if (r.cast) CastControl.pause(r) else pauseWhenReady(r)
+                if (s.live) livePausedAt = System.currentTimeMillis()
                 _state.update { it.copy(phase = Phase.PAUSED) }
             }
             Phase.PAUSED -> {
@@ -1131,10 +1147,11 @@ object Castor {
                     _state.update { it.copy(phase = Phase.BUFFERING) }
                     return
                 }
-                // Direct en pause : on repart au direct (et pas là où l'image s'était figée).
-                if (s.live) { castAt(0.0); return }
                 if (r.cast) CastControl.play(r) else playWhenReady(r)
-                _state.update { it.copy(phase = Phase.PLAYING) }
+                // Direct : la lecture reprend là où elle s'était figée ; le retard sur le direct a grandi d'autant.
+                val paused = if (s.live && livePausedAt > 0) (System.currentTimeMillis() - livePausedAt) / 1000.0 else 0.0
+                livePausedAt = 0L
+                _state.update { it.copy(phase = Phase.PLAYING, liveBehind = (it.liveBehind + paused).coerceAtMost(maxLiveBack(it))) }
             }
             else -> castAt(if (s.phase == Phase.STOPPED && s.duration > 0 && s.position < s.duration - 5) s.position else 0.0)
         }
@@ -1159,7 +1176,31 @@ object Castor {
         }
     }
 
-    fun skip(delta: Double) = seekTo(_state.value.position + delta, debounceMs = 700)
+    fun skip(delta: Double) {
+        val s = _state.value
+        if (!s.live) { seekTo(s.position + delta, debounceMs = 700); return }
+        // Direct : on remonte (ou redescend) dans ce que garde le flux ; le flux est renvoyé avec ce retard.
+        if (!s.active || !s.continuous) return
+        val running = if (s.phase == Phase.PAUSED && livePausedAt > 0) (System.currentTimeMillis() - livePausedAt) / 1000.0 else 0.0
+        val target = (s.liveBehind + running - delta).coerceIn(0.0, maxLiveBack(s))
+        _state.update { it.copy(liveBehind = target) }
+        seekJob?.cancel()
+        seekJob = scope.launch { delay(700); exec { castAt(_state.value.liveBehind) } }
+    }
+
+    /** Direct : retour au direct. */
+    fun goLive() {
+        val s = _state.value
+        if (!s.live || sending()) return
+        seekJob?.cancel()
+        exec { castAt(0.0) }
+    }
+
+    /** On peut remonter dans tout ce que garde le flux, moins les derniers morceaux (le direct lui-même). */
+    private fun maxLiveBack(s: CastState) = (s.liveWindow - 30).coerceAtLeast(0.0)
+
+    /** Direct en pause : depuis quand (pour compter le retard pris). */
+    @Volatile private var livePausedAt = 0L
 
     private suspend fun doSeek(target: Double) {
         val s = _state.value

@@ -384,7 +384,9 @@ class ProxyServer(private val ctx: Context) {
             }
             vTime = acc
         } else {
-            idx = (plan.segs.size - 3).coerceAtLeast(0)
+            // Direct : « start » = secondes de retard voulues sur le direct (on remonte dans ce que garde le flux).
+            val seg = plan.segs.map { it.duration }.average().takeIf { it > 0 } ?: plan.targetDuration
+            idx = (plan.segs.size - 3 - (start / seg).toInt()).coerceAtLeast(0)
         }
         val keys = ConcurrentHashMap<String, ByteArray>()
         // Son servi à part : on le recolle à l'image, morceau par morceau (même début dans le temps).

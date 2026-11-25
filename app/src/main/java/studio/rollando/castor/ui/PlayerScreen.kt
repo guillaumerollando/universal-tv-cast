@@ -1,5 +1,8 @@
 package studio.rollando.castor.ui
 
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.material.icons.rounded.SkipNext
 import androidx.compose.material.icons.rounded.Smartphone
 import android.content.Intent
 import android.os.Build
@@ -125,6 +128,7 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         if (film) FilmHeader(state)
+        else if (state.live) ChannelHeader(state)
         // « Affiche » : grand cadre qui dit ce qui se passe sur la télé.
         else Box(
             Modifier
@@ -154,9 +158,10 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
             }
         }
 
-        if (!film) Column {
+        if (!film && !state.live) Column {
             Text(media.title, style = MaterialTheme.typography.titleLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
             media.host?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant) }
+            streamInfoLine(state)?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant) }
         }
 
         BackgroundTip(state)
@@ -342,26 +347,84 @@ private fun Progress(s: CastState) {
     }
 }
 
-/** Direct : pas de barre de temps (elle ne voudrait rien dire), un badge clair et ce que fait « Lecture ». */
+/** Ce que le flux dit de lui-même, en une ligne : « 720p · 25 i/s · H.264 · Audio : Français, English ». */
+@Composable
+private fun streamInfoLine(s: CastState): String? {
+    val i = s.streamInfo ?: return null
+    val parts = buildList {
+        i.height?.let { add("${it}p") }
+        i.fps?.let { add(stringResource(R.string.info_fps, if (it % 1.0 == 0.0) it.toInt().toString() else "%.2f".format(it))) }
+        i.videoCodec?.let { add(it) }
+        if (i.audio.size > 1) add(stringResource(R.string.info_audio, i.audio.joinToString(", ")))
+        if (i.subtitles.isNotEmpty()) add(stringResource(R.string.info_subs, i.subtitles.joinToString(", ")))
+    }
+    return parts.takeIf { it.isNotEmpty() }?.joinToString(" · ")
+}
+
+/** En-tête d'une chaîne en direct : à sa couleur, son nom en grand, l'état et les infos du flux. */
+@Composable
+private fun ChannelHeader(s: CastState) {
+    val m = s.media ?: return
+    val known = remember(m.url) { studio.rollando.castor.data.Channels.find("${m.url} ${m.pageUrl} ${m.title}") }
+    val base = Color(known?.color ?: studio.rollando.castor.data.Channels.colorFor(m.title))
+    Box(
+        Modifier.fillMaxWidth().aspectRatio(16f / 9f).clip(RoundedCornerShape(28.dp))
+            .background(Brush.linearGradient(listOf(base, base.copy(alpha = 0.5f).compositeOver(Color.Black))))
+            .semantics(mergeDescendants = true) { liveRegion = LiveRegionMode.Polite },
+    ) {
+        if (s.phase == Phase.PLAYING) Box(Modifier.align(Alignment.Center).padding(bottom = 30.dp)) { CastWaves(Color.White.copy(alpha = 0.35f), size = 190.dp) }
+        Text(
+            m.title, color = Color.White, maxLines = 2, overflow = TextOverflow.Ellipsis,
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            style = MaterialTheme.typography.displaySmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
+            modifier = Modifier.align(Alignment.Center).padding(horizontal = 24.dp).padding(bottom = 24.dp),
+        )
+        Column(Modifier.align(Alignment.BottomStart).padding(18.dp)) {
+            Text(
+                phaseLabel(s) + (s.renderer?.let { " · " + it.name } ?: ""),
+                style = MaterialTheme.typography.labelLarge, color = Color.White.copy(alpha = 0.92f), maxLines = 1, overflow = TextOverflow.Ellipsis,
+            )
+            streamInfoLine(s)?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = Color.White.copy(alpha = 0.75f), maxLines = 1) }
+        }
+        if (s.phase == Phase.LOADING || s.phase == Phase.SENDING || s.phase == Phase.BUFFERING) {
+            LinearProgressIndicator(Modifier.fillMaxWidth().align(Alignment.BottomCenter))
+        }
+    }
+}
+
+/**
+ * Direct : pas de barre de temps (la fenêtre gardée par le flux ne veut rien dire). Badge rouge au direct ;
+ * en retard (pause, retour en arrière), le retard « −1:24 » et « Revenir au direct ».
+ */
 @Composable
 private fun LiveBar(s: CastState) {
     val c = MaterialTheme.colorScheme
     val paused = s.phase == Phase.PAUSED
-    Row(Modifier.fillMaxWidth().padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+    // Le retard grandit pendant la pause : on le recalcule chaque seconde.
+    val pausedSince = remember(paused) { if (paused) System.currentTimeMillis() else 0L }
+    var now by remember { mutableStateOf(System.currentTimeMillis()) }
+    LaunchedEffect(paused) { while (paused) { now = System.currentTimeMillis(); kotlinx.coroutines.delay(1000) } }
+    val behind = (s.liveBehind + if (paused) (now - pausedSince) / 1000.0 else 0.0).toLong()
+    val atLive = behind < 5 && !paused
+    Row(Modifier.fillMaxWidth().padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
         Row(
             Modifier.clip(RoundedCornerShape(50))
-                .background(if (paused) c.surfaceContainerHighest else Color(0xFFE53935))
+                .background(if (atLive) Color(0xFFE53935) else c.surfaceContainerHighest)
                 .padding(horizontal = 12.dp, vertical = 6.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Box(Modifier.size(8.dp).clip(CircleShape).background(if (paused) c.onSurfaceVariant else Color.White))
+            Box(Modifier.size(8.dp).clip(CircleShape).background(if (atLive) Color.White else c.onSurfaceVariant))
             Spacer(Modifier.width(8.dp))
-            Text(stringResource(R.string.player_live).uppercase(), style = MaterialTheme.typography.labelLarge,
-                color = if (paused) c.onSurfaceVariant else Color.White)
+            Text(
+                if (atLive || behind < 5) stringResource(R.string.player_live).uppercase() else "−%d:%02d".format(behind / 60, behind % 60),
+                style = MaterialTheme.typography.labelLarge, color = if (atLive) Color.White else c.onSurface,
+            )
         }
-        if (paused) {
-            Spacer(Modifier.width(12.dp))
-            Text(stringResource(R.string.live_paused), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
+        Spacer(Modifier.weight(1f))
+        if (!atLive && s.active) TextButton(onClick = Castor::goLive) {
+            Text(stringResource(R.string.live_back))
+            Spacer(Modifier.width(4.dp))
+            Icon(Icons.Rounded.SkipNext, null, Modifier.size(18.dp))
         }
     }
 }
@@ -370,7 +433,7 @@ private fun LiveBar(s: CastState) {
 private fun Controls(s: CastState) {
     val enabled = s.renderer != null && s.phase != Phase.LOADING
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
-        FilledTonalIconButton(onClick = { Castor.skip(-10.0) }, enabled = enabled && s.active && !s.live, modifier = Modifier.size(56.dp)) {
+        FilledTonalIconButton(onClick = { Castor.skip(-10.0) }, enabled = enabled && s.active && (!s.live || s.continuous), modifier = Modifier.size(56.dp)) {
             Icon(Icons.Rounded.Replay10, stringResource(R.string.cd_rewind), Modifier.size(28.dp))
         }
         val playing = s.phase == Phase.PLAYING || s.phase == Phase.BUFFERING || s.phase == Phase.SENDING
@@ -383,7 +446,7 @@ private fun Controls(s: CastState) {
                 stringResource(if (playing) R.string.action_pause else R.string.action_play), Modifier.size(44.dp),
             )
         }
-        FilledTonalIconButton(onClick = { Castor.skip(10.0) }, enabled = enabled && s.active && !s.live, modifier = Modifier.size(56.dp)) {
+        FilledTonalIconButton(onClick = { Castor.skip(10.0) }, enabled = enabled && s.active && (!s.live || s.continuous && s.liveBehind > 0), modifier = Modifier.size(56.dp)) {
             Icon(Icons.Rounded.Forward10, stringResource(R.string.cd_forward10), Modifier.size(28.dp))
         }
         FilledTonalIconButton(onClick = Castor::stop, enabled = enabled && s.active, modifier = Modifier.size(56.dp)) {

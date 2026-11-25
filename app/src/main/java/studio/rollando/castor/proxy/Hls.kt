@@ -19,7 +19,15 @@ object Hls {
         val encryptedSample: Boolean,
     ) {
         val duration: Double get() = segs.sumOf { it.duration }
+        /** Ce que la liste « maître » dit du flux (qualité, langues), s'il y en a une. */
+        var info: StreamInfo? = null
     }
+
+    /** Infos lues dans le flux lui-même (aucun service extérieur) : qualité, codec, langues proposées. */
+    class StreamInfo(
+        val height: Int?, val fps: Double?, val videoCodec: String?,
+        val audio: List<String>, val subtitles: List<String>,
+    )
 
     private val ATTR = Regex("""([A-Z0-9-]+)=("[^"]*"|[^,]*)""")
 
@@ -45,20 +53,38 @@ object Hls {
             .mapNotNull { it["GROUP-ID"] }
             .toSet()
 
-        class Variant(val bandwidth: Long, val audio: String?, val uri: String)
+        class Variant(val bandwidth: Long, val audio: String?, val uri: String, val a: Map<String, String> = emptyMap())
         val variants = mutableListOf<Variant>()
         for ((i, line) in lines.withIndex()) {
             if (!line.startsWith("#EXT-X-STREAM-INF:")) continue
             val a = attrs(line.substringAfter(':'))
             val uri = lines.drop(i + 1).firstOrNull { it.isNotEmpty() && !it.startsWith("#") } ?: continue
-            variants += Variant(a["BANDWIDTH"]?.toLongOrNull() ?: 0, a["AUDIO"], uri)
+            variants += Variant(a["BANDWIDTH"]?.toLongOrNull() ?: 0, a["AUDIO"], uri, a)
         }
         if (variants.isEmpty()) return parseMedia(text, f.finalUrl, false)
         val muxed = variants.filter { it.audio == null || it.audio !in audioGroupsWithUri }
         val chosen = muxed.ifEmpty { variants }.maxBy { it.bandwidth }
         val split = muxed.isEmpty()
         val v = Http.fetch(resolve(f.finalUrl, chosen.uri), headers)
-        return parseMedia(String(v.bytes, Charsets.UTF_8), v.finalUrl, split)
+        val media = lines.filter { it.startsWith("#EXT-X-MEDIA:") }.map { attrs(it.substringAfter(':')) }
+        fun names(type: String) = media.filter { it["TYPE"] == type }
+            .mapNotNull { (it["NAME"] ?: it["LANGUAGE"])?.takeIf { n -> n.isNotBlank() } }.distinct()
+        val codec = chosen.a["CODECS"]?.split(',')?.map { it.trim() }?.firstOrNull { c ->
+            c.startsWith("avc") || c.startsWith("hvc") || c.startsWith("hev") || c.startsWith("av01") || c.startsWith("vp09")
+        }?.let { c ->
+            when {
+                c.startsWith("avc") -> "H.264"; c.startsWith("hvc") || c.startsWith("hev") -> "HEVC"
+                c.startsWith("av01") -> "AV1"; else -> "VP9"
+            }
+        }
+        return parseMedia(String(v.bytes, Charsets.UTF_8), v.finalUrl, split).also {
+            it.info = StreamInfo(
+                height = chosen.a["RESOLUTION"]?.substringAfter('x')?.toIntOrNull(),
+                fps = chosen.a["FRAME-RATE"]?.toDoubleOrNull(),
+                videoCodec = codec,
+                audio = names("AUDIO"), subtitles = names("SUBTITLES"),
+            )
+        }
     }
 
     fun reload(plan: Plan, headers: Map<String, String>): Plan {

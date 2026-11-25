@@ -121,6 +121,11 @@ object Channels {
         "redbull" to Known("Red Bull TV", 0xFF1E2A5A),
     )
 
+    private val PALETTE = listOf(0xFF2E6F8E, 0xFF7A3E9D, 0xFF2F8F6B, 0xFFB5523B, 0xFF3A5BA0, 0xFF8E6A2E, 0xFF9C2F5A)
+
+    /** Couleur d'une chaîne inconnue : tirée de son nom, toujours la même. */
+    fun colorFor(name: String): Long = PALETTE[(name.hashCode() and 0x7fffffff) % PALETTE.size]
+
     fun find(text: String): Known? {
         val tokens = text.lowercase().split(Regex("[^a-z0-9]+")).filter { it.isNotEmpty() }
         for ((kw, k) in LIST) if (tokens.any { it == kw || (kw.length >= 4 && it.startsWith(kw)) }) return k

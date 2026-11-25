@@ -226,6 +226,9 @@
     <string name="video_live">Ao vivo</string>
     <string name="video_generic">Vídeo</string>
     <string name="channel_remove">Remover o canal</string>
+    <string name="info_fps">%1$s fps</string>
+    <string name="info_audio">Áudio: %1$s</string>
+    <string name="info_subs">Legendas: %1$s</string>
     <string name="home_channels">Canais</string>
     <string name="channel_rename">Renomear</string>
     <string name="channel_name">Nome do canal</string>

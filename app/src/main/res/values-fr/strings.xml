@@ -226,6 +226,9 @@
     <string name="video_live">Direct</string>
     <string name="video_generic">Vidéo</string>
     <string name="channel_remove">Retirer la chaîne</string>
+    <string name="info_fps">%1$s i/s</string>
+    <string name="info_audio">Audio : %1$s</string>
+    <string name="info_subs">Sous-titres : %1$s</string>
     <string name="home_channels">Chaînes</string>
     <string name="channel_rename">Renommer</string>
     <string name="channel_name">Nom de la chaîne</string>

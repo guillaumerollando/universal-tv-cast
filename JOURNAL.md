@@ -646,3 +646,13 @@ fait toute seule.
 - Chaînes : rangée « Chaînes » sur l'accueil (plus dans « Reprendre ») ; nom reconnu (Arte, France 24, TV5Monde, franceinfo, BFMTV… ~35 chaînes, avec leur couleur), sinon titre, sinon site ; tuile à la couleur de la chaîne + « ● En direct » ; appui long : Renommer (nom gardé) / Retirer la chaîne. Titre du lecteur : « Arte » au lieu de « Direct ».
 - Vérifié sur l'émulateur avec la fausse télé et le direct officiel d'Arte : pause → Pause, lecture → flux renvoyé ; téléphone au direct, badge rouge → « Revenir au direct » après pause ; rangée Chaînes, renommer.
 - Téléphone, direct : plus de « 29:22 · 30:00 » (fenêtre du flux, sans sens) ; le retard s'affiche dans le badge : « −1:24 · Revenir au direct ». Vérifié sur l'émulateur.
+
+## 2026-11-25 (soir, 25) — Direct sur la télé, version propre
+
+- Retour de Guillaume : depuis la version précédente, Lecture après une pause renvoyait au direct (moins fluide qu'avant), ±10 s désactivés, pas de retard affiché, « index.m3u8 » comme titre.
+- Pause → Lecture : simple Play, la télé reprend là où elle s'était figée (comme avant) ; le retard pris s'ajoute (« −0:10 »).
+- ±10 s actifs sur un direct (appli et notification) en flux continu : le flux est renvoyé avec le retard voulu (`/ts/…?start=N` = N secondes de retard ; le relais remonte d'autant de morceaux dans ce que garde la liste), dans la limite de la fenêtre du flux moins 30 s. +10 s seulement si on est en retard.
+- Badge : rouge « EN DIRECT » au direct, sinon « −m:ss » + bouton « Revenir au direct ». Le téléphone transmet son retard en renvoyant vers la télé.
+- En-tête de l'onglet Lecture pour un direct : à la couleur de la chaîne, son nom en grand, l'état, et une ligne lue dans le flux lui-même (liste maître : définition, images/s, codec, langues audio et sous-titres s'il y en a plusieurs) — « 720p · 25 i/s · H.264 » pour Arte. Même ligne sous le titre des autres vidéos HLS.
+- Titre d'un direct ouvert par son lien : nom de la chaîne reconnue (sinon « Direct »), aussi depuis « Coller un lien ».
+- Vérifié avec la fausse télé et le direct d'Arte : Pause puis Play (pas de renvoi), −0:10 affiché, −10 s → start=20, Revenir au direct → start=0 et badge rouge.

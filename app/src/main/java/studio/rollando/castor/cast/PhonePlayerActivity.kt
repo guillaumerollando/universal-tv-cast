@@ -274,7 +274,8 @@ class PhonePlayerActivity : ComponentActivity() {
     }
 
     private fun sendToTv() {
-        val pos = (player?.currentPosition ?: 0L) / 1000.0
+        // Direct : on transmet le retard sur le direct (la télé reprend avec le même).
+        val pos = if (session?.live == true) liveDelay.toDouble() else (player?.currentPosition ?: 0L) / 1000.0
         saveProgress()
         player?.pause()
         Castor.resumeOnTv(pos)

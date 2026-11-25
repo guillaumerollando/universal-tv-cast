@@ -18,6 +18,15 @@ object Subtitles {
         return ("﻿" + text.trim() + "\n").toByteArray(Charsets.UTF_8)
     }
 
+    /** SRT (déjà converti par [toSrt]) → WebVTT, le format des sous-titres de Google Cast. */
+    fun srtToVtt(srt: ByteArray): ByteArray {
+        val text = String(srt, Charsets.UTF_8).removePrefix("\uFEFF")
+        val body = text.lines().joinToString("\n") { line ->
+            if (line.contains("-->")) line.replace(',', '.') else line
+        }
+        return ("WEBVTT\n\n" + body.trim() + "\n").toByteArray(Charsets.UTF_8)
+    }
+
     private fun decode(b: ByteArray): String = try {
         Charsets.UTF_8.newDecoder()
             .onMalformedInput(CodingErrorAction.REPORT)

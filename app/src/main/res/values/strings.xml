@@ -57,6 +57,9 @@
     <string name="report_intro">Describe the problem here:</string>
     <string name="settings_shake">Shake for help</string>
     <string name="settings_shake_sub">Shake the phone to open help and report a problem.</string>
+    <string name="tv_type_cast">Google Cast · subtitles</string>
+    <string name="tv_type_dlna">DLNA</string>
+    <string name="err_cast_format">The Cast player couldn’t read this video (format not supported). Try the DLNA entry for the same TV, or another source.</string>
     <string name="cd_settings">Settings</string>
     <string name="home_title">Send any video to your TV</string>
     <string name="home_subtitle">Free. No ads. No tracking.</string>

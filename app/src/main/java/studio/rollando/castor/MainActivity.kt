@@ -93,7 +93,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     /** Les boutons de volume du téléphone règlent le son de la télé pendant la diffusion. */
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         val s = Castor.state.value
-        if (s.active && s.renderer?.rcUrl != null &&
+        if (s.active && (s.renderer?.rcUrl != null || s.renderer?.cast == true) &&
             (event.keyCode == KeyEvent.KEYCODE_VOLUME_UP || event.keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
         ) {
             if (event.action == KeyEvent.ACTION_DOWN) Castor.changeVolume(if (event.keyCode == KeyEvent.KEYCODE_VOLUME_UP) 2 else -2)

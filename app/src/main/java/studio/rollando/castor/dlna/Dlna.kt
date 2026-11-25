@@ -36,6 +36,9 @@ data class Renderer(
     val location: String = "",
     val cmUrl: String? = null,
     val cmType: String? = null,
+    /** Appareil Google Cast (Chromecast, Google TV, télé avec Cast intégré) plutôt que DLNA. */
+    val cast: Boolean = false,
+    val routeId: String? = null,
 ) {
     val host: String get() = runCatching { URL(location.ifEmpty { avUrl }).host }.getOrDefault("")
 }

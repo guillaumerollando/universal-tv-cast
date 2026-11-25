@@ -140,6 +140,11 @@ class ProxyServer(private val ctx: Context) {
                 if (req.seg.getOrNull(0) != "r" || remotes[req.seg.getOrNull(1)]?.kind == Kind.MAIN) {
                     Log.i(TAG, "télé → ${req.method} ${target.take(80)} range=${headers["range"]}")
                 }
+                if (req.method == "OPTIONS") {
+                    head(out, 204, "No Content", listOf("Access-Control-Max-Age" to "86400", "Content-Length" to "0"))
+                    out.flush()
+                    return
+                }
                 // Beaucoup de télés cherchent un fichier de sous-titres du même nom, à côté de la vidéo (video.srt…).
                 val ext = Mime.ext(req.seg.lastOrNull() ?: "")
                 if (req.seg.getOrNull(0) in setOf("r", "l") && ext in setOf("srt", "smi", "sami", "ass", "ssa", "sub", "vtt", "txt")) {
@@ -180,7 +185,12 @@ class ProxyServer(private val ctx: Context) {
         val sb = StringBuilder("HTTP/1.1 $code $reason\r\n")
         for ((k, v) in h) sb.append(k).append(": ").append(v).append("\r\n")
         sb.append("Server: Android/1.0 UPnP/1.0 DLNADOC/1.50 Castor/1.0\r\n")
-        sb.append("Access-Control-Allow-Origin: *\r\nConnection: close\r\n\r\n")
+        // CORS : le lecteur Google Cast (une page web) exige ces en-têtes pour la vidéo, le HLS et les sous-titres.
+        sb.append("Access-Control-Allow-Origin: *\r\n")
+        sb.append("Access-Control-Allow-Methods: GET, HEAD, OPTIONS\r\n")
+        sb.append("Access-Control-Allow-Headers: *\r\n")
+        sb.append("Access-Control-Expose-Headers: Content-Length, Content-Range, Accept-Ranges, Content-Type\r\n")
+        sb.append("Connection: close\r\n\r\n")
         out.write(sb.toString().toByteArray(Charsets.ISO_8859_1))
     }
 
@@ -490,8 +500,13 @@ class ProxyServer(private val ctx: Context) {
     // ------------------------------------------------------------------ sous-titres
 
     private fun serveSubtitle(req: Req, out: OutputStream) {
-        val bytes = subtitle ?: return empty(out, 404, "Not Found")
-        head(out, 200, "OK", listOf("Content-Type" to "text/srt; charset=utf-8", "Content-Length" to bytes.size.toString()))
+        val srt = subtitle ?: return empty(out, 404, "Not Found")
+        val vtt = Mime.ext(req.seg.lastOrNull() ?: "") == "vtt"
+        val bytes = if (vtt) Subtitles.srtToVtt(srt) else srt
+        head(out, 200, "OK", listOf(
+            "Content-Type" to (if (vtt) "text/vtt; charset=utf-8" else "text/srt; charset=utf-8"),
+            "Content-Length" to bytes.size.toString(),
+        ))
         if (req.method != "HEAD") out.write(bytes)
     }
 

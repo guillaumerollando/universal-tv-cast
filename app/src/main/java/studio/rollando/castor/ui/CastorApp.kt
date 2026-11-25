@@ -225,8 +225,14 @@ private fun TvSheet(onDismiss: () -> Unit) {
                         val selected = r.udn == state.renderer?.udn
                         ListItem(
                             headlineContent = { Text(r.name) },
-                            supportingContent = listOfNotNull(r.manufacturer, r.model, r.host).distinct().joinToString(" · ").takeIf { it.isNotBlank() }
-                                ?.let { { Text(it) } },
+                            supportingContent = {
+                                Text(
+                                    listOfNotNull(
+                                        stringResource(if (r.cast) R.string.tv_type_cast else R.string.tv_type_dlna),
+                                        r.model?.takeIf { it != r.name },
+                                    ).joinToString(" · ")
+                                )
+                            },
                             leadingContent = { Icon(Icons.Rounded.Tv, null) },
                             trailingContent = { RadioButton(selected = selected, onClick = null) },
                             colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),

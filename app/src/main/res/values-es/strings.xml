@@ -56,6 +56,9 @@
     <string name="report_intro">Describe el problema aquí:</string>
     <string name="settings_shake">Agitar para obtener ayuda</string>
     <string name="settings_shake_sub">Agita el móvil para abrir la ayuda e informar de un problema.</string>
+    <string name="tv_type_cast">Google Cast · subtítulos</string>
+    <string name="tv_type_dlna">DLNA</string>
+    <string name="err_cast_format">El reproductor Cast no pudo leer este vídeo (formato no compatible). Prueba la opción DLNA de la misma TV u otra fuente.</string>
     <string name="cd_settings">Ajustes</string>
     <string name="home_title">Envía cualquier vídeo a tu TV</string>
     <string name="home_subtitle">Gratis. Sin anuncios. Sin rastreo.</string>

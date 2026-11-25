@@ -170,3 +170,19 @@ bibliothèque. Rien n'est envoyé à la télé. Vérifié sur émulateur (Spider
 
 ## 2026-11-25 — Animation « en cours de lecture » sur l'en-tête du film
 Badge télé avec ondes (en haut à droite) et barres d'égaliseur à côté de l'état ; immobiles en pause ou sans animations.
+
+## 2026-11-25 — Google Cast (pour les sous-titres et toutes les télés Cast)
+**Constat** : la Philips ne demande jamais les sous-titres en DLNA (ni CaptionInfo.sec, ni fichier .srt voisin) ;
+son lecteur DLNA ne lit que les pistes intégrées au fichier. Web Video Cast ouvrait un autre lecteur sur cette télé :
+très probablement Google Cast (la télé l'intègre, ports 8008/8009).
+
+**Fait**
+- SDK Google Cast officiel (`play-services-cast-framework`) + MediaRouter ; lecteur standard de Google.
+- Les appareils Cast apparaissent dans « Choisir une télé » à côté du DLNA (« Google Cast · sous-titres » / « DLNA »).
+- Lecture Cast : vidéo par le relais (MP4/fichiers directs, HLS réécrit), titre et affiche, **sous-titres en piste
+  WebVTT** ; commandes pause, avance, arrêt, volume ; reprise à la position de Stremio ; erreur de format signalée.
+- Relais : CORS complet + réponse aux requêtes OPTIONS ; sous-titres servis en WebVTT (`subtitles.vtt`).
+- DLNA inchangé. Vérifié sur émulateur (démarrage, DLNA, WebVTT, CORS) ; l'émulateur ne voit pas les appareils Cast.
+
+**À vérifier sur la vraie télé** : l'entrée Cast de la Philips apparaît ; la vidéo Stremio et ses sous-titres
+s'affichent dans le lecteur Cast ; avance ; arrêt.

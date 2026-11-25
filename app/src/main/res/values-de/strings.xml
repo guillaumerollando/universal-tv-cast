@@ -56,6 +56,9 @@
     <string name="report_intro">Beschreibe das Problem hier:</string>
     <string name="settings_shake">Schütteln für Hilfe</string>
     <string name="settings_shake_sub">Schüttle das Handy, um die Hilfe zu öffnen und ein Problem zu melden.</string>
+    <string name="tv_type_cast">Google Cast · Untertitel</string>
+    <string name="tv_type_dlna">DLNA</string>
+    <string name="err_cast_format">Der Cast-Player konnte dieses Video nicht abspielen (Format nicht unterstützt). Probier den DLNA-Eintrag desselben Fernsehers oder eine andere Quelle.</string>
     <string name="cd_settings">Einstellungen</string>
     <string name="home_title">Schick jedes Video auf deinen Fernseher</string>
     <string name="home_subtitle">Kostenlos. Ohne Werbung. Ohne Tracking.</string>

@@ -65,6 +65,7 @@ fun BackgroundTip(s: CastState) {
     val context = LocalContext.current
     val dismissed by Library.dismissedTips.collectAsState()
     val media = s.media ?: return
+    if (s.onPhone) return // rien n'est relayé vers la télé
     val source = media.sourceApp?.takeIf { media.fromPhoneApp }
     val target: Pair<String, String>? = when {
         source != null && "src:$source" !in dismissed && Background.atRisk(context, source) -> "src:$source" to source

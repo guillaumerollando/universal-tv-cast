@@ -254,6 +254,11 @@
     <string name="iptv_hidden_title">Canales ocultos</string>
     <string name="iptv_unhide">Mostrar de nuevo</string>
     <string name="action_close">Cerrar</string>
+    <string name="cd_fullscreen">Pantalla completa</string>
+    <string name="cd_fullscreen_exit">Salir de pantalla completa</string>
+    <string name="phone_play_here">Reproducir en este móvil</string>
+    <string name="phone_watch_tv">Ver en la TV</string>
+    <string name="phase_on_phone">En este móvil</string>
     <string name="iptv_title">Listas de canales</string>
     <string name="iptv_intro">Una lista de canales (lista M3U o IPTV) reúne canales de TV en un solo enlace. Pega su dirección o abre el archivo: aquí tendrás todos sus canales, con su logotipo.</string>
     <string name="iptv_url_hint">Dirección de la lista (.m3u)</string>

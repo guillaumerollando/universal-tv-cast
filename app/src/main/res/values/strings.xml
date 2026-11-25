@@ -255,6 +255,11 @@
     <string name="iptv_hidden_title">Hidden channels</string>
     <string name="iptv_unhide">Show again</string>
     <string name="action_close">Close</string>
+    <string name="cd_fullscreen">Full screen</string>
+    <string name="cd_fullscreen_exit">Exit full screen</string>
+    <string name="phone_play_here">Play on this phone</string>
+    <string name="phone_watch_tv">Watch on the TV</string>
+    <string name="phase_on_phone">On this phone</string>
     <string name="iptv_title">Channel lists</string>
     <string name="iptv_intro">A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.</string>
     <string name="iptv_url_hint">List address (.m3u)</string>

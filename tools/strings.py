@@ -419,6 +419,11 @@ S = {
 "iptv_hidden_title": ["Hidden channels", "Chaînes masquées", "Canales ocultos", "Ausgeblendete Sender", "Canali nascosti", "Verborgen zenders", "Canais ocultos"],
 "iptv_unhide": ["Show again", "Réafficher", "Mostrar de nuevo", "Wieder zeigen", "Mostra di nuovo", "Weer tonen", "Mostrar de novo"],
 "action_close": ["Close", "Fermer", "Cerrar", "Schließen", "Chiudi", "Sluiten", "Fechar"],
+"cd_fullscreen": ["Full screen", "Plein écran", "Pantalla completa", "Vollbild", "Schermo intero", "Volledig scherm", "Tela cheia"],
+"cd_fullscreen_exit": ["Exit full screen", "Quitter le plein écran", "Salir de pantalla completa", "Vollbild beenden", "Esci da schermo intero", "Volledig scherm sluiten", "Sair da tela cheia"],
+"phone_play_here": ["Play on this phone", "Lire sur ce téléphone", "Reproducir en este móvil", "Auf diesem Handy abspielen", "Riproduci su questo telefono", "Afspelen op deze telefoon", "Reproduzir neste celular"],
+"phone_watch_tv": ["Watch on the TV", "Regarder sur la télé", "Ver en la TV", "Auf dem Fernseher ansehen", "Guarda sulla TV", "Kijken op de tv", "Assistir na TV"],
+"phase_on_phone": ["On this phone", "Sur ce téléphone", "En este móvil", "Auf diesem Handy", "Su questo telefono", "Op deze telefoon", "Neste celular"],
 "iptv_title": ["Channel lists", "Listes de chaînes", "Listas de canales", "Senderlisten", "Liste di canali", "Zenderlijsten", "Listas de canais"],
 "iptv_intro": [
  "A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.",

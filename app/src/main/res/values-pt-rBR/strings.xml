@@ -254,6 +254,11 @@
     <string name="iptv_hidden_title">Canais ocultos</string>
     <string name="iptv_unhide">Mostrar de novo</string>
     <string name="action_close">Fechar</string>
+    <string name="cd_fullscreen">Tela cheia</string>
+    <string name="cd_fullscreen_exit">Sair da tela cheia</string>
+    <string name="phone_play_here">Reproduzir neste celular</string>
+    <string name="phone_watch_tv">Assistir na TV</string>
+    <string name="phase_on_phone">Neste celular</string>
     <string name="iptv_title">Listas de canais</string>
     <string name="iptv_intro">Uma lista de canais (lista M3U ou IPTV) reúne canais de TV em um só link. Cole o endereço ou abra o arquivo: aqui você encontra todos os canais, com o logotipo.</string>
     <string name="iptv_url_hint">Endereço da lista (.m3u)</string>

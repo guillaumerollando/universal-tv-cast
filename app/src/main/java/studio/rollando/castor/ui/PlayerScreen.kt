@@ -127,7 +127,8 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        if (film) FilmHeader(state)
+        if (state.onPhone) PhoneVideo(state)
+        else if (film) FilmHeader(state)
         else if (state.live) ChannelHeader(state)
         // « Affiche » : grand cadre qui dit ce qui se passe sur la télé.
         else Box(
@@ -158,6 +159,7 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
             }
         }
 
+        if (state.onPhone && (film || state.live)) Text(media.title, style = MaterialTheme.typography.titleLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
         if (!film && !state.live) Column {
             Text(media.title, style = MaterialTheme.typography.titleLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
             media.host?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant) }
@@ -207,34 +209,29 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
 
         if (!state.active) {
             Button(
-                onClick = { if (state.renderer == null) onChooseTv() else Castor.cast() },
+                onClick = { if (state.renderer == null && !state.onPhone) onChooseTv() else Castor.cast() },
                 enabled = state.phase != Phase.LOADING,
                 modifier = Modifier.fillMaxWidth().height(56.dp),
             ) {
                 Icon(Icons.Rounded.Cast, null)
                 Spacer(Modifier.width(10.dp))
-                Text(state.renderer?.let { stringResource(R.string.action_cast_to, it.name) } ?: stringResource(R.string.action_cast_pick),
+                Text(if (state.onPhone) stringResource(R.string.phone_play_here)
+                    else state.renderer?.let { stringResource(R.string.action_cast_to, it.name) } ?: stringResource(R.string.action_cast_pick),
                     maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }
 
         Progress(state)
         Controls(state)
-        // Finir l'épisode dans son lit : même vidéo, même endroit, sur le téléphone (la télé se met en pause).
-        val ctx = LocalContext.current
+        // Un seul écran pour les deux : sur la télé, ou sur ce téléphone (finir l'épisode dans son lit), au même endroit.
         OutlinedButton(
-            onClick = {
-                Castor.toPhone()?.let {
-                    studio.rollando.castor.cast.PhonePlayback.pending = it
-                    ctx.startActivity(Intent(ctx, studio.rollando.castor.cast.PhonePlayerActivity::class.java))
-                }
-            },
+            onClick = { if (state.onPhone) Castor.toTv() else Castor.toPhone() },
             enabled = state.phase != Phase.LOADING,
             modifier = Modifier.fillMaxWidth().height(52.dp),
         ) {
-            Icon(Icons.Rounded.Smartphone, null)
+            Icon(if (state.onPhone) Icons.Rounded.Cast else Icons.Rounded.Smartphone, null)
             Spacer(Modifier.width(10.dp))
-            Text(stringResource(R.string.phone_watch))
+            Text(stringResource(if (state.onPhone) R.string.phone_watch_tv else R.string.phone_watch))
         }
         // Direct : pas de sous-titres à régler ; à la place, de quoi zapper. Le mode de lecture des listes HLS
         // (flux continu ou non) se règle seulement dans les Réglages.
@@ -321,7 +318,7 @@ private fun phaseLabel(s: CastState): String = stringResource(
 )
 
 @Composable
-private fun Progress(s: CastState) {
+internal fun Progress(s: CastState) {
     if (s.live) { LiveBar(s); return }
     var dragging by remember { mutableStateOf(false) }
     var dragValue by remember { mutableFloatStateOf(0f) }
@@ -430,7 +427,7 @@ private fun LiveBar(s: CastState) {
 }
 
 @Composable
-private fun Controls(s: CastState) {
+internal fun Controls(s: CastState) {
     // Pendant le chargement ou l'envoi, lecture, pause et ±10 s ne font rien : un seul bouton, pour annuler.
     if (s.phase == Phase.LOADING || s.phase == Phase.SENDING) {
         Box(Modifier.fillMaxWidth().height(80.dp), contentAlignment = Alignment.Center) {
@@ -442,7 +439,7 @@ private fun Controls(s: CastState) {
         }
         return
     }
-    val enabled = s.renderer != null && s.phase != Phase.LOADING
+    val enabled = (s.renderer != null || s.onPhone) && s.phase != Phase.LOADING
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
         FilledTonalIconButton(onClick = { Castor.skip(-10.0) }, enabled = enabled && s.active && (!s.live || s.continuous), modifier = Modifier.size(56.dp)) {
             Icon(Icons.Rounded.Replay10, stringResource(R.string.cd_rewind), Modifier.size(28.dp))

@@ -81,6 +81,11 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
+    override fun onStop() {
+        super.onStop()
+        studio.rollando.castor.cast.Castor.appHidden()
+    }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         handle(intent)
@@ -101,7 +106,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     @android.annotation.SuppressLint("RestrictedApi") // faux positif connu : surcharge publique d’Activity
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         val s = Castor.state.value
-        if (s.active && (s.renderer?.rcUrl != null || s.renderer?.cast == true) &&
+        if (s.active && !s.onPhone && (s.renderer?.rcUrl != null || s.renderer?.cast == true) &&
             (event.keyCode == KeyEvent.KEYCODE_VOLUME_UP || event.keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
         ) {
             if (event.action == KeyEvent.ACTION_DOWN) Castor.changeVolume(if (event.keyCode == KeyEvent.KEYCODE_VOLUME_UP) 2 else -2)

@@ -758,3 +758,15 @@ fait toute seule.
   barre visent le moment du programme vu à l'instant de l'appui (le temps de l'attente est rattrapé).
 - LiveBuffer : « direct » = 3 morceaux avant le plus récent, pour startFor comme pour la plage disponible (cohérents).
 - Émulateur (fausse télé, Africa 24 English) : pause 10 s → −0:11 ; reprise stable −0:15 ; −10 → −0:27 stable, flux demandé start=26.
+
+## 2026-11-26 — Un seul écran de lecture, télé ou téléphone
+- PhonePlayerActivity supprimée. cast/PhoneEngine.kt : un ExoPlayer pour l'appli ; CastState.onPhone. castAt() bascule sur
+  phonePlay() quand onPhone : reprise, déplacements du direct, chaîne suivante, zapping passent tous par le même chemin.
+- Direct sur téléphone : lu depuis l'enregistrement du relais (/ts/…/stream.ts?start=N, ProgressiveMediaSource) →
+  pause, ±10 s, barre, « Revenir au direct » identiques à la télé (même LiveClock). Vidéo : lue à sa source (en-têtes,
+  son séparé, sous-titres de l'appli).
+- Écran de lecture : la vidéo à la place du grand cadre, bouton plein écran ; téléphone tourné → plein écran (commandes
+  habituelles en surimpression, un appui les montre/cache). « Regarder sur le téléphone » ↔ « Regarder sur la télé »,
+  au même endroit (le passage télé → téléphone garde l'enregistrement du direct). L'appli cachée → pause.
+- Émulateur : Africa 24 English sur téléphone : pause 10 s → −0:12 ; −10 → −0:26 (start=26) ; plein écran OK ;
+  retour télé → start=26, −0:27.

@@ -225,6 +225,9 @@ fun CastorApp() {
     }
     }
 
+    // Lecture sur le téléphone, téléphone tourné : la vidéo en plein écran.
+    val landscape = androidx.compose.ui.platform.LocalConfiguration.current.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
+    if (state.onPhone && landscape && tab == Tab.PLAYER && Nav.iptv.collectAsState().value == null) PhoneFullscreen(state)
     // Page de détail « Chaînes » : plein écran, sans l'en-tête ni la barre d'onglets de l'appli.
     val iptvOpen by Nav.iptv.collectAsState()
     if (iptvOpen != null) IptvScreen(onClose = { Nav.iptv.value = null })

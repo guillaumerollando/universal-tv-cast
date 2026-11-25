@@ -72,6 +72,8 @@ data class CastState(
     /** Direct : retard voulu sur le direct (secondes) et ce que le flux garde en arrière. */
     val liveBehind: Double = 0.0,
     val liveWindow: Double = 0.0,
+    /** La lecture se fait sur ce téléphone (dans l'écran de lecture) plutôt que sur la télé. */
+    val onPhone: Boolean = false,
 ) {
     val active: Boolean get() = phase in setOf(Phase.SENDING, Phase.BUFFERING, Phase.PLAYING, Phase.PAUSED)
 }
@@ -126,6 +128,7 @@ object Castor {
         CastControl.init(app)
         CastControl.onDevices = { list -> castDevices = list; publish(allDevices()) }
         CastControl.onFinished = { onMediaEnded() }
+        PhoneEngine.onStatus = { st -> if (_state.value.onPhone) onPhoneStatus(st) }
         // Avancement noté toutes les 15 s : « Reprendre » saura ce qui est fini.
         scope.launch {
             var last = 0L
@@ -376,7 +379,7 @@ object Castor {
         loadSubtitle()
         _state.update { it.copy(phase = Phase.IDLE) }
         if (autoCast) {
-            if (_state.value.renderer != null) castAt(media.startSec)
+            if (_state.value.renderer != null || _state.value.onPhone) castAt(media.startSec)
             else {
                 pendingCast = true
                 _state.update { it.copy(notice = Notice(R.string.notice_pick_tv)) }
@@ -397,23 +400,72 @@ object Castor {
         Library.setRecentImage(page, image)
     }
 
-    /** Ce qu'il faut au lecteur du téléphone pour reprendre la vidéo en cours, au même endroit. */
-    class PhoneSession(val media: Media, val startSec: Double, val subtitle: ByteArray?, val hls: Boolean, val live: Boolean = false)
-
     /**
-     * « Regarder sur le téléphone » : la télé s'arrête sur l'écran d'attente, le téléphone reprend au même
-     * endroit, avec les mêmes sous-titres (décalage compris).
+     * « Regarder sur ce téléphone » : la télé s'arrête sur l'écran d'attente, le téléphone reprend au même endroit
+     * (même moment du direct), dans l'écran de lecture de l'appli. Une seule lecture à la fois.
      */
-    fun toPhone(): PhoneSession? {
+    fun toPhone() {
         val s = _state.value
-        val m = s.media ?: return null
-        if (s.slides != null) return null
-        val at = if (s.active || s.position > 1) s.position else m.startSec
-        // Une seule lecture à la fois : la télé s'arrête (écran d'attente), même si elle était encore en train
-        // de charger la vidéo — sinon elle démarrait de son côté pendant que le téléphone lisait.
+        val m = s.media ?: return
+        if (s.slides != null || s.onPhone) return
+        val at = if (s.live) currentBehind() else if (s.active || s.position > 1) s.position else m.startSec
         pendingCast = false
-        if (s.active || s.phase == Phase.LOADING || s.phase == Phase.SENDING) stop()
-        return PhoneSession(m, if (s.live) 0.0 else at, proxy.subtitle, s.isHls, s.live)
+        if (s.active || s.phase == Phase.LOADING || s.phase == Phase.SENDING) stop(keepRecording = true)
+        exec {
+            _state.update { it.copy(onPhone = true, notice = null) }
+            castAt(at)
+        }
+    }
+
+    /** « Regarder sur la télé » depuis le téléphone : la télé reprend au même endroit. */
+    fun toTv() {
+        val s = _state.value
+        if (!s.onPhone) return
+        val pos = if (s.live) currentBehind() else PhoneEngine.position
+        PhoneEngine.stop()
+        _state.update { it.copy(onPhone = false, phase = Phase.IDLE) }
+        resumeOnTv(pos)
+    }
+
+    /** L'appli passe en arrière-plan : la lecture sur le téléphone se met en pause (pas de son caché). */
+    fun appHidden() {
+        val s = _state.value
+        if (s.onPhone && (s.phase == Phase.PLAYING || s.phase == Phase.BUFFERING)) togglePlay()
+    }
+
+    /** Lance (ou relance, après un déplacement) la lecture sur le téléphone. */
+    private fun phonePlay(start: Double) {
+        val s = _state.value
+        val m = s.media ?: return
+        pollJob?.cancel()
+        _state.update {
+            it.copy(phase = Phase.SENDING, notice = null, idle = false,
+                liveBehind = if (it.live) start else it.liveBehind, position = if (it.live) 0.0 else start)
+        }
+        // Direct : depuis l'enregistrement du téléphone (comme la télé), pour pouvoir mettre en pause et revenir.
+        val liveUrl = if (s.live && s.isHls && m.audioUrl == null && remoteId != null)
+            "${proxy.baseUrl()}/ts/$remoteId/stream.${if (fmp4) "mp4" else "ts"}?start=${start.toLong()}" else null
+        if (s.live) liveClock.start(start)
+        PhoneEngine.play(app, m, start, proxy.subtitle, s.isHls, liveUrl)
+    }
+
+    private fun onPhoneStatus(st: PhoneEngine.Status) {
+        val s = _state.value
+        if (st.error) {
+            _state.update { it.copy(phase = Phase.STOPPED, notice = Notice(R.string.phone_error, error = true)) }
+            return
+        }
+        if (st.ended && !s.live) s.media?.let { Library.markFinished(it.url) }
+        val behind = if (s.live) liveClock.update(st.phase == Phase.PLAYING) else s.liveBehind
+        val window = if (s.live) liveRecording()?.second ?: s.liveWindow else s.liveWindow
+        _state.update {
+            it.copy(
+                phase = if (it.phase == Phase.SENDING && st.phase == Phase.IDLE) it.phase else st.phase,
+                position = if (it.live) 0.0 else st.position,
+                duration = if (it.live) 0.0 else if (st.duration > 0) st.duration else it.duration,
+                liveBehind = behind, liveWindow = window,
+            )
+        }
     }
 
     /** Retour du téléphone vers la télé : la vidéo y reprend là où le téléphone s'est arrêté. */
@@ -873,6 +925,8 @@ object Castor {
     @Volatile private var lastCastStart = 0.0
 
     private suspend fun castAt(start: Double, forceDlna: Boolean = false, paused: Boolean = false, keepRetry: Boolean = false) {
+        // Lecture sur le téléphone : même demande (reprise, déplacement dans le direct, chaîne suivante…), autre écran.
+        if (_state.value.onPhone) { phonePlay(start); return }
         if (!keepRetry) { liveRetried = false; startRetried = false }
         lastCastStart = start
         val chosen = _state.value.renderer ?: throw NoTv()
@@ -1212,6 +1266,14 @@ object Castor {
 
     private suspend fun togglePlayNow() {
         val s = _state.value
+        if (s.onPhone) {
+            when (s.phase) {
+                Phase.PLAYING, Phase.BUFFERING -> { if (s.live) liveClock.update(true); PhoneEngine.pause() }
+                Phase.PAUSED -> { if (s.live) liveClock.update(false); PhoneEngine.resume() }
+                else -> castAt(if (s.phase == Phase.STOPPED && s.duration > 0 && s.position < s.duration - 5) s.position else 0.0)
+            }
+            return
+        }
         val r = target() ?: throw NoTv()
         when (s.phase) {
             Phase.PLAYING, Phase.BUFFERING -> {
@@ -1336,6 +1398,7 @@ object Castor {
 
     private suspend fun doSeek(target: Double) {
         val s = _state.value
+        if (s.onPhone) { PhoneEngine.seekTo(target); return }
         val r = target() ?: throw NoTv()
         if (r.cast) {
             CastControl.seek(r, target)
@@ -1498,8 +1561,14 @@ object Castor {
         stop()
     }
 
-    fun stop() = exec {
-        proxy.stopLive()
+    fun stop(keepRecording: Boolean = false) = exec {
+        // Passage télé → téléphone : l'enregistrement du direct continue (on garde de quoi revenir en arrière).
+        if (!keepRecording) proxy.stopLive()
+        if (_state.value.onPhone) {
+            PhoneEngine.stop()
+            _state.update { it.copy(phase = Phase.STOPPED) }
+            return@exec
+        }
         slideJob?.cancel()
         seekJob?.cancel()
         _state.update { it.copy(slides = it.slides?.copy(auto = false)) }

@@ -30,7 +30,7 @@ data class Recent(
     /** Page d'un site (pas une vidéo d'une autre appli). */
     val isWeb: Boolean get() = web
 
-    fun toMedia() = Media(url = url, title = title, mime = mime, headers = headers, pageUrl = pageUrl, posterUrl = poster, backdropUrl = poster, fileName = fileName,
+    fun toMedia() = Media(url = url, title = title, mime = mime, headers = headers, pageUrl = pageUrl, posterUrl = poster, backdropUrl = if (live) null else poster, fileName = fileName, channel = channel,
         startSec = if (finished || pos < 30) 0.0 else pos - 5)
 
     /** Avancement (0 à 1) si la vidéo est commencée et pas finie. */
@@ -183,7 +183,7 @@ object Library {
         val r00 = Recent(m.title, m.url, m.mime, m.headers, m.pageUrl, System.currentTimeMillis(),
             m.backdropUrl ?: m.posterUrl, m.fileName, m.season, m.episode, live = live) // image large : elle remplit la carte
         // Une chaîne garde le nom qu'on lui a donné.
-        val r0 = r00.copy(channel = _recents.value.firstOrNull { it.key == r00.key || it.url == r00.url }?.channel)
+        val r0 = r00.copy(channel = _recents.value.firstOrNull { it.key == r00.key || it.url == r00.url }?.channel ?: m.channel)
         // Même série : le nouvel épisode remplace l'ancien (et garde son image si celui-ci n'en a pas).
         val old = _recents.value.filter { it.key == r0.key || it.url == r0.url }
         val r = if (r0.poster == null) r0.copy(poster = old.firstNotNullOfOrNull { it.poster } ?: bookmarkFor(m.pageUrl ?: "")?.image) else r0

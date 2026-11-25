@@ -382,6 +382,31 @@ S = {
 "home_sites": ["My sites", "Mes sites", "Mis sitios", "Meine Seiten", "I miei siti", "Mijn sites", "Meus sites"],
 "home_cast_more": ["Cast something else", "Caster autre chose", "Enviar otra cosa", "Etwas anderes senden", "Trasmetti altro", "Iets anders casten", "Transmitir outra coisa"],
 "home_long_press_hint": ["Press and hold a card to remove it or keep it in bookmarks.", "Appui long sur une carte pour la retirer ou la garder en favori.", "Mantén pulsada una tarjeta para quitarla o guardarla en favoritos.", "Karte gedrückt halten, um sie zu entfernen oder als Lesezeichen zu behalten.", "Tieni premuta una scheda per rimuoverla o tenerla nei preferiti.", "Houd een kaart ingedrukt om ze te verwijderen of als bladwijzer te bewaren.", "Mantenha um cartão pressionado para removê-lo ou mantê-lo nos favoritos."],
+"iptv_title": ["Channel lists", "Listes de chaînes", "Listas de canales", "Senderlisten", "Liste di canali", "Zenderlijsten", "Listas de canais"],
+"iptv_intro": [
+ "A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.",
+ "Une liste de chaînes (liste M3U ou IPTV) regroupe des chaînes télé dans un seul lien. Colle son adresse ou ouvre le fichier : tu retrouves ici toutes ses chaînes, avec leur logo.",
+ "Una lista de canales (lista M3U o IPTV) reúne canales de TV en un solo enlace. Pega su dirección o abre el archivo: aquí tendrás todos sus canales, con su logotipo.",
+ "Eine Senderliste (M3U- oder IPTV-Liste) fasst TV-Sender in einem einzigen Link zusammen. Füge ihre Adresse ein oder öffne die Datei: Hier findest du alle Sender mit ihrem Logo.",
+ "Una lista di canali (lista M3U o IPTV) riunisce canali TV in un solo link. Incolla il suo indirizzo o apri il file: qui troverai tutti i canali, con il loro logo.",
+ "Een zenderlijst (M3U- of IPTV-lijst) bundelt tv-zenders in één link. Plak het adres of open het bestand: hier vind je alle zenders, met hun logo.",
+ "Uma lista de canais (lista M3U ou IPTV) reúne canais de TV em um só link. Cole o endereço ou abra o arquivo: aqui você encontra todos os canais, com o logotipo."],
+"iptv_url_hint": ["List address (.m3u)", "Adresse de la liste (.m3u)", "Dirección de la lista (.m3u)", "Adresse der Liste (.m3u)", "Indirizzo della lista (.m3u)", "Adres van de lijst (.m3u)", "Endereço da lista (.m3u)"],
+"iptv_import": ["Import", "Importer", "Importar", "Importieren", "Importa", "Importeren", "Importar"],
+"iptv_file": ["Open a file", "Ouvrir un fichier", "Abrir un archivo", "Datei öffnen", "Apri un file", "Bestand openen", "Abrir um arquivo"],
+"iptv_try_free": ["Try a free list", "Essayer une liste gratuite", "Probar una lista gratuita", "Kostenlose Liste ausprobieren", "Prova una lista gratuita", "Probeer een gratis lijst", "Experimentar uma lista gratuita"],
+"iptv_try_free_sub": ["Free-TV: free, official channels from around the world", "Free-TV : des chaînes gratuites et officielles du monde entier", "Free-TV: canales gratuitos y oficiales de todo el mundo", "Free-TV: kostenlose, offizielle Sender aus aller Welt", "Free-TV: canali gratuiti e ufficiali da tutto il mondo", "Free-TV: gratis, officiële zenders van over de hele wereld", "Free-TV: canais gratuitos e oficiais do mundo todo"],
+"iptv_search": ["Search a channel", "Chercher une chaîne", "Buscar un canal", "Sender suchen", "Cerca un canale", "Zender zoeken", "Procurar um canal"],
+"iptv_all": ["All", "Toutes", "Todos", "Alle", "Tutti", "Alle", "Todos"],
+"iptv_update": ["Update", "Mettre à jour", "Actualizar", "Aktualisieren", "Aggiorna", "Bijwerken", "Atualizar"],
+"iptv_remove": ["Remove this list", "Supprimer cette liste", "Eliminar esta lista", "Diese Liste entfernen", "Rimuovi questa lista", "Deze lijst verwijderen", "Remover esta lista"],
+"iptv_add": ["Add a list", "Ajouter une liste", "Añadir una lista", "Liste hinzufügen", "Aggiungi una lista", "Lijst toevoegen", "Adicionar uma lista"],
+"iptv_loading": ["Importing the list…", "Import de la liste…", "Importando la lista…", "Liste wird importiert…", "Importazione della lista…", "Lijst importeren…", "Importando a lista…"],
+"iptv_err_not_list": ["This link isn’t a channel list.", "Ce lien n’est pas une liste de chaînes.", "Este enlace no es una lista de canales.", "Dieser Link ist keine Senderliste.", "Questo link non è una lista di canali.", "Deze link is geen zenderlijst.", "Este link não é uma lista de canais."],
+"iptv_err_load": ["Couldn’t load the list. Check the address and your connection.", "Impossible de charger la liste. Vérifie l’adresse et ta connexion.", "No se pudo cargar la lista. Comprueba la dirección y tu conexión.", "Die Liste konnte nicht geladen werden. Prüfe die Adresse und deine Verbindung.", "Impossibile caricare la lista. Controlla l’indirizzo e la connessione.", "De lijst kon niet worden geladen. Controleer het adres en je verbinding.", "Não foi possível carregar a lista. Verifique o endereço e sua conexão."],
+"iptv_none_found": ["No channel found", "Aucune chaîne trouvée", "No se encontró ningún canal", "Kein Sender gefunden", "Nessun canale trovato", "Geen zender gevonden", "Nenhum canal encontrado"],
+"iptv_note": ["Channels come from the list you import: Universal TV Cast doesn’t provide any.", "Les chaînes viennent de la liste que tu importes : Universal TV Cast n’en fournit aucune.", "Los canales vienen de la lista que importas: Universal TV Cast no proporciona ninguno.", "Die Sender stammen aus der importierten Liste: Universal TV Cast stellt selbst keine bereit.", "I canali provengono dalla lista che importi: Universal TV Cast non ne fornisce nessuno.", "De zenders komen uit de lijst die je importeert: Universal TV Cast levert er zelf geen.", "Os canais vêm da lista que você importa: o Universal TV Cast não fornece nenhum."],
+"link_dialog_note": ["A video, a live stream or a channel list (.m3u).", "Une vidéo, un direct ou une liste de chaînes (.m3u).", "Un vídeo, un directo o una lista de canales (.m3u).", "Ein Video, ein Livestream oder eine Senderliste (.m3u).", "Un video, una diretta o una lista di canali (.m3u).", "Een video, een livestream of een zenderlijst (.m3u).", "Um vídeo, uma transmissão ao vivo ou uma lista de canais (.m3u)."],
 "bookmark_site": ["Site", "Site", "Sitio", "Website", "Sito", "Site", "Site"],
 "bookmark_followed_series": ["“%1$s” followed: the bookmark will move to each episode you watch.", "« %1$s » suivie : le marque-page avancera tout seul à chaque épisode regardé.", "«%1$s» seguida: el marcador avanzará solo con cada episodio que veas.", "„%1$s“ wird verfolgt: Das Lesezeichen rückt mit jeder Folge mit.", "«%1$s» seguita: il segnalibro avanzerà da solo a ogni episodio.", "‘%1$s’ gevolgd: de bladwijzer schuift mee met elke aflevering.", "“%1$s” seguida: o marcador avança sozinho a cada episódio assistido."],
 "bookmark_added": ["“%1$s” added to favorites.", "« %1$s » ajouté aux favoris.", "«%1$s» añadido a favoritos.", "„%1$s“ zu Favoriten hinzugefügt.", "«%1$s» aggiunto ai preferiti.", "‘%1$s’ toegevoegd aan favorieten.", "“%1$s” adicionado aos favoritos."],
@@ -389,7 +414,10 @@ S = {
 }
 PLURALS = {"browser_found": [
  ("%d video", "%d videos"), ("%d vidéo", "%d vidéos"), ("%d vídeo", "%d vídeos"), ("%d Video", "%d Videos"),
- ("%d video", "%d video"), ("%d video", "%d video's"), ("%d vídeo", "%d vídeos")]}
+ ("%d video", "%d video"), ("%d video", "%d video's"), ("%d vídeo", "%d vídeos")],
+"iptv_count": [
+ ("%d channel", "%d channels"), ("%d chaîne", "%d chaînes"), ("%d canal", "%d canales"), ("%d Sender", "%d Sender"),
+ ("%d canale", "%d canali"), ("%d zender", "%d zenders"), ("%d canal", "%d canais")]}
 
 def esc(s):
     s = html.escape(s, quote=False)

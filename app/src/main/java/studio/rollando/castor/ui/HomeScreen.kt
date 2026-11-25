@@ -41,6 +41,7 @@ import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.FolderOpen
 import androidx.compose.material.icons.rounded.Link
+import androidx.compose.material.icons.rounded.LiveTv
 import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material.icons.rounded.PhotoLibrary
 import androidx.compose.material.icons.rounded.Public
@@ -126,7 +127,16 @@ fun HomeScreen(
                 }
             }
             if (channels.isNotEmpty()) {
-                item { SectionTitle(stringResource(R.string.home_channels), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
+                item {
+                    Row(Modifier.padding(start = 16.dp, end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                        SectionTitle(stringResource(R.string.home_channels), Modifier.weight(1f).semantics { heading() })
+                        TextButton(onClick = { Nav.iptv.value = "" }) {
+                            Text(stringResource(R.string.iptv_title))
+                            Spacer(Modifier.width(4.dp))
+                            Icon(Icons.AutoMirrored.Rounded.ArrowForward, null, Modifier.size(18.dp))
+                        }
+                    }
+                }
                 item {
                     LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         items(channels, key = { "c" + it.key }) { ch -> ChannelTile(ch, onBrowse) }
@@ -159,11 +169,7 @@ fun HomeScreen(
                         SmallTile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), Modifier.weight(1f), onPickPhotos)
                         SmallTile(Icons.Rounded.Link, stringResource(R.string.home_link_tile), Modifier.weight(1f), onPasteLink)
                     }
-                    TextButton(onClick = onPickFile, modifier = Modifier.align(Alignment.End)) {
-                        Icon(Icons.Rounded.FolderOpen, null, Modifier.size(18.dp))
-                        Spacer(Modifier.width(6.dp))
-                        Text(stringResource(R.string.home_files_other))
-                    }
+                    MoreSources(onPickFile)
                 }
             }
             item {
@@ -211,11 +217,7 @@ fun HomeScreen(
                     Tile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), stringResource(R.string.home_photos_short), Modifier.weight(1f), onPickPhotos)
                     Tile(Icons.Rounded.Link, stringResource(R.string.home_link), stringResource(R.string.home_link_short), Modifier.weight(1f), onPasteLink)
                 }
-                TextButton(onClick = onPickFile, modifier = Modifier.align(Alignment.End)) {
-                    Icon(Icons.Rounded.FolderOpen, null, Modifier.size(18.dp))
-                    Spacer(Modifier.width(6.dp))
-                    Text(stringResource(R.string.home_files_other))
-                }
+                MoreSources(onPickFile)
             }
         }
 
@@ -362,6 +364,7 @@ private fun ChannelTile(r: Recent, onBrowse: (String?) -> Unit) {
     val base = androidx.compose.ui.graphics.Color(known?.color ?: studio.rollando.castor.data.Channels.colorFor(name))
     var menu by remember { mutableStateOf(false) }
     var rename by remember { mutableStateOf(false) }
+    var logoOk by remember(r.poster) { mutableStateOf(false) }
     val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
     val renameLabel = stringResource(R.string.channel_rename)
     val removeLabel = stringResource(R.string.channel_remove)
@@ -390,13 +393,18 @@ private fun ChannelTile(r: Recent, onBrowse: (String?) -> Unit) {
         ) {
             Box(
                 Modifier.fillMaxWidth().aspectRatio(16f / 10f).clip(RoundedCornerShape(16.dp))
-                    .background(Brush.linearGradient(listOf(base, base.copy(alpha = 0.55f).compositeOver(androidx.compose.ui.graphics.Color.Black)))),
+                    .background(
+                        if (logoOk) Brush.linearGradient(listOf(androidx.compose.ui.graphics.Color(0xFF2A2D35), androidx.compose.ui.graphics.Color(0xFF1B1D22)))
+                        else Brush.linearGradient(listOf(base, base.copy(alpha = 0.55f).compositeOver(androidx.compose.ui.graphics.Color.Black)))),
                 contentAlignment = Alignment.Center,
             ) {
-                Text(name, color = androidx.compose.ui.graphics.Color.White, maxLines = 2, overflow = TextOverflow.Ellipsis,
+                if (!logoOk) Text(name, color = androidx.compose.ui.graphics.Color.White, maxLines = 2, overflow = TextOverflow.Ellipsis,
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
                     modifier = Modifier.padding(horizontal = 8.dp))
+                // Logo de la chaîne (venu d'une liste IPTV), s'il y en a un.
+                if (r.poster != null) RemoteImage(r.poster, Modifier.matchParentSize().padding(horizontal = 18.dp, vertical = 12.dp),
+                    contentScale = androidx.compose.ui.layout.ContentScale.Fit, maxSide = 300, onState = { logoOk = it })
                 // Petit point rouge « à l'antenne » dans le coin.
                 Box(Modifier.align(Alignment.TopEnd).padding(8.dp).size(8.dp).clip(CircleShape)
                     .background(androidx.compose.ui.graphics.Color(0xFFFF4D4D)))
@@ -405,7 +413,8 @@ private fun ChannelTile(r: Recent, onBrowse: (String?) -> Unit) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(Modifier.size(6.dp).clip(CircleShape).background(androidx.compose.ui.graphics.Color(0xFFFF4D4D)))
                 Spacer(Modifier.width(5.dp))
-                Text(liveLabel, style = MaterialTheme.typography.labelMedium, color = c.onSurfaceVariant, maxLines = 1)
+                Text(if (logoOk) name else liveLabel, style = MaterialTheme.typography.labelMedium, color = c.onSurfaceVariant,
+                    maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }
         androidx.compose.material3.DropdownMenu(expanded = menu, onDismissRequest = { menu = false }, shape = RoundedCornerShape(16.dp)) {
@@ -459,3 +468,19 @@ private fun Tile(icon: ImageVector, title: String, sub: String, modifier: Modifi
     }
 }
 
+/** Les autres sources, en liens discrets : listes de chaînes (IPTV) et fichiers d'autres applis. */
+@Composable
+private fun MoreSources(onPickFile: () -> Unit) {
+    Column(Modifier.fillMaxWidth()) {
+        TextButton(onClick = { Nav.iptv.value = "" }) {
+            Icon(Icons.Rounded.LiveTv, null, Modifier.size(18.dp))
+            Spacer(Modifier.width(6.dp))
+            Text(stringResource(R.string.iptv_title))
+        }
+        TextButton(onClick = onPickFile) {
+            Icon(Icons.Rounded.FolderOpen, null, Modifier.size(18.dp))
+            Spacer(Modifier.width(6.dp))
+            Text(stringResource(R.string.home_files_other))
+        }
+    }
+}

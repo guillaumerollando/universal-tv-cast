@@ -35,6 +35,8 @@ data class Media(
     val episode: Int? = null,
     /** Son servi à part de l'image (liste HLS), recollé par le relais. */
     val audioUrl: String? = null,
+    /** Nom de la chaîne, quand elle vient d'une liste IPTV. */
+    val channel: String? = null,
 ) {
     /** La vidéo est servie par une autre appli du téléphone (Stremio et son serveur local…). */
     val fromPhoneApp: Boolean get() = runCatching { Uri.parse(url).host }.getOrNull()

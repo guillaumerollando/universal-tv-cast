@@ -238,6 +238,24 @@
     <string name="home_sites">Mijn sites</string>
     <string name="home_cast_more">Iets anders casten</string>
     <string name="home_long_press_hint">Houd een kaart ingedrukt om ze te verwijderen of als bladwijzer te bewaren.</string>
+    <string name="iptv_title">Zenderlijsten</string>
+    <string name="iptv_intro">Een zenderlijst (M3U- of IPTV-lijst) bundelt tv-zenders in één link. Plak het adres of open het bestand: hier vind je alle zenders, met hun logo.</string>
+    <string name="iptv_url_hint">Adres van de lijst (.m3u)</string>
+    <string name="iptv_import">Importeren</string>
+    <string name="iptv_file">Bestand openen</string>
+    <string name="iptv_try_free">Probeer een gratis lijst</string>
+    <string name="iptv_try_free_sub">Free-TV: gratis, officiële zenders van over de hele wereld</string>
+    <string name="iptv_search">Zender zoeken</string>
+    <string name="iptv_all">Alle</string>
+    <string name="iptv_update">Bijwerken</string>
+    <string name="iptv_remove">Deze lijst verwijderen</string>
+    <string name="iptv_add">Lijst toevoegen</string>
+    <string name="iptv_loading">Lijst importeren…</string>
+    <string name="iptv_err_not_list">Deze link is geen zenderlijst.</string>
+    <string name="iptv_err_load">De lijst kon niet worden geladen. Controleer het adres en je verbinding.</string>
+    <string name="iptv_none_found">Geen zender gevonden</string>
+    <string name="iptv_note">De zenders komen uit de lijst die je importeert: Universal TV Cast levert er zelf geen.</string>
+    <string name="link_dialog_note">Een video, een livestream of een zenderlijst (.m3u).</string>
     <string name="bookmark_site">Site</string>
     <string name="bookmark_followed_series">‘%1$s’ gevolgd: de bladwijzer schuift mee met elke aflevering.</string>
     <string name="bookmark_added">‘%1$s’ toegevoegd aan favorieten.</string>
@@ -245,5 +263,9 @@
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video\'s</item>
+    </plurals>
+    <plurals name="iptv_count">
+        <item quantity="one">%d zender</item>
+        <item quantity="other">%d zenders</item>
     </plurals>
 </resources>

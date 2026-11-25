@@ -668,3 +668,9 @@ fait toute seule.
 - Cause : la Philips rate parfois le premier envoi (vu en quittant l'écran d'attente). Correctif : si la télé n'a jamais lu et est arrêtée après le délai de grâce (12 s), la vidéo est renvoyée une fois, à la même position (vidéo ou direct). Fausse télé : option FAKE_DROPFIRST=1 qui reproduit ça ; vérifié (abandon à 21:27:02, renvoi à 21:27:14, lecture).
 - Chaînes connues : de ~35 à ~150 (TNT, jeunesse, musique, sport, Belgique, Suisse, Québec, Luxembourg, Monaco, Afrique francophone, info internationale), dans `data/Channels.kt`. Reconnaissance sans accents, « France 2 » / « france-2 » / « france2 » (mots collés deux ou trois à la suite), « Canal+ ». Mots-clés trop courants resserrés (histoiretv, museumtv, tracetv…). Noms et couleurs utilisés seulement pour un direct (notification comprise). ChannelsTest (adresses réelles des flux testés, titres, faux positifs).
 - Public international (demande de Guillaume) : chaînes du monde ajoutées (Royaume-Uni, Irlande, États-Unis, Allemagne, Autriche, Espagne, Italie, Portugal, Brésil, Pays-Bas, nordiques, Europe de l'Est, Grèce, Turquie, monde arabe, Asie, Océanie, Amérique latine, Afrique, info/sport internationaux). Mots-clés ambigus resserrés (nos, hr, tn, welt, record, history…) ; noms précis avant les généraux (ABC News avant ABC). Tests élargis (BBC One, Das Erste, Rai News 24, Antena 3, NHK World, CNN en Español… et faux positifs).
+
+## 2026-11-25 (nuit) — Listes de chaînes (IPTV)
+- Import d'une liste M3U par adresse (y compris collée dans « Lien ») ou par fichier ; Free-TV proposée pour essayer.
+- Écran « Listes de chaînes » : recherche sans accents, filtres par groupe (pays du téléphone d'abord), logos.
+- Les liens YouTube/Twitch des listes sont écartés ; User-Agent/Referer de la liste repris.
+- Une chaîne regardée apparaît dans « Chaînes » avec son logo. Listes en ligne remises à jour une fois par jour.

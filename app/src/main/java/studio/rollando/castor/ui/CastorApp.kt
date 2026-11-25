@@ -77,6 +77,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import kotlinx.coroutines.launch
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -112,6 +113,8 @@ object Nav {
     val help = MutableStateFlow(false)
     /** Demande d'ouvrir le choix de la télé (depuis l'aide). */
     val tvs = MutableStateFlow(false)
+    /** Écran des listes de chaînes ouvert : id de la liste à montrer ("" : la première). */
+    val iptv = MutableStateFlow<String?>(null)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -219,6 +222,8 @@ fun CastorApp() {
     }
     }
 
+    val iptvOpen by Nav.iptv.collectAsState()
+    iptvOpen?.let { id -> IptvScreen(onClose = { Nav.iptv.value = null }, startWith = id.ifEmpty { null }) }
     if (showTvs) TvSheet(onDismiss = { showTvs = false })
     if (showSettings) SettingsSheet(onDismiss = { showSettings = false })
     val showHelp by Nav.help.collectAsState()
@@ -347,26 +352,55 @@ private fun TvSheet(onDismiss: () -> Unit) {
 
 @Composable
 private fun LinkDialog(onDismiss: () -> Unit) {
+    val ctx = LocalContext.current
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
     var text by rememberSaveable { mutableStateOf("") }
-    val valid = text.trim().startsWith("http")
-    fun go() {
-        if (!valid) return
-        val url = text.trim()
+    var busy by remember { mutableStateOf(false) }
+    var error by remember { mutableStateOf<String?>(null) }
+    val errLoad = stringResource(R.string.iptv_err_load)
+    val valid = text.trim().startsWith("http") && !busy
+    fun cast(url: String) {
         Castor.open(Media(url = url, title = Uri.decode(url.substringBefore('?').substringAfterLast('/')).ifBlank { url }))
         Nav.tab.value = Tab.PLAYER
         onDismiss()
+    }
+    fun go() {
+        if (!valid) return
+        val url = text.trim()
+        // Fichier vidéo évident : on l'envoie tout de suite. Sinon, on regarde d'abord si c'est une liste de chaînes.
+        if (studio.rollando.castor.net.Mime.ext(url) in setOf("mp4", "mkv", "webm", "avi", "mov", "ts", "mp3", "m4v", "flv")) return cast(url)
+        busy = true
+        scope.launch {
+            if (studio.rollando.castor.data.IptvStore.looksLikeList(url)) {
+                runCatching { studio.rollando.castor.data.IptvStore.import(ctx, url) }
+                    .onSuccess { Nav.iptv.value = it.id; onDismiss() }
+                    .onFailure { error = errLoad; busy = false }
+            } else cast(url)
+        }
     }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.link_dialog_title)) },
         text = {
-            OutlinedTextField(
-                value = text, onValueChange = { text = it }, singleLine = true,
-                placeholder = { Text("https://…") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri, imeAction = ImeAction.Go),
-                keyboardActions = KeyboardActions(onGo = { go() }),
-                modifier = Modifier.fillMaxWidth(),
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedTextField(
+                    value = text, onValueChange = { text = it; error = null }, singleLine = true,
+                    placeholder = { Text("https://…") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri, imeAction = ImeAction.Go),
+                    keyboardActions = KeyboardActions(onGo = { go() }),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                when {
+                    busy -> Row(verticalAlignment = Alignment.CenterVertically) {
+                        androidx.compose.material3.CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp)
+                        Spacer(Modifier.width(10.dp))
+                        Text(stringResource(R.string.iptv_loading), style = MaterialTheme.typography.bodyMedium)
+                    }
+                    error != null -> Text(error!!, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
+                    else -> Text(stringResource(R.string.link_dialog_note), style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
         },
         confirmButton = { TextButton(onClick = ::go, enabled = valid) { Text(stringResource(R.string.action_cast)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },

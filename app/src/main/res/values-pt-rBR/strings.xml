@@ -238,6 +238,24 @@
     <string name="home_sites">Meus sites</string>
     <string name="home_cast_more">Transmitir outra coisa</string>
     <string name="home_long_press_hint">Mantenha um cartão pressionado para removê-lo ou mantê-lo nos favoritos.</string>
+    <string name="iptv_title">Listas de canais</string>
+    <string name="iptv_intro">Uma lista de canais (lista M3U ou IPTV) reúne canais de TV em um só link. Cole o endereço ou abra o arquivo: aqui você encontra todos os canais, com o logotipo.</string>
+    <string name="iptv_url_hint">Endereço da lista (.m3u)</string>
+    <string name="iptv_import">Importar</string>
+    <string name="iptv_file">Abrir um arquivo</string>
+    <string name="iptv_try_free">Experimentar uma lista gratuita</string>
+    <string name="iptv_try_free_sub">Free-TV: canais gratuitos e oficiais do mundo todo</string>
+    <string name="iptv_search">Procurar um canal</string>
+    <string name="iptv_all">Todos</string>
+    <string name="iptv_update">Atualizar</string>
+    <string name="iptv_remove">Remover esta lista</string>
+    <string name="iptv_add">Adicionar uma lista</string>
+    <string name="iptv_loading">Importando a lista…</string>
+    <string name="iptv_err_not_list">Este link não é uma lista de canais.</string>
+    <string name="iptv_err_load">Não foi possível carregar a lista. Verifique o endereço e sua conexão.</string>
+    <string name="iptv_none_found">Nenhum canal encontrado</string>
+    <string name="iptv_note">Os canais vêm da lista que você importa: o Universal TV Cast não fornece nenhum.</string>
+    <string name="link_dialog_note">Um vídeo, uma transmissão ao vivo ou uma lista de canais (.m3u).</string>
     <string name="bookmark_site">Site</string>
     <string name="bookmark_followed_series">“%1$s” seguida: o marcador avança sozinho a cada episódio assistido.</string>
     <string name="bookmark_added">“%1$s” adicionado aos favoritos.</string>
@@ -245,5 +263,9 @@
     <plurals name="browser_found">
         <item quantity="one">%d vídeo</item>
         <item quantity="other">%d vídeos</item>
+    </plurals>
+    <plurals name="iptv_count">
+        <item quantity="one">%d canal</item>
+        <item quantity="other">%d canais</item>
     </plurals>
 </resources>

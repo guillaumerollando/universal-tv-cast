@@ -238,6 +238,24 @@
     <string name="home_sites">Meine Seiten</string>
     <string name="home_cast_more">Etwas anderes senden</string>
     <string name="home_long_press_hint">Karte gedrückt halten, um sie zu entfernen oder als Lesezeichen zu behalten.</string>
+    <string name="iptv_title">Senderlisten</string>
+    <string name="iptv_intro">Eine Senderliste (M3U- oder IPTV-Liste) fasst TV-Sender in einem einzigen Link zusammen. Füge ihre Adresse ein oder öffne die Datei: Hier findest du alle Sender mit ihrem Logo.</string>
+    <string name="iptv_url_hint">Adresse der Liste (.m3u)</string>
+    <string name="iptv_import">Importieren</string>
+    <string name="iptv_file">Datei öffnen</string>
+    <string name="iptv_try_free">Kostenlose Liste ausprobieren</string>
+    <string name="iptv_try_free_sub">Free-TV: kostenlose, offizielle Sender aus aller Welt</string>
+    <string name="iptv_search">Sender suchen</string>
+    <string name="iptv_all">Alle</string>
+    <string name="iptv_update">Aktualisieren</string>
+    <string name="iptv_remove">Diese Liste entfernen</string>
+    <string name="iptv_add">Liste hinzufügen</string>
+    <string name="iptv_loading">Liste wird importiert…</string>
+    <string name="iptv_err_not_list">Dieser Link ist keine Senderliste.</string>
+    <string name="iptv_err_load">Die Liste konnte nicht geladen werden. Prüfe die Adresse und deine Verbindung.</string>
+    <string name="iptv_none_found">Kein Sender gefunden</string>
+    <string name="iptv_note">Die Sender stammen aus der importierten Liste: Universal TV Cast stellt selbst keine bereit.</string>
+    <string name="link_dialog_note">Ein Video, ein Livestream oder eine Senderliste (.m3u).</string>
     <string name="bookmark_site">Website</string>
     <string name="bookmark_followed_series">„%1$s“ wird verfolgt: Das Lesezeichen rückt mit jeder Folge mit.</string>
     <string name="bookmark_added">„%1$s“ zu Favoriten hinzugefügt.</string>
@@ -245,5 +263,9 @@
     <plurals name="browser_found">
         <item quantity="one">%d Video</item>
         <item quantity="other">%d Videos</item>
+    </plurals>
+    <plurals name="iptv_count">
+        <item quantity="one">%d Sender</item>
+        <item quantity="other">%d Sender</item>
     </plurals>
 </resources>

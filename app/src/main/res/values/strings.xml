@@ -239,6 +239,24 @@
     <string name="home_sites">My sites</string>
     <string name="home_cast_more">Cast something else</string>
     <string name="home_long_press_hint">Press and hold a card to remove it or keep it in bookmarks.</string>
+    <string name="iptv_title">Channel lists</string>
+    <string name="iptv_intro">A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.</string>
+    <string name="iptv_url_hint">List address (.m3u)</string>
+    <string name="iptv_import">Import</string>
+    <string name="iptv_file">Open a file</string>
+    <string name="iptv_try_free">Try a free list</string>
+    <string name="iptv_try_free_sub">Free-TV: free, official channels from around the world</string>
+    <string name="iptv_search">Search a channel</string>
+    <string name="iptv_all">All</string>
+    <string name="iptv_update">Update</string>
+    <string name="iptv_remove">Remove this list</string>
+    <string name="iptv_add">Add a list</string>
+    <string name="iptv_loading">Importing the list…</string>
+    <string name="iptv_err_not_list">This link isn’t a channel list.</string>
+    <string name="iptv_err_load">Couldn’t load the list. Check the address and your connection.</string>
+    <string name="iptv_none_found">No channel found</string>
+    <string name="iptv_note">Channels come from the list you import: Universal TV Cast doesn’t provide any.</string>
+    <string name="link_dialog_note">A video, a live stream or a channel list (.m3u).</string>
     <string name="bookmark_site">Site</string>
     <string name="bookmark_followed_series">“%1$s” followed: the bookmark will move to each episode you watch.</string>
     <string name="bookmark_added">“%1$s” added to favorites.</string>
@@ -246,5 +264,9 @@
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videos</item>
+    </plurals>
+    <plurals name="iptv_count">
+        <item quantity="one">%d channel</item>
+        <item quantity="other">%d channels</item>
     </plurals>
 </resources>

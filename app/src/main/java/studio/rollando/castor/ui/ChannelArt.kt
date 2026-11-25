@@ -28,6 +28,16 @@ import kotlinx.coroutines.withContext
 import studio.rollando.castor.data.Channels
 import studio.rollando.castor.data.IptvStore
 
+/** Un seul format de tuile de chaîne dans toute l'appli : accueil, mosaïque, récentes, zapping. */
+object ChannelTiles {
+    val width = 96.dp
+    val gap = 4.dp
+    val corner = 12.dp
+    val logoPad = 9.dp
+    /** Marge sur les côtés d'une rangée ou de la mosaïque. */
+    val edge = 10.dp
+}
+
 /** Fond choisi pour chaque logo (couleur unie), repris par la notification. */
 object ChannelArtColors {
     val background = java.util.concurrent.ConcurrentHashMap<String, Int>()

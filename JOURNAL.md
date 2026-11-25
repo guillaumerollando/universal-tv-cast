@@ -742,3 +742,11 @@ fait toute seule.
   logo préféré), plus celles regardées par leur lien (Arte…). Plus de boutons de listes ni de « iptv-org · France · 230 ».
 - ⋮ : « Mes listes de chaînes » (nombre, mettre à jour, supprimer, ajouter) et « Chaînes masquées (N) » (réafficher
   une à une, ou tout). Le zapping puise aussi dans toutes les chaînes.
+
+## 2026-11-26 — Page Chaînes : écran de détail au style de l'appli, tuiles unifiées
+- Page « Chaînes » plein écran (pas d'en-tête d'appli ni de barre d'onglets : on y vient de l'accueil comme de la lecture),
+  avec le fond de l'appli (lueur verte en haut). Recherche et catégories en verre fumé, qui s'effacent en descendant et
+  reviennent en remontant ; catégories en pilules ambrées comme les onglets.
+- ChannelTiles (ChannelArt.kt) : un seul format de tuile (96 dp, écart 4 dp, coins 12 dp, marge du logo 9 dp) pour
+  l'accueil, la mosaïque, les récentes et le zapping.
+- Récentes de la page Chaînes : retrouvées aussi par le nom (chaîne présente dans deux listes).

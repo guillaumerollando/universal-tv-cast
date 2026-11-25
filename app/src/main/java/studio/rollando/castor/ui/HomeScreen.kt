@@ -138,7 +138,7 @@ fun HomeScreen(
                     }
                 }
                 item {
-                    LazyRow(contentPadding = PaddingValues(horizontal = 14.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    LazyRow(contentPadding = PaddingValues(horizontal = ChannelTiles.edge), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
                         items(channels, key = { "c" + it.key }) { ch -> ChannelTile(ch, onBrowse) }
                     }
                 }
@@ -368,7 +368,7 @@ private fun ChannelTile(r: Recent, onBrowse: (String?) -> Unit) {
     val liveLabel = stringResource(R.string.player_live)
     Box {
         Column(
-            Modifier.width(112.dp).clip(RoundedCornerShape(20.dp))
+            Modifier.width(ChannelTiles.width).clip(RoundedCornerShape(ChannelTiles.corner))
                 .combinedClickable(
                     role = Role.Button,
                     onClick = {
@@ -384,13 +384,12 @@ private fun ChannelTile(r: Recent, onBrowse: (String?) -> Unit) {
                         androidx.compose.ui.semantics.CustomAccessibilityAction(renameLabel) { rename = true; true },
                         androidx.compose.ui.semantics.CustomAccessibilityAction(removeLabel) { Library.removeRecent(r.key); true },
                     )
-                }
-                .padding(2.dp),
+                },
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Box(Modifier.fillMaxWidth().aspectRatio(16f / 10f).clip(RoundedCornerShape(16.dp))) {
+            Box(Modifier.fillMaxWidth().aspectRatio(16f / 10f).clip(RoundedCornerShape(ChannelTiles.corner))) {
                 ChannelArt(
-                    name = name, logo = r.poster, streamUrl = r.url, pad = 16.dp,
+                    name = name, logo = r.poster, streamUrl = r.url, pad = ChannelTiles.logoPad,
                     textStyle = MaterialTheme.typography.titleMedium.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
                     modifier = Modifier.matchParentSize(),
                 )

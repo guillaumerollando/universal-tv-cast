@@ -202,7 +202,7 @@ fun CastorApp() {
             }
             }
         },
-        bottomBar = { PillTabBar(tab, state.active, haze) { Nav.tab.value = it } },
+        bottomBar = { PillTabBar(tab, state.active, haze) { Nav.iptv.value = null; Nav.tab.value = it } },
     ) { padding ->
         // Les écrans défilent sous la barre d'onglets (sauf le navigateur) et finissent au-dessus d'elle.
         val bottom = padding.calculateBottomPadding()
@@ -225,8 +225,9 @@ fun CastorApp() {
     }
     }
 
+    // Page de détail « Chaînes » : plein écran, sans l'en-tête ni la barre d'onglets de l'appli.
     val iptvOpen by Nav.iptv.collectAsState()
-    iptvOpen?.let { id -> IptvScreen(onClose = { Nav.iptv.value = null }, startWith = id.ifEmpty { null }) }
+    if (iptvOpen != null) IptvScreen(onClose = { Nav.iptv.value = null })
     if (showTvs) TvSheet(onDismiss = { showTvs = false })
     if (showSettings) SettingsSheet(onDismiss = { showSettings = false })
     val showHelp by Nav.help.collectAsState()
@@ -531,7 +532,7 @@ internal fun Hidden(visible: Boolean, content: @Composable () -> Unit) {
  * très floutée, ou un dégradé vert sombre ; il se fond dans le fond de l'appli, sans bord net.
  */
 @Composable
-private fun Ambient(backdrop: String?) {
+internal fun Ambient(backdrop: String?) {
     val c = MaterialTheme.colorScheme
     androidx.compose.animation.Crossfade(backdrop, animationSpec = androidx.compose.animation.core.tween(600), label = "ambiance") { url ->
         Box(Modifier.fillMaxWidth().height(460.dp)) {

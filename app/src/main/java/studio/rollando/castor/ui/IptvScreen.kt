@@ -97,6 +97,17 @@ import studio.rollando.castor.data.Channels
 import studio.rollando.castor.data.Iptv
 import studio.rollando.castor.data.IptvStore
 import java.text.Normalizer
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.foundation.layout.offset
+import androidx.compose.ui.semantics.selected
+import dev.chrisbanes.haze.HazeStyle
+import dev.chrisbanes.haze.HazeTint
+import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.hazeSource
 
 /** Liste officielle de chaînes gratuites (Free-TV), proposée pour essayer sans rien chercher. */
 const val FREE_TV_LIST = "https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8"
@@ -160,7 +171,10 @@ fun IptvScreen(onClose: () -> Unit, startWith: String? = null) {
     LaunchedEffect(Unit) { IptvStore.refreshStale(ctx); refreshTick++ }
     val hiddenChannels = remember(all, hidden) { all.orEmpty().filter { it.url in hidden } }
 
-    Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+    // Page de détail plein écran, au style de l'appli : son fond sombre et sa lueur verte en haut.
+    Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background, contentColor = MaterialTheme.colorScheme.onBackground) {
+    Box(Modifier.fillMaxSize()) {
+        Ambient(null)
         Column(Modifier.fillMaxSize().statusBarsPadding().imePadding()) {
             Row(Modifier.fillMaxWidth().height(64.dp).padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = onClose) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.cd_back)) }
@@ -193,6 +207,7 @@ fun IptvScreen(onClose: () -> Unit, startWith: String? = null) {
             if (lists.isEmpty()) AddListPanel(busy, onImport = ::import, onPickFile = { pickFile.launch(arrayOf("*/*")) })
             else ChannelBrowser(all, onClose)
         }
+    }
     }
     if (adding) AlertDialog(
         onDismissRequest = { adding = false },
@@ -262,7 +277,7 @@ private fun AddListPanel(busy: Boolean, onImport: (String) -> Unit, onPickFile: 
     var url by rememberSaveable { mutableStateOf("") }
     val valid = url.trim().startsWith("http")
     Column(
-        (if (compact) Modifier else Modifier.verticalScroll(rememberScrollState()).padding(16.dp)).navigationBarsPadding(),
+        if (compact) Modifier else Modifier.verticalScroll(rememberScrollState()).padding(16.dp).navigationBarsPadding(),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         if (!compact) Text(stringResource(R.string.iptv_intro), style = MaterialTheme.typography.bodyLarge)
@@ -321,7 +336,10 @@ private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
     val recents by studio.rollando.castor.data.Library.recents.collectAsState()
     val recent = remember(all, recents, hidden) {
         val byUrl = all.associateBy { it.url }
-        recents.filter { it.live }.mapNotNull { byUrl[it.url] }.filter { it.url !in hidden }.distinctBy { it.url }.take(12)
+        // Par son flux, sinon par son nom (une chaîne présente dans deux listes n'en garde qu'un).
+        val byName = all.associateBy { fold(it.name).filter(Char::isLetterOrDigit) }
+        recents.filter { it.live }.mapNotNull { byUrl[it.url] ?: byName[fold(it.channelName).filter(Char::isLetterOrDigit)] }
+            .filter { it.url !in hidden }.distinctBy { it.url }.take(12)
     }
     val shown = remember(all, query, group, hidden) {
         val q = fold(query.trim())
@@ -331,57 +349,80 @@ private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
     LaunchedEffect(lastHidden) { if (lastHidden != null) { kotlinx.coroutines.delay(5000); lastHidden = null } }
     fun play(ch: Iptv.Channel) { playChannel(ch); onClose() }
     fun hide(ch: Iptv.Channel) { IptvStore.hide(ch.url); lastHidden = ch.url }
-    Box(Modifier.fillMaxSize()) {
-    Column(Modifier.fillMaxSize()) {
-        OutlinedTextField(
-            value = query, onValueChange = { query = it }, singleLine = true,
-            leadingIcon = { Icon(Icons.Rounded.Search, null) },
-            trailingIcon = { if (query.isNotEmpty()) IconButton(onClick = { query = "" }) { Icon(Icons.Rounded.Close, stringResource(R.string.cd_clear)) } },
-            placeholder = { Text(stringResource(R.string.iptv_search)) },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            shape = RoundedCornerShape(28.dp),
-            modifier = Modifier.fillMaxWidth().padding(16.dp, 8.dp),
-        )
-        if (groups.size > 1) LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            item { FilterChip(selected = group == null, onClick = { group = null }, label = { Text(stringResource(R.string.iptv_all)) }) }
-            items(groups) { g -> FilterChip(selected = group == g, onClick = { group = if (group == g) null else g }, label = { Text(g) }) }
+    // Recherche et catégories : elles s'effacent quand on descend dans la mosaïque et reviennent dès qu'on remonte.
+    val density = androidx.compose.ui.platform.LocalDensity.current
+    var headerPx by remember { mutableStateOf(0) }
+    var shift by remember { mutableStateOf(0f) }
+    val conn = remember {
+        object : androidx.compose.ui.input.nestedscroll.NestedScrollConnection {
+            override fun onPreScroll(available: androidx.compose.ui.geometry.Offset, source: androidx.compose.ui.input.nestedscroll.NestedScrollSource): androidx.compose.ui.geometry.Offset {
+                shift = (shift + available.y).coerceIn(-headerPx.toFloat(), 0f)
+                return androidx.compose.ui.geometry.Offset.Zero
+            }
         }
-        Spacer(Modifier.height(8.dp))
+    }
+    val headerDp = with(density) { headerPx.toDp() }
+    val glass = remember { dev.chrisbanes.haze.HazeState() }
+    val c = MaterialTheme.colorScheme
+    val gridState = androidx.compose.foundation.lazy.grid.rememberLazyGridState()
+    // Rien dessous tant qu'on est tout en haut : pas de verre fumé (pas de bandeau inutile).
+    val overContent by remember { androidx.compose.runtime.derivedStateOf { gridState.firstVisibleItemIndex > 0 || gridState.firstVisibleItemScrollOffset > 0 } }
+    Box(Modifier.fillMaxSize().nestedScroll(conn).clipToBounds()) {
+        Box(Modifier.fillMaxSize().hazeSource(glass)) {
         when {
-            channels == null -> Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
-            shown.isEmpty() -> Text(stringResource(R.string.iptv_none_found), modifier = Modifier.padding(16.dp),
-                color = MaterialTheme.colorScheme.onSurfaceVariant)
+            channels == null -> Box(Modifier.fillMaxWidth().padding(top = headerDp + 32.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+            shown.isEmpty() -> Text(stringResource(R.string.iptv_none_found), modifier = Modifier.padding(start = 16.dp, top = headerDp + 16.dp),
+                color = c.onSurfaceVariant)
             else -> LazyVerticalGrid(
                 columns = GridCells.Adaptive(84.dp),
+                state = gridState,
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(start = 10.dp, end = 10.dp, bottom = 96.dp),
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp),
+                contentPadding = PaddingValues(start = ChannelTiles.edge, end = ChannelTiles.edge, top = headerDp,
+                    bottom = 16.dp + androidx.compose.foundation.layout.WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()),
+                horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap),
+                verticalArrangement = Arrangement.spacedBy(ChannelTiles.gap),
             ) {
                 // Les chaînes qu'on regarde, en premier (sans recherche ni filtre en cours).
                 if (recent.isNotEmpty() && query.isBlank() && group == null) {
                     item(span = { GridItemSpan(maxLineSpan) }) {
-                        Text(stringResource(R.string.iptv_recent), style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.padding(4.dp, 4.dp).semantics { heading() })
+                        SectionTitle(stringResource(R.string.iptv_recent), Modifier.padding(horizontal = 6.dp).semantics { heading() })
                     }
                     item(span = { GridItemSpan(maxLineSpan) }) {
-                        LazyRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        LazyRow(horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
                             items(recent, key = { "r" + it.url }) { ch ->
-                                ChannelTile(ch, Modifier.width(96.dp), onClick = { play(ch) }, onHide = { hide(ch) }, onForget = {
+                                ChannelTile(ch, Modifier.width(ChannelTiles.width), onClick = { play(ch) }, onHide = { hide(ch) }, onForget = {
                                     recents.firstOrNull { it.url == ch.url }?.let { studio.rollando.castor.data.Library.removeRecent(it.key) }
                                 })
                             }
                         }
                     }
                     item(span = { GridItemSpan(maxLineSpan) }) {
-                        Text(stringResource(R.string.iptv_all_channels), style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.padding(4.dp, 12.dp, 4.dp, 0.dp).semantics { heading() })
+                        SectionTitle(stringResource(R.string.iptv_all_channels), Modifier.padding(start = 6.dp, end = 6.dp, top = 8.dp).semantics { heading() })
                     }
                 }
                 items(shown, key = { it.url }) { ch -> ChannelTile(ch, Modifier, onClick = { play(ch) }, onHide = { hide(ch) }) }
             }
         }
-    }
+        }
+        // En-tête en verre fumé, comme la barre d'onglets.
+        Column(
+            Modifier.fillMaxWidth()
+                .onSizeChanged { headerPx = it.height }
+                .offset { androidx.compose.ui.unit.IntOffset(0, shift.toInt()) }
+                .then(if (overContent) Modifier.hazeEffect(glass, HazeStyle(
+                    backgroundColor = c.background,
+                    tint = HazeTint(Color(0xFF12241F).copy(alpha = 0.78f)),
+                    blurRadius = 28.dp, noiseFactor = 0.04f,
+                    fallbackTint = HazeTint(Color(0xFF12241F).copy(alpha = 0.96f)),
+                )) else Modifier)
+                .padding(bottom = 10.dp),
+        ) {
+            SearchPill(query, { query = it })
+            if (groups.size > 1) LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                item { Pill(stringResource(R.string.iptv_all), group == null) { group = null } }
+                items(groups) { g -> Pill(g, group == g) { group = if (group == g) null else g } }
+            }
+        }
         // « Chaîne masquée · Annuler », quelques secondes.
         lastHidden?.let { url ->
             Surface(
@@ -396,6 +437,41 @@ private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
                     }
                 }
             }
+        }
+    }
+}
+
+/** Recherche en forme de pilule, comme la barre d'adresse du navigateur. */
+@Composable
+private fun SearchPill(query: String, onChange: (String) -> Unit) {
+    val c = MaterialTheme.colorScheme
+    androidx.compose.material3.TextField(
+        value = query, onValueChange = onChange, singleLine = true,
+        leadingIcon = { Icon(Icons.Rounded.Search, null) },
+        trailingIcon = { if (query.isNotEmpty()) IconButton(onClick = { onChange("") }) { Icon(Icons.Rounded.Close, stringResource(R.string.cd_clear)) } },
+        placeholder = { Text(stringResource(R.string.iptv_search)) },
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+        shape = RoundedCornerShape(50),
+        colors = androidx.compose.material3.TextFieldDefaults.colors(
+            focusedContainerColor = c.surfaceContainerHigh.copy(alpha = 0.9f), unfocusedContainerColor = c.surfaceContainerHigh.copy(alpha = 0.9f),
+            focusedIndicatorColor = Color.Transparent, unfocusedIndicatorColor = Color.Transparent,
+        ),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+    )
+}
+
+/** Filtre rapide, aux couleurs des onglets : ambré quand il est choisi. */
+@Composable
+private fun Pill(label: String, selected: Boolean, onClick: () -> Unit) {
+    val c = MaterialTheme.colorScheme
+    Surface(
+        onClick = onClick, shape = RoundedCornerShape(50),
+        color = if (selected) c.primary else c.surfaceContainerHigh.copy(alpha = 0.9f),
+        contentColor = if (selected) c.onPrimary else c.onSurfaceVariant,
+        modifier = Modifier.height(36.dp).semantics { this.selected = selected },
+    ) {
+        Box(Modifier.padding(horizontal = 14.dp), contentAlignment = Alignment.Center) {
+            Text(label, style = MaterialTheme.typography.labelLarge, maxLines = 1)
         }
     }
 }
@@ -445,12 +521,12 @@ fun ZapSection(media: Media) {
             }
         }
         if (suggestions.isNotEmpty()) {
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            LazyRow(horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
                 items(suggestions, key = { "z" + it.url }) { ch ->
                     ChannelArt(
-                        name = ch.name, logo = ch.logo, streamUrl = null, pad = 9.dp,
+                        name = ch.name, logo = ch.logo, streamUrl = null, pad = ChannelTiles.logoPad,
                         textStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold),
-                        modifier = Modifier.width(96.dp).aspectRatio(16f / 10f).clip(RoundedCornerShape(12.dp))
+                        modifier = Modifier.width(ChannelTiles.width).aspectRatio(16f / 10f).clip(RoundedCornerShape(ChannelTiles.corner))
                             .clickable(role = Role.Button, onClickLabel = ch.name) { playChannel(ch) }
                             .semantics { contentDescription = ch.name },
                     )
@@ -478,7 +554,7 @@ private fun ChannelTile(ch: Iptv.Channel, modifier: Modifier, onClick: () -> Uni
     val forgetLabel = stringResource(R.string.iptv_remove_recent)
     Box(modifier) {
         Column(
-            Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp))
+            Modifier.fillMaxWidth().clip(RoundedCornerShape(ChannelTiles.corner))
                 .combinedClickable(role = Role.Button, onClick = onClick, onLongClick = {
                     haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); menu = true
                 })
@@ -494,9 +570,9 @@ private fun ChannelTile(ch: Iptv.Channel, modifier: Modifier, onClick: () -> Uni
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             ChannelArt(
-                name = ch.name, logo = ch.logo, streamUrl = null, pad = 9.dp,
+                name = ch.name, logo = ch.logo, streamUrl = null, pad = ChannelTiles.logoPad,
                 textStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold),
-                modifier = Modifier.fillMaxWidth().aspectRatio(16f / 10f).clip(RoundedCornerShape(12.dp)),
+                modifier = Modifier.fillMaxWidth().aspectRatio(16f / 10f).clip(RoundedCornerShape(ChannelTiles.corner)),
             )
         }
         DropdownMenu(menu, onDismissRequest = { menu = false }, shape = RoundedCornerShape(16.dp)) {

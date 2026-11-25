@@ -93,6 +93,8 @@ class PhonePlayerActivity : ComponentActivity() {
     private var failed by mutableStateOf(false)
     /** Direct : en retard sur le direct (pause, retour en arrière) — le badge propose d'y revenir. */
     private var behindLive by mutableStateOf(false)
+    /** Retard sur le direct, en secondes (affiché « −1:24 »). */
+    private var liveDelay by mutableStateOf(0L)
     private val liveWatch = object : Runnable {
         override fun run() {
             val p = player
@@ -102,6 +104,7 @@ class PhonePlayerActivity : ComponentActivity() {
                 // retard que bien au-delà.
                 val target = p.currentMediaItem?.liveConfiguration?.targetOffsetMs?.takeIf { it != C.TIME_UNSET } ?: 30_000L
                 behindLive = !p.isPlaying || (offset != C.TIME_UNSET && offset > target + 15_000)
+                liveDelay = if (offset == C.TIME_UNSET) 0 else ((offset - target) / 1000).coerceAtLeast(0)
             }
             handler.postDelayed(this, 1000)
         }
@@ -129,6 +132,10 @@ class PhonePlayerActivity : ComponentActivity() {
                                 setShowSubtitleButton(true)
                                 setShowNextButton(false)
                                 setShowPreviousButton(false)
+                                // Direct : « 29:22 · 30:00 » (la fenêtre gardée par le flux) ne veut rien dire ; le retard
+                                // sur le direct est affiché dans le badge du haut.
+                                if (s.live) listOf(androidx.media3.ui.R.id.exo_time, androidx.media3.ui.R.id.exo_position, androidx.media3.ui.R.id.exo_duration)
+                                    .forEach { id -> findViewById<View>(id)?.visibility = View.GONE }
                                 setControllerVisibilityListener(PlayerView.ControllerVisibilityListener { v ->
                                     controlsVisible = v == View.VISIBLE
                                 })
@@ -163,7 +170,11 @@ class PhonePlayerActivity : ComponentActivity() {
                                             androidx.compose.foundation.shape.CircleShape))
                                         Spacer(Modifier.width(8.dp))
                                         Text(
-                                            if (behindLive) stringResource(R.string.live_back) else stringResource(R.string.player_live).uppercase(),
+                                            when {
+                                                !behindLive -> stringResource(R.string.player_live).uppercase()
+                                                liveDelay >= 5 -> "−%d:%02d · ".format(liveDelay / 60, liveDelay % 60) + stringResource(R.string.live_back)
+                                                else -> stringResource(R.string.live_back)
+                                            },
                                             color = Color.White, style = MaterialTheme.typography.labelLarge,
                                         )
                                     }

@@ -504,7 +504,13 @@ object Castor {
             }
         }
         if (!r.cast) {
-            replaceMedia(r, url, Dlna.didl(name, url, "image/jpeg", null, false))
+            // Photo suivante : on tente le changement direct (une seule commande) avant la pause préalable.
+            val meta = Dlna.didl(name, url, "image/jpeg", null, false)
+            try {
+                Dlna.setUri(r, url, meta)
+            } catch (e: TvError) {
+                replaceMedia(r, url, meta)
+            }
             runCatching { Dlna.play(r) }
         }
         via = if (r !== chosen) r else null

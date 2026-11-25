@@ -184,7 +184,7 @@
     <string name="slideshow_on">Presentación activa · una foto cada 6 s</string>
     <string name="slideshow_off">Presentación en pausa</string>
     <string name="settings_smooth_slides">Presentación fluida</string>
-    <string name="settings_smooth_slides_sub">Envía el álbum como un solo vídeo: sin pantalla negra entre fotos, con un fundido. Desactívalo si tu TV muestra las fotos con retraso.</string>
+    <string name="settings_smooth_slides_sub">Experimental. Envía el álbum como un solo vídeo en directo, con fundido entre fotos. Muchas TV lo muestran con retraso: déjalo desactivado si las fotos cambian lento.</string>
     <plurals name="browser_found">
         <item quantity="one">%d vídeo</item>
         <item quantity="other">%d vídeos</item>

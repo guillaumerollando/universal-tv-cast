@@ -185,7 +185,7 @@
     <string name="slideshow_on">Slideshow on · a photo every 6 s</string>
     <string name="slideshow_off">Slideshow paused</string>
     <string name="settings_smooth_slides">Smooth slideshow</string>
-    <string name="settings_smooth_slides_sub">Sends the album as one video: no black screen between photos, with a fade. Turn off if your TV shows the photos late.</string>
+    <string name="settings_smooth_slides_sub">Experimental. Sends the album as one live video, with a fade between photos. Many TVs show it late: leave off if photos change slowly.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videos</item>

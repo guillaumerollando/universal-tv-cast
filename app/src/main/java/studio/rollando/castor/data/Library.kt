@@ -38,7 +38,7 @@ object Library {
         _continuous.value = prefs.getBoolean("continuous", true)
         _shakeHelp.value = prefs.getBoolean("shake_help", true)
         _embedSubs.value = prefs.getBoolean("embed_subs", true)
-        _smoothSlides.value = prefs.getBoolean("smooth_slides", true)
+        _smoothSlides.value = prefs.getBoolean("smooth_slides_v2", false)
         _dismissedTips.value = prefs.getStringSet("tips_dismissed", emptySet()).orEmpty().toSet()
     }
 
@@ -60,10 +60,10 @@ object Library {
     val embedSubs: StateFlow<Boolean> = _embedSubs
     fun setEmbedSubs(on: Boolean) { _embedSubs.value = on; prefs.edit().putBoolean("embed_subs", on).apply() }
 
-    private val _smoothSlides = MutableStateFlow(true)
+    private val _smoothSlides = MutableStateFlow(false)
     /** Diaporama envoyé comme une seule vidéo (pas d'écran noir entre les photos). */
     val smoothSlides: StateFlow<Boolean> = _smoothSlides
-    fun setSmoothSlides(on: Boolean) { _smoothSlides.value = on; prefs.edit().putBoolean("smooth_slides", on).apply() }
+    fun setSmoothSlides(on: Boolean) { _smoothSlides.value = on; prefs.edit().putBoolean("smooth_slides_v2", on).apply() }
 
     private val _shakeHelp = MutableStateFlow(true)
     /** Secouer le téléphone ouvre l'aide. */

@@ -325,3 +325,22 @@ régler pendant la lecture puis mettre pause fait beaucoup d'actions d'un coup.
 - Cast : le lecteur accepte-t-il le HLS en direct sans piste son ?
 - Délai entre l'appui et la photo affichée (le flux en direct a un peu de retard, mais plus d'écran noir).
 - Batterie pendant un long diaporama.
+
+## 2026-11-25 (soir, 2) — Diaporama en flux : moins bien sur la Philips, retour au mode photo par photo
+**Retour du testeur** : avec le flux, l'album est plus lent qu'avant et pas fluide.
+**Constats** (journal du téléphone et réseau, en lecture seule) :
+- Le flux est passé par le **DLNA**. Le téléphone ne trouve **aucun appareil Google Cast**, alors que la télé
+  s'annonce bien en Cast sur le réseau (réponse mDNS `_googlecast._tcp`, ports 8008/8009, `eureka_info` lisible).
+  Les services Google publient une route, mais pas pour le lecteur standard de Google (`CC1AD845`) que
+  l'appli demande. Le Cast de cette Philips ne semble donc pas proposer ce lecteur.
+  Conséquence : chez le testeur, tout passe en DLNA, y compris les sous-titres (intégrés au MP4).
+- Le lecteur DLNA de la Philips met beaucoup de vidéo en réserve avant d'afficher un flux en direct, d'où le
+  retard. Sa liste de commandes (`avt.xml`) n'a pas `SetNextAVTransportURI` : impossible de lui faire préparer
+  la photo suivante à l'avance.
+
+**Fait**
+- « Diaporama fluide » est désactivé par défaut et marqué expérimental. On revient au mode photo par photo, et
+  on change de photo par une seule commande quand la télé l'accepte (avant : pause puis attente).
+- Tests 17/17, lint propre.
+**Piste** : le noir entre deux photos vient de la télé en DLNA. On ne pourra l'enlever qu'avec un lecteur à
+nous sur la télé : un récepteur Cast personnalisé (si le Cast de la Philips en accepte un) ou une appli Titan OS.

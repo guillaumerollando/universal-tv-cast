@@ -184,7 +184,7 @@
     <string name="slideshow_on">Diashow aan · elke 6 s een foto</string>
     <string name="slideshow_off">Diashow gepauzeerd</string>
     <string name="settings_smooth_slides">Vloeiende diashow</string>
-    <string name="settings_smooth_slides_sub">Stuurt het album als één video: geen zwart beeld tussen foto’s, met een overgang. Zet uit als je tv de foto’s te laat toont.</string>
+    <string name="settings_smooth_slides_sub">Experimenteel. Stuurt het album als één livevideo, met een overgang tussen foto’s. Veel tv’s tonen het met vertraging: laat uit als foto’s traag wisselen.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video\'s</item>

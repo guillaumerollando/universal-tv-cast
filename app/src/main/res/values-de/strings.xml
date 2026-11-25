@@ -184,7 +184,7 @@
     <string name="slideshow_on">Diashow läuft · alle 6 s ein Foto</string>
     <string name="slideshow_off">Diashow pausiert</string>
     <string name="settings_smooth_slides">Flüssige Diashow</string>
-    <string name="settings_smooth_slides_sub">Sendet das Album als ein Video: kein schwarzes Bild zwischen den Fotos, mit Überblendung. Schalte es aus, wenn dein Fernseher die Fotos verspätet zeigt.</string>
+    <string name="settings_smooth_slides_sub">Experimentell. Sendet das Album als ein Live-Video mit Überblendung. Viele Fernseher zeigen es verzögert: ausgeschaltet lassen, wenn die Fotos langsam wechseln.</string>
     <plurals name="browser_found">
         <item quantity="one">%d Video</item>
         <item quantity="other">%d Videos</item>

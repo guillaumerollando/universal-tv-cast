@@ -183,12 +183,17 @@ fun PhoneFullscreen(state: CastState) {
         if (loading && !controls) CircularProgressIndicator(Modifier.align(Alignment.Center), color = Color.White)
         AnimatedVisibility(controls, enter = fadeIn(), exit = fadeOut(), modifier = Modifier.fillMaxSize()) {
             Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.35f))) {
-                // En haut : le titre.
-                Text(
-                    state.media?.title.orEmpty(), color = Color.White, style = MaterialTheme.typography.titleMedium,
-                    maxLines = 1, overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.align(Alignment.TopStart).safeDrawingPadding().padding(horizontal = 24.dp, vertical = 14.dp),
-                )
+                // En haut : le logo de la chaîne (un film : son titre).
+                val m = state.media
+                Box(Modifier.align(Alignment.TopStart).safeDrawingPadding().padding(horizontal = 24.dp, vertical = 14.dp)) {
+                    if (m != null && state.live) ChannelArt(
+                        name = m.channel ?: m.title, logo = m.posterUrl, streamUrl = m.url, pad = ChannelTiles.logoPad,
+                        textStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
+                        modifier = Modifier.size(width = ChannelTiles.width, height = ChannelTiles.width * 10 / 16)
+                            .clip(RoundedCornerShape(ChannelTiles.corner)),
+                    ) else Text(m?.title.orEmpty(), color = Color.White, style = MaterialTheme.typography.titleMedium,
+                        maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
                 // Au centre : reculer, lecture/pause, avancer.
                 CenterControls(state, loading, Modifier.align(Alignment.Center))
                 // En bas : la barre (ou celle du direct), et la sortie du plein écran à droite.

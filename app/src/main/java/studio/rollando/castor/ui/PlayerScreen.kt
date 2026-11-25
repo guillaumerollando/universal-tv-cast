@@ -159,7 +159,14 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
             }
         }
 
-        if (state.onPhone && (film || state.live)) Text(media.title, style = MaterialTheme.typography.titleLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
+        // Sur le téléphone : la chaîne par son logo (comme partout ailleurs), un film par son titre.
+        if (state.onPhone && state.live) ChannelArt(
+            name = media.channel ?: media.title, logo = media.posterUrl, streamUrl = media.url, pad = ChannelTiles.logoPad,
+            textStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
+            modifier = Modifier.width(ChannelTiles.width).aspectRatio(16f / 10f).clip(RoundedCornerShape(ChannelTiles.corner))
+                .semantics { contentDescription = media.channel ?: media.title },
+        )
+        else if (state.onPhone && film) Text(media.title, style = MaterialTheme.typography.titleLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
         if (!film && !state.live) Column {
             Text(media.title, style = MaterialTheme.typography.titleLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
             media.host?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant) }

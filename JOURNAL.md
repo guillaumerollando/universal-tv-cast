@@ -680,3 +680,9 @@ fait toute seule.
 - Direct : la même barre que les vidéos, en rouge. Pleine au direct ; on peut la tirer pour remonter dans la fenêtre du flux
   (Castor.seekLive → castAt(retard)). Badge EN DIRECT / −m:ss et « Revenir au direct » dessous.
 - Un direct n'est jamais considéré comme fini d'après la durée annoncée par la télé (la fausse télé en annonçait une).
+
+## 2026-11-25 (nuit, 3) — Logos des chaînes, bien intégrés
+- Un seul visuel de chaîne (ui/ChannelArt.kt) pour l'accueil, les listes, l'écran de lecture et la notification.
+- Logo : celui fourni, sinon celui de la même chaîne (même flux, sinon même nom) dans une liste importée. Aucune autre source.
+- Fond : la couleur qui domine sur le bord du logo (logo « en carré » prolongé), marges transparentes retirées ;
+  logo détouré : couleur de la chaîne si elle contraste, sinon fond neutre clair ou sombre.

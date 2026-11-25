@@ -299,20 +299,13 @@ private fun ChannelRow(ch: Iptv.Channel, onClick: () -> Unit) {
     }
 }
 
-/** Le logo de la chaîne ; en attendant (ou à défaut), ses initiales sur sa couleur. */
+/** Le logo de la chaîne sur un fond assorti ; à défaut, ses initiales sur sa couleur. */
 @Composable
 fun ChannelLogo(name: String, logo: String?, modifier: Modifier = Modifier.size(width = 64.dp, height = 44.dp)) {
-    var loaded by remember(logo) { mutableStateOf(false) }
-    val base = Color(Channels.find(name)?.color ?: Channels.colorFor(name))
-    Box(
-        modifier.clip(RoundedCornerShape(10.dp)).background(if (loaded) Color(0xFF24272E) else base),
-        contentAlignment = Alignment.Center,
-    ) {
-        if (!loaded) Text(
-            name.split(' ').filter { it.isNotBlank() }.take(2).joinToString("") { it.take(1) }.uppercase(),
-            color = Color.White, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold),
-        )
-        RemoteImage(logo, Modifier.fillMaxSize().padding(5.dp), contentScale = ContentScale.Fit, maxSide = 200,
-            onState = { loaded = it })
-    }
+    ChannelArt(
+        name = name, logo = logo, streamUrl = null, pad = 6.dp,
+        label = name.split(' ').filter { it.isNotBlank() }.take(2).joinToString("") { it.take(1) }.uppercase(),
+        textStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold),
+        modifier = modifier.clip(RoundedCornerShape(10.dp)),
+    )
 }

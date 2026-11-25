@@ -360,11 +360,8 @@ private fun ResumeCard(r: ResumeItem, onBrowse: (String?) -> Unit, modifier: Mod
 private fun ChannelTile(r: Recent, onBrowse: (String?) -> Unit) {
     val c = MaterialTheme.colorScheme
     val name = r.channelName
-    val known = remember(r.url, r.title) { studio.rollando.castor.data.Channels.find("${r.url} ${r.pageUrl} ${r.title}") }
-    val base = androidx.compose.ui.graphics.Color(known?.color ?: studio.rollando.castor.data.Channels.colorFor(name))
     var menu by remember { mutableStateOf(false) }
     var rename by remember { mutableStateOf(false) }
-    var logoOk by remember(r.poster) { mutableStateOf(false) }
     val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
     val renameLabel = stringResource(R.string.channel_rename)
     val removeLabel = stringResource(R.string.channel_remove)
@@ -391,20 +388,12 @@ private fun ChannelTile(r: Recent, onBrowse: (String?) -> Unit) {
                 .padding(6.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Box(
-                Modifier.fillMaxWidth().aspectRatio(16f / 10f).clip(RoundedCornerShape(16.dp))
-                    .background(
-                        if (logoOk) Brush.linearGradient(listOf(androidx.compose.ui.graphics.Color(0xFF2A2D35), androidx.compose.ui.graphics.Color(0xFF1B1D22)))
-                        else Brush.linearGradient(listOf(base, base.copy(alpha = 0.55f).compositeOver(androidx.compose.ui.graphics.Color.Black)))),
-                contentAlignment = Alignment.Center,
-            ) {
-                if (!logoOk) Text(name, color = androidx.compose.ui.graphics.Color.White, maxLines = 2, overflow = TextOverflow.Ellipsis,
-                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
-                    modifier = Modifier.padding(horizontal = 8.dp))
-                // Logo de la chaîne (venu d'une liste IPTV), s'il y en a un.
-                if (r.poster != null) RemoteImage(r.poster, Modifier.matchParentSize().padding(horizontal = 18.dp, vertical = 12.dp),
-                    contentScale = androidx.compose.ui.layout.ContentScale.Fit, maxSide = 300, onState = { logoOk = it })
+            Box(Modifier.fillMaxWidth().aspectRatio(16f / 10f).clip(RoundedCornerShape(16.dp))) {
+                ChannelArt(
+                    name = name, logo = r.poster, streamUrl = r.url, pad = 16.dp,
+                    textStyle = MaterialTheme.typography.titleMedium.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
+                    modifier = Modifier.matchParentSize(),
+                )
                 // Petit point rouge « à l'antenne » dans le coin.
                 Box(Modifier.align(Alignment.TopEnd).padding(8.dp).size(8.dp).clip(CircleShape)
                     .background(androidx.compose.ui.graphics.Color(0xFFFF4D4D)))
@@ -413,7 +402,7 @@ private fun ChannelTile(r: Recent, onBrowse: (String?) -> Unit) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(Modifier.size(6.dp).clip(CircleShape).background(androidx.compose.ui.graphics.Color(0xFFFF4D4D)))
                 Spacer(Modifier.width(5.dp))
-                Text(if (logoOk) name else liveLabel, style = MaterialTheme.typography.labelMedium, color = c.onSurfaceVariant,
+                Text(name, style = MaterialTheme.typography.labelMedium, color = c.onSurfaceVariant,
                     maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }

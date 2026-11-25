@@ -325,6 +325,13 @@ object Castor {
                     val name = studio.rollando.castor.data.Channels.find("${media.url} ${media.pageUrl}")?.name ?: app.getString(R.string.video_live)
                     _state.update { it.copy(media = it.media?.copy(title = name)) }
                 }
+                // Direct sans image : le logo de la chaîne, s'il est dans une liste importée.
+                if (!plan.endList && _state.value.media?.posterUrl == null) {
+                    val m0 = _state.value.media
+                    studio.rollando.castor.data.IptvStore.logoFor(m0?.channel ?: m0?.title, media.url)?.let { logo ->
+                        _state.update { it.copy(media = it.media?.copy(posterUrl = logo)) }
+                    }
+                }
             }
         }
         val probe = scope.async { runCatching { embeddedSubtitles(media) }.getOrDefault(emptyList()) }

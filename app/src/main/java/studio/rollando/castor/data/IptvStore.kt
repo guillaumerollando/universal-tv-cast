@@ -79,6 +79,7 @@ object IptvStore {
         val p = Playlist(id, old?.name ?: name ?: Iptv.nameFor(source), source, channels.size, System.currentTimeMillis())
         _lists.value = listOf(p) + _lists.value.filter { it.id != id }
         save()
+        logoIndex = null
         p
     }
 
@@ -102,6 +103,32 @@ object IptvStore {
         }
     }
 
+    // ---------------------------------------------------------------- logos des chaînes, d'après les listes importées
+
+    @Volatile private var logoIndex: Pair<Map<String, String>, Map<String, String>>? = null // (adresse → logo, nom → logo)
+
+    private fun fold(s: String) = java.text.Normalizer.normalize(s.lowercase(), java.text.Normalizer.Form.NFD)
+        .replace(Regex("\\p{M}+"), "").replace("+", "plus").replace(Regex("[^a-z0-9]+"), "")
+
+    /**
+     * Le logo d'une chaîne, s'il est dans une des listes importées : même adresse de flux, sinon même nom
+     * (« Arte » ouverte par son lien retrouve le logo d'« Arte » de la liste). Rien n'est cherché ailleurs.
+     */
+    suspend fun logoFor(name: String?, url: String?): String? = withContext(Dispatchers.IO) {
+        if (_lists.value.isEmpty()) return@withContext null
+        val idx = logoIndex ?: run {
+            val byUrl = HashMap<String, String>()
+            val byName = HashMap<String, String>()
+            for (p in _lists.value) for (c in channels(p.id)) {
+                val logo = c.logo ?: continue
+                byUrl.putIfAbsent(c.url, logo)
+                byName.putIfAbsent(fold(c.name), logo)
+            }
+            (byUrl to byName).also { logoIndex = it }
+        }
+        url?.let { idx.first[it] } ?: name?.let { n -> fold(n).takeIf { it.isNotEmpty() }?.let { idx.second[it] } }
+    }
+
     fun rename(id: String, name: String) {
         if (name.isBlank()) return
         _lists.value = _lists.value.map { if (it.id == id) it.copy(name = name.trim()) else it }
@@ -113,5 +140,6 @@ object IptvStore {
         synchronized(cache) { cache.remove(id) }
         runCatching { File(dir, "$id.m3u").delete() }
         save()
+        logoIndex = null
     }
 }

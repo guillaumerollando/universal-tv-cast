@@ -350,20 +350,19 @@ private fun Progress(s: CastState) {
 @Composable
 private fun ChannelHeader(s: CastState) {
     val m = s.media ?: return
-    val known = remember(m.url) { studio.rollando.castor.data.Channels.find("${m.url} ${m.pageUrl} ${m.title}") }
-    val base = Color(known?.color ?: studio.rollando.castor.data.Channels.colorFor(m.title))
     Box(
         Modifier.fillMaxWidth().aspectRatio(16f / 9f).clip(RoundedCornerShape(28.dp))
-            .background(Brush.linearGradient(listOf(base, base.copy(alpha = 0.5f).compositeOver(Color.Black))))
             .semantics(mergeDescendants = true) { liveRegion = LiveRegionMode.Polite },
     ) {
-        if (s.phase == Phase.PLAYING) Box(Modifier.align(Alignment.Center).padding(bottom = 30.dp)) { CastWaves(Color.White.copy(alpha = 0.35f), size = 190.dp) }
-        Text(
-            m.title, color = Color.White, maxLines = 2, overflow = TextOverflow.Ellipsis,
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-            style = MaterialTheme.typography.displaySmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
-            modifier = Modifier.align(Alignment.Center).padding(horizontal = 24.dp).padding(bottom = 24.dp),
+        // Le logo de la chaîne (ou son nom) sur un fond assorti, comme sur l'accueil.
+        ChannelArt(
+            name = m.channel ?: m.title, logo = m.posterUrl, streamUrl = m.url, pad = 56.dp,
+            textStyle = MaterialTheme.typography.displaySmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
+            modifier = Modifier.matchParentSize().padding(bottom = 0.dp),
         )
+        // Voile sombre en bas : l'état de la lecture reste lisible sur n'importe quel fond.
+        Box(Modifier.align(Alignment.BottomCenter).fillMaxWidth().height(64.dp)
+            .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(alpha = 0.55f)))))
         Column(Modifier.align(Alignment.BottomStart).padding(18.dp)) {
             Text(
                 phaseLabel(s) + (s.renderer?.let { " · " + it.name } ?: ""),

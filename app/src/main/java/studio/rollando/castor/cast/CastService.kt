@@ -123,8 +123,28 @@ class CastService : Service() {
      * prend une couleur au hasard.
      */
     private fun artwork(s: CastState): android.graphics.Bitmap? {
-        Images.peek(s.media?.posterUrl)?.let { return it }
         val m = s.media ?: return null
+        val poster = Images.peek(m.posterUrl)
+        // Direct avec logo : le logo centré sur le fond choisi pour lui dans l'appli (même rendu que l'écran de lecture).
+        val logoBg = m.posterUrl?.let { studio.rollando.castor.ui.ChannelArtColors.background[it] }
+        if (s.live && poster != null && logoBg != null) {
+            val key = "logo|" + m.posterUrl
+            if (key == tileKey) return tile
+            val size = 512
+            val bmp = android.graphics.Bitmap.createBitmap(size, size, android.graphics.Bitmap.Config.ARGB_8888)
+            val c = android.graphics.Canvas(bmp)
+            c.drawColor(logoBg)
+            val box = size * 0.72f
+            val k = minOf(box / poster.width, box / poster.height)
+            val w = poster.width * k
+            val h = poster.height * k
+            c.drawBitmap(poster, null, android.graphics.RectF((size - w) / 2, (size - h) / 2, (size + w) / 2, (size + h) / 2),
+                android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG or android.graphics.Paint.FILTER_BITMAP_FLAG))
+            tileKey = key
+            tile = bmp
+            return bmp
+        }
+        poster?.let { return it }
         val key = m.title + "|" + m.url
         if (key == tileKey) return tile
         // Le nom et la couleur d'une chaîne connue : seulement pour un direct (un film peut s'appeler « Histoire »…).

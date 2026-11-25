@@ -31,6 +31,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -300,7 +301,7 @@ private fun ChannelBrowser(list: IptvStore.Playlist, refreshTick: Int, onClose: 
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 96.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 // Les chaînes qu'on regarde, en premier (sans recherche ni filtre en cours).
                 if (recent.isNotEmpty() && query.isBlank() && group == null) {
@@ -359,6 +360,8 @@ private fun ChannelTile(ch: Iptv.Channel, modifier: Modifier, onClick: () -> Uni
                     haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); menu = true
                 })
                 .semantics {
+                    // Le logo suffit à l'œil ; le nom reste lu par le lecteur d'écran.
+                    contentDescription = ch.name
                     customActions = listOfNotNull(
                         androidx.compose.ui.semantics.CustomAccessibilityAction(hideLabel) { onHide(); true },
                         onForget?.let { f -> androidx.compose.ui.semantics.CustomAccessibilityAction(forgetLabel) { f(); true } },
@@ -372,9 +375,6 @@ private fun ChannelTile(ch: Iptv.Channel, modifier: Modifier, onClick: () -> Uni
                 textStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold),
                 modifier = Modifier.fillMaxWidth().aspectRatio(16f / 10f).clip(RoundedCornerShape(12.dp)),
             )
-            Spacer(Modifier.height(5.dp))
-            Text(ch.name, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(horizontal = 2.dp))
         }
         DropdownMenu(menu, onDismissRequest = { menu = false }, shape = RoundedCornerShape(16.dp)) {
             if (onForget != null) DropdownMenuItem(text = { Text(forgetLabel) }, onClick = { menu = false; onForget() })

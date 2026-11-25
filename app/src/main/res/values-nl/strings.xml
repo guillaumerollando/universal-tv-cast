@@ -67,7 +67,7 @@
     <string name="home_link_short">Video- of .m3u8-link</string>
     <string name="home_files_other">Bestanden bekijken (muziek…)</string>
     <string name="home_resume">Verder kijken</string>
-    <string name="home_bookmarks_empty">Tik op ★ in de browser om je favoriete sites hier te bewaren.</string>
+    <string name="home_bookmarks_empty">Tik op ★ bij een site of een aflevering: hier ga je verder waar je was.</string>
     <string name="photos_counter">%1$d / %2$d</string>
     <string name="cd_prev_photo">Vorige foto</string>
     <string name="cd_next_photo">Volgende foto</string>
@@ -194,6 +194,8 @@
     <string name="bookmark_resume">Hervatten</string>
     <string name="browser_silent">Alleen beeld, zonder geluid</string>
     <string name="err_protected">Deze site beschermt zijn video’s: alleen de eigen speler kan ze afspelen, dus ze kunnen niet naar de tv.</string>
+    <string name="bookmark_open">Openen</string>
+    <string name="cd_browser_home">Startpagina browser</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video\'s</item>

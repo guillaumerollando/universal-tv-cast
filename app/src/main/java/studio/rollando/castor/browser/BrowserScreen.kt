@@ -37,6 +37,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.Cast
@@ -157,7 +158,7 @@ class BrowserController(context: Context) {
             override fun onPageStarted(view: WebView, u: String, favicon: Bitmap?) {
                 barVisible = true
                 newPage(u)
-                this@BrowserController.url = u
+                if (!u.startsWith("about:")) this@BrowserController.url = u
                 sniffer.pageUrl = u
                 refreshNav(view)
             }
@@ -171,13 +172,17 @@ class BrowserController(context: Context) {
             override fun doUpdateVisitedHistory(view: WebView, u: String, isReload: Boolean) {
                 // Sites « une seule page » : l'adresse change sans rechargement ; la liste doit suivre.
                 newPage(u)
-                this@BrowserController.url = u
+                if (!u.startsWith("about:")) this@BrowserController.url = u
                 sniffer.pageUrl = u
                 refreshNav(view)
             }
         }
         webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView, newProgress: Int) { this@BrowserController.progress = newProgress }
+            override fun onReceivedIcon(view: WebView, icon: Bitmap?) {
+                val host = Uri.parse(view.url ?: "").host?.removePrefix("www.") ?: return
+                icon?.let { studio.rollando.castor.ui.Favicons.save(view.context, host, it) }
+            }
             override fun onReceivedTitle(view: WebView, t: String?) {
                 this@BrowserController.title = t.orEmpty()
                 // Titre nettoyé (sans le nom du site ni « Regarder maintenant : ») pour la télé et la liste.
@@ -192,13 +197,26 @@ class BrowserController(context: Context) {
     private fun newPage(u: String) {
         // On ignore l'ancre et les paramètres de position (?t=…) que certains lecteurs ajoutent en cours de lecture.
         val page = u.substringBefore('#').replace(Regex("([?&])(t|time|start|pos|position)=[^&]*&?"), "$1").trimEnd('?', '&')
-        if (page != lastPage) sniffer.reset()
+        if (page != lastPage) {
+            sniffer.reset()
+            // Série suivie : ouvrir un épisode plus loin fait avancer le marque-page.
+            Library.advanceBookmark(u, onlyForward = true)
+        }
         lastPage = page
     }
 
     private fun refreshNav(v: WebView) {
         canGoBack = v.canGoBack()
         canGoForward = v.canGoForward()
+    }
+
+    /** Retour à la page d'accueil du navigateur (favoris, séries en cours). */
+    fun goHome() {
+        started = false
+        url = ""
+        title = ""
+        sniffer.reset()
+        webView.loadUrl("about:blank")
     }
 
     fun load(input: String) {
@@ -226,10 +244,19 @@ fun BrowserScreen(b: BrowserController) {
     var input by remember { mutableStateOf(TextFieldValue("")) }
     val focus = LocalFocusManager.current
     val c = MaterialTheme.colorScheme
-    val isBookmarked = bookmarks.any { it.url == b.url }
+    // Étoile pleine aussi sur un autre épisode d'une série suivie.
+    val isBookmarked = remember(bookmarks, b.url) { Library.isBookmarked(b.url) }
 
     BackHandler(enabled = b.canGoBack) { b.webView.goBack() }
     // Clavier fermé (touche retour) : le champ d'adresse se libère, la barre peut de nouveau se cacher.
+    // Toucher la barre sélectionne toute l'adresse : on le refait juste après le toucher, qui sinon place le
+    // curseur au milieu (et le texte tapé s'insérait dans l'ancienne adresse).
+    androidx.compose.runtime.LaunchedEffect(editing) {
+        if (editing) {
+            kotlinx.coroutines.delay(60)
+            input = input.copy(selection = TextRange(0, input.text.length))
+        }
+    }
     val imeVisible = androidx.compose.foundation.layout.WindowInsets.isImeVisible
     val keyboard = androidx.compose.ui.platform.LocalSoftwareKeyboardController.current
     androidx.compose.runtime.LaunchedEffect(imeVisible) { if (!imeVisible && editing) focus.clearFocus() }
@@ -245,7 +272,9 @@ fun BrowserScreen(b: BrowserController) {
                 androidx.compose.animation.fadeOut(androidx.compose.animation.core.tween(160)),
         ) {
         Row(Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { b.webView.goBack() }, enabled = b.canGoBack) {
+            if (b.started) IconButton(onClick = { b.goHome() }) {
+                Icon(Icons.Rounded.Home, stringResource(R.string.cd_browser_home))
+            } else IconButton(onClick = { b.webView.goBack() }, enabled = b.canGoBack) {
                 Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.cd_back))
             }
             TextField(
@@ -273,7 +302,7 @@ fun BrowserScreen(b: BrowserController) {
                 },
             )
             if (b.started && b.url.isNotEmpty()) {
-                IconButton(onClick = { Library.toggleBookmark(b.title, b.url) }) {
+                IconButton(onClick = { Library.toggleBookmark(PageTitle.series(PageTitle.clean(b.title, Uri.parse(b.url).host ?: "")), b.url) }) {
                     Icon(
                         if (isBookmarked) Icons.Rounded.Star else Icons.Rounded.StarBorder,
                         stringResource(if (isBookmarked) R.string.cd_bookmark_remove else R.string.cd_bookmark_add),
@@ -375,6 +404,7 @@ fun BrowserScreen(b: BrowserController) {
                             showFound = false
                             // On retient la page (l'épisode) : l'accueil proposera d'y revenir.
                             Library.rememberSiteVisit(f.pageUrl, f.pageTitle.ifBlank { f.label })
+                            Library.advanceBookmark(f.pageUrl)
                             Castor.open(
                                 Media(
                                     url = f.url,
@@ -397,15 +427,38 @@ fun BrowserScreen(b: BrowserController) {
 @Composable
 private fun StartPage(onOpen: (String) -> Unit) {
     val bookmarks by Library.bookmarks.collectAsState()
+    val sites by Library.sites.collectAsState()
     val c = MaterialTheme.colorScheme
     LazyColumn(
         Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(24.dp),
+        contentPadding = PaddingValues(vertical = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
+        // Mes séries et sites d'abord : un toucher reprend là où on en est.
+        if (bookmarks.isNotEmpty()) {
+            item {
+                Text(stringResource(R.string.home_bookmarks), style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp))
+            }
+            item {
+                androidx.compose.foundation.lazy.LazyRow(contentPadding = PaddingValues(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    items(bookmarks.size) { i ->
+                        val b = bookmarks[i]
+                        val siteWide = b.key == b.host.lowercase()
+                        val visit = if (siteWide) sites[b.host]?.takeIf { it.url != b.url } else null
+                        studio.rollando.castor.ui.FavoriteCard(
+                            b, resumeUrl = visit?.url ?: b.url, episode = visit?.episode ?: b.episode,
+                            onOpen = onOpen, onRemove = { Library.removeBookmark(b) },
+                        )
+                    }
+                }
+                Spacer(Modifier.height(16.dp))
+            }
+        }
         item {
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(if (bookmarks.isEmpty()) 24.dp else 8.dp))
             Box(Modifier.size(96.dp).clip(RoundedCornerShape(32.dp)).background(c.primary.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
                 Icon(Icons.Rounded.Search, null, Modifier.size(48.dp), tint = c.primary)
             }
@@ -414,17 +467,7 @@ private fun StartPage(onOpen: (String) -> Unit) {
         item { Text(stringResource(R.string.browser_start_title), style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center) }
         item {
             Text(stringResource(R.string.browser_start_body), style = MaterialTheme.typography.bodyLarge,
-                color = c.onSurfaceVariant, textAlign = TextAlign.Center)
-            Spacer(Modifier.height(16.dp))
-        }
-        itemsIndexed(bookmarks, key = { _, b -> b.url }) { _, bm ->
-            ListItem(
-                headlineContent = { Text(bm.title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                supportingContent = { Text(Uri.parse(bm.url).host?.removePrefix("www.") ?: "", maxLines = 1) },
-                leadingContent = { Icon(Icons.Rounded.Star, null, tint = c.primary) },
-                colors = ListItemDefaults.colors(containerColor = c.surfaceContainerLow),
-                modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).clickable(role = Role.Button) { onOpen(bm.url) },
-            )
+                color = c.onSurfaceVariant, textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = 24.dp))
         }
     }
 }

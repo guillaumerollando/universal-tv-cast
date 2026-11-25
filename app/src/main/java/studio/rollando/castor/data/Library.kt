@@ -15,7 +15,14 @@ data class Recent(
     fun toMedia() = Media(url = url, title = title, mime = mime, headers = headers, pageUrl = pageUrl, posterUrl = poster, fileName = fileName)
 }
 
-data class Bookmark(val title: String, val url: String)
+/**
+ * Favori = marque-page : [url] est la page où l'on en est (l'épisode en cours) ; il avance tout seul quand on
+ * caste un autre épisode de la même série. [episode] : numéro lu dans l'adresse, si elle en a un.
+ */
+data class Bookmark(val title: String, val url: String, val episode: Int? = null, val time: Long = 0) {
+    val host: String get() = runCatching { android.net.Uri.parse(url).host?.removePrefix("www.") }.getOrNull().orEmpty()
+    val key: String get() = studio.rollando.castor.browser.Episodes.seriesKey(url)
+}
 
 /** Dernière page d'un site où l'on a lancé une vidéo (l'épisode où l'on en est). */
 data class SiteVisit(val url: String, val title: String, val episode: Int?, val time: Long)
@@ -101,7 +108,41 @@ object Library {
     fun removeRecent(r: Recent) { _recents.value = _recents.value - r; saveRecents() }
     fun clearRecents() { _recents.value = emptyList(); saveRecents() }
 
-    fun isBookmarked(url: String) = _bookmarks.value.any { it.url == url }
+    /** La page appartient-elle à une série (ou un site) déjà en favori ? */
+    fun bookmarkFor(url: String): Bookmark? {
+        val k = studio.rollando.castor.browser.Episodes.seriesKey(url)
+        return _bookmarks.value.firstOrNull { it.url == url || it.key == k }
+    }
+
+    fun isBookmarked(url: String) = bookmarkFor(url) != null
+
+    fun removeBookmark(b: Bookmark) { _bookmarks.value = _bookmarks.value - b; saveBookmarks() }
+
+    /**
+     * Le marque-page avance : on caste (ou on ouvre un épisode plus loin de) une série suivie. Le favori pointe
+     * alors sur cette page et remonte en tête de liste. [onlyForward] : seulement si l'épisode est plus loin.
+     */
+    fun advanceBookmark(url: String, onlyForward: Boolean = false) {
+        val b = bookmarkFor(url) ?: return
+        val ep = studio.rollando.castor.browser.Episodes.find(url)?.number
+        if (b.url == url) { if (!onlyForward) touchBookmark(b); return }
+        if (onlyForward && (ep == null || b.episode == null || ep <= b.episode)) return
+        _bookmarks.value = listOf(b.copy(url = url, episode = ep, time = System.currentTimeMillis())) + (_bookmarks.value - b)
+        saveBookmarks()
+    }
+
+    private fun touchBookmark(b: Bookmark) {
+        _bookmarks.value = listOf(b.copy(time = System.currentTimeMillis())) + (_bookmarks.value - b)
+        saveBookmarks()
+    }
+
+    private fun saveBookmarks() {
+        prefs.edit().putString("bookmarks", JSONArray().apply {
+            _bookmarks.value.forEach {
+                put(JSONObject().put("title", it.title).put("url", it.url).put("ep", it.episode ?: -1).put("time", it.time))
+            }
+        }.toString()).apply()
+    }
 
     private val _sites = MutableStateFlow<Map<String, SiteVisit>>(emptyMap())
     /** Par site (domaine) : la dernière page d'où l'on a casté, pour reprendre la série là où on l'a laissée. */
@@ -122,11 +163,11 @@ object Library {
     }
 
     fun toggleBookmark(title: String, url: String) {
-        _bookmarks.value = if (isBookmarked(url)) _bookmarks.value.filter { it.url != url }
-        else _bookmarks.value + Bookmark(title.ifBlank { url }, url)
-        prefs.edit().putString("bookmarks", JSONArray().apply {
-            _bookmarks.value.forEach { put(JSONObject().put("title", it.title).put("url", it.url)) }
-        }.toString()).apply()
+        val existing = bookmarkFor(url)
+        _bookmarks.value = if (existing != null) _bookmarks.value - existing
+        else listOf(Bookmark(title.ifBlank { url }, url, studio.rollando.castor.browser.Episodes.find(url)?.number,
+            System.currentTimeMillis())) + _bookmarks.value
+        saveBookmarks()
     }
 
     private fun saveRecents() {
@@ -155,6 +196,6 @@ object Library {
 
     private fun readBookmarks(a: JSONArray) = (0 until a.length()).map { i ->
         val o = a.getJSONObject(i)
-        Bookmark(o.getString("title"), o.getString("url"))
+        Bookmark(o.getString("title"), o.getString("url"), o.optInt("ep", -1).takeIf { it >= 0 }, o.optLong("time"))
     }
 }

@@ -11,6 +11,11 @@ object PageTitle {
     )
     private val SUFFIX = Regex("(?i)\\s+(en streaming|streaming( vf| vostfr)?( gratuit)?|online free|online|free online|gratuit|en ligne|hd)$")
 
+    private val EPISODE = Regex("(?iu)\\s*[–—:|·-]?\\s*(?<!\\p{L})(épisode|episode|episodio|folge|ep\\.?|e)\\s*\\d+.*$|\\s*S\\d{1,2}E\\d{1,3}.*$")
+
+    /** Nom de la série seul (pour un favori qui suivra les épisodes) : « Mon Anime – Épisode 12 » → « Mon Anime ». */
+    fun series(title: String): String = EPISODE.replace(title, "").trim().ifBlank { title }
+
     fun clean(title: String, host: String): String {
         if (title.isBlank()) return title
         val site = host.removePrefix("www.").substringBefore('.').lowercase().filter { it.isLetterOrDigit() }

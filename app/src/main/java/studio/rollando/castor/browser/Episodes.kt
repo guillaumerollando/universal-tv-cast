@@ -7,7 +7,18 @@ package studio.rollando.castor.browser
  */
 object Episodes {
     /** [explicit] : le mot « épisode » (ou ep=) est dans l'adresse, pas seulement un nombre à la fin. */
-    data class Ep(val number: Int, val next: String, val explicit: Boolean = true)
+    data class Ep(val number: Int, val next: String, val explicit: Boolean = true, val at: Int = 0, val len: Int = 0)
+
+    /**
+     * Clé d'une série : l'adresse sans le numéro d'épisode (ni http, www, #ancre). Deux épisodes de la même
+     * série ont la même clé ; deux séries d'un même site, non.
+     */
+    fun seriesKey(url: String): String {
+        val u = url.substringBefore('#')
+        val ep = find(u)
+        val base = if (ep != null) u.substring(0, ep.at) + "#" + u.substring(ep.at + ep.len) else u.substringBefore('?')
+        return base.substringAfter("://").removePrefix("www.").trimEnd('/').lowercase()
+    }
 
     private val QUERY = Regex("(?i)([?&](?:ep|episode|e)=)(\\d{1,4})(?!\\d)")
     private val NAMED = Regex("(?i)(?:episode|episodio|épisode|folge|ep|e)[-_ ./]?(\\d{1,4})(?!\\d)")
@@ -30,6 +41,6 @@ object Episodes {
         val n = digits.toIntOrNull() ?: return null
         if (n in 1900..2100) return null // une année, pas un épisode
         val next = (n + 1).toString().padStart(digits.length, '0')
-        return Ep(n, url.substring(0, at) + next + url.substring(at + digits.length))
+        return Ep(n, url.substring(0, at) + next + url.substring(at + digits.length), at = at, len = digits.length)
     }
 }

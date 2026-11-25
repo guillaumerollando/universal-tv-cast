@@ -31,8 +31,6 @@ import androidx.compose.material.icons.rounded.PhotoLibrary
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.VideoLibrary
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -120,6 +118,25 @@ fun HomeScreen(
             }
         }
 
+        // Mes séries et sites : en premier, un toucher reprend là où on en est.
+        if (bookmarks.isNotEmpty()) {
+            item { SectionTitle(stringResource(R.string.home_bookmarks), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
+            item {
+                LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    items(bookmarks, key = { "b" + it.key }) { b ->
+                        // Favori d'une série : il pointe déjà sur l'épisode en cours. Favori d'un site entier : on
+                        // reprend à la dernière page d'où l'on a casté.
+                        val siteWide = b.key == b.host.lowercase()
+                        val visit = if (siteWide) sites[b.host]?.takeIf { it.url != b.url } else null
+                        FavoriteCard(
+                            b, resumeUrl = visit?.url ?: b.url, episode = visit?.episode ?: b.episode,
+                            onOpen = { onBrowse(it) }, onRemove = { Library.removeBookmark(b) },
+                        )
+                    }
+                }
+            }
+        }
+
         if (recents.isNotEmpty()) {
             item { SectionTitle(stringResource(R.string.home_resume), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
             item {
@@ -129,35 +146,11 @@ fun HomeScreen(
             }
         }
 
-        item { SectionTitle(stringResource(R.string.home_bookmarks), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
         if (bookmarks.isEmpty()) {
+            item { SectionTitle(stringResource(R.string.home_bookmarks), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
             item {
                 Text(stringResource(R.string.home_bookmarks_empty), style = MaterialTheme.typography.bodyMedium,
                     color = c.onSurfaceVariant, modifier = Modifier.padding(horizontal = 16.dp))
-            }
-        } else item {
-            LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(bookmarks, key = { "b" + it.url }) { b ->
-                    // Si l'on a casté depuis ce site, le favori reprend à la dernière page (l'épisode en cours).
-                    val visit = sites[Library.hostOf(b.url)]?.takeIf { it.url != b.url }
-                    AssistChip(
-                        onClick = { onBrowse(visit?.url ?: b.url) },
-                        label = {
-                            Text(
-                                b.title + when {
-                                    visit?.episode != null -> " · " + stringResource(R.string.bookmark_episode, visit.episode)
-                                    visit != null -> " · " + stringResource(R.string.bookmark_resume)
-                                    else -> ""
-                                },
-                                maxLines = 1, overflow = TextOverflow.Ellipsis,
-                            )
-                        },
-                        leadingIcon = { Icon(Icons.Rounded.Star, null, Modifier.size(18.dp), tint = c.primary) },
-                        colors = AssistChipDefaults.assistChipColors(containerColor = c.surfaceContainerHigh),
-                        border = null,
-                        modifier = Modifier.height(40.dp),
-                    )
-                }
             }
         }
 

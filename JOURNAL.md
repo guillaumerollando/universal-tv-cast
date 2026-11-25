@@ -548,3 +548,21 @@ chargeait), avec un message d'erreur à chaque appui.
   sans recharger (on ignore l'ancre et les paramètres de position ?t=…). Avant : seulement en changeant de site.
 - Tests 23/23, lint propre.
 - Titre des vidéos trouvées sur un site nettoyé (`PageTitle`) : sans le nom du site ni les accroches (« Regarder maintenant : Black Clover Season 2 · Otakubinge » → « Black Clover Season 2 »). Tests 24/24.
+
+## 2026-11-25 (soir, 16) — Favoris = marque-pages de séries, logos, accueil du navigateur
+**Demande du testeur** : favoris plus jolis (nom du site, logo) ; surtout, des favoris qui servent de
+marque-pages pour suivre plusieurs séries (comme ses light novels : le favori avance là où il en est) ;
+accueil et accueil du navigateur qui répondent vite à cet usage.
+**Fait**
+- Favori = marque-page : clé de série (adresse sans le numéro d'épisode : `Episodes.seriesKey`). Caster un épisode
+  d'une série suivie, ou ouvrir un épisode plus loin, fait avancer le favori (adresse, n° d'épisode) et le remonte
+  en tête. Plusieurs séries d'un même site sont suivies séparément. Étoile pleine sur tous les épisodes d'une
+  série suivie. Titre du favori : la série seule (« Mon Anime – Épisode 12 » → « Mon Anime »).
+- Logos des sites : donnés par le navigateur lui-même (`onReceivedIcon`), gardés sur le téléphone (aucun service
+  extérieur). Sinon, première lettre sur une pastille.
+- Cartes de favoris (logo, site, titre, « Ép. 13 » / « Reprendre » / « Ouvrir », ✕) : en premier sur l'accueil,
+  et en tête de l'accueil du navigateur. Bouton maison dans la barre du navigateur pour y revenir.
+- Barre d'adresse : le toucher plaçait le curseur au milieu et le texte tapé s'insérait dans l'ancienne adresse ;
+  la sélection complète est refaite juste après le toucher. Plus d'« about:blank » affiché.
+- Vérifié sur émulateur : favori otakubinge (logo) ; favori « Mon Anime » ép. 12 → bouton Épisode 13 → la carte
+  affiche « Ép. 13 ». Tests 26/26 (clé de série, nom de série), lint propre.

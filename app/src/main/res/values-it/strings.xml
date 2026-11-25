@@ -67,7 +67,7 @@
     <string name="home_link_short">Link video o .m3u8</string>
     <string name="home_files_other">Sfoglia i file (musica…)</string>
     <string name="home_resume">Riprendi</string>
-    <string name="home_bookmarks_empty">Tocca ★ nel browser per ritrovare qui i tuoi siti preferiti.</string>
+    <string name="home_bookmarks_empty">Tocca ★ su un sito o sull’episodio di una serie: la riprenderai qui, dove eri rimasto.</string>
     <string name="photos_counter">%1$d / %2$d</string>
     <string name="cd_prev_photo">Foto precedente</string>
     <string name="cd_next_photo">Foto successiva</string>
@@ -194,6 +194,8 @@
     <string name="bookmark_resume">Riprendi</string>
     <string name="browser_silent">Solo immagine, senza audio</string>
     <string name="err_protected">Questo sito protegge i suoi video: solo il suo lettore può riprodurli, quindi non si possono inviare alla TV.</string>
+    <string name="bookmark_open">Apri</string>
+    <string name="cd_browser_home">Home del browser</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video</item>

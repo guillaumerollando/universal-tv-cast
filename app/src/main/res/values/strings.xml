@@ -68,7 +68,7 @@
     <string name="home_link_short">Video or .m3u8 link</string>
     <string name="home_files_other">Browse files (music…)</string>
     <string name="home_resume">Pick up where you left off</string>
-    <string name="home_bookmarks_empty">Tap ★ in the browser to keep your favorite sites here.</string>
+    <string name="home_bookmarks_empty">Tap ★ on a site or on a series episode: you’ll pick it up here, right where you left off.</string>
     <string name="photos_counter">%1$d / %2$d</string>
     <string name="cd_prev_photo">Previous photo</string>
     <string name="cd_next_photo">Next photo</string>
@@ -195,6 +195,8 @@
     <string name="bookmark_resume">Resume</string>
     <string name="browser_silent">Picture only, no sound</string>
     <string name="err_protected">This site protects its videos: only its own player can read them, so they can’t be sent to the TV.</string>
+    <string name="bookmark_open">Open</string>
+    <string name="cd_browser_home">Browser home</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videos</item>

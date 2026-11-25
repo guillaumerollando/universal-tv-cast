@@ -180,7 +180,8 @@ class BrowserController(context: Context) {
             override fun onProgressChanged(view: WebView, newProgress: Int) { this@BrowserController.progress = newProgress }
             override fun onReceivedTitle(view: WebView, t: String?) {
                 this@BrowserController.title = t.orEmpty()
-                sniffer.pageTitle = t.orEmpty()
+                // Titre nettoyé (sans le nom du site ni « Regarder maintenant : ») pour la télé et la liste.
+                sniffer.pageTitle = PageTitle.clean(t.orEmpty(), Uri.parse(view.url ?: "").host ?: "")
             }
             // Fenêtres surgissantes (souvent des pubs) : refusées.
             override fun onCreateWindow(view: WebView, isDialog: Boolean, isUserGesture: Boolean, resultMsg: Message?) = false

@@ -547,3 +547,4 @@ chargeait), avec un message d'erreur à chaque appui.
 - La liste des vidéos se vide à chaque nouvelle page, y compris quand un site « une seule page » change d'adresse
   sans recharger (on ignore l'ancre et les paramètres de position ?t=…). Avant : seulement en changeant de site.
 - Tests 23/23, lint propre.
+- Titre des vidéos trouvées sur un site nettoyé (`PageTitle`) : sans le nom du site ni les accroches (« Regarder maintenant : Black Clover Season 2 · Otakubinge » → « Black Clover Season 2 »). Tests 24/24.

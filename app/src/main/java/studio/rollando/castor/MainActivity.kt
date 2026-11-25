@@ -98,7 +98,8 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         val parsed = Intake.parse(this, intent) ?: return
         val from = referrer?.takeIf { it.scheme == "android-app" }?.host?.takeIf { it != packageName }
         val media = parsed.copy(sourceApp = from)
-        Castor.open(media)
+        // Une autre appli nous envoie une vidéo (« Caster sur la télé ») : la télé est le choix explicite.
+        Castor.open(media, toTv = true)
         Nav.tab.value = Tab.PLAYER
     }
 

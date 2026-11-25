@@ -216,7 +216,7 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
 
         if (!state.active) {
             Button(
-                onClick = { if (state.renderer == null && !state.onPhone) onChooseTv() else Castor.cast() },
+                onClick = { if (state.renderer == null && !state.onPhone) { Castor.castWhenTvChosen(); onChooseTv() } else Castor.cast() },
                 enabled = state.phase != Phase.LOADING,
                 modifier = Modifier.fillMaxWidth().height(56.dp),
             ) {

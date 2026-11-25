@@ -777,3 +777,10 @@ fait toute seule.
   paysage → portrait → paysage → portrait, vidéo qui bouge à chaque étape.
 - Plein écran : −10 / lecture-pause (ambrée) / +10 au centre, plus petits ; barre en bas avec la sortie du plein écran en
   bas à droite ; titre en haut. Double-tap gauche/droite = −10 / +10 s (plein écran et cadre), rond au milieu de la moitié.
+
+## 2026-11-26 — Plus d'envoi à la télé sans choix
+- Castor.playOnTv (session) : null au lancement → ouvrir une vidéo/chaîne ne l'envoie nulle part ; l'écran de lecture
+  propose « Lire sur <télé> » ou « Regarder sur le téléphone ». Le choix est retenu jusqu'à la fermeture (zapping au même
+  endroit). « Choisir une télé » depuis l'écran de lecture lance dès la télé choisie.
+- Exception : une autre appli qui nous envoie une vidéo (« Caster sur la télé ») = télé explicite (open(toTv = true)).
+- Émulateur : appli relancée, appui sur une chaîne → 0 envoi ; choix téléphone puis « chaîne au hasard » → téléphone, 0 envoi.

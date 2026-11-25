@@ -325,7 +325,17 @@ object Castor {
 
     // ------------------------------------------------------------------ vidéo
 
-    fun open(media: Media, autoCast: Boolean = true) = exec {
+    /**
+     * Où lire, choisi par l'utilisateur pendant cette session : la télé (true), ce téléphone (false), pas encore
+     * choisi (null). Tant qu'il n'a pas choisi, rien ne part sur la télé : il pourrait couper ce qui y passe.
+     */
+    @Volatile private var playOnTv: Boolean? = null
+
+    /**
+     * @param toTv l'utilisateur a explicitement demandé la télé (« Caster sur la télé » depuis une autre appli).
+     */
+    fun open(media: Media, autoCast: Boolean = true, toTv: Boolean = false) = exec {
+        if (toTv) { playOnTv = true; if (_state.value.onPhone) { PhoneEngine.stop(); _state.update { it.copy(onPhone = false) } } }
         pollJob?.cancel()
         slideJob?.cancel()
         stopStream()
@@ -378,7 +388,10 @@ object Castor {
         _state.value.media?.let { Library.addRecent(it, live = _state.value.live) }
         loadSubtitle()
         _state.update { it.copy(phase = Phase.IDLE) }
-        if (autoCast) {
+        if (autoCast && playOnTv == null) {
+            // Pas encore choisi : l'écran de lecture propose la télé ou ce téléphone.
+            if (_state.value.renderer == null) discover()
+        } else if (autoCast) {
             if (_state.value.renderer != null || _state.value.onPhone) castAt(media.startSec)
             else {
                 pendingCast = true
@@ -408,6 +421,7 @@ object Castor {
         val s = _state.value
         val m = s.media ?: return
         if (s.slides != null || s.onPhone) return
+        playOnTv = false
         val at = if (s.live) currentBehind() else if (s.active || s.position > 1) s.position else m.startSec
         pendingCast = false
         if (s.active || s.phase == Phase.LOADING || s.phase == Phase.SENDING) stop(keepRecording = true)
@@ -422,6 +436,7 @@ object Castor {
         val s = _state.value
         if (!s.onPhone) return
         val pos = if (s.live) currentBehind() else PhoneEngine.position
+        playOnTv = true
         PhoneEngine.stop()
         _state.update { it.copy(onPhone = false, phase = Phase.IDLE) }
         resumeOnTv(pos)
@@ -1213,7 +1228,17 @@ object Castor {
 
     private fun sending() = _state.value.phase == Phase.SENDING || _state.value.phase == Phase.LOADING
 
-    fun cast() { if (!sending()) exec { castAt(_state.value.media?.startSec ?: 0.0) } }
+    /** « Choisir une télé » depuis l'écran de lecture : la vidéo y partira dès la télé choisie. */
+    fun castWhenTvChosen() {
+        playOnTv = true
+        if (_state.value.media != null) pendingCast = true
+    }
+
+    fun cast() {
+        if (sending()) return
+        if (!_state.value.onPhone) playOnTv = true
+        exec { castAt(_state.value.media?.startSec ?: 0.0) }
+    }
 
     /** Vrai si la vidéo passe par le DLNA de secours d'une télé Cast. */
     val usingFallback: Boolean get() = via != null
@@ -1295,7 +1320,7 @@ object Castor {
                 val b = if (s.live) liveClock.update(false) else s.liveBehind
                 _state.update { it.copy(phase = Phase.PLAYING, liveBehind = b) }
             }
-            else -> castAt(if (s.phase == Phase.STOPPED && s.duration > 0 && s.position < s.duration - 5) s.position else 0.0)
+            else -> { playOnTv = true; castAt(if (s.phase == Phase.STOPPED && s.duration > 0 && s.position < s.duration - 5) s.position else 0.0) }
         }
     }
 

@@ -100,6 +100,8 @@ class BrowserController(context: Context) {
     var canGoBack by mutableStateOf(false)
     var canGoForward by mutableStateOf(false)
     var started by mutableStateOf(false)
+    /** Barre d'adresse visible (cachée quand on descend dans la page, réaffichée en remontant). */
+    var barVisible by mutableStateOf(true)
     /** Nombre de pubs bloquées depuis le lancement (pour le journal). */
     @Volatile var blockedCount = 0
     private var lastHost: String? = null
@@ -118,8 +120,25 @@ class BrowserController(context: Context) {
             displayZoomControls = false
         }
         sniffer.userAgent = settings.userAgentString
+        setOnScrollChangeListener { _, _, y, _, oldY ->
+            val dy = y - oldY
+            val show = when {
+                y < 60 -> true
+                dy > 14 -> false
+                dy < -14 -> true
+                else -> barVisible
+            }
+            if (show != barVisible) {
+                barVisible = show
+                studio.rollando.castor.ui.Nav.compact.value = !show
+            }
+        }
         CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
         addJavascriptInterface(sniffer.Bridge(), "CastorBridge")
+        // Le script de repérage tourne aussi dans les cadres (lecteurs intégrés venant d'un autre site).
+        if (androidx.webkit.WebViewFeature.isFeatureSupported(androidx.webkit.WebViewFeature.DOCUMENT_START_SCRIPT)) {
+            runCatching { androidx.webkit.WebViewCompat.addDocumentStartJavaScript(this, VideoSniffer.SCRIPT, setOf("*")) }
+        }
         webViewClient = object : WebViewClient() {
             override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
                 if (Library.adBlock.value && AdBlock.isAd(request.url)) {
@@ -138,6 +157,8 @@ class BrowserController(context: Context) {
             }
 
             override fun onPageStarted(view: WebView, u: String, favicon: Bitmap?) {
+                barVisible = true
+                studio.rollando.castor.ui.Nav.compact.value = false
                 val host = Uri.parse(u).host
                 if (host != lastHost) sniffer.reset()
                 lastHost = host
@@ -190,7 +211,9 @@ class BrowserController(context: Context) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BrowserScreen(b: BrowserController) {
-    val found by b.sniffer.found.collectAsState()
+    // Les vidéos de moins d'une minute (pubs, aperçus) ne sont pas proposées : personne ne veut les caster.
+    val allFound by b.sniffer.found.collectAsState()
+    val found = allFound.filterNot { it.short }
     val bookmarks by Library.bookmarks.collectAsState()
     var showFound by remember { mutableStateOf(false) }
     var editing by remember { mutableStateOf(false) }
@@ -202,6 +225,10 @@ fun BrowserScreen(b: BrowserController) {
     BackHandler(enabled = b.canGoBack) { b.webView.goBack() }
 
     Column(Modifier.fillMaxSize()) {
+        androidx.compose.animation.AnimatedVisibility(
+            visible = b.barVisible || editing || !b.started,
+            enter = androidx.compose.animation.expandVertically(), exit = androidx.compose.animation.shrinkVertically(),
+        ) {
         Row(Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = { b.webView.goBack() }, enabled = b.canGoBack) {
                 Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.cd_back))
@@ -246,6 +273,7 @@ fun BrowserScreen(b: BrowserController) {
                 Icon(Icons.Rounded.Refresh, stringResource(R.string.cd_reload))
             }
         }
+        }
         if (b.started && b.progress < 100) LinearProgressIndicator(progress = { b.progress / 100f }, modifier = Modifier.fillMaxWidth())
 
         Box(Modifier.weight(1f).fillMaxWidth()) {
@@ -253,6 +281,22 @@ fun BrowserScreen(b: BrowserController) {
                 AndroidView(factory = { (b.webView.parent as? ViewGroup)?.removeView(b.webView); b.webView }, modifier = Modifier.fillMaxSize())
             } else {
                 StartPage(onOpen = { b.load(it) })
+            }
+            // Série : bouton « Épisode 13 → » quand l'adresse contient un numéro d'épisode.
+            val ep = remember(b.url) { Episodes.find(b.url) }
+            androidx.compose.animation.AnimatedVisibility(
+                visible = b.started && ep != null && (ep.explicit || found.isNotEmpty()),
+                enter = scaleIn(), exit = scaleOut(),
+                modifier = Modifier.align(Alignment.BottomStart).padding(16.dp),
+            ) {
+                ep?.let { e ->
+                    ExtendedFloatingActionButton(
+                        onClick = { b.load(e.next) },
+                        icon = { Icon(Icons.AutoMirrored.Rounded.ArrowForward, null) },
+                        text = { Text(stringResource(R.string.browser_next_episode, e.number + 1)) },
+                        containerColor = c.secondaryContainer, contentColor = c.onSecondaryContainer,
+                    )
+                }
             }
             androidx.compose.animation.AnimatedVisibility(
                 visible = found.isNotEmpty(),
@@ -280,7 +324,16 @@ fun BrowserScreen(b: BrowserController) {
             LazyColumn(contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 32.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 itemsIndexed(found, key = { _, f -> f.url }) { i, f ->
                     ListItem(
-                        headlineContent = { Text(f.label, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                        headlineContent = {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(f.label, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
+                                // La durée tout de suite visible : 25 min, c'est l'épisode ; 0:12, une pub.
+                                durationText(f.duration)?.let { d ->
+                                    Spacer(Modifier.width(8.dp))
+                                    Text(d, style = MaterialTheme.typography.labelLarge, color = c.primary)
+                                }
+                            }
+                        },
                         supportingContent = {
                             Text(
                                 listOfNotNull(
@@ -301,8 +354,11 @@ fun BrowserScreen(b: BrowserController) {
                         },
                         trailingContent = { Icon(Icons.Rounded.Cast, null) },
                         colors = ListItemDefaults.colors(containerColor = c.surfaceContainerLow),
-                        modifier = Modifier.clip(RoundedCornerShape(16.dp)).clickable(role = Role.Button) {
+                        modifier = Modifier.clip(RoundedCornerShape(16.dp))
+                            .clickable(role = Role.Button) {
                             showFound = false
+                            // On retient la page (l'épisode) : l'accueil proposera d'y revenir.
+                            Library.rememberSiteVisit(f.pageUrl, f.pageTitle.ifBlank { f.label })
                             Castor.open(
                                 Media(
                                     url = f.url,
@@ -354,4 +410,14 @@ private fun StartPage(onOpen: (String) -> Unit) {
             )
         }
     }
+}
+
+/** « 25 min », « 1 h 32 », « 0:12 » ou « Direct » ; null si inconnue. */
+@Composable
+private fun durationText(d: Double?): String? = when {
+    d == null -> null
+    d == 0.0 -> stringResource(R.string.browser_live)
+    d < 60 -> "0:%02d".format(d.toInt())
+    d < 3600 -> "${(d / 60).toInt()} min"
+    else -> "${(d / 3600).toInt()} h %02d".format(((d % 3600) / 60).toInt())
 }

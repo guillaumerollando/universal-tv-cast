@@ -108,6 +108,8 @@ object Nav {
     val openUrl = MutableStateFlow<String?>(null)
     /** Panneau d'aide ouvert (bouton « ? », secousse, lien dans une erreur). */
     val help = MutableStateFlow(false)
+    /** Le navigateur cache l'en-tête quand on descend dans la page (plus de place pour le site). */
+    val compact = MutableStateFlow(false)
     /** Demande d'ouvrir le choix de la télé (depuis l'aide). */
     val tvs = MutableStateFlow(false)
 }
@@ -124,6 +126,11 @@ fun CastorApp() {
     var showSettings by rememberSaveable { mutableStateOf(false) }
     var showLink by rememberSaveable { mutableStateOf(false) }
     val browser = remember { BrowserController(context) }
+    // Ouvrir une page dans le navigateur depuis un autre écran (épisode à reprendre…).
+    val urlRequest by Nav.openUrl.collectAsState()
+    LaunchedEffect(urlRequest) {
+        urlRequest?.let { browser.load(it); Nav.tab.value = Tab.BROWSER; Nav.openUrl.value = null }
+    }
 
     val pickFile = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
         uri ?: return@rememberLauncherForActivityResult
@@ -152,6 +159,11 @@ fun CastorApp() {
         topBar = {
             // Barre maison : le nom en deux étages (« UNIVERSAL » au-dessus de « TV Cast ») reste compact ;
             // c'est le nom de la télé qui se raccourcit.
+            val compact by Nav.compact.collectAsState()
+            androidx.compose.animation.AnimatedVisibility(
+                visible = !(compact && tab == Tab.BROWSER),
+                enter = androidx.compose.animation.expandVertically(), exit = androidx.compose.animation.shrinkVertically(),
+            ) {
             Surface(color = androidx.compose.ui.graphics.Color.Transparent, contentColor = MaterialTheme.colorScheme.onSurface) {
                 Row(
                     Modifier.fillMaxWidth().statusBarsPadding().height(64.dp).padding(start = 16.dp, end = 4.dp),
@@ -184,6 +196,7 @@ fun CastorApp() {
                         Icon(Icons.Rounded.Settings, stringResource(R.string.cd_settings))
                     }
                 }
+            }
             }
         },
         bottomBar = { PillTabBar(tab, state.active) { Nav.tab.value = it } },

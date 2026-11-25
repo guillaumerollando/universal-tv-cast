@@ -72,6 +72,7 @@ fun HomeScreen(
 ) {
     val recents by Library.recents.collectAsState()
     val bookmarks by Library.bookmarks.collectAsState()
+    val sites by Library.sites.collectAsState()
     val c = MaterialTheme.colorScheme
 
     LazyColumn(
@@ -137,9 +138,20 @@ fun HomeScreen(
         } else item {
             LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(bookmarks, key = { "b" + it.url }) { b ->
+                    // Si l'on a casté depuis ce site, le favori reprend à la dernière page (l'épisode en cours).
+                    val visit = sites[Library.hostOf(b.url)]?.takeIf { it.url != b.url }
                     AssistChip(
-                        onClick = { onBrowse(b.url) },
-                        label = { Text(b.title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                        onClick = { onBrowse(visit?.url ?: b.url) },
+                        label = {
+                            Text(
+                                b.title + when {
+                                    visit?.episode != null -> " · " + stringResource(R.string.bookmark_episode, visit.episode)
+                                    visit != null -> " · " + stringResource(R.string.bookmark_resume)
+                                    else -> ""
+                                },
+                                maxLines = 1, overflow = TextOverflow.Ellipsis,
+                            )
+                        },
                         leadingIcon = { Icon(Icons.Rounded.Star, null, Modifier.size(18.dp), tint = c.primary) },
                         colors = AssistChipDefaults.assistChipColors(containerColor = c.surfaceContainerHigh),
                         border = null,
@@ -194,8 +206,13 @@ private fun RecentCard(r: Recent) {
         Box(
             Modifier.fillMaxWidth().aspectRatio(2f / 3f).clip(RoundedCornerShape(16.dp)).background(c.surfaceContainerHigh)
                 .clickable(role = Role.Button) {
-                    Castor.open(r.toMedia())
-                    Nav.tab.value = Tab.PLAYER
+                    // Vidéo trouvée sur un site : son lien a souvent expiré, on rouvre la page (l'épisode).
+                    val page = r.pageUrl
+                    if (page != null && page.startsWith("http")) Nav.openUrl.value = page
+                    else {
+                        Castor.open(r.toMedia())
+                        Nav.tab.value = Tab.PLAYER
+                    }
                 }
                 .semantics { contentDescription = r.title },
             contentAlignment = Alignment.Center,

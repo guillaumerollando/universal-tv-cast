@@ -17,6 +17,9 @@ data class Recent(
 
 data class Bookmark(val title: String, val url: String)
 
+/** Dernière page d'un site où l'on a lancé une vidéo (l'épisode où l'on en est). */
+data class SiteVisit(val url: String, val title: String, val episode: Int?, val time: Long)
+
 /** Favoris, historique et réglages, gardés sur le téléphone uniquement. */
 object Library {
     private lateinit var prefs: SharedPreferences
@@ -34,6 +37,13 @@ object Library {
         prefs = ctx.getSharedPreferences("library", Context.MODE_PRIVATE)
         _recents.value = runCatching { readRecents(JSONArray(prefs.getString("recents", "[]"))) }.getOrDefault(emptyList())
         _bookmarks.value = runCatching { readBookmarks(JSONArray(prefs.getString("bookmarks", "[]"))) }.getOrDefault(emptyList())
+        _sites.value = runCatching {
+            val o = JSONObject(prefs.getString("sites", "{}") ?: "{}")
+            o.keys().asSequence().associateWith { h ->
+                val v = o.getJSONObject(h)
+                SiteVisit(v.getString("url"), v.optString("title"), v.optInt("ep", -1).takeIf { it >= 0 }, v.optLong("time"))
+            }
+        }.getOrDefault(emptyMap())
         _adBlock.value = prefs.getBoolean("adblock", true)
         _continuous.value = prefs.getBoolean("continuous", true)
         _shakeHelp.value = prefs.getBoolean("shake_help", true)
@@ -92,6 +102,24 @@ object Library {
     fun clearRecents() { _recents.value = emptyList(); saveRecents() }
 
     fun isBookmarked(url: String) = _bookmarks.value.any { it.url == url }
+
+    private val _sites = MutableStateFlow<Map<String, SiteVisit>>(emptyMap())
+    /** Par site (domaine) : la dernière page d'où l'on a casté, pour reprendre la série là où on l'a laissée. */
+    val sites: StateFlow<Map<String, SiteVisit>> = _sites
+
+    fun hostOf(url: String): String = runCatching { android.net.Uri.parse(url).host?.removePrefix("www.") }.getOrNull().orEmpty()
+
+    fun rememberSiteVisit(url: String, title: String) {
+        val host = hostOf(url).ifEmpty { return }
+        val ep = studio.rollando.castor.browser.Episodes.find(url)?.number
+        _sites.value = (_sites.value + (host to SiteVisit(url, title, ep, System.currentTimeMillis())))
+            .entries.sortedByDescending { it.value.time }.take(30).associate { it.key to it.value }
+        prefs.edit().putString("sites", JSONObject().apply {
+            _sites.value.forEach { (h, v) ->
+                put(h, JSONObject().put("url", v.url).put("title", v.title).put("ep", v.episode ?: -1).put("time", v.time))
+            }
+        }.toString()).apply()
+    }
 
     fun toggleBookmark(title: String, url: String) {
         _bookmarks.value = if (isBookmarked(url)) _bookmarks.value.filter { it.url != url }

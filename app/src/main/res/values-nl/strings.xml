@@ -188,6 +188,10 @@
     <string name="episode_label">Seizoen %1$d · Aflevering %2$d</string>
     <string name="subs_in_video">Al in de video</string>
     <string name="subs_in_video_note">Kies ze met de afstandsbediening van de tv.</string>
+    <string name="browser_live">Live</string>
+    <string name="browser_next_episode">Aflevering %1$d</string>
+    <string name="bookmark_episode">Afl. %1$d</string>
+    <string name="bookmark_resume">Hervatten</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video\'s</item>

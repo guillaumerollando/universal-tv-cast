@@ -332,6 +332,10 @@ S = {
 "episode_label": ["Season %1$d · Episode %2$d", "Saison %1$d · Épisode %2$d", "Temporada %1$d · Episodio %2$d", "Staffel %1$d · Folge %2$d", "Stagione %1$d · Episodio %2$d", "Seizoen %1$d · Aflevering %2$d", "Temporada %1$d · Episódio %2$d"],
 "subs_in_video": ["Already in the video", "Déjà dans la vidéo", "Ya en el vídeo", "Schon im Video", "Già nel video", "Al in de video", "Já no vídeo"],
 "subs_in_video_note": ["Choose them with your TV remote.", "Choisis-les avec la télécommande de la télé.", "Elígelos con el mando de la TV.", "Wähle sie mit der TV-Fernbedienung.", "Sceglili con il telecomando della TV.", "Kies ze met de afstandsbediening van de tv.", "Escolha pelo controle da TV."],
+"browser_live": ["Live", "Direct", "En directo", "Live", "Diretta", "Live", "Ao vivo"],
+"browser_next_episode": ["Episode %1$d", "Épisode %1$d", "Episodio %1$d", "Folge %1$d", "Episodio %1$d", "Aflevering %1$d", "Episódio %1$d"],
+"bookmark_episode": ["Ep. %1$d", "Ép. %1$d", "Ep. %1$d", "Folge %1$d", "Ep. %1$d", "Afl. %1$d", "Ep. %1$d"],
+"bookmark_resume": ["Resume", "Reprendre", "Continuar", "Fortsetzen", "Riprendi", "Hervatten", "Continuar"],
 }
 PLURALS = {"browser_found": [
  ("%d video", "%d videos"), ("%d vidéo", "%d vidéos"), ("%d vídeo", "%d vídeos"), ("%d Video", "%d Videos"),

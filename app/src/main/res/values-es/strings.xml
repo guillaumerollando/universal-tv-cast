@@ -188,6 +188,10 @@
     <string name="episode_label">Temporada %1$d · Episodio %2$d</string>
     <string name="subs_in_video">Ya en el vídeo</string>
     <string name="subs_in_video_note">Elígelos con el mando de la TV.</string>
+    <string name="browser_live">En directo</string>
+    <string name="browser_next_episode">Episodio %1$d</string>
+    <string name="bookmark_episode">Ep. %1$d</string>
+    <string name="bookmark_resume">Continuar</string>
     <plurals name="browser_found">
         <item quantity="one">%d vídeo</item>
         <item quantity="other">%d vídeos</item>

@@ -477,3 +477,24 @@ noir, usage le soir devant la télé, un seul thème à soigner). En attente de 
 **Décision** (testeur) : thème sombre uniquement. Le thème clair est supprimé ; les icônes des barres système
 restent claires même si le téléphone est en mode clair (vérifié sur émulateur). Opacité de la barre portée à 84 %
 pour que les noms des onglets restent lisibles au-dessus d'une affiche.
+
+## 2026-11-25 (soir, 12) — Navigateur : la bonne vidéo, sa durée, l'en-tête qui se cache, les séries
+**Retour du testeur** : sur un site de streaming pris au hasard, l'épisode (25 min) n'était pas proposé, seulement
+3 vidéos de 12 s. Il voudrait voir la durée, un en-tête qui se cache en descendant, et de l'aide pour les séries
+(changer d'épisode, savoir où on en est). Le journal du téléphone n'avait plus la séance.
+**Causes probables** : seules les adresses en .mp4/.m3u8… étaient proposées (beaucoup de lecteurs servent sans
+extension), et le script de repérage ne tournait que dans la page, pas dans le cadre du lecteur intégré.
+**Fait**
+- Adresse sans extension demandée « à partir de l'octet 0 » (ou qui ressemble à une vidéo) : on lit 1 Ko pour
+  vérifier (#EXTM3U, ftyp MP4, MKV, type vidéo) avant de la proposer (60 vérifications max par site).
+- Script de repérage injecté dans tous les cadres dès leur ouverture (`addDocumentStartJavaScript`).
+- Durée : HLS (somme des segments, « Direct » sans fin), MP4 (boîte mvhd), lecteur de la page. Liste triée par
+  durée. **Moins d'une minute : pas proposée du tout** (souhait du testeur). Sans nom de fichier, la vidéo prend
+  le titre de la page.
+- En-tête de l'appli et barre d'adresse cachés quand on descend dans la page, réaffichés en remontant.
+- Séries : bouton « Épisode 13 → » quand l'adresse contient un numéro d'épisode (episode-12, ep-07-vostfr, ?ep=3,
+  …/saison-1/5). Caster depuis un site retient la page : le favori de ce site affiche « · Ép. 12 » et y reprend.
+  Les vidéos « Reprendre » venues d'un site rouvrent leur page (les liens de streaming expirent).
+- Vérifié sur émulateur avec un faux site (lecteur dans un cadre d'un autre domaine, vidéo /get?id=… sans
+  extension, pub de 12 s) : 1 vidéo, « 25 min », titre de la page, pub masquée, bouton Épisode 13, en-tête caché
+  au défilement. Tests : 22 (dont les formes d'adresses d'épisodes), lint propre.

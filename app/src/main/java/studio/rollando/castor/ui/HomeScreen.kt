@@ -246,7 +246,7 @@ private data class ResumeItem(
 private fun resumeItems(recents: List<Recent>, bookmarks: List<Bookmark>): List<ResumeItem> {
     val series = bookmarks.filter { it.isSeries }
     val fromRecents = recents.mapNotNull { r ->
-        val b = series.firstOrNull { it.key == r.key }
+        val b = series.firstOrNull { it.sameSeries(r) }
         // Une page de site sans numéro d'épisode (accueil, bande-annonce…) : son titre ne dirait rien.
         // Page de site sans épisode : on la garde (film, vidéo à identifiant), sauf l'accueil d'un site et les
         // vidéos courtes (bande-annonce, aperçu), dont le titre ne dirait rien.
@@ -260,18 +260,17 @@ private fun resumeItems(recents: List<Recent>, bookmarks: List<Bookmark>): List<
             else if (b == null) return@mapNotNull null
         }
         // Le favori a pu avancer plus loin (épisode ouvert sans être casté) : on reprend au plus loin.
-        val bookmarkAhead = b != null && (b.episode ?: 0) > (ep ?: 0)
+        val bookmarkAhead = b != null && (b.episode ?: b.titleEpisode ?: 0) > (ep ?: 0)
         ResumeItem(
-            key = r.key, title = b?.title ?: r.seriesTitle, image = r.poster ?: b?.image,
+            key = r.key, title = b?.seriesTitle ?: r.seriesTitle, image = r.poster ?: b?.image,
             host = Uri.parse(r.pageUrl ?: r.url).host?.removePrefix("www.")?.takeIf { it != "127.0.0.1" && it != "localhost" }.orEmpty(),
-            season = r.season, episode = if (bookmarkAhead) b!!.episode else ep, time = maxOf(r.time, b?.time ?: 0),
+            season = r.season, episode = if (bookmarkAhead) b!!.episode ?: b.titleEpisode else ep, time = maxOf(r.time, b?.time ?: 0),
             recent = r, bookmark = b, openUrl = if (bookmarkAhead) b!!.url else open,
             progress = if (bookmarkAhead) null else r.progress,
         )
     }
-    val keys = recents.map { it.key }.toSet()
-    val onlyBookmarked = series.filter { it.key !in keys }.map { b ->
-        ResumeItem(b.key, b.title, b.image, b.host, null, b.episode, b.time, null, b, b.url)
+    val onlyBookmarked = series.filter { b -> recents.none { b.sameSeries(it) } }.map { b ->
+        ResumeItem(b.key, b.seriesTitle, b.image, b.host, null, b.episode ?: b.titleEpisode, b.time, null, b, b.url)
     }
     return (fromRecents + onlyBookmarked).sortedByDescending { it.time }
 }

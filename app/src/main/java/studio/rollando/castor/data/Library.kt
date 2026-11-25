@@ -49,7 +49,7 @@ data class Recent(
 
     /** Page d'accueil d'un site (une vidéo d'aperçu, pas quelque chose qu'on reprend). */
     val isHomePage: Boolean get() = web && runCatching {
-        android.net.Uri.parse(pageUrl).path.orEmpty().trim('/').lowercase() in setOf("", "home", "accueil", "index", "index.html", "fr", "en")
+        android.net.Uri.parse(pageUrl).path.orEmpty().trim('/').lowercase() in HOME_PATHS
     }.getOrDefault(false)
 
     /** Titre de la série seule (« Jujutsu Kaisen » plutôt que « Jujutsu Kaisen – Épisode 5 »). */
@@ -75,8 +75,24 @@ data class Bookmark(
     val isSite: Boolean get() =
         key == (runCatching { android.net.Uri.parse(url).authority }.getOrNull() ?: host).removePrefix("www.").lowercase()
     /** Série suivie (une page d'épisode) ; sinon c'est un site ou une page de site, rangé dans « Mes sites ». */
-    val isSeries: Boolean get() = !isSite && episode != null
+    val isSeries: Boolean get() = !isSite && (episode != null || titleEpisode != null || !isHomePage)
+
+    /** Épisode lu dans le titre, pour les sites dont l'adresse n'a pas de numéro (« /watch/a8Kz93 »). */
+    val titleEpisode: Int? get() = studio.rollando.castor.browser.PageTitle.episode(title)
+    /** Nom de la série seule (« Frieren – Épisode 8 » → « Frieren »). */
+    val seriesTitle: String get() = studio.rollando.castor.browser.PageTitle.series(title)
+
+    /** Accueil d'un site (« /home », « /accueil »…) : rangé avec les sites. */
+    private val isHomePage: Boolean get() = runCatching {
+        android.net.Uri.parse(url).path.orEmpty().trim('/').lowercase() in HOME_PATHS
+    }.getOrDefault(false)
+
+    /** Même série qu'une entrée de « Reprendre » (même adresse de série, même page, ou même nom sur le même site). */
+    fun sameSeries(r: Recent): Boolean = key == r.key || url == r.pageUrl ||
+        (r.isWeb && host == Library.hostOf(r.pageUrl!!) && seriesTitle.equals(r.seriesTitle, ignoreCase = true))
 }
+
+private val HOME_PATHS = setOf("", "home", "accueil", "index", "index.html", "index.php", "fr", "en")
 
 /** Ce que l'appli a fait toute seule avec un favori, pour le dire à l'utilisateur. */
 sealed class BookmarkEvent {
@@ -164,9 +180,10 @@ object Library {
 
     /** Retire de « Reprendre » toute la série (et son favori, s'il y en a un, sinon elle y reviendrait). */
     fun removeRecent(key: String) {
-        _recents.value = _recents.value.filter { it.key != key }
+        val gone = _recents.value.filter { it.key == key }
+        _recents.value = _recents.value - gone.toSet()
         saveRecents()
-        _bookmarks.value.filter { !it.isSite && it.key == key }.forEach { removeBookmark(it) }
+        _bookmarks.value.filter { b -> b.isSeries && (b.key == key || gone.any { b.sameSeries(it) }) }.forEach { removeBookmark(it) }
     }
     fun removeRecent(r: Recent) = removeRecent(r.key)
 
@@ -272,9 +289,10 @@ object Library {
                 _hiddenSites.value = _hiddenSites.value - h
                 prefs.edit().putStringSet("hidden_sites", _hiddenSites.value).apply()
             } }
-            val b = Bookmark(title.ifBlank { url }, url, ep?.number, System.currentTimeMillis(), image)
+            val b = Bookmark(title.ifBlank { url }, url, ep?.number ?: studio.rollando.castor.browser.PageTitle.episode(title),
+                System.currentTimeMillis(), image)
             _bookmarks.value = listOf(b) + _bookmarks.value
-            _events.tryEmit(BookmarkEvent.Followed(b.title, series = !b.isSite && ep != null))
+            _events.tryEmit(BookmarkEvent.Followed(b.title, series = !b.isSite && b.episode != null))
         }
         saveBookmarks()
     }

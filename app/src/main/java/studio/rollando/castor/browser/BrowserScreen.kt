@@ -307,7 +307,7 @@ fun BrowserScreen(b: BrowserController) {
                 IconButton(onClick = {
                     val clean = PageTitle.clean(b.title, Uri.parse(b.url).host ?: "")
                     // Épisode d'une série : le favori porte le nom de la série. Site ou film : le titre tel quel.
-                    val name = if (Episodes.find(b.url) != null) PageTitle.series(clean) else clean
+                    val name = if (Episodes.find(b.url) != null || PageTitle.episode(clean) != null) PageTitle.series(clean) else clean
                     Library.toggleBookmark(name, b.url, b.sniffer.pageImage)
                 }) {
                     Icon(

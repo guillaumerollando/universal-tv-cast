@@ -506,3 +506,24 @@ Les 3 vidéos de 12 s vues par le testeur étaient des clips d'aperçu du site (
   4 réponses non vidéo, on cesse de vérifier ce préfixe.
 - Résultat : une seule vidéo proposée, « Regarder maintenant : Black Clover Season 2 », HLS, « 23 min ». Le flux
   s'ouvre dans l'appli (23:50, pas de protection). Pas casté (pas de télé sur l'émulateur).
+
+## 2026-11-25 (soir, 13) — otakubinge : « fichier non pris en charge », puis 403
+**Journal du téléphone** : 1er essai lu par la télé puis refusé (« fichier non pris en charge ») ; 2e essai, le site
+répond 403 sur le flux.
+**Analyse (émulateur, PC)** :
+- Le site sert l'image et le son **séparément** (deux listes HLS, morceaux MPEG-TS chiffrés AES-128). La liste
+  choisie au 1er essai était le **son seul** (AAC, vérifié en déchiffrant un morceau) : la télé ne l'a pas lu.
+- L'adresse principale de chaque épisode (`/w/<jeton>`, donnée par `/api/media/content/…`) renvoie 403 hors du
+  lecteur du site (Cloudflare, session). Les listes `/v/<jeton>` ne se relisent pas : redemandées par l'appli,
+  elles renvoient 403. **Ce site protège ses vidéos : seul son lecteur peut les lire.** Aucune appli de cast ne
+  peut les relire.
+**Fait**
+- `HlsKind` : on lit le début du premier morceau (déchiffré si AES-128) et on regarde ses pistes (PMT). Une liste
+  **son seul n'est plus jamais proposée** ; une image sans son est signalée « Image seule, sans le son ».
+- `TsMerge` : quand un site sert image et son à part (sans protection), le relais les **fusionne** en un seul
+  MPEG-TS (pistes renumérotées, PMT commune, entrelacement par horodatage). La liste du son est associée à l'image
+  dans le navigateur ; dans ce cas on passe par le flux continu (DLNA). Test : MPEG-TS image + MPEG-TS son
+  fabriqués avec ffmpeg → un flux à 2 pistes lu par ffprobe.
+- Site qui refuse la vidéo à la télé (403/401) : message clair « Ce site protège ses vidéos… » au lieu d'un échec
+  muet. Retrait des vérifications en double (pour ne pas consommer les jetons du lecteur du site).
+- Tests 23/23, lint propre.

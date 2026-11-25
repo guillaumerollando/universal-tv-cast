@@ -32,7 +32,8 @@ import kotlin.concurrent.thread
  */
 class ProxyServer(private val ctx: Context) {
     enum class Kind { MAIN, PLAYLIST, SEGMENT, KEY }
-    private class Remote(val url: String, val headers: Map<String, String>, val kind: Kind)
+    /** [audio] : liste HLS du son, quand le site le sert à part de l'image (fusionnés à la volée). */
+    private class Remote(val url: String, val headers: Map<String, String>, val kind: Kind, val audio: String? = null)
     private class Req(val method: String, val seg: List<String>, val query: Map<String, String>, val headers: Map<String, String>)
 
     private val server = ServerSocket(0, 50)
@@ -49,6 +50,8 @@ class ProxyServer(private val ctx: Context) {
 
     @Volatile var subtitle: ByteArray? = null
     @Volatile var subtitleUrl: String? = null
+    /** Appelé quand le site refuse de redonner la vidéo à la télé (403 / 401). */
+    @Volatile var onSourceDenied: ((Int) -> Unit)? = null
     /** Nom du format tel que la télé l'accepte (ex. « video/mpeg » au lieu de « video/mp2t »). */
     @Volatile var mimeOverride: String? = null
 
@@ -68,10 +71,10 @@ class ProxyServer(private val ctx: Context) {
         subtitle = null; subtitleUrl = null; mimeOverride = null
     }
 
-    fun register(url: String, headers: Map<String, String>, kind: Kind = Kind.MAIN): String =
+    fun register(url: String, headers: Map<String, String>, kind: Kind = Kind.MAIN, audio: String? = null): String =
         idsByUrl.getOrPut("$kind|$url") {
             val id = "r" + counter.incrementAndGet()
-            remotes[id] = Remote(url, headers, kind)
+            remotes[id] = Remote(url, headers, kind, audio)
             id
         }
 
@@ -357,7 +360,14 @@ class ProxyServer(private val ctx: Context) {
             head(out0, 200, "OK", listOf("Content-Type" to type, "Cache-Control" to "no-cache") + dlna(false))
             return
         }
-        var plan = Hls.load(r.url, r.headers)
+        val plan0 = try {
+            Hls.load(r.url, r.headers)
+        } catch (e: studio.rollando.castor.net.HttpError) {
+            // Le site refuse (liens à usage unique, protection) : on le dit à l'appli plutôt qu'un échec muet.
+            if (e.code == 401 || e.code == 403) onSourceDenied?.invoke(e.code)
+            throw e
+        }
+        var plan = plan0
         head(out0, 200, "OK", listOf(
             "Content-Type" to type,
             "Cache-Control" to "no-cache",
@@ -366,15 +376,28 @@ class ProxyServer(private val ctx: Context) {
         val out = ChunkedOutputStream(out0)
 
         var idx = 0
+        var vTime = 0.0 // début du prochain morceau d'image, en secondes
         if (plan.endList) {
             var acc = 0.0
             while (idx < plan.segs.size - 1 && acc + plan.segs[idx].duration <= start) {
                 acc += plan.segs[idx].duration; idx++
             }
+            vTime = acc
         } else {
             idx = (plan.segs.size - 3).coerceAtLeast(0)
         }
         val keys = ConcurrentHashMap<String, ByteArray>()
+        // Son servi à part : on le recolle à l'image, morceau par morceau (même début dans le temps).
+        val audioPlan = r.audio?.takeIf { !plan.fmp4 }?.let { runCatching { Hls.load(it, r.headers) }.getOrNull() }
+        val merger = if (audioPlan != null) TsMerge() else null
+        var aIdx = 0
+        var aTime = 0.0
+        if (audioPlan != null) {
+            while (aIdx < audioPlan.segs.size - 1 && aTime + audioPlan.segs[aIdx].duration <= vTime) {
+                aTime += audioPlan.segs[aIdx].duration; aIdx++
+            }
+            Log.i(TAG, "image et son séparés : fusion (son à partir de ${aTime.toInt()} s)")
+        }
         val queue = ArrayDeque<Pair<Hls.Seg, Future<ByteArray?>>>()
         var lastSeq = -1L
         var currentMap: String? = null
@@ -405,7 +428,16 @@ class ProxyServer(private val ctx: Context) {
                     out.write(Http.fetch(map, r.headers).bytes)
                     currentMap = map
                 }
-                out.write(data)
+                vTime += seg.duration
+                if (merger != null && audioPlan != null) {
+                    val sound = java.io.ByteArrayOutputStream()
+                    while (aIdx < audioPlan.segs.size && aTime < vTime) {
+                        val aSeg = audioPlan.segs[aIdx++]
+                        fetchSegment(aSeg, r.headers, keys, true)?.let(sound::write)
+                        aTime += aSeg.duration
+                    }
+                    out.write(merger.merge(data, sound.toByteArray()))
+                } else out.write(data)
                 out.flush()
                 lastSeq = seg.seq
             }

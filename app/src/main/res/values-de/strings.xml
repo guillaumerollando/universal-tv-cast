@@ -192,6 +192,8 @@
     <string name="browser_next_episode">Folge %1$d</string>
     <string name="bookmark_episode">Folge %1$d</string>
     <string name="bookmark_resume">Fortsetzen</string>
+    <string name="browser_silent">Nur Bild, ohne Ton</string>
+    <string name="err_protected">Diese Seite schützt ihre Videos: Nur ihr eigener Player kann sie abspielen, daher lassen sie sich nicht an den Fernseher senden.</string>
     <plurals name="browser_found">
         <item quantity="one">%d Video</item>
         <item quantity="other">%d Videos</item>

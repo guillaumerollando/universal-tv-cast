@@ -336,6 +336,8 @@ S = {
 "browser_next_episode": ["Episode %1$d", "Épisode %1$d", "Episodio %1$d", "Folge %1$d", "Episodio %1$d", "Aflevering %1$d", "Episódio %1$d"],
 "bookmark_episode": ["Ep. %1$d", "Ép. %1$d", "Ep. %1$d", "Folge %1$d", "Ep. %1$d", "Afl. %1$d", "Ep. %1$d"],
 "bookmark_resume": ["Resume", "Reprendre", "Continuar", "Fortsetzen", "Riprendi", "Hervatten", "Continuar"],
+"browser_silent": ["Picture only, no sound", "Image seule, sans le son", "Solo imagen, sin sonido", "Nur Bild, ohne Ton", "Solo immagine, senza audio", "Alleen beeld, zonder geluid", "Só imagem, sem som"],
+"err_protected": ["This site protects its videos: only its own player can read them, so they can’t be sent to the TV.", "Ce site protège ses vidéos : seul son propre lecteur peut les lire, elles ne peuvent donc pas être envoyées sur la télé.", "Este sitio protege sus vídeos: solo su propio reproductor puede leerlos, así que no se pueden enviar a la TV.", "Diese Seite schützt ihre Videos: Nur ihr eigener Player kann sie abspielen, daher lassen sie sich nicht an den Fernseher senden.", "Questo sito protegge i suoi video: solo il suo lettore può riprodurli, quindi non si possono inviare alla TV.", "Deze site beschermt zijn video’s: alleen de eigen speler kan ze afspelen, dus ze kunnen niet naar de tv.", "Este site protege seus vídeos: só o próprio player consegue reproduzi-los, então não dá para enviá-los à TV."],
 }
 PLURALS = {"browser_found": [
  ("%d video", "%d videos"), ("%d vidéo", "%d vidéos"), ("%d vídeo", "%d vídeos"), ("%d Video", "%d Videos"),

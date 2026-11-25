@@ -192,6 +192,8 @@
     <string name="browser_next_episode">Aflevering %1$d</string>
     <string name="bookmark_episode">Afl. %1$d</string>
     <string name="bookmark_resume">Hervatten</string>
+    <string name="browser_silent">Alleen beeld, zonder geluid</string>
+    <string name="err_protected">Deze site beschermt zijn video’s: alleen de eigen speler kan ze afspelen, dus ze kunnen niet naar de tv.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video\'s</item>

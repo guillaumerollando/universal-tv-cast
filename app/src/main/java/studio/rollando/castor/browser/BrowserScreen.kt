@@ -337,6 +337,7 @@ fun BrowserScreen(b: BrowserController) {
                         supportingContent = {
                             Text(
                                 listOfNotNull(
+                                    if (f.silent) stringResource(R.string.browser_silent) else null,
                                     if (f.qualities > 0) stringResource(R.string.browser_auto_quality, f.qualities) +
                                         (if (f.maxHeight > 0) " · ${f.maxHeight}p" else "")
                                     else if (f.hls) "HLS" else "MP4/WebM",
@@ -366,6 +367,7 @@ fun BrowserScreen(b: BrowserController) {
                                     mime = if (f.hls) "application/vnd.apple.mpegurl" else null,
                                     headers = f.headers,
                                     pageUrl = f.pageUrl,
+                                    audioUrl = f.audio,
                                 )
                             )
                             Nav.tab.value = Tab.PLAYER

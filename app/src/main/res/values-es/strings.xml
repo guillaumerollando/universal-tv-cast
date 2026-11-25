@@ -192,6 +192,8 @@
     <string name="browser_next_episode">Episodio %1$d</string>
     <string name="bookmark_episode">Ep. %1$d</string>
     <string name="bookmark_resume">Continuar</string>
+    <string name="browser_silent">Solo imagen, sin sonido</string>
+    <string name="err_protected">Este sitio protege sus vídeos: solo su propio reproductor puede leerlos, así que no se pueden enviar a la TV.</string>
     <plurals name="browser_found">
         <item quantity="one">%d vídeo</item>
         <item quantity="other">%d vídeos</item>

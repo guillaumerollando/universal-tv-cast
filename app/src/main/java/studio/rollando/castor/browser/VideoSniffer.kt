@@ -13,6 +13,10 @@ data class Found(
     val url: String, val hls: Boolean, val headers: Map<String, String>, val pageTitle: String, val pageUrl: String,
     /** Pour un flux HLS « principal » : nombre de qualités et la meilleure (ex. 5 et 1080). */
     val qualities: Int = 0, val maxHeight: Int = 0,
+    /** Image sans son (le site sert le son à part) et son pas encore trouvé : proposée, mais signalée. */
+    val silent: Boolean = false,
+    /** Liste HLS du son servi à part, recollé à l'image par le relais. */
+    val audio: String? = null,
     /** Durée en secondes si on la connaît (null : inconnue ; 0 : direct). */
     val duration: Double? = null,
 ) {
@@ -38,7 +42,12 @@ class VideoSniffer {
 
     private val fileExt = setOf("mp4", "webm", "mkv", "m4v", "mov", "avi", "mp3", "m4a")
 
-    fun reset() { _found.value = emptyList(); hidden.clear(); probed.clear(); misses.clear() }
+    fun reset() {
+        _found.value = emptyList(); hidden.clear(); probed.clear(); misses.clear(); audioList = null
+    }
+
+    /** Dernière piste son seule repérée sur la page (pour la recoller à l'image). */
+    @Volatile private var audioList: String? = null
 
     /** Extensions qui ne sont jamais des vidéos : inutile de les vérifier. */
     private val notMedia = setOf("js", "css", "png", "jpg", "jpeg", "gif", "webp", "svg", "ico", "woff", "woff2", "ttf",
@@ -152,7 +161,22 @@ class VideoSniffer {
             val text = runCatching { String(studio.rollando.castor.net.Http.fetch(f.url, f.headers, connectTimeout = 8000).bytes) }.getOrNull()
                 ?: return@thread
             if (!text.contains("#EXT-X-STREAM-INF")) {
-                update(f.url) { it.copy(duration = hlsDuration(text)) }
+                // Liste « média » directe : on regarde ce que contient son premier morceau. Une piste son seule
+                // (image et son séparés par le lecteur du site) ne se caste pas : on ne la propose pas.
+                val kind = runCatching { HlsKind.of(text, f.url, f.headers) }.getOrNull()
+                android.util.Log.i("CastorWeb", "liste HLS ${f.url.takeLast(24)} : $kind")
+                if (kind == HlsKind.Kind.AUDIO) {
+                    // Le son à part : pas proposé seul, mais recollé aux images sans son de la page.
+                    hidden += f.url
+                    audioList = f.url
+                    synchronized(this) {
+                        _found.value = sorted(_found.value.filter { it.url != f.url }
+                            .map { if (it.silent) it.copy(silent = false, audio = f.url) else it })
+                    }
+                    return@thread
+                }
+                val sound = if (kind == HlsKind.Kind.VIDEO) audioList else null
+                update(f.url) { it.copy(duration = hlsDuration(text), silent = kind == HlsKind.Kind.VIDEO && sound == null, audio = sound) }
                 return@thread
             }
             val lines = text.lines().map { it.trim() }
@@ -279,6 +303,75 @@ object Mp4Duration {
         outer@ for (i in 0..b.size - pat.size) {
             for (j in pat.indices) if (b[i + j] != pat[j]) continue@outer
             return i
+        }
+        return null
+    }
+}
+
+/**
+ * Ce que contient une liste HLS : image et son, image seule ou son seul. On lit le début du premier morceau
+ * (déchiffré s'il est en AES-128) et on regarde les types de pistes annoncés (PMT du MPEG-TS).
+ */
+object HlsKind {
+    enum class Kind { BOTH, VIDEO, AUDIO }
+
+    fun of(playlist: String, base: String, headers: Map<String, String>): Kind? {
+        val lines = playlist.lines().map { it.trim() }
+        val segLine = lines.firstOrNull { it.isNotEmpty() && !it.startsWith("#") } ?: return null
+        val keyLine = lines.takeWhile { it != segLine }.lastOrNull { it.startsWith("#EXT-X-KEY") }
+        val seg = java.net.URL(java.net.URL(base), segLine).toString()
+        val c = studio.rollando.castor.net.Http.open(seg, headers, null, connectTimeout = 6000, readTimeout = 8000)
+        var data = try {
+            c.inputStream.use { ins -> val b = ByteArray(32 * 1024); var n = 0
+                while (n < b.size) { val r = ins.read(b, n, b.size - n); if (r < 0) break; n += r }
+                b.copyOf(n) }
+        } finally { c.disconnect() }
+        if (keyLine != null && keyLine.contains("AES-128")) {
+            val keyUri = Regex("URI=\"([^\"]+)\"").find(keyLine)?.groupValues?.get(1) ?: return null
+            val key = studio.rollando.castor.net.Http.fetch(java.net.URL(java.net.URL(base), keyUri).toString(), headers, connectTimeout = 6000).bytes
+            val ivHex = Regex("IV=0[xX]([0-9a-fA-F]+)").find(keyLine)?.groupValues?.get(1)
+            val iv = ivHex?.padStart(32, '0')?.chunked(2)?.map { it.toInt(16).toByte() }?.toByteArray() ?: ByteArray(16)
+            val n = data.size / 16 * 16
+            val cipher = javax.crypto.Cipher.getInstance("AES/CBC/NoPadding")
+            cipher.init(javax.crypto.Cipher.DECRYPT_MODE, javax.crypto.spec.SecretKeySpec(key, "AES"), javax.crypto.spec.IvParameterSpec(iv))
+            data = cipher.doFinal(data, 0, n)
+        } else if (keyLine != null && !keyLine.contains("NONE")) return null
+        return fromTs(data)
+    }
+
+    /** Types de pistes de la table PMT d'un début de MPEG-TS. */
+    fun fromTs(d: ByteArray): Kind? {
+        val start = (0 until minOf(d.size, 188 * 4)).firstOrNull { i ->
+            d[i] == 0x47.toByte() && i + 188 < d.size && d[i + 188] == 0x47.toByte()
+        } ?: return null
+        var pmtPid = -1
+        var p = start
+        while (p + 188 <= d.size) {
+            val pid = ((d[p + 1].toInt() and 0x1F) shl 8) or (d[p + 2].toInt() and 0xFF)
+            val pusi = d[p + 1].toInt() and 0x40 != 0
+            val afc = (d[p + 3].toInt() ushr 4) and 3
+            var q = p + 4
+            if (afc == 2 || afc == 3) q += 1 + (d[q].toInt() and 0xFF)
+            if (pusi && q < p + 188) {
+                q += 1 + (d[q].toInt() and 0xFF) // pointer_field
+                if (pid == 0 && pmtPid < 0 && q + 12 < p + 188) {
+                    pmtPid = ((d[q + 10].toInt() and 0x1F) shl 8) or (d[q + 11].toInt() and 0xFF)
+                } else if (pid == pmtPid && q + 12 < p + 188 && d[q].toInt() == 2) {
+                    val sectionEnd = q + 3 + (((d[q + 1].toInt() and 0x0F) shl 8) or (d[q + 2].toInt() and 0xFF)) - 4
+                    val infoLen = ((d[q + 10].toInt() and 0x0F) shl 8) or (d[q + 11].toInt() and 0xFF)
+                    var e = q + 12 + infoLen
+                    var video = false; var audio = false
+                    while (e + 5 <= minOf(sectionEnd, p + 188)) {
+                        when (d[e].toInt() and 0xFF) {
+                            0x01, 0x02, 0x10, 0x1B, 0x24, 0x42, 0xEA -> video = true
+                            0x03, 0x04, 0x0F, 0x11, 0x81, 0x87 -> audio = true
+                        }
+                        e += 5 + (((d[e + 3].toInt() and 0x0F) shl 8) or (d[e + 4].toInt() and 0xFF))
+                    }
+                    return when { video && audio -> Kind.BOTH; video -> Kind.VIDEO; audio -> Kind.AUDIO; else -> null }
+                }
+            }
+            p += 188
         }
         return null
     }

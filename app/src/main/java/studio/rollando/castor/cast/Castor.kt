@@ -105,6 +105,9 @@ object Castor {
         CastControl.init(app)
         CastControl.onDevices = { list -> castDevices = list; publish(allDevices()) }
         CastControl.onFinished = { onMediaEnded() }
+        proxy.onSourceDenied = { _ ->
+            _state.update { it.copy(notice = Notice(R.string.err_protected, error = true)) }
+        }
     }
 
     @Volatile private var dlnaDevices: List<Renderer> = emptyList()
@@ -277,7 +280,7 @@ object Castor {
         hlsDuration = 0.0
         fmp4 = false
         if (!media.isLocal) {
-            remoteId = proxy.register(media.url, media.headers)
+            remoteId = proxy.register(media.url, media.headers, audio = media.audioUrl)
             remoteId?.let { id -> scope.launch { runCatching { proxy.prefetchMeta(id) } } }
             val hls = media.mime?.contains("mpegurl", true) == true || Mime.ext(media.url) == "m3u8" || sniffHls(media)
             if (hls) {
@@ -742,7 +745,8 @@ object Castor {
         _state.update { it.copy(phase = Phase.SENDING, notice = null, idle = false) }
         val base = proxy.baseUrl()
         var r = chosen
-        if (chosen.cast && !forceDlna) {
+        // Cast ne lit pas notre flux fusionné : on passe par le DLNA de la télé si elle en a un.
+        if (chosen.cast && !forceDlna && !(m.audioUrl != null && chosen.fallback != null)) {
             try {
                 via = null
                 castViaGoogleCast(chosen, s, m, start, base, paused)
@@ -761,7 +765,8 @@ object Castor {
         via = if (r !== chosen) r else null
         val tvMimes = sinksOf(r)
         // Une télé qui ne lit pas le HLS reçoit toujours le flux continu.
-        val continuous = s.isHls && (s.continuous || !Dlna.accepts(tvMimes, "application/vnd.apple.mpegurl"))
+        // Image et son séparés : seul le flux continu (fusionné par le relais) les réunit.
+        val continuous = s.isHls && (s.continuous || m.audioUrl != null || !Dlna.accepts(tvMimes, "application/vnd.apple.mpegurl"))
         if (continuous != (s.isHls && s.continuous)) _state.update { it.copy(continuous = true) }
         // Télé DLNA qui ignore les sous-titres externes : on les intègre au MP4 (piste texte), sans réencodage.
         val embedUrl = embeddedUrl(m, s, continuous, base)

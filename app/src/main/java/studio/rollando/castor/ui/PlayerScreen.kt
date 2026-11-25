@@ -161,7 +161,6 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
         if (!film && !state.live) Column {
             Text(media.title, style = MaterialTheme.typography.titleLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
             media.host?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant) }
-            streamInfoLine(state)?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant) }
         }
 
         BackgroundTip(state)
@@ -347,21 +346,7 @@ private fun Progress(s: CastState) {
     }
 }
 
-/** Ce que le flux dit de lui-même, en une ligne : « 720p · 25 i/s · H.264 · Audio : Français, English ». */
-@Composable
-private fun streamInfoLine(s: CastState): String? {
-    val i = s.streamInfo ?: return null
-    val parts = buildList {
-        i.height?.let { add("${it}p") }
-        i.fps?.let { add(stringResource(R.string.info_fps, if (it % 1.0 == 0.0) it.toInt().toString() else "%.2f".format(it))) }
-        i.videoCodec?.let { add(it) }
-        if (i.audio.size > 1) add(stringResource(R.string.info_audio, i.audio.joinToString(", ")))
-        if (i.subtitles.isNotEmpty()) add(stringResource(R.string.info_subs, i.subtitles.joinToString(", ")))
-    }
-    return parts.takeIf { it.isNotEmpty() }?.joinToString(" · ")
-}
-
-/** En-tête d'une chaîne en direct : à sa couleur, son nom en grand, l'état et les infos du flux. */
+/** En-tête d'une chaîne en direct : à sa couleur, son nom en grand, l'état de la lecture. */
 @Composable
 private fun ChannelHeader(s: CastState) {
     val m = s.media ?: return
@@ -384,7 +369,6 @@ private fun ChannelHeader(s: CastState) {
                 phaseLabel(s) + (s.renderer?.let { " · " + it.name } ?: ""),
                 style = MaterialTheme.typography.labelLarge, color = Color.White.copy(alpha = 0.92f), maxLines = 1, overflow = TextOverflow.Ellipsis,
             )
-            streamInfoLine(s)?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = Color.White.copy(alpha = 0.75f), maxLines = 1) }
         }
         if (s.phase == Phase.LOADING || s.phase == Phase.SENDING || s.phase == Phase.BUFFERING) {
             LinearProgressIndicator(Modifier.fillMaxWidth().align(Alignment.BottomCenter))

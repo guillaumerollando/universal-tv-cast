@@ -72,8 +72,6 @@ data class CastState(
     /** Direct : retard voulu sur le direct (secondes) et ce que le flux garde en arrière. */
     val liveBehind: Double = 0.0,
     val liveWindow: Double = 0.0,
-    /** Ce que le flux dit de lui-même : qualité, codec, langues. */
-    val streamInfo: studio.rollando.castor.proxy.Hls.StreamInfo? = null,
 ) {
     val active: Boolean get() = phase in setOf(Phase.SENDING, Phase.BUFFERING, Phase.PLAYING, Phase.PAUSED)
 }
@@ -300,7 +298,7 @@ object Castor {
         _state.update {
             it.copy(media = media, slides = null, phase = Phase.LOADING, isHls = false, splitAudio = false, subIndex = media.defaultSub,
                 position = 0.0, duration = 0.0, notice = null, continuous = Library.continuousHls.value, subDelay = 0.0,
-                embeddedSubs = emptyList(), live = false, liveBehind = 0.0, liveWindow = 0.0, streamInfo = null)
+                embeddedSubs = emptyList(), live = false, liveBehind = 0.0, liveWindow = 0.0)
         }
         proxy.reset()
         remoteId = null
@@ -317,7 +315,7 @@ object Castor {
                 fmp4 = plan.fmp4
                 _state.update {
                     it.copy(isHls = true, splitAudio = plan.splitAudio, duration = hlsDuration, live = !plan.endList,
-                        liveWindow = if (plan.endList) 0.0 else plan.duration, streamInfo = plan.info,
+                        liveWindow = if (plan.endList) 0.0 else plan.duration,
                         continuous = if (plan.splitAudio) false else it.continuous)
                 }
                 // Titre lisible pour un direct ouvert par son lien (« index.m3u8 ») : le nom de la chaîne.

@@ -656,3 +656,5 @@ fait toute seule.
 - En-tête de l'onglet Lecture pour un direct : à la couleur de la chaîne, son nom en grand, l'état, et une ligne lue dans le flux lui-même (liste maître : définition, images/s, codec, langues audio et sous-titres s'il y en a plusieurs) — « 720p · 25 i/s · H.264 » pour Arte. Même ligne sous le titre des autres vidéos HLS.
 - Titre d'un direct ouvert par son lien : nom de la chaîne reconnue (sinon « Direct »), aussi depuis « Coller un lien ».
 - Vérifié avec la fausse télé et le direct d'Arte : Pause puis Play (pas de renvoi), −0:10 affiché, −10 s → start=20, Revenir au direct → start=0 et badge rouge.
+- Retiré à la demande de Guillaume : la ligne d'infos techniques du flux (720p · 25 i/s · H.264…), qu'on ne peut pas changer et qui encombre (« il met son lien, il envoie, ça marche »). Code de lecture de ces infos supprimé aussi.
+- Chaînes légales vérifiées (liste + morceaux vidéo téléchargés depuis la France, 25/11) pour ses tests : Arte, TV5Monde Info, TV5Monde FBS, ICI RDI, ICI Montréal, Savoir Média, TV Monaco, MonacoInfo, BX1. Écartées : rediffusions sur IP brutes (France 3, Gulli…), CGTN, RTL, TVM3 (pas de vidéo).

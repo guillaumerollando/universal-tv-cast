@@ -16,6 +16,13 @@ object PageTitle {
     /** Nom de la série seul (pour un favori qui suivra les épisodes) : « Mon Anime – Épisode 12 » → « Mon Anime ». */
     fun series(title: String): String = EPISODE.replace(title, "").trim().ifBlank { title }
 
+    private val EP_NUMBER = Regex("(?iu)(?<!\\p{L})(?:épisode|episode|episodio|folge|ep\\.?|e)\\s*(\\d{1,4})(?!\\d)|\\bS\\d{1,2}E(\\d{1,4})")
+
+    /** Numéro d'épisode écrit dans le titre (« Mon Anime – Épisode 12 » → 12), quand l'adresse n'en a pas. */
+    fun episode(title: String): Int? = EP_NUMBER.find(title)?.let { m ->
+        (m.groups[1] ?: m.groups[2])?.value?.toIntOrNull()
+    }
+
     fun clean(title: String, host: String): String {
         if (title.isBlank()) return title
         val site = host.removePrefix("www.").substringBefore('.').lowercase().filter { it.isLetterOrDigit() }

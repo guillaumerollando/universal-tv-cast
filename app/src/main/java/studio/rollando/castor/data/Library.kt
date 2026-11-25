@@ -32,6 +32,9 @@ data class Recent(
 
     /** Une seule entrée par série : l'adresse de la page sans le numéro d'épisode, ou le nom de la série et sa saison. */
     val key: String get() = when {
+        // L'adresse ne dit pas l'épisode (site qui donne un identifiant par vidéo) : la série, d'après le titre.
+        web && urlEpisode == null && titleEpisode != null ->
+            "t:" + Library.hostOf(pageUrl!!) + "|" + studio.rollando.castor.browser.PageTitle.series(title).lowercase()
         web -> studio.rollando.castor.browser.Episodes.seriesKey(pageUrl!!)
         season != null && fileName != null ->
             "f:" + studio.rollando.castor.subs.SubtitleFinder.parse(fileName).title.lowercase() + "#" + season
@@ -39,7 +42,15 @@ data class Recent(
     }
 
     /** Épisode où l'on en est (pour la pastille), s'il est connu. */
-    val episodeNumber: Int? get() = episode ?: pageUrl?.takeIf { web }?.let { studio.rollando.castor.browser.Episodes.find(it)?.number }
+    val episodeNumber: Int? get() = episode ?: urlEpisode ?: titleEpisode
+
+    private val urlEpisode: Int? get() = pageUrl?.takeIf { web }?.let { studio.rollando.castor.browser.Episodes.find(it)?.number }
+    private val titleEpisode: Int? get() = if (web) studio.rollando.castor.browser.PageTitle.episode(title) else null
+
+    /** Page d'accueil d'un site (une vidéo d'aperçu, pas quelque chose qu'on reprend). */
+    val isHomePage: Boolean get() = web && runCatching {
+        android.net.Uri.parse(pageUrl).path.orEmpty().trim('/').lowercase() in setOf("", "home", "accueil", "index", "index.html", "fr", "en")
+    }.getOrDefault(false)
 
     /** Titre de la série seule (« Jujutsu Kaisen » plutôt que « Jujutsu Kaisen – Épisode 5 »). */
     val seriesTitle: String get() = when {

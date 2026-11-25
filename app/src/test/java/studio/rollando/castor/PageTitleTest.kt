@@ -12,6 +12,15 @@ class PageTitleTest {
         assertEquals("Black Clover Season 2", PageTitle.series("Black Clover Season 2"))
     }
 
+    @Test fun episodeFromTitle() {
+        assertEquals(12, PageTitle.episode("Mon Anime – Épisode 12"))
+        assertEquals(1120, PageTitle.episode("One Piece Episode 1120 VOSTFR"))
+        assertEquals(5, PageTitle.episode("Dark S01E05"))
+        assertEquals(3, PageTitle.episode("Black Clover Season 2 Ep. 3"))
+        assertEquals(null, PageTitle.episode("Black Clover Season 2"))
+        assertEquals(null, PageTitle.episode("Dune Part Two"))
+    }
+
     @Test fun cleansSiteNameAndHooks() {
         assertEquals("Black Clover Season 2", PageTitle.clean("Regarder maintenant : Black Clover Season 2 · Otakubinge", "otakubinge.com"))
         assertEquals("One Piece Épisode 1120", PageTitle.clean("One Piece Épisode 1120 en streaming - AnimeSama", "anime-sama.fr"))

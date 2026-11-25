@@ -248,7 +248,9 @@ private fun resumeItems(recents: List<Recent>, bookmarks: List<Bookmark>): List<
     val fromRecents = recents.mapNotNull { r ->
         val b = series.firstOrNull { it.key == r.key }
         // Une page de site sans numéro d'épisode (accueil, bande-annonce…) : son titre ne dirait rien.
-        if (r.isWeb && r.episodeNumber == null && b == null) return@mapNotNull null
+        // Page de site sans épisode : on la garde (film, vidéo à identifiant), sauf l'accueil d'un site et les
+        // vidéos courtes (bande-annonce, aperçu), dont le titre ne dirait rien.
+        if (r.isWeb && r.episodeNumber == null && b == null && (r.isHomePage || r.dur in 1.0..600.0)) return@mapNotNull null
         var ep = r.episodeNumber
         var open = r.pageUrl?.takeIf { r.isWeb }
         if (r.finished) {

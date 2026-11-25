@@ -1,5 +1,16 @@
 package studio.rollando.castor.browser
 
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.icons.rounded.WifiOff
+import androidx.compose.material.icons.rounded.GppBad
+import androidx.compose.material.icons.rounded.ErrorOutline
+import androidx.compose.material.icons.automirrored.rounded.OpenInNew
+import androidx.compose.material3.Button
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.TextButton
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
@@ -96,8 +107,21 @@ import java.io.ByteArrayInputStream
 
 /** Le navigateur intégré, gardé en vie quand on change d'onglet. */
 @SuppressLint("SetJavaScriptEnabled")
+/** Ce qui empêche la page de s'afficher, dit clairement à la place d'un écran noir. */
+data class WebProblem(val kind: Kind, val url: String, val code: Int = 0) {
+    enum class Kind { OFFLINE, NOT_FOUND, TIMEOUT, SSL, OTHER, BLANK }
+    val host: String get() = Uri.parse(url).host?.removePrefix("www.") ?: url
+}
+
 class BrowserController(context: Context) {
     val sniffer = VideoSniffer()
+    /** Problème de la page en cours (erreur de chargement, page restée vide), ou null. */
+    var problem by mutableStateOf<WebProblem?>(null)
+    /** Site pour lequel l'utilisateur a demandé de réessayer sans bloqueur de pubs. */
+    private var adsAllowedHost: String? = null
+    private var mainStatus = 0
+    private val handler = android.os.Handler(android.os.Looper.getMainLooper())
+    private var blankCheck: Runnable? = null
     var url by mutableStateOf("")
     var title by mutableStateOf("")
     var progress by mutableIntStateOf(100)
@@ -142,7 +166,7 @@ class BrowserController(context: Context) {
         }
         webViewClient = object : WebViewClient() {
             override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
-                if (Library.adBlock.value && AdBlock.isAd(request.url)) {
+                if (Library.adBlock.value && adsAllowedHost == null && AdBlock.isAd(request.url)) {
                     blockedCount++
                     return WebResourceResponse("text/plain", "utf-8", ByteArrayInputStream(ByteArray(0)))
                 }
@@ -153,12 +177,42 @@ class BrowserController(context: Context) {
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
                 val scheme = request.url.scheme
                 if (scheme != "http" && scheme != "https") return true // intent://, market://… : on reste ici.
-                if (Library.adBlock.value && AdBlock.blocked(request.url)) return true
+                if (Library.adBlock.value && adsAllowedHost == null && AdBlock.blocked(request.url)) return true
                 return false
+            }
+
+            override fun onReceivedError(view: WebView, request: WebResourceRequest, error: android.webkit.WebResourceError) {
+                if (!request.isForMainFrame) return
+                val kind = when (error.errorCode) {
+                    ERROR_HOST_LOOKUP -> if (isOffline(view.context)) WebProblem.Kind.OFFLINE else WebProblem.Kind.NOT_FOUND
+                    ERROR_CONNECT -> if (isOffline(view.context)) WebProblem.Kind.OFFLINE else WebProblem.Kind.NOT_FOUND
+                    ERROR_TIMEOUT -> WebProblem.Kind.TIMEOUT
+                    ERROR_FAILED_SSL_HANDSHAKE -> WebProblem.Kind.SSL
+                    else -> if (isOffline(view.context)) WebProblem.Kind.OFFLINE else WebProblem.Kind.OTHER
+                }
+                android.util.Log.i("CastorWeb", "erreur de page ${request.url.host} : ${error.errorCode} ${error.description}")
+                problem = WebProblem(kind, request.url.toString())
+            }
+
+            override fun onReceivedHttpError(view: WebView, request: WebResourceRequest, response: WebResourceResponse) {
+                if (request.isForMainFrame) mainStatus = response.statusCode
+            }
+
+            @android.annotation.SuppressLint("WebViewClientOnReceivedSslError")
+            override fun onReceivedSslError(view: WebView, handler: android.webkit.SslErrorHandler, error: android.net.http.SslError) {
+                handler.cancel() // jamais de passe-droit sur un certificat invalide
+                if (error.url == view.url || problem == null && Uri.parse(error.url).host == Uri.parse(view.url ?: "").host)
+                    problem = WebProblem(WebProblem.Kind.SSL, error.url)
             }
 
             override fun onPageStarted(view: WebView, u: String, favicon: Bitmap?) {
                 barVisible = true
+                if (!u.startsWith("about:")) {
+                    if (problem?.url != u) problem = null
+                    mainStatus = 0
+                    if (adsAllowedHost != null && Uri.parse(u).host != adsAllowedHost) adsAllowedHost = null
+                }
+                blankCheck?.let { handler.removeCallbacks(it) }
                 newPage(u)
                 if (!u.startsWith("about:")) this@BrowserController.url = u
                 sniffer.pageUrl = u
@@ -169,6 +223,7 @@ class BrowserController(context: Context) {
                 android.util.Log.i("CastorWeb", "page chargée : ${Uri.parse(u).host} · vidéos repérées ${sniffer.found.value.size} · pubs bloquées $blockedCount")
                 view.evaluateJavascript(VideoSniffer.SCRIPT, null)
                 refreshNav(view)
+                if (!u.startsWith("about:") && problem == null) scheduleBlankCheck(view, u)
             }
 
             override fun doUpdateVisitedHistory(view: WebView, u: String, isReload: Boolean) {
@@ -195,6 +250,48 @@ class BrowserController(context: Context) {
         }
     }
 
+    private fun isOffline(ctx: Context): Boolean {
+        val cm = ctx.getSystemService(android.net.ConnectivityManager::class.java) ?: return false
+        val caps = cm.getNetworkCapabilities(cm.activeNetwork) ?: return true
+        return !caps.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
+
+    /**
+     * Page chargée mais rien à l'écran (ni texte, ni image, ni lecteur) au bout de quelques secondes : le plus
+     * souvent un script bloqué ou un site qui refuse les navigateurs intégrés. On le dit, avec des solutions.
+     */
+    private fun scheduleBlankCheck(view: WebView, u: String, delay: Long = 4000) {
+        blankCheck?.let { handler.removeCallbacks(it) }
+        val r = Runnable {
+            if (view.url != u || problem != null || !started) return@Runnable
+            view.evaluateJavascript(
+                "(function(){var b=document.body;if(!b)return 0;" +
+                    "return (b.innerText||'').trim().length+document.querySelectorAll('img,video,iframe,canvas,svg,embed,object').length;})()"
+            ) { v ->
+                if (v?.trim('"')?.toIntOrNull() == 0 && view.url == u && problem == null) {
+                    android.util.Log.i("CastorWeb", "page vide : ${Uri.parse(u).host} (statut $mainStatus)")
+                    problem = WebProblem(WebProblem.Kind.BLANK, u, mainStatus)
+                }
+            }
+        }
+        blankCheck = r
+        handler.postDelayed(r, delay)
+    }
+
+    /** Revérifie tout de suite que la page affichée n'est pas vide (retour sur l'onglet). */
+    fun checkBlankNow() {
+        val u = webView.url ?: return
+        if (!started || problem != null || u.startsWith("about:") || progress < 100) return
+        scheduleBlankCheck(webView, u, delay = 600)
+    }
+
+    fun retry(withoutAds: Boolean = false) {
+        val p = problem ?: return
+        if (withoutAds) adsAllowedHost = Uri.parse(p.url).host
+        problem = null
+        if (webView.url == p.url) webView.reload() else webView.loadUrl(p.url)
+    }
+
     /** Nouvelle page (adresse différente, hors #ancre) : on oublie les vidéos de la précédente. */
     private fun newPage(u: String) {
         // On ignore l'ancre et les paramètres de position (?t=…) que certains lecteurs ajoutent en cours de lecture.
@@ -214,6 +311,7 @@ class BrowserController(context: Context) {
 
     /** Retour à la page d'accueil du navigateur (favoris, séries en cours). */
     fun goHome() {
+        problem = null
         started = false
         url = ""
         title = ""
@@ -230,6 +328,8 @@ class BrowserController(context: Context) {
             else -> "https://duckduckgo.com/?q=" + Uri.encode(t)
         }
         started = true
+        problem = null
+        barVisible = true
         webView.loadUrl(target)
     }
 }
@@ -237,6 +337,8 @@ class BrowserController(context: Context) {
 @OptIn(ExperimentalMaterial3Api::class, androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
 fun BrowserScreen(b: BrowserController) {
+    // En arrivant sur l'onglet : la barre d'adresse est là, et une page restée vide est signalée.
+    LaunchedEffect(Unit) { b.barVisible = true; b.checkBlankNow() }
     // Les vidéos de moins d'une minute (pubs, aperçus) ne sont pas proposées : personne ne veut les caster.
     val allFound by b.sniffer.found.collectAsState()
     val found = allFound.filterNot { it.short }
@@ -267,7 +369,8 @@ fun BrowserScreen(b: BrowserController) {
     val slide = androidx.compose.animation.core.tween<androidx.compose.ui.unit.IntSize>(260, easing = androidx.compose.animation.core.FastOutSlowInEasing)
     Column(Modifier.fillMaxSize()) {
         androidx.compose.animation.AnimatedVisibility(
-            visible = b.barVisible || (editing && imeVisible) || !b.started,
+            // Toujours visible en cas de problème : sans elle, plus moyen de réessayer ni de changer d'adresse.
+            visible = b.barVisible || (editing && imeVisible) || !b.started || b.problem != null,
             enter = androidx.compose.animation.expandVertically(slide, expandFrom = Alignment.Top) +
                 androidx.compose.animation.fadeIn(androidx.compose.animation.core.tween(200)),
             exit = androidx.compose.animation.shrinkVertically(slide, shrinkTowards = Alignment.Top) +
@@ -333,6 +436,7 @@ fun BrowserScreen(b: BrowserController) {
             } else {
                 StartPage(onOpen = { b.load(it) })
             }
+            b.problem?.takeIf { b.started }?.let { p -> ProblemPanel(p, b) }
             // Ce que l'appli fait toute seule avec les favoris, dit clairement (et pas de surprise).
             BookmarkNotice(Modifier.align(Alignment.TopCenter).padding(12.dp))
             // Série : bouton « Épisode 13 → » quand l'adresse contient un numéro d'épisode.
@@ -530,5 +634,64 @@ private fun BookmarkNotice(modifier: Modifier) {
                 Text(text.orEmpty(), style = MaterialTheme.typography.bodyMedium)
             }
         }
+    }
+}
+
+/** À la place d'un écran noir : ce qui se passe, en clair, et quoi faire. */
+@Composable
+private fun ProblemPanel(p: WebProblem, b: BrowserController) {
+    val c = MaterialTheme.colorScheme
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    val (title, body) = when (p.kind) {
+        WebProblem.Kind.OFFLINE -> stringResource(R.string.web_err_offline) to stringResource(R.string.web_err_offline_body)
+        WebProblem.Kind.NOT_FOUND -> stringResource(R.string.web_err_notfound) to stringResource(R.string.web_err_notfound_body, p.host)
+        WebProblem.Kind.TIMEOUT -> stringResource(R.string.web_err_timeout) to p.host
+        WebProblem.Kind.SSL -> stringResource(R.string.web_err_ssl) to stringResource(R.string.web_err_ssl_body, p.host)
+        WebProblem.Kind.OTHER -> stringResource(R.string.web_err_generic) to p.host
+        WebProblem.Kind.BLANK -> stringResource(R.string.web_blank) to stringResource(R.string.web_blank_body)
+    }
+    val adBlock by Library.adBlock.collectAsState()
+    Column(
+        Modifier.fillMaxSize().background(c.background).verticalScroll(rememberScrollState()).padding(horizontal = 28.dp, vertical = 40.dp)
+            .semantics { liveRegion = androidx.compose.ui.semantics.LiveRegionMode.Polite },
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Box(Modifier.size(88.dp).clip(RoundedCornerShape(28.dp)).background(c.error.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+            Icon(
+                when (p.kind) {
+                    WebProblem.Kind.OFFLINE -> Icons.Rounded.WifiOff
+                    WebProblem.Kind.SSL -> Icons.Rounded.GppBad
+                    else -> Icons.Rounded.ErrorOutline
+                }, null, Modifier.size(44.dp), tint = c.error,
+            )
+        }
+        Spacer(Modifier.height(20.dp))
+        Text(title, style = MaterialTheme.typography.titleLarge, textAlign = TextAlign.Center)
+        Spacer(Modifier.height(8.dp))
+        Text(body, style = MaterialTheme.typography.bodyLarge, color = c.onSurfaceVariant, textAlign = TextAlign.Center)
+        if (p.code >= 400) {
+            Spacer(Modifier.height(6.dp))
+            Text(stringResource(R.string.web_err_code, p.code), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
+        }
+        Spacer(Modifier.height(28.dp))
+        Button(onClick = { b.retry() }, modifier = Modifier.fillMaxWidth()) {
+            Icon(Icons.Rounded.Refresh, null); Spacer(Modifier.width(8.dp)); Text(stringResource(R.string.web_retry))
+        }
+        if (p.kind == WebProblem.Kind.BLANK && adBlock) {
+            Spacer(Modifier.height(8.dp))
+            FilledTonalButton(onClick = { b.retry(withoutAds = true) }, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.web_retry_noads), textAlign = TextAlign.Center)
+            }
+        }
+        if (p.kind != WebProblem.Kind.OFFLINE) {
+            Spacer(Modifier.height(8.dp))
+            OutlinedButton(onClick = {
+                runCatching { ctx.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, Uri.parse(p.url))) }
+            }, modifier = Modifier.fillMaxWidth()) {
+                Icon(Icons.AutoMirrored.Rounded.OpenInNew, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp))
+                Text(stringResource(R.string.web_open_outside), textAlign = TextAlign.Center)
+            }
+        }
+        TextButton(onClick = { b.goHome() }) { Text(stringResource(R.string.web_back_home)) }
     }
 }

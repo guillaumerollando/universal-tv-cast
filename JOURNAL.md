@@ -611,3 +611,11 @@ fait toute seule.
 - Reprise au bon endroit : la carte (vidéo d'une autre appli) ou un nouveau cast depuis la même page d'épisode repart 5 s avant l'arrêt (s'il a dépassé 30 s). Même mécanisme que la reprise Stremio (DLNA : placement après le début de lecture ; flux continu : ?start=).
 - Sites dont l'adresse ne contient pas le numéro d'épisode (un identifiant par vidéo, ex. /watch/a8Kz93) : l'épisode est lu dans le titre de la page (« Frieren – Épisode 8 »), et la série regroupée par site + nom. Une page sans épisode (film) reste dans « Reprendre », sauf l'accueil d'un site et les vidéos de moins de 10 min. Tests PageTitle.episode.
 - Favori posé sur un épisode d'un site sans numéro dans l'adresse : reconnu comme série (épisode lu dans le titre), rangé dans « Reprendre » et fusionné avec la carte de la série (même nom sur le même site) au lieu de « Mes sites ». Seuls les sites et leurs pages d'accueil restent dans « Mes sites ». « Retirer de Reprendre » retire aussi ce favori.
+
+## 2026-11-25 (soir, 21) — Navigateur : plus d'écran noir muet
+
+- Retour de Guillaume : un site restait tout noir, sans barre d'adresse (capture). Journaux sans indice sur le site.
+- Erreurs de chargement de la page principale (pas d'Internet, site introuvable, trop lent, certificat invalide — jamais de passe-droit SSL) : écran clair avec « Réessayer », « Ouvrir dans le navigateur du téléphone », « Retour à l'accueil du navigateur ».
+- Page chargée mais vide (ni texte, ni image, ni lecteur après 4 s, ou en revenant sur l'onglet) : « La page reste vide » + « Réessayer sans bloqueur de pubs » (pour ce site, le temps de la visite) et ouverture dans le navigateur du téléphone ; code HTTP affiché s'il y en a un.
+- La barre d'adresse est toujours visible en cas de problème et en revenant sur l'onglet Navigateur.
+- Vérifié sur l'émulateur : page noire servie par le PC, domaine inexistant.

@@ -103,36 +103,6 @@ data class Bookmark(
 
 private val GENERIC_LIVE_TITLES = setOf("live", "direct", "en direct", "en directo", "diretta", "ao vivo", "video", "vidéo", "vídeo", "index", "stream")
 
-/** Chaînes connues, reconnues dans l'adresse ou le titre du flux : un vrai nom et leur couleur. */
-object Channels {
-    data class Known(val name: String, val color: Long)
-    private val LIST = listOf(
-        "arte" to Known("Arte", 0xFFFA481C), "tv5monde" to Known("TV5Monde", 0xFF0091D2), "tv5" to Known("TV5Monde", 0xFF0091D2),
-        "france24" to Known("France 24", 0xFF0E70B6), "franceinfo" to Known("franceinfo:", 0xFFF5A300),
-        "euronews" to Known("Euronews", 0xFF1E4FA3), "bfmtv" to Known("BFMTV", 0xFF0A3D8F), "bfm" to Known("BFMTV", 0xFF0A3D8F),
-        "lci" to Known("LCI", 0xFF233C8C), "cnews" to Known("CNews", 0xFFD6001C), "lequipe" to Known("L'Équipe", 0xFFE30613),
-        "france2" to Known("France 2", 0xFFE4002B), "france3" to Known("France 3", 0xFF1F5AA8), "france4" to Known("France 4", 0xFF6E2C8F),
-        "france5" to Known("France 5", 0xFF00A24E), "tf1" to Known("TF1", 0xFF1C3F94), "m6" to Known("M6", 0xFF4A4A4A),
-        "w9" to Known("W9", 0xFF7B2D8E), "tmc" to Known("TMC", 0xFF0072BC), "gulli" to Known("Gulli", 0xFFF39200),
-        "publicsenat" to Known("Public Sénat", 0xFFB3122E), "lcp" to Known("LCP", 0xFF003A70), "nrj12" to Known("NRJ 12", 0xFFD50032),
-        "rmc" to Known("RMC", 0xFF1D1D1B), "cgtn" to Known("CGTN", 0xFF0C4C8A), "africanews" to Known("Africanews", 0xFFC8102E),
-        "aljazeera" to Known("Al Jazeera", 0xFFC8902E), "dw" to Known("DW", 0xFF05B2FC), "bbc" to Known("BBC", 0xFF1D1D1B),
-        "cnn" to Known("CNN", 0xFFCC0000), "skynews" to Known("Sky News", 0xFFC8102E), "nasa" to Known("NASA TV", 0xFF0B3D91),
-        "redbull" to Known("Red Bull TV", 0xFF1E2A5A),
-    )
-
-    private val PALETTE = listOf(0xFF2E6F8E, 0xFF7A3E9D, 0xFF2F8F6B, 0xFFB5523B, 0xFF3A5BA0, 0xFF8E6A2E, 0xFF9C2F5A)
-
-    /** Couleur d'une chaîne inconnue : tirée de son nom, toujours la même. */
-    fun colorFor(name: String): Long = PALETTE[(name.hashCode() and 0x7fffffff) % PALETTE.size]
-
-    fun find(text: String): Known? {
-        val tokens = text.lowercase().split(Regex("[^a-z0-9]+")).filter { it.isNotEmpty() }
-        for ((kw, k) in LIST) if (tokens.any { it == kw || (kw.length >= 4 && it.startsWith(kw)) }) return k
-        return null
-    }
-}
-
 private val HOME_PATHS = setOf("", "home", "accueil", "index", "index.html", "index.php", "fr", "en")
 
 /** Ce que l'appli a fait toute seule avec un favori, pour le dire à l'utilisateur. */

@@ -127,7 +127,8 @@ class CastService : Service() {
         val m = s.media ?: return null
         val key = m.title + "|" + m.url
         if (key == tileKey) return tile
-        val known = studio.rollando.castor.data.Channels.find("${m.url} ${m.pageUrl} ${m.title}")
+        // Le nom et la couleur d'une chaîne connue : seulement pour un direct (un film peut s'appeler « Histoire »…).
+        val known = if (s.live) studio.rollando.castor.data.Channels.find("${m.url} ${m.pageUrl} ${m.title}") else null
         val color = (known?.color ?: studio.rollando.castor.data.Channels.colorFor(m.title)).toInt()
         val size = 512
         val bmp = android.graphics.Bitmap.createBitmap(size, size, android.graphics.Bitmap.Config.ARGB_8888)

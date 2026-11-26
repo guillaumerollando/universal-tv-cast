@@ -267,6 +267,13 @@
     <string name="iptv_guide_help">If your provider gives a programme guide (EPG) address, paste it here: the current programme will show under its channels.</string>
     <string name="action_save">Save</string>
     <string name="notice_tv_not_starting">The TV isn’t starting playback. Is it switched on? A TV on standby accepts the video but doesn’t show it.</string>
+    <string name="start_title">To get started</string>
+    <string name="start_tv_title">Free TV channels</string>
+    <string name="start_tv_sub">Hundreds of official channels from around the world, free and legal.</string>
+    <string name="start_sites_title">Free, legal sites to try: open a video, then send it to your TV.</string>
+    <string name="start_archive">Public-domain films</string>
+    <string name="start_arte">Films, documentaries, concerts</string>
+    <string name="start_nasa">Space on video</string>
     <string name="iptv_title">Channel lists</string>
     <string name="iptv_intro">A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.</string>
     <string name="iptv_url_hint">List address (.m3u)</string>

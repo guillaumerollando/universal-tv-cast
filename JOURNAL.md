@@ -842,3 +842,12 @@ fait toute seule.
   (CastorApp, sous l'Ambient), centrée sur la vidéo → elle éclaire aussi l'en-tête. Plus dessinée dans PlayerScreen.
 - Page Chaînes : « Regardées récemment » en mosaïque (mêmes cases que « Toutes les chaînes »), plus en rangée.
 - Non vérifié sur émulateur (arrêté après la surcharge mémoire) ; installé sur le téléphone de Guillaume.
+
+## 2026-11-26 — « Pour commencer » (contenus gratuits et légaux)
+- Accueil des nouveaux venus : section « Pour commencer » (ui/Starter.kt) : carte « Chaînes TV gratuites » (un appui importe
+  Free-TV et ouvre les chaînes) + 3 sites gratuits et légaux à essayer. Accueil du navigateur : les 3 sites tant qu'aucun site.
+- Sites retenus après essai dans le navigateur de l'appli (vidéo détectée) : Internet Archive (films du domaine public,
+  monde entier), Arte.tv (Europe, plusieurs langues), NASA+ (monde entier). Icônes : celles publiées par les sites.
+- Mosaïque : chaînes du pays du téléphone d'abord (sans recherche ni catégorie). Logo supprimé chez Imgur (redirection
+  « removed ») = absent → nom de la chaîne sur sa couleur.
+- Émulateur : planté côté GPU, relancé en -gpu swiftshader_indirect.

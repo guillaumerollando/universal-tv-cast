@@ -445,6 +445,13 @@ S = {
  "La TV non avvia la riproduzione. È accesa? In standby accetta il video ma non lo mostra.",
  "De tv start het afspelen niet. Staat hij aan? In stand-by neemt hij de video aan maar toont hem niet.",
  "A TV não inicia a reprodução. Ela está ligada? Em modo de espera, aceita o vídeo mas não o mostra."],
+"start_title": ["To get started", "Pour commencer", "Para empezar", "Zum Start", "Per iniziare", "Om te beginnen", "Para começar"],
+"start_tv_title": ["Free TV channels", "Chaînes TV gratuites", "Canales de TV gratis", "Kostenlose TV-Sender", "Canali TV gratuiti", "Gratis tv-zenders", "Canais de TV grátis"],
+"start_tv_sub": ["Hundreds of official channels from around the world, free and legal.", "Des centaines de chaînes officielles du monde entier, gratuites et légales.", "Cientos de canales oficiales de todo el mundo, gratis y legales.", "Hunderte offizielle Sender aus aller Welt, kostenlos und legal.", "Centinaia di canali ufficiali da tutto il mondo, gratuiti e legali.", "Honderden officiële zenders van over de hele wereld, gratis en legaal.", "Centenas de canais oficiais do mundo todo, grátis e legais."],
+"start_sites_title": ["Free, legal sites to try: open a video, then send it to your TV.", "Des sites gratuits et légaux à essayer : ouvre une vidéo, puis envoie-la sur ta télé.", "Webs gratuitas y legales para probar: abre un vídeo y envíalo a tu TV.", "Kostenlose, legale Seiten zum Ausprobieren: Video öffnen und an den Fernseher senden.", "Siti gratuiti e legali da provare: apri un video e invialo alla TV.", "Gratis, legale sites om te proberen: open een video en stuur hem naar je tv.", "Sites grátis e legais para testar: abra um vídeo e envie para a TV."],
+"start_archive": ["Public-domain films", "Films du domaine public", "Películas de dominio público", "Gemeinfreie Filme", "Film di pubblico dominio", "Films uit het publieke domein", "Filmes em domínio público"],
+"start_arte": ["Films, documentaries, concerts", "Films, documentaires, concerts", "Películas, documentales, conciertos", "Filme, Dokus, Konzerte", "Film, documentari, concerti", "Films, documentaires, concerten", "Filmes, documentários, shows"],
+"start_nasa": ["Space on video", "L’espace en vidéo", "El espacio en vídeo", "Der Weltraum im Video", "Lo spazio in video", "De ruimte op video", "O espaço em vídeo"],
 "iptv_title": ["Channel lists", "Listes de chaînes", "Listas de canales", "Senderlisten", "Liste di canali", "Zenderlijsten", "Listas de canais"],
 "iptv_intro": [
  "A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.",

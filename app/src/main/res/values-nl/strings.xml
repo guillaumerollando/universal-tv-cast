@@ -266,6 +266,13 @@
     <string name="iptv_guide_help">Geeft je aanbieder een adres voor een programmagids (EPG), plak het hier: het huidige programma verschijnt onder zijn zenders.</string>
     <string name="action_save">Opslaan</string>
     <string name="notice_tv_not_starting">De tv start het afspelen niet. Staat hij aan? In stand-by neemt hij de video aan maar toont hem niet.</string>
+    <string name="start_title">Om te beginnen</string>
+    <string name="start_tv_title">Gratis tv-zenders</string>
+    <string name="start_tv_sub">Honderden officiële zenders van over de hele wereld, gratis en legaal.</string>
+    <string name="start_sites_title">Gratis, legale sites om te proberen: open een video en stuur hem naar je tv.</string>
+    <string name="start_archive">Films uit het publieke domein</string>
+    <string name="start_arte">Films, documentaires, concerten</string>
+    <string name="start_nasa">De ruimte op video</string>
     <string name="iptv_title">Zenderlijsten</string>
     <string name="iptv_intro">Een zenderlijst (M3U- of IPTV-lijst) bundelt tv-zenders in één link. Plak het adres of open het bestand: hier vind je alle zenders, met hun logo.</string>
     <string name="iptv_url_hint">Adres van de lijst (.m3u)</string>

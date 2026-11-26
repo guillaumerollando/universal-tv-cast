@@ -32,7 +32,10 @@ object Images {
         cache.get(url)?.let { return@withContext it }
         if (synchronized(missing) { url in missing }) return@withContext null
         val bmp = runCatching {
-            val bytes = Http.fetch(url, emptyMap(), connectTimeout = 8000).bytes
+            val f = Http.fetch(url, emptyMap(), connectTimeout = 8000)
+            // Image supprimée chez Imgur : il renvoie une image « n'existe plus » à la place ; on la traite comme absente.
+            if (f.finalUrl.contains("imgur.com/removed")) return@runCatching null
+            val bytes = f.bytes
             val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
             BitmapFactory.decodeByteArray(bytes, 0, bytes.size, bounds)
             var sample = 1

@@ -369,7 +369,10 @@ private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
     }
     val shown = remember(all, query, group, hidden) {
         val q = fold(query.trim())
-        all.filter { it.url !in hidden && (group == null || it.group == group) && (q.isEmpty() || fold(it.name).contains(q)) }
+        val list = all.filter { it.url !in hidden && (group == null || it.group == group) && (q.isEmpty() || fold(it.name).contains(q)) }
+        // Sans recherche ni catégorie : les chaînes du pays du téléphone d'abord (l'ordre reste celui des listes).
+        val here = java.util.Locale.getDefault().country.lowercase()
+        if (q.isEmpty() && group == null && here.length == 2) list.sortedByDescending { it.country == here } else list
     }
     var lastHidden by remember { mutableStateOf<String?>(null) }
     LaunchedEffect(lastHidden) { if (lastHidden != null) { kotlinx.coroutines.delay(5000); lastHidden = null } }

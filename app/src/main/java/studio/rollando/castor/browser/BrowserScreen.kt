@@ -598,6 +598,13 @@ private fun StartPage(onOpen: (String) -> Unit) {
                 Spacer(Modifier.height(16.dp))
             }
         }
+        // Aucun site encore : des sites gratuits et légaux à essayer.
+        if (sites.isEmpty()) item {
+            Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                studio.rollando.castor.ui.StarterSites(onOpen)
+            }
+            Spacer(Modifier.height(16.dp))
+        }
         if (series.isNotEmpty()) {
             item {
                 Text(stringResource(R.string.home_bookmarks), style = MaterialTheme.typography.titleMedium,

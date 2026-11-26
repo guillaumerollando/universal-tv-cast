@@ -217,7 +217,7 @@
     <string name="site_hide">Ngừng gợi ý</string>
     <string name="home_sites">Trang web của tôi</string>
     <string name="home_cast_more">Truyền nội dung khác</string>
-    <string name="home_long_press_hint">Nhấn giữ một thẻ để xóa hoặc lưu vào dấu trang.</string>
+    <string name="start_dismiss">Không đề xuất nữa</string>
     <string name="err_source_app_closed">%1$s không còn phản hồi: có lẽ ứng dụng đã bị đóng. Hãy mở lại và phát lại video từ ứng dụng đó.</string>
     <string name="iptv_recent">Đã xem gần đây</string>
     <string name="iptv_all_channels">Tất cả kênh</string>

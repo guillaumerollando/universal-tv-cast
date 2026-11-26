@@ -217,7 +217,7 @@
     <string name="site_hide">Nu mai sugera</string>
     <string name="home_sites">Site-urile mele</string>
     <string name="home_cast_more">Proiectează altceva</string>
-    <string name="home_long_press_hint">Ține apăsat pe un card ca să-l elimini sau să-l păstrezi în marcaje.</string>
+    <string name="start_dismiss">Nu mai propune</string>
     <string name="err_source_app_closed">%1$s nu mai răspunde: probabil a fost închisă. Deschide-o din nou și repornește videoclipul din ea.</string>
     <string name="iptv_recent">Vizionate recent</string>
     <string name="iptv_all_channels">Toate canalele</string>

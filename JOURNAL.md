@@ -999,3 +999,11 @@ fait toute seule.
   faute de télé : ne compte pas comme un choix (la question revient quand une télé est là).
 - Vérifié émulateur (sans télé) : 6ter lue direct sur le téléphone, « The Rookie » = l'image, « Ensuite 23:50 » ;
   journal « source www.francetv.fr décalée de -1 h : corrigée ». Tests EpgShiftTest/EpgPickTest, lint 0 erreur.
+
+## 2026-11-26 (nuit) — Suggestions gratuites qu'on peut écarter
+- « Pour commencer » (accueil et navigateur) : appui long sur un site suggéré ou sur la carte des chaînes gratuites →
+  « Ne plus proposer » (aussi action d'accessibilité). Gardé dans Library (`starters_dismissed`), même liste pour
+  l'accueil et le navigateur.
+- Texte « Appui long sur une carte pour la retirer ou la garder en favori » supprimé (mal placé, sans effet sur
+  les suggestions) ; clé remplacée par `start_dismiss` dans les 23 langues.
+- Vérifié émulateur : NASA+ écarté → disparu de l'accueil et du navigateur, et le reste après redémarrage.

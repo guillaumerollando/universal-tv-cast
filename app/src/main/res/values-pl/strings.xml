@@ -217,7 +217,7 @@
     <string name="site_hide">Nie proponuj</string>
     <string name="home_sites">Moje strony</string>
     <string name="home_cast_more">Prześlij coś innego</string>
-    <string name="home_long_press_hint">Przytrzymaj kartę, aby ją usunąć lub zachować w zakładkach.</string>
+    <string name="start_dismiss">Nie proponuj więcej</string>
     <string name="err_source_app_closed">%1$s już nie odpowiada: prawdopodobnie aplikacja została zamknięta. Otwórz ją ponownie i uruchom z niej wideo.</string>
     <string name="iptv_recent">Ostatnio oglądane</string>
     <string name="iptv_all_channels">Wszystkie kanały</string>

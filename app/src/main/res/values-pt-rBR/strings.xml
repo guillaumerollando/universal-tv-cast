@@ -217,7 +217,7 @@
     <string name="site_hide">Não sugerir mais</string>
     <string name="home_sites">Meus sites</string>
     <string name="home_cast_more">Transmitir outra coisa</string>
-    <string name="home_long_press_hint">Mantenha um cartão pressionado para removê-lo ou mantê-lo nos favoritos.</string>
+    <string name="start_dismiss">Não sugerir mais</string>
     <string name="err_source_app_closed">%1$s não está respondendo: o app provavelmente foi fechado. Abra de novo e reinicie o vídeo por ele.</string>
     <string name="iptv_recent">Vistos recentemente</string>
     <string name="iptv_all_channels">Todos os canais</string>

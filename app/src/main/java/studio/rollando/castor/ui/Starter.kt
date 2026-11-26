@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.LiveTv
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -32,6 +33,8 @@ import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -56,8 +59,46 @@ private val STARTER_SITES = listOf(
         "https://plus.nasa.gov/wp-content/uploads/2023/03/cropped-nasa-png-placeholder.png?w=192"),
 )
 
-/** Sites gratuits pas encore dans « Mes sites ». */
-private fun starterSitesFor(known: Set<String>) = STARTER_SITES.filter { s -> known.none { it.removePrefix("www.").endsWith(s.host) } }
+/** Sites gratuits pas encore dans « Mes sites », ni écartés par l'utilisateur (appui long → « Ne plus proposer »). */
+private fun starterSitesFor(known: Set<String>, dismissed: Set<String>) = STARTER_SITES.filter { s ->
+    s.host !in dismissed && known.none { it.removePrefix("www.").endsWith(s.host) }
+}
+
+/** Identifiant de la carte des chaînes gratuites dans les suggestions écartées. */
+private const val FREE_TV = "free-tv"
+
+/**
+ * Une suggestion qu'on peut écarter : appui long → « Ne plus proposer » (le même geste que pour retirer une carte
+ * ailleurs dans l'appli), aussi proposé aux lecteurs d'écran.
+ */
+@Composable
+private fun Dismissable(id: String, onClick: () -> Unit, content: @Composable (Modifier) -> Unit) {
+    var menu by remember { mutableStateOf(false) }
+    val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
+    val label = stringResource(R.string.start_dismiss)
+    androidx.compose.foundation.layout.Box {
+        content(
+            Modifier.clip(RoundedCornerShape(18.dp))
+                .combinedClickable(
+                    role = androidx.compose.ui.semantics.Role.Button,
+                    onClick = onClick,
+                    onLongClick = { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); menu = true },
+                )
+                .semantics {
+                    customActions = listOf(androidx.compose.ui.semantics.CustomAccessibilityAction(label) {
+                        studio.rollando.castor.data.Library.dismissStarter(id); true
+                    })
+                }
+        )
+        androidx.compose.material3.DropdownMenu(expanded = menu, onDismissRequest = { menu = false }, shape = RoundedCornerShape(16.dp)) {
+            androidx.compose.material3.DropdownMenuItem(
+                text = { Text(label) },
+                leadingIcon = { Icon(androidx.compose.material.icons.Icons.Rounded.Close, null) },
+                onClick = { menu = false; studio.rollando.castor.data.Library.dismissStarter(id) },
+            )
+        }
+    }
+}
 
 /** « Pour commencer » : de quoi essayer l'appli tout de suite, avec du contenu gratuit et légal. */
 @Composable
@@ -66,11 +107,13 @@ fun StarterSection(
     /** Sites déjà connus de l'utilisateur (« Mes sites ») : on ne les suggère plus. */
     known: Set<String> = emptySet(),
 ) {
-    val sites = remember(known) { starterSitesFor(known) }
-    if (!showChannels && !(showSites && sites.isNotEmpty())) return
+    val dismissed by studio.rollando.castor.data.Library.dismissedStarters.collectAsState()
+    val sites = remember(known, dismissed) { starterSitesFor(known, dismissed) }
+    val channels = showChannels && FREE_TV !in dismissed
+    if (!channels && !(showSites && sites.isNotEmpty())) return
     Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         SectionTitle(stringResource(R.string.start_title), Modifier.semantics { heading() })
-        if (showChannels) FreeChannelsCard(onPasteLink)
+        if (channels) FreeChannelsCard(onPasteLink)
         if (showSites && sites.isNotEmpty()) StarterSites(onBrowse, known)
     }
 }
@@ -86,11 +129,10 @@ fun FreeChannelsCard(onPasteLink: () -> Unit) {
     // Repliée par défaut : sur l'accueil, elle ne prend qu'une ligne ; on la déplie pour voir le lien.
     var open by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
     val c = MaterialTheme.colorScheme
-    Card(
-        onClick = { open = !open },
+    Dismissable(FREE_TV, onClick = { open = !open }) { press -> Card(
         colors = CardDefaults.cardColors(containerColor = c.surfaceContainerHigh),
         shape = RoundedCornerShape(20.dp),
-        modifier = Modifier.fillMaxWidth().animateContentSize(),
+        modifier = Modifier.fillMaxWidth().then(press).animateContentSize(),
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -127,23 +169,23 @@ fun FreeChannelsCard(onPasteLink: () -> Unit) {
             }
             }
         }
-    }
+    } }
 }
 
 /** Trois sites gratuits et légaux à essayer dans le navigateur de l'appli. */
 @Composable
 fun StarterSites(onBrowse: (String) -> Unit, known: Set<String> = emptySet()) {
     val c = MaterialTheme.colorScheme
-    val list = remember(known) { starterSitesFor(known) }
+    val dismissed by studio.rollando.castor.data.Library.dismissedStarters.collectAsState()
+    val list = remember(known, dismissed) { starterSitesFor(known, dismissed) }
     if (list.isEmpty()) return
     Text(stringResource(R.string.start_sites_title), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         list.forEach { s ->
-            Card(
-                onClick = { onBrowse(s.url) },
+            androidx.compose.foundation.layout.Box(Modifier.weight(1f)) { Dismissable(s.host, onClick = { onBrowse(s.url) }) { press -> Card(
                 colors = CardDefaults.cardColors(containerColor = c.surfaceContainerHigh),
                 shape = RoundedCornerShape(18.dp),
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxWidth().then(press),
             ) {
                 Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     androidx.compose.foundation.layout.Box(Modifier.size(36.dp)) {
@@ -154,7 +196,7 @@ fun StarterSites(onBrowse: (String) -> Unit, known: Set<String> = emptySet()) {
                     Text(stringResource(s.desc), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant,
                         maxLines = 2, overflow = TextOverflow.Ellipsis)
                 }
-            }
+            } } }
         }
     }
 }

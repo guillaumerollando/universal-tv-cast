@@ -217,7 +217,7 @@
     <string name="site_hide">Niet meer voorstellen</string>
     <string name="home_sites">Mijn sites</string>
     <string name="home_cast_more">Iets anders casten</string>
-    <string name="home_long_press_hint">Houd een kaart ingedrukt om ze te verwijderen of als bladwijzer te bewaren.</string>
+    <string name="start_dismiss">Niet meer voorstellen</string>
     <string name="err_source_app_closed">%1$s reageert niet meer: de app is waarschijnlijk gesloten. Open hem opnieuw en start de video daar.</string>
     <string name="iptv_recent">Onlangs bekeken</string>
     <string name="iptv_all_channels">Alle zenders</string>

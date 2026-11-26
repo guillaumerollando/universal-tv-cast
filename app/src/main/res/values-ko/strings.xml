@@ -217,7 +217,7 @@
     <string name="site_hide">추천 안 함</string>
     <string name="home_sites">내 사이트</string>
     <string name="home_cast_more">다른 것 전송하기</string>
-    <string name="home_long_press_hint">카드를 길게 누르면 삭제하거나 북마크에 보관할 수 있어요.</string>
+    <string name="start_dismiss">다시 추천하지 않기</string>
     <string name="err_source_app_closed">%1$s이(가) 더 이상 응답하지 않아요. 앱이 종료된 것 같아요. 다시 열고 그 앱에서 동영상을 다시 재생하세요.</string>
     <string name="iptv_recent">최근 시청</string>
     <string name="iptv_all_channels">전체 채널</string>

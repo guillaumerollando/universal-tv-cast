@@ -184,10 +184,6 @@ fun HomeScreen(
                 StarterSection(onBrowse = { onBrowse(it) }, onPasteLink = onPasteLink,
                     showChannels = lists.isEmpty(), showSites = sites.size < 6, known = sites.map { it.host }.toSet())
             }
-            item {
-                Text(stringResource(R.string.home_long_press_hint), style = MaterialTheme.typography.bodySmall,
-                    color = c.onSurfaceVariant, modifier = Modifier.padding(horizontal = 16.dp))
-            }
         }
         return
     }

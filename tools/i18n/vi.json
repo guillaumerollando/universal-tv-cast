@@ -216,7 +216,7 @@
   "site_hide": "Ngừng gợi ý",
   "home_sites": "Trang web của tôi",
   "home_cast_more": "Truyền nội dung khác",
-  "home_long_press_hint": "Nhấn giữ một thẻ để xóa hoặc lưu vào dấu trang.",
+  "start_dismiss": "Không đề xuất nữa",
   "err_source_app_closed": "%1$s không còn phản hồi: có lẽ ứng dụng đã bị đóng. Hãy mở lại và phát lại video từ ứng dụng đó.",
   "iptv_recent": "Đã xem gần đây",
   "iptv_all_channels": "Tất cả kênh",

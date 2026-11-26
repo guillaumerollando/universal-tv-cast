@@ -217,7 +217,7 @@
     <string name="site_hide">إيقاف الاقتراح</string>
     <string name="home_sites">مواقعي</string>
     <string name="home_cast_more">بث شيء آخر</string>
-    <string name="home_long_press_hint">اضغط مطولًا على بطاقة لإزالتها أو الاحتفاظ بها في الإشارات المرجعية.</string>
+    <string name="start_dismiss">عدم الاقتراح مجددًا</string>
     <string name="err_source_app_closed">%1$s لم يعد يستجيب: ربما تم إغلاقه. افتحه مجددًا وأعد تشغيل الفيديو منه.</string>
     <string name="iptv_recent">شوهدت مؤخرًا</string>
     <string name="iptv_all_channels">كل القنوات</string>

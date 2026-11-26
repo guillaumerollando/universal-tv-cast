@@ -217,7 +217,7 @@
     <string name="site_hide">Jangan sarankan lagi</string>
     <string name="home_sites">Situs saya</string>
     <string name="home_cast_more">Cast yang lain</string>
-    <string name="home_long_press_hint">Tekan lama kartu untuk menghapusnya atau menyimpannya di bookmark.</string>
+    <string name="start_dismiss">Jangan sarankan lagi</string>
     <string name="err_source_app_closed">%1$s tidak merespons lagi: mungkin sudah ditutup. Buka lagi dan mulai ulang video dari sana.</string>
     <string name="iptv_recent">Baru ditonton</string>
     <string name="iptv_all_channels">Semua saluran</string>

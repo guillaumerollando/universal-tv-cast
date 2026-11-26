@@ -216,7 +216,7 @@
   "site_hide": "Sluta föreslå",
   "home_sites": "Mina sajter",
   "home_cast_more": "Casta något annat",
-  "home_long_press_hint": "Tryck länge på ett kort för att ta bort det eller spara det i bokmärken.",
+  "start_dismiss": "Föreslå inte igen",
   "err_source_app_closed": "%1$s svarar inte längre: appen har förmodligen stängts. Öppna den igen och starta om videon därifrån.",
   "iptv_recent": "Nyligen tittade",
   "iptv_all_channels": "Alla kanaler",

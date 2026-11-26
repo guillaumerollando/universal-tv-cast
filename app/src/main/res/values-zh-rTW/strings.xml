@@ -217,7 +217,7 @@
     <string name="site_hide">不再推薦</string>
     <string name="home_sites">我的網站</string>
     <string name="home_cast_more">投放其他內容</string>
-    <string name="home_long_press_hint">長按卡片即可移除，或保留在書籤中。</string>
+    <string name="start_dismiss">不再推薦</string>
     <string name="err_source_app_closed">%1$s 已無回應：可能已被關閉。請重新開啟它，並從中重新播放影片。</string>
     <string name="iptv_recent">最近觀看</string>
     <string name="iptv_all_channels">所有頻道</string>

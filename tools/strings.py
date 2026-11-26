@@ -340,7 +340,7 @@ S = {
 "site_hide": ["Stop suggesting", "Ne plus proposer", "No volver a sugerir", "Nicht mehr vorschlagen", "Non proporre più", "Niet meer voorstellen", "Não sugerir mais"],
 "home_sites": ["My sites", "Mes sites", "Mis sitios", "Meine Seiten", "I miei siti", "Mijn sites", "Meus sites"],
 "home_cast_more": ["Cast something else", "Caster autre chose", "Enviar otra cosa", "Etwas anderes senden", "Trasmetti altro", "Iets anders casten", "Transmitir outra coisa"],
-"home_long_press_hint": ["Press and hold a card to remove it or keep it in bookmarks.", "Appui long sur une carte pour la retirer ou la garder en favori.", "Mantén pulsada una tarjeta para quitarla o guardarla en favoritos.", "Karte gedrückt halten, um sie zu entfernen oder als Lesezeichen zu behalten.", "Tieni premuta una scheda per rimuoverla o tenerla nei preferiti.", "Houd een kaart ingedrukt om ze te verwijderen of als bladwijzer te bewaren.", "Mantenha um cartão pressionado para removê-lo ou mantê-lo nos favoritos."],
+"start_dismiss": ["Don’t suggest again", "Ne plus proposer", "No volver a sugerir", "Nicht mehr vorschlagen", "Non proporre più", "Niet meer voorstellen", "Não sugerir mais"],
 "err_source_app_closed": [
  "%1$s isn’t responding anymore: it was probably closed. Open it again and restart the video from it.",
  "%1$s ne répond plus : l’appli a sans doute été fermée. Rouvre-la et relance la vidéo depuis elle.",

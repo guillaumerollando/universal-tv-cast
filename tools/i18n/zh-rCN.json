@@ -216,7 +216,7 @@
   "site_hide": "不再推荐",
   "home_sites": "我的网站",
   "home_cast_more": "投放其他内容",
-  "home_long_press_hint": "长按卡片可将其移除或保留到收藏。",
+  "start_dismiss": "不再推荐",
   "err_source_app_closed": "%1$s 不再响应：可能已被关闭。请重新打开它，并从中重新播放视频。",
   "iptv_recent": "最近观看",
   "iptv_all_channels": "所有频道",

@@ -216,7 +216,7 @@
   "site_hide": "Önermeyi bırak",
   "home_sites": "Sitelerim",
   "home_cast_more": "Başka bir şey yansıt",
-  "home_long_press_hint": "Bir kartı kaldırmak veya yer imlerinde tutmak için basılı tutun.",
+  "start_dismiss": "Bir daha önerme",
   "err_source_app_closed": "%1$s artık yanıt vermiyor: büyük olasılıkla kapatıldı. Yeniden açın ve videoyu oradan yeniden başlatın.",
   "iptv_recent": "Son izlenenler",
   "iptv_all_channels": "Tüm kanallar",

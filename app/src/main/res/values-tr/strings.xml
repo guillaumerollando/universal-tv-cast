@@ -217,7 +217,7 @@
     <string name="site_hide">Önermeyi bırak</string>
     <string name="home_sites">Sitelerim</string>
     <string name="home_cast_more">Başka bir şey yansıt</string>
-    <string name="home_long_press_hint">Bir kartı kaldırmak veya yer imlerinde tutmak için basılı tutun.</string>
+    <string name="start_dismiss">Bir daha önerme</string>
     <string name="err_source_app_closed">%1$s artık yanıt vermiyor: büyük olasılıkla kapatıldı. Yeniden açın ve videoyu oradan yeniden başlatın.</string>
     <string name="iptv_recent">Son izlenenler</string>
     <string name="iptv_all_channels">Tüm kanallar</string>

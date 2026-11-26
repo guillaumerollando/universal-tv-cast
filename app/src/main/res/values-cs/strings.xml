@@ -217,7 +217,7 @@
     <string name="site_hide">Už nenabízet</string>
     <string name="home_sites">Moje weby</string>
     <string name="home_cast_more">Poslat něco jiného</string>
-    <string name="home_long_press_hint">Podrž kartu, chceš-li ji odebrat nebo uložit do záložek.</string>
+    <string name="start_dismiss">Už nenabízet</string>
     <string name="err_source_app_closed">%1$s už neodpovídá: nejspíš byla zavřena. Otevři ji znovu a spusť video z ní.</string>
     <string name="iptv_recent">Nedávno sledované</string>
     <string name="iptv_all_channels">Všechny kanály</string>

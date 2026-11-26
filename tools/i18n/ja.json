@@ -216,7 +216,7 @@
   "site_hide": "今後おすすめしない",
   "home_sites": "マイサイト",
   "home_cast_more": "他のものをキャスト",
-  "home_long_press_hint": "カードを長押しすると、削除やブックマークへの保存ができます。",
+  "start_dismiss": "今後表示しない",
   "err_source_app_closed": "%1$s が応答しなくなりました。閉じられた可能性があります。もう一度開いて、そこから動画を再生し直してください。",
   "iptv_recent": "最近見たチャンネル",
   "iptv_all_channels": "すべてのチャンネル",

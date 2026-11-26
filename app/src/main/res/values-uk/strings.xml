@@ -217,7 +217,7 @@
     <string name="site_hide">Не пропонувати</string>
     <string name="home_sites">Мої сайти</string>
     <string name="home_cast_more">Транслювати щось інше</string>
-    <string name="home_long_press_hint">Утримуй картку, щоб видалити її або зберегти в закладках.</string>
+    <string name="start_dismiss">Більше не пропонувати</string>
     <string name="err_source_app_closed">%1$s більше не відповідає: найімовірніше, застосунок закрито. Відкрий його знову й запусти відео звідти.</string>
     <string name="iptv_recent">Нещодавні</string>
     <string name="iptv_all_channels">Усі канали</string>

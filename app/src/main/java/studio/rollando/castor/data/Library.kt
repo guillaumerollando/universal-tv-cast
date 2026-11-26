@@ -135,6 +135,7 @@ object Library {
         _adBlock.value = prefs.getBoolean("adblock", true)
         _continuous.value = prefs.getBoolean("continuous", true)
         _shakeHelp.value = prefs.getBoolean("shake_help", true)
+        _dismissedStarters.value = prefs.getStringSet("starters_dismissed", emptySet()).orEmpty().toSet()
         _embedSubs.value = prefs.getBoolean("embed_subs", true)
         _smoothSlides.value = prefs.getBoolean("smooth_slides_v2", false)
         _powerSaver.value = prefs.getBoolean("power_saver", false)
@@ -174,6 +175,14 @@ object Library {
     /** Secouer le téléphone ouvre l'aide. */
     val shakeHelp: StateFlow<Boolean> = _shakeHelp
     fun setShakeHelp(on: Boolean) { _shakeHelp.value = on; prefs.edit().putBoolean("shake_help", on).apply() }
+
+    /** Suggestions gratuites de « Pour commencer » que l'utilisateur ne veut plus voir (site, ou « free-tv »). */
+    private val _dismissedStarters = MutableStateFlow<Set<String>>(emptySet())
+    val dismissedStarters: StateFlow<Set<String>> = _dismissedStarters
+    fun dismissStarter(id: String) {
+        _dismissedStarters.value = _dismissedStarters.value + id
+        prefs.edit().putStringSet("starters_dismissed", _dismissedStarters.value).apply()
+    }
 
     private val _dismissedTips = MutableStateFlow<Set<String>>(emptySet())
     /** Conseils que l'utilisateur a choisi de ne plus voir. */

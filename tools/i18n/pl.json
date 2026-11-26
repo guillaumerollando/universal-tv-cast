@@ -216,7 +216,7 @@
   "site_hide": "Nie proponuj",
   "home_sites": "Moje strony",
   "home_cast_more": "Prześlij coś innego",
-  "home_long_press_hint": "Przytrzymaj kartę, aby ją usunąć lub zachować w zakładkach.",
+  "start_dismiss": "Nie proponuj więcej",
   "err_source_app_closed": "%1$s już nie odpowiada: prawdopodobnie aplikacja została zamknięta. Otwórz ją ponownie i uruchom z niej wideo.",
   "iptv_recent": "Ostatnio oglądane",
   "iptv_all_channels": "Wszystkie kanały",

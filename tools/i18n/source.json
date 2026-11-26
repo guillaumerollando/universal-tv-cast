@@ -864,9 +864,9 @@
    "en": "Cast something else",
    "fr": "Caster autre chose"
   },
-  "home_long_press_hint": {
-   "en": "Press and hold a card to remove it or keep it in bookmarks.",
-   "fr": "Appui long sur une carte pour la retirer ou la garder en favori."
+  "start_dismiss": {
+   "en": "Don’t suggest again",
+   "fr": "Ne plus proposer"
   },
   "err_source_app_closed": {
    "en": "%1$s isn’t responding anymore: it was probably closed. Open it again and restart the video from it.",

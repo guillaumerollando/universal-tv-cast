@@ -217,7 +217,7 @@
     <string name="site_hide">ไม่ต้องแนะนำอีก</string>
     <string name="home_sites">เว็บไซต์ของฉัน</string>
     <string name="home_cast_more">แคสต์อย่างอื่น</string>
-    <string name="home_long_press_hint">แตะการ์ดค้างไว้เพื่อนำออกหรือเก็บไว้ในบุ๊กมาร์ก</string>
+    <string name="start_dismiss">ไม่ต้องแนะนำอีก</string>
     <string name="err_source_app_closed">%1$s ไม่ตอบสนองแล้ว: แอปอาจถูกปิดไป เปิดแอปอีกครั้งแล้วเริ่มวิดีโอใหม่จากแอปนั้น</string>
     <string name="iptv_recent">ดูล่าสุด</string>
     <string name="iptv_all_channels">ช่องทั้งหมด</string>

@@ -276,6 +276,7 @@
     <string name="start_tv_steps">Copia questo link, tocca «Incolla un link» e incollalo: arrivano tutti i canali. Funziona con qualsiasi lista di canali (M3U).</string>
     <string name="start_copy">Copia il link</string>
     <string name="start_copied">Link copiato</string>
+    <string name="next_episode">Episodio successivo</string>
     <string name="iptv_title">Liste di canali</string>
     <string name="iptv_intro">Una lista di canali (lista M3U o IPTV) riunisce canali TV in un solo link. Incolla il suo indirizzo o apri il file: qui troverai tutti i canali, con il loro logo.</string>
     <string name="iptv_url_hint">Indirizzo della lista (.m3u)</string>

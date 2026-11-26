@@ -462,6 +462,7 @@ S = {
  "Copie este link, toque em “Colar um link” e cole: todos os canais chegam. Funciona com qualquer lista de canais (M3U)."],
 "start_copy": ["Copy the link", "Copier le lien", "Copiar el enlace", "Link kopieren", "Copia il link", "Link kopiëren", "Copiar o link"],
 "start_copied": ["Link copied", "Lien copié", "Enlace copiado", "Link kopiert", "Link copiato", "Link gekopieerd", "Link copiado"],
+"next_episode": ["Next episode", "Épisode suivant", "Siguiente episodio", "Nächste Folge", "Episodio successivo", "Volgende aflevering", "Próximo episódio"],
 "iptv_title": ["Channel lists", "Listes de chaînes", "Listas de canales", "Senderlisten", "Liste di canali", "Zenderlijsten", "Listas de canais"],
 "iptv_intro": [
  "A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.",

@@ -871,3 +871,13 @@ fait toute seule.
   Castor.castAt avant chaque envoi (télé ou téléphone).
 - PhoneEngine journalise : interruption par le système (focus audio perdu, casque débranché), volume, session audio.
 - Non vérifié : l'émulateur plante (GPU) en lançant la vidéo du site.
+
+## 2026-11-26 — Épisode suivant repéré sur la page, fondus
+- Cas Guillaume (historique lu via version de diagnostic) : otakubinge « …/anime/<série>/watch », titre sans numéro →
+  aucun moyen de déduire la suite par l'adresse.
+- Script de page : repère un lien « épisode suivant » (rel=next, ou texte/aria-label « Épisode suivant », « Next episode »,
+  « Suivant ›»…, même site). Media.nextUrl / Recent.nextUrl (« next » dans l'historique) ; « Reprendre » s'en sert pour
+  un épisode fini ; bouton « Épisode suivant » sur l'écran de lecture (ouvre la page dans le navigateur). Limite : un
+  bouton sans lien (site qui change d'épisode en JavaScript) n'est pas vu.
+- Test local (page sans numéro, lien « Épisode suivant › ») : bouton affiché, watch2.html ouverte.
+- Fondu court (18 dp) en haut des zones qui défilent : accueil, écran de lecture (sous l'en-tête ou la vidéo).

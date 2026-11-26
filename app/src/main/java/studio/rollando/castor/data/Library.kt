@@ -15,6 +15,8 @@ data class Recent(
     val season: Int? = null, val episode: Int? = null,
     /** Où l'on s'est arrêté (secondes) et durée totale ; [done] : la lecture est allée jusqu'au bout. */
     val pos: Double = 0.0, val dur: Double = 0.0, val done: Boolean = false,
+    /** Page de l'épisode suivant, repérée sur le site (quand l'adresse ne dit pas le numéro). */
+    val nextUrl: String? = null,
     /** Chaîne en direct (rangée « Chaînes », pas « Reprendre ») et le nom que l'utilisateur lui a donné. */
     val live: Boolean = false, val channel: String? = null,
 ) {
@@ -30,7 +32,7 @@ data class Recent(
     /** Page d'un site (pas une vidéo d'une autre appli). */
     val isWeb: Boolean get() = web
 
-    fun toMedia() = Media(url = url, title = title, mime = mime, headers = headers, pageUrl = pageUrl, posterUrl = poster, backdropUrl = if (live) null else poster, fileName = fileName, channel = channel,
+    fun toMedia() = Media(url = url, title = title, mime = mime, headers = headers, pageUrl = pageUrl, posterUrl = poster, backdropUrl = if (live) null else poster, fileName = fileName, channel = channel, nextUrl = nextUrl,
         startSec = if (finished || pos < 30) 0.0 else pos - 5)
 
     /** Avancement (0 à 1) si la vidéo est commencée et pas finie. */
@@ -181,7 +183,7 @@ object Library {
     fun addRecent(m: Media, live: Boolean = false) {
         if (m.isLocal) return
         val r00 = Recent(m.title, m.url, m.mime, m.headers, m.pageUrl, System.currentTimeMillis(),
-            m.backdropUrl ?: m.posterUrl, m.fileName, m.season, m.episode, live = live) // image large : elle remplit la carte
+            m.backdropUrl ?: m.posterUrl, m.fileName, m.season, m.episode, live = live, nextUrl = m.nextUrl) // image large : elle remplit la carte
         // Une chaîne garde le nom qu'on lui a donné.
         val r0 = r00.copy(channel = _recents.value.firstOrNull { it.key == r00.key || it.url == r00.url }?.channel ?: m.channel)
         // Même série : le nouvel épisode remplace l'ancien (et garde son image si celui-ci n'en a pas).
@@ -321,7 +323,7 @@ object Library {
             put("title", r.title); put("url", r.url); put("mime", r.mime ?: ""); put("page", r.pageUrl ?: ""); put("poster", r.poster ?: ""); put("file", r.fileName ?: "")
             put("season", r.season ?: -1); put("ep", r.episode ?: -1)
             put("pos", r.pos); put("dur", r.dur); put("done", r.done)
-            put("live", r.live); put("channel", r.channel ?: "")
+            put("live", r.live); put("channel", r.channel ?: ""); put("next", r.nextUrl ?: "")
             put("time", r.time); put("headers", JSONObject(r.headers as Map<*, *>))
         })
         prefs.edit().putString("recents", arr.toString()).apply()
@@ -343,6 +345,7 @@ object Library {
             episode = o.optInt("ep", -1).takeIf { it >= 0 },
             pos = o.optDouble("pos", 0.0), dur = o.optDouble("dur", 0.0), done = o.optBoolean("done", false),
             live = o.optBoolean("live", false), channel = o.optString("channel").ifEmpty { null },
+            nextUrl = o.optString("next").ifEmpty { null },
         )
     }.distinctBy { it.key } // anciennes listes : un épisode par entrée
 

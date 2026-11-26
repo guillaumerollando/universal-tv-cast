@@ -276,6 +276,7 @@
     <string name="start_tv_steps">Kopieer deze link, tik op ‘Link plakken’ en plak hem: alle zenders komen binnen. Dit werkt met elke zenderlijst (M3U).</string>
     <string name="start_copy">Link kopiëren</string>
     <string name="start_copied">Link gekopieerd</string>
+    <string name="next_episode">Volgende aflevering</string>
     <string name="iptv_title">Zenderlijsten</string>
     <string name="iptv_intro">Een zenderlijst (M3U- of IPTV-lijst) bundelt tv-zenders in één link. Plak het adres of open het bestand: hier vind je alle zenders, met hun logo.</string>
     <string name="iptv_url_hint">Adres van de lijst (.m3u)</string>

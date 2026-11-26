@@ -138,7 +138,8 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
     Box(Modifier.fillMaxWidth().weight(1f)) {
     // L'ambiance (image du film floutée) est dessinée derrière tout l'écran, en-tête compris : voir Ambient().
     Column(
-        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp),
+        // Ce qui passe sous la vidéo (ou l'en-tête) en défilant s'efface en fondu.
+        Modifier.fillMaxSize().fadeTop().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         if (state.onPhone) Unit
@@ -259,6 +260,18 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
             Icon(if (state.onPhone) Icons.Rounded.Cast else Icons.Rounded.Smartphone, null)
             Spacer(Modifier.width(10.dp))
             Text(stringResource(if (state.onPhone) R.string.phone_watch_tv else R.string.phone_watch))
+        }
+        // Épisode suivant (lien repéré sur le site, ou déduit de l'adresse) : il s'ouvre dans le navigateur.
+        val nextEp = remember(media.nextUrl, media.pageUrl) {
+            if (channel) null else media.nextUrl ?: media.pageUrl?.let { studio.rollando.castor.browser.Episodes.find(it)?.next }
+        }
+        if (nextEp != null) OutlinedButton(
+            onClick = { Nav.openUrl.value = nextEp },
+            modifier = Modifier.fillMaxWidth().height(52.dp),
+        ) {
+            Icon(Icons.Rounded.SkipNext, null)
+            Spacer(Modifier.width(10.dp))
+            Text(stringResource(R.string.next_episode))
         }
         // Direct : pas de sous-titres à régler ; à la place, de quoi zapper. Le mode de lecture des listes HLS
         // (flux continu ou non) se règle seulement dans les Réglages.

@@ -106,6 +106,7 @@ fun HomeScreen(
     // une rangée compacte. Nouveau venu : la présentation et les grandes tuiles.
     if (resume.isNotEmpty() || sites.isNotEmpty() || channels.isNotEmpty()) {
         LazyColumn(
+            modifier = Modifier.fadeTop(),
             contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp + LocalBottomInset.current),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
@@ -181,6 +182,7 @@ fun HomeScreen(
     }
 
     LazyColumn(
+        modifier = Modifier.fadeTop(),
         contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp + LocalBottomInset.current),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
@@ -275,6 +277,8 @@ private fun resumeItems(recents: List<Recent>, bookmarks: List<Bookmark>): List<
             // Épisode fini : on propose le suivant ; un film (ou un épisode sans suite connue) fini disparaît.
             val cur = if (r.isWeb) r.pageUrl?.let { Episodes.find(it) } else null
             if (cur != null) { ep = cur.number + 1; open = cur.next }
+            // Le site ne met pas le numéro dans l'adresse, mais on a repéré son lien « épisode suivant ».
+            else if (r.nextUrl != null) { ep = null; open = r.nextUrl }
             else if (b == null) return@mapNotNull null
         }
         // Le favori a pu avancer plus loin (épisode ouvert sans être casté) : on reprend au plus loin.

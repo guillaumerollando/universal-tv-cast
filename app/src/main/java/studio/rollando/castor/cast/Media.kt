@@ -37,6 +37,8 @@ data class Media(
     val audioUrl: String? = null,
     /** Nom de la chaîne, quand elle vient d'une liste IPTV. */
     val channel: String? = null,
+    /** Page de l'épisode suivant (repérée sur le site, ou déduite de l'adresse), pour « Épisode suivant ». */
+    val nextUrl: String? = null,
 ) {
     /** La vidéo est servie par une autre appli du téléphone (Stremio et son serveur local…). */
     val fromPhoneApp: Boolean get() = runCatching { Uri.parse(url).host }.getOrNull()

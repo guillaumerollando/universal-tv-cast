@@ -279,6 +279,7 @@
     <string name="bookmark_advanced">%1$s: dấu trang đã chuyển sang tập %2$d.</string>
     <string name="settings_power">Tiết kiệm pin</string>
     <string name="settings_power_sub">Tắt hiệu ứng phát sáng quanh video, làm mờ và hoạt ảnh, đồng thời kiểm tra truyền hình trực tiếp ít hơn. Chất lượng video không đổi. Tự bật khi điện thoại tiết kiệm pin.</string>
+    <string name="tv_asleep">Không phản hồi: đã tắt?</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

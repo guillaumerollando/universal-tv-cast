@@ -277,7 +277,8 @@
   "bookmark_added": "„%1$s“ přidáno do oblíbených.",
   "bookmark_advanced": "%1$s: záložka přesunuta na díl %2$d.",
   "settings_power": "Úspora energie",
-  "settings_power_sub": "Vypne záři kolem videa, rozostření a animace a méně často kontroluje živé vysílání. Kvalita videa se nemění. Zapne se sama, když telefon šetří baterii."
+  "settings_power_sub": "Vypne záři kolem videa, rozostření a animace a méně často kontroluje živé vysílání. Kvalita videa se nemění. Zapne se sama, když telefon šetří baterii.",
+  "tv_asleep": "Neodpovídá: vypnutá?"
  },
  "plurals": {
   "browser_found": {

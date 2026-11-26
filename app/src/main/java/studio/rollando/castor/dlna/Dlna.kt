@@ -41,6 +41,11 @@ data class Renderer(
     val routeId: String? = null,
     /** Pour une télé qui a Cast et DLNA : l'entrée DLNA de secours si le lecteur Cast refuse la vidéo. */
     val fallback: Renderer? = null,
+    /**
+     * La télé a répondu à la recherche du réseau (SSDP). Une télé en veille répond encore aux requêtes directes, mais
+     * plus à la recherche : elle est listée sans être choisie d'office.
+     */
+    val awake: Boolean = true,
 ) {
     val host: String
         get() = if (location.startsWith("cast://")) location.removePrefix("cast://")
@@ -74,7 +79,12 @@ object Dlna {
      * (certaines télés, dont des Philips Titan OS, ne répondent jamais à la recherche SSDP).
      * [known] : adresses de description déjà connues, vérifiées tout de suite.
      */
-    fun discover(ctx: Context, known: Collection<String> = emptyList(), timeoutMs: Long = 5000, onFound: (Renderer) -> Unit) {
+    fun discover(
+        ctx: Context, known: Collection<String> = emptyList(), timeoutMs: Long = 5000,
+        /** Adresse d'un appareil qui a répondu à la recherche du réseau (il est allumé). */
+        onAwake: (String) -> Unit = {},
+        onFound: (Renderer) -> Unit,
+    ) {
         val wifi = ctx.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         val lock = wifi.createMulticastLock("castor-ssdp").apply { setReferenceCounted(false); acquire() }
         val pool = Executors.newFixedThreadPool(64)
@@ -129,6 +139,7 @@ object Dlna {
                             try { m.receive(p) } catch (_: SocketTimeoutException) { continue }
                             val text = String(p.data, 0, p.length)
                             if (!text.startsWith("NOTIFY")) continue
+                            if (text.contains("ssdp:alive", true)) p.address?.hostAddress?.let(onAwake)
                             location(text)?.let(::tryLocation)
                             p.address?.hostAddress?.let { if (probedHosts.add(it)) probeHost(it) }
                         }
@@ -160,6 +171,7 @@ object Dlna {
                     } catch (_: SocketTimeoutException) {
                         continue
                     }
+                    p.address?.hostAddress?.let(onAwake)
                     location(String(p.data, 0, p.length))?.let(::tryLocation)
                 }
             }

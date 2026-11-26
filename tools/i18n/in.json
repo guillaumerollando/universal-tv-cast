@@ -277,7 +277,8 @@
   "bookmark_added": "“%1$s” ditambahkan ke favorit.",
   "bookmark_advanced": "%1$s: bookmark dipindahkan ke episode %2$d.",
   "settings_power": "Hemat daya",
-  "settings_power_sub": "Mematikan cahaya di sekitar video, efek blur, dan animasi, serta lebih jarang memeriksa siaran langsung. Kualitas video tetap sama. Aktif sendiri saat ponselmu menghemat baterai."
+  "settings_power_sub": "Mematikan cahaya di sekitar video, efek blur, dan animasi, serta lebih jarang memeriksa siaran langsung. Kualitas video tetap sama. Aktif sendiri saat ponselmu menghemat baterai.",
+  "tv_asleep": "Tidak merespons: mati?"
  },
  "plurals": {
   "browser_found": {

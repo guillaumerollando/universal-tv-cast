@@ -944,3 +944,12 @@ fait toute seule.
 - Lint : 0 erreur (LocalActivity, StateFlow lu via collectAsState, BOM littéral → ﻿), pluriels « many » fr/es/it/pt,
   états primitifs (mutableIntStateOf…), offset lambda (pas de recomposition à chaque image de l'indicateur d'onglet).
 - Test général émulateur : accueil, Chaînes, lecture téléphone + programme, plein écran, navigateur, 0 plantage.
+
+## 2026-11-26 (nuit) — Télé éteinte : pas « connectée », lecture sur le téléphone
+- Mesuré (lecture seule) : Philips éteinte = répond en HTTP (description 200), mais PAS à la recherche SSDP (la box répond).
+- Renderer.awake : vrai seulement si l'appareil a répondu à la recherche (M-SEARCH) ou s'annonce (NOTIFY alive).
+  Choix automatique de la télé seulement parmi les allumées ; la télé en cours est lâchée si elle ne répond plus (sauf
+  lecture en cours ou choisie à la main). Liste : « Ne répond pas : éteinte ? ». Nouvelle recherche au retour dans l'appli.
+- Vidéo/chaîne ouverte sans télé allumée → lecture directe sur le téléphone à la fin de la recherche (pendingAuto).
+- Émulateur (fausse télé = comme en veille) : pastille « Choisir une télé », chaîne lancée sur le téléphone, 0 envoi.
+- À vérifier télé allumée : la Philips doit répondre à la recherche (sinon elle serait vue « éteinte ? »).

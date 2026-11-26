@@ -258,6 +258,7 @@
     <string name="next_episode">Próximo episódio</string>
     <string name="settings_power">Economia de energia</string>
     <string name="settings_power_sub">Desliga o brilho em volta do vídeo, o desfoque e as animações, e acompanha o ao vivo com menos frequência. A qualidade do vídeo não muda. Liga sozinho quando o celular economiza bateria.</string>
+    <string name="tv_asleep">Não responde: desligada?</string>
     <string name="iptv_title">Listas de canais</string>
     <string name="iptv_intro">Uma lista de canais (lista M3U ou IPTV) reúne canais de TV em um só link. Cole o endereço ou abra o arquivo: aqui você encontra todos os canais, com o logotipo.</string>
     <string name="iptv_url_hint">Endereço da lista (.m3u)</string>

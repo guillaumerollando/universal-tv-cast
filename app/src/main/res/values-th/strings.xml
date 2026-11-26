@@ -279,6 +279,7 @@
     <string name="bookmark_advanced">%1$s: ย้ายบุ๊กมาร์กไปยังตอนที่ %2$d แล้ว</string>
     <string name="settings_power">ประหยัดพลังงาน</string>
     <string name="settings_power_sub">ปิดแสงรอบวิดีโอ เอฟเฟกต์เบลอ และแอนิเมชัน และตรวจสอบการถ่ายทอดสดน้อยลง คุณภาพวิดีโอไม่เปลี่ยน เปิดเองเมื่อโทรศัพท์ประหยัดแบตเตอรี่</string>
+    <string name="tv_asleep">ไม่ตอบสนอง: ปิดอยู่หรือเปล่า?</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>

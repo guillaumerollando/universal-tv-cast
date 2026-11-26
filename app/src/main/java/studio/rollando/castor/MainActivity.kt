@@ -81,6 +81,13 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
+    override fun onStart() {
+        super.onStart()
+        // Retour dans l'appli : on revérifie quelles télés sont allumées (rien ne passe : pas de risque de couper).
+        val s = studio.rollando.castor.cast.Castor.state.value
+        if (!s.active && !s.searching && s.renderers.isNotEmpty()) studio.rollando.castor.cast.Castor.discover()
+    }
+
     override fun onStop() {
         super.onStop()
         studio.rollando.castor.cast.Castor.appHidden()

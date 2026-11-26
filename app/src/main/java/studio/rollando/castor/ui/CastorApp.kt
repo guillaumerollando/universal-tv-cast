@@ -358,6 +358,7 @@ private fun TvSheet(onDismiss: () -> Unit) {
                             supportingContent = {
                                 Text(
                                     listOfNotNull(
+                                        if (!r.awake) stringResource(R.string.tv_asleep) else null,
                                         stringResource(if (r.cast) R.string.tv_type_cast else R.string.tv_type_dlna),
                                         r.model?.takeIf { it != r.name },
                                     ).joinToString(" · ")

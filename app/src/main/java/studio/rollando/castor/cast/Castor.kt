@@ -234,20 +234,30 @@ object Castor {
         CastControl.scan(active = true)
         scope.launch {
             val found = mutableListOf<Renderer>()
+            // Appareils qui ont répondu à la recherche du réseau : allumés (une télé en veille ne répond plus).
+            val awake = java.util.concurrent.ConcurrentHashMap.newKeySet<String>()
+            fun refresh() {
+                dlnaDevices = synchronized(found) { found.map { it.copy(awake = it.host in awake) } }
+                publish(allDevices())
+            }
             try {
-                Dlna.discover(app, Library.knownTvs) { r ->
+                Dlna.discover(app, Library.knownTvs, onAwake = { h -> if (awake.add(h)) refresh() }) { r ->
                     Library.rememberTv(r.location)
                     synchronized(found) { if (found.none { it.udn == r.udn }) found += r }
-                    dlnaDevices = synchronized(found) { found.toList() }
-                    publish(allDevices())
+                    refresh()
                 }
             } catch (e: Exception) {
                 Log.w("Castor", "discovery", e)
             }
-            dlnaDevices = synchronized(found) { found.toList() }
-            publish(allDevices())
+            refresh()
             CastControl.scan(active = false)
             _state.update { it.copy(searching = false) }
+            // Vidéo ouverte sans télé allumée en vue : elle se lit sur le téléphone, tout de suite.
+            if (pendingAuto) {
+                pendingAuto = false
+                val s = _state.value
+                if (s.renderer == null && s.media != null && !s.active && playOnTv == null) toPhone()
+            }
             if (pendingCast && _state.value.renderer != null && _state.value.media != null) {
                 pendingCast = false
                 exec { castAt(_state.value.media?.startSec ?: 0.0) }
@@ -280,8 +290,12 @@ object Castor {
         val sorted = list.sortedBy { it.name.lowercase() }
         _state.update { s ->
             fun matches(r: Renderer, udn: String?) = udn != null && (r.udn == udn || r.fallback?.udn == udn)
+            // La télé en cours reste choisie si elle répond, si une vidéo y passe, ou si on vient de la choisir ;
+            // sinon (éteinte), on ne l'affiche plus comme connectée. Choix automatique : seulement parmi les allumées.
             val keep = s.renderer?.let { cur -> sorted.firstOrNull { matches(it, cur.udn) } ?: cur }
-            val sel = keep ?: sorted.firstOrNull { matches(it, Library.lastTv) } ?: sorted.singleOrNull()
+                ?.takeIf { it.awake || s.active || it.udn == chosenNow }
+            val awake = sorted.filter { it.awake }
+            val sel = keep ?: awake.firstOrNull { matches(it, Library.lastTv) } ?: awake.singleOrNull()
             s.copy(renderers = sorted, renderer = sel)
         }
     }
@@ -309,7 +323,13 @@ object Castor {
         _state.update { it.copy(renderer = null, phase = Phase.IDLE, position = 0.0, volume = null, notice = null) }
     }
 
+    /** Télé choisie à la main pendant cette session (gardée même si elle ne répond pas à la recherche). */
+    @Volatile private var chosenNow: String? = null
+    /** Vidéo ouverte pendant la recherche des télés : décider télé ou téléphone une fois la recherche finie. */
+    @Volatile private var pendingAuto = false
+
     fun chooseTv(r: Renderer) {
+        chosenNow = r.udn
         Library.lastTv = r.udn
         val previous = _state.value.renderer
         _state.update { it.copy(renderer = r, volume = null) }
@@ -394,8 +414,8 @@ object Castor {
         loadSubtitle()
         _state.update { it.copy(phase = Phase.IDLE) }
         if (autoCast && playOnTv == null) {
-            // Pas encore choisi : l'écran de lecture propose la télé ou ce téléphone.
-            if (_state.value.renderer == null) discover()
+            // Pas encore choisi : l'écran de lecture propose la télé ou ce téléphone ; sans télé allumée, téléphone.
+            if (_state.value.renderer == null) { pendingAuto = true; if (_state.value.searching) Unit else discover() }
         } else if (autoCast) {
             if (_state.value.renderer != null || _state.value.onPhone) castAt(media.startSec)
             else {

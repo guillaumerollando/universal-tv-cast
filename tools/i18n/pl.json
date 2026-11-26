@@ -277,7 +277,8 @@
   "bookmark_added": "Dodano „%1$s” do ulubionych.",
   "bookmark_advanced": "%1$s: zakładka przeniesiona na odcinek %2$d.",
   "settings_power": "Oszczędzanie energii",
-  "settings_power_sub": "Wyłącza poświatę wokół wideo, rozmycie i animacje oraz rzadziej sprawdza transmisję na żywo. Jakość wideo się nie zmienia. Włącza się samo, gdy telefon oszczędza baterię."
+  "settings_power_sub": "Wyłącza poświatę wokół wideo, rozmycie i animacje oraz rzadziej sprawdza transmisję na żywo. Jakość wideo się nie zmienia. Włącza się samo, gdy telefon oszczędza baterię.",
+  "tv_asleep": "Nie odpowiada: wyłączony?"
  },
  "plurals": {
   "browser_found": {

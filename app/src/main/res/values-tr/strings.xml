@@ -279,6 +279,7 @@
     <string name="bookmark_advanced">%1$s: yer imi %2$d. bölüme taşındı.</string>
     <string name="settings_power">Güç tasarrufu</string>
     <string name="settings_power_sub">Videonun etrafındaki parıltıyı, bulanıklığı ve animasyonları kapatır, canlı yayını daha seyrek kontrol eder. Video kalitesi değişmez. Telefonun pil tasarrufundayken kendiliğinden açılır.</string>
+    <string name="tv_asleep">Yanıt vermiyor: kapalı mı?</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video</item>

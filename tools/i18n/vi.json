@@ -277,7 +277,8 @@
   "bookmark_added": "Đã thêm “%1$s” vào mục yêu thích.",
   "bookmark_advanced": "%1$s: dấu trang đã chuyển sang tập %2$d.",
   "settings_power": "Tiết kiệm pin",
-  "settings_power_sub": "Tắt hiệu ứng phát sáng quanh video, làm mờ và hoạt ảnh, đồng thời kiểm tra truyền hình trực tiếp ít hơn. Chất lượng video không đổi. Tự bật khi điện thoại tiết kiệm pin."
+  "settings_power_sub": "Tắt hiệu ứng phát sáng quanh video, làm mờ và hoạt ảnh, đồng thời kiểm tra truyền hình trực tiếp ít hơn. Chất lượng video không đổi. Tự bật khi điện thoại tiết kiệm pin.",
+  "tv_asleep": "Không phản hồi: đã tắt?"
  },
  "plurals": {
   "browser_found": {

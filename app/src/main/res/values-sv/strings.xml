@@ -279,6 +279,7 @@
     <string name="bookmark_advanced">%1$s: bokmärket har flyttats till avsnitt %2$d.</string>
     <string name="settings_power">Energisparläge</string>
     <string name="settings_power_sub">Stänger av ljusskenet runt videon, oskärpan och animationerna och kollar direktsändningen mer sällan. Videokvaliteten är densamma. Slås på av sig själv när telefonen sparar batteri.</string>
+    <string name="tv_asleep">Svarar inte: avstängd?</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videor</item>

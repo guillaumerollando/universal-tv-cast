@@ -279,6 +279,7 @@
     <string name="bookmark_advanced">%1$s: záložka přesunuta na díl %2$d.</string>
     <string name="settings_power">Úspora energie</string>
     <string name="settings_power_sub">Vypne záři kolem videa, rozostření a animace a méně často kontroluje živé vysílání. Kvalita videa se nemění. Zapne se sama, když telefon šetří baterii.</string>
+    <string name="tv_asleep">Neodpovídá: vypnutá?</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="few">%d videa</item>

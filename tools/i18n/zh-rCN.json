@@ -277,7 +277,8 @@
   "bookmark_added": "已将“%1$s”添加到收藏。",
   "bookmark_advanced": "%1$s：书签已前进到第 %2$d 集。",
   "settings_power": "省电模式",
-  "settings_power_sub": "关闭视频周围的光晕、模糊效果和动画，并降低直播检查频率。画质不变。手机开启省电时会自动开启。"
+  "settings_power_sub": "关闭视频周围的光晕、模糊效果和动画，并降低直播检查频率。画质不变。手机开启省电时会自动开启。",
+  "tv_asleep": "无响应：已关机？"
  },
  "plurals": {
   "browser_found": {

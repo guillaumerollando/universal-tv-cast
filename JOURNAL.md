@@ -862,3 +862,12 @@ fait toute seule.
   « Coller un lien » (ouvre la case habituelle) ; explique que ça marche avec toute liste M3U. Plus d'import en un appui.
 - Tuile « Coller un lien » : « Vidéo, direct ou liste de chaînes ». Case : titre « Colle un lien », bouton « Ouvrir ».
 - Émulateur (appli remise à zéro) : copier → Coller un lien → suggestion du clavier → valider → page Chaînes ouverte.
+
+## 2026-11-26 — Problème de son après le navigateur
+- Rapporté : plus de son correct après une lecture lancée depuis le navigateur ; réglé en relançant l'appli. Journal du
+  téléphone trop court pour voir la cause.
+- Suspect : le lecteur du site continuait dans la WebView (rien ne le mettait en pause) → deux lecteurs pour le son.
+  BrowserController.pauseMedia() (JS : pause de toutes les vidéos/sons, iframes de même origine comprises), appelé par
+  Castor.castAt avant chaque envoi (télé ou téléphone).
+- PhoneEngine journalise : interruption par le système (focus audio perdu, casque débranché), volume, session audio.
+- Non vérifié : l'émulateur plante (GPU) en lançant la vidéo du site.

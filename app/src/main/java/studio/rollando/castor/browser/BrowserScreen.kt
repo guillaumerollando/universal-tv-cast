@@ -118,6 +118,20 @@ data class WebProblem(val kind: Kind, val url: String, val code: Int = 0) {
 
 class BrowserController(context: Context) {
     val sniffer = VideoSniffer()
+
+    /**
+     * Met en pause les vidéos et sons de la page : quand la lecture part sur le téléphone ou la télé, le lecteur du
+     * site ne doit pas continuer derrière (deux sons, ou notre lecteur qui perd le son du téléphone).
+     */
+    fun pauseMedia() = handler.post {
+        runCatching {
+            webView.evaluateJavascript(
+                "(function(){function p(d){try{d.querySelectorAll('video,audio').forEach(function(m){try{m.pause()}catch(e){}});" +
+                    "d.querySelectorAll('iframe').forEach(function(f){try{p(f.contentDocument)}catch(e){}})}catch(e){}}p(document)})()", null)
+        }
+    }
+
+    init { studio.rollando.castor.cast.Castor.pausePageMedia = ::pauseMedia }
     /** Problème de la page en cours (erreur de chargement, page restée vide), ou null. */
     var problem by mutableStateOf<WebProblem?>(null)
     /** Signale un problème ; la barre montre l'adresse demandée (sinon elle resterait vide). */

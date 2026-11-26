@@ -105,6 +105,14 @@ object PhoneEngine {
             addListener(object : Player.Listener {
                 override fun onPlaybackStateChanged(state: Int) { if (state == Player.STATE_ENDED) ended = true; report() }
                 override fun onIsPlayingChanged(isPlaying: Boolean) = report()
+                // Pour comprendre un « problème de son » : qui a interrompu la lecture, et le volume.
+                override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+                    if (reason == Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_FOCUS_LOSS || reason == Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_BECOMING_NOISY)
+                        android.util.Log.w("CastorPhone", "lecture interrompue par le système (raison $reason : son pris par une autre appli ou casque débranché)")
+                    report()
+                }
+                override fun onVolumeChanged(volume: Float) { android.util.Log.i("CastorPhone", "volume du lecteur : $volume") }
+                override fun onAudioSessionIdChanged(audioSessionId: Int) { android.util.Log.i("CastorPhone", "session audio $audioSessionId") }
                 override fun onPlayerError(e: PlaybackException) {
                     android.util.Log.w("CastorPhone", "lecture impossible : ${e.errorCodeName}", e)
                     error = true

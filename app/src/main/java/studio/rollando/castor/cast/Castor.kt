@@ -332,6 +332,9 @@ object Castor {
      */
     @Volatile private var playOnTv: Boolean? = null
 
+    /** Met en pause la vidéo de la page ouverte dans le navigateur (branché par le navigateur). */
+    @Volatile var pausePageMedia: (() -> Unit)? = null
+
     /**
      * @param toTv l'utilisateur a explicitement demandé la télé (« Caster sur la télé » depuis une autre appli).
      */
@@ -941,6 +944,8 @@ object Castor {
     @Volatile private var lastCastStart = 0.0
 
     private suspend fun castAt(start: Double, forceDlna: Boolean = false, paused: Boolean = false, keepRetry: Boolean = false) {
+        // La vidéo part ailleurs : le lecteur de la page ne continue pas derrière.
+        pausePageMedia?.invoke()
         // Lecture sur le téléphone : même demande (reprise, déplacement dans le direct, chaîne suivante…), autre écran.
         if (_state.value.onPhone) { phonePlay(start); return }
         if (!keepRetry) { liveRetried = false; startRetried = false }

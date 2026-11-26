@@ -138,8 +138,7 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
     Box(Modifier.fillMaxWidth().weight(1f)) {
     // L'ambiance (image du film floutée) est dessinée derrière tout l'écran, en-tête compris : voir Ambient().
     Column(
-        // Ce qui passe sous la vidéo (ou l'en-tête) en défilant s'efface en fondu.
-        Modifier.fillMaxSize().fadeTop().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp),
+        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         if (state.onPhone) Unit

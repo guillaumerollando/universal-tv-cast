@@ -881,3 +881,5 @@ fait toute seule.
   bouton sans lien (site qui change d'épisode en JavaScript) n'est pas vu.
 - Test local (page sans numéro, lien « Épisode suivant › ») : bouton affiché, watch2.html ouverte.
 - Fondu court (18 dp) en haut des zones qui défilent : accueil, écran de lecture (sous l'en-tête ou la vidéo).
+- Fondus retirés à la demande de Guillaume (« c'était plus propre avant ») : ui/Fade.kt supprimé, accueil et écran de
+  lecture comme avant. En-tête inchangé (il ne se cache pas au défilement).

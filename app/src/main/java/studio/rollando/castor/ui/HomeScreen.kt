@@ -106,7 +106,6 @@ fun HomeScreen(
     // une rangée compacte. Nouveau venu : la présentation et les grandes tuiles.
     if (resume.isNotEmpty() || sites.isNotEmpty() || channels.isNotEmpty()) {
         LazyColumn(
-            modifier = Modifier.fadeTop(),
             contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp + LocalBottomInset.current),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
@@ -182,7 +181,6 @@ fun HomeScreen(
     }
 
     LazyColumn(
-        modifier = Modifier.fadeTop(),
         contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp + LocalBottomInset.current),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {

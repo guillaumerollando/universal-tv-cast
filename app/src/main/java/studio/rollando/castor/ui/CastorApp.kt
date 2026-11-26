@@ -263,7 +263,8 @@ fun CastorApp() {
     // Lecture sur le téléphone, ailleurs que sur l'écran de lecture : la vidéo continue en vignette.
     val playingOnPhone = state.onPhone && (state.active || state.phase == studio.rollando.castor.cast.Phase.SENDING)
     if (playingOnPhone && !landscape && (tab != Tab.PLAYER || iptvOpen != null)) {
-        val bottomBar = if (iptvOpen != null) 0.dp else 88.dp
+        // Sur le navigateur, la vignette se tient au-dessus du bouton « 1 vidéo » (celui qui lance l'épisode suivant).
+        val bottomBar = if (iptvOpen != null) 0.dp else if (tab == Tab.BROWSER) 88.dp + 72.dp else 88.dp
         MiniPlayer(state, bottom = bottomBar + 12.dp + androidx.compose.foundation.layout.WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding())
     }
     if (showTvs) TvSheet(onDismiss = { showTvs = false })

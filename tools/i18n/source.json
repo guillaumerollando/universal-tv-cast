@@ -1,0 +1,1218 @@
+{
+ "strings": {
+  "intent_cast_label": {
+   "en": "Cast to TV",
+   "fr": "Caster sur la télé"
+  },
+  "tab_home": {
+   "en": "Home",
+   "fr": "Accueil"
+  },
+  "tab_browser": {
+   "en": "Browser",
+   "fr": "Navigateur"
+  },
+  "tab_player": {
+   "en": "Playing",
+   "fr": "Lecture"
+  },
+  "tv_choose": {
+   "en": "Choose a TV",
+   "fr": "Choisir une télé"
+  },
+  "cd_choose_tv": {
+   "en": "TV",
+   "fr": "Télé"
+  },
+  "tv_sheet_title": {
+   "en": "TVs on your Wi-Fi",
+   "fr": "Télés sur ton Wi-Fi"
+  },
+  "tv_searching": {
+   "en": "Searching…",
+   "fr": "Recherche…"
+  },
+  "tv_search_again": {
+   "en": "Search again",
+   "fr": "Chercher à nouveau"
+  },
+  "tv_none_title": {
+   "en": "No TV found",
+   "fr": "Aucune télé trouvée"
+  },
+  "tv_none_body": {
+   "en": "Turn on your TV and check that your phone is on the same Wi-Fi network. Universal TV Cast works with TVs that support DLNA (most Philips, Samsung, LG, Sony, Panasonic, Hisense…).",
+   "fr": "Allume ta télé et vérifie que ton téléphone est sur le même Wi-Fi. Universal TV Cast fonctionne avec les télés compatibles DLNA (la plupart des Philips, Samsung, LG, Sony, Panasonic, Hisense…)."
+  },
+  "tv_add_ip": {
+   "en": "Add a TV by IP address",
+   "fr": "Ajouter une télé par adresse IP"
+  },
+  "tv_ip_label": {
+   "en": "TV IP address",
+   "fr": "Adresse IP de la télé"
+  },
+  "tv_ip_help": {
+   "en": "You’ll find it in the TV’s network settings.",
+   "fr": "Tu la trouves dans les réglages réseau de la télé."
+  },
+  "action_add": {
+   "en": "Add",
+   "fr": "Ajouter"
+  },
+  "err_ip_not_found": {
+   "en": "No compatible TV found at %1$s.",
+   "fr": "Aucune télé compatible trouvée à l’adresse %1$s."
+  },
+  "err_tv_busy": {
+   "en": "The TV isn’t responding. Wait a few seconds before trying again.",
+   "fr": "La télé ne répond pas. Attends quelques secondes avant de réessayer."
+  },
+  "notice_source_asleep": {
+   "en": "The TV is waiting for the video, but %1$s isn’t sending it: Android has probably put it to sleep in the background. In its battery settings, choose “No restrictions”, then try again.",
+   "fr": "La télé attend la vidéo, mais %1$s ne l’envoie plus : Android l’a sans doute mis en veille en arrière-plan. Dans ses réglages de batterie, choisis « Aucune restriction », puis réessaie."
+  },
+  "action_source_settings": {
+   "en": "Open %1$s settings",
+   "fr": "Ouvrir les réglages de %1$s"
+  },
+  "source_generic": {
+   "en": "the source app",
+   "fr": "l’appli source"
+  },
+  "tv_disconnect": {
+   "en": "Disconnect from %1$s",
+   "fr": "Se déconnecter de %1$s"
+  },
+  "tip_source_title": {
+   "en": "Keep %1$s awake for smooth seeking",
+   "fr": "Garde %1$s actif pour avancer sans coupure"
+  },
+  "tip_source_body": {
+   "en": "%1$s sends the video to the TV from your phone. If Android puts it to sleep in the background, the TV freezes as soon as you skip ahead.",
+   "fr": "C’est %1$s qui envoie la vidéo depuis ton téléphone. Si Android le met en veille en arrière-plan, la télé se fige dès que tu avances."
+  },
+  "tip_self_title": {
+   "en": "Keep %1$s awake during playback",
+   "fr": "Garde %1$s actif pendant la diffusion"
+  },
+  "tip_self_body": {
+   "en": "%1$s relays the video to the TV. If Android puts it to sleep, playback stops when the screen turns off.",
+   "fr": "%1$s relaie la vidéo vers la télé. Si Android le met en veille, la lecture s’arrête quand l’écran s’éteint."
+  },
+  "tip_howto_xiaomi": {
+   "en": "In its settings: Battery saver → “No restrictions”, and turn on “Autostart”.",
+   "fr": "Dans ses réglages : Économiseur de batterie → « Aucune restriction », et active « Démarrage automatique »."
+  },
+  "tip_howto_samsung": {
+   "en": "In its settings: Battery → “Unrestricted”.",
+   "fr": "Dans ses réglages : Batterie → « Non restreinte »."
+  },
+  "tip_howto_huawei": {
+   "en": "In its settings: Battery → App launch → manage manually and allow running in background.",
+   "fr": "Dans ses réglages : Batterie → Lancement d’applis → gérer manuellement et autoriser l’exécution en arrière-plan."
+  },
+  "tip_howto_oppo": {
+   "en": "In its settings: Battery usage → allow background activity.",
+   "fr": "Dans ses réglages : Utilisation de la batterie → autoriser l’activité en arrière-plan."
+  },
+  "tip_howto_generic": {
+   "en": "In its settings: Battery → “Unrestricted” (or “Don’t optimize”).",
+   "fr": "Dans ses réglages : Batterie → « Sans restriction » (ou « Ne pas optimiser »)."
+  },
+  "action_dont_show": {
+   "en": "Don’t show again",
+   "fr": "Ne plus afficher"
+  },
+  "help_section": {
+   "en": "Troubleshooting",
+   "fr": "Dépannage"
+  },
+  "state_expanded": {
+   "en": "expanded",
+   "fr": "ouvert"
+  },
+  "state_collapsed": {
+   "en": "collapsed",
+   "fr": "fermé"
+  },
+  "help_tv_title": {
+   "en": "My TV doesn’t show up",
+   "fr": "Ma télé n’apparaît pas"
+  },
+  "help_tv_body": {
+   "en": "Turn the TV on and use the same Wi-Fi as the phone (not a guest network). Turn off any VPN. Still nothing? Add it by its IP address (Choose a TV → Add a TV by IP address).",
+   "fr": "Allume la télé et utilise le même Wi-Fi que le téléphone (pas un réseau invité). Coupe le VPN s’il y en a un. Toujours rien ? Ajoute-la par son adresse IP (Choisir une télé → Ajouter une télé par adresse IP)."
+  },
+  "help_freeze_title": {
+   "en": "The video freezes when I skip ahead",
+   "fr": "La vidéo se fige quand j’avance"
+  },
+  "help_freeze_body": {
+   "en": "The app serving the video was put to sleep by Android: let it run in the background (status below). With a torrent, the part you jump to must also be downloaded first: give it a few seconds.",
+   "fr": "L’appli qui sert la vidéo a été mise en veille par Android : autorise-la à tourner en arrière-plan (état ci-dessous). Avec un torrent, le passage demandé doit aussi être téléchargé : patiente quelques secondes."
+  },
+  "help_format_title": {
+   "en": "“File not supported” on the TV",
+   "fr": "« Fichier non pris en charge » sur la télé"
+  },
+  "help_format_body": {
+   "en": "The TV can’t read this format: often HEVC/x265 (the format of many phone videos), DTS sound or MKV on older TVs. Try another source or quality; for phone videos, film in “H.264” or “Most compatible” mode.",
+   "fr": "La télé ne sait pas lire ce format : souvent HEVC/x265 (le format de beaucoup de vidéos filmées au téléphone), son DTS ou MKV sur les télés anciennes. Essaie une autre source ou qualité ; pour tes vidéos, filme en mode « H.264 » ou « Plus compatible »."
+  },
+  "help_subs_title": {
+   "en": "No subtitles",
+   "fr": "Pas de sous-titres"
+  },
+  "help_subs_body": {
+   "en": "Universal TV Cast finds subtitles automatically from the video name and picks your language. On Google Cast TVs they appear directly. On other TVs, it builds them into MP4 videos (setting “Built-in subtitles”). For other formats on those TVs, choose a version of the video with built-in subtitles.",
+   "fr": "Universal TV Cast trouve les sous-titres tout seul à partir du nom de la vidéo et choisit ta langue. Sur les télés Google Cast, ils s’affichent directement. Sur les autres, l’appli les intègre aux vidéos MP4 (réglage « Sous-titres intégrés »). Pour les autres formats sur ces télés, prends une version de la vidéo avec sous-titres intégrés."
+  },
+  "help_hdmi_title": {
+   "en": "The TV switches input at the end",
+   "fr": "La télé change de source à la fin"
+  },
+  "help_hdmi_body": {
+   "en": "Some TVs go back to their last input (HDMI) when a video ends or is stopped. Universal TV Cast shows its waiting screen on the TV instead, so the next video starts faster. To free the TV, disconnect it.",
+   "fr": "Certaines télés repassent sur leur dernière entrée (HDMI) quand une vidéo se termine ou est arrêtée. Universal TV Cast affiche à la place son écran d’attente sur la télé : la vidéo suivante démarre plus vite. Pour libérer la télé, déconnecte-la."
+  },
+  "help_sleep_title": {
+   "en": "Playback stops when the phone screen turns off",
+   "fr": "La lecture s’arrête quand l’écran du téléphone s’éteint"
+  },
+  "help_sleep_body": {
+   "en": "Let Universal TV Cast run in the background.",
+   "fr": "Autorise Universal TV Cast à tourner en arrière-plan."
+  },
+  "help_title": {
+   "en": "Help",
+   "fr": "Aide"
+  },
+  "cd_help": {
+   "en": "Help",
+   "fr": "Aide"
+  },
+  "action_help": {
+   "en": "Help",
+   "fr": "Aide"
+  },
+  "help_report": {
+   "en": "Report a problem",
+   "fr": "Signaler un problème"
+  },
+  "help_report_hint": {
+   "en": "Your e-mail app opens with a few technical details (phone and TV model, app version, last message). Nothing is sent unless you send it.",
+   "fr": "Ton appli e-mail s’ouvre avec quelques infos techniques (modèle du téléphone et de la télé, version de l’appli, dernier message). Rien ne part sans toi."
+  },
+  "report_subject": {
+   "en": "Universal TV Cast %1$s: a problem",
+   "fr": "Universal TV Cast %1$s : un problème"
+  },
+  "report_intro": {
+   "en": "Describe the problem here:",
+   "fr": "Décris le problème ici :"
+  },
+  "settings_shake": {
+   "en": "Shake for help",
+   "fr": "Secouer pour obtenir de l’aide"
+  },
+  "settings_shake_sub": {
+   "en": "Shake the phone to open help and report a problem.",
+   "fr": "Secoue le téléphone pour ouvrir l’aide et signaler un problème."
+  },
+  "tv_type_cast": {
+   "en": "Google Cast · subtitles",
+   "fr": "Google Cast · sous-titres"
+  },
+  "tv_type_dlna": {
+   "en": "DLNA",
+   "fr": "DLNA"
+  },
+  "err_cast_format": {
+   "en": "The Cast player couldn’t read this video (format not supported). Try the DLNA entry for the same TV, or another source.",
+   "fr": "Le lecteur Cast n’a pas pu lire cette vidéo (format non pris en charge). Essaie l’entrée DLNA de la même télé, ou une autre source."
+  },
+  "home_browse_short": {
+   "en": "Spots the videos",
+   "fr": "Repère les vidéos"
+  },
+  "home_videos": {
+   "en": "Videos",
+   "fr": "Vidéos"
+  },
+  "home_videos_short": {
+   "en": "From this phone",
+   "fr": "Du téléphone"
+  },
+  "home_photos": {
+   "en": "Album",
+   "fr": "Album"
+  },
+  "home_photos_short": {
+   "en": "Photos and videos",
+   "fr": "Photos et vidéos"
+  },
+  "home_link_short": {
+   "en": "Video, live stream or channel list",
+   "fr": "Vidéo, direct ou liste de chaînes"
+  },
+  "home_files_other": {
+   "en": "Browse files (music…)",
+   "fr": "Parcourir les fichiers (musique…)"
+  },
+  "home_resume": {
+   "en": "Pick up where you left off",
+   "fr": "Reprendre"
+  },
+  "home_bookmarks_empty": {
+   "en": "Tap ★ on a site or on a series episode: you’ll pick it up here, right where you left off.",
+   "fr": "Touche ★ sur un site ou sur l’épisode d’une série : tu la reprendras ici, là où tu en es."
+  },
+  "photos_counter": {
+   "en": "%1$d / %2$d",
+   "fr": "%1$d / %2$d"
+  },
+  "cd_prev_photo": {
+   "en": "Previous photo",
+   "fr": "Photo précédente"
+  },
+  "cd_next_photo": {
+   "en": "Next photo",
+   "fr": "Photo suivante"
+  },
+  "cd_slideshow_start": {
+   "en": "Start slideshow",
+   "fr": "Lancer le diaporama"
+  },
+  "cd_slideshow_stop": {
+   "en": "Pause slideshow",
+   "fr": "Mettre le diaporama en pause"
+  },
+  "home_browse_tile": {
+   "en": "Websites",
+   "fr": "Sites web"
+  },
+  "settings_embed": {
+   "en": "Built-in subtitles (DLNA TVs)",
+   "fr": "Sous-titres intégrés (télés DLNA)"
+  },
+  "settings_embed_sub": {
+   "en": "Adds the subtitles inside MP4 videos, for TVs that ignore separate subtitles. No re-encoding, no extra battery use.",
+   "fr": "Ajoute les sous-titres dans les vidéos MP4, pour les télés qui ignorent les sous-titres séparés. Sans réencodage, sans surconsommation."
+  },
+  "browser_auto_quality": {
+   "en": "Auto · %1$d qualities",
+   "fr": "Auto · %1$d qualités"
+  },
+  "cd_settings": {
+   "en": "Settings",
+   "fr": "Réglages"
+  },
+  "home_title": {
+   "en": "Send any video to your TV",
+   "fr": "Envoie n’importe quelle vidéo sur ta télé"
+  },
+  "home_subtitle": {
+   "en": "Free. No ads. No tracking.",
+   "fr": "Gratuit. Sans pub. Sans pistage."
+  },
+  "home_browse": {
+   "en": "Browse a website",
+   "fr": "Naviguer sur un site"
+  },
+  "home_browse_sub": {
+   "en": "Universal TV Cast spots the videos on the page",
+   "fr": "Universal TV Cast repère les vidéos de la page"
+  },
+  "home_files": {
+   "en": "Videos on this phone",
+   "fr": "Vidéos du téléphone"
+  },
+  "home_files_sub": {
+   "en": "Films, clips, music",
+   "fr": "Films, clips, musique"
+  },
+  "home_link": {
+   "en": "Paste a link",
+   "fr": "Coller un lien"
+  },
+  "home_link_sub": {
+   "en": "Direct link to a video or an .m3u8 stream",
+   "fr": "Lien direct vers une vidéo ou un flux .m3u8"
+  },
+  "home_other_title": {
+   "en": "From another app",
+   "fr": "Depuis une autre appli"
+  },
+  "home_other_body": {
+   "en": "In your video app, choose “External player”, “Open with” or “Share”, then Universal TV Cast.",
+   "fr": "Dans ton appli vidéo, choisis « Lecteur externe », « Ouvrir avec » ou « Partager », puis Universal TV Cast."
+  },
+  "home_bookmarks": {
+   "en": "Bookmarks",
+   "fr": "Favoris"
+  },
+  "home_recents": {
+   "en": "Recently played",
+   "fr": "Lu récemment"
+  },
+  "cd_delete": {
+   "en": "Remove",
+   "fr": "Retirer"
+  },
+  "link_dialog_title": {
+   "en": "Paste a link",
+   "fr": "Colle un lien"
+  },
+  "action_cast": {
+   "en": "Cast",
+   "fr": "Caster"
+  },
+  "action_cancel": {
+   "en": "Cancel",
+   "fr": "Annuler"
+  },
+  "browser_hint": {
+   "en": "Search or address",
+   "fr": "Site ou recherche"
+  },
+  "cd_back": {
+   "en": "Back",
+   "fr": "Précédent"
+  },
+  "cd_forward": {
+   "en": "Forward",
+   "fr": "Suivant"
+  },
+  "cd_reload": {
+   "en": "Reload",
+   "fr": "Recharger"
+  },
+  "cd_clear": {
+   "en": "Clear",
+   "fr": "Effacer"
+  },
+  "cd_bookmark_add": {
+   "en": "Add to bookmarks",
+   "fr": "Ajouter aux favoris"
+  },
+  "cd_bookmark_remove": {
+   "en": "Remove from bookmarks",
+   "fr": "Retirer des favoris"
+  },
+  "browser_sheet_title": {
+   "en": "Videos on this page",
+   "fr": "Vidéos de la page"
+  },
+  "browser_sheet_hint": {
+   "en": "Pick the one to send to the TV. If it doesn’t play, try the next one.",
+   "fr": "Choisis celle à envoyer sur la télé. Si elle ne se lance pas, essaie la suivante."
+  },
+  "browser_best": {
+   "en": "best guess",
+   "fr": "le plus probable"
+  },
+  "browser_start_title": {
+   "en": "Find a video on the web",
+   "fr": "Trouve une vidéo sur le web"
+  },
+  "browser_start_body": {
+   "en": "Open the page with the video and start playing it. A button will appear to send it to your TV.",
+   "fr": "Ouvre la page de la vidéo et lance-la. Un bouton apparaîtra pour l’envoyer sur ta télé."
+  },
+  "player_empty_title": {
+   "en": "Nothing playing",
+   "fr": "Rien en cours"
+  },
+  "player_empty_body": {
+   "en": "Pick a video from the home screen, the browser or another app.",
+   "fr": "Choisis une vidéo depuis l’accueil, le navigateur ou une autre appli."
+  },
+  "phase_loading": {
+   "en": "Preparing the video…",
+   "fr": "Préparation de la vidéo…"
+  },
+  "phase_sending": {
+   "en": "Sending to the TV…",
+   "fr": "Envoi à la télé…"
+  },
+  "phase_buffering": {
+   "en": "Loading on the TV…",
+   "fr": "Chargement sur la télé…"
+  },
+  "phase_playing": {
+   "en": "Playing on the TV",
+   "fr": "Lecture sur la télé"
+  },
+  "phase_paused": {
+   "en": "Paused",
+   "fr": "En pause"
+  },
+  "phase_stopped": {
+   "en": "Stopped",
+   "fr": "Arrêté"
+  },
+  "phase_ready": {
+   "en": "Ready to cast",
+   "fr": "Prêt à caster"
+  },
+  "player_on_tv": {
+   "en": "On %1$s",
+   "fr": "Sur %1$s"
+  },
+  "player_live": {
+   "en": "Live",
+   "fr": "En direct"
+  },
+  "action_cast_to": {
+   "en": "Play on %1$s",
+   "fr": "Lire sur %1$s"
+  },
+  "action_cast_pick": {
+   "en": "Choose a TV",
+   "fr": "Choisir une télé"
+  },
+  "cd_rewind": {
+   "en": "Back 10 seconds",
+   "fr": "Reculer de 10 secondes"
+  },
+  "cd_forward10": {
+   "en": "Forward 10 seconds",
+   "fr": "Avancer de 10 secondes"
+  },
+  "action_play": {
+   "en": "Play",
+   "fr": "Lecture"
+  },
+  "action_pause": {
+   "en": "Pause",
+   "fr": "Pause"
+  },
+  "action_stop": {
+   "en": "Stop",
+   "fr": "Arrêter"
+  },
+  "cd_vol_down": {
+   "en": "TV volume down",
+   "fr": "Baisser le son de la télé"
+  },
+  "cd_vol_up": {
+   "en": "TV volume up",
+   "fr": "Monter le son de la télé"
+  },
+  "volume_label": {
+   "en": "Volume %1$d",
+   "fr": "Volume %1$d"
+  },
+  "volume_unknown": {
+   "en": "TV volume",
+   "fr": "Son de la télé"
+  },
+  "subs_title": {
+   "en": "Subtitles",
+   "fr": "Sous-titres"
+  },
+  "subs_none": {
+   "en": "None",
+   "fr": "Aucun"
+  },
+  "subs_add": {
+   "en": "Add a file",
+   "fr": "Ajouter un fichier"
+  },
+  "subs_note": {
+   "en": "SRT, VTT and ASS files are supported. Some TVs don’t show subtitles sent this way.",
+   "fr": "Fichiers SRT, VTT et ASS acceptés. Certaines télés n’affichent pas les sous-titres envoyés ainsi."
+  },
+  "mode_title": {
+   "en": "Streaming mode",
+   "fr": "Mode de lecture"
+  },
+  "mode_continuous": {
+   "en": "Continuous",
+   "fr": "Continu"
+  },
+  "mode_direct": {
+   "en": "Direct",
+   "fr": "Direct"
+  },
+  "mode_continuous_help": {
+   "en": "Works with almost every TV. Skipping restarts the stream at the new position.",
+   "fr": "Marche avec presque toutes les télés. Avancer relance le flux au nouvel endroit."
+  },
+  "mode_direct_help": {
+   "en": "Sends the stream as is. Smoother skipping, if your TV can read HLS streams.",
+   "fr": "Envoie le flux tel quel. Avance plus fluide, si ta télé sait lire les flux HLS."
+  },
+  "mode_split_audio": {
+   "en": "This video has its sound on a separate track, so direct mode is used to keep the sound.",
+   "fr": "Le son de cette vidéo est sur une piste à part : le mode direct est utilisé pour le garder."
+  },
+  "notice_pick_tv": {
+   "en": "Choose a TV to start playback.",
+   "fr": "Choisis une télé pour lancer la lecture."
+  },
+  "err_no_wifi": {
+   "en": "Connect your phone to the same Wi-Fi as the TV.",
+   "fr": "Connecte ton téléphone au même Wi-Fi que la télé."
+  },
+  "err_drm": {
+   "en": "This video is copy-protected (DRM) and can’t be sent to the TV.",
+   "fr": "Cette vidéo est protégée (DRM) et ne peut pas être envoyée sur la télé."
+  },
+  "err_tv": {
+   "en": "The TV refused the request (%1$s). It may not support this video format.",
+   "fr": "La télé a refusé (%1$s). Elle ne lit peut-être pas ce format de vidéo."
+  },
+  "err_source": {
+   "en": "The video site refused access (error %1$s). The link may have expired: reopen the page and try again.",
+   "fr": "Le site de la vidéo refuse l’accès (erreur %1$s). Le lien a peut-être expiré : rouvre la page et réessaie."
+  },
+  "err_network": {
+   "en": "Network problem. Check your Wi-Fi connection.",
+   "fr": "Problème de réseau. Vérifie ta connexion Wi-Fi."
+  },
+  "err_generic": {
+   "en": "Something went wrong: %1$s",
+   "fr": "Un souci est survenu : %1$s"
+  },
+  "err_subtitle": {
+   "en": "Couldn’t read these subtitles.",
+   "fr": "Impossible de lire ces sous-titres."
+  },
+  "cd_dismiss": {
+   "en": "Dismiss",
+   "fr": "Fermer"
+  },
+  "settings_title": {
+   "en": "Settings",
+   "fr": "Réglages"
+  },
+  "settings_adblock": {
+   "en": "Block ads in the browser",
+   "fr": "Bloquer les pubs du navigateur"
+  },
+  "settings_adblock_sub": {
+   "en": "Also blocks pop-up windows.",
+   "fr": "Bloque aussi les fenêtres surgissantes."
+  },
+  "settings_continuous": {
+   "en": "Continuous mode by default",
+   "fr": "Mode continu par défaut"
+  },
+  "settings_continuous_sub": {
+   "en": "For streaming sites (HLS). Works with almost every TV.",
+   "fr": "Pour les sites de streaming (HLS). Marche avec presque toutes les télés."
+  },
+  "settings_clear": {
+   "en": "Clear playback history",
+   "fr": "Effacer l’historique de lecture"
+  },
+  "about_version": {
+   "en": "Version %1$s",
+   "fr": "Version %1$s"
+  },
+  "about_body": {
+   "en": "Universal TV Cast is free, with no ads and no tracking. Everything stays on your phone.",
+   "fr": "Universal TV Cast est gratuit, sans pub et sans pistage. Tout reste sur ton téléphone."
+  },
+  "about_made_by": {
+   "en": "Made with care by",
+   "fr": "Fait avec soin par"
+  },
+  "about_more": {
+   "en": "Discover our other apps",
+   "fr": "Découvrir nos autres applis"
+  },
+  "notif_channel": {
+   "en": "Playback on the TV",
+   "fr": "Lecture sur la télé"
+  },
+  "notif_on_tv": {
+   "en": "On %1$s",
+   "fr": "Sur %1$s"
+  },
+  "tv_idle_line": {
+   "en": "Ready. Pick what to watch on your phone.",
+   "fr": "Prêt. Choisis quoi regarder sur ton téléphone."
+  },
+  "phase_tv_waiting": {
+   "en": "Waiting screen on the TV",
+   "fr": "Écran d’attente sur la télé"
+  },
+  "subs_delay": {
+   "en": "Timing",
+   "fr": "Décalage"
+  },
+  "subs_delay_hint": {
+   "en": "Subtitles show before the voice? Tap +. After the voice? Tap −. The video waits, paused, while you adjust.",
+   "fr": "Les sous-titres arrivent avant la voix ? Appuie sur +. Après la voix ? Appuie sur −. La vidéo attend en pause pendant le réglage."
+  },
+  "cd_subs_earlier": {
+   "en": "Show subtitles earlier",
+   "fr": "Afficher les sous-titres plus tôt"
+  },
+  "cd_subs_later": {
+   "en": "Show subtitles later",
+   "fr": "Afficher les sous-titres plus tard"
+  },
+  "subs_delay_reset": {
+   "en": "Reset to 0",
+   "fr": "Remettre à 0"
+  },
+  "album_video": {
+   "en": "Video",
+   "fr": "Vidéo"
+  },
+  "diag_wifi_ok": {
+   "en": "Phone on Wi-Fi · %1$s",
+   "fr": "Téléphone sur le Wi-Fi · %1$s"
+  },
+  "diag_wifi_none": {
+   "en": "Phone not on Wi-Fi",
+   "fr": "Téléphone pas connecté au Wi-Fi"
+  },
+  "diag_tvs_found": {
+   "en": "TVs found: %1$d",
+   "fr": "Télés trouvées : %1$d"
+  },
+  "diag_app_ok": {
+   "en": "%1$s: allowed in the background",
+   "fr": "%1$s : autorisée en arrière-plan"
+  },
+  "diag_app_risk": {
+   "en": "%1$s: may be put to sleep",
+   "fr": "%1$s : peut être mise en veille"
+  },
+  "diag_source_unknown": {
+   "en": "Open a video from your video app to check it here too.",
+   "fr": "Ouvre une vidéo depuis ton appli vidéo pour la vérifier ici aussi."
+  },
+  "diag_current": {
+   "en": "Current video: %1$s · via %2$s",
+   "fr": "Vidéo en cours : %1$s · via %2$s"
+  },
+  "diag_no_video": {
+   "en": "No video playing right now.",
+   "fr": "Aucune vidéo en cours."
+  },
+  "diag_subs_found": {
+   "en": "Subtitles available for this video: %1$d",
+   "fr": "Sous-titres disponibles pour cette vidéo : %1$d"
+  },
+  "diag_tv_cast": {
+   "en": "Your TV uses Google Cast: subtitles show directly.",
+   "fr": "Ta télé utilise Google Cast : les sous-titres s’affichent directement."
+  },
+  "diag_tv_dlna": {
+   "en": "Your TV uses DLNA: subtitles are built into MP4 videos only.",
+   "fr": "Ta télé utilise le DLNA : les sous-titres ne sont intégrés qu’aux vidéos MP4."
+  },
+  "diag_no_tv": {
+   "en": "No TV chosen yet.",
+   "fr": "Aucune télé choisie pour l’instant."
+  },
+  "action_send_again": {
+   "en": "Send to the TV again",
+   "fr": "Renvoyer à la télé"
+  },
+  "action_try_dlna": {
+   "en": "Try with DLNA",
+   "fr": "Essayer en DLNA"
+  },
+  "action_open_settings_of": {
+   "en": "Settings of %1$s",
+   "fr": "Réglages de %1$s"
+  },
+  "slideshow_on": {
+   "en": "Slideshow on · a photo every 6 s",
+   "fr": "Diaporama en cours · une photo toutes les 6 s"
+  },
+  "slideshow_off": {
+   "en": "Slideshow paused",
+   "fr": "Diaporama en pause"
+  },
+  "settings_smooth_slides": {
+   "en": "Smooth slideshow",
+   "fr": "Diaporama fluide"
+  },
+  "settings_smooth_slides_sub": {
+   "en": "Experimental. Sends the album as one live video, with a fade between photos. Many TVs show it late: leave off if photos change slowly.",
+   "fr": "Expérimental. Envoie l’album comme une seule vidéo en direct, avec un fondu entre les photos. Beaucoup de télés l’affichent en retard : laisse désactivé si les photos changent lentement."
+  },
+  "episode_label": {
+   "en": "Season %1$d · Episode %2$d",
+   "fr": "Saison %1$d · Épisode %2$d"
+  },
+  "subs_in_video": {
+   "en": "Already in the video",
+   "fr": "Déjà dans la vidéo"
+  },
+  "subs_in_video_note": {
+   "en": "Choose them with your TV remote.",
+   "fr": "Choisis-les avec la télécommande de la télé."
+  },
+  "browser_live": {
+   "en": "Live",
+   "fr": "Direct"
+  },
+  "browser_next_episode": {
+   "en": "Episode %1$d",
+   "fr": "Épisode %1$d"
+  },
+  "bookmark_episode": {
+   "en": "Ep. %1$d",
+   "fr": "Ép. %1$d"
+  },
+  "bookmark_resume": {
+   "en": "Resume",
+   "fr": "Reprendre"
+  },
+  "browser_silent": {
+   "en": "Picture only, no sound",
+   "fr": "Image seule, sans le son"
+  },
+  "err_protected": {
+   "en": "This site protects its videos: only its own player can read them, so they can’t be sent to the TV.",
+   "fr": "Ce site protège ses vidéos : seul son propre lecteur peut les lire, elles ne peuvent donc pas être envoyées sur la télé."
+  },
+  "bookmark_open": {
+   "en": "Open",
+   "fr": "Ouvrir"
+  },
+  "cd_browser_home": {
+   "en": "Browser home",
+   "fr": "Accueil du navigateur"
+  },
+  "resume_season_episode": {
+   "en": "S%1$d · Ep. %2$d",
+   "fr": "S%1$d · Ép. %2$d"
+  },
+  "resume_remove": {
+   "en": "Remove from “Pick up”",
+   "fr": "Retirer de « Reprendre »"
+  },
+  "resume_follow": {
+   "en": "Keep it here (bookmark)",
+   "fr": "Garder ici (favori)"
+  },
+  "home_link_tile": {
+   "en": "Link",
+   "fr": "Lien"
+  },
+  "web_err_offline": {
+   "en": "No internet connection",
+   "fr": "Pas de connexion Internet"
+  },
+  "web_err_offline_body": {
+   "en": "Check your Wi-Fi, then try again.",
+   "fr": "Vérifie ton Wi-Fi, puis réessaie."
+  },
+  "web_err_notfound": {
+   "en": "Site not found",
+   "fr": "Site introuvable"
+  },
+  "web_err_notfound_body": {
+   "en": "%1$s doesn’t answer. Check the address: the site may have moved to a new one.",
+   "fr": "%1$s ne répond pas. Vérifie l’adresse : le site a peut-être changé d’adresse."
+  },
+  "web_err_timeout": {
+   "en": "The site is taking too long",
+   "fr": "Le site met trop de temps à répondre"
+  },
+  "web_err_ssl": {
+   "en": "Connection not secure",
+   "fr": "Connexion non sécurisée"
+  },
+  "web_err_ssl_body": {
+   "en": "The certificate of %1$s isn’t valid, so the page wasn’t opened.",
+   "fr": "Le certificat de %1$s n’est pas valide : la page n’a pas été ouverte."
+  },
+  "web_err_ssl_hint": {
+   "en": "This often means your internet provider blocks the site.",
+   "fr": "C’est souvent le signe que ton fournisseur d’accès bloque ce site."
+  },
+  "web_err_generic": {
+   "en": "The page couldn’t open",
+   "fr": "La page n’a pas pu s’ouvrir"
+  },
+  "web_blank": {
+   "en": "The page stays blank",
+   "fr": "La page reste vide"
+  },
+  "web_blank_body": {
+   "en": "Some sites don’t show with the ad blocker, or refuse in-app browsers.",
+   "fr": "Certains sites ne s’affichent pas avec le bloqueur de pubs, ou refusent les navigateurs intégrés."
+  },
+  "web_err_code": {
+   "en": "Error from the site: %1$d",
+   "fr": "Erreur du site : %1$d"
+  },
+  "web_retry": {
+   "en": "Try again",
+   "fr": "Réessayer"
+  },
+  "web_retry_noads": {
+   "en": "Try again without the ad blocker",
+   "fr": "Réessayer sans bloqueur de pubs"
+  },
+  "web_open_outside": {
+   "en": "Open in the phone’s browser",
+   "fr": "Ouvrir dans le navigateur du téléphone"
+  },
+  "web_back_home": {
+   "en": "Back to start page",
+   "fr": "Retour à l’accueil du navigateur"
+  },
+  "phone_watch": {
+   "en": "Watch on this phone",
+   "fr": "Regarder sur le téléphone"
+  },
+  "phone_to_tv": {
+   "en": "Send to the TV",
+   "fr": "Envoyer sur la télé"
+  },
+  "phone_error": {
+   "en": "This phone can’t play this video. It may still work on the TV.",
+   "fr": "Le téléphone n’arrive pas à lire cette vidéo. Elle passe peut-être sur la télé."
+  },
+  "cd_copy_link": {
+   "en": "Copy the link",
+   "fr": "Copier le lien"
+  },
+  "cd_share_link": {
+   "en": "Share the link",
+   "fr": "Partager le lien"
+  },
+  "link_copied": {
+   "en": "Link copied",
+   "fr": "Lien copié"
+  },
+  "video_live": {
+   "en": "Live",
+   "fr": "Direct"
+  },
+  "video_generic": {
+   "en": "Video",
+   "fr": "Vidéo"
+  },
+  "channel_remove": {
+   "en": "Remove channel",
+   "fr": "Retirer la chaîne"
+  },
+  "err_live_stopped": {
+   "en": "The TV stopped this live stream. Try again, or watch it on the phone.",
+   "fr": "La télé a arrêté ce direct. Réessaie, ou regarde-le sur le téléphone."
+  },
+  "home_channels": {
+   "en": "Channels",
+   "fr": "Chaînes"
+  },
+  "channel_rename": {
+   "en": "Rename",
+   "fr": "Renommer"
+  },
+  "channel_name": {
+   "en": "Channel name",
+   "fr": "Nom de la chaîne"
+  },
+  "action_ok": {
+   "en": "OK",
+   "fr": "OK"
+  },
+  "live_back": {
+   "en": "Back to live",
+   "fr": "Revenir au direct"
+  },
+  "live_paused": {
+   "en": "Paused · Play resumes live",
+   "fr": "En pause · Lecture reprend au direct"
+  },
+  "home_see_all": {
+   "en": "See all",
+   "fr": "Tout voir"
+  },
+  "site_hide": {
+   "en": "Stop suggesting",
+   "fr": "Ne plus proposer"
+  },
+  "home_sites": {
+   "en": "My sites",
+   "fr": "Mes sites"
+  },
+  "home_cast_more": {
+   "en": "Cast something else",
+   "fr": "Caster autre chose"
+  },
+  "home_long_press_hint": {
+   "en": "Press and hold a card to remove it or keep it in bookmarks.",
+   "fr": "Appui long sur une carte pour la retirer ou la garder en favori."
+  },
+  "err_source_app_closed": {
+   "en": "%1$s isn’t responding anymore: it was probably closed. Open it again and restart the video from it.",
+   "fr": "%1$s ne répond plus : l’appli a sans doute été fermée. Rouvre-la et relance la vidéo depuis elle."
+  },
+  "iptv_recent": {
+   "en": "Watched recently",
+   "fr": "Regardées récemment"
+  },
+  "iptv_all_channels": {
+   "en": "All channels",
+   "fr": "Toutes les chaînes"
+  },
+  "iptv_hide": {
+   "en": "Hide this channel",
+   "fr": "Masquer cette chaîne"
+  },
+  "iptv_hidden_done": {
+   "en": "Channel hidden",
+   "fr": "Chaîne masquée"
+  },
+  "iptv_unhide_all": {
+   "en": "Show all again",
+   "fr": "Tout réafficher"
+  },
+  "iptv_remove_recent": {
+   "en": "Remove from recent",
+   "fr": "Retirer des récentes"
+  },
+  "action_undo": {
+   "en": "Undo",
+   "fr": "Annuler"
+  },
+  "err_channel_denied": {
+   "en": "This channel isn’t responding (error %1$s): its link may no longer work, or it may only be available in its own country. Press and hold it in the list to hide it.",
+   "fr": "Cette chaîne ne répond pas (erreur %1$s) : son lien ne marche peut-être plus, ou elle n’est visible que dans son pays. Appui long dans la liste pour la masquer."
+  },
+  "err_source_unreachable": {
+   "en": "The video isn’t responding: the site or channel may be offline. Try again later.",
+   "fr": "La vidéo ne répond pas : le site ou la chaîne est peut-être hors ligne. Réessaie plus tard."
+  },
+  "zap_title": {
+   "en": "Channel surfing",
+   "fr": "Zapper"
+  },
+  "zap_random": {
+   "en": "Random channel",
+   "fr": "Une chaîne au hasard"
+  },
+  "iptv_my_lists": {
+   "en": "My channel lists",
+   "fr": "Mes listes de chaînes"
+  },
+  "iptv_hidden_title": {
+   "en": "Hidden channels",
+   "fr": "Chaînes masquées"
+  },
+  "iptv_unhide": {
+   "en": "Show again",
+   "fr": "Réafficher"
+  },
+  "action_close": {
+   "en": "Close",
+   "fr": "Fermer"
+  },
+  "cd_fullscreen": {
+   "en": "Full screen",
+   "fr": "Plein écran"
+  },
+  "cd_fullscreen_exit": {
+   "en": "Exit full screen",
+   "fr": "Quitter le plein écran"
+  },
+  "phone_play_here": {
+   "en": "Play on this phone",
+   "fr": "Lire sur ce téléphone"
+  },
+  "phone_watch_tv": {
+   "en": "Watch on the TV",
+   "fr": "Regarder sur la télé"
+  },
+  "phase_on_phone": {
+   "en": "On this phone",
+   "fr": "Sur ce téléphone"
+  },
+  "epg_now": {
+   "en": "Now",
+   "fr": "En ce moment"
+  },
+  "epg_next": {
+   "en": "Next",
+   "fr": "Ensuite"
+  },
+  "iptv_guide": {
+   "en": "Programme guide",
+   "fr": "Guide des programmes"
+  },
+  "iptv_guide_hint": {
+   "en": "Guide address (XMLTV), optional",
+   "fr": "Adresse du guide (XMLTV), facultatif"
+  },
+  "iptv_guide_help": {
+   "en": "If your provider gives a programme guide (EPG) address, paste it here: the current programme will show under its channels.",
+   "fr": "Si ton fournisseur donne une adresse de guide des programmes (EPG), colle-la ici : le programme en cours s’affichera sous ses chaînes."
+  },
+  "action_save": {
+   "en": "Save",
+   "fr": "Enregistrer"
+  },
+  "notice_tv_not_starting": {
+   "en": "The TV isn’t starting playback. Is it switched on? A TV on standby accepts the video but doesn’t show it.",
+   "fr": "La télé ne démarre pas la lecture. Est-elle allumée ? En veille, elle accepte la vidéo mais ne l’affiche pas."
+  },
+  "start_title": {
+   "en": "To get started",
+   "fr": "Pour commencer"
+  },
+  "start_tv_title": {
+   "en": "Free TV channels",
+   "fr": "Chaînes TV gratuites"
+  },
+  "start_tv_sub": {
+   "en": "Free channels available in your country, in one link.",
+   "fr": "Les chaînes gratuites disponibles dans ton pays, en un seul lien."
+  },
+  "start_sites_title": {
+   "en": "Free, legal sites to try: open a video, then send it to your TV.",
+   "fr": "Des sites gratuits et légaux à essayer : ouvre une vidéo, puis envoie-la sur ta télé."
+  },
+  "start_archive": {
+   "en": "Public-domain films",
+   "fr": "Films du domaine public"
+  },
+  "start_arte": {
+   "en": "Films, documentaries, concerts",
+   "fr": "Films, documentaires, concerts"
+  },
+  "start_nasa": {
+   "en": "Space on video",
+   "fr": "L’espace en vidéo"
+  },
+  "start_tv_steps": {
+   "en": "Copy this link, then tap “Paste a link” and paste it: all the channels arrive. It works with any channel list (M3U) you find.",
+   "fr": "Copie ce lien, puis touche « Coller un lien » et colle-le : toutes les chaînes arrivent. Ça marche avec n’importe quelle liste de chaînes (M3U) que tu trouveras."
+  },
+  "start_copy": {
+   "en": "Copy the link",
+   "fr": "Copier le lien"
+  },
+  "start_copied": {
+   "en": "Link copied",
+   "fr": "Lien copié"
+  },
+  "next_episode": {
+   "en": "Next episode",
+   "fr": "Épisode suivant"
+  },
+  "iptv_title": {
+   "en": "Channel lists",
+   "fr": "Listes de chaînes"
+  },
+  "iptv_intro": {
+   "en": "A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.",
+   "fr": "Une liste de chaînes (liste M3U ou IPTV) regroupe des chaînes télé dans un seul lien. Colle son adresse ou ouvre le fichier : tu retrouves ici toutes ses chaînes, avec leur logo."
+  },
+  "iptv_url_hint": {
+   "en": "List address (.m3u)",
+   "fr": "Adresse de la liste (.m3u)"
+  },
+  "iptv_import": {
+   "en": "Import",
+   "fr": "Importer"
+  },
+  "iptv_file": {
+   "en": "Open a file",
+   "fr": "Ouvrir un fichier"
+  },
+  "iptv_try_free": {
+   "en": "Try a free list",
+   "fr": "Essayer une liste gratuite"
+  },
+  "iptv_try_free_sub": {
+   "en": "Free channels available in your country (iptv-org)",
+   "fr": "Les chaînes gratuites disponibles dans ton pays (iptv-org)"
+  },
+  "iptv_search": {
+   "en": "Search a channel",
+   "fr": "Chercher une chaîne"
+  },
+  "iptv_all": {
+   "en": "All",
+   "fr": "Toutes"
+  },
+  "iptv_update": {
+   "en": "Update",
+   "fr": "Mettre à jour"
+  },
+  "iptv_remove": {
+   "en": "Remove this list",
+   "fr": "Supprimer cette liste"
+  },
+  "iptv_add": {
+   "en": "Add a list",
+   "fr": "Ajouter une liste"
+  },
+  "iptv_loading": {
+   "en": "Importing the list…",
+   "fr": "Import de la liste…"
+  },
+  "iptv_err_not_list": {
+   "en": "This link isn’t a channel list.",
+   "fr": "Ce lien n’est pas une liste de chaînes."
+  },
+  "iptv_err_load": {
+   "en": "Couldn’t load the list. Check the address and your connection.",
+   "fr": "Impossible de charger la liste. Vérifie l’adresse et ta connexion."
+  },
+  "iptv_none_found": {
+   "en": "No channel found",
+   "fr": "Aucune chaîne trouvée"
+  },
+  "iptv_note": {
+   "en": "Channels come from the list you import: Universal TV Cast doesn’t provide any.",
+   "fr": "Les chaînes viennent de la liste que tu importes : Universal TV Cast n’en fournit aucune."
+  },
+  "link_dialog_note": {
+   "en": "A video, a live stream or a channel list (.m3u).",
+   "fr": "Une vidéo, un direct ou une liste de chaînes (.m3u)."
+  },
+  "bookmark_site": {
+   "en": "Site",
+   "fr": "Site"
+  },
+  "bookmark_followed_series": {
+   "en": "“%1$s” followed: the bookmark will move to each episode you watch.",
+   "fr": "« %1$s » suivie : le marque-page avancera tout seul à chaque épisode regardé."
+  },
+  "bookmark_added": {
+   "en": "“%1$s” added to favorites.",
+   "fr": "« %1$s » ajouté aux favoris."
+  },
+  "bookmark_advanced": {
+   "en": "%1$s: bookmark moved to episode %2$d.",
+   "fr": "%1$s : marque-page avancé à l’épisode %2$d."
+  }
+ },
+ "plurals": {
+  "browser_found": {
+   "en": {
+    "one": "%d video",
+    "other": "%d videos"
+   },
+   "fr": {
+    "one": "%d vidéo",
+    "other": "%d vidéos"
+   }
+  },
+  "iptv_count": {
+   "en": {
+    "one": "%d channel",
+    "other": "%d channels"
+   },
+   "fr": {
+    "one": "%d chaîne",
+    "other": "%d chaînes"
+   }
+  }
+ }
+}

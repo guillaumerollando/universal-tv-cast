@@ -58,11 +58,12 @@ private val STARTER_SITES = listOf(
 
 /** « Pour commencer » : de quoi essayer l'appli tout de suite, avec du contenu gratuit et légal. */
 @Composable
-fun StarterSection(onBrowse: (String) -> Unit, onPasteLink: () -> Unit, showChannels: Boolean = true) {
+fun StarterSection(onBrowse: (String) -> Unit, onPasteLink: () -> Unit, showChannels: Boolean = true, showSites: Boolean = true) {
+    if (!showChannels && !showSites) return
     Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         SectionTitle(stringResource(R.string.start_title), Modifier.semantics { heading() })
         if (showChannels) FreeChannelsCard(onPasteLink)
-        StarterSites(onBrowse)
+        if (showSites) StarterSites(onBrowse)
     }
 }
 

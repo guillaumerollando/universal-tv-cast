@@ -176,6 +176,13 @@ fun HomeScreen(
                     MoreSources(onPickFile, showLists = channels.isEmpty()) // sinon, déjà en tête de « Chaînes »
                 }
             }
+            // La découverte continue pas à pas : ce qui n'a pas encore été essayé reste proposé (une liste de chaînes,
+            // un site), et disparaît une fois fait.
+            item {
+                val lists by studio.rollando.castor.data.IptvStore.lists.collectAsState()
+                StarterSection(onBrowse = { onBrowse(it) }, onPasteLink = onPasteLink,
+                    showChannels = lists.isEmpty(), showSites = sites.isEmpty())
+            }
             item {
                 Text(stringResource(R.string.home_long_press_hint), style = MaterialTheme.typography.bodySmall,
                     color = c.onSurfaceVariant, modifier = Modifier.padding(horizontal = 16.dp))

@@ -51,7 +51,12 @@ object Epg {
             if (SKIP.any { it in f }) return@filter false
             // Collection découpée par pays : seulement le guide de ce pays. Sinon (guide unique) : toujours.
             !g.byCountry || BY_COUNTRY.find(f)?.groupValues?.get(1)?.lowercase() == cc
-        }.map { it.url }
+        }.map { it.url }.let { declared ->
+            // Aucun guide déclaré ne connaît peut-être la chaîne : en dernier recours, le guide gratuit du pays que
+            // déclare la liste Free-TV (open source), sans avoir à importer Free-TV.
+            val fallback = cc?.let { fallbackGuide(it) }
+            if (fallback != null && fallback !in declared) declared + fallback else declared
+        }
         if (guides.isEmpty()) return@withContext null
         val keys = listOfNotNull(tvgId?.lowercase()?.let { "id:$it" }, key(name).takeIf { it.isNotEmpty() })
         val now = System.currentTimeMillis()
@@ -62,6 +67,12 @@ object Epg {
             if (i >= 0) return@withContext progs[i] to progs.getOrNull(i + 1)
         }
         null
+    }
+
+    /** Guide gratuit d'un pays, celui que déclare la liste Free-TV (« …_FR1.xml.gz »). Un pays sans guide : refus mis en cache. */
+    fun fallbackGuide(cc: String): String {
+        val code = if (cc == "gb") "UK" else cc.uppercase()
+        return "https://epgshare01.online/epgshare01/epg_ripper_${code}1.xml.gz"
     }
 
     /** Guides injoignables : on ne réessaie qu'au bout d'une heure. */

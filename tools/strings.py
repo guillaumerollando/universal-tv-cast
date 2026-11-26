@@ -520,4 +520,26 @@ for i, lang in enumerate(LANGS):
         out.append(f'    <plurals name="{k}">\n        <item quantity="one">{esc(one)}</item>\n        <item quantity="other">{esc(other)}</item>\n    </plurals>')
     out.append("</resources>\n")
     open(os.path.join(d, "strings.xml"), "w").write("\n".join(out))
-print(len(S), "textes x", len(LANGS), "langues")
+# Langues supplémentaires : tools/i18n/<qualificatif Android>.json ({"strings": {clé: texte}, "plurals": {clé: {quantité: texte}}}).
+# Une clé absente retombe sur l'anglais (Android le fait tout seul).
+import json, glob
+extra = 0
+for f in sorted(glob.glob(os.path.join(os.path.dirname(__file__), "i18n", "*.json"))):
+    q = os.path.basename(f)[:-5]
+    if q == "source":
+        continue
+    data = json.load(open(f, encoding="utf-8"))
+    d = os.path.join(root, f"values-{q}")
+    os.makedirs(d, exist_ok=True)
+    out = ['<?xml version="1.0" encoding="utf-8"?>', "<!-- Généré par tools/strings.py depuis tools/i18n : ne pas modifier à la main. -->", "<resources>"]
+    for k, t in data.get("strings", {}).items():
+        if k in S and k != "app_name" and t:
+            out.append(f'    <string name="{k}">{esc(t)}</string>')
+    for k, qs in data.get("plurals", {}).items():
+        if k in PLURALS and qs:
+            items = "\n".join(f'        <item quantity="{qq}">{esc(tt)}</item>' for qq, tt in qs.items())
+            out.append(f'    <plurals name="{k}">\n{items}\n    </plurals>')
+    out.append("</resources>\n")
+    open(os.path.join(d, "strings.xml"), "w", encoding="utf-8").write("\n".join(out))
+    extra += 1
+print(len(S), "textes x", len(LANGS) + extra, "langues")

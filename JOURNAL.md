@@ -917,3 +917,10 @@ fait toute seule.
   dans ces listes (Free-TV en déclarait).
 - Ondes de diffusion (CastWaves) remises sur l'en-tête de chaîne pendant la lecture sur la télé (perdues avec les logos).
 - +10 s au direct : actif seulement à partir d'1 s de retard (avant : > 0, d'où le bouton actif et clignotant au direct).
+
+## 2026-11-26 (nuit) — Programmes pour toutes les chaînes ; découverte pas à pas
+- Sources gratuites vérifiées : les guides d'iptv-org/epg (GUIDES.md) sont tous hors service ; epgshare01 (déclaré par
+  Free-TV, liste open source) couvre 83/231 chaînes iptv-org France, epg.pw 76/231. Repli retenu : epgshare01 du pays de
+  la chaîne (Epg.fallbackGuide), utilisé seulement si aucun guide déclaré ne la connaît (12 h de cache, 1 h si absent).
+- Émulateur, appli neuve + iptv-org France seule : France 3 → « En ce moment » + « Ensuite · 03:15 … » (guide FR en 2,2 s).
+- Accueil habitué : « Pour commencer » garde ce qui n'a pas été essayé (liste de chaînes si aucune, sites si aucun site).

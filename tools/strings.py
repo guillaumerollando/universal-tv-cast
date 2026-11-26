@@ -426,6 +426,17 @@ S = {
 "phase_on_phone": ["On this phone", "Sur ce téléphone", "En este móvil", "Auf diesem Handy", "Su questo telefono", "Op deze telefoon", "Neste celular"],
 "epg_now": ["Now", "En ce moment", "Ahora", "Jetzt", "In onda", "Nu", "Agora"],
 "epg_next": ["Next", "Ensuite", "Después", "Danach", "A seguire", "Hierna", "Depois"],
+"iptv_guide": ["Programme guide", "Guide des programmes", "Guía de programación", "Programmführer", "Guida TV", "Programmagids", "Guia de programação"],
+"iptv_guide_hint": ["Guide address (XMLTV), optional", "Adresse du guide (XMLTV), facultatif", "Dirección de la guía (XMLTV), opcional", "Adresse des Programmführers (XMLTV), optional", "Indirizzo della guida (XMLTV), facoltativo", "Adres van de gids (XMLTV), optioneel", "Endereço do guia (XMLTV), opcional"],
+"iptv_guide_help": [
+ "If your provider gives a programme guide (EPG) address, paste it here: the current programme will show under its channels.",
+ "Si ton fournisseur donne une adresse de guide des programmes (EPG), colle-la ici : le programme en cours s’affichera sous ses chaînes.",
+ "Si tu proveedor da una dirección de guía de programación (EPG), pégala aquí: el programa en curso aparecerá bajo sus canales.",
+ "Wenn dein Anbieter eine Programmführer-Adresse (EPG) angibt, füge sie hier ein: Die laufende Sendung erscheint unter seinen Sendern.",
+ "Se il tuo fornitore indica l’indirizzo di una guida TV (EPG), incollalo qui: il programma in onda apparirà sotto i suoi canali.",
+ "Geeft je aanbieder een adres voor een programmagids (EPG), plak het hier: het huidige programma verschijnt onder zijn zenders.",
+ "Se o seu provedor fornece um endereço de guia de programação (EPG), cole aqui: o programa atual aparecerá nos canais dele."],
+"action_save": ["Save", "Enregistrer", "Guardar", "Speichern", "Salva", "Opslaan", "Salvar"],
 "iptv_title": ["Channel lists", "Listes de chaînes", "Listas de canales", "Senderlisten", "Liste di canali", "Zenderlijsten", "Listas de canais"],
 "iptv_intro": [
  "A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.",

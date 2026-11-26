@@ -262,6 +262,10 @@
     <string name="phase_on_phone">On this phone</string>
     <string name="epg_now">Now</string>
     <string name="epg_next">Next</string>
+    <string name="iptv_guide">Programme guide</string>
+    <string name="iptv_guide_hint">Guide address (XMLTV), optional</string>
+    <string name="iptv_guide_help">If your provider gives a programme guide (EPG) address, paste it here: the current programme will show under its channels.</string>
+    <string name="action_save">Save</string>
     <string name="iptv_title">Channel lists</string>
     <string name="iptv_intro">A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.</string>
     <string name="iptv_url_hint">List address (.m3u)</string>

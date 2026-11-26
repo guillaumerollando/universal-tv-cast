@@ -17,7 +17,7 @@ import java.io.File
  * (une liste mondiale pèse plusieurs Mo). Une liste importée par adresse se met à jour toute seule une fois par jour.
  */
 object IptvStore {
-    data class Playlist(val id: String, val name: String, val source: String, val count: Int, val updated: Long) {
+    data class Playlist(val id: String, val name: String, val source: String, val count: Int, val updated: Long, val guide: String? = null) {
         val isRemote: Boolean get() = source.startsWith("http")
     }
 
@@ -37,7 +37,8 @@ object IptvStore {
             val a = JSONArray(prefs.getString("lists", "[]"))
             (0 until a.length()).map { i ->
                 val o = a.getJSONObject(i)
-                Playlist(o.getString("id"), o.getString("name"), o.getString("source"), o.optInt("count"), o.optLong("updated"))
+                Playlist(o.getString("id"), o.getString("name"), o.getString("source"), o.optInt("count"), o.optLong("updated"),
+                    o.optString("guide").takeIf { it.isNotBlank() })
             }
         }.getOrDefault(emptyList())
         _hidden.value = prefs.getStringSet("hidden", emptySet()).orEmpty().toSet()
@@ -46,7 +47,8 @@ object IptvStore {
     private fun save() {
         prefs.edit().putString("lists", JSONArray().apply {
             _lists.value.forEach { p ->
-                put(JSONObject().put("id", p.id).put("name", p.name).put("source", p.source).put("count", p.count).put("updated", p.updated))
+                put(JSONObject().put("id", p.id).put("name", p.name).put("source", p.source).put("count", p.count).put("updated", p.updated)
+                    .apply { p.guide?.let { put("guide", it) } })
             }
         }.toString()).apply()
     }
@@ -77,7 +79,7 @@ object IptvStore {
         val id = old?.id ?: java.util.UUID.randomUUID().toString().take(8)
         File(dir, "$id.m3u").writeText(text)
         synchronized(cache) { cache[id] = channels }
-        val p = Playlist(id, old?.name ?: name ?: Iptv.nameFor(source), source, channels.size, System.currentTimeMillis())
+        val p = Playlist(id, old?.name ?: name ?: Iptv.nameFor(source), source, channels.size, System.currentTimeMillis(), old?.guide)
         _lists.value = listOf(p) + _lists.value.filter { it.id != id }
         save()
         logoIndex = null; allCache = null; guidesCache = null
@@ -140,14 +142,21 @@ object IptvStore {
     fun unhide(url: String) { _hidden.value = _hidden.value - url; prefs.edit().putStringSet("hidden", _hidden.value).apply() }
     fun unhideAll(urls: Collection<String>) { _hidden.value = _hidden.value - urls.toSet(); prefs.edit().putStringSet("hidden", _hidden.value).apply() }
 
-    @Volatile private var guidesCache: List<String>? = null
+    /** Un guide des programmes, et s'il fait partie d'une collection découpée par pays (à ne lire que pour ce pays). */
+    data class Guide(val url: String, val byCountry: Boolean)
 
-    /** Tous les guides des programmes déclarés par les listes importées. */
-    suspend fun guideUrls(): List<String> = withContext(Dispatchers.IO) {
+    @Volatile private var guidesCache: List<Guide>? = null
+
+    /** Tous les guides des programmes fournis par les listes importées. */
+    suspend fun guideUrls(): List<Guide> = withContext(Dispatchers.IO) {
         guidesCache?.let { return@withContext it }
         _lists.value.flatMap { p ->
-            runCatching { File(dir, "${p.id}.m3u").bufferedReader().use { r -> Iptv.guideUrls(r.readLine().orEmpty()) } }.getOrDefault(emptyList())
-        }.distinct().also { guidesCache = it }
+            val declared = runCatching { File(dir, "${p.id}.m3u").bufferedReader().use { r -> Iptv.guideUrls(r.readLine().orEmpty()) } }.getOrDefault(emptyList())
+            // Guide indiqué par l'utilisateur, celui d'un serveur « Xtream », celui écrit en tête de la liste.
+            // Une liste qui en déclare beaucoup (Free-TV : un par pays) : seulement celui du pays de la chaîne.
+            listOfNotNull(p.guide, Iptv.xtreamGuide(p.source)).map { Guide(it, false) } +
+                declared.map { Guide(it, declared.size > 3) }
+        }.distinctBy { it.url }.also { guidesCache = it }
     }
 
     @Volatile private var allCache: List<Iptv.Channel>? = null
@@ -169,12 +178,25 @@ object IptvStore {
         out.values.toList().also { allCache = it }
     }
 
+    /** Toutes les fiches de cette chaîne, dans toutes les listes (même flux ou même nom). */
+    suspend fun entries(url: String, name: String?): List<Iptv.Channel> {
+        val n = name?.let { fold(it) }
+        return _lists.value.flatMap { p -> channels(p.id).filter { it.url == url || (n != null && fold(it.name) == n) } }
+    }
+
     /** La liste et la chaîne qui correspondent à ce flux (ou, à défaut, à ce nom), parmi les listes importées. */
     suspend fun locate(url: String, name: String?): Pair<Playlist, Iptv.Channel>? {
         for (p in _lists.value) channels(p.id).firstOrNull { it.url == url }?.let { return p to it }
         val n = name?.let { fold(it) }?.takeIf { it.isNotEmpty() } ?: return null
         for (p in _lists.value) channels(p.id).firstOrNull { fold(it.name) == n }?.let { return p to it }
         return null
+    }
+
+    /** Adresse du guide des programmes donnée par l'utilisateur pour cette liste (vide : aucune). */
+    fun setGuide(id: String, url: String?) {
+        _lists.value = _lists.value.map { if (it.id == id) it.copy(guide = url?.trim()?.takeIf { u -> u.startsWith("http") }) else it }
+        save()
+        guidesCache = null
     }
 
     fun rename(id: String, name: String) {

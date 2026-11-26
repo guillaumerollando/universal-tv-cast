@@ -148,6 +148,7 @@ fun IptvScreen(onClose: () -> Unit, startWith: String? = null) {
     var adding by remember { mutableStateOf(false) }
     var showLists by remember { mutableStateOf(false) }
     var showHidden by remember { mutableStateOf(false) }
+    var guideFor by remember { mutableStateOf<IptvStore.Playlist?>(null) }
     var refreshTick by remember { mutableStateOf(0) }
     val errNotList = stringResource(R.string.iptv_err_not_list)
     val errLoad = stringResource(R.string.iptv_err_load)
@@ -235,6 +236,8 @@ fun IptvScreen(onClose: () -> Unit, startWith: String? = null) {
                             DropdownMenu(m, onDismissRequest = { m = false }) {
                                 if (p.isRemote) DropdownMenuItem(text = { Text(stringResource(R.string.iptv_update)) },
                                     onClick = { m = false; import(p.source) })
+                                DropdownMenuItem(text = { Text(stringResource(R.string.iptv_guide)) },
+                                    onClick = { m = false; guideFor = p })
                                 DropdownMenuItem(text = { Text(stringResource(R.string.iptv_remove)) },
                                     onClick = { m = false; IptvStore.remove(p.id); refreshTick++ })
                             }
@@ -270,6 +273,27 @@ fun IptvScreen(onClose: () -> Unit, startWith: String? = null) {
         dismissButton = { TextButton(onClick = { showHidden = false }) { Text(stringResource(R.string.action_close)) } },
     )
     LaunchedEffect(hiddenChannels.isEmpty()) { if (hiddenChannels.isEmpty()) showHidden = false }
+    // Adresse du guide des programmes d'une liste (facultative), pour les fournisseurs qui la donnent à part.
+    guideFor?.let { p ->
+        var url by remember(p.id) { mutableStateOf(p.guide.orEmpty()) }
+        AlertDialog(
+            onDismissRequest = { guideFor = null },
+            title = { Text(stringResource(R.string.iptv_guide)) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(stringResource(R.string.iptv_guide_help), style = MaterialTheme.typography.bodyMedium)
+                    OutlinedTextField(
+                        value = url, onValueChange = { url = it }, singleLine = true,
+                        label = { Text(stringResource(R.string.iptv_guide_hint)) }, placeholder = { Text("https://…") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+            },
+            confirmButton = { TextButton(onClick = { IptvStore.setGuide(p.id, url); guideFor = null }) { Text(stringResource(R.string.action_save)) } },
+            dismissButton = { TextButton(onClick = { guideFor = null }) { Text(stringResource(R.string.action_cancel)) } },
+        )
+    }
 }
 
 @Composable
@@ -492,7 +516,12 @@ fun NowNext(media: Media, modifier: Modifier = Modifier, compact: Boolean = fals
     var tick by remember { mutableStateOf(0) }
     LaunchedEffect(Unit) { while (true) { kotlinx.coroutines.delay(60_000); tick++ } }
     val nn by produceState<Pair<studio.rollando.castor.data.Epg.Prog, studio.rollando.castor.data.Epg.Prog?>?>(null, name, country, tick) {
-        value = runCatching { studio.rollando.castor.data.Epg.nowNext(name, country) }.getOrNull()
+        // Chaque fiche de la chaîne (elle peut venir de plusieurs listes, chacune avec son guide) ; la première qui répond.
+        value = runCatching {
+            val cands = (listOfNotNull(ch) + IptvStore.entries(media.url, name)).distinctBy { Triple(it.name, it.tvgId, it.country) }
+            cands.firstNotNullOfOrNull { c -> studio.rollando.castor.data.Epg.nowNext(c.name, c.country ?: country, c.tvgId) }
+                ?: studio.rollando.castor.data.Epg.nowNext(name, country, null)
+        }.getOrNull()
     }
     val (now, next) = nn ?: return
     val c = MaterialTheme.colorScheme

@@ -36,34 +36,46 @@ object Epg {
     fun key(s: String): String = Normalizer.normalize(s.lowercase(), Normalizer.Form.NFD)
         .replace(Regex("\\p{M}+"), "").replace("+", "plus").replace(Regex("[^a-z0-9]+"), "")
 
-    /** (en ce moment, ensuite) pour cette chaîne ; null si aucun guide ne la connaît. */
-    suspend fun nowNext(name: String, country: String?): Pair<Prog, Prog?>? = withContext(Dispatchers.IO) {
-        val cc = country?.lowercase()?.takeIf { it.length == 2 } ?: return@withContext null
-        val guides = IptvStore.guideUrls().filter { u ->
-            val f = u.substringAfterLast('/').lowercase()
-            Regex("_${cc}\\d*\\.xml").containsMatchIn(f)
-        }
+    /** Guide découpé par pays (« …_FR1.xml.gz ») : seuls ceux du pays de la chaîne servent. */
+    private val BY_COUNTRY = Regex("_([a-z]{2})\\d*\\.xml", RegexOption.IGNORE_CASE)
+    private val SKIP = listOf("all_sources", "dummy")
+
+    /**
+     * (en ce moment, ensuite) pour cette chaîne ; null si aucun guide ne la connaît. Cherchée par son identifiant
+     * de guide (celui de la liste, quand la liste et le guide viennent du même fournisseur), sinon par son nom.
+     */
+    suspend fun nowNext(name: String, country: String?, tvgId: String? = null): Pair<Prog, Prog?>? = withContext(Dispatchers.IO) {
+        val cc = country?.lowercase()?.takeIf { it.length == 2 }
+        val guides = IptvStore.guideUrls().filter { g ->
+            val f = g.url.substringAfterLast('/').substringBefore('?').lowercase()
+            if (SKIP.any { it in f }) return@filter false
+            // Collection découpée par pays : seulement le guide de ce pays. Sinon (guide unique) : toujours.
+            !g.byCountry || BY_COUNTRY.find(f)?.groupValues?.get(1)?.lowercase() == cc
+        }.map { it.url }
         if (guides.isEmpty()) return@withContext null
-        val k = key(name)
+        val keys = listOfNotNull(tvgId?.lowercase()?.let { "id:$it" }, key(name).takeIf { it.isNotEmpty() })
         val now = System.currentTimeMillis()
         for (g in guides) {
-            val idx = load(g)
-            val progs = idx?.get(k)
-            Log.i("CastorEpg", "« $name » ($cc, clé $k) dans ${g.substringAfterLast('/')} : ${progs?.size ?: "absente"} (${idx?.size} chaînes)")
-            if (progs == null) continue
+            val idx = load(g) ?: continue
+            val progs = keys.firstNotNullOfOrNull { idx[it] } ?: continue
             val i = progs.indexOfFirst { now >= it.start && now < it.stop }
             if (i >= 0) return@withContext progs[i] to progs.getOrNull(i + 1)
         }
         null
     }
 
+    /** Guides injoignables : on ne réessaie qu'au bout d'une heure. */
+    private val failed = HashMap<String, Long>()
+
     private suspend fun load(url: String): Map<String, List<Prog>>? = lock.withLock {
         mem[url]?.let { return it }
+        failed[url]?.let { if (System.currentTimeMillis() - it < 3600_000) return null }
         val name = url.hashCode().toUInt().toString(16)
         val cache = File(dir, "$name.tsv")
         val idx = if (cache.exists() && System.currentTimeMillis() - cache.lastModified() < FRESH) readCache(cache)
             else runCatching { download(url, cache) }.onFailure { Log.w("CastorEpg", "guide $url : ${it.message}") }.getOrNull()
                 ?: if (cache.exists()) readCache(cache) else null
+        if (idx == null) failed[url] = System.currentTimeMillis()
         idx?.also { mem[url] = it }
     }
 
@@ -143,7 +155,7 @@ object Epg {
         val out = HashMap<String, List<Prog>>()
         for ((id, list) in progs) {
             val sorted = list.sortedBy { it.start }
-            for (k in names[id].orEmpty() + key(id.substringBeforeLast('.'))) {
+            for (k in names[id].orEmpty() + key(id.substringBeforeLast('.')) + ("id:" + id.lowercase())) {
                 if (k.isEmpty()) continue
                 if ((out[k]?.size ?: 0) < sorted.size) out[k] = sorted
             }

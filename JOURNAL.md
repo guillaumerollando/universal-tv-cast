@@ -793,3 +793,12 @@ fait toute seule.
   cache (programmes de −6 h à +30 h). Correspondance par le nom de la chaîne (les tvg-id des listes ≠ ceux des guides).
 - Écran de lecture : « En ce moment » + progression + « Ensuite · 01:32 … » (sous l'en-tête télé ; à côté du logo sur
   téléphone ; titre seul à côté du logo en plein écran). Émulateur : guide FR (4 Mo) lu en 2,7 s ; Arte : 50 programmes.
+
+## 2026-11-26 — Guides : serveurs Xtream et adresse à la main
+- Iptv.xtreamGuide : liste « …/get.php?username=…&password=… » → guide « …/xmltv.php?… » (déduit, rien à saisir).
+- « Mes listes » ⋮ › Guide des programmes : adresse facultative par liste (Playlist.guide).
+- IptvStore.Guide(url, byCountry) : une liste qui déclare beaucoup de guides (Free-TV) = collection par pays → seulement
+  celui du pays ; guide unique, Xtream ou saisi → toujours lu. Correspondance par identifiant de guide (tvg-id) puis par nom ;
+  toutes les fiches de la chaîne (plusieurs listes) essayées. Guide injoignable : nouvel essai au bout d'1 h.
+- Émulateur, faux fournisseur Xtream (get.php sans guide en tête, xmltv.php « Émission de test ») : programme affiché
+  via l'identifiant (le guide nommait la chaîne autrement). Test unitaire IptvTest.findsXtreamGuideAndHeaderGuides.

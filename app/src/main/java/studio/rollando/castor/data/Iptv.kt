@@ -112,6 +112,20 @@ object Iptv {
         return (attrs["x-tvg-url"] ?: attrs["url-tvg"]).orEmpty().split(',').map { it.trim() }.filter { it.startsWith("http") }
     }
 
+    /**
+     * Serveur IPTV « Xtream » (la plupart des abonnements) : la liste est à « …/get.php?username=…&password=… »,
+     * son guide toujours à « …/xmltv.php?username=…&password=… ».
+     */
+    fun xtreamGuide(source: String): String? {
+        val u = runCatching { java.net.URI(source) }.getOrNull() ?: return null
+        if (!u.path.orEmpty().endsWith("/get.php")) return null
+        val q = u.rawQuery.orEmpty().split('&').associate { it.substringBefore('=') to it.substringAfter('=', "") }
+        val user = q["username"] ?: return null
+        val pass = q["password"] ?: return null
+        val base = source.substringBefore("get.php")
+        return "${base}xmltv.php?username=$user&password=$pass"
+    }
+
     /** « France 24 (1080p) [Geo-blocked] Ⓖ » → « France 24 ». */
     fun cleanName(raw: String): String = raw
         .replace(QUALITY, "")

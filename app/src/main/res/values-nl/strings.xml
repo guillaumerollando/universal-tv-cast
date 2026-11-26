@@ -261,6 +261,10 @@
     <string name="phase_on_phone">Op deze telefoon</string>
     <string name="epg_now">Nu</string>
     <string name="epg_next">Hierna</string>
+    <string name="iptv_guide">Programmagids</string>
+    <string name="iptv_guide_hint">Adres van de gids (XMLTV), optioneel</string>
+    <string name="iptv_guide_help">Geeft je aanbieder een adres voor een programmagids (EPG), plak het hier: het huidige programma verschijnt onder zijn zenders.</string>
+    <string name="action_save">Opslaan</string>
     <string name="iptv_title">Zenderlijsten</string>
     <string name="iptv_intro">Een zenderlijst (M3U- of IPTV-lijst) bundelt tv-zenders in één link. Plak het adres of open het bestand: hier vind je alle zenders, met hun logo.</string>
     <string name="iptv_url_hint">Adres van de lijst (.m3u)</string>

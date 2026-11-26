@@ -50,4 +50,14 @@ class IptvTest {
         assertEquals("iptv-org · Français", Iptv.nameFor("https://iptv-org.github.io/iptv/languages/fra.m3u", Locale.FRENCH))
         assertEquals("iptv-org", Iptv.nameFor("https://iptv-org.github.io/iptv/index.m3u", Locale.FRENCH))
     }
+
+    @Test fun findsXtreamGuideAndHeaderGuides() {
+        assertEquals("http://tv.example:8080/xmltv.php?username=bob&password=s3cr",
+            Iptv.xtreamGuide("http://tv.example:8080/get.php?username=bob&password=s3cr&type=m3u_plus&output=ts"))
+        assertNull(Iptv.xtreamGuide("https://iptv-org.github.io/iptv/countries/fr.m3u"))
+        assertEquals(listOf("https://epg.example/a.xml.gz", "https://epg.example/b.xml.gz"), Iptv.guideUrls(list))
+        val c = Iptv.parse(list)
+        assertEquals("Kanali7.al", c[0].tvgId)
+        assertEquals("ma", c[1].country)
+    }
 }

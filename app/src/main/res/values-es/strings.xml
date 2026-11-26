@@ -261,6 +261,10 @@
     <string name="phase_on_phone">En este móvil</string>
     <string name="epg_now">Ahora</string>
     <string name="epg_next">Después</string>
+    <string name="iptv_guide">Guía de programación</string>
+    <string name="iptv_guide_hint">Dirección de la guía (XMLTV), opcional</string>
+    <string name="iptv_guide_help">Si tu proveedor da una dirección de guía de programación (EPG), pégala aquí: el programa en curso aparecerá bajo sus canales.</string>
+    <string name="action_save">Guardar</string>
     <string name="iptv_title">Listas de canales</string>
     <string name="iptv_intro">Una lista de canales (lista M3U o IPTV) reúne canales de TV en un solo enlace. Pega su dirección o abre el archivo: aquí tendrás todos sus canales, con su logotipo.</string>
     <string name="iptv_url_hint">Dirección de la lista (.m3u)</string>

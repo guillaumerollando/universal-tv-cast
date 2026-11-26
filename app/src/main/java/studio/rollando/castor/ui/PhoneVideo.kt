@@ -80,14 +80,14 @@ private fun VideoSurface(modifier: Modifier, active: Boolean = true, onColor: ((
     val player by PhoneEngine.playerFlow.collectAsState()
     if (!active) { Box(modifier.background(Color.Black)); return }
     var view by remember { mutableStateOf<PlayerView?>(null) }
-    // Couleur de l'image, pour la lueur autour de la vidéo : une vignette de 32 × 18 px copiée toutes les 1,5 s,
+    // Couleur de l'image, pour la lueur autour de la vidéo : une vignette de 32 × 18 px copiée toutes les 0,4 s,
     // seulement pendant la lecture (rien à calculer en pause ; la copie se fait sur la carte graphique).
     if (onColor != null) LaunchedEffect(view) {
         val v = view ?: return@LaunchedEffect
         val bmp = android.graphics.Bitmap.createBitmap(32, 18, android.graphics.Bitmap.Config.ARGB_8888)
         val handler = android.os.Handler(android.os.Looper.getMainLooper())
         while (true) {
-            kotlinx.coroutines.delay(1500)
+            kotlinx.coroutines.delay(400)
             if (PhoneEngine.last?.phase != Phase.PLAYING) continue
             val sv = v.videoSurfaceView as? android.view.SurfaceView ?: continue
             if (!sv.holder.surface.isValid || sv.width == 0) continue
@@ -299,8 +299,9 @@ private fun Modifier.androidx_shadow() = this.shadow(12.dp, RoundedCornerShape(1
 /** Couleur d'ensemble de l'image, un peu ravivée (une image terne donnerait une lueur grise). */
 private fun dominant(b: android.graphics.Bitmap): Color {
     var r = 0L; var g = 0L; var bl = 0L; var n = 0
-    for (y in 0 until b.height) for (x in 0 until b.width) {
-        val p = b.getPixel(x, y)
+    val px = IntArray(b.width * b.height)
+    b.getPixels(px, 0, b.width, 0, 0, b.width, b.height) // en une fois (576 pixels)
+    for (p in px) {
         r += android.graphics.Color.red(p); g += android.graphics.Color.green(p); bl += android.graphics.Color.blue(p); n++
     }
     if (n == 0) return Color.Transparent

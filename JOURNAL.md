@@ -851,3 +851,8 @@ fait toute seule.
 - Mosaïque : chaînes du pays du téléphone d'abord (sans recherche ni catégorie). Logo supprimé chez Imgur (redirection
   « removed ») = absent → nom de la chaîne sur sa couleur.
 - Émulateur : planté côté GPU, relancé en -gpu swiftshader_indirect.
+
+## 2026-11-26 — Lueur plus réactive
+- Lecture de la couleur toutes les 0,4 s (au lieu de 1,5 s), transition 0,45 s (au lieu de 1,4 s) : jusqu'à ~3 s de
+  retard avant, < 1 s maintenant. Pixels lus en une fois (getPixels). Copie 32×18 par la carte graphique : coût négligeable.
+- Non revérifié à l'écran (navigation de l'émulateur ratée) ; installé sur le téléphone.

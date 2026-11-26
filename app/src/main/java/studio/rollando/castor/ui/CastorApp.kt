@@ -169,7 +169,8 @@ fun CastorApp() {
     val glowColor by androidx.compose.animation.animateColorAsState(
         if (state.onPhone && tab == Tab.PLAYER && iptvNow == null && glowArgb != null) androidx.compose.ui.graphics.Color(glowArgb!!)
         else androidx.compose.ui.graphics.Color.Transparent,
-        androidx.compose.animation.core.tween(1400), label = "lueur",
+        // Court : la lueur suit l'image presque en direct (une couleur toutes les 0,4 s, fondue en 0,45 s).
+        androidx.compose.animation.core.tween(450), label = "lueur",
     )
     val statusTop = androidx.compose.foundation.layout.WindowInsets.statusBars.getTop(androidx.compose.ui.platform.LocalDensity.current)
     if (glowColor.alpha > 0f) Box(

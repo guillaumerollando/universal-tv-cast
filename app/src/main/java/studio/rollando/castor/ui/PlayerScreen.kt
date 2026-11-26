@@ -238,13 +238,25 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
             }
         }
 
-        if (!state.active) {
+        // Une télé à qui envoyer : celle choisie, ou une qui répond sur le Wi-Fi. Sans télé, tout se passe sur le téléphone.
+        val tvAvailable = state.renderer != null || state.renderers.any { it.awake }
+        if (!state.active && !state.onPhone && !tvAvailable) {
+            Button(
+                onClick = { Castor.toPhone() },
+                enabled = state.phase != Phase.LOADING,
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+            ) {
+                Icon(Icons.Rounded.Smartphone, null)
+                Spacer(Modifier.width(10.dp))
+                Text(stringResource(R.string.phone_watch), maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
+        } else if (!state.active) {
             Button(
                 onClick = { if (state.renderer == null && !state.onPhone) { Castor.castWhenTvChosen(); onChooseTv() } else Castor.cast() },
                 enabled = state.phase != Phase.LOADING,
                 modifier = Modifier.fillMaxWidth().height(56.dp),
             ) {
-                Icon(Icons.Rounded.Cast, null)
+                Icon(if (state.onPhone) Icons.Rounded.Smartphone else Icons.Rounded.Cast, null)
                 Spacer(Modifier.width(10.dp))
                 Text(if (state.onPhone) stringResource(R.string.phone_play_here)
                     else state.renderer?.let { stringResource(R.string.action_cast_to, it.name) } ?: stringResource(R.string.action_cast_pick),
@@ -255,7 +267,7 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
         Progress(state)
         Controls(state)
         // Un seul écran pour les deux : sur la télé, ou sur ce téléphone (finir l'épisode dans son lit), au même endroit.
-        OutlinedButton(
+        if (tvAvailable || (state.active && !state.onPhone)) OutlinedButton(
             onClick = { if (state.onPhone) Castor.toTv() else Castor.toPhone() },
             enabled = state.phase != Phase.LOADING,
             modifier = Modifier.fillMaxWidth().height(52.dp),

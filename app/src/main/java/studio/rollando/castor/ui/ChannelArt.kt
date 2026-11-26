@@ -47,13 +47,21 @@ object ChannelArtColors {
 private data class LogoLook(val bitmap: Bitmap, val background: Color?, val ink: Float)
 
 private object LogoLooks {
-    private val cache = HashMap<String, LogoLook>()
+    /** Logos prêts à poser, en mémoire (20 Mo au plus) ; les fichiers restent sur le téléphone (voir Images). */
+    private val cache = object : android.util.LruCache<String, LogoLook>(20 * 1024 * 1024) {
+        override fun sizeOf(key: String, value: LogoLook) = value.bitmap.byteCount
+    }
+
+    /** Taille gardée : assez pour une tuile de 96 dp sur un écran très fin, pas plus. */
+    private const val SIDE = 256
+
+    fun peek(url: String?): LogoLook? = url?.let { cache.get(it) }
 
     suspend fun get(url: String): LogoLook? {
-        synchronized(cache) { cache[url] }?.let { return it }
-        val bmp = Images.load(url, 400) ?: return null
+        cache.get(url)?.let { return it }
+        val bmp = Images.load(url, SIDE) ?: return null
         val look = withContext(Dispatchers.Default) { analyse(bmp) }
-        synchronized(cache) { cache[url] = look }
+        cache.put(url, look)
         return look
     }
 
@@ -119,7 +127,9 @@ fun ChannelArt(
     label: String = name,
 ) {
     // Le logo fourni ; s'il manque ou ne se charge pas, celui de la même chaîne dans une liste importée.
-    val found by produceState<Pair<String, LogoLook>?>(null, name, logo, streamUrl) {
+    // Logo déjà prêt : posé tout de suite (pas de nom qui s'affiche puis se remplace à chaque retour sur l'écran).
+    val ready = androidx.compose.runtime.remember(logo) { logo?.let { u -> LogoLooks.peek(u)?.let { u to it } } }
+    val found by produceState(ready, name, logo, streamUrl) {
         value = logo?.let { u -> LogoLooks.get(u)?.let { u to it } }
             ?: IptvStore.logoFor(name, streamUrl)?.takeIf { it != logo }?.let { u -> LogoLooks.get(u)?.let { u to it } }
     }

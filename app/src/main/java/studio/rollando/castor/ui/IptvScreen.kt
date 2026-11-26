@@ -530,9 +530,11 @@ fun NowNext(media: Media, modifier: Modifier = Modifier, compact: Boolean = fals
     val country = ch?.country ?: java.util.Locale.getDefault().country.lowercase()
     var tick by remember { androidx.compose.runtime.mutableIntStateOf(0) }
     LaunchedEffect(Unit) { while (true) { kotlinx.coroutines.delay(60_000); tick++ } }
-    val nn by produceState<Pair<studio.rollando.castor.data.Epg.Prog, studio.rollando.castor.data.Epg.Prog?>?>(null, name, country, tick) {
+    // Remis à zéro à chaque changement de chaîne : jamais le programme de la chaîne d'avant.
+    var nn by remember(name, country) { mutableStateOf<Pair<studio.rollando.castor.data.Epg.Prog, studio.rollando.castor.data.Epg.Prog?>?>(null) }
+    LaunchedEffect(name, country, tick) {
         // Chaque fiche de la chaîne (elle peut venir de plusieurs listes, chacune avec son guide) ; la première qui répond.
-        value = runCatching {
+        nn = runCatching {
             val cands = (listOfNotNull(ch) + IptvStore.entries(media.url, name)).distinctBy { Triple(it.name, it.tvgId, it.country) }
             cands.firstNotNullOfOrNull { c -> studio.rollando.castor.data.Epg.nowNext(c.name, c.country ?: country, c.tvgId) }
                 ?: studio.rollando.castor.data.Epg.nowNext(name, country, null)

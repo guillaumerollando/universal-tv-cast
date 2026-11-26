@@ -983,3 +983,19 @@ fait toute seule.
 - Castor garde la façade publique (openPhotos, photoAt…) ; Album utilise les membres `internal` de Castor.
 - Vérifié : compilation sans avertissement, tests unitaires, lint 0 erreur ; émulateur + fausse télé : vidéo envoyée et lue,
   album 2 photos (flux diaporama), photo suivante, diaporama, arrêt.
+
+## 2026-11-26 (soir) — Logos gardés, programmes recalés, téléphone direct sans télé
+- Logos et images : gardés sur le téléphone (cache/images, WebP, 30 Mo au plus, ménage au démarrage), réduits
+  à la taille utile (logos 256 px) ; en mémoire, cache limité (20 Mo) au lieu d'une liste sans fin de bitmaps 400 px.
+  Logo déjà prêt : affiché tout de suite (plus de nom puis logo à chaque retour sur l'écran).
+- Programmes faux : le guide gratuit France (epgshare01) mélange plusieurs sources ; France Télévisions y est
+  décalée d'1 h (« Journal 20h00 » annoncé à 19 h). Epg mesure le décalage de chaque source d'après les heures
+  écrites dans les titres (« Le 6h info »…), à l'heure du pays de la chaîne, et la recale (majorité nette, ≥ 8 titres).
+  Piège : un fuseau ICU inconnu de java.util donnait GMT (−2 h mesuré) → fuseau du téléphone s'il est du pays.
+  « En ce moment » = programme commencé le plus récemment ; « Ensuite » = premier qui commence après maintenant
+  (sources qui se chevauchent). Affichage remis à zéro à chaque changement de chaîne. Cache du guide : .v4.tsv.
+- Écran de lecture : sans télé allumée, plus de « Choisir une télé » : la vidéo part sur le téléphone (vidéo
+  ouverte « pour la télé » comprise) ; « Regarder sur la télé » caché sans télé. Lecture auto sur le téléphone
+  faute de télé : ne compte pas comme un choix (la question revient quand une télé est là).
+- Vérifié émulateur (sans télé) : 6ter lue direct sur le téléphone, « The Rookie » = l'image, « Ensuite 23:50 » ;
+  journal « source www.francetv.fr décalée de -1 h : corrigée ». Tests EpgShiftTest/EpgPickTest, lint 0 erreur.

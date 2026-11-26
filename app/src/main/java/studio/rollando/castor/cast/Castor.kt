@@ -75,6 +75,7 @@ object Castor {
     fun init(ctx: Context) {
         if (::app.isInitialized) return
         app = ctx.applicationContext
+        studio.rollando.castor.ui.Images.init(app)
         Library.init(app)
         studio.rollando.castor.data.IptvStore.init(app)
         studio.rollando.castor.data.Epg.init(app)
@@ -209,7 +210,13 @@ object Castor {
             if (pendingAuto) {
                 pendingAuto = false
                 val s = _state.value
-                if (s.renderer == null && s.media != null && !s.active && playOnTv == null) toPhone()
+                if (s.renderer == null && s.media != null && !s.active && playOnTv == null) autoPhone()
+            }
+            // Télé voulue, mais aucune n'est allumée : pas de « Choisis une télé » inutile, la vidéo part sur le téléphone.
+            if (pendingCast && _state.value.renderer == null) {
+                val s = _state.value
+                if (s.renderers.none { it.awake } && s.media != null && !s.active && !s.onPhone) { pendingCast = false; autoPhone() }
+                else if (s.media != null) _state.update { it.copy(notice = Notice(R.string.notice_pick_tv)) }
             }
             if (pendingCast && _state.value.renderer != null && _state.value.media != null) {
                 pendingCast = false
@@ -384,9 +391,13 @@ object Castor {
             if (_state.value.renderer == null) { pendingAuto = true; if (_state.value.searching) Unit else discover() }
         } else if (autoCast) {
             if (_state.value.renderer != null || _state.value.onPhone) castAt(media.startSec)
-            else {
+            else if (!_state.value.searching && _state.value.renderers.none { it.awake }) {
+                // Aucune télé allumée en vue : on vérifie le réseau, et sans télé la vidéo part sur le téléphone.
                 pendingCast = true
-                _state.update { it.copy(notice = Notice(R.string.notice_pick_tv)) }
+                discover()
+            } else {
+                pendingCast = true
+                if (!_state.value.searching) _state.update { it.copy(notice = Notice(R.string.notice_pick_tv)) }
                 discover()
             }
         }
@@ -424,6 +435,13 @@ object Castor {
             _state.update { it.copy(onPhone = true, notice = null) }
             castAt(at)
         }
+    }
+
+    /** Lecture sur le téléphone faute de télé allumée : ce n'est pas un choix, la question reviendra avec une télé. */
+    private fun autoPhone() {
+        val keep = playOnTv
+        toPhone()
+        playOnTv = keep
     }
 
     /** « Regarder sur la télé » depuis le téléphone : la télé reprend au même endroit. */
@@ -485,7 +503,7 @@ object Castor {
         _state.update { it.copy(media = m.copy(startSec = pos), position = pos) }
         if (_state.value.renderer == null) {
             pendingCast = true
-            _state.update { it.copy(notice = Notice(R.string.notice_pick_tv)) }
+            if (_state.value.renderers.any { it.awake }) _state.update { it.copy(notice = Notice(R.string.notice_pick_tv)) }
             discover()
             return
         }

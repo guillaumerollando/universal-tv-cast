@@ -26,6 +26,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.animation.animateContentSize
+import androidx.compose.material.icons.rounded.ExpandLess
+import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -71,21 +74,27 @@ fun StarterSection(onBrowse: (String) -> Unit, onPasteLink: () -> Unit, showChan
 fun FreeChannelsCard(onPasteLink: () -> Unit) {
     val clipboard = androidx.compose.ui.platform.LocalClipboardManager.current
     var copied by remember { mutableStateOf(false) }
+    // Repliée par défaut : sur l'accueil, elle ne prend qu'une ligne ; on la déplie pour voir le lien.
+    var open by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
     val c = MaterialTheme.colorScheme
     Card(
+        onClick = { open = !open },
         colors = CardDefaults.cardColors(containerColor = c.surfaceContainerHigh),
         shape = RoundedCornerShape(20.dp),
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().animateContentSize(),
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(Icons.Rounded.LiveTv, null, Modifier.size(28.dp), tint = c.primary)
                 Spacer(Modifier.width(14.dp))
-                Column {
+                Column(Modifier.weight(1f)) {
                     Text(stringResource(R.string.start_tv_title), style = MaterialTheme.typography.titleMedium)
                     Text(stringResource(R.string.start_tv_sub), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
                 }
+                Icon(if (open) androidx.compose.material.icons.Icons.Rounded.ExpandLess else androidx.compose.material.icons.Icons.Rounded.ExpandMore,
+                    null, tint = c.onSurfaceVariant)
             }
+            if (open) {
             // Le lien, en entier, sélectionnable : c'est lui qu'on apprend à coller.
             androidx.compose.material3.Surface(shape = RoundedCornerShape(12.dp), color = c.surfaceContainerHighest, modifier = Modifier.fillMaxWidth()) {
                 androidx.compose.foundation.text.selection.SelectionContainer {
@@ -102,6 +111,7 @@ fun FreeChannelsCard(onPasteLink: () -> Unit) {
                 androidx.compose.material3.OutlinedButton(onClick = onPasteLink, modifier = Modifier.weight(1f)) {
                     Text(stringResource(R.string.home_link), maxLines = 1)
                 }
+            }
             }
         }
     }

@@ -72,6 +72,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import studio.rollando.castor.R
+import kotlinx.coroutines.launch
+import androidx.compose.animation.core.animateFloat
 import studio.rollando.castor.cast.Castor
 import studio.rollando.castor.data.Bookmark
 import studio.rollando.castor.data.Library
@@ -165,9 +167,9 @@ fun HomeScreen(
                 Column(Modifier.padding(horizontal = 16.dp)) {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         SmallTile(Icons.Rounded.Public, stringResource(R.string.home_browse_tile), Modifier.weight(1f)) { onBrowse(null) }
-                        SmallTile(Icons.Rounded.VideoLibrary, stringResource(R.string.home_videos), Modifier.weight(1f), onPickVideo)
-                        SmallTile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), Modifier.weight(1f), onPickPhotos)
-                        SmallTile(Icons.Rounded.Link, stringResource(R.string.home_link_tile), Modifier.weight(1f), onPasteLink)
+                        SmallTile(Icons.Rounded.VideoLibrary, stringResource(R.string.home_videos), Modifier.weight(1f), onClick = onPickVideo)
+                        SmallTile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), Modifier.weight(1f), onClick = onPickPhotos)
+                        SmallTile(Icons.Rounded.Link, stringResource(R.string.home_link_tile), Modifier.weight(1f), onClick = onPasteLink)
                     }
                     MoreSources(onPickFile, showLists = channels.isEmpty()) // sinon, déjà en tête de « Chaînes »
                 }
@@ -180,7 +182,14 @@ fun HomeScreen(
         return
     }
 
+    // « Coller un lien » de la carte des chaînes gratuites : on remonte jusqu'à la tuile et on la met en surbrillance,
+    // pour montrer où elle se trouve (on la touchera soi-même la prochaine fois).
+    val listState = androidx.compose.foundation.lazy.rememberLazyListState()
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    var showLinkTile by remember { mutableStateOf(false) }
+    androidx.compose.runtime.LaunchedEffect(showLinkTile) { if (showLinkTile) { kotlinx.coroutines.delay(3200); showLinkTile = false } }
     LazyColumn(
+        state = listState,
         contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp + LocalBottomInset.current),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
@@ -211,18 +220,23 @@ fun HomeScreen(
             Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Tile(Icons.Rounded.Public, stringResource(R.string.home_browse_tile), stringResource(R.string.home_browse_short), Modifier.weight(1f)) { onBrowse(null) }
-                    Tile(Icons.Rounded.VideoLibrary, stringResource(R.string.home_videos), stringResource(R.string.home_videos_short), Modifier.weight(1f), onPickVideo)
+                    Tile(Icons.Rounded.VideoLibrary, stringResource(R.string.home_videos), stringResource(R.string.home_videos_short), Modifier.weight(1f), onClick = onPickVideo)
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Tile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), stringResource(R.string.home_photos_short), Modifier.weight(1f), onPickPhotos)
-                    Tile(Icons.Rounded.Link, stringResource(R.string.home_link), stringResource(R.string.home_link_short), Modifier.weight(1f), onPasteLink)
+                    Tile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), stringResource(R.string.home_photos_short), Modifier.weight(1f), onClick = onPickPhotos)
+                    Tile(Icons.Rounded.Link, stringResource(R.string.home_link), stringResource(R.string.home_link_short), Modifier.weight(1f),
+                        highlight = showLinkTile, onClick = { showLinkTile = false; onPasteLink() })
                 }
                 MoreSources(onPickFile)
             }
         }
 
         // Nouveau venu : du contenu gratuit et légal pour essayer l'appli tout de suite.
-        item { StarterSection(onBrowse = { onBrowse(it) }, onPasteLink = onPasteLink) }
+        item {
+            StarterSection(onBrowse = { onBrowse(it) }, onPasteLink = {
+                scope.launch { listState.animateScrollToItem(1); showLinkTile = true }
+            })
+        }
 
         item { SectionTitle(stringResource(R.string.home_bookmarks), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
         item {
@@ -436,9 +450,18 @@ private fun SmallTile(icon: ImageVector, title: String, modifier: Modifier, onCl
 }
 
 @Composable
-private fun Tile(icon: ImageVector, title: String, sub: String, modifier: Modifier, onClick: () -> Unit) {
+private fun Tile(icon: ImageVector, title: String, sub: String, modifier: Modifier, highlight: Boolean = false, onClick: () -> Unit) {
     val c = MaterialTheme.colorScheme
-    Surface(onClick = onClick, shape = RoundedCornerShape(22.dp), color = c.surfaceContainerHigh, modifier = modifier.height(118.dp)) {
+    // Mise en surbrillance (« c'est ici ») : un contour ambré qui pulse quelques instants.
+    val pulse = androidx.compose.animation.core.rememberInfiniteTransition(label = "repère")
+    val glow by pulse.animateFloat(0.35f, 1f, androidx.compose.animation.core.infiniteRepeatable(
+        androidx.compose.animation.core.tween(550), androidx.compose.animation.core.RepeatMode.Reverse), label = "repère")
+    Surface(
+        onClick = onClick, shape = RoundedCornerShape(22.dp),
+        color = if (highlight) c.primary.copy(alpha = 0.14f).compositeOver(c.surfaceContainerHigh) else c.surfaceContainerHigh,
+        border = if (highlight) androidx.compose.foundation.BorderStroke(3.dp, c.primary.copy(alpha = glow)) else null,
+        modifier = modifier.height(118.dp),
+    ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.SpaceBetween) {
             Box(Modifier.size(42.dp).clip(CircleShape).background(c.primary.copy(alpha = 0.16f)), contentAlignment = Alignment.Center) {
                 Icon(icon, null, tint = c.primary, modifier = Modifier.size(24.dp))

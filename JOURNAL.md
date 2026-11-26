@@ -886,3 +886,10 @@ fait toute seule.
 - Navigateur : la vignette de la vidéo en cours se tient au-dessus du bouton « N vidéos » (+72 dp), qu'elle cachait
   (bouton qui lance l'épisode suivant). Non revérifié à l'écran.
 - Vignette remontée seulement quand le bouton « N vidéos » est affiché (Nav.browserVideoButton).
+
+## 2026-11-26 — Parcours de départ, fausse « page vide »
+- Internet Archive signalé « page vide » à tort : page faite de composants web (shadow DOM), invisibles pour innerText et
+  querySelectorAll. Le contrôle compte maintenant tout élément à shadowRoot comme du contenu. Vérifié sur l'émulateur.
+- Carte « Chaînes TV gratuites » repliée par défaut (une ligne), dépliée d'un appui.
+- Son « Coller un lien » : remonte jusqu'à la tuile « Coller un lien » et l'entoure d'un contour ambré qui pulse ~3 s
+  (on apprend où elle est). Vérifié sur l'émulateur (appli remise à zéro).

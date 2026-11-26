@@ -287,8 +287,12 @@ class BrowserController(context: Context) {
         val r = Runnable {
             if (view.url != u || problem != null || !started) return@Runnable
             view.evaluateJavascript(
+                // Texte et médias de la page… et ce que contiennent ses composants web (contenu « isolé », que ni
+                // innerText ni querySelectorAll ne voient : Internet Archive est fait ainsi).
                 "(function(){var b=document.body;if(!b)return 0;" +
-                    "return (b.innerText||'').trim().length+document.querySelectorAll('img,video,iframe,canvas,svg,embed,object').length;})()"
+                    "var n=(b.innerText||'').trim().length+document.querySelectorAll('img,video,iframe,canvas,svg,embed,object').length;" +
+                    "if(n)return n;var a=document.querySelectorAll('*');for(var i=0;i<a.length;i++){if(a[i].shadowRoot)return 1;}" +
+                    "return 0;})()"
             ) { v ->
                 if (v?.trim('"')?.toIntOrNull() == 0 && view.url == u && problem == null) {
                     android.util.Log.i("CastorWeb", "page vide : ${Uri.parse(u).host} (statut $mainStatus)")

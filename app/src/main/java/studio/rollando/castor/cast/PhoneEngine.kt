@@ -41,6 +41,9 @@ object PhoneEngine {
     /** Le lecteur en cours (l'écran l'affiche) ; null quand rien ne joue sur le téléphone. */
     val playerFlow: kotlinx.coroutines.flow.StateFlow<ExoPlayer?> = _player
     private val player: ExoPlayer? get() = _player.value
+    /** Couleur dominante de l'image en cours (ARGB), pour la lueur de l'écran de lecture ; null : aucune. */
+    val glow = kotlinx.coroutines.flow.MutableStateFlow<Int?>(null)
+
     /** Dernier état connu (lisible de n'importe quel fil). */
     @Volatile var last: Status? = null
         private set

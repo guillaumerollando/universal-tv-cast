@@ -413,14 +413,11 @@ private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
                     item(span = { GridItemSpan(maxLineSpan) }) {
                         SectionTitle(stringResource(R.string.iptv_recent), Modifier.padding(horizontal = 6.dp).semantics { heading() })
                     }
-                    item(span = { GridItemSpan(maxLineSpan) }) {
-                        LazyRow(horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
-                            items(recent, key = { "r" + it.url }) { ch ->
-                                ChannelTile(ch, Modifier.width(ChannelTiles.width), onClick = { play(ch) }, onHide = { hide(ch) }, onForget = {
-                                    recents.firstOrNull { it.url == ch.url }?.let { studio.rollando.castor.data.Library.removeRecent(it.key) }
-                                })
-                            }
-                        }
+                    // En mosaïque, comme toutes les chaînes : on les voit d'un coup d'œil, sans faire défiler.
+                    items(recent, key = { "r" + it.url }) { ch ->
+                        ChannelTile(ch, Modifier, onClick = { play(ch) }, onHide = { hide(ch) }, onForget = {
+                            recents.firstOrNull { it.url == ch.url }?.let { studio.rollando.castor.data.Library.removeRecent(it.key) }
+                        })
                     }
                     item(span = { GridItemSpan(maxLineSpan) }) {
                         SectionTitle(stringResource(R.string.iptv_all_channels), Modifier.padding(start = 6.dp, end = 6.dp, top = 8.dp).semantics { heading() })

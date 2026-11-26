@@ -836,3 +836,9 @@ fait toute seule.
 - Cause : le flou de la barre d'onglets (Haze, hazeSource sur le contenu) capturait la WebView en continu → la page
   disparaissait une image sur deux. hazeSource retiré sur l'onglet Navigateur (la page ne passe pas sous la barre).
 - Émulateur (Wikipédia) : avant, luminosité des captures 205–223 qui alterne ; après, 205,6 stable au repos et au défilement.
+
+## 2026-11-26 — Lueur jusque dans l'en-tête, récentes en mosaïque
+- Lueur de la vidéo (téléphone) : couleur partagée (PhoneEngine.glow) et dessinée dans l'éclairage de fond de l'appli
+  (CastorApp, sous l'Ambient), centrée sur la vidéo → elle éclaire aussi l'en-tête. Plus dessinée dans PlayerScreen.
+- Page Chaînes : « Regardées récemment » en mosaïque (mêmes cases que « Toutes les chaînes »), plus en rangée.
+- Non vérifié sur émulateur (arrêté après la surcharge mémoire) ; installé sur le téléphone de Guillaume.

@@ -78,6 +78,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.asPaddingValues
 import dev.chrisbanes.haze.hazeSource
@@ -161,6 +163,27 @@ fun CastorApp() {
     // Ambiance derrière l'en-tête : l'image floutée du film en cours, sinon un dégradé vert sombre.
     Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
     Ambient(state.media?.backdropUrl?.takeIf { tab == Tab.PLAYER && state.slides == null })
+    // Vidéo sur le téléphone : sa lumière éclaire le haut de l'écran, en-tête compris, comme un éclairage d'ambiance.
+    val glowArgb by studio.rollando.castor.cast.PhoneEngine.glow.collectAsState()
+    val iptvNow by Nav.iptv.collectAsState()
+    val glowColor by androidx.compose.animation.animateColorAsState(
+        if (state.onPhone && tab == Tab.PLAYER && iptvNow == null && glowArgb != null) androidx.compose.ui.graphics.Color(glowArgb!!)
+        else androidx.compose.ui.graphics.Color.Transparent,
+        androidx.compose.animation.core.tween(1400), label = "lueur",
+    )
+    val statusTop = androidx.compose.foundation.layout.WindowInsets.statusBars.getTop(androidx.compose.ui.platform.LocalDensity.current)
+    if (glowColor.alpha > 0f) Box(
+        Modifier.fillMaxWidth().height(700.dp).drawBehind {
+            // Centrée sur la vidéo : barre d'état + en-tête (64 dp) + marge, puis le milieu de la vidéo (16:9).
+            val videoH = (size.width - 32.dp.toPx()) * 9f / 16f
+            val cy = statusTop + 72.dp.toPx() + videoH / 2
+            drawRect(androidx.compose.ui.graphics.Brush.radialGradient(
+                listOf(glowColor.copy(alpha = 0.6f * glowColor.alpha), glowColor.copy(alpha = 0.22f * glowColor.alpha), androidx.compose.ui.graphics.Color.Transparent),
+                center = androidx.compose.ui.geometry.Offset(size.width / 2, cy),
+                radius = size.width * 1.05f,
+            ))
+        },
+    )
     Scaffold(
         containerColor = androidx.compose.ui.graphics.Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,

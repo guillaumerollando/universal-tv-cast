@@ -297,9 +297,9 @@ private fun resumeItems(recents: List<Recent>, bookmarks: List<Bookmark>): List<
         if (r.finished) {
             // Épisode fini : on propose le suivant ; un film (ou un épisode sans suite connue) fini disparaît.
             val cur = if (r.isWeb) r.pageUrl?.let { Episodes.find(it) } else null
-            if (cur != null) { ep = cur.number + 1; open = cur.next }
-            // Le site ne met pas le numéro dans l'adresse, mais on a repéré son lien « épisode suivant ».
-            else if (r.nextUrl != null) { ep = null; open = r.nextUrl }
+            // Le lien repéré sur la page (fiable) avant celui déduit de l'adresse ; dernière partie (« 4/4 ») : pas de suite.
+            if (r.nextUrl != null) { ep = cur?.number?.plus(1); open = r.nextUrl }
+            else if (cur != null && cur.next.isNotEmpty()) { ep = cur.number + 1; open = cur.next }
             else if (b == null) return@mapNotNull null
         }
         // Le favori a pu avancer plus loin (épisode ouvert sans être casté) : on reprend au plus loin.

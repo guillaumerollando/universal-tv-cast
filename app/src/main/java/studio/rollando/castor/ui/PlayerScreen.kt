@@ -262,7 +262,7 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
         }
         // Épisode suivant (lien repéré sur le site, ou déduit de l'adresse) : il s'ouvre dans le navigateur.
         val nextEp = remember(media.nextUrl, media.pageUrl) {
-            if (channel) null else media.nextUrl ?: media.pageUrl?.let { studio.rollando.castor.browser.Episodes.find(it)?.next }
+            if (channel) null else media.nextUrl ?: media.pageUrl?.let { studio.rollando.castor.browser.Episodes.find(it)?.next?.takeIf { n -> n.isNotEmpty() } }
         }
         if (nextEp != null) OutlinedButton(
             onClick = { Nav.openUrl.value = nextEp },

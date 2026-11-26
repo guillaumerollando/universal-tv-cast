@@ -578,7 +578,7 @@ fun BrowserScreen(b: BrowserController) {
                                     mime = if (f.hls) "application/vnd.apple.mpegurl" else null,
                                     headers = f.headers,
                                     pageUrl = f.pageUrl,
-                                    nextUrl = b.sniffer.nextEpisode ?: Episodes.find(f.pageUrl)?.next,
+                                    nextUrl = b.sniffer.nextEpisode ?: Episodes.find(f.pageUrl)?.next?.takeIf { it.isNotEmpty() },
                                     audioUrl = f.audio,
                                     // Même épisode déjà commencé : on reprend là où on s'était arrêté.
                                     startSec = Library.resumeAt(f.pageUrl),

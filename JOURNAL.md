@@ -953,3 +953,6 @@ fait toute seule.
 - Vidéo/chaîne ouverte sans télé allumée → lecture directe sur le téléphone à la fin de la recherche (pendingAuto).
 - Émulateur (fausse télé = comme en veille) : pastille « Choisir une télé », chaîne lancée sur le téléphone, 0 envoi.
 - À vérifier télé allumée : la Philips doit répondre à la recherche (sinon elle serait vue « éteinte ? »).
+- Épisodes : « prisonniere-951-1-4 » lu comme épisode 951 (le « e » final de « prisonniere » pris pour « e951 ») →
+  le mot doit commencer là ; « -1-4/ » et « (1/4) » = partie 1 sur 4 (dernière partie : pas de suite). Le lien
+  « épisode suivant » repéré sur la page passe avant celui déduit de l'adresse. Tests ajoutés.

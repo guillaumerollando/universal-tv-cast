@@ -21,7 +21,10 @@ object Episodes {
     }
 
     private val QUERY = Regex("(?i)([?&](?:ep|episode|e)=)(\\d{1,4})(?!\\d)")
-    private val NAMED = Regex("(?i)(?:episode|episodio|épisode|folge|ep|e)[-_ ./]?(\\d{1,4})(?!\\d)")
+    // Le mot doit commencer là (« prisonnier-e-951 » n'est pas « e951 ») : pas de lettre juste avant.
+    private val NAMED = Regex("(?i)(?<![a-z])(?:episode|episodio|épisode|folge|ep|e)[-_ ./]?(\\d{1,4})(?!\\d)")
+    /** « …-1-4/ » : partie 1 sur 4 (Arte et d'autres écrivent ainsi « (1/4) »). */
+    private val PART_OF = Regex("[-_](\\d{1,2})[-_](\\d{1,2})/?$")
     private val TRAILING = Regex("(?i)[-_/](\\d{1,4})(?=(?:[-_/.](?:vostfr|vf|vo|fr|en|sub|dub|hd|html?|php))*/?$)")
 
     fun find(url: String): Ep? {
@@ -33,6 +36,13 @@ object Episodes {
         val p = path.substring(after)
         val named = NAMED.findAll(p).lastOrNull()
         if (named != null) return build(url, after + named.groups[1]!!.range.first, named.groupValues[1])
+        PART_OF.find(p)?.let { m ->
+            val n = m.groupValues[1].toInt(); val of = m.groupValues[2].toInt()
+            if (n in 1..of && of in 2..99) return build(url, after + m.groups[1]!!.range.first, m.groupValues[1])?.let { e ->
+                // Dernière partie : pas de suivant.
+                if (n == of) e.copy(next = "") else e
+            }
+        }
         val t = TRAILING.find(p) ?: return null
         return build(url, after + t.groups[1]!!.range.first, t.groupValues[1])?.copy(explicit = false)
     }

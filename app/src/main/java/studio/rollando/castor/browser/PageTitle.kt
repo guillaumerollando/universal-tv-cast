@@ -19,8 +19,14 @@ object PageTitle {
     private val EP_NUMBER = Regex("(?iu)(?<!\\p{L})(?:épisode|episode|episodio|folge|ep\\.?|e)\\s*(\\d{1,4})(?!\\d)|\\bS\\d{1,2}E(\\d{1,4})")
 
     /** Numéro d'épisode écrit dans le titre (« Mon Anime – Épisode 12 » → 12), quand l'adresse n'en a pas. */
+    /** « Prisonnière 951 (1/4) » : partie 1 sur 4. */
+    private val PART_OF = Regex("\\((\\d{1,2})\\s*/\\s*(\\d{1,2})\\)")
+
     fun episode(title: String): Int? = EP_NUMBER.find(title)?.let { m ->
         (m.groups[1] ?: m.groups[2])?.value?.toIntOrNull()
+    } ?: PART_OF.find(title)?.let { m ->
+        val n = m.groupValues[1].toInt(); val of = m.groupValues[2].toInt()
+        n.takeIf { it in 1..of && of >= 2 }
     }
 
     fun clean(title: String, host: String): String {

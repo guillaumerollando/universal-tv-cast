@@ -280,6 +280,7 @@
     <string name="settings_power">Hemat daya</string>
     <string name="settings_power_sub">Mematikan cahaya di sekitar video, efek blur, dan animasi, serta lebih jarang memeriksa siaran langsung. Kualitas video tetap sama. Aktif sendiri saat ponselmu menghemat baterai.</string>
     <string name="tv_asleep">Tidak merespons: mati?</string>
+    <string name="audio_language">Bahasa</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

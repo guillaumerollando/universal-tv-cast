@@ -58,6 +58,8 @@ object PhoneEngine {
     /** Lance la lecture (remplace ce qui jouait). `liveUrl` : flux continu du relais, pour un direct. */
     fun play(ctx: Context, m: Media, startSec: Double, subtitle: ByteArray?, hls: Boolean, liveUrl: String?) = main.post {
         val p = player ?: build(ctx).also { _player.value = it }
+        wantedAudio = null
+        p.trackSelectionParameters = p.trackSelectionParameters.buildUpon().clearOverridesOfType(C.TRACK_TYPE_AUDIO).build()
         ended = false
         error = false
         val ua = m.headers.entries.firstOrNull { it.key.equals("User-Agent", true) }?.value
@@ -105,6 +107,7 @@ object PhoneEngine {
             addListener(object : Player.Listener {
                 override fun onPlaybackStateChanged(state: Int) { if (state == Player.STATE_ENDED) ended = true; report() }
                 override fun onIsPlayingChanged(isPlaying: Boolean) = report()
+                override fun onTracksChanged(tracks: androidx.media3.common.Tracks) = applyAudio()
                 // Pour comprendre un « problème de son » : qui a interrompu la lecture, et le volume.
                 override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
                     if (reason == Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_FOCUS_LOSS || reason == Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_BECOMING_NOISY)
@@ -134,6 +137,22 @@ object PhoneEngine {
         val st = Status(phase, p.currentPosition / 1000.0, dur, ended, error)
         last = st
         onStatus?.invoke(st)
+    }
+
+    /** Piste son voulue (nom ou langue) : appliquée dès que le lecteur connaît les pistes de la vidéo. */
+    @Volatile private var wantedAudio: Pair<String, String?>? = null
+
+    fun selectAudio(name: String, lang: String?) = main.post { wantedAudio = name to lang; applyAudio() }
+
+    private fun applyAudio() {
+        val p = player ?: return
+        val (name, lang) = wantedAudio ?: return
+        val groups = p.currentTracks.groups.filter { it.type == C.TRACK_TYPE_AUDIO }
+        val pick = groups.firstNotNullOfOrNull { g -> (0 until g.length).firstOrNull { g.getTrackFormat(it).label == name }?.let { g to it } }
+            ?: groups.firstNotNullOfOrNull { g -> (0 until g.length).firstOrNull { lang != null && g.getTrackFormat(it).language == lang }?.let { g to it } }
+            ?: return
+        p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
+            .setOverrideForType(androidx.media3.common.TrackSelectionOverride(pick.first.mediaTrackGroup, pick.second)).build()
     }
 
     fun pause() = main.post { player?.pause() }

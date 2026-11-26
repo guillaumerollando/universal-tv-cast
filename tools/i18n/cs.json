@@ -278,7 +278,8 @@
   "bookmark_advanced": "%1$s: záložka přesunuta na díl %2$d.",
   "settings_power": "Úspora energie",
   "settings_power_sub": "Vypne záři kolem videa, rozostření a animace a méně často kontroluje živé vysílání. Kvalita videa se nemění. Zapne se sama, když telefon šetří baterii.",
-  "tv_asleep": "Neodpovídá: vypnutá?"
+  "tv_asleep": "Neodpovídá: vypnutá?",
+  "audio_language": "Jazyk"
  },
  "plurals": {
   "browser_found": {

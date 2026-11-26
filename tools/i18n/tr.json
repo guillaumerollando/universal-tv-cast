@@ -278,7 +278,8 @@
   "bookmark_advanced": "%1$s: yer imi %2$d. bölüme taşındı.",
   "settings_power": "Güç tasarrufu",
   "settings_power_sub": "Videonun etrafındaki parıltıyı, bulanıklığı ve animasyonları kapatır, canlı yayını daha seyrek kontrol eder. Video kalitesi değişmez. Telefonun pil tasarrufundayken kendiliğinden açılır.",
-  "tv_asleep": "Yanıt vermiyor: kapalı mı?"
+  "tv_asleep": "Yanıt vermiyor: kapalı mı?",
+  "audio_language": "Dil"
  },
  "plurals": {
   "browser_found": {

@@ -259,6 +259,7 @@
     <string name="settings_power">Energiebesparing</string>
     <string name="settings_power_sub">Zet de gloed rond de video, de vervaging en de animaties uit en volgt live-tv minder vaak. De videokwaliteit blijft gelijk. Gaat vanzelf aan als je telefoon batterij bespaart.</string>
     <string name="tv_asleep">Reageert niet: uitgeschakeld?</string>
+    <string name="audio_language">Taal</string>
     <string name="iptv_title">Zenderlijsten</string>
     <string name="iptv_intro">Een zenderlijst (M3U- of IPTV-lijst) bundelt tv-zenders in één link. Plak het adres of open het bestand: hier vind je alle zenders, met hun logo.</string>
     <string name="iptv_url_hint">Adres van de lijst (.m3u)</string>

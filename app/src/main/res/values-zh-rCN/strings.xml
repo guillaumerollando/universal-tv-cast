@@ -280,6 +280,7 @@
     <string name="settings_power">省电模式</string>
     <string name="settings_power_sub">关闭视频周围的光晕、模糊效果和动画，并降低直播检查频率。画质不变。手机开启省电时会自动开启。</string>
     <string name="tv_asleep">无响应：已关机？</string>
+    <string name="audio_language">语言</string>
     <plurals name="browser_found">
         <item quantity="other">%d 个视频</item>
     </plurals>

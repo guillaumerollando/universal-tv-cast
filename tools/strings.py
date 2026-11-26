@@ -431,6 +431,7 @@ S = {
  "Zet de gloed rond de video, de vervaging en de animaties uit en volgt live-tv minder vaak. De videokwaliteit blijft gelijk. Gaat vanzelf aan als je telefoon batterij bespaart.",
  "Desliga o brilho em volta do vídeo, o desfoque e as animações, e acompanha o ao vivo com menos frequência. A qualidade do vídeo não muda. Liga sozinho quando o celular economiza bateria."],
 "tv_asleep": ["Not responding: switched off?", "Ne répond pas : éteinte ?", "No responde: ¿apagada?", "Antwortet nicht: ausgeschaltet?", "Non risponde: spenta?", "Reageert niet: uitgeschakeld?", "Não responde: desligada?"],
+"audio_language": ["Language", "Langue", "Idioma", "Sprache", "Lingua", "Taal", "Idioma"],
 "iptv_title": ["Channel lists", "Listes de chaînes", "Listas de canales", "Senderlisten", "Liste di canali", "Zenderlijsten", "Listas de canais"],
 "iptv_intro": [
  "A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.",

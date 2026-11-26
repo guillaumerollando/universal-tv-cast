@@ -49,6 +49,8 @@ class ProxyServer(private val ctx: Context) {
     private val metas = ConcurrentHashMap<String, Meta>()
 
     @Volatile var subtitle: ByteArray? = null
+    /** Piste son choisie dans une liste maîtresse : la télé ne reçoit qu'elle (les autres pistes sont retirées). */
+    @Volatile var audioChoice: String? = null
     @Volatile var subtitleUrl: String? = null
     /** Appelé quand le site refuse de redonner la vidéo à la télé (403 / 401). */
     @Volatile var onSourceDenied: ((Int) -> Unit)? = null
@@ -321,6 +323,8 @@ class ProxyServer(private val ctx: Context) {
             val line = raw.trim()
             when {
                 line.isEmpty() -> raw
+                line.startsWith("#EXT-X-MEDIA:") && line.contains("TYPE=AUDIO") && audioChoice != null &&
+                    uriAttr.find(line)?.groupValues?.get(1)?.let { Hls.resolve(base, it) } != audioChoice -> ""
                 line.startsWith("#") -> {
                     if (line.startsWith("#EXT-X-STREAM-INF")) nextIsPlaylist = true
                     val kind = when {

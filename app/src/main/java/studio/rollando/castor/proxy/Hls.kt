@@ -61,6 +61,33 @@ object Hls {
         return parseMedia(String(v.bytes, Charsets.UTF_8), v.finalUrl, split)
     }
 
+    /** Piste son ou sous-titres proposée par une liste maîtresse (« français », « plurilingue (VO) »…). */
+    data class Track(val name: String, val lang: String?, val uri: String, val default: Boolean)
+
+    /**
+     * Pistes son et sous-titres d'une liste maîtresse (#EXT-X-MEDIA). Les sous-titres ne sont gardés que s'ils tiennent
+     * en un seul fichier WebVTT (cas d'Arte) : l'appli sait les envoyer à la télé et au lecteur du téléphone.
+     */
+    fun tracks(url: String, headers: Map<String, String>): Pair<List<Track>, List<Track>> {
+        val f = Http.fetch(url, headers)
+        val text = String(f.bytes, Charsets.UTF_8)
+        if (!text.contains("#EXT-X-STREAM-INF")) return emptyList<Track>() to emptyList()
+        val media = text.lines().map { it.trim() }.filter { it.startsWith("#EXT-X-MEDIA:") }.map { attrs(it.substringAfter(':')) }
+        fun track(a: Map<String, String>) = a["URI"]?.takeIf { it.isNotBlank() }?.let { u ->
+            Track(a["NAME"] ?: a["LANGUAGE"] ?: "?", a["LANGUAGE"], resolve(f.finalUrl, u), a["DEFAULT"] == "YES")
+        }
+        val audio = media.filter { it["TYPE"] == "AUDIO" }.mapNotNull(::track).distinctBy { it.uri }
+        val subs = media.filter { it["TYPE"] == "SUBTITLES" && it["FORCED"] != "YES" }.mapNotNull(::track).mapNotNull { t ->
+            runCatching {
+                val p = Http.fetch(t.uri, headers)
+                val segs = String(p.bytes, Charsets.UTF_8).lines().map { it.trim() }.filter { it.isNotEmpty() && !it.startsWith("#") }
+                segs.singleOrNull()?.let { resolve(p.finalUrl, it) }?.takeIf { it.substringBefore('?').let { s -> s.endsWith(".vtt") || s.endsWith(".webvtt") } }
+                    ?.let { t.copy(uri = it) }
+            }.getOrNull()
+        }
+        return audio to subs
+    }
+
     fun reload(plan: Plan, headers: Map<String, String>): Plan {
         val f = Http.fetch(plan.url, headers)
         return parseMedia(String(f.bytes, Charsets.UTF_8), f.finalUrl, plan.splitAudio)

@@ -51,6 +51,8 @@ import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Cast
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Translate
 import androidx.compose.material.icons.rounded.ErrorOutline
 import androidx.compose.material.icons.rounded.Forward10
 import androidx.compose.material.icons.rounded.Info
@@ -76,6 +78,8 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
@@ -274,7 +278,7 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
         }
         // Direct : pas de sous-titres à régler ; à la place, de quoi zapper. Le mode de lecture des listes HLS
         // (flux continu ou non) se règle seulement dans les Réglages.
-        if (channel) ZapSection(media) else SubtitlesCard(state)
+        if (channel) ZapSection(media) else { AudioCard(state); SubtitlesCard(state) }
         Spacer(Modifier.height(8.dp + LocalBottomInset.current))
     }
     }
@@ -510,6 +514,36 @@ internal fun Controls(s: CastState) {
     }
 }
 
+
+/** Langue (piste son) quand la vidéo en propose plusieurs (Arte : français, VO, allemand, audiodescription…). */
+@Composable
+private fun AudioCard(s: CastState) {
+    if (s.audioTracks.size < 2) return
+    var open by remember { mutableStateOf(false) }
+    val current = s.audioTracks.getOrNull(s.audioIndex)?.name.orEmpty()
+    Card(
+        onClick = { open = true }, shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+    ) {
+        Box {
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.audio_language)) },
+                supportingContent = { Text(current.replaceFirstChar { it.titlecase() }) },
+                leadingContent = { Icon(Icons.Rounded.Translate, null) },
+                colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+            )
+            DropdownMenu(open, onDismissRequest = { open = false }) {
+                s.audioTracks.forEachIndexed { i, t ->
+                    DropdownMenuItem(
+                        text = { Text(t.name.replaceFirstChar { it.titlecase() }) },
+                        leadingIcon = { if (i == s.audioIndex) Icon(Icons.Rounded.Check, null) },
+                        onClick = { open = false; Castor.selectAudio(i) },
+                    )
+                }
+            }
+        }
+    }
+}
 
 @Composable
 private fun SubtitlesCard(s: CastState) {

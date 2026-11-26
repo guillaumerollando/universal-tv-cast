@@ -961,3 +961,14 @@ fait toute seule.
   liste maîtresse qui arrive après retire ses pistes aussitôt. Journal : « vidéos proposées : 1 » du début à la fin.
 - Noms : titre de la page (sans « – Regarder le film complet ») au lieu d'un nom de fichier technique.
 - Sites gratuits suggérés (accueil et accueil du navigateur) tant qu'il y a moins de 6 sites, sans ceux déjà dans « Mes sites ».
+
+## 2026-11-26 (nuit) — Langues et sous-titres de la vidéo
+- Hls.tracks : pistes son (#EXT-X-MEDIA AUDIO : nom, langue, défaut) et sous-titres en un seul WebVTT (Arte), hors « forcés ».
+- Carte « Langue » sur l'écran de lecture (≥ 2 pistes). Téléphone : TrackSelectionOverride (nom puis langue), réappliqué
+  quand les pistes arrivent. Télé : le relais ne garde que la piste choisie dans la liste maîtresse servie (audioChoice) ;
+  changement → renvoi au même endroit. Non vérifié sur la vraie télé (la fausse reçoit le flux continu, sans ce choix).
+- Sous-titres de la vidéo ajoutés à la carte « Sous-titres » (français, allemand, sourds et malentendants…).
+- Bugs trouvés en route : setPageImage écrasait la vidéo par une copie ancienne (sous-titres et titre perdus) → mise à
+  jour sur l'état courant ; identify() ne cherche plus de film pour un nom technique (« 130430-001-A ») ; titre affiché
+  sans « – Regarder la série » (PageTitle.display).
+- Émulateur, Arte « Prisonnière 951 (1/4) » sur téléphone : 6 langues, VO appliquée, sous-titres français affichés.

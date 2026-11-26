@@ -74,6 +74,9 @@ data class CastState(
     val liveWindow: Double = 0.0,
     /** La lecture se fait sur ce téléphone (dans l'écran de lecture) plutôt que sur la télé. */
     val onPhone: Boolean = false,
+    /** Pistes son proposées par la vidéo (« français », « VO »…) et celle choisie. */
+    val audioTracks: List<studio.rollando.castor.proxy.Hls.Track> = emptyList(),
+    val audioIndex: Int = -1,
 ) {
     val active: Boolean get() = phase in setOf(Phase.SENDING, Phase.BUFFERING, Phase.PLAYING, Phase.PAUSED)
 }
@@ -367,7 +370,7 @@ object Castor {
         _state.update {
             it.copy(media = media, slides = null, phase = Phase.LOADING, isHls = false, splitAudio = false, subIndex = media.defaultSub,
                 position = 0.0, duration = 0.0, notice = null, continuous = Library.continuousHls.value, subDelay = 0.0,
-                embeddedSubs = emptyList(), live = false, liveBehind = 0.0, liveWindow = 0.0)
+                embeddedSubs = emptyList(), live = false, liveBehind = 0.0, liveWindow = 0.0, audioTracks = emptyList(), audioIndex = -1)
         }
         proxy.reset()
         remoteId = null
@@ -380,6 +383,19 @@ object Castor {
             if (hls) {
                 val plan = Hls.load(media.url, media.headers)
                 if (plan.encryptedSample) throw Drm()
+                // Langues et sous-titres de la vidéo (liste maîtresse) : à choisir, sur la télé comme sur le téléphone.
+                if (plan.endList) runCatching { Hls.tracks(media.url, media.headers) }
+                    .onFailure { Log.w("Castor", "pistes de la liste : ${it.message}") }
+                    .onSuccess { (a, t) -> Log.i("Castor", "pistes : ${a.size} son, ${t.size} sous-titres") }
+                    .getOrNull()?.let { (audio, subs) ->
+                    val def = audio.indexOfFirst { it.default }.takeIf { it >= 0 } ?: if (audio.isNotEmpty()) 0 else -1
+                    proxy.audioChoice = audio.getOrNull(def)?.uri
+                    _state.update { st ->
+                        val m = st.media ?: return@update st
+                        val extra = subs.filter { t -> m.subs.none { it.uri == t.uri } }.map { SubSource(it.uri, it.name) }
+                        st.copy(audioTracks = audio, audioIndex = def, media = m.copy(subs = m.subs + extra))
+                    }
+                }
                 hlsDuration = if (plan.endList) plan.duration else 0.0
                 fmp4 = plan.fmp4
                 _state.update {
@@ -432,9 +448,13 @@ object Castor {
      */
     /** L'image de la page arrive après le lancement : la vidéo en cours venue de cette page en profite. */
     fun setPageImage(page: String, image: String) {
-        val m = _state.value.media ?: return
-        if (m.pageUrl != page || m.backdropUrl != null) return
-        _state.update { it.copy(media = m.copy(posterUrl = m.posterUrl ?: image, backdropUrl = image)) }
+        val m0 = _state.value.media ?: return
+        if (m0.pageUrl != page || m0.backdropUrl != null) return
+        // Sur la vidéo telle qu'elle est maintenant (pas une copie prise avant : on perdrait titre et sous-titres).
+        _state.update { st ->
+            val m = st.media?.takeIf { it.pageUrl == page && it.backdropUrl == null } ?: return@update st
+            st.copy(media = m.copy(posterUrl = m.posterUrl ?: image, backdropUrl = image))
+        }
         Library.setRecentImage(page, image)
     }
 
@@ -487,6 +507,7 @@ object Castor {
             "${proxy.baseUrl()}/ts/$remoteId/stream.${if (fmp4) "mp4" else "ts"}?start=${start.toLong()}" else null
         if (s.live) liveClock.start(start)
         PhoneEngine.play(app, m, start, proxy.subtitle, s.isHls, liveUrl)
+        s.audioTracks.getOrNull(s.audioIndex)?.let { PhoneEngine.selectAudio(it.name, it.lang) }
     }
 
     private fun onPhoneStatus(st: PhoneEngine.Status) {
@@ -528,7 +549,10 @@ object Castor {
         // Nom de fichier générique (« index.m3u8 », « master.m3u8 »…) ou direct : il ne dit rien du film, et
         // chercher des sous-titres trouverait n'importe quel film du même nom.
         val base = name.substringAfterLast('/').substringBeforeLast('.').lowercase()
-        if (base in GENERIC_NAMES || (_state.value.isHls && hlsDuration <= 0.0)) {
+        // Identifiant technique (« 130430-001-A », plein de chiffres) : il ne dit rien du film ; chercher un film à ce
+        // nom en trouverait un au hasard (« série »). Le titre de la page reste.
+        val technical = base.count { it.isDigit() } >= 5
+        if (base in GENERIC_NAMES || technical || (_state.value.isHls && hlsDuration <= 0.0)) {
             // Titre lisible à la place de « index.m3u8 » : « Direct » ou « Vidéo ».
             if (m.title == name || m.title.substringAfterLast('/') == name) _state.update {
                 val live = it.isHls && hlsDuration <= 0.0
@@ -561,7 +585,7 @@ object Castor {
         val titleIsFileName = m.title == name || m.title.contains('.') && !m.title.contains(' ')
         _state.update {
             it.copy(
-                media = m.copy(
+                media = (it.media ?: m).copy(
                     subs = subs, title = if (titleIsFileName) nice else m.title,
                     posterUrl = result?.art?.poster ?: m.posterUrl,
                     backdropUrl = result?.art?.backdrop ?: m.backdropUrl,
@@ -1661,6 +1685,17 @@ object Castor {
         val s = _state.value
         _state.update { it.copy(continuous = on) }
         if (s.active && s.isHls && s.continuous != on) castAt(s.position)
+    }
+
+    /** Choisit la piste son (langue) ; la vidéo reprend au même endroit avec elle. */
+    fun selectAudio(index: Int) {
+        val s = _state.value
+        val t = s.audioTracks.getOrNull(index) ?: return
+        if (index == s.audioIndex) return
+        proxy.audioChoice = t.uri
+        _state.update { it.copy(audioIndex = index) }
+        if (s.onPhone) PhoneEngine.selectAudio(t.name, t.lang)
+        else if (s.active) exec { castAt(currentPosition()) }
     }
 
     fun selectSubtitle(index: Int) {

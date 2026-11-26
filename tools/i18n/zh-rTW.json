@@ -278,7 +278,8 @@
   "bookmark_advanced": "%1$s：書籤已前進到第 %2$d 集。",
   "settings_power": "省電模式",
   "settings_power_sub": "關閉影片周圍的光暈、模糊效果和動畫，並降低直播檢查頻率。畫質不變。手機開啟省電時會自動開啟。",
-  "tv_asleep": "沒有回應：已關機？"
+  "tv_asleep": "沒有回應：已關機？",
+  "audio_language": "語言"
  },
  "plurals": {
   "browser_found": {

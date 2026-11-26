@@ -278,7 +278,8 @@
   "bookmark_advanced": "%1$s：ブックマークをエピソード %2$d に進めました。",
   "settings_power": "省電力",
   "settings_power_sub": "動画のまわりの光、ぼかし、アニメーションをオフにし、ライブの確認回数を減らします。画質は変わりません。スマホが省電力モードのときは自動でオンになります。",
-  "tv_asleep": "応答なし：電源オフ？"
+  "tv_asleep": "応答なし：電源オフ？",
+  "audio_language": "言語"
  },
  "plurals": {
   "browser_found": {

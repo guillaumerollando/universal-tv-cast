@@ -278,7 +278,8 @@
   "bookmark_advanced": "%1$s: bokmärket har flyttats till avsnitt %2$d.",
   "settings_power": "Energisparläge",
   "settings_power_sub": "Stänger av ljusskenet runt videon, oskärpan och animationerna och kollar direktsändningen mer sällan. Videokvaliteten är densamma. Slås på av sig själv när telefonen sparar batteri.",
-  "tv_asleep": "Svarar inte: avstängd?"
+  "tv_asleep": "Svarar inte: avstängd?",
+  "audio_language": "Språk"
  },
  "plurals": {
   "browser_found": {

@@ -259,6 +259,7 @@
     <string name="settings_power">Économie d’énergie</string>
     <string name="settings_power_sub">Coupe la lueur autour de la vidéo, le flou et les animations, et suit le direct moins souvent. La qualité vidéo ne change pas. S’active tout seul quand ton téléphone économise sa batterie.</string>
     <string name="tv_asleep">Ne répond pas : éteinte ?</string>
+    <string name="audio_language">Langue</string>
     <string name="iptv_title">Listes de chaînes</string>
     <string name="iptv_intro">Une liste de chaînes (liste M3U ou IPTV) regroupe des chaînes télé dans un seul lien. Colle son adresse ou ouvre le fichier : tu retrouves ici toutes ses chaînes, avec leur logo.</string>
     <string name="iptv_url_hint">Adresse de la liste (.m3u)</string>

@@ -574,7 +574,7 @@ fun BrowserScreen(b: BrowserController) {
                             Castor.open(
                                 Media(
                                     url = f.url,
-                                    title = f.pageTitle.ifBlank { f.label },
+                                    title = f.pageTitle.takeIf { it.isNotBlank() }?.let { PageTitle.display(it, Uri.parse(f.pageUrl).host.orEmpty()) } ?: f.label,
                                     mime = if (f.hls) "application/vnd.apple.mpegurl" else null,
                                     headers = f.headers,
                                     pageUrl = f.pageUrl,

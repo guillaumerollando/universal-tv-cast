@@ -29,6 +29,11 @@ object PageTitle {
         n.takeIf { it in 1..of && of >= 2 }
     }
 
+    private val WATCH_TAIL = Regex("(?iu)\\s*[–—|-]\\s*(regarder|voir|watch|ansehen|guarda|ver|kijk)\\b.*$")
+
+    /** Titre à montrer pour une vidéo : nettoyé, sans « – Regarder la série » / « – Watch now » à la fin. */
+    fun display(title: String, host: String): String = WATCH_TAIL.replace(clean(title, host), "").trim().ifBlank { clean(title, host) }
+
     fun clean(title: String, host: String): String {
         if (title.isBlank()) return title
         val site = host.removePrefix("www.").substringBefore('.').lowercase().filter { it.isLetterOrDigit() }

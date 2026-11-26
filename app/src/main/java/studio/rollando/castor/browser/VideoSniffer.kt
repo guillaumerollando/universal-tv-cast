@@ -33,8 +33,7 @@ data class Found(
             val technical = !name.contains('.') || base in TECHNICAL || name.count { it.isDigit() } >= 5 ||
                 Regex("[a-z0-9]{20,}").containsMatchIn(base)
             // Sans les fins de titre du genre « – Regarder le film complet » / « – Watch now ».
-            val title = PageTitle.clean(pageTitle, Uri.parse(pageUrl).host.orEmpty())
-                .replace(Regex("(?iu)\\s*[–—|-]\\s*(regarder|voir|watch|ansehen|guarda|ver|kijk)\\b.*$"), "").trim()
+            val title = PageTitle.display(pageTitle, Uri.parse(pageUrl).host.orEmpty())
             return (if (technical && title.isNotBlank()) title else name).take(60).ifEmpty { url.take(60) }
         }
 

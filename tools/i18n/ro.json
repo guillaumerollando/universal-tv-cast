@@ -278,7 +278,8 @@
   "bookmark_advanced": "%1$s: marcajul a fost mutat la episodul %2$d.",
   "settings_power": "Economisire energie",
   "settings_power_sub": "Oprește strălucirea din jurul videoclipului, estomparea și animațiile și verifică transmisiunea live mai rar. Calitatea video rămâne aceeași. Pornește singur când telefonul economisește bateria.",
-  "tv_asleep": "Nu răspunde: oprit?"
+  "tv_asleep": "Nu răspunde: oprit?",
+  "audio_language": "Limbă"
  },
  "plurals": {
   "browser_found": {

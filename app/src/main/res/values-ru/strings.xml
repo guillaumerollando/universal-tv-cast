@@ -280,6 +280,7 @@
     <string name="settings_power">Энергосбережение</string>
     <string name="settings_power_sub">Отключает свечение вокруг видео, размытие и анимации и реже проверяет прямой эфир. Качество видео не меняется. Включается само, когда телефон экономит заряд.</string>
     <string name="tv_asleep">Не отвечает: выключен?</string>
+    <string name="audio_language">Язык</string>
     <plurals name="browser_found">
         <item quantity="one">%d видео</item>
         <item quantity="few">%d видео</item>

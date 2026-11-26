@@ -280,6 +280,7 @@
     <string name="settings_power">Oszczędzanie energii</string>
     <string name="settings_power_sub">Wyłącza poświatę wokół wideo, rozmycie i animacje oraz rzadziej sprawdza transmisję na żywo. Jakość wideo się nie zmienia. Włącza się samo, gdy telefon oszczędza baterię.</string>
     <string name="tv_asleep">Nie odpowiada: wyłączony?</string>
+    <string name="audio_language">Język</string>
     <plurals name="browser_found">
         <item quantity="one">%d wideo</item>
         <item quantity="few">%d wideo</item>

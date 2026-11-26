@@ -280,6 +280,7 @@
     <string name="settings_power">توفير الطاقة</string>
     <string name="settings_power_sub">يوقف التوهج حول الفيديو والتمويه والرسوم المتحركة، ويتحقق من البث المباشر بشكل أقل. لا تتغير جودة الفيديو. يعمل تلقائيًا عندما يوفّر هاتفك البطارية.</string>
     <string name="tv_asleep">لا يستجيب: هل هو مطفأ؟</string>
+    <string name="audio_language">اللغة</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>

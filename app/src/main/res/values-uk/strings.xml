@@ -280,6 +280,7 @@
     <string name="settings_power">Енергозбереження</string>
     <string name="settings_power_sub">Вимикає сяйво навколо відео, розмиття й анімації та рідше перевіряє прямий ефір. Якість відео не змінюється. Вмикається саме, коли телефон заощаджує заряд.</string>
     <string name="tv_asleep">Не відповідає: вимкнено?</string>
+    <string name="audio_language">Мова</string>
     <plurals name="browser_found">
         <item quantity="one">%d відео</item>
         <item quantity="few">%d відео</item>

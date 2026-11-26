@@ -78,6 +78,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import kotlinx.coroutines.launch
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.foundation.layout.navigationBars
@@ -187,6 +191,21 @@ fun CastorApp() {
             ))
         },
     )
+    // En-tête qui se cache quand on fait défiler vers le bas et revient dès qu'on remonte (comme les grandes applis) :
+    // il rend sa hauteur au contenu. Le défilement est d'abord « pris » par l'en-tête tant qu'il bouge.
+    val headerPx = with(androidx.compose.ui.platform.LocalDensity.current) { 64.dp.toPx() }
+    var headerHidden by remember { androidx.compose.runtime.mutableFloatStateOf(0f) }
+    LaunchedEffect(tab) { headerHidden = 0f }
+    val headerScroll = remember(headerPx) {
+        object : androidx.compose.ui.input.nestedscroll.NestedScrollConnection {
+            override fun onPreScroll(available: androidx.compose.ui.geometry.Offset, source: androidx.compose.ui.input.nestedscroll.NestedScrollSource): androidx.compose.ui.geometry.Offset {
+                val before = headerHidden
+                headerHidden = (headerHidden - available.y).coerceIn(0f, headerPx)
+                return androidx.compose.ui.geometry.Offset(0f, before - headerHidden)
+            }
+        }
+    }
+    val headerDp = with(androidx.compose.ui.platform.LocalDensity.current) { (headerPx - headerHidden).toDp() }
     Scaffold(
         containerColor = androidx.compose.ui.graphics.Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,
@@ -196,8 +215,11 @@ fun CastorApp() {
             // Navigateur : pas d'en-tête d'appli, toute la place pour le site (la barre d'onglets permet d'en sortir).
             if (tab != Tab.BROWSER) {
             Surface(color = androidx.compose.ui.graphics.Color.Transparent, contentColor = MaterialTheme.colorScheme.onSurface) {
+                // Hauteur qui suit le défilement ; la barre glisse vers le haut et s'efface.
+                Box(Modifier.fillMaxWidth().statusBarsPadding().height(headerDp).clipToBounds()
+                    .graphicsLayer { alpha = 1f - headerHidden / headerPx }, contentAlignment = Alignment.BottomStart) {
                 Row(
-                    Modifier.fillMaxWidth().statusBarsPadding().height(64.dp).padding(start = 16.dp, end = 4.dp),
+                    Modifier.fillMaxWidth().requiredHeight(64.dp).padding(start = 16.dp, end = 4.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(painterResource(R.drawable.ic_logo), null, Modifier.size(30.dp), tint = MaterialTheme.colorScheme.primary)
@@ -227,6 +249,7 @@ fun CastorApp() {
                         Icon(Icons.Rounded.Settings, stringResource(R.string.cd_settings))
                     }
                 }
+                }
             }
             }
         },
@@ -235,6 +258,7 @@ fun CastorApp() {
         // Les écrans défilent sous la barre d'onglets (sauf le navigateur) et finissent au-dessus d'elle.
         val bottom = padding.calculateBottomPadding()
         Box(Modifier.padding(top = padding.calculateTopPadding()).fillMaxSize()
+            .then(if (tab != Tab.BROWSER) Modifier.nestedScroll(headerScroll) else Modifier)
             // Pas de flou derrière la barre d'onglets sur le navigateur : la capture continue de la page web la faisait
             // clignoter (et la page ne passe pas sous la barre).
             .then(if (tab != Tab.BROWSER) Modifier.hazeSource(haze) else Modifier)

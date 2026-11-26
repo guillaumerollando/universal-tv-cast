@@ -73,6 +73,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import studio.rollando.castor.R
 import kotlinx.coroutines.launch
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.animation.core.animateFloat
 import studio.rollando.castor.cast.Castor
 import studio.rollando.castor.data.Bookmark
@@ -452,15 +454,29 @@ private fun SmallTile(icon: ImageVector, title: String, modifier: Modifier, onCl
 @Composable
 private fun Tile(icon: ImageVector, title: String, sub: String, modifier: Modifier, highlight: Boolean = false, onClick: () -> Unit) {
     val c = MaterialTheme.colorScheme
-    // Mise en surbrillance (« c'est ici ») : un contour ambré qui pulse quelques instants.
+    // Mise en surbrillance (« c'est ici ») : une lueur ambrée qui pulse autour de la tuile, comme la lumière de la vidéo.
     val pulse = androidx.compose.animation.core.rememberInfiniteTransition(label = "repère")
-    val glow by pulse.animateFloat(0.35f, 1f, androidx.compose.animation.core.infiniteRepeatable(
-        androidx.compose.animation.core.tween(550), androidx.compose.animation.core.RepeatMode.Reverse), label = "repère")
+    val glow by pulse.animateFloat(0.25f, 1f, androidx.compose.animation.core.infiniteRepeatable(
+        androidx.compose.animation.core.tween(650), androidx.compose.animation.core.RepeatMode.Reverse), label = "repère")
     Surface(
         onClick = onClick, shape = RoundedCornerShape(22.dp),
-        color = if (highlight) c.primary.copy(alpha = 0.14f).compositeOver(c.surfaceContainerHigh) else c.surfaceContainerHigh,
-        border = if (highlight) androidx.compose.foundation.BorderStroke(3.dp, c.primary.copy(alpha = glow)) else null,
-        modifier = modifier.height(118.dp),
+        color = if (highlight) c.primary.copy(alpha = 0.10f + 0.10f * glow).compositeOver(c.surfaceContainerHigh) else c.surfaceContainerHigh,
+        border = if (highlight) androidx.compose.foundation.BorderStroke(1.5.dp, c.primary.copy(alpha = 0.5f + 0.5f * glow)) else null,
+        modifier = modifier.height(118.dp).then(if (highlight) Modifier
+            .drawBehind {
+                // Halo : un dégradé ambré qui déborde largement de la tuile et respire.
+                val r = size.maxDimension * (0.95f + 0.35f * glow)
+                drawCircle(
+                    androidx.compose.ui.graphics.Brush.radialGradient(
+                        listOf(c.primary.copy(alpha = 0.85f * glow), c.primary.copy(alpha = 0.35f * glow), androidx.compose.ui.graphics.Color.Transparent),
+                        center = center, radius = r,
+                    ),
+                    radius = r, center = center,
+                )
+            }
+            // Ombre lumineuse ambrée sous la tuile (lumière qui en émane).
+            .shadow((10 + 22 * glow).dp, RoundedCornerShape(22.dp), clip = false, ambientColor = c.primary, spotColor = c.primary)
+        else Modifier),
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.SpaceBetween) {
             Box(Modifier.size(42.dp).clip(CircleShape).background(c.primary.copy(alpha = 0.16f)), contentAlignment = Alignment.Center) {

@@ -903,3 +903,9 @@ fait toute seule.
   (« 127960-000-A_v1080… ») sont masqués ; la vidéo « Auto · N qualités » passe en tête.
 - Émulateur, Arte « Flow » : avant 7 entrées (son seul, morceaux) ; après « 1 vidéo » = 127960-000-A.m3u8, 1 h 21, 6 qualités.
   Accueil Arte : plus de fausses vidéos. Aucun plantage.
+
+## 2026-11-26 — En-tête qui se cache, lueur de « Coller un lien »
+- En-tête de l'appli (accueil, lecture) : se cache en défilant vers le bas (sa hauteur suit le doigt, il s'efface) et
+  revient dès qu'on remonte ; réaffiché en changeant d'onglet. NestedScrollConnection sur la zone de contenu.
+- Surbrillance de la tuile « Coller un lien » : halo radial ambré qui déborde et respire (650 ms), ombre lumineuse ambrée,
+  fond légèrement ambré, fin liseré. Vérifié sur l'émulateur (deux phases de la pulsation).

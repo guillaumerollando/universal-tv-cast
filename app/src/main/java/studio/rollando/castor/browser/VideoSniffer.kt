@@ -22,12 +22,25 @@ data class Found(
 ) {
     /** Très courte : presque toujours une pub ou une bande-annonce. */
     val short: Boolean get() = duration != null && duration in 0.5..60.0
-    /** Nom du fichier ; pour une adresse sans nom de fichier (« get », « play »…), le titre de la page. */
+    /**
+     * Nom à montrer : le titre de la page (« Prisonnière 951 (1/4) ») quand le nom du fichier est technique
+     * (« 130430-001-A.m3u8 », « index.m3u8 », identifiant…) ; sinon le nom du fichier (« Vacances.mp4 »).
+     */
     val label: String
         get() {
             val name = Uri.decode(url.substringBefore('?').substringAfterLast('/'))
-            return (if (name.contains('.') || pageTitle.isBlank()) name else pageTitle).take(60).ifEmpty { url.take(60) }
+            val base = name.substringBeforeLast('.').lowercase()
+            val technical = !name.contains('.') || base in TECHNICAL || name.count { it.isDigit() } >= 5 ||
+                Regex("[a-z0-9]{20,}").containsMatchIn(base)
+            // Sans les fins de titre du genre « – Regarder le film complet » / « – Watch now ».
+            val title = PageTitle.clean(pageTitle, Uri.parse(pageUrl).host.orEmpty())
+                .replace(Regex("(?iu)\\s*[–—|-]\\s*(regarder|voir|watch|ansehen|guarda|ver|kijk)\\b.*$"), "").trim()
+            return (if (technical && title.isNotBlank()) title else name).take(60).ifEmpty { url.take(60) }
         }
+
+    private companion object {
+        val TECHNICAL = setOf("index", "master", "playlist", "manifest", "stream", "video", "chunklist", "main", "live", "prog_index", "media", "play", "get")
+    }
     val host: String get() = runCatching { Uri.parse(url).host?.removePrefix("www.") }.getOrNull() ?: ""
 }
 
@@ -122,7 +135,11 @@ class VideoSniffer {
             // Déjà couvert par une liste maîtresse du même dossier (morceau, piste, variante) : rien de plus à proposer.
             val dir = url.substringBefore('?').substringBeforeLast('/')
             if (_found.value.any { it.qualities > 0 && it.url.substringBefore('?').substringBeforeLast('/') == dir }) return
-            if (!hls && _found.value.any { it.qualities > 0 && baseOf(url).startsWith(baseOf(it.url) + "_") }) return
+            // Piste ou variante d'une liste déjà repérée (« 130430-001-A_aud_VF… » de « 130430-001-A.m3u8 »), même si
+            // cette liste n'est pas encore examinée : on ne la montre jamais seule.
+            if (_found.value.any { it.hls && baseOf(url).startsWith(baseOf(it.url) + "_") }) return
+            // La liste qui regroupe arrive après ses pistes : elle les remplace tout de suite.
+            if (hls) _found.value = _found.value.filter { !baseOf(it.url).startsWith(baseOf(url) + "_") }
             addLocked(url, hls, reqHeaders)
         }
     }
@@ -153,7 +170,7 @@ class VideoSniffer {
 
     /** Morceau, piste ou variante d'une vidéo déjà proposée par sa liste maîtresse (« 127960-000-A_v1080… »). */
     private fun partOf(it: Found, master: Found): Boolean =
-        it.url != master.url && !it.hls && baseOf(it.url).startsWith(baseOf(master.url) + "_")
+        it.url != master.url && baseOf(it.url).startsWith(baseOf(master.url) + "_")
 
     /** La vidéo complète (liste maîtresse, plusieurs qualités) d'abord, puis la plus longue. */
     private fun sorted(l: List<Found>) = l.sortedWith(compareByDescending<Found> { it.qualities > 0 }.thenByDescending { it.duration ?: if (it.hls) 1.0 else 0.5 })

@@ -956,3 +956,7 @@ fait toute seule.
 - Épisodes : « prisonniere-951-1-4 » lu comme épisode 951 (le « e » final de « prisonniere » pris pour « e951 ») →
   le mot doit commencer là ; « -1-4/ » et « (1/4) » = partie 1 sur 4 (dernière partie : pas de suite). Le lien
   « épisode suivant » repéré sur la page passe avant celui déduit de l'adresse. Tests ajoutés.
+- Arte « 5 vidéos » reproduit (accueil → « Reprendre la lecture ») : les pistes (aud_VF, aud_VO…) arrivaient avant la liste
+  maîtresse → 1, 2, … 5 puis retour à 1. Désormais une piste au nom d'une liste HLS déjà vue n'est jamais ajoutée, et la
+  liste maîtresse qui arrive après retire ses pistes aussitôt. Journal : « vidéos proposées : 1 » du début à la fin.
+- Noms : titre de la page (sans « – Regarder le film complet ») au lieu d'un nom de fichier technique.

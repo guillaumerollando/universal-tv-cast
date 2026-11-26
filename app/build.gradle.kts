@@ -17,7 +17,13 @@ android {
     }
 
     androidResources {
-        localeFilters += listOf("en", "fr", "es", "de", "it", "nl", "pt-rBR")
+        // Choix de la langue de l'appli dans les réglages d'Android (13 et plus).
+        generateLocaleConfig = true
+        // Langues de l'appli (les traductions des bibliothèques dans d'autres langues sont écartées : APK plus léger).
+        localeFilters += listOf(
+            "en", "fr", "es", "de", "it", "nl", "pt-rBR",
+            "ja", "ko", "zh-rCN", "zh-rTW", "ru", "uk", "pl", "cs", "ar", "tr", "hi", "in", "sv", "ro", "vi", "th",
+        )
     }
 
     buildTypes {

@@ -173,7 +173,7 @@ fun CastorApp() {
     val glowArgb by studio.rollando.castor.cast.PhoneEngine.glow.collectAsState()
     val iptvNow by Nav.iptv.collectAsState()
     val glowColor by androidx.compose.animation.animateColorAsState(
-        if (state.onPhone && tab == Tab.PLAYER && iptvNow == null && glowArgb != null) androidx.compose.ui.graphics.Color(glowArgb!!)
+        if (state.onPhone && tab == Tab.PLAYER && iptvNow == null && glowArgb != null && !studio.rollando.castor.data.Power.saving.collectAsState().value) androidx.compose.ui.graphics.Color(glowArgb!!)
         else androidx.compose.ui.graphics.Color.Transparent,
         // Court : la lueur suit l'image presque en direct (une couleur toutes les 0,4 s, fondue en 0,45 s).
         androidx.compose.animation.core.tween(450), label = "lueur",
@@ -513,6 +513,12 @@ private fun SettingsSheet(onDismiss: () -> Unit) {
                 val embed by Library.embedSubs.collectAsState()
                 SwitchRow(stringResource(R.string.settings_embed), stringResource(R.string.settings_embed_sub), embed) {
                     Library.setEmbedSubs(it)
+                }
+            }
+            item {
+                val power by Library.powerSaver.collectAsState()
+                SwitchRow(stringResource(R.string.settings_power), stringResource(R.string.settings_power_sub), power) {
+                    Library.setPowerSaver(it)
                 }
             }
             item {

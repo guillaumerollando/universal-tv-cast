@@ -36,6 +36,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -67,6 +68,8 @@ fun PillTabBar(tab: Tab, casting: Boolean, haze: dev.chrisbanes.haze.HazeState, 
         TabSpec(Tab.PLAYER, if (casting) Icons.Rounded.CastConnected else Icons.Rounded.Cast, stringResource(R.string.tab_player), dot = casting),
     )
     val index = tabs.indexOfFirst { it.tab == tab }.coerceAtLeast(0)
+    // Économie d'énergie : pas de flou (recalculé à chaque image), un fond plein à la place.
+    val saving by studio.rollando.castor.data.Power.saving.collectAsState()
 
     // « Verre fumé » : pilule translucide avec liseré et reflet clair ; le contenu défile dessous.
     Box(
@@ -81,13 +84,13 @@ fun PillTabBar(tab: Tab, casting: Boolean, haze: dev.chrisbanes.haze.HazeState, 
             border = BorderStroke(1.dp, androidx.compose.ui.graphics.Color.White.copy(alpha = 0.12f)),
             modifier = Modifier.widthIn(max = 420.dp).fillMaxWidth()
                 .clip(shape)
-                .hazeEffect(haze, HazeStyle(
+                .then(if (saving) Modifier.background(c.surfaceContainerHigh.copy(alpha = 0.97f)) else Modifier.hazeEffect(haze, HazeStyle(
                     backgroundColor = c.background,
                     tint = HazeTint(androidx.compose.ui.graphics.Color(0xFF12241F).copy(alpha = 0.72f)),
                     blurRadius = 28.dp,
                     noiseFactor = 0.04f,
                     fallbackTint = HazeTint(androidx.compose.ui.graphics.Color(0xFF12241F).copy(alpha = 0.95f)),
-                ))
+                )))
                 .background(androidx.compose.ui.graphics.Brush.verticalGradient(
                     listOf(androidx.compose.ui.graphics.Color.White.copy(alpha = 0.07f), androidx.compose.ui.graphics.Color.Transparent)), shape),
         ) {

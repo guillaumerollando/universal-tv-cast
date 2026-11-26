@@ -463,6 +463,15 @@ S = {
 "start_copy": ["Copy the link", "Copier le lien", "Copiar el enlace", "Link kopieren", "Copia il link", "Link kopiëren", "Copiar o link"],
 "start_copied": ["Link copied", "Lien copié", "Enlace copiado", "Link kopiert", "Link copiato", "Link gekopieerd", "Link copiado"],
 "next_episode": ["Next episode", "Épisode suivant", "Siguiente episodio", "Nächste Folge", "Episodio successivo", "Volgende aflevering", "Próximo episódio"],
+"settings_power": ["Power saving", "Économie d’énergie", "Ahorro de energía", "Energiesparmodus", "Risparmio energetico", "Energiebesparing", "Economia de energia"],
+"settings_power_sub": [
+ "Turns off the glow around the video, the blur and the animations, and checks live TV less often. Video quality stays the same. Turns on by itself when your phone saves battery.",
+ "Coupe la lueur autour de la vidéo, le flou et les animations, et suit le direct moins souvent. La qualité vidéo ne change pas. S’active tout seul quand ton téléphone économise sa batterie.",
+ "Desactiva el brillo alrededor del vídeo, el desenfoque y las animaciones, y sigue el directo con menos frecuencia. La calidad del vídeo no cambia. Se activa solo cuando el móvil ahorra batería.",
+ "Schaltet das Leuchten um das Video, die Unschärfe und die Animationen ab und prüft Live-TV seltener. Die Videoqualität bleibt gleich. Schaltet sich automatisch ein, wenn dein Handy Akku spart.",
+ "Disattiva il bagliore intorno al video, la sfocatura e le animazioni, e segue la diretta meno spesso. La qualità del video non cambia. Si attiva da solo quando il telefono risparmia batteria.",
+ "Zet de gloed rond de video, de vervaging en de animaties uit en volgt live-tv minder vaak. De videokwaliteit blijft gelijk. Gaat vanzelf aan als je telefoon batterij bespaart.",
+ "Desliga o brilho em volta do vídeo, o desfoque e as animações, e acompanha o ao vivo com menos frequência. A qualidade do vídeo não muda. Liga sozinho quando o celular economiza bateria."],
 "iptv_title": ["Channel lists", "Listes de chaînes", "Listas de canales", "Senderlisten", "Liste di canali", "Zenderlijsten", "Listas de canais"],
 "iptv_intro": [
  "A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.",

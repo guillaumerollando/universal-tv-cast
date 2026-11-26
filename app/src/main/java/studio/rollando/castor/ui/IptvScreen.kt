@@ -446,7 +446,8 @@ private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
             Modifier.fillMaxWidth()
                 .onSizeChanged { headerPx = it.height }
                 .offset { androidx.compose.ui.unit.IntOffset(0, shift.toInt()) }
-                .then(if (overContent) Modifier.hazeEffect(glass, HazeStyle(
+                .then(if (overContent && studio.rollando.castor.data.Power.saving.value) Modifier.background(c.surfaceContainer.copy(alpha = 0.97f))
+                else if (overContent) Modifier.hazeEffect(glass, HazeStyle(
                     backgroundColor = c.background,
                     tint = HazeTint(Color(0xFF12241F).copy(alpha = 0.78f)),
                     blurRadius = 28.dp, noiseFactor = 0.04f,

@@ -137,6 +137,7 @@ object Library {
         _shakeHelp.value = prefs.getBoolean("shake_help", true)
         _embedSubs.value = prefs.getBoolean("embed_subs", true)
         _smoothSlides.value = prefs.getBoolean("smooth_slides_v2", false)
+        _powerSaver.value = prefs.getBoolean("power_saver", false)
         _hiddenSites.value = prefs.getStringSet("hidden_sites", emptySet()).orEmpty().toSet()
         _dismissedTips.value = prefs.getStringSet("tips_dismissed", emptySet()).orEmpty().toSet()
     }
@@ -158,6 +159,11 @@ object Library {
     /** Intégrer les sous-titres au MP4 pour les télés DLNA (qui ignorent souvent les sous-titres externes). */
     val embedSubs: StateFlow<Boolean> = _embedSubs
     fun setEmbedSubs(on: Boolean) { _embedSubs.value = on; prefs.edit().putBoolean("embed_subs", on).apply() }
+
+    private val _powerSaver = MutableStateFlow(false)
+    /** Économie d'énergie choisie dans les Réglages (voir [Power]). */
+    val powerSaver: StateFlow<Boolean> = _powerSaver
+    fun setPowerSaver(on: Boolean) { _powerSaver.value = on; prefs.edit().putBoolean("power_saver", on).apply(); Power.refresh() }
 
     private val _smoothSlides = MutableStateFlow(false)
     /** Diaporama envoyé comme une seule vidéo (pas d'écran noir entre les photos). */

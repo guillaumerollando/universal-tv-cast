@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
@@ -22,14 +23,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-/** Vrai si l'utilisateur a coupé les animations dans Android (accessibilité). */
+/** Vrai si les animations décoratives doivent s'arrêter : coupées dans Android (accessibilité), ou économie d'énergie. */
 @Composable
 fun animationsOff(): Boolean {
     val ctx = LocalContext.current
-    return remember {
+    val system = remember {
         runCatching { Settings.Global.getFloat(ctx.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE) == 0f }
             .getOrDefault(false)
     }
+    val saving by studio.rollando.castor.data.Power.saving.collectAsState()
+    return system || saving
 }
 
 /** Ondes qui partent de la télé pendant la lecture : le signal envoyé par le téléphone. */

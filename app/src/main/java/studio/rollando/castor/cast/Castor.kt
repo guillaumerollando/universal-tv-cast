@@ -125,6 +125,7 @@ object Castor {
         Library.init(app)
         studio.rollando.castor.data.IptvStore.init(app)
         studio.rollando.castor.data.Epg.init(app)
+        studio.rollando.castor.data.Power.init(app)
         _state.update { it.copy(continuous = Library.continuousHls.value) }
         CastControl.init(app)
         CastControl.onDevices = { list -> castDevices = list; publish(allDevices()) }
@@ -1100,7 +1101,7 @@ object Castor {
             var lastPlaying = 0.0 // dernière position vue en lecture, pour reconnaître la fin
             var sawPlaying = false // la télé a vraiment lu cette vidéo
             while (isActive) {
-                delay(if (failures >= 2) 10_000 else if (_state.value.live) 1000 else 2000)
+                delay(if (failures >= 2) 10_000 else if (_state.value.live && !studio.rollando.castor.data.Power.saving.value) 1000 else 2000)
                 if (busy) continue
                 val r = target() ?: break
                 // Direct : retard réel de la télé et plage enregistrée, d'après l'enregistrement du téléphone.

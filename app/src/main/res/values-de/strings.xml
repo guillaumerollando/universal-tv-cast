@@ -277,6 +277,8 @@
     <string name="start_copy">Link kopieren</string>
     <string name="start_copied">Link kopiert</string>
     <string name="next_episode">Nächste Folge</string>
+    <string name="settings_power">Energiesparmodus</string>
+    <string name="settings_power_sub">Schaltet das Leuchten um das Video, die Unschärfe und die Animationen ab und prüft Live-TV seltener. Die Videoqualität bleibt gleich. Schaltet sich automatisch ein, wenn dein Handy Akku spart.</string>
     <string name="iptv_title">Senderlisten</string>
     <string name="iptv_intro">Eine Senderliste (M3U- oder IPTV-Liste) fasst TV-Sender in einem einzigen Link zusammen. Füge ihre Adresse ein oder öffne die Datei: Hier findest du alle Sender mit ihrem Logo.</string>
     <string name="iptv_url_hint">Adresse der Liste (.m3u)</string>

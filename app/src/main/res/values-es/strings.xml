@@ -277,6 +277,8 @@
     <string name="start_copy">Copiar el enlace</string>
     <string name="start_copied">Enlace copiado</string>
     <string name="next_episode">Siguiente episodio</string>
+    <string name="settings_power">Ahorro de energía</string>
+    <string name="settings_power_sub">Desactiva el brillo alrededor del vídeo, el desenfoque y las animaciones, y sigue el directo con menos frecuencia. La calidad del vídeo no cambia. Se activa solo cuando el móvil ahorra batería.</string>
     <string name="iptv_title">Listas de canales</string>
     <string name="iptv_intro">Una lista de canales (lista M3U o IPTV) reúne canales de TV en un solo enlace. Pega su dirección o abre el archivo: aquí tendrás todos sus canales, con su logotipo.</string>
     <string name="iptv_url_hint">Dirección de la lista (.m3u)</string>

@@ -924,3 +924,13 @@ fait toute seule.
   la chaîne (Epg.fallbackGuide), utilisé seulement si aucun guide déclaré ne la connaît (12 h de cache, 1 h si absent).
 - Émulateur, appli neuve + iptv-org France seule : France 3 → « En ce moment » + « Ensuite · 03:15 … » (guide FR en 2,2 s).
 - Accueil habitué : « Pour commencer » garde ce qui n'a pas été essayé (liste de chaînes si aucune, sites si aucun site).
+
+## 2026-11-26 (nuit) — Économie d'énergie, 23 langues
+- data/Power.kt : économie d'énergie = réglage (Réglages) OU économie d'énergie du téléphone. Coupe : lueur de la vidéo
+  (plus de copie d'image), flou Haze (barre d'onglets, en-tête Chaînes → fond plein), animations décoratives
+  (animationsOff), suivi du direct 2 s au lieu d'1 s. Vidéo inchangée.
+- Traductions : tools/i18n/<qualificatif>.json (source.json = référence en/fr), lus par tools/strings.py ; 16 langues
+  ajoutées par 4 traducteurs en parallèle (ja, ko, zh-rCN, zh-rTW, ru, uk, pl, cs, ar, tr, hi, in, sv, ro, vi, th), toutes
+  vérifiées (clés, placeholders, pluriels CLDR). localeFilters étendu (sinon écartées !), generateLocaleConfig +
+  res/resources.properties : langue choisie par appli dans Android 13+. Vérifié : japonais, arabe (miroir RTL).
+- Nouveaux textes à traduire désormais aussi dans tools/i18n (sinon repli sur l'anglais).

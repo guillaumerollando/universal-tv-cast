@@ -88,7 +88,7 @@ private fun VideoSurface(modifier: Modifier, active: Boolean = true, onColor: ((
         val handler = android.os.Handler(android.os.Looper.getMainLooper())
         while (true) {
             kotlinx.coroutines.delay(400)
-            if (PhoneEngine.last?.phase != Phase.PLAYING) continue
+            if (PhoneEngine.last?.phase != Phase.PLAYING || studio.rollando.castor.data.Power.saving.value) continue
             val sv = v.videoSurfaceView as? android.view.SurfaceView ?: continue
             if (!sv.holder.surface.isValid || sv.width == 0) continue
             val ok = kotlinx.coroutines.suspendCancellableCoroutine<Boolean> { cont ->

@@ -831,3 +831,8 @@ fait toute seule.
 - Journal : « direct : morceau… » toutes les 30 morceaux (le journal du Xiaomi ne garde qu'1–2 min).
 - Lueur (mode ambiant) autour de la vidéo du téléphone : PixelCopy d'une vignette 32×18 toutes les 1,5 s pendant la
   lecture, couleur moyenne ravivée (S ×1,6, V 0,45–0,85), halo radial animé (1,4 s) derrière la vidéo.
+
+## 2026-11-26 — Navigateur qui clignotait
+- Cause : le flou de la barre d'onglets (Haze, hazeSource sur le contenu) capturait la WebView en continu → la page
+  disparaissait une image sur deux. hazeSource retiré sur l'onglet Navigateur (la page ne passe pas sous la barre).
+- Émulateur (Wikipédia) : avant, luminosité des captures 205–223 qui alterne ; après, 205,6 stable au repos et au défilement.

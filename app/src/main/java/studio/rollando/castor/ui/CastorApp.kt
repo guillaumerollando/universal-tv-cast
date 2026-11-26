@@ -208,7 +208,10 @@ fun CastorApp() {
     ) { padding ->
         // Les écrans défilent sous la barre d'onglets (sauf le navigateur) et finissent au-dessus d'elle.
         val bottom = padding.calculateBottomPadding()
-        Box(Modifier.padding(top = padding.calculateTopPadding()).fillMaxSize().hazeSource(haze)
+        Box(Modifier.padding(top = padding.calculateTopPadding()).fillMaxSize()
+            // Pas de flou derrière la barre d'onglets sur le navigateur : la capture continue de la page web la faisait
+            // clignoter (et la page ne passe pas sous la barre).
+            .then(if (tab != Tab.BROWSER) Modifier.hazeSource(haze) else Modifier)
             .then(if (tab == Tab.BROWSER) Modifier.padding(bottom = bottom) else Modifier)) {
             androidx.compose.runtime.CompositionLocalProvider(LocalBottomInset provides if (tab == Tab.BROWSER) 0.dp else bottom) {
             when (tab) {

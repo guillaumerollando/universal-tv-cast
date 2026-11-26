@@ -47,7 +47,7 @@ class VideoSniffer {
     private val fileExt = setOf("mp4", "webm", "mkv", "m4v", "mov", "avi", "mp3", "m4a")
 
     fun reset() {
-        _found.value = emptyList(); hidden.clear(); probed.clear(); misses.clear(); audioList = null; pageImage = null; nextEpisode = null
+        _found.value = emptyList(); hidden.clear(); probed.clear(); misses.clear(); audioList = null; pageImage = null; nextEpisode = null; lastLogged = -1
     }
 
     /** Dernière piste son seule repérée sur la page (pour la recoller à l'image). */
@@ -157,6 +157,9 @@ class VideoSniffer {
 
     /** La vidéo complète (liste maîtresse, plusieurs qualités) d'abord, puis la plus longue. */
     private fun sorted(l: List<Found>) = l.sortedWith(compareByDescending<Found> { it.qualities > 0 }.thenByDescending { it.duration ?: if (it.hls) 1.0 else 0.5 })
+        .also { r -> if (r.size != lastLogged) { lastLogged = r.size; android.util.Log.i("CastorWeb", "vidéos proposées : ${r.size} ${r.joinToString { it.label.take(30) }}") } }
+
+    @Volatile private var lastLogged = -1
 
     private fun update(url: String, change: (Found) -> Found) {
         synchronized(this) { _found.value = sorted(_found.value.map { if (it.url == url) change(it) else it }) }

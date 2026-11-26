@@ -934,3 +934,5 @@ fait toute seule.
   vérifiées (clés, placeholders, pluriels CLDR). localeFilters étendu (sinon écartées !), generateLocaleConfig +
   res/resources.properties : langue choisie par appli dans Android 13+. Vérifié : japonais, arabe (miroir RTL).
 - Nouveaux textes à traduire désormais aussi dans tools/i18n (sinon repli sur l'anglais).
+- Arte (émulateur, journal « vidéos proposées ») : épisode de série, 3 films, film en allemand, concert → 1 seule vidéo
+  (liste maîtresse) à chaque fois, aucun plantage. NASA+ et Internet Archive : 1 vidéo (tests précédents).

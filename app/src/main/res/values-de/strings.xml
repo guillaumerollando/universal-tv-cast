@@ -64,7 +64,7 @@
     <string name="home_videos_short">Vom Handy</string>
     <string name="home_photos">Album</string>
     <string name="home_photos_short">Fotos und Videos</string>
-    <string name="home_link_short">Video- oder .m3u8-Link</string>
+    <string name="home_link_short">Video, Livestream oder Senderliste</string>
     <string name="home_files_other">Dateien durchsuchen (Musik…)</string>
     <string name="home_resume">Weiterschauen</string>
     <string name="home_bookmarks_empty">Tippe auf ★ bei einer Seite oder einer Folge: Hier machst du genau dort weiter, wo du warst.</string>
@@ -91,7 +91,7 @@
     <string name="home_bookmarks">Lesezeichen</string>
     <string name="home_recents">Zuletzt abgespielt</string>
     <string name="cd_delete">Entfernen</string>
-    <string name="link_dialog_title">Videolink einfügen</string>
+    <string name="link_dialog_title">Link einfügen</string>
     <string name="action_cast">Streamen</string>
     <string name="action_cancel">Abbrechen</string>
     <string name="browser_hint">Suche oder Adresse</string>
@@ -273,6 +273,9 @@
     <string name="start_archive">Gemeinfreie Filme</string>
     <string name="start_arte">Filme, Dokus, Konzerte</string>
     <string name="start_nasa">Der Weltraum im Video</string>
+    <string name="start_tv_steps">Kopiere diesen Link, tippe auf „Link einfügen“ und füge ihn ein: Alle Sender sind da. Das klappt mit jeder Senderliste (M3U).</string>
+    <string name="start_copy">Link kopieren</string>
+    <string name="start_copied">Link kopiert</string>
     <string name="iptv_title">Senderlisten</string>
     <string name="iptv_intro">Eine Senderliste (M3U- oder IPTV-Liste) fasst TV-Sender in einem einzigen Link zusammen. Füge ihre Adresse ein oder öffne die Datei: Hier findest du alle Sender mit ihrem Logo.</string>
     <string name="iptv_url_hint">Adresse der Liste (.m3u)</string>

@@ -445,7 +445,8 @@ private fun LinkDialog(onDismiss: () -> Unit) {
                 }
             }
         },
-        confirmButton = { TextButton(onClick = ::go, enabled = valid) { Text(stringResource(R.string.action_cast)) } },
+        // « Ouvrir » : une vidéo s'ouvre (puis on choisit télé ou téléphone), une liste de chaînes s'importe.
+        confirmButton = { TextButton(onClick = ::go, enabled = valid) { Text(stringResource(R.string.bookmark_open)) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
     )
 }

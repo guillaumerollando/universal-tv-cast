@@ -64,7 +64,7 @@
     <string name="home_videos_short">Van je telefoon</string>
     <string name="home_photos">Album</string>
     <string name="home_photos_short">Foto’s en video’s</string>
-    <string name="home_link_short">Video- of .m3u8-link</string>
+    <string name="home_link_short">Video, livestream of zenderlijst</string>
     <string name="home_files_other">Bestanden bekijken (muziek…)</string>
     <string name="home_resume">Verder kijken</string>
     <string name="home_bookmarks_empty">Tik op ★ bij een site of een aflevering: hier ga je verder waar je was.</string>
@@ -91,7 +91,7 @@
     <string name="home_bookmarks">Bladwijzers</string>
     <string name="home_recents">Recent afgespeeld</string>
     <string name="cd_delete">Verwijderen</string>
-    <string name="link_dialog_title">Plak een videolink</string>
+    <string name="link_dialog_title">Plak een link</string>
     <string name="action_cast">Casten</string>
     <string name="action_cancel">Annuleren</string>
     <string name="browser_hint">Zoek of adres</string>
@@ -273,6 +273,9 @@
     <string name="start_archive">Films uit het publieke domein</string>
     <string name="start_arte">Films, documentaires, concerten</string>
     <string name="start_nasa">De ruimte op video</string>
+    <string name="start_tv_steps">Kopieer deze link, tik op ‘Link plakken’ en plak hem: alle zenders komen binnen. Dit werkt met elke zenderlijst (M3U).</string>
+    <string name="start_copy">Link kopiëren</string>
+    <string name="start_copied">Link gekopieerd</string>
     <string name="iptv_title">Zenderlijsten</string>
     <string name="iptv_intro">Een zenderlijst (M3U- of IPTV-lijst) bundelt tv-zenders in één link. Plak het adres of open het bestand: hier vind je alle zenders, met hun logo.</string>
     <string name="iptv_url_hint">Adres van de lijst (.m3u)</string>

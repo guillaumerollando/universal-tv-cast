@@ -64,7 +64,7 @@
     <string name="home_videos_short">Du téléphone</string>
     <string name="home_photos">Album</string>
     <string name="home_photos_short">Photos et vidéos</string>
-    <string name="home_link_short">Lien vidéo ou .m3u8</string>
+    <string name="home_link_short">Vidéo, direct ou liste de chaînes</string>
     <string name="home_files_other">Parcourir les fichiers (musique…)</string>
     <string name="home_resume">Reprendre</string>
     <string name="home_bookmarks_empty">Touche ★ sur un site ou sur l’épisode d’une série : tu la reprendras ici, là où tu en es.</string>
@@ -91,7 +91,7 @@
     <string name="home_bookmarks">Favoris</string>
     <string name="home_recents">Lu récemment</string>
     <string name="cd_delete">Retirer</string>
-    <string name="link_dialog_title">Colle un lien vidéo</string>
+    <string name="link_dialog_title">Colle un lien</string>
     <string name="action_cast">Caster</string>
     <string name="action_cancel">Annuler</string>
     <string name="browser_hint">Site ou recherche</string>
@@ -273,6 +273,9 @@
     <string name="start_archive">Films du domaine public</string>
     <string name="start_arte">Films, documentaires, concerts</string>
     <string name="start_nasa">L’espace en vidéo</string>
+    <string name="start_tv_steps">Copie ce lien, puis touche « Coller un lien » et colle-le : toutes les chaînes arrivent. Ça marche avec n’importe quelle liste de chaînes (M3U) que tu trouveras.</string>
+    <string name="start_copy">Copier le lien</string>
+    <string name="start_copied">Lien copié</string>
     <string name="iptv_title">Listes de chaînes</string>
     <string name="iptv_intro">Une liste de chaînes (liste M3U ou IPTV) regroupe des chaînes télé dans un seul lien. Colle son adresse ou ouvre le fichier : tu retrouves ici toutes ses chaînes, avec leur logo.</string>
     <string name="iptv_url_hint">Adresse de la liste (.m3u)</string>

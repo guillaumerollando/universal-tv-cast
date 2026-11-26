@@ -55,45 +55,53 @@ private val STARTER_SITES = listOf(
 
 /** « Pour commencer » : de quoi essayer l'appli tout de suite, avec du contenu gratuit et légal. */
 @Composable
-fun StarterSection(onBrowse: (String) -> Unit, showChannels: Boolean = true) {
+fun StarterSection(onBrowse: (String) -> Unit, onPasteLink: () -> Unit, showChannels: Boolean = true) {
     Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         SectionTitle(stringResource(R.string.start_title), Modifier.semantics { heading() })
-        if (showChannels) FreeChannelsCard()
+        if (showChannels) FreeChannelsCard(onPasteLink)
         StarterSites(onBrowse)
     }
 }
 
-/** Les chaînes TV gratuites et officielles (liste Free-TV) : un appui les importe et ouvre les chaînes. */
+/**
+ * Les chaînes TV gratuites et officielles (liste Free-TV) : on montre le lien, on le copie, on le colle dans
+ * « Coller un lien ». L'utilisateur apprend le geste, et comprend qu'il marche avec toute autre liste.
+ */
 @Composable
-fun FreeChannelsCard() {
-    val ctx = LocalContext.current
-    val scope = rememberCoroutineScope()
-    val lists by IptvStore.lists.collectAsState()
-    var busy by remember { mutableStateOf(false) }
-    val has = lists.any { it.source == FREE_TV_LIST }
+fun FreeChannelsCard(onPasteLink: () -> Unit) {
+    val clipboard = androidx.compose.ui.platform.LocalClipboardManager.current
+    var copied by remember { mutableStateOf(false) }
     val c = MaterialTheme.colorScheme
     Card(
-        onClick = {
-            if (has) Nav.iptv.value = ""
-            else if (!busy) {
-                busy = true
-                scope.launch {
-                    runCatching { IptvStore.import(ctx, FREE_TV_LIST) }.onSuccess { Nav.iptv.value = "" }
-                    busy = false
-                }
-            }
-        },
         colors = CardDefaults.cardColors(containerColor = c.surfaceContainerHigh),
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            if (busy) CircularProgressIndicator(Modifier.size(28.dp), strokeWidth = 3.dp)
-            else Icon(Icons.Rounded.LiveTv, null, Modifier.size(28.dp), tint = c.primary)
-            Spacer(Modifier.width(16.dp))
-            Column {
-                Text(stringResource(R.string.start_tv_title), style = MaterialTheme.typography.titleMedium)
-                Text(stringResource(R.string.start_tv_sub), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Rounded.LiveTv, null, Modifier.size(28.dp), tint = c.primary)
+                Spacer(Modifier.width(14.dp))
+                Column {
+                    Text(stringResource(R.string.start_tv_title), style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.start_tv_sub), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
+                }
+            }
+            // Le lien, en entier, sélectionnable : c'est lui qu'on apprend à coller.
+            androidx.compose.material3.Surface(shape = RoundedCornerShape(12.dp), color = c.surfaceContainerHighest, modifier = Modifier.fillMaxWidth()) {
+                androidx.compose.foundation.text.selection.SelectionContainer {
+                    Text(FREE_TV_LIST, style = MaterialTheme.typography.bodySmall.copy(fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace),
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp))
+                }
+            }
+            Text(stringResource(R.string.start_tv_steps), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                androidx.compose.material3.FilledTonalButton(
+                    onClick = { clipboard.setText(androidx.compose.ui.text.AnnotatedString(FREE_TV_LIST)); copied = true },
+                    modifier = Modifier.weight(1f),
+                ) { Text(stringResource(if (copied) R.string.start_copied else R.string.start_copy), maxLines = 1) }
+                androidx.compose.material3.OutlinedButton(onClick = onPasteLink, modifier = Modifier.weight(1f)) {
+                    Text(stringResource(R.string.home_link), maxLines = 1)
+                }
             }
         }
     }

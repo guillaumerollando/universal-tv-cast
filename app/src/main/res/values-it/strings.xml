@@ -64,7 +64,7 @@
     <string name="home_videos_short">Dal telefono</string>
     <string name="home_photos">Album</string>
     <string name="home_photos_short">Foto e video</string>
-    <string name="home_link_short">Link video o .m3u8</string>
+    <string name="home_link_short">Video, diretta o lista di canali</string>
     <string name="home_files_other">Sfoglia i file (musica…)</string>
     <string name="home_resume">Riprendi</string>
     <string name="home_bookmarks_empty">Tocca ★ su un sito o sull’episodio di una serie: la riprenderai qui, dove eri rimasto.</string>
@@ -91,7 +91,7 @@
     <string name="home_bookmarks">Preferiti</string>
     <string name="home_recents">Riprodotti di recente</string>
     <string name="cd_delete">Rimuovi</string>
-    <string name="link_dialog_title">Incolla il link di un video</string>
+    <string name="link_dialog_title">Incolla un link</string>
     <string name="action_cast">Trasmetti</string>
     <string name="action_cancel">Annulla</string>
     <string name="browser_hint">Sito o ricerca</string>
@@ -273,6 +273,9 @@
     <string name="start_archive">Film di pubblico dominio</string>
     <string name="start_arte">Film, documentari, concerti</string>
     <string name="start_nasa">Lo spazio in video</string>
+    <string name="start_tv_steps">Copia questo link, tocca «Incolla un link» e incollalo: arrivano tutti i canali. Funziona con qualsiasi lista di canali (M3U).</string>
+    <string name="start_copy">Copia il link</string>
+    <string name="start_copied">Link copiato</string>
     <string name="iptv_title">Liste di canali</string>
     <string name="iptv_intro">Una lista di canali (lista M3U o IPTV) riunisce canali TV in un solo link. Incolla il suo indirizzo o apri il file: qui troverai tutti i canali, con il loro logo.</string>
     <string name="iptv_url_hint">Indirizzo della lista (.m3u)</string>

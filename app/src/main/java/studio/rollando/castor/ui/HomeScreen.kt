@@ -222,7 +222,7 @@ fun HomeScreen(
         }
 
         // Nouveau venu : du contenu gratuit et légal pour essayer l'appli tout de suite.
-        item { StarterSection(onBrowse = { onBrowse(it) }) }
+        item { StarterSection(onBrowse = { onBrowse(it) }, onPasteLink = onPasteLink) }
 
         item { SectionTitle(stringResource(R.string.home_bookmarks), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
         item {

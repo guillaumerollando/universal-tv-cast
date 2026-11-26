@@ -856,3 +856,9 @@ fait toute seule.
 - Lecture de la couleur toutes les 0,4 s (au lieu de 1,5 s), transition 0,45 s (au lieu de 1,4 s) : jusqu'à ~3 s de
   retard avant, < 1 s maintenant. Pixels lus en une fois (getPixels). Copie 32×18 par la carte graphique : coût négligeable.
 - Non revérifié à l'écran (navigation de l'émulateur ratée) ; installé sur le téléphone.
+
+## 2026-11-26 — Chaînes gratuites : apprendre à coller le lien
+- Carte « Chaînes TV gratuites » : le lien Free-TV affiché (sélectionnable), « Copier le lien » (→ « Lien copié ») et
+  « Coller un lien » (ouvre la case habituelle) ; explique que ça marche avec toute liste M3U. Plus d'import en un appui.
+- Tuile « Coller un lien » : « Vidéo, direct ou liste de chaînes ». Case : titre « Colle un lien », bouton « Ouvrir ».
+- Émulateur (appli remise à zéro) : copier → Coller un lien → suggestion du clavier → valider → page Chaînes ouverte.

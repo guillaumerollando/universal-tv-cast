@@ -69,7 +69,9 @@ class VideoSniffer {
         val url = req.url.toString()
         if (!url.startsWith("http")) return
         val ext = Mime.ext(url)
-        val hls = ext == "m3u8" || url.contains(".m3u8")
+        // Une liste HLS se termine par .m3u8 dans son chemin ; pas « m3u8 » au milieu des paramètres (mesures
+        // d'audience d'Arte, journaux de lecteurs…), qui faisaient apparaître des dizaines de fausses vidéos.
+        val hls = ext == "m3u8" || req.url.path.orEmpty().endsWith(".m3u8", ignoreCase = true)
         if (AdBlock.isAd(req.url)) return
         if (hls || ext in fileExt) { add(url, hls, req.requestHeaders); return }
         // Adresse sans extension connue : un lecteur vidéo qui demande « à partir de l'octet 0 », ou une adresse
@@ -112,8 +114,20 @@ class VideoSniffer {
         }
     }
 
+
     fun add(url: String, hls: Boolean, reqHeaders: Map<String, String> = emptyMap()) {
-        if (_found.value.any { it.url == url }) return
+        // Plusieurs fils peuvent trouver la même vidéo en même temps : une seule fois dans la liste, et pas plus de 15.
+        synchronized(this) {
+            if (_found.value.any { it.url == url } || _found.value.size >= 15) return
+            // Déjà couvert par une liste maîtresse du même dossier (morceau, piste, variante) : rien de plus à proposer.
+            val dir = url.substringBefore('?').substringBeforeLast('/')
+            if (_found.value.any { it.qualities > 0 && it.url.substringBefore('?').substringBeforeLast('/') == dir }) return
+            if (!hls && _found.value.any { it.qualities > 0 && baseOf(url).startsWith(baseOf(it.url) + "_") }) return
+            addLocked(url, hls, reqHeaders)
+        }
+    }
+
+    private fun addLocked(url: String, hls: Boolean, reqHeaders: Map<String, String>) {
         val headers = LinkedHashMap<String, String>()
         for ((k, v) in reqHeaders) {
             if (k.equals("range", true) || k.equals("accept-encoding", true)) continue
@@ -134,7 +148,15 @@ class VideoSniffer {
     }
 
     /** Les plus longues d'abord (le film avant les pubs de 12 s) ; durée inconnue : les HLS d'abord. */
-    private fun sorted(l: List<Found>) = l.sortedWith(compareByDescending<Found> { it.duration ?: if (it.hls) 1.0 else 0.5 })
+    /** Nom de fichier sans extension (« 127960-000-A »). */
+    private fun baseOf(u: String) = Uri.decode(u.substringBefore('?').substringAfterLast('/')).substringBeforeLast('.')
+
+    /** Morceau, piste ou variante d'une vidéo déjà proposée par sa liste maîtresse (« 127960-000-A_v1080… »). */
+    private fun partOf(it: Found, master: Found): Boolean =
+        it.url != master.url && !it.hls && baseOf(it.url).startsWith(baseOf(master.url) + "_")
+
+    /** La vidéo complète (liste maîtresse, plusieurs qualités) d'abord, puis la plus longue. */
+    private fun sorted(l: List<Found>) = l.sortedWith(compareByDescending<Found> { it.qualities > 0 }.thenByDescending { it.duration ?: if (it.hls) 1.0 else 0.5 })
 
     private fun update(url: String, change: (Found) -> Found) {
         synchronized(this) { _found.value = sorted(_found.value.map { if (it.url == url) change(it) else it }) }
@@ -187,6 +209,13 @@ class VideoSniffer {
             val variants = mutableListOf<String>()
             var maxH = 0
             for ((i, l) in lines.withIndex()) {
+                // Pistes son et sous-titres de la liste maîtresse (« aud_VF », « aud_VO »…) : comprises dans la vidéo.
+                if (l.startsWith("#EXT-X-MEDIA")) {
+                    Regex("URI=\"([^\"]+)\"").find(l)?.groupValues?.get(1)?.let { u ->
+                        runCatching { java.net.URL(java.net.URL(f.url), u).toString() }.getOrNull()?.let(variants::add)
+                    }
+                    continue
+                }
                 if (!l.startsWith("#EXT-X-STREAM-INF")) continue
                 Regex("RESOLUTION=\\d+x(\\d+)").find(l)?.groupValues?.get(1)?.toIntOrNull()?.let { maxH = maxOf(maxH, it) }
                 lines.drop(i + 1).firstOrNull { it.isNotEmpty() && !it.startsWith("#") }?.let { u ->
@@ -198,10 +227,13 @@ class VideoSniffer {
             val d = variants.firstOrNull()?.let { v ->
                 runCatching { hlsDuration(String(studio.rollando.castor.net.Http.fetch(v, f.headers, connectTimeout = 8000).bytes)) }.getOrNull()
             }
+            // Tout ce qui vient du même dossier que la liste maîtresse (pistes, morceaux, variantes) est déjà dedans :
+            // une seule ligne « Auto · N qualités » pour cette vidéo.
+            val dir = f.url.substringBefore('?').substringBeforeLast('/')
             synchronized(this) {
                 _found.value = sorted(_found.value
-                    .filter { it.url !in variants }
-                    .map { if (it.url == f.url) it.copy(qualities = variants.size, maxHeight = maxH, duration = d ?: it.duration) else it })
+                    .filter { it.url !in variants && (it.url == f.url || (it.url.substringBefore('?').substringBeforeLast('/') != dir && !partOf(it, f))) }
+                    .map { if (it.url == f.url) it.copy(qualities = variants.count { v -> !v.contains("aud", true) }.coerceAtLeast(1), maxHeight = maxH, duration = d ?: it.duration) else it })
             }
         }
     }

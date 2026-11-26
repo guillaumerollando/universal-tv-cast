@@ -533,7 +533,7 @@ fun BrowserScreen(b: BrowserController) {
                 Spacer(Modifier.height(12.dp))
             }
             LazyColumn(contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 32.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                itemsIndexed(found, key = { _, f -> f.url }) { i, f ->
+                itemsIndexed(found, key = { i, f -> "$i|${f.url}" }) { i, f ->
                     ListItem(
                         headlineContent = {
                             Row(verticalAlignment = Alignment.CenterVertically) {

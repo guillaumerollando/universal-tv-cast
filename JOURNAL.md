@@ -893,3 +893,13 @@ fait toute seule.
 - Carte « Chaînes TV gratuites » repliée par défaut (une ligne), dépliée d'un appui.
 - Son « Coller un lien » : remonte jusqu'à la tuile « Coller un lien » et l'entoure d'un contour ambré qui pulse ~3 s
   (on apprend où elle est). Vérifié sur l'émulateur (appli remise à zéro).
+
+## 2026-11-26 — Arte : plantage et « 20 milliards de vidéos »
+- Plantage (journal du téléphone, 02:51) : IllegalArgumentException « Key … » = même adresse deux fois dans la liste
+  « Vidéos de la page » (clé de liste dupliquée). Ajout à la liste synchronisé et sans doublon, au plus 15 ; clé de liste unique.
+- Fausses vidéos : « .m3u8 » cherché dans toute l'adresse (paramètres des mesures d'audience d'Arte inclus) → seulement
+  un chemin qui finit par .m3u8.
+- Liste maîtresse : ses pistes #EXT-X-MEDIA (aud_VF, aud_VO…), les éléments du même dossier, et les fichiers à son nom
+  (« 127960-000-A_v1080… ») sont masqués ; la vidéo « Auto · N qualités » passe en tête.
+- Émulateur, Arte « Flow » : avant 7 entrées (son seul, morceaux) ; après « 1 vidéo » = 127960-000-A.m3u8, 1 h 21, 6 qualités.
+  Accueil Arte : plus de fausses vidéos. Aucun plantage.

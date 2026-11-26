@@ -321,7 +321,9 @@ private fun AddListPanel(busy: Boolean, onImport: (String) -> Unit, onPickFile: 
             Spacer(Modifier.width(8.dp))
             Text(stringResource(R.string.iptv_file))
         }
-        if (!compact) {
+        // La liste gratuite (Free-TV, avec son guide des programmes) : proposée tant qu'elle n'est pas importée.
+        val lists by IptvStore.lists.collectAsState()
+        if (lists.none { it.source == FREE_TV_LIST }) {
             Card(
                 onClick = { if (!busy) onImport(FREE_TV_LIST) },
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
@@ -337,9 +339,9 @@ private fun AddListPanel(busy: Boolean, onImport: (String) -> Unit, onPickFile: 
                     }
                 }
             }
-            Text(stringResource(R.string.iptv_note), style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
+        if (!compact) Text(stringResource(R.string.iptv_note), style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 

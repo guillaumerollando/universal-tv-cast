@@ -488,7 +488,7 @@ class ProxyServer(private val ctx: Context) {
             out.write(data)
             out.flush()
             buf.readerEnd = e.end
-            if (e.seg.seq % 5 == 0L) Log.i(TAG, "direct : morceau ${e.seg.seq}, retard ${buf.behind.toInt()} s, remontée possible ${buf.window.toInt()} s")
+            if (e.seg.seq % 30 == 0L) Log.i(TAG, "direct : morceau ${e.seg.seq}, retard ${buf.behind.toInt()} s, remontée possible ${buf.window.toInt()} s")
         }
         out.finish()
     }

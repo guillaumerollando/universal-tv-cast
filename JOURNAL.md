@@ -823,3 +823,11 @@ fait toute seule.
 - LiveClock : le direct se mesure depuis le vrai départ de la lecture (le temps de chargement ne compte plus ; sinon
   « Revenir au direct » afficherait −0:05). Avant le départ : retard demandé, figé.
 - Émulateur (téléphone) : direct → pause 3 s « −0:03 » → reprise stable → Revenir au direct « EN DIRECT ».
+
+## 2026-11-26 — Guide absent chez Guillaume, lueur autour de la vidéo
+- Diagnostic (version de diagnostic installée un instant, données lues puis version normale réinstallée) : son téléphone
+  n'a que la liste « iptv-org · France », qui ne déclare aucun guide → rien à afficher. « Essayer une liste gratuite »
+  (Free-TV) est maintenant aussi dans « Ajouter une liste » tant qu'elle n'est pas importée.
+- Journal : « direct : morceau… » toutes les 30 morceaux (le journal du Xiaomi ne garde qu'1–2 min).
+- Lueur (mode ambiant) autour de la vidéo du téléphone : PixelCopy d'une vignette 32×18 toutes les 1,5 s pendant la
+  lecture, couleur moyenne ravivée (S ×1,6, V 0,45–0,85), halo radial animé (1,4 s) derrière la vidéo.

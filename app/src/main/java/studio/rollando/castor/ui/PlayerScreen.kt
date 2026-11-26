@@ -107,6 +107,7 @@ import studio.rollando.castor.cast.Castor
 import studio.rollando.castor.cast.Intake
 import studio.rollando.castor.cast.Phase
 import java.util.Locale
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.runtime.collectAsState
 
 @Composable
@@ -125,9 +126,26 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
     // Une chaîne reste une chaîne même si son flux ne répond pas (écran de chaîne, zapping pour passer à une autre).
     val channel = state.live || media.channel != null
     val iptvOpen by Nav.iptv.collectAsState()
+    // Lueur autour de la vidéo du téléphone, aux couleurs de l'image (comme le « mode ambiant » des grands lecteurs).
+    var glow by remember { mutableStateOf<Color?>(null) }
+    LaunchedEffect(state.onPhone, media.url) { glow = null }
+    val glowColor by androidx.compose.animation.animateColorAsState(
+        if (state.onPhone) glow ?: Color.Transparent else Color.Transparent, androidx.compose.animation.core.tween(1400), label = "lueur")
+    Box(Modifier.fillMaxSize()) {
+    if (glowColor.alpha > 0f) Box(
+        Modifier.fillMaxWidth().height(560.dp).drawBehind {
+            drawRect(Brush.radialGradient(
+                listOf(glowColor.copy(alpha = 0.6f * glowColor.alpha), glowColor.copy(alpha = 0.22f * glowColor.alpha), Color.Transparent),
+                center = androidx.compose.ui.geometry.Offset(size.width / 2, size.width * 0.32f),
+                radius = size.width * 0.95f,
+            ))
+        },
+    )
     Column(Modifier.fillMaxSize()) {
     // Sur le téléphone, la vidéo reste en haut pendant qu'on fait défiler le reste.
-    if (state.onPhone) Box(Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp)) { PhoneVideo(state, active = iptvOpen == null) }
+    if (state.onPhone) Box(Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp)) {
+        PhoneVideo(state, active = iptvOpen == null, onGlow = { glow = it })
+    }
     Box(Modifier.fillMaxWidth().weight(1f)) {
     // L'ambiance (image du film floutée) est dessinée derrière tout l'écran, en-tête compris : voir Ambient().
     Column(
@@ -257,6 +275,7 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
         // (flux continu ou non) se règle seulement dans les Réglages.
         if (channel) ZapSection(media) else SubtitlesCard(state)
         Spacer(Modifier.height(8.dp + LocalBottomInset.current))
+    }
     }
     }
     }

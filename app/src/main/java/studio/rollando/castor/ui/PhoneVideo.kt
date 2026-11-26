@@ -76,13 +76,34 @@ import studio.rollando.castor.cast.PhoneEngine
  */
 @OptIn(UnstableApi::class)
 @Composable
-private fun VideoSurface(modifier: Modifier, active: Boolean = true) {
+private fun VideoSurface(modifier: Modifier, active: Boolean = true, onColor: ((Color) -> Unit)? = null) {
     val player by PhoneEngine.playerFlow.collectAsState()
     if (!active) { Box(modifier.background(Color.Black)); return }
+    var view by remember { mutableStateOf<PlayerView?>(null) }
+    // Couleur de l'image, pour la lueur autour de la vidéo : une vignette de 32 × 18 px copiée toutes les 1,5 s,
+    // seulement pendant la lecture (rien à calculer en pause ; la copie se fait sur la carte graphique).
+    if (onColor != null) LaunchedEffect(view) {
+        val v = view ?: return@LaunchedEffect
+        val bmp = android.graphics.Bitmap.createBitmap(32, 18, android.graphics.Bitmap.Config.ARGB_8888)
+        val handler = android.os.Handler(android.os.Looper.getMainLooper())
+        while (true) {
+            kotlinx.coroutines.delay(1500)
+            if (PhoneEngine.last?.phase != Phase.PLAYING) continue
+            val sv = v.videoSurfaceView as? android.view.SurfaceView ?: continue
+            if (!sv.holder.surface.isValid || sv.width == 0) continue
+            val ok = kotlinx.coroutines.suspendCancellableCoroutine<Boolean> { cont ->
+                runCatching {
+                    android.view.PixelCopy.request(sv, bmp, { r -> if (cont.isActive) cont.resume(r == android.view.PixelCopy.SUCCESS) {} }, handler)
+                }.onFailure { if (cont.isActive) cont.resume(false) {} }
+            }
+            if (ok) onColor(dominant(bmp))
+        }
+    }
     key(player) {
         AndroidView(
             factory = { ctx ->
                 PlayerView(ctx).apply {
+                    view = this
                     useController = false
                     keepScreenOn = true
                     resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
@@ -125,7 +146,7 @@ private fun Activity.orientation(o: Int) { requestedOrientation = o }
 
 /** Dans l'écran de lecture : la vidéo à la place du grand cadre, avec un bouton plein écran. */
 @Composable
-fun PhoneVideo(state: CastState, active: Boolean = true) {
+fun PhoneVideo(state: CastState, active: Boolean = true, onGlow: ((Color) -> Unit)? = null) {
     val activity = LocalContext.current as? Activity
     val portrait = androidx.compose.ui.platform.LocalConfiguration.current.orientation != android.content.res.Configuration.ORIENTATION_LANDSCAPE
     var flash by remember { mutableStateOf<Pair<Int, Long>?>(null) }
@@ -134,7 +155,7 @@ fun PhoneVideo(state: CastState, active: Boolean = true) {
         Modifier.fillMaxWidth().aspectRatio(16f / 9f).clip(RoundedCornerShape(28.dp)).background(Color.Black)
             .skipGestures(onTap = {}, onSkip = { d -> Castor.skip(d.toDouble()); flash = d to System.currentTimeMillis() }),
     ) {
-        VideoSurface(Modifier.fillMaxSize(), active = portrait && active)
+        VideoSurface(Modifier.fillMaxSize(), active = portrait && active, onColor = onGlow)
         if (state.phase == Phase.SENDING || state.phase == Phase.BUFFERING || state.phase == Phase.LOADING) {
             CircularProgressIndicator(Modifier.align(Alignment.Center), color = Color.White)
         }
@@ -274,3 +295,19 @@ fun MiniPlayer(state: CastState, bottom: androidx.compose.ui.unit.Dp, modifier: 
 }
 
 private fun Modifier.androidx_shadow() = this.shadow(12.dp, RoundedCornerShape(16.dp))
+
+/** Couleur d'ensemble de l'image, un peu ravivée (une image terne donnerait une lueur grise). */
+private fun dominant(b: android.graphics.Bitmap): Color {
+    var r = 0L; var g = 0L; var bl = 0L; var n = 0
+    for (y in 0 until b.height) for (x in 0 until b.width) {
+        val p = b.getPixel(x, y)
+        r += android.graphics.Color.red(p); g += android.graphics.Color.green(p); bl += android.graphics.Color.blue(p); n++
+    }
+    if (n == 0) return Color.Transparent
+    val hsv = FloatArray(3)
+    android.graphics.Color.RGBToHSV((r / n).toInt(), (g / n).toInt(), (bl / n).toInt(), hsv)
+    // Sur le fond sombre de l'appli, une lueur trop sombre ne se verrait pas : on la garde assez claire et colorée.
+    hsv[1] = (hsv[1] * 1.6f).coerceIn(0.25f, 1f)
+    hsv[2] = hsv[2].coerceIn(0.45f, 0.85f)
+    return Color(android.graphics.Color.HSVToColor(hsv))
+}

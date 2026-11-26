@@ -56,6 +56,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import studio.rollando.castor.R
+import androidx.compose.ui.draw.shadow
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.foundation.shape.CircleShape
@@ -124,7 +125,7 @@ private fun Activity.orientation(o: Int) { requestedOrientation = o }
 
 /** Dans l'écran de lecture : la vidéo à la place du grand cadre, avec un bouton plein écran. */
 @Composable
-fun PhoneVideo(state: CastState) {
+fun PhoneVideo(state: CastState, active: Boolean = true) {
     val activity = LocalContext.current as? Activity
     val portrait = androidx.compose.ui.platform.LocalConfiguration.current.orientation != android.content.res.Configuration.ORIENTATION_LANDSCAPE
     var flash by remember { mutableStateOf<Pair<Int, Long>?>(null) }
@@ -133,7 +134,7 @@ fun PhoneVideo(state: CastState) {
         Modifier.fillMaxWidth().aspectRatio(16f / 9f).clip(RoundedCornerShape(28.dp)).background(Color.Black)
             .skipGestures(onTap = {}, onSkip = { d -> Castor.skip(d.toDouble()); flash = d to System.currentTimeMillis() }),
     ) {
-        VideoSurface(Modifier.fillMaxSize(), active = portrait)
+        VideoSurface(Modifier.fillMaxSize(), active = portrait && active)
         if (state.phase == Phase.SENDING || state.phase == Phase.BUFFERING || state.phase == Phase.LOADING) {
             CircularProgressIndicator(Modifier.align(Alignment.Center), color = Color.White)
         }
@@ -247,3 +248,29 @@ private fun CenterControls(s: CastState, loading: Boolean, modifier: Modifier) {
         }
     }
 }
+
+/**
+ * Hors de l'écran de lecture (accueil, chaînes…) pendant une lecture sur le téléphone : la vidéo continue dans une
+ * petite vignette en bas à droite. Un appui ramène à l'écran de lecture.
+ */
+@Composable
+fun MiniPlayer(state: CastState, bottom: androidx.compose.ui.unit.Dp, modifier: Modifier = Modifier) {
+    Box(modifier.fillMaxSize().padding(end = 12.dp, bottom = bottom), contentAlignment = Alignment.BottomEnd) {
+        Box(
+            Modifier.size(width = 192.dp, height = 108.dp)
+                .androidx_shadow()
+                .clip(RoundedCornerShape(16.dp)).background(Color.Black)
+                .clickable(role = androidx.compose.ui.semantics.Role.Button, onClickLabel = state.media?.title) {
+                    Nav.iptv.value = null
+                    Nav.tab.value = Tab.PLAYER
+                },
+        ) {
+            VideoSurface(Modifier.fillMaxSize())
+            if (state.phase == Phase.SENDING || state.phase == Phase.BUFFERING) {
+                CircularProgressIndicator(Modifier.align(Alignment.Center).size(28.dp), color = Color.White, strokeWidth = 3.dp)
+            }
+        }
+    }
+}
+
+private fun Modifier.androidx_shadow() = this.shadow(12.dp, RoundedCornerShape(16.dp))

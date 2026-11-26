@@ -810,3 +810,10 @@ fait toute seule.
 - 20 s sans démarrer (DLNA) : « La télé ne démarre pas la lecture. Est-elle allumée ? … » + bouton Annuler (sans rien couper).
 - LiveClock : le retard ne grandit qu'une fois la lecture vraiment partie (avant : retard demandé) — fini le « −15 » sans image.
 - Fausse télé : FAKE_STANDBY=1 (accepte, reste en transition). Émulateur : message à 20 s, Annuler, retard stable.
+
+## 2026-11-26 — Chaîne qui échoue, vidéo fixe, vignette
+- Une chaîne (media.channel) garde l'écran de chaîne, le programme et la section Zapper même si son flux ne répond pas
+  (avant : plus « en direct » → écran de vidéo, plus de zapping).
+- Téléphone : la vidéo reste en haut de l'écran de lecture, le reste défile dessous.
+- MiniPlayer : lecture sur le téléphone, ailleurs que sur l'écran de lecture (accueil, chaînes…) → vignette 192×108 en bas
+  à droite (au-dessus de la barre d'onglets) ; un appui ramène à l'écran de lecture. Un seul affichage tient la vidéo.

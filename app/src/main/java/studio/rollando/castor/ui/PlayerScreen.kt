@@ -107,6 +107,7 @@ import studio.rollando.castor.cast.Castor
 import studio.rollando.castor.cast.Intake
 import studio.rollando.castor.cast.Phase
 import java.util.Locale
+import androidx.compose.runtime.collectAsState
 
 @Composable
 fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
@@ -121,15 +122,21 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
     }
     val c = MaterialTheme.colorScheme
     val film = media.backdropUrl != null
-    Box(Modifier.fillMaxSize()) {
+    // Une chaîne reste une chaîne même si son flux ne répond pas (écran de chaîne, zapping pour passer à une autre).
+    val channel = state.live || media.channel != null
+    val iptvOpen by Nav.iptv.collectAsState()
+    Column(Modifier.fillMaxSize()) {
+    // Sur le téléphone, la vidéo reste en haut pendant qu'on fait défiler le reste.
+    if (state.onPhone) Box(Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp)) { PhoneVideo(state, active = iptvOpen == null) }
+    Box(Modifier.fillMaxWidth().weight(1f)) {
     // L'ambiance (image du film floutée) est dessinée derrière tout l'écran, en-tête compris : voir Ambient().
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        if (state.onPhone) PhoneVideo(state)
+        if (state.onPhone) Unit
         else if (film) FilmHeader(state)
-        else if (state.live) ChannelHeader(state)
+        else if (channel) ChannelHeader(state)
         // « Affiche » : grand cadre qui dit ce qui se passe sur la télé.
         else Box(
             Modifier
@@ -160,7 +167,7 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
         }
 
         // Sur le téléphone : la chaîne par son logo (comme partout ailleurs), un film par son titre.
-        if (state.onPhone && state.live) Row(verticalAlignment = Alignment.CenterVertically) {
+        if (state.onPhone && channel) Row(verticalAlignment = Alignment.CenterVertically) {
             ChannelArt(
                 name = media.channel ?: media.title, logo = media.posterUrl, streamUrl = media.url, pad = ChannelTiles.logoPad,
                 textStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
@@ -171,9 +178,9 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
             NowNext(media, Modifier.weight(1f))
         }
         // Sur la télé : le programme en cours sous l'en-tête de la chaîne.
-        else if (state.live) NowNext(media)
+        else if (channel) NowNext(media)
         else if (state.onPhone && film) Text(media.title, style = MaterialTheme.typography.titleLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
-        if (!film && !state.live) Column {
+        if (!film && !channel) Column {
             Text(media.title, style = MaterialTheme.typography.titleLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
             media.host?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant) }
         }
@@ -248,8 +255,9 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
         }
         // Direct : pas de sous-titres à régler ; à la place, de quoi zapper. Le mode de lecture des listes HLS
         // (flux continu ou non) se règle seulement dans les Réglages.
-        if (state.live) ZapSection(media) else SubtitlesCard(state)
+        if (channel) ZapSection(media) else SubtitlesCard(state)
         Spacer(Modifier.height(8.dp + LocalBottomInset.current))
+    }
     }
     }
 }

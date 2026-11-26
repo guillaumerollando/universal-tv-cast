@@ -78,6 +78,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.asPaddingValues
 import dev.chrisbanes.haze.hazeSource
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -231,6 +233,12 @@ fun CastorApp() {
     // Page de détail « Chaînes » : plein écran, sans l'en-tête ni la barre d'onglets de l'appli.
     val iptvOpen by Nav.iptv.collectAsState()
     if (iptvOpen != null) IptvScreen(onClose = { Nav.iptv.value = null })
+    // Lecture sur le téléphone, ailleurs que sur l'écran de lecture : la vidéo continue en vignette.
+    val playingOnPhone = state.onPhone && (state.active || state.phase == studio.rollando.castor.cast.Phase.SENDING)
+    if (playingOnPhone && !landscape && (tab != Tab.PLAYER || iptvOpen != null)) {
+        val bottomBar = if (iptvOpen != null) 0.dp else 88.dp
+        MiniPlayer(state, bottom = bottomBar + 12.dp + androidx.compose.foundation.layout.WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding())
+    }
     if (showTvs) TvSheet(onDismiss = { showTvs = false })
     if (showSettings) SettingsSheet(onDismiss = { showSettings = false })
     val showHelp by Nav.help.collectAsState()

@@ -784,3 +784,12 @@ fait toute seule.
   endroit). « Choisir une télé » depuis l'écran de lecture lance dès la télé choisie.
 - Exception : une autre appli qui nous envoie une vidéo (« Caster sur la télé ») = télé explicite (open(toTv = true)).
 - Émulateur : appli relancée, appui sur une chaîne → 0 envoi ; choix téléphone puis « chaîne au hasard » → téléphone, 0 envoi.
+
+## 2026-11-26 — Programme en cours (guide déclaré par les listes)
+- Vérifié : les flux en direct ne portent pas le nom du programme (Arte, TV5, NHK, DW, Africa 24, Rai News : pas d'EIT/SDT,
+  ID3 sans titre). Source retenue avec Guillaume : les guides XMLTV que déclare la liste importée (x-tvg-url / url-tvg).
+- data/Epg.kt : seulement le guide du pays de la chaîne (tvg-country, ou suffixe du tvg-id, sinon pays du téléphone ;
+  fichiers « _FR1.xml.gz »…), jamais « ALL_SOURCES ». Téléchargé au plus toutes les 12 h, lu en flux, résumé gardé en
+  cache (programmes de −6 h à +30 h). Correspondance par le nom de la chaîne (les tvg-id des listes ≠ ceux des guides).
+- Écran de lecture : « En ce moment » + progression + « Ensuite · 01:32 … » (sous l'en-tête télé ; à côté du logo sur
+  téléphone ; titre seul à côté du logo en plein écran). Émulateur : guide FR (4 Mo) lu en 2,7 s ; Arte : 50 programmes.

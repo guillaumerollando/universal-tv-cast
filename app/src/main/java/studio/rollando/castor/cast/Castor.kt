@@ -124,6 +124,7 @@ object Castor {
         app = ctx.applicationContext
         Library.init(app)
         studio.rollando.castor.data.IptvStore.init(app)
+        studio.rollando.castor.data.Epg.init(app)
         _state.update { it.copy(continuous = Library.continuousHls.value) }
         CastControl.init(app)
         CastControl.onDevices = { list -> castDevices = list; publish(allDevices()) }

@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Fullscreen
@@ -185,7 +186,8 @@ fun PhoneFullscreen(state: CastState) {
             Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.35f))) {
                 // En haut : le logo de la chaîne (un film : son titre).
                 val m = state.media
-                Box(Modifier.align(Alignment.TopStart).safeDrawingPadding().padding(horizontal = 24.dp, vertical = 14.dp)) {
+                Row(Modifier.align(Alignment.TopStart).safeDrawingPadding().padding(horizontal = 24.dp, vertical = 14.dp),
+                    verticalAlignment = Alignment.CenterVertically) {
                     if (m != null && state.live) ChannelArt(
                         name = m.channel ?: m.title, logo = m.posterUrl, streamUrl = m.url, pad = ChannelTiles.logoPad,
                         textStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
@@ -193,6 +195,12 @@ fun PhoneFullscreen(state: CastState) {
                             .clip(RoundedCornerShape(ChannelTiles.corner)),
                     ) else Text(m?.title.orEmpty(), color = Color.White, style = MaterialTheme.typography.titleMedium,
                         maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    if (m != null && state.live) {
+                        androidx.compose.foundation.layout.Spacer(Modifier.size(14.dp))
+                        androidx.compose.runtime.CompositionLocalProvider(androidx.compose.material3.LocalContentColor provides Color.White) {
+                            NowNext(m, Modifier.widthIn(max = 420.dp), compact = true)
+                        }
+                    }
                 }
                 // Au centre : reculer, lecture/pause, avancer.
                 CenterControls(state, loading, Modifier.align(Alignment.Center))

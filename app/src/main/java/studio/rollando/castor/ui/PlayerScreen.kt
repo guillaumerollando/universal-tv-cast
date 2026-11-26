@@ -160,12 +160,18 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
         }
 
         // Sur le téléphone : la chaîne par son logo (comme partout ailleurs), un film par son titre.
-        if (state.onPhone && state.live) ChannelArt(
-            name = media.channel ?: media.title, logo = media.posterUrl, streamUrl = media.url, pad = ChannelTiles.logoPad,
-            textStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
-            modifier = Modifier.width(ChannelTiles.width).aspectRatio(16f / 10f).clip(RoundedCornerShape(ChannelTiles.corner))
-                .semantics { contentDescription = media.channel ?: media.title },
-        )
+        if (state.onPhone && state.live) Row(verticalAlignment = Alignment.CenterVertically) {
+            ChannelArt(
+                name = media.channel ?: media.title, logo = media.posterUrl, streamUrl = media.url, pad = ChannelTiles.logoPad,
+                textStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
+                modifier = Modifier.width(ChannelTiles.width).aspectRatio(16f / 10f).clip(RoundedCornerShape(ChannelTiles.corner))
+                    .semantics { contentDescription = media.channel ?: media.title },
+            )
+            Spacer(Modifier.width(14.dp))
+            NowNext(media, Modifier.weight(1f))
+        }
+        // Sur la télé : le programme en cours sous l'en-tête de la chaîne.
+        else if (state.live) NowNext(media)
         else if (state.onPhone && film) Text(media.title, style = MaterialTheme.typography.titleLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
         if (!film && !state.live) Column {
             Text(media.title, style = MaterialTheme.typography.titleLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)

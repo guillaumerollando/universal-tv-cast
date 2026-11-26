@@ -80,7 +80,7 @@ object IptvStore {
         val p = Playlist(id, old?.name ?: name ?: Iptv.nameFor(source), source, channels.size, System.currentTimeMillis())
         _lists.value = listOf(p) + _lists.value.filter { it.id != id }
         save()
-        logoIndex = null; allCache = null
+        logoIndex = null; allCache = null; guidesCache = null
         p
     }
 
@@ -140,6 +140,16 @@ object IptvStore {
     fun unhide(url: String) { _hidden.value = _hidden.value - url; prefs.edit().putStringSet("hidden", _hidden.value).apply() }
     fun unhideAll(urls: Collection<String>) { _hidden.value = _hidden.value - urls.toSet(); prefs.edit().putStringSet("hidden", _hidden.value).apply() }
 
+    @Volatile private var guidesCache: List<String>? = null
+
+    /** Tous les guides des programmes déclarés par les listes importées. */
+    suspend fun guideUrls(): List<String> = withContext(Dispatchers.IO) {
+        guidesCache?.let { return@withContext it }
+        _lists.value.flatMap { p ->
+            runCatching { File(dir, "${p.id}.m3u").bufferedReader().use { r -> Iptv.guideUrls(r.readLine().orEmpty()) } }.getOrDefault(emptyList())
+        }.distinct().also { guidesCache = it }
+    }
+
     @Volatile private var allCache: List<Iptv.Channel>? = null
 
     /**
@@ -178,6 +188,6 @@ object IptvStore {
         synchronized(cache) { cache.remove(id) }
         runCatching { File(dir, "$id.m3u").delete() }
         save()
-        logoIndex = null; allCache = null
+        logoIndex = null; allCache = null; guidesCache = null
     }
 }

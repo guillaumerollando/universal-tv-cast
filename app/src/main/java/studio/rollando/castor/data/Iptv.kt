@@ -13,6 +13,9 @@ object Iptv {
         val logo: String? = null,
         val group: String? = null,
         val headers: Map<String, String> = emptyMap(),
+        /** Identifiant de la chaîne dans le guide des programmes (« ARTEFrench.fr »), et son pays (« fr »). */
+        val tvgId: String? = null,
+        val country: String? = null,
     )
 
     /**
@@ -72,6 +75,10 @@ object Iptv {
                         logo = attrs["tvg-logo"]?.takeIf { it.startsWith("http", true) },
                         group = attrs["group-title"]?.split(';')?.firstOrNull()?.trim()?.takeIf { it.isNotBlank() && !it.equals("undefined", true) },
                         headers = headers,
+                        tvgId = attrs["tvg-id"]?.substringBefore('@')?.takeIf { it.isNotBlank() },
+                        country = (attrs["tvg-country"]?.split(';', ',')?.firstOrNull()
+                            ?: attrs["tvg-id"]?.substringBefore('@')?.substringAfterLast('.', ""))
+                            ?.trim()?.lowercase()?.takeIf { it.length == 2 },
                     )
                     opts.clear()
                 }
@@ -94,6 +101,16 @@ object Iptv {
     private val QUALITY = Regex("""\s*\((?:\d{3,4}p|\d+k|4k|hd|sd|fhd|uhd)\)""", RegexOption.IGNORE_CASE)
     private val BRACKETS = Regex("""\s*\[[^\]]*]""")
     private val MARKS = Regex("""[Ⓐ-ⓩ①-⓿]""") // Ⓢ Ⓖ Ⓨ… (notes de Free-TV)
+
+    /**
+     * Guides des programmes déclarés en tête de la liste (« #EXTM3U x-tvg-url="…, …" ») : c'est la liste importée
+     * par l'utilisateur qui les fournit.
+     */
+    fun guideUrls(text: String): List<String> {
+        val head = text.lineSequence().firstOrNull { it.trimStart().startsWith("#EXTM3U") } ?: return emptyList()
+        val attrs = ATTR.findAll(head).associate { it.groupValues[1].lowercase() to it.groupValues[2] }
+        return (attrs["x-tvg-url"] ?: attrs["url-tvg"]).orEmpty().split(',').map { it.trim() }.filter { it.startsWith("http") }
+    }
 
     /** « France 24 (1080p) [Geo-blocked] Ⓖ » → « France 24 ». */
     fun cleanName(raw: String): String = raw

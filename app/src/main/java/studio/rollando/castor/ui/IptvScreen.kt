@@ -476,6 +476,46 @@ private fun Pill(label: String, selected: Boolean, onClick: () -> Unit) {
     }
 }
 
+/**
+ * « En ce moment » et « Ensuite » pour la chaîne en cours, d'après le guide des programmes que déclare la liste
+ * importée. Rien n'est affiché si aucun guide ne connaît la chaîne.
+ */
+@Composable
+fun NowNext(media: Media, modifier: Modifier = Modifier, compact: Boolean = false) {
+    val pool = rememberAllChannels().orEmpty()
+    val wanted = studio.rollando.castor.data.Epg.key(media.channel ?: media.title)
+    val ch = remember(pool, media.url) {
+        pool.firstOrNull { it.url == media.url } ?: pool.firstOrNull { studio.rollando.castor.data.Epg.key(it.name) == wanted }
+    }
+    val name = ch?.name ?: media.channel ?: media.title
+    val country = ch?.country ?: java.util.Locale.getDefault().country.lowercase()
+    var tick by remember { mutableStateOf(0) }
+    LaunchedEffect(Unit) { while (true) { kotlinx.coroutines.delay(60_000); tick++ } }
+    val nn by produceState<Pair<studio.rollando.castor.data.Epg.Prog, studio.rollando.castor.data.Epg.Prog?>?>(null, name, country, tick) {
+        value = runCatching { studio.rollando.castor.data.Epg.nowNext(name, country) }.getOrNull()
+    }
+    val (now, next) = nn ?: return
+    val c = MaterialTheme.colorScheme
+    val fmt = remember { java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT) }
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        if (!compact) Text(stringResource(R.string.epg_now).uppercase(), style = MaterialTheme.typography.labelSmall, color = c.primary)
+        Text(now.title, style = if (compact) MaterialTheme.typography.titleSmall else MaterialTheme.typography.titleMedium,
+            maxLines = if (compact) 1 else 2, overflow = TextOverflow.Ellipsis)
+        if (!compact) {
+            val total = (now.stop - now.start).coerceAtLeast(1)
+            val done = ((System.currentTimeMillis() - now.start).toFloat() / total).coerceIn(0f, 1f)
+            androidx.compose.material3.LinearProgressIndicator(
+                progress = { done }, modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp).height(3.dp).clip(RoundedCornerShape(2.dp)),
+                color = c.primary, trackColor = c.surfaceContainerHighest, drawStopIndicator = {},
+            )
+            next?.let {
+                Text(stringResource(R.string.epg_next) + " · " + fmt.format(java.util.Date(it.start)) + "  " + it.title,
+                    style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
+        }
+    }
+}
+
 /** Lance une chaîne d'une liste sur la télé et passe à l'écran de lecture. */
 fun playChannel(ch: Iptv.Channel) {
     Castor.open(Media(

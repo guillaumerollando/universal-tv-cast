@@ -259,6 +259,8 @@
     <string name="phone_play_here">Lire sur ce téléphone</string>
     <string name="phone_watch_tv">Regarder sur la télé</string>
     <string name="phase_on_phone">Sur ce téléphone</string>
+    <string name="epg_now">En ce moment</string>
+    <string name="epg_next">Ensuite</string>
     <string name="iptv_title">Listes de chaînes</string>
     <string name="iptv_intro">Une liste de chaînes (liste M3U ou IPTV) regroupe des chaînes télé dans un seul lien. Colle son adresse ou ouvre le fichier : tu retrouves ici toutes ses chaînes, avec leur logo.</string>
     <string name="iptv_url_hint">Adresse de la liste (.m3u)</string>

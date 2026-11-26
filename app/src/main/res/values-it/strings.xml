@@ -259,6 +259,8 @@
     <string name="phone_play_here">Riproduci su questo telefono</string>
     <string name="phone_watch_tv">Guarda sulla TV</string>
     <string name="phase_on_phone">Su questo telefono</string>
+    <string name="epg_now">In onda</string>
+    <string name="epg_next">A seguire</string>
     <string name="iptv_title">Liste di canali</string>
     <string name="iptv_intro">Una lista di canali (lista M3U o IPTV) riunisce canali TV in un solo link. Incolla il suo indirizzo o apri il file: qui troverai tutti i canali, con il loro logo.</string>
     <string name="iptv_url_hint">Indirizzo della lista (.m3u)</string>

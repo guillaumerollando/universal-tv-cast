@@ -35,4 +35,11 @@ class PageTitleTest {
         org.junit.Assert.assertEquals("https://www.arte.tv/fr/videos/130430-001-A/prisonniere-951-2-4/", e?.next)
         org.junit.Assert.assertEquals(12, studio.rollando.castor.browser.Episodes.find("https://site.tv/anime/x/episode-12")?.number)
     }
+
+    @Test fun displayTitlesWithoutSiteFormulas() {
+        org.junit.Assert.assertEquals("Prisonnière 951 (1/4)",
+            studio.rollando.castor.browser.PageTitle.display("Prisonnière 951 (1/4) - Regarder la série | ARTE", "www.arte.tv"))
+        org.junit.Assert.assertEquals("Charlie Chaplin Festival",
+            studio.rollando.castor.browser.PageTitle.display("Charlie Chaplin Festival : Free Download, Borrow, and Streaming : Internet Archive", "archive.org"))
+    }
 }

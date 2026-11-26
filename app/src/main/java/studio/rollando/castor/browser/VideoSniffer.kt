@@ -30,7 +30,9 @@ data class Found(
         get() {
             val name = Uri.decode(url.substringBefore('?').substringAfterLast('/'))
             val base = name.substringBeforeLast('.').lowercase()
+            // Technique aussi : un nom en un seul bloc avec des tirets bas (« charlie_chaplin_film_fest_512k »).
             val technical = !name.contains('.') || base in TECHNICAL || name.count { it.isDigit() } >= 5 ||
+                (base.contains('_') && !base.contains(' ')) ||
                 Regex("[a-z0-9]{20,}").containsMatchIn(base)
             // Sans les fins de titre du genre « – Regarder le film complet » / « – Watch now ».
             val title = PageTitle.display(pageTitle, Uri.parse(pageUrl).host.orEmpty())

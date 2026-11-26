@@ -972,3 +972,6 @@ fait toute seule.
   jour sur l'état courant ; identify() ne cherche plus de film pour un nom technique (« 130430-001-A ») ; titre affiché
   sans « – Regarder la série » (PageTitle.display).
 - Émulateur, Arte « Prisonnière 951 (1/4) » sur téléphone : 6 langues, VO appliquée, sous-titres français affichés.
+- Internet Archive (Chaplin) : 1 vidéo (1 h 17), lecture sur téléphone OK ; titre sans « : Free Download, Borrow… ».
+  Nom de fichier à tirets bas = technique → titre de la page. NASA+ : 1 vidéo (test précédent) ; non relu cette nuit,
+  l'émulateur plante (GPU) dès qu'une vidéo tourne longtemps.

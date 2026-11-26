@@ -975,3 +975,11 @@ fait toute seule.
 - Internet Archive (Chaplin) : 1 vidéo (1 h 17), lecture sur téléphone OK ; titre sans « : Free Download, Borrow… ».
   Nom de fichier à tirets bas = technique → titre de la page. NASA+ : 1 vidéo (test précédent) ; non relu cette nuit,
   l'émulateur plante (GPU) dès qu'une vidéo tourne longtemps.
+
+## 2026-11-26 (matin) — Castor.kt découpé (sans changement de comportement)
+- Castor.kt (1 757 lignes) → 1 319 lignes + fichiers par sujet, dans `cast/` :
+  `CastState.kt` (état, phases, erreurs), `Album.kt` (photos, diaporama, vidéos de l'album),
+  `LiveClock.kt` (retard sur le direct), `MediaProbe.kt` (HLS ? sous-titres MKV ?), `TvSteps.kt` (gestes DLNA prudents).
+- Castor garde la façade publique (openPhotos, photoAt…) ; Album utilise les membres `internal` de Castor.
+- Vérifié : compilation sans avertissement, tests unitaires, lint 0 erreur ; émulateur + fausse télé : vidéo envoyée et lue,
+  album 2 photos (flux diaporama), photo suivante, diaporama, arrêt.

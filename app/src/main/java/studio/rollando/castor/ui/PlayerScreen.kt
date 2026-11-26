@@ -410,7 +410,8 @@ private fun LiveBar(s: CastState) {
     val behindD = if (dragging) max - dragValue else s.liveBehind
     val behind = behindD.toLong()
     val paused = s.phase == Phase.PAUSED
-    val atLive = behind < 8 && !paused
+    // Précis à la seconde : dès 1 s de retard (ou en pause), on l'affiche et on propose de revenir au direct.
+    val atLive = behind < 1 && !paused
     val liveLabel = stringResource(R.string.player_live)
     val delayText = "−%d:%02d".format(behind / 60, behind % 60)
     Column {
@@ -432,13 +433,13 @@ private fun LiveBar(s: CastState) {
                 Box(Modifier.size(7.dp).clip(CircleShape).background(if (atLive) Color.White else c.onSurfaceVariant))
                 Spacer(Modifier.width(6.dp))
                 Text(
-                    if (behind < 8) liveLabel.uppercase() else delayText,
+                    if (atLive) liveLabel.uppercase() else delayText,
                     style = MaterialTheme.typography.labelMedium, color = if (atLive) Color.White else c.onSurface,
                 )
             }
             Spacer(Modifier.weight(1f))
             // Disponible en lecture comme en pause, dès qu'on a du retard.
-            if (behind >= 8 && s.active) TextButton(onClick = Castor::goLive) {
+            if (!atLive && s.active) TextButton(onClick = Castor::goLive) {
                 Text(stringResource(R.string.live_back))
                 Spacer(Modifier.width(4.dp))
                 Icon(Icons.Rounded.SkipNext, null, Modifier.size(18.dp))

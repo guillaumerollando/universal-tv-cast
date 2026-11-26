@@ -1417,11 +1417,15 @@ object Castor {
         @Synchronized fun update(playing: Boolean): Double {
             val n = System.currentTimeMillis()
             if (since == 0L) return 0.0
-            if (playing) { played += (n - tick) / 1000.0; started = true }
+            // Le direct se mesure depuis le vrai départ de la lecture : le temps de chargement ne compte pas (sinon
+            // « Revenir au direct » afficherait aussitôt « −0:05 »). Avant le départ, le retard demandé, sans bouger.
+            if (!started) {
+                if (playing) { started = true; since = n; played = 0.0 }
+                tick = n
+                return base
+            }
+            if (playing) played += (n - tick) / 1000.0
             tick = n
-            // Tant que rien ne joue (télé en veille, chargement sans fin), le retard ne bouge pas. Une fois partie,
-            // le temps de chargement compte : le programme a avancé pendant ce temps.
-            if (!started) return base
             return (base + (n - since) / 1000.0 - played).coerceAtLeast(0.0)
         }
     }

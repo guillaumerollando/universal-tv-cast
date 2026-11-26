@@ -817,3 +817,9 @@ fait toute seule.
 - Téléphone : la vidéo reste en haut de l'écran de lecture, le reste défile dessous.
 - MiniPlayer : lecture sur le téléphone, ailleurs que sur l'écran de lecture (accueil, chaînes…) → vignette 192×108 en bas
   à droite (au-dessus de la barre d'onglets) ; un appui ramène à l'écran de lecture. Un seul affichage tient la vidéo.
+
+## 2026-11-26 — Retard du direct à la seconde
+- Seuil 1 s (au lieu de 8) : dès 1 s de retard, ou en pause, « −0:01 » et « Revenir au direct ».
+- LiveClock : le direct se mesure depuis le vrai départ de la lecture (le temps de chargement ne compte plus ; sinon
+  « Revenir au direct » afficherait −0:05). Avant le départ : retard demandé, figé.
+- Émulateur (téléphone) : direct → pause 3 s « −0:03 » → reprise stable → Revenir au direct « EN DIRECT ».

@@ -110,7 +110,18 @@ import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 
 /** Liste officielle de chaînes gratuites (Free-TV), proposée pour essayer sans rien chercher. */
-const val FREE_TV_LIST = "https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8"
+val FREE_TV_LIST: String get() = freeChannelsList()
+
+/**
+ * Chaînes gratuites du pays du téléphone, dans l'annuaire iptv-org (une liste par pays, bien entretenue : en France,
+ * ~170 chaînes sur 230 répondent, contre 10 sur 33 dans Free-TV). Sans pays connu : par langue.
+ */
+fun freeChannelsList(locale: java.util.Locale = java.util.Locale.getDefault()): String {
+    val cc = locale.country.lowercase().let { if (it == "gb") "uk" else it }
+    if (cc.length == 2) return "https://iptv-org.github.io/iptv/countries/$cc.m3u"
+    val lang = runCatching { locale.isO3Language }.getOrNull()?.takeIf { it.length == 3 } ?: "eng"
+    return "https://iptv-org.github.io/iptv/languages/$lang.m3u"
+}
 
 private fun fold(s: String) = Normalizer.normalize(s, Normalizer.Form.NFD).replace(Regex("\\p{M}+"), "").lowercase()
 

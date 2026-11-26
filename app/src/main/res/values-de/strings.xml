@@ -268,7 +268,7 @@
     <string name="notice_tv_not_starting">Der Fernseher startet die Wiedergabe nicht. Ist er eingeschaltet? Im Standby nimmt er das Video an, zeigt es aber nicht.</string>
     <string name="start_title">Zum Start</string>
     <string name="start_tv_title">Kostenlose TV-Sender</string>
-    <string name="start_tv_sub">Hunderte offizielle Sender aus aller Welt, kostenlos und legal.</string>
+    <string name="start_tv_sub">Die kostenlosen Sender deines Landes, in einem Link.</string>
     <string name="start_sites_title">Kostenlose, legale Seiten zum Ausprobieren: Video öffnen und an den Fernseher senden.</string>
     <string name="start_archive">Gemeinfreie Filme</string>
     <string name="start_arte">Filme, Dokus, Konzerte</string>
@@ -283,7 +283,7 @@
     <string name="iptv_import">Importieren</string>
     <string name="iptv_file">Datei öffnen</string>
     <string name="iptv_try_free">Kostenlose Liste ausprobieren</string>
-    <string name="iptv_try_free_sub">Free-TV: kostenlose, offizielle Sender aus aller Welt</string>
+    <string name="iptv_try_free_sub">Die kostenlosen Sender deines Landes (iptv-org)</string>
     <string name="iptv_search">Sender suchen</string>
     <string name="iptv_all">Alle</string>
     <string name="iptv_update">Aktualisieren</string>

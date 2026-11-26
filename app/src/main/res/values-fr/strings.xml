@@ -268,7 +268,7 @@
     <string name="notice_tv_not_starting">La télé ne démarre pas la lecture. Est-elle allumée ? En veille, elle accepte la vidéo mais ne l’affiche pas.</string>
     <string name="start_title">Pour commencer</string>
     <string name="start_tv_title">Chaînes TV gratuites</string>
-    <string name="start_tv_sub">Des centaines de chaînes officielles du monde entier, gratuites et légales.</string>
+    <string name="start_tv_sub">Les chaînes gratuites disponibles dans ton pays, en un seul lien.</string>
     <string name="start_sites_title">Des sites gratuits et légaux à essayer : ouvre une vidéo, puis envoie-la sur ta télé.</string>
     <string name="start_archive">Films du domaine public</string>
     <string name="start_arte">Films, documentaires, concerts</string>
@@ -283,7 +283,7 @@
     <string name="iptv_import">Importer</string>
     <string name="iptv_file">Ouvrir un fichier</string>
     <string name="iptv_try_free">Essayer une liste gratuite</string>
-    <string name="iptv_try_free_sub">Free-TV : des chaînes gratuites et officielles du monde entier</string>
+    <string name="iptv_try_free_sub">Les chaînes gratuites disponibles dans ton pays (iptv-org)</string>
     <string name="iptv_search">Chercher une chaîne</string>
     <string name="iptv_all">Toutes</string>
     <string name="iptv_update">Mettre à jour</string>

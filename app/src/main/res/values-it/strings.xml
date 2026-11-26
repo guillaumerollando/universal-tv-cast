@@ -268,7 +268,7 @@
     <string name="notice_tv_not_starting">La TV non avvia la riproduzione. È accesa? In standby accetta il video ma non lo mostra.</string>
     <string name="start_title">Per iniziare</string>
     <string name="start_tv_title">Canali TV gratuiti</string>
-    <string name="start_tv_sub">Centinaia di canali ufficiali da tutto il mondo, gratuiti e legali.</string>
+    <string name="start_tv_sub">I canali gratuiti disponibili nel tuo paese, in un solo link.</string>
     <string name="start_sites_title">Siti gratuiti e legali da provare: apri un video e invialo alla TV.</string>
     <string name="start_archive">Film di pubblico dominio</string>
     <string name="start_arte">Film, documentari, concerti</string>
@@ -283,7 +283,7 @@
     <string name="iptv_import">Importa</string>
     <string name="iptv_file">Apri un file</string>
     <string name="iptv_try_free">Prova una lista gratuita</string>
-    <string name="iptv_try_free_sub">Free-TV: canali gratuiti e ufficiali da tutto il mondo</string>
+    <string name="iptv_try_free_sub">I canali gratuiti del tuo paese (iptv-org)</string>
     <string name="iptv_search">Cerca un canale</string>
     <string name="iptv_all">Tutti</string>
     <string name="iptv_update">Aggiorna</string>

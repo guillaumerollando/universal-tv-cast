@@ -399,6 +399,10 @@ private fun ChannelHeader(s: CastState) {
             textStyle = MaterialTheme.typography.displaySmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
             modifier = Modifier.matchParentSize().padding(bottom = 0.dp),
         )
+        // En lecture sur la télé : les ondes de diffusion autour du logo (« ça passe »).
+        if (s.phase == Phase.PLAYING && !s.onPhone) Box(Modifier.align(Alignment.Center)) {
+            CastWaves(Color.White.copy(alpha = 0.45f), size = 230.dp)
+        }
         // Voile sombre en bas : l'état de la lecture reste lisible sur n'importe quel fond.
         Box(Modifier.align(Alignment.BottomCenter).fillMaxWidth().height(64.dp)
             .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(alpha = 0.55f)))))
@@ -497,7 +501,7 @@ internal fun Controls(s: CastState) {
                 stringResource(if (playing) R.string.action_pause else R.string.action_play), Modifier.size(44.dp),
             )
         }
-        FilledTonalIconButton(onClick = { Castor.skip(10.0) }, enabled = enabled && s.active && (!s.live || s.continuous && s.liveBehind > 0), modifier = Modifier.size(56.dp)) {
+        FilledTonalIconButton(onClick = { Castor.skip(10.0) }, enabled = enabled && s.active && (!s.live || s.continuous && s.liveBehind >= 1), modifier = Modifier.size(56.dp)) {
             Icon(Icons.Rounded.Forward10, stringResource(R.string.cd_forward10), Modifier.size(28.dp))
         }
         FilledTonalIconButton(onClick = Castor::stop, enabled = enabled && s.active, modifier = Modifier.size(56.dp)) {

@@ -269,7 +269,7 @@
     <string name="notice_tv_not_starting">The TV isn’t starting playback. Is it switched on? A TV on standby accepts the video but doesn’t show it.</string>
     <string name="start_title">To get started</string>
     <string name="start_tv_title">Free TV channels</string>
-    <string name="start_tv_sub">Hundreds of official channels from around the world, free and legal.</string>
+    <string name="start_tv_sub">Free channels available in your country, in one link.</string>
     <string name="start_sites_title">Free, legal sites to try: open a video, then send it to your TV.</string>
     <string name="start_archive">Public-domain films</string>
     <string name="start_arte">Films, documentaries, concerts</string>
@@ -284,7 +284,7 @@
     <string name="iptv_import">Import</string>
     <string name="iptv_file">Open a file</string>
     <string name="iptv_try_free">Try a free list</string>
-    <string name="iptv_try_free_sub">Free-TV: free, official channels from around the world</string>
+    <string name="iptv_try_free_sub">Free channels available in your country (iptv-org)</string>
     <string name="iptv_search">Search a channel</string>
     <string name="iptv_all">All</string>
     <string name="iptv_update">Update</string>

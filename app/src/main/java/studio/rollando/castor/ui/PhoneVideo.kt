@@ -263,7 +263,7 @@ private fun CenterControls(s: CastState, loading: Boolean, modifier: Modifier) {
                     stringResource(if (playing) R.string.action_pause else R.string.action_play), Modifier.size(38.dp), tint = c.onPrimary)
             }
         }
-        IconButton(onClick = { Castor.skip(10.0) }, enabled = canSkip && (!s.live || s.liveBehind > 0),
+        IconButton(onClick = { Castor.skip(10.0) }, enabled = canSkip && (!s.live || s.liveBehind >= 1),
             modifier = Modifier.size(52.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.4f))) {
             Icon(Icons.Rounded.Forward10, stringResource(R.string.cd_forward10), Modifier.size(30.dp), tint = Color.White)
         }

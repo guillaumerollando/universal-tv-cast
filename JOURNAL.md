@@ -909,3 +909,11 @@ fait toute seule.
   revient dès qu'on remonte ; réaffiché en changeant d'onglet. NestedScrollConnection sur la zone de contenu.
 - Surbrillance de la tuile « Coller un lien » : halo radial ambré qui déborde et respire (650 ms), ombre lumineuse ambrée,
   fond légèrement ambré, fin liseré. Vérifié sur l'émulateur (deux phases de la pulsation).
+
+## 2026-11-26 — Chaînes gratuites : iptv-org par pays ; ondes ; +10 s
+- Free-TV testée depuis le réseau de Guillaume : France 10/33 chaînes répondent (403, serveurs morts, pages YouTube/sites).
+  iptv-org France : ~170/231. « Chaînes TV gratuites » et « Essayer une liste gratuite » proposent maintenant
+  iptv-org/countries/<pays du téléphone>.m3u (gb → uk ; sans pays : languages/<langue>.m3u). Pas de guide des programmes
+  dans ces listes (Free-TV en déclarait).
+- Ondes de diffusion (CastWaves) remises sur l'en-tête de chaîne pendant la lecture sur la télé (perdues avec les logos).
+- +10 s au direct : actif seulement à partir d'1 s de retard (avant : > 0, d'où le bouton actif et clignotant au direct).

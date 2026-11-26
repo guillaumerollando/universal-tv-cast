@@ -268,7 +268,7 @@
     <string name="notice_tv_not_starting">A TV não inicia a reprodução. Ela está ligada? Em modo de espera, aceita o vídeo mas não o mostra.</string>
     <string name="start_title">Para começar</string>
     <string name="start_tv_title">Canais de TV grátis</string>
-    <string name="start_tv_sub">Centenas de canais oficiais do mundo todo, grátis e legais.</string>
+    <string name="start_tv_sub">Os canais grátis disponíveis no seu país, em um só link.</string>
     <string name="start_sites_title">Sites grátis e legais para testar: abra um vídeo e envie para a TV.</string>
     <string name="start_archive">Filmes em domínio público</string>
     <string name="start_arte">Filmes, documentários, shows</string>
@@ -283,7 +283,7 @@
     <string name="iptv_import">Importar</string>
     <string name="iptv_file">Abrir um arquivo</string>
     <string name="iptv_try_free">Experimentar uma lista gratuita</string>
-    <string name="iptv_try_free_sub">Free-TV: canais gratuitos e oficiais do mundo todo</string>
+    <string name="iptv_try_free_sub">Os canais grátis do seu país (iptv-org)</string>
     <string name="iptv_search">Procurar um canal</string>
     <string name="iptv_all">Todos</string>
     <string name="iptv_update">Atualizar</string>

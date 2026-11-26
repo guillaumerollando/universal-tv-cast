@@ -268,7 +268,7 @@
     <string name="notice_tv_not_starting">De tv start het afspelen niet. Staat hij aan? In stand-by neemt hij de video aan maar toont hem niet.</string>
     <string name="start_title">Om te beginnen</string>
     <string name="start_tv_title">Gratis tv-zenders</string>
-    <string name="start_tv_sub">Honderden officiële zenders van over de hele wereld, gratis en legaal.</string>
+    <string name="start_tv_sub">De gratis zenders in jouw land, in één link.</string>
     <string name="start_sites_title">Gratis, legale sites om te proberen: open een video en stuur hem naar je tv.</string>
     <string name="start_archive">Films uit het publieke domein</string>
     <string name="start_arte">Films, documentaires, concerten</string>
@@ -283,7 +283,7 @@
     <string name="iptv_import">Importeren</string>
     <string name="iptv_file">Bestand openen</string>
     <string name="iptv_try_free">Probeer een gratis lijst</string>
-    <string name="iptv_try_free_sub">Free-TV: gratis, officiële zenders van over de hele wereld</string>
+    <string name="iptv_try_free_sub">De gratis zenders in jouw land (iptv-org)</string>
     <string name="iptv_search">Zender zoeken</string>
     <string name="iptv_all">Alle</string>
     <string name="iptv_update">Bijwerken</string>

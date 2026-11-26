@@ -100,7 +100,7 @@ fun PillTabBar(tab: Tab, casting: Boolean, haze: dev.chrisbanes.haze.HazeState, 
                 // Indicateur qui glisse sous l'onglet choisi.
                 Box(
                     Modifier
-                        .offset(x = x)
+                        .offset { androidx.compose.ui.unit.IntOffset(x.roundToPx(), 0) }
                         .width(slot)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(50))

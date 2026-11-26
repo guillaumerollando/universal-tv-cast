@@ -160,7 +160,7 @@ fun IptvScreen(onClose: () -> Unit, startWith: String? = null) {
     var showLists by remember { mutableStateOf(false) }
     var showHidden by remember { mutableStateOf(false) }
     var guideFor by remember { mutableStateOf<IptvStore.Playlist?>(null) }
-    var refreshTick by remember { mutableStateOf(0) }
+    var refreshTick by remember { androidx.compose.runtime.mutableIntStateOf(0) }
     val errNotList = stringResource(R.string.iptv_err_not_list)
     val errLoad = stringResource(R.string.iptv_err_load)
     val all = rememberAllChannels(refreshTick)
@@ -391,8 +391,8 @@ private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
     fun hide(ch: Iptv.Channel) { IptvStore.hide(ch.url); lastHidden = ch.url }
     // Recherche et catégories : elles s'effacent quand on descend dans la mosaïque et reviennent dès qu'on remonte.
     val density = androidx.compose.ui.platform.LocalDensity.current
-    var headerPx by remember { mutableStateOf(0) }
-    var shift by remember { mutableStateOf(0f) }
+    var headerPx by remember { androidx.compose.runtime.mutableIntStateOf(0) }
+    var shift by remember { androidx.compose.runtime.mutableFloatStateOf(0f) }
     val conn = remember {
         object : androidx.compose.ui.input.nestedscroll.NestedScrollConnection {
             override fun onPreScroll(available: androidx.compose.ui.geometry.Offset, source: androidx.compose.ui.input.nestedscroll.NestedScrollSource): androidx.compose.ui.geometry.Offset {
@@ -405,6 +405,7 @@ private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
     val glass = remember { dev.chrisbanes.haze.HazeState() }
     val c = MaterialTheme.colorScheme
     val gridState = androidx.compose.foundation.lazy.grid.rememberLazyGridState()
+    val saving by studio.rollando.castor.data.Power.saving.collectAsState()
     // Rien dessous tant qu'on est tout en haut : pas de verre fumé (pas de bandeau inutile).
     val overContent by remember { androidx.compose.runtime.derivedStateOf { gridState.firstVisibleItemIndex > 0 || gridState.firstVisibleItemScrollOffset > 0 } }
     Box(Modifier.fillMaxSize().nestedScroll(conn).clipToBounds()) {
@@ -446,7 +447,7 @@ private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
             Modifier.fillMaxWidth()
                 .onSizeChanged { headerPx = it.height }
                 .offset { androidx.compose.ui.unit.IntOffset(0, shift.toInt()) }
-                .then(if (overContent && studio.rollando.castor.data.Power.saving.value) Modifier.background(c.surfaceContainer.copy(alpha = 0.97f))
+                .then(if (overContent && saving) Modifier.background(c.surfaceContainer.copy(alpha = 0.97f))
                 else if (overContent) Modifier.hazeEffect(glass, HazeStyle(
                     backgroundColor = c.background,
                     tint = HazeTint(Color(0xFF12241F).copy(alpha = 0.78f)),
@@ -527,7 +528,7 @@ fun NowNext(media: Media, modifier: Modifier = Modifier, compact: Boolean = fals
     }
     val name = ch?.name ?: media.channel ?: media.title
     val country = ch?.country ?: java.util.Locale.getDefault().country.lowercase()
-    var tick by remember { mutableStateOf(0) }
+    var tick by remember { androidx.compose.runtime.mutableIntStateOf(0) }
     LaunchedEffect(Unit) { while (true) { kotlinx.coroutines.delay(60_000); tick++ } }
     val nn by produceState<Pair<studio.rollando.castor.data.Epg.Prog, studio.rollando.castor.data.Epg.Prog?>?>(null, name, country, tick) {
         // Chaque fiche de la chaîne (elle peut venir de plusieurs listes, chacune avec son guide) ; la première qui répond.

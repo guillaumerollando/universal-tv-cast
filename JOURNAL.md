@@ -936,3 +936,11 @@ fait toute seule.
 - Nouveaux textes à traduire désormais aussi dans tools/i18n (sinon repli sur l'anglais).
 - Arte (émulateur, journal « vidéos proposées ») : épisode de série, 3 films, film en allemand, concert → 1 seule vidéo
   (liste maîtresse) à chaque fois, aucun plantage. NASA+ et Internet Archive : 1 vidéo (tests précédents).
+
+## 2026-11-26 (nuit) — Rangement du code
+- Code mort retiré : IptvStore.locate, LiveBuffer.nextSeq, PlayerScreen.Volume/ModeCard, CastorApp.Hidden,
+  Castor.clockText ; 22 textes inutilisés retirés (source + 16 traductions).
+- Compilateur : 0 avertissement (Locale.forLanguageTag/Builder, resumeWith, presse-papiers Android, @param:StringRes).
+- Lint : 0 erreur (LocalActivity, StateFlow lu via collectAsState, BOM littéral → ﻿), pluriels « many » fr/es/it/pt,
+  états primitifs (mutableIntStateOf…), offset lambda (pas de recomposition à chaque image de l'indicateur d'onglet).
+- Test général émulateur : accueil, Chaînes, lecture téléphone + programme, plein écran, navigateur, 0 plantage.

@@ -80,19 +80,11 @@
     <string name="cd_settings">Configurações</string>
     <string name="home_title">Envie qualquer vídeo para a sua TV</string>
     <string name="home_subtitle">Grátis. Sem anúncios. Sem rastreamento.</string>
-    <string name="home_browse">Navegar em um site</string>
-    <string name="home_browse_sub">O Universal TV Cast encontra os vídeos da página</string>
-    <string name="home_files">Vídeos do celular</string>
-    <string name="home_files_sub">Filmes, clipes, música</string>
     <string name="home_link">Colar um link</string>
-    <string name="home_link_sub">Link direto para um vídeo ou stream .m3u8</string>
     <string name="home_other_title">De outro app</string>
     <string name="home_other_body">No seu app de vídeo, escolha “Player externo”, “Abrir com” ou “Compartilhar” e depois o Universal TV Cast.</string>
     <string name="home_bookmarks">Favoritos</string>
-    <string name="home_recents">Reproduzidos recentemente</string>
-    <string name="cd_delete">Remover</string>
     <string name="link_dialog_title">Cole um link</string>
-    <string name="action_cast">Transmitir</string>
     <string name="action_cancel">Cancelar</string>
     <string name="browser_hint">Site ou pesquisa</string>
     <string name="cd_back">Voltar</string>
@@ -124,20 +116,10 @@
     <string name="action_play">Tocar</string>
     <string name="action_pause">Pausar</string>
     <string name="action_stop">Parar</string>
-    <string name="cd_vol_down">Diminuir o volume da TV</string>
-    <string name="cd_vol_up">Aumentar o volume da TV</string>
-    <string name="volume_label">Volume %1$d</string>
-    <string name="volume_unknown">Volume da TV</string>
     <string name="subs_title">Legendas</string>
     <string name="subs_none">Nenhuma</string>
     <string name="subs_add">Adicionar arquivo</string>
     <string name="subs_note">Arquivos SRT, VTT e ASS são aceitos. Algumas TVs não mostram legendas enviadas assim.</string>
-    <string name="mode_title">Modo de reprodução</string>
-    <string name="mode_continuous">Contínuo</string>
-    <string name="mode_direct">Direto</string>
-    <string name="mode_continuous_help">Funciona com quase todas as TVs. Ao avançar, o stream recomeça na nova posição.</string>
-    <string name="mode_direct_help">Envia o stream como está. Avanço mais suave, se a sua TV lê streams HLS.</string>
-    <string name="mode_split_audio">O som deste vídeo está em uma faixa separada: o modo direto é usado para mantê-lo.</string>
     <string name="notice_pick_tv">Escolha uma TV para começar.</string>
     <string name="err_no_wifi">Conecte o celular ao mesmo Wi-Fi da TV.</string>
     <string name="err_drm">Este vídeo é protegido (DRM) e não pode ser enviado à TV.</string>
@@ -218,7 +200,6 @@
     <string name="web_open_outside">Abrir no navegador do celular</string>
     <string name="web_back_home">Voltar ao início</string>
     <string name="phone_watch">Assistir no celular</string>
-    <string name="phone_to_tv">Enviar para a TV</string>
     <string name="phone_error">O celular não consegue reproduzir este vídeo. Talvez funcione na TV.</string>
     <string name="cd_copy_link">Copiar o link</string>
     <string name="cd_share_link">Compartilhar o link</string>
@@ -232,7 +213,6 @@
     <string name="channel_name">Nome do canal</string>
     <string name="action_ok">OK</string>
     <string name="live_back">Voltar ao vivo</string>
-    <string name="live_paused">Pausado · Reproduzir volta ao vivo</string>
     <string name="home_see_all">Ver tudo</string>
     <string name="site_hide">Não sugerir mais</string>
     <string name="home_sites">Meus sites</string>
@@ -258,7 +238,6 @@
     <string name="cd_fullscreen_exit">Sair da tela cheia</string>
     <string name="phone_play_here">Reproduzir neste celular</string>
     <string name="phone_watch_tv">Assistir na TV</string>
-    <string name="phase_on_phone">Neste celular</string>
     <string name="epg_now">Agora</string>
     <string name="epg_next">Depois</string>
     <string name="iptv_guide">Guia de programação</string>
@@ -297,16 +276,17 @@
     <string name="iptv_none_found">Nenhum canal encontrado</string>
     <string name="iptv_note">Os canais vêm da lista que você importa: o Universal TV Cast não fornece nenhum.</string>
     <string name="link_dialog_note">Um vídeo, uma transmissão ao vivo ou uma lista de canais (.m3u).</string>
-    <string name="bookmark_site">Site</string>
     <string name="bookmark_followed_series">“%1$s” seguida: o marcador avança sozinho a cada episódio assistido.</string>
     <string name="bookmark_added">“%1$s” adicionado aos favoritos.</string>
     <string name="bookmark_advanced">%1$s: marcador avançou para o episódio %2$d.</string>
     <plurals name="browser_found">
         <item quantity="one">%d vídeo</item>
+        <item quantity="many">%d vídeos</item>
         <item quantity="other">%d vídeos</item>
     </plurals>
     <plurals name="iptv_count">
         <item quantity="one">%d canal</item>
+        <item quantity="many">%d canais</item>
         <item quantity="other">%d canais</item>
     </plurals>
 </resources>

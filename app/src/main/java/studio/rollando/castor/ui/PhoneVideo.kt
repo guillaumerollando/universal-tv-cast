@@ -93,8 +93,8 @@ private fun VideoSurface(modifier: Modifier, active: Boolean = true, onColor: ((
             if (!sv.holder.surface.isValid || sv.width == 0) continue
             val ok = kotlinx.coroutines.suspendCancellableCoroutine<Boolean> { cont ->
                 runCatching {
-                    android.view.PixelCopy.request(sv, bmp, { r -> if (cont.isActive) cont.resume(r == android.view.PixelCopy.SUCCESS) {} }, handler)
-                }.onFailure { if (cont.isActive) cont.resume(false) {} }
+                    android.view.PixelCopy.request(sv, bmp, { r -> if (cont.isActive) cont.resumeWith(Result.success(r == android.view.PixelCopy.SUCCESS)) }, handler)
+                }.onFailure { if (cont.isActive) cont.resumeWith(Result.success(false)) }
             }
             if (ok) onColor(dominant(bmp))
         }
@@ -147,7 +147,7 @@ private fun Activity.orientation(o: Int) { requestedOrientation = o }
 /** Dans l'écran de lecture : la vidéo à la place du grand cadre, avec un bouton plein écran. */
 @Composable
 fun PhoneVideo(state: CastState, active: Boolean = true, onGlow: ((Color) -> Unit)? = null) {
-    val activity = LocalContext.current as? Activity
+    val activity = androidx.activity.compose.LocalActivity.current
     val portrait = androidx.compose.ui.platform.LocalConfiguration.current.orientation != android.content.res.Configuration.ORIENTATION_LANDSCAPE
     var flash by remember { mutableStateOf<Pair<Int, Long>?>(null) }
     LaunchedEffect(flash) { if (flash != null) { kotlinx.coroutines.delay(600); flash = null } }
@@ -173,7 +173,7 @@ fun PhoneVideo(state: CastState, active: Boolean = true, onGlow: ((Color) -> Uni
  */
 @Composable
 fun PhoneFullscreen(state: CastState) {
-    val activity = LocalContext.current as? Activity
+    val activity = androidx.activity.compose.LocalActivity.current
     var controls by remember { mutableStateOf(true) }
     LaunchedEffect(controls, state.phase) {
         if (controls && state.phase == Phase.PLAYING) { kotlinx.coroutines.delay(3500); controls = false }

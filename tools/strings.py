@@ -161,12 +161,7 @@ S = {
 "cd_settings": ["Settings", "Réglages", "Ajustes", "Einstellungen", "Impostazioni", "Instellingen", "Configurações"],
 "home_title": ["Send any video to your TV", "Envoie n’importe quelle vidéo sur ta télé", "Envía cualquier vídeo a tu TV", "Schick jedes Video auf deinen Fernseher", "Manda qualsiasi video sulla tua TV", "Stuur elke video naar je tv", "Envie qualquer vídeo para a sua TV"],
 "home_subtitle": ["Free. No ads. No tracking.", "Gratuit. Sans pub. Sans pistage.", "Gratis. Sin anuncios. Sin rastreo.", "Kostenlos. Ohne Werbung. Ohne Tracking.", "Gratis. Senza pubblicità. Senza tracciamento.", "Gratis. Geen advertenties. Geen tracking.", "Grátis. Sem anúncios. Sem rastreamento."],
-"home_browse": ["Browse a website", "Naviguer sur un site", "Navegar por una web", "Eine Website öffnen", "Naviga su un sito", "Een website openen", "Navegar em um site"],
-"home_browse_sub": ["Universal TV Cast spots the videos on the page", "Universal TV Cast repère les vidéos de la page", "Universal TV Cast detecta los vídeos de la página", "Universal TV Cast findet die Videos auf der Seite", "Universal TV Cast trova i video nella pagina", "Universal TV Cast vindt de video's op de pagina", "O Universal TV Cast encontra os vídeos da página"],
-"home_files": ["Videos on this phone", "Vidéos du téléphone", "Vídeos del móvil", "Videos auf dem Handy", "Video sul telefono", "Video's op deze telefoon", "Vídeos do celular"],
-"home_files_sub": ["Films, clips, music", "Films, clips, musique", "Películas, clips, música", "Filme, Clips, Musik", "Film, clip, musica", "Films, clips, muziek", "Filmes, clipes, música"],
 "home_link": ["Paste a link", "Coller un lien", "Pegar un enlace", "Link einfügen", "Incolla un link", "Link plakken", "Colar um link"],
-"home_link_sub": ["Direct link to a video or an .m3u8 stream", "Lien direct vers une vidéo ou un flux .m3u8", "Enlace directo a un vídeo o a un flujo .m3u8", "Direktlink zu einem Video oder .m3u8-Stream", "Link diretto a un video o a uno stream .m3u8", "Directe link naar een video of .m3u8-stream", "Link direto para um vídeo ou stream .m3u8"],
 "home_other_title": ["From another app", "Depuis une autre appli", "Desde otra app", "Aus einer anderen App", "Da un’altra app", "Vanuit een andere app", "De outro app"],
 "home_other_body": [
  "In your video app, choose “External player”, “Open with” or “Share”, then Universal TV Cast.",
@@ -177,10 +172,7 @@ S = {
  "Kies in je video-app ‘Externe speler’, ‘Openen met’ of ‘Delen’ en daarna Universal TV Cast.",
  "No seu app de vídeo, escolha “Player externo”, “Abrir com” ou “Compartilhar” e depois o Universal TV Cast."],
 "home_bookmarks": ["Bookmarks", "Favoris", "Favoritos", "Lesezeichen", "Preferiti", "Bladwijzers", "Favoritos"],
-"home_recents": ["Recently played", "Lu récemment", "Reproducido recientemente", "Zuletzt abgespielt", "Riprodotti di recente", "Recent afgespeeld", "Reproduzidos recentemente"],
-"cd_delete": ["Remove", "Retirer", "Quitar", "Entfernen", "Rimuovi", "Verwijderen", "Remover"],
 "link_dialog_title": ["Paste a link", "Colle un lien", "Pega un enlace", "Link einfügen", "Incolla un link", "Plak een link", "Cole um link"],
-"action_cast": ["Cast", "Caster", "Enviar", "Streamen", "Trasmetti", "Casten", "Transmitir"],
 "action_cancel": ["Cancel", "Annuler", "Cancelar", "Abbrechen", "Annulla", "Annuleren", "Cancelar"],
 "browser_hint": ["Search or address", "Site ou recherche", "Web o búsqueda", "Suche oder Adresse", "Sito o ricerca", "Zoek of adres", "Site ou pesquisa"],
 "cd_back": ["Back", "Précédent", "Atrás", "Zurück", "Indietro", "Terug", "Voltar"],
@@ -233,10 +225,6 @@ S = {
 "action_play": ["Play", "Lecture", "Reproducir", "Abspielen", "Riproduci", "Afspelen", "Tocar"],
 "action_pause": ["Pause", "Pause", "Pausa", "Pause", "Pausa", "Pauze", "Pausar"],
 "action_stop": ["Stop", "Arrêter", "Detener", "Stopp", "Ferma", "Stoppen", "Parar"],
-"cd_vol_down": ["TV volume down", "Baisser le son de la télé", "Bajar el volumen de la TV", "Fernseher leiser", "Abbassa il volume della TV", "Tv zachter", "Diminuir o volume da TV"],
-"cd_vol_up": ["TV volume up", "Monter le son de la télé", "Subir el volumen de la TV", "Fernseher lauter", "Alza il volume della TV", "Tv harder", "Aumentar o volume da TV"],
-"volume_label": ["Volume %1$d", "Volume %1$d", "Volumen %1$d", "Lautstärke %1$d", "Volume %1$d", "Volume %1$d", "Volume %1$d"],
-"volume_unknown": ["TV volume", "Son de la télé", "Volumen de la TV", "Lautstärke", "Volume della TV", "Tv-volume", "Volume da TV"],
 "subs_title": ["Subtitles", "Sous-titres", "Subtítulos", "Untertitel", "Sottotitoli", "Ondertiteling", "Legendas"],
 "subs_none": ["None", "Aucun", "Ninguno", "Keine", "Nessuno", "Geen", "Nenhuma"],
 "subs_add": ["Add a file", "Ajouter un fichier", "Añadir archivo", "Datei hinzufügen", "Aggiungi file", "Bestand toevoegen", "Adicionar arquivo"],
@@ -248,33 +236,6 @@ S = {
  "File SRT, VTT e ASS supportati. Alcune TV non mostrano i sottotitoli inviati in questo modo.",
  "SRT-, VTT- en ASS-bestanden worden ondersteund. Sommige tv's tonen ondertiteling die zo verstuurd wordt niet.",
  "Arquivos SRT, VTT e ASS são aceitos. Algumas TVs não mostram legendas enviadas assim."],
-"mode_title": ["Streaming mode", "Mode de lecture", "Modo de reproducción", "Wiedergabemodus", "Modalità di riproduzione", "Afspeelmodus", "Modo de reprodução"],
-"mode_continuous": ["Continuous", "Continu", "Continuo", "Durchgehend", "Continuo", "Doorlopend", "Contínuo"],
-"mode_direct": ["Direct", "Direct", "Directo", "Direkt", "Diretto", "Direct", "Direto"],
-"mode_continuous_help": [
- "Works with almost every TV. Skipping restarts the stream at the new position.",
- "Marche avec presque toutes les télés. Avancer relance le flux au nouvel endroit.",
- "Funciona con casi todas las TV. Al avanzar, el flujo se reinicia en la nueva posición.",
- "Funktioniert mit fast jedem Fernseher. Beim Spulen startet der Stream an der neuen Stelle neu.",
- "Funziona con quasi tutte le TV. Andando avanti, lo stream riparte dal nuovo punto.",
- "Werkt met bijna elke tv. Bij doorspoelen start de stream opnieuw op de nieuwe plek.",
- "Funciona com quase todas as TVs. Ao avançar, o stream recomeça na nova posição."],
-"mode_direct_help": [
- "Sends the stream as is. Smoother skipping, if your TV can read HLS streams.",
- "Envoie le flux tel quel. Avance plus fluide, si ta télé sait lire les flux HLS.",
- "Envía el flujo tal cual. Avance más fluido si tu TV puede leer flujos HLS.",
- "Sendet den Stream unverändert. Flüssigeres Spulen, wenn dein Fernseher HLS-Streams lesen kann.",
- "Invia lo stream così com’è. Avanzamento più fluido, se la tua TV legge gli stream HLS.",
- "Stuurt de stream zoals hij is. Soepeler doorspoelen, als je tv HLS-streams kan lezen.",
- "Envia o stream como está. Avanço mais suave, se a sua TV lê streams HLS."],
-"mode_split_audio": [
- "This video has its sound on a separate track, so direct mode is used to keep the sound.",
- "Le son de cette vidéo est sur une piste à part : le mode direct est utilisé pour le garder.",
- "El sonido de este vídeo está en una pista aparte: se usa el modo directo para conservarlo.",
- "Der Ton dieses Videos liegt auf einer eigenen Spur, daher wird der Direktmodus verwendet.",
- "L’audio di questo video è su una traccia separata: si usa la modalità diretta per mantenerlo.",
- "Het geluid van deze video staat op een apart spoor, dus de directe modus wordt gebruikt.",
- "O som deste vídeo está em uma faixa separada: o modo direto é usado para mantê-lo."],
 "notice_pick_tv": ["Choose a TV to start playback.", "Choisis une télé pour lancer la lecture.", "Elige una TV para empezar la reproducción.", "Wähle einen Fernseher, um die Wiedergabe zu starten.", "Scegli una TV per avviare la riproduzione.", "Kies een tv om het afspelen te starten.", "Escolha uma TV para começar."],
 "err_no_wifi": ["Connect your phone to the same Wi-Fi as the TV.", "Connecte ton téléphone au même Wi-Fi que la télé.", "Conecta el móvil a la misma wifi que la TV.", "Verbinde dein Handy mit demselben WLAN wie den Fernseher.", "Collega il telefono alla stessa rete Wi-Fi della TV.", "Verbind je telefoon met hetzelfde wifi-netwerk als de tv.", "Conecte o celular ao mesmo Wi-Fi da TV."],
 "err_drm": ["This video is copy-protected (DRM) and can’t be sent to the TV.", "Cette vidéo est protégée (DRM) et ne peut pas être envoyée sur la télé.", "Este vídeo está protegido (DRM) y no se puede enviar a la TV.", "Dieses Video ist kopiergeschützt (DRM) und kann nicht gesendet werden.", "Questo video è protetto (DRM) e non può essere inviato alla TV.", "Deze video is beveiligd (DRM) en kan niet naar de tv.", "Este vídeo é protegido (DRM) e não pode ser enviado à TV."],
@@ -362,7 +323,6 @@ S = {
 "web_open_outside": ["Open in the phone’s browser", "Ouvrir dans le navigateur du téléphone", "Abrir en el navegador del móvil", "Im Browser des Handys öffnen", "Apri nel browser del telefono", "Openen in de browser van de telefoon", "Abrir no navegador do celular"],
 "web_back_home": ["Back to start page", "Retour à l’accueil du navigateur", "Volver al inicio", "Zur Startseite", "Torna alla pagina iniziale", "Terug naar startpagina", "Voltar ao início"],
 "phone_watch": ["Watch on this phone", "Regarder sur le téléphone", "Ver en este móvil", "Auf dem Handy ansehen", "Guarda sul telefono", "Op deze telefoon kijken", "Assistir no celular"],
-"phone_to_tv": ["Send to the TV", "Envoyer sur la télé", "Enviar a la TV", "An den Fernseher senden", "Invia alla TV", "Naar de tv sturen", "Enviar para a TV"],
 "phone_error": ["This phone can’t play this video. It may still work on the TV.", "Le téléphone n’arrive pas à lire cette vidéo. Elle passe peut-être sur la télé.", "Este móvil no puede reproducir este vídeo. Quizá funcione en la TV.", "Das Handy kann dieses Video nicht abspielen. Auf dem Fernseher klappt es vielleicht.", "Il telefono non riesce a riprodurre questo video. Forse funziona sulla TV.", "Deze telefoon kan deze video niet afspelen. Op de tv lukt het misschien wel.", "O celular não consegue reproduzir este vídeo. Talvez funcione na TV."],
 "cd_copy_link": ["Copy the link", "Copier le lien", "Copiar el enlace", "Link kopieren", "Copia il link", "Link kopiëren", "Copiar o link"],
 "cd_share_link": ["Share the link", "Partager le lien", "Compartir el enlace", "Link teilen", "Condividi il link", "Link delen", "Compartilhar o link"],
@@ -376,7 +336,6 @@ S = {
 "channel_name": ["Channel name", "Nom de la chaîne", "Nombre del canal", "Name des Senders", "Nome del canale", "Naam van de zender", "Nome do canal"],
 "action_ok": ["OK", "OK", "Aceptar", "OK", "OK", "OK", "OK"],
 "live_back": ["Back to live", "Revenir au direct", "Volver al directo", "Zurück zum Live", "Torna alla diretta", "Terug naar live", "Voltar ao vivo"],
-"live_paused": ["Paused · Play resumes live", "En pause · Lecture reprend au direct", "En pausa · Reproducir vuelve al directo", "Pausiert · Abspielen springt zum Live", "In pausa · Riproduci torna alla diretta", "Gepauzeerd · Afspelen gaat naar live", "Pausado · Reproduzir volta ao vivo"],
 "home_see_all": ["See all", "Tout voir", "Ver todo", "Alle ansehen", "Vedi tutto", "Alles bekijken", "Ver tudo"],
 "site_hide": ["Stop suggesting", "Ne plus proposer", "No volver a sugerir", "Nicht mehr vorschlagen", "Non proporre più", "Niet meer voorstellen", "Não sugerir mais"],
 "home_sites": ["My sites", "Mes sites", "Mis sitios", "Meine Seiten", "I miei siti", "Mijn sites", "Meus sites"],
@@ -423,7 +382,6 @@ S = {
 "cd_fullscreen_exit": ["Exit full screen", "Quitter le plein écran", "Salir de pantalla completa", "Vollbild beenden", "Esci da schermo intero", "Volledig scherm sluiten", "Sair da tela cheia"],
 "phone_play_here": ["Play on this phone", "Lire sur ce téléphone", "Reproducir en este móvil", "Auf diesem Handy abspielen", "Riproduci su questo telefono", "Afspelen op deze telefoon", "Reproduzir neste celular"],
 "phone_watch_tv": ["Watch on the TV", "Regarder sur la télé", "Ver en la TV", "Auf dem Fernseher ansehen", "Guarda sulla TV", "Kijken op de tv", "Assistir na TV"],
-"phase_on_phone": ["On this phone", "Sur ce téléphone", "En este móvil", "Auf diesem Handy", "Su questo telefono", "Op deze telefoon", "Neste celular"],
 "epg_now": ["Now", "En ce moment", "Ahora", "Jetzt", "In onda", "Nu", "Agora"],
 "epg_next": ["Next", "Ensuite", "Después", "Danach", "A seguire", "Hierna", "Depois"],
 "iptv_guide": ["Programme guide", "Guide des programmes", "Guía de programación", "Programmführer", "Guida TV", "Programmagids", "Guia de programação"],
@@ -497,7 +455,6 @@ S = {
 "iptv_none_found": ["No channel found", "Aucune chaîne trouvée", "No se encontró ningún canal", "Kein Sender gefunden", "Nessun canale trovato", "Geen zender gevonden", "Nenhum canal encontrado"],
 "iptv_note": ["Channels come from the list you import: Universal TV Cast doesn’t provide any.", "Les chaînes viennent de la liste que tu importes : Universal TV Cast n’en fournit aucune.", "Los canales vienen de la lista que importas: Universal TV Cast no proporciona ninguno.", "Die Sender stammen aus der importierten Liste: Universal TV Cast stellt selbst keine bereit.", "I canali provengono dalla lista che importi: Universal TV Cast non ne fornisce nessuno.", "De zenders komen uit de lijst die je importeert: Universal TV Cast levert er zelf geen.", "Os canais vêm da lista que você importa: o Universal TV Cast não fornece nenhum."],
 "link_dialog_note": ["A video, a live stream or a channel list (.m3u).", "Une vidéo, un direct ou une liste de chaînes (.m3u).", "Un vídeo, un directo o una lista de canales (.m3u).", "Ein Video, ein Livestream oder eine Senderliste (.m3u).", "Un video, una diretta o una lista di canali (.m3u).", "Een video, een livestream of een zenderlijst (.m3u).", "Um vídeo, uma transmissão ao vivo ou uma lista de canais (.m3u)."],
-"bookmark_site": ["Site", "Site", "Sitio", "Website", "Sito", "Site", "Site"],
 "bookmark_followed_series": ["“%1$s” followed: the bookmark will move to each episode you watch.", "« %1$s » suivie : le marque-page avancera tout seul à chaque épisode regardé.", "«%1$s» seguida: el marcador avanzará solo con cada episodio que veas.", "„%1$s“ wird verfolgt: Das Lesezeichen rückt mit jeder Folge mit.", "«%1$s» seguita: il segnalibro avanzerà da solo a ogni episodio.", "‘%1$s’ gevolgd: de bladwijzer schuift mee met elke aflevering.", "“%1$s” seguida: o marcador avança sozinho a cada episódio assistido."],
 "bookmark_added": ["“%1$s” added to favorites.", "« %1$s » ajouté aux favoris.", "«%1$s» añadido a favoritos.", "„%1$s“ zu Favoriten hinzugefügt.", "«%1$s» aggiunto ai preferiti.", "‘%1$s’ toegevoegd aan favorieten.", "“%1$s” adicionado aos favoritos."],
 "bookmark_advanced": ["%1$s: bookmark moved to episode %2$d.", "%1$s : marque-page avancé à l’épisode %2$d.", "%1$s: marcador avanzado al episodio %2$d.", "%1$s: Lesezeichen auf Folge %2$d gesetzt.", "%1$s: segnalibro spostato all’episodio %2$d.", "%1$s: bladwijzer naar aflevering %2$d.", "%1$s: marcador avançou para o episódio %2$d."],
@@ -526,7 +483,9 @@ for i, lang in enumerate(LANGS):
         out.append(f'    <string name="{k}"{attr}>{esc(v[i])}</string>')
     for k, v in PLURALS.items():
         one, other = v[i]
-        out.append(f'    <plurals name="{k}">\n        <item quantity="one">{esc(one)}</item>\n        <item quantity="other">{esc(other)}</item>\n    </plurals>')
+        # Français, espagnol, italien, portugais : forme « many » (très grands nombres) = « other ».
+        many = f'\n        <item quantity="many">{esc(other)}</item>' if lang in ("fr", "es", "it", "pt-rBR") else ""
+        out.append(f'    <plurals name="{k}">\n        <item quantity="one">{esc(one)}</item>{many}\n        <item quantity="other">{esc(other)}</item>\n    </plurals>')
     out.append("</resources>\n")
     open(os.path.join(d, "strings.xml"), "w").write("\n".join(out))
 # Langues supplémentaires : tools/i18n/<qualificatif Android>.json ({"strings": {clé: texte}, "plurals": {clé: {quantité: texte}}}).

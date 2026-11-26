@@ -316,29 +316,9 @@
    "en": "Free. No ads. No tracking.",
    "fr": "Gratuit. Sans pub. Sans pistage."
   },
-  "home_browse": {
-   "en": "Browse a website",
-   "fr": "Naviguer sur un site"
-  },
-  "home_browse_sub": {
-   "en": "Universal TV Cast spots the videos on the page",
-   "fr": "Universal TV Cast repère les vidéos de la page"
-  },
-  "home_files": {
-   "en": "Videos on this phone",
-   "fr": "Vidéos du téléphone"
-  },
-  "home_files_sub": {
-   "en": "Films, clips, music",
-   "fr": "Films, clips, musique"
-  },
   "home_link": {
    "en": "Paste a link",
    "fr": "Coller un lien"
-  },
-  "home_link_sub": {
-   "en": "Direct link to a video or an .m3u8 stream",
-   "fr": "Lien direct vers une vidéo ou un flux .m3u8"
   },
   "home_other_title": {
    "en": "From another app",
@@ -352,21 +332,9 @@
    "en": "Bookmarks",
    "fr": "Favoris"
   },
-  "home_recents": {
-   "en": "Recently played",
-   "fr": "Lu récemment"
-  },
-  "cd_delete": {
-   "en": "Remove",
-   "fr": "Retirer"
-  },
   "link_dialog_title": {
    "en": "Paste a link",
    "fr": "Colle un lien"
-  },
-  "action_cast": {
-   "en": "Cast",
-   "fr": "Caster"
   },
   "action_cancel": {
    "en": "Cancel",
@@ -492,22 +460,6 @@
    "en": "Stop",
    "fr": "Arrêter"
   },
-  "cd_vol_down": {
-   "en": "TV volume down",
-   "fr": "Baisser le son de la télé"
-  },
-  "cd_vol_up": {
-   "en": "TV volume up",
-   "fr": "Monter le son de la télé"
-  },
-  "volume_label": {
-   "en": "Volume %1$d",
-   "fr": "Volume %1$d"
-  },
-  "volume_unknown": {
-   "en": "TV volume",
-   "fr": "Son de la télé"
-  },
   "subs_title": {
    "en": "Subtitles",
    "fr": "Sous-titres"
@@ -523,30 +475,6 @@
   "subs_note": {
    "en": "SRT, VTT and ASS files are supported. Some TVs don’t show subtitles sent this way.",
    "fr": "Fichiers SRT, VTT et ASS acceptés. Certaines télés n’affichent pas les sous-titres envoyés ainsi."
-  },
-  "mode_title": {
-   "en": "Streaming mode",
-   "fr": "Mode de lecture"
-  },
-  "mode_continuous": {
-   "en": "Continuous",
-   "fr": "Continu"
-  },
-  "mode_direct": {
-   "en": "Direct",
-   "fr": "Direct"
-  },
-  "mode_continuous_help": {
-   "en": "Works with almost every TV. Skipping restarts the stream at the new position.",
-   "fr": "Marche avec presque toutes les télés. Avancer relance le flux au nouvel endroit."
-  },
-  "mode_direct_help": {
-   "en": "Sends the stream as is. Smoother skipping, if your TV can read HLS streams.",
-   "fr": "Envoie le flux tel quel. Avance plus fluide, si ta télé sait lire les flux HLS."
-  },
-  "mode_split_audio": {
-   "en": "This video has its sound on a separate track, so direct mode is used to keep the sound.",
-   "fr": "Le son de cette vidéo est sur une piste à part : le mode direct est utilisé pour le garder."
   },
   "notice_pick_tv": {
    "en": "Choose a TV to start playback.",
@@ -868,10 +796,6 @@
    "en": "Watch on this phone",
    "fr": "Regarder sur le téléphone"
   },
-  "phone_to_tv": {
-   "en": "Send to the TV",
-   "fr": "Envoyer sur la télé"
-  },
   "phone_error": {
    "en": "This phone can’t play this video. It may still work on the TV.",
    "fr": "Le téléphone n’arrive pas à lire cette vidéo. Elle passe peut-être sur la télé."
@@ -923,10 +847,6 @@
   "live_back": {
    "en": "Back to live",
    "fr": "Revenir au direct"
-  },
-  "live_paused": {
-   "en": "Paused · Play resumes live",
-   "fr": "En pause · Lecture reprend au direct"
   },
   "home_see_all": {
    "en": "See all",
@@ -1027,10 +947,6 @@
   "phone_watch_tv": {
    "en": "Watch on the TV",
    "fr": "Regarder sur la télé"
-  },
-  "phase_on_phone": {
-   "en": "On this phone",
-   "fr": "Sur ce téléphone"
   },
   "epg_now": {
    "en": "Now",
@@ -1175,10 +1091,6 @@
   "link_dialog_note": {
    "en": "A video, a live stream or a channel list (.m3u).",
    "fr": "Une vidéo, un direct ou une liste de chaînes (.m3u)."
-  },
-  "bookmark_site": {
-   "en": "Site",
-   "fr": "Site"
   },
   "bookmark_followed_series": {
    "en": "“%1$s” followed: the bookmark will move to each episode you watch.",

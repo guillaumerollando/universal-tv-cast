@@ -23,7 +23,7 @@ object Iptv {
      * des balises propres au HLS (durée des morceaux, variantes de qualité).
      */
     fun isChannelList(text: String): Boolean {
-        val head = text.trimStart('﻿', ' ', '\n', '\r', '\t')
+        val head = text.trimStart('\uFEFF', ' ', '\n', '\r', '\t')
         if (!head.startsWith("#EXTM3U")) return false
         if (!head.contains("#EXTINF")) return false
         return !head.contains("#EXT-X-TARGETDURATION") && !head.contains("#EXT-X-STREAM-INF") &&
@@ -136,8 +136,9 @@ object Iptv {
 
     /** « fra » (code à trois lettres) comme « fr ». */
     private fun languageLocale(code: String): Locale =
-        if (code.length == 2) Locale(code)
-        else Locale.getISOLanguages().firstOrNull { runCatching { Locale(it).isO3Language }.getOrNull() == code }?.let { Locale(it) } ?: Locale(code)
+        if (code.length == 2) Locale.forLanguageTag(code)
+        else Locale.getISOLanguages().firstOrNull { runCatching { Locale.forLanguageTag(it).isO3Language }.getOrNull() == code }
+            ?.let { Locale.forLanguageTag(it) } ?: Locale.forLanguageTag(code)
 
     /** Un nom lisible pour la liste, d'après son adresse (« Free-TV », « iptv-org · France »…). */
     fun nameFor(url: String, locale: Locale = Locale.getDefault()): String {
@@ -152,7 +153,7 @@ object Iptv {
         }.orEmpty()
         val dir = parts.getOrNull(parts.size - 2)
         val detail = when {
-            dir == "countries" && file.length == 2 -> Locale("", file.uppercase()).getDisplayCountry(locale)
+            dir == "countries" && file.length == 2 -> Locale.Builder().setRegion(file.uppercase()).build().getDisplayCountry(locale)
             dir == "languages" && file.length in 2..3 -> languageLocale(file).getDisplayLanguage(locale).replaceFirstChar { it.titlecase(locale) }
             dir == "categories" -> file.replaceFirstChar { it.titlecase(locale) }
             file.isBlank() || file.lowercase() in setOf("playlist", "index", "list", "channels", "tv", "get", "iptv") -> ""

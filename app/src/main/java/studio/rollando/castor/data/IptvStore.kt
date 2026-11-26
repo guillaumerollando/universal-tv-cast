@@ -184,13 +184,6 @@ object IptvStore {
         return _lists.value.flatMap { p -> channels(p.id).filter { it.url == url || (n != null && fold(it.name) == n) } }
     }
 
-    /** La liste et la chaîne qui correspondent à ce flux (ou, à défaut, à ce nom), parmi les listes importées. */
-    suspend fun locate(url: String, name: String?): Pair<Playlist, Iptv.Channel>? {
-        for (p in _lists.value) channels(p.id).firstOrNull { it.url == url }?.let { return p to it }
-        val n = name?.let { fold(it) }?.takeIf { it.isNotEmpty() } ?: return null
-        for (p in _lists.value) channels(p.id).firstOrNull { fold(it.name) == n }?.let { return p to it }
-        return null
-    }
 
     /** Adresse du guide des programmes donnée par l'utilisateur pour cette liste (vide : aucune). */
     fun setGuide(id: String, url: String?) {

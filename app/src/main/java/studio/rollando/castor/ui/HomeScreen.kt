@@ -98,7 +98,7 @@ fun HomeScreen(
     val sites = siteItems(recents, bookmarks, hidden)
     val channels = recents.filter { it.live }
     // « Tout voir » : 1 = tout « Reprendre », 2 = tous les sites.
-    var showAll by rememberSaveable { mutableStateOf(0) }
+    var showAll by rememberSaveable { androidx.compose.runtime.mutableIntStateOf(0) }
     if (showAll == 1 && resume.isNotEmpty() || showAll == 2 && sites.isNotEmpty()) {
         BackHandler { showAll = 0 }
         if (showAll == 1) AllResume(resume, onBrowse) { showAll = 0 }

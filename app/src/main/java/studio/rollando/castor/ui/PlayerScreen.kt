@@ -510,25 +510,6 @@ internal fun Controls(s: CastState) {
     }
 }
 
-@Composable
-private fun Volume(s: CastState) {
-    val enabled = s.renderer?.rcUrl != null
-    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer), shape = RoundedCornerShape(20.dp)) {
-        Row(Modifier.fillMaxWidth().padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = { Castor.changeVolume(-3) }, enabled = enabled, modifier = Modifier.size(52.dp)) {
-                Icon(Icons.AutoMirrored.Rounded.VolumeDown, stringResource(R.string.cd_vol_down))
-            }
-            Text(
-                s.volume?.let { stringResource(R.string.volume_label, it) } ?: stringResource(R.string.volume_unknown),
-                style = MaterialTheme.typography.titleSmall, textAlign = TextAlign.Center, modifier = Modifier.weight(1f)
-                    .semantics { liveRegion = LiveRegionMode.Polite },
-            )
-            IconButton(onClick = { Castor.changeVolume(3) }, enabled = enabled, modifier = Modifier.size(52.dp)) {
-                Icon(Icons.AutoMirrored.Rounded.VolumeUp, stringResource(R.string.cd_vol_up))
-            }
-        }
-    }
-}
 
 @Composable
 private fun SubtitlesCard(s: CastState) {
@@ -644,37 +625,6 @@ private fun SubtitleDelay(delay: Double) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ModeCard(s: CastState) {
-    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer), shape = RoundedCornerShape(20.dp)) {
-        Column(Modifier.padding(16.dp)) {
-            Text(stringResource(R.string.mode_title), style = MaterialTheme.typography.titleMedium)
-            Spacer(Modifier.height(10.dp))
-            SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-                SegmentedButton(
-                    selected = s.continuous, onClick = { Castor.setContinuous(true) },
-                    shape = SegmentedButtonDefaults.itemShape(0, 2),
-                ) { Text(stringResource(R.string.mode_continuous)) }
-                SegmentedButton(
-                    selected = !s.continuous, onClick = { Castor.setContinuous(false) },
-                    shape = SegmentedButtonDefaults.itemShape(1, 2),
-                ) { Text(stringResource(R.string.mode_direct)) }
-            }
-            Spacer(Modifier.height(8.dp))
-            Text(
-                stringResource(
-                    when {
-                        s.splitAudio && !s.continuous -> R.string.mode_split_audio
-                        s.continuous -> R.string.mode_continuous_help
-                        else -> R.string.mode_direct_help
-                    }
-                ),
-                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
-    }
-}
 
 @Composable
 private fun Empty() {

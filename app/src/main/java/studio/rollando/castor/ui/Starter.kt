@@ -73,7 +73,7 @@ fun StarterSection(onBrowse: (String) -> Unit, onPasteLink: () -> Unit, showChan
  */
 @Composable
 fun FreeChannelsCard(onPasteLink: () -> Unit) {
-    val clipboard = androidx.compose.ui.platform.LocalClipboardManager.current
+    val ctx = LocalContext.current
     var copied by remember { mutableStateOf(false) }
     // Repliée par défaut : sur l'accueil, elle ne prend qu'une ligne ; on la déplie pour voir le lien.
     var open by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
@@ -106,7 +106,11 @@ fun FreeChannelsCard(onPasteLink: () -> Unit) {
             Text(stringResource(R.string.start_tv_steps), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 androidx.compose.material3.FilledTonalButton(
-                    onClick = { clipboard.setText(androidx.compose.ui.text.AnnotatedString(FREE_TV_LIST)); copied = true },
+                    onClick = {
+                        (ctx.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager)
+                            .setPrimaryClip(android.content.ClipData.newPlainText("M3U", FREE_TV_LIST))
+                        copied = true
+                    },
                     modifier = Modifier.weight(1f),
                 ) { Text(stringResource(if (copied) R.string.start_copied else R.string.start_copy), maxLines = 1) }
                 androidx.compose.material3.OutlinedButton(onClick = onPasteLink, modifier = Modifier.weight(1f)) {

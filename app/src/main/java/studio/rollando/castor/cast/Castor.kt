@@ -43,7 +43,7 @@ data class Slides(val uris: List<String>, val index: Int = 0, val auto: Boolean 
     val isVideo: Boolean get() = index in videos
 }
 
-data class Notice(@StringRes val res: Int, val arg: String? = null, val error: Boolean = false)
+data class Notice(@param:StringRes val res: Int, val arg: String? = null, val error: Boolean = false)
 
 data class CastState(
     val renderers: List<Renderer> = emptyList(),
@@ -1235,11 +1235,6 @@ object Castor {
         }.getOrDefault(pkg)
     }
 
-    private fun clockText(sec: Double): String {
-        val t = sec.toLong()
-        return if (t >= 3600) String.format(java.util.Locale.ROOT, "%d:%02d:%02d", t / 3600, (t / 60) % 60, t % 60)
-        else String.format(java.util.Locale.ROOT, "%d:%02d", t / 60, t % 60)
-    }
 
     // ------------------------------------------------------------------ commandes
 

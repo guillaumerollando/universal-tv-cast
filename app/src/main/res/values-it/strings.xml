@@ -80,19 +80,11 @@
     <string name="cd_settings">Impostazioni</string>
     <string name="home_title">Manda qualsiasi video sulla tua TV</string>
     <string name="home_subtitle">Gratis. Senza pubblicità. Senza tracciamento.</string>
-    <string name="home_browse">Naviga su un sito</string>
-    <string name="home_browse_sub">Universal TV Cast trova i video nella pagina</string>
-    <string name="home_files">Video sul telefono</string>
-    <string name="home_files_sub">Film, clip, musica</string>
     <string name="home_link">Incolla un link</string>
-    <string name="home_link_sub">Link diretto a un video o a uno stream .m3u8</string>
     <string name="home_other_title">Da un’altra app</string>
     <string name="home_other_body">Nella tua app video scegli «Lettore esterno», «Apri con» o «Condividi», poi Universal TV Cast.</string>
     <string name="home_bookmarks">Preferiti</string>
-    <string name="home_recents">Riprodotti di recente</string>
-    <string name="cd_delete">Rimuovi</string>
     <string name="link_dialog_title">Incolla un link</string>
-    <string name="action_cast">Trasmetti</string>
     <string name="action_cancel">Annulla</string>
     <string name="browser_hint">Sito o ricerca</string>
     <string name="cd_back">Indietro</string>
@@ -124,20 +116,10 @@
     <string name="action_play">Riproduci</string>
     <string name="action_pause">Pausa</string>
     <string name="action_stop">Ferma</string>
-    <string name="cd_vol_down">Abbassa il volume della TV</string>
-    <string name="cd_vol_up">Alza il volume della TV</string>
-    <string name="volume_label">Volume %1$d</string>
-    <string name="volume_unknown">Volume della TV</string>
     <string name="subs_title">Sottotitoli</string>
     <string name="subs_none">Nessuno</string>
     <string name="subs_add">Aggiungi file</string>
     <string name="subs_note">File SRT, VTT e ASS supportati. Alcune TV non mostrano i sottotitoli inviati in questo modo.</string>
-    <string name="mode_title">Modalità di riproduzione</string>
-    <string name="mode_continuous">Continuo</string>
-    <string name="mode_direct">Diretto</string>
-    <string name="mode_continuous_help">Funziona con quasi tutte le TV. Andando avanti, lo stream riparte dal nuovo punto.</string>
-    <string name="mode_direct_help">Invia lo stream così com’è. Avanzamento più fluido, se la tua TV legge gli stream HLS.</string>
-    <string name="mode_split_audio">L’audio di questo video è su una traccia separata: si usa la modalità diretta per mantenerlo.</string>
     <string name="notice_pick_tv">Scegli una TV per avviare la riproduzione.</string>
     <string name="err_no_wifi">Collega il telefono alla stessa rete Wi-Fi della TV.</string>
     <string name="err_drm">Questo video è protetto (DRM) e non può essere inviato alla TV.</string>
@@ -218,7 +200,6 @@
     <string name="web_open_outside">Apri nel browser del telefono</string>
     <string name="web_back_home">Torna alla pagina iniziale</string>
     <string name="phone_watch">Guarda sul telefono</string>
-    <string name="phone_to_tv">Invia alla TV</string>
     <string name="phone_error">Il telefono non riesce a riprodurre questo video. Forse funziona sulla TV.</string>
     <string name="cd_copy_link">Copia il link</string>
     <string name="cd_share_link">Condividi il link</string>
@@ -232,7 +213,6 @@
     <string name="channel_name">Nome del canale</string>
     <string name="action_ok">OK</string>
     <string name="live_back">Torna alla diretta</string>
-    <string name="live_paused">In pausa · Riproduci torna alla diretta</string>
     <string name="home_see_all">Vedi tutto</string>
     <string name="site_hide">Non proporre più</string>
     <string name="home_sites">I miei siti</string>
@@ -258,7 +238,6 @@
     <string name="cd_fullscreen_exit">Esci da schermo intero</string>
     <string name="phone_play_here">Riproduci su questo telefono</string>
     <string name="phone_watch_tv">Guarda sulla TV</string>
-    <string name="phase_on_phone">Su questo telefono</string>
     <string name="epg_now">In onda</string>
     <string name="epg_next">A seguire</string>
     <string name="iptv_guide">Guida TV</string>
@@ -297,16 +276,17 @@
     <string name="iptv_none_found">Nessun canale trovato</string>
     <string name="iptv_note">I canali provengono dalla lista che importi: Universal TV Cast non ne fornisce nessuno.</string>
     <string name="link_dialog_note">Un video, una diretta o una lista di canali (.m3u).</string>
-    <string name="bookmark_site">Sito</string>
     <string name="bookmark_followed_series">«%1$s» seguita: il segnalibro avanzerà da solo a ogni episodio.</string>
     <string name="bookmark_added">«%1$s» aggiunto ai preferiti.</string>
     <string name="bookmark_advanced">%1$s: segnalibro spostato all’episodio %2$d.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
+        <item quantity="many">%d video</item>
         <item quantity="other">%d video</item>
     </plurals>
     <plurals name="iptv_count">
         <item quantity="one">%d canale</item>
+        <item quantity="many">%d canali</item>
         <item quantity="other">%d canali</item>
     </plurals>
 </resources>

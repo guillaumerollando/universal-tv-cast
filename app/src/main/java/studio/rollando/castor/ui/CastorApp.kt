@@ -596,10 +596,6 @@ internal fun SectionTitle(text: String, modifier: Modifier = Modifier) {
     Text(text, style = MaterialTheme.typography.titleMedium, modifier = modifier.padding(top = 8.dp, bottom = 4.dp))
 }
 
-@Composable
-internal fun Hidden(visible: Boolean, content: @Composable () -> Unit) {
-    AnimatedVisibility(visible) { content() }
-}
 
 /**
  * Fond d'ambiance en haut de l'écran, sous la barre d'état et l'en-tête (comme YouTube) : l'image du film,

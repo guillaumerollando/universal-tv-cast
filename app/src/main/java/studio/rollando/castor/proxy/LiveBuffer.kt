@@ -96,7 +96,6 @@ class LiveBuffer(
         null
     }
 
-    fun nextSeq(e: Entry): Long = e.seg.seq + 1
 
     fun close() {
         alive = false

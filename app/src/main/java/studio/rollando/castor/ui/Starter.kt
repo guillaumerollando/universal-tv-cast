@@ -56,14 +56,22 @@ private val STARTER_SITES = listOf(
         "https://plus.nasa.gov/wp-content/uploads/2023/03/cropped-nasa-png-placeholder.png?w=192"),
 )
 
+/** Sites gratuits pas encore dans « Mes sites ». */
+private fun starterSitesFor(known: Set<String>) = STARTER_SITES.filter { s -> known.none { it.removePrefix("www.").endsWith(s.host) } }
+
 /** « Pour commencer » : de quoi essayer l'appli tout de suite, avec du contenu gratuit et légal. */
 @Composable
-fun StarterSection(onBrowse: (String) -> Unit, onPasteLink: () -> Unit, showChannels: Boolean = true, showSites: Boolean = true) {
-    if (!showChannels && !showSites) return
+fun StarterSection(
+    onBrowse: (String) -> Unit, onPasteLink: () -> Unit, showChannels: Boolean = true, showSites: Boolean = true,
+    /** Sites déjà connus de l'utilisateur (« Mes sites ») : on ne les suggère plus. */
+    known: Set<String> = emptySet(),
+) {
+    val sites = remember(known) { starterSitesFor(known) }
+    if (!showChannels && !(showSites && sites.isNotEmpty())) return
     Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         SectionTitle(stringResource(R.string.start_title), Modifier.semantics { heading() })
         if (showChannels) FreeChannelsCard(onPasteLink)
-        if (showSites) StarterSites(onBrowse)
+        if (showSites && sites.isNotEmpty()) StarterSites(onBrowse, known)
     }
 }
 
@@ -124,11 +132,13 @@ fun FreeChannelsCard(onPasteLink: () -> Unit) {
 
 /** Trois sites gratuits et légaux à essayer dans le navigateur de l'appli. */
 @Composable
-fun StarterSites(onBrowse: (String) -> Unit) {
+fun StarterSites(onBrowse: (String) -> Unit, known: Set<String> = emptySet()) {
     val c = MaterialTheme.colorScheme
+    val list = remember(known) { starterSitesFor(known) }
+    if (list.isEmpty()) return
     Text(stringResource(R.string.start_sites_title), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        STARTER_SITES.forEach { s ->
+        list.forEach { s ->
             Card(
                 onClick = { onBrowse(s.url) },
                 colors = CardDefaults.cardColors(containerColor = c.surfaceContainerHigh),

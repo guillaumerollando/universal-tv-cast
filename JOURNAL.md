@@ -960,3 +960,4 @@ fait toute seule.
   maîtresse → 1, 2, … 5 puis retour à 1. Désormais une piste au nom d'une liste HLS déjà vue n'est jamais ajoutée, et la
   liste maîtresse qui arrive après retire ses pistes aussitôt. Journal : « vidéos proposées : 1 » du début à la fin.
 - Noms : titre de la page (sans « – Regarder le film complet ») au lieu d'un nom de fichier technique.
+- Sites gratuits suggérés (accueil et accueil du navigateur) tant qu'il y a moins de 6 sites, sans ceux déjà dans « Mes sites ».

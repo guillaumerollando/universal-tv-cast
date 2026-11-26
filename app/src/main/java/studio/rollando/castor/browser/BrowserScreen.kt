@@ -621,10 +621,10 @@ private fun StartPage(onOpen: (String) -> Unit) {
                 Spacer(Modifier.height(16.dp))
             }
         }
-        // Aucun site encore : des sites gratuits et légaux à essayer.
-        if (sites.isEmpty()) item {
+        // Des sites gratuits et légaux à essayer (ceux pas encore dans « Mes sites »), tant qu'on en a peu.
+        if (sites.size < 6) item {
             Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                studio.rollando.castor.ui.StarterSites(onOpen)
+                studio.rollando.castor.ui.StarterSites(onOpen, sites.map { it.host }.toSet())
             }
             Spacer(Modifier.height(16.dp))
         }

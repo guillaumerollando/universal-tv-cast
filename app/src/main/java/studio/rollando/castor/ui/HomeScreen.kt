@@ -180,8 +180,9 @@ fun HomeScreen(
             // un site), et disparaît une fois fait.
             item {
                 val lists by studio.rollando.castor.data.IptvStore.lists.collectAsState()
+                // Sites gratuits suggérés tant que l'accueil n'est pas chargé (moins de 6 sites), sauf ceux déjà connus.
                 StarterSection(onBrowse = { onBrowse(it) }, onPasteLink = onPasteLink,
-                    showChannels = lists.isEmpty(), showSites = sites.isEmpty())
+                    showChannels = lists.isEmpty(), showSites = sites.size < 6, known = sites.map { it.host }.toSet())
             }
             item {
                 Text(stringResource(R.string.home_long_press_hint), style = MaterialTheme.typography.bodySmall,

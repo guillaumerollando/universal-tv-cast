@@ -265,6 +265,7 @@
     <string name="iptv_guide_hint">Dirección de la guía (XMLTV), opcional</string>
     <string name="iptv_guide_help">Si tu proveedor da una dirección de guía de programación (EPG), pégala aquí: el programa en curso aparecerá bajo sus canales.</string>
     <string name="action_save">Guardar</string>
+    <string name="notice_tv_not_starting">La TV no inicia la reproducción. ¿Está encendida? En reposo acepta el vídeo pero no lo muestra.</string>
     <string name="iptv_title">Listas de canales</string>
     <string name="iptv_intro">Una lista de canales (lista M3U o IPTV) reúne canales de TV en un solo enlace. Pega su dirección o abre el archivo: aquí tendrás todos sus canales, con su logotipo.</string>
     <string name="iptv_url_hint">Dirección de la lista (.m3u)</string>

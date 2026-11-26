@@ -437,6 +437,14 @@ S = {
  "Geeft je aanbieder een adres voor een programmagids (EPG), plak het hier: het huidige programma verschijnt onder zijn zenders.",
  "Se o seu provedor fornece um endereço de guia de programação (EPG), cole aqui: o programa atual aparecerá nos canais dele."],
 "action_save": ["Save", "Enregistrer", "Guardar", "Speichern", "Salva", "Opslaan", "Salvar"],
+"notice_tv_not_starting": [
+ "The TV isn’t starting playback. Is it switched on? A TV on standby accepts the video but doesn’t show it.",
+ "La télé ne démarre pas la lecture. Est-elle allumée ? En veille, elle accepte la vidéo mais ne l’affiche pas.",
+ "La TV no inicia la reproducción. ¿Está encendida? En reposo acepta el vídeo pero no lo muestra.",
+ "Der Fernseher startet die Wiedergabe nicht. Ist er eingeschaltet? Im Standby nimmt er das Video an, zeigt es aber nicht.",
+ "La TV non avvia la riproduzione. È accesa? In standby accetta il video ma non lo mostra.",
+ "De tv start het afspelen niet. Staat hij aan? In stand-by neemt hij de video aan maar toont hem niet.",
+ "A TV não inicia a reprodução. Ela está ligada? Em modo de espera, aceita o vídeo mas não o mostra."],
 "iptv_title": ["Channel lists", "Listes de chaînes", "Listas de canales", "Senderlisten", "Liste di canali", "Zenderlijsten", "Listas de canais"],
 "iptv_intro": [
  "A channel list (M3U or IPTV list) gathers TV channels in a single link. Paste its address or open the file: you’ll find all its channels here, with their logos.",

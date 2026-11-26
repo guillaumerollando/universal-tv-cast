@@ -442,7 +442,8 @@ private fun LiveBar(s: CastState) {
 @Composable
 internal fun Controls(s: CastState) {
     // Pendant le chargement ou l'envoi, lecture, pause et ±10 s ne font rien : un seul bouton, pour annuler.
-    if (s.phase == Phase.LOADING || s.phase == Phase.SENDING) {
+    // (Aussi quand la télé n'a jamais démarré, en veille par exemple : on doit pouvoir abandonner.)
+    if (s.phase == Phase.LOADING || s.phase == Phase.SENDING || s.notice?.res == R.string.notice_tv_not_starting) {
         Box(Modifier.fillMaxWidth().height(80.dp), contentAlignment = Alignment.Center) {
             OutlinedButton(onClick = Castor::cancel, modifier = Modifier.height(56.dp)) {
                 Icon(Icons.Rounded.Close, null, Modifier.size(20.dp))

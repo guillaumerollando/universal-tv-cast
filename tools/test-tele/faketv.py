@@ -91,6 +91,9 @@ class H(http.server.BaseHTTPRequestHandler):
                 S['reopen'] = False; log('   Play perdu (lecteur en réouverture)')
                 return reply(self, '<u:PlayResponse xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"/>')
             if S['state'] == 'PAUSED_PLAYBACK': S['t'] = time.time(); S['state'] = 'PLAYING'
+            elif S['state'] in ('STOPPED',) and S['uri'] and os.environ.get('FAKE_STANDBY'):
+                # Télé en veille (veille réseau) : accepte la vidéo, reste « en transition », n'affiche jamais rien.
+                S['state'] = 'TRANSITIONING'; log('   (veille) reste en transition')
             elif S['state'] in ('STOPPED',) and S['uri']:
                 S['gen'] += 1; S['state'] = 'TRANSITIONING'; threading.Thread(target=player, args=(S['gen'], 0.0), daemon=True).start()
             return reply(self, '<u:PlayResponse xmlns:u="urn:schemas-upnp-org:service:AVTransport:1"/>')

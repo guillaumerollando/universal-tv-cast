@@ -1166,6 +1166,16 @@ object Castor {
                             _state.update { it.copy(notice = Notice(R.string.notice_source_asleep, sourceLabel(st.media))) }
                         }
                     } else waitingSince = 0L
+                    // La télé n'a toujours pas démarré : souvent une télé en veille (elle répond sur le réseau, accepte
+                    // la vidéo, mais reste « en transition » sans rien afficher). On le dit, sans rien couper.
+                    if (!sawPlaying && !r.cast && System.currentTimeMillis() - castTime > 20_000 &&
+                        (st.phase == Phase.BUFFERING || st.phase == Phase.SENDING) && st.notice == null
+                    ) {
+                        _state.update { it.copy(notice = Notice(R.string.notice_tv_not_starting, error = true)) }
+                    }
+                    if (sawPlaying && _state.value.notice?.res == R.string.notice_tv_not_starting) {
+                        _state.update { it.copy(notice = null) }
+                    }
                     // Arrivée au bout (la télé s'arrête près de la fin) : écran d'attente ou suite de l'album.
                     // Dans un album, la télé qui s'arrête après avoir lu la vidéo = fin : on enchaîne, même si
                     // elle n'a jamais annoncé de durée. Sinon, il faut être près de la fin connue (ou sans durée).
@@ -1399,14 +1409,19 @@ object Castor {
         private var since = 0L
         private var played = 0.0
         private var tick = 0L
+        /** La lecture a vraiment démarré (avant : on affiche le retard demandé, sans le faire grandir). */
+        private var started = false
         @Synchronized fun start(behind: Double) {
-            val n = System.currentTimeMillis(); base = behind; since = n; played = 0.0; tick = n
+            val n = System.currentTimeMillis(); base = behind; since = n; played = 0.0; tick = n; started = false
         }
         @Synchronized fun update(playing: Boolean): Double {
             val n = System.currentTimeMillis()
             if (since == 0L) return 0.0
-            if (playing) played += (n - tick) / 1000.0
+            if (playing) { played += (n - tick) / 1000.0; started = true }
             tick = n
+            // Tant que rien ne joue (télé en veille, chargement sans fin), le retard ne bouge pas. Une fois partie,
+            // le temps de chargement compte : le programme a avancé pendant ce temps.
+            if (!started) return base
             return (base + (n - since) / 1000.0 - played).coerceAtLeast(0.0)
         }
     }

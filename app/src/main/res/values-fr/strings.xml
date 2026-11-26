@@ -265,6 +265,7 @@
     <string name="iptv_guide_hint">Adresse du guide (XMLTV), facultatif</string>
     <string name="iptv_guide_help">Si ton fournisseur donne une adresse de guide des programmes (EPG), colle-la ici : le programme en cours s’affichera sous ses chaînes.</string>
     <string name="action_save">Enregistrer</string>
+    <string name="notice_tv_not_starting">La télé ne démarre pas la lecture. Est-elle allumée ? En veille, elle accepte la vidéo mais ne l’affiche pas.</string>
     <string name="iptv_title">Listes de chaînes</string>
     <string name="iptv_intro">Une liste de chaînes (liste M3U ou IPTV) regroupe des chaînes télé dans un seul lien. Colle son adresse ou ouvre le fichier : tu retrouves ici toutes ses chaînes, avec leur logo.</string>
     <string name="iptv_url_hint">Adresse de la liste (.m3u)</string>

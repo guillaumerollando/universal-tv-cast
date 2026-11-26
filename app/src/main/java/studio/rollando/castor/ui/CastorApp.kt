@@ -190,7 +190,7 @@ fun CastorApp() {
                     }
                     Spacer(Modifier.width(12.dp))
                     Box(Modifier.weight(1f), contentAlignment = Alignment.CenterEnd) {
-                        TvChip(state.renderer?.name, state.searching) { showTvs = true }
+                        TvChip(state.renderer?.name, state.searching, casting = state.active && !state.onPhone) { showTvs = true }
                     }
                     IconButton(onClick = { Nav.help.value = true }) {
                         Icon(Icons.AutoMirrored.Rounded.HelpOutline, stringResource(R.string.cd_help))
@@ -239,14 +239,15 @@ fun CastorApp() {
 }
 
 @Composable
-private fun TvChip(name: String?, searching: Boolean, onClick: () -> Unit) {
+private fun TvChip(name: String?, searching: Boolean, casting: Boolean, onClick: () -> Unit) {
     val label = name ?: stringResource(R.string.tv_choose)
     val cd = stringResource(R.string.cd_choose_tv)
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(50),
-        color = if (name != null) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
-        contentColor = if (name != null) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurface,
+        // Vert seulement quand une vidéo passe vraiment sur la télé : choisie ne veut pas dire allumée (une télé en veille répond).
+        color = if (name != null && casting) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surfaceContainerHigh,
+        contentColor = if (name != null && casting) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurface,
         modifier = Modifier.height(40.dp).semantics { contentDescription = "$cd : $label" },
     ) {
         Row(Modifier.padding(horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically) {

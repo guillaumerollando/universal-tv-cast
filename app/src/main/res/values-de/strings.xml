@@ -265,6 +265,7 @@
     <string name="iptv_guide_hint">Adresse des Programmführers (XMLTV), optional</string>
     <string name="iptv_guide_help">Wenn dein Anbieter eine Programmführer-Adresse (EPG) angibt, füge sie hier ein: Die laufende Sendung erscheint unter seinen Sendern.</string>
     <string name="action_save">Speichern</string>
+    <string name="notice_tv_not_starting">Der Fernseher startet die Wiedergabe nicht. Ist er eingeschaltet? Im Standby nimmt er das Video an, zeigt es aber nicht.</string>
     <string name="iptv_title">Senderlisten</string>
     <string name="iptv_intro">Eine Senderliste (M3U- oder IPTV-Liste) fasst TV-Sender in einem einzigen Link zusammen. Füge ihre Adresse ein oder öffne die Datei: Hier findest du alle Sender mit ihrem Logo.</string>
     <string name="iptv_url_hint">Adresse der Liste (.m3u)</string>

@@ -802,3 +802,11 @@ fait toute seule.
   toutes les fiches de la chaîne (plusieurs listes) essayées. Guide injoignable : nouvel essai au bout d'1 h.
 - Émulateur, faux fournisseur Xtream (get.php sans guide en tête, xmltv.php « Émission de test ») : programme affiché
   via l'identifiant (le guide nommait la chaîne autrement). Test unitaire IptvTest.findsXtreamGuideAndHeaderGuides.
+
+## 2026-11-26 — Télé éteinte (veille réseau)
+- Constaté (lecture seule) : la Philips éteinte répond sur le réseau (description 200, port ouvert) et, après un envoi,
+  reste « TRANSITIONING », RelTime 0:00:00. Impossible de savoir d'avance qu'elle est éteinte.
+- Pastille de la télé : verte seulement quand une vidéo y passe (choisie ≠ allumée).
+- 20 s sans démarrer (DLNA) : « La télé ne démarre pas la lecture. Est-elle allumée ? … » + bouton Annuler (sans rien couper).
+- LiveClock : le retard ne grandit qu'une fois la lecture vraiment partie (avant : retard demandé) — fini le « −15 » sans image.
+- Fausse télé : FAKE_STANDBY=1 (accepte, reste en transition). Émulateur : message à 20 s, Annuler, retard stable.

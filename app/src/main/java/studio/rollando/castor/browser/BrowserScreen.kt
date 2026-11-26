@@ -501,8 +501,12 @@ fun BrowserScreen(b: BrowserController) {
                     )
                 }
             }
+            // La vignette de la vidéo en cours se range au-dessus de ce bouton seulement quand il est là.
+            val hasFab = found.isNotEmpty()
+            androidx.compose.runtime.LaunchedEffect(hasFab) { studio.rollando.castor.ui.Nav.browserVideoButton.value = hasFab }
+            androidx.compose.runtime.DisposableEffect(Unit) { onDispose { studio.rollando.castor.ui.Nav.browserVideoButton.value = false } }
             androidx.compose.animation.AnimatedVisibility(
-                visible = found.isNotEmpty(),
+                visible = hasFab,
                 enter = scaleIn(), exit = scaleOut(),
                 modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
             ) {

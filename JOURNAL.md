@@ -885,3 +885,4 @@ fait toute seule.
   lecture comme avant. En-tête inchangé (il ne se cache pas au défilement).
 - Navigateur : la vignette de la vidéo en cours se tient au-dessus du bouton « N vidéos » (+72 dp), qu'elle cachait
   (bouton qui lance l'épisode suivant). Non revérifié à l'écran.
+- Vignette remontée seulement quand le bouton « N vidéos » est affiché (Nav.browserVideoButton).

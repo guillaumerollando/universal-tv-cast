@@ -120,6 +120,8 @@ object Nav {
     val tvs = MutableStateFlow(false)
     /** Écran des listes de chaînes ouvert : id de la liste à montrer ("" : la première). */
     val iptv = MutableStateFlow<String?>(null)
+    /** Le navigateur affiche son bouton « N vidéos » (en bas à droite). */
+    val browserVideoButton = MutableStateFlow(false)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -263,8 +265,9 @@ fun CastorApp() {
     // Lecture sur le téléphone, ailleurs que sur l'écran de lecture : la vidéo continue en vignette.
     val playingOnPhone = state.onPhone && (state.active || state.phase == studio.rollando.castor.cast.Phase.SENDING)
     if (playingOnPhone && !landscape && (tab != Tab.PLAYER || iptvOpen != null)) {
-        // Sur le navigateur, la vignette se tient au-dessus du bouton « 1 vidéo » (celui qui lance l'épisode suivant).
-        val bottomBar = if (iptvOpen != null) 0.dp else if (tab == Tab.BROWSER) 88.dp + 72.dp else 88.dp
+        // Sur le navigateur, quand le bouton « 1 vidéo » est affiché, la vignette se tient au-dessus de lui.
+        val videoButton by Nav.browserVideoButton.collectAsState()
+        val bottomBar = if (iptvOpen != null) 0.dp else if (tab == Tab.BROWSER && videoButton) 88.dp + 72.dp else 88.dp
         MiniPlayer(state, bottom = bottomBar + 12.dp + androidx.compose.foundation.layout.WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding())
     }
     if (showTvs) TvSheet(onDismiss = { showTvs = false })

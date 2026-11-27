@@ -352,6 +352,10 @@
     <string name="net_help_mac">1. システム設定 → 一般 → 共有 → 「ファイル共有」をオン。\n2. ⓘボタン → ＋で動画のフォルダを追加。\n3. オプション → 「Windowsファイル共有」でアカウントにチェック。\n4. ここでMacをタップし、Macのアカウントでサインインします。</string>
     <string name="net_help_nas_title">NAS、またはディスク付きルーター</string>
     <string name="net_help_nas">設定で「メディアサーバー」（DLNAまたはUPnP）をオンにすると、パスワードなしでここに自動的に表示されます。共有フォルダーも、NASのアカウントで使えます。</string>
+    <string name="tip_notif_title">通知にリモコンを表示</string>
+    <string name="tip_notif_body">再生中、Universal TV Cast は操作ボタン(一時停止、±10秒、停止)を通知とロック画面に表示し、アプリを開かずにテレビを操作できます。それ以外は何もしません。広告もメッセージも送りません。</string>
+    <string name="action_notif_allow">リモコンを表示</string>
+    <string name="action_no_thanks">いいえ</string>
     <plurals name="browser_found">
         <item quantity="other">%d 本の動画</item>
     </plurals>

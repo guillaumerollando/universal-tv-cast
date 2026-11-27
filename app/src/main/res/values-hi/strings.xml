@@ -352,6 +352,10 @@
     <string name="net_help_mac">1. सिस्टम सेटिंग → सामान्य → शेयरिंग → फ़ाइल शेयरिंग चालू करें।\n2. ⓘ बटन → + से वीडियो वाला फ़ोल्डर जोड़ें।\n3. विकल्प → “Windows फ़ाइल शेयरिंग” में अपना खाता चुनें।\n4. यहाँ अपने Mac पर टैप करें और अपने Mac खाते से साइन इन करें।</string>
     <string name="net_help_nas_title">NAS या डिस्क वाला राउटर</string>
     <string name="net_help_nas">इसकी सेटिंग में “मीडिया सर्वर” (DLNA या UPnP) चालू करें: यह यहाँ अपने आप दिखेगा, बिना पासवर्ड के। इसके शेयर किए फ़ोल्डर भी चलते हैं, आपके NAS खाते से।</string>
+    <string name="tip_notif_title">सूचनाओं में आपका रिमोट</string>
+    <string name="tip_notif_body">वीडियो चलते समय Universal TV Cast अपने बटन (रोकें, ±10 से, बंद करें) सूचनाओं और लॉक स्क्रीन पर दिखाता है, ताकि आप ऐप खोले बिना टीवी चला सकें। और कुछ नहीं: कभी विज्ञापन नहीं, कभी संदेश नहीं।</string>
+    <string name="action_notif_allow">रिमोट दिखाएँ</string>
+    <string name="action_no_thanks">नहीं, धन्यवाद</string>
     <plurals name="browser_found">
         <item quantity="one">%d वीडियो</item>
         <item quantity="other">%d वीडियो</item>

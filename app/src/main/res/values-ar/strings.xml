@@ -352,6 +352,10 @@
     <string name="net_help_mac">1. إعدادات النظام ← عام ← المشاركة ← فعّل مشاركة الملفات.\n2. زر ⓘ ← أضف مجلد الفيديوهات بزر +.\n3. الخيارات ← حدّد حسابك ضمن «مشاركة ملفات Windows».\n4. هنا، اضغط على Mac وسجّل الدخول بحساب Mac.</string>
     <string name="net_help_nas_title">NAS أو راوتر مع قرص</string>
     <string name="net_help_nas">فعّل «خادم الوسائط» (DLNA أو UPnP) من إعداداته: سيظهر هنا تلقائيًا بدون كلمة مرور. المجلدات المشتركة تعمل أيضًا، بحساب NAS الخاص بك.</string>
+    <string name="tip_notif_title">جهاز التحكم في الإشعارات</string>
+    <string name="tip_notif_body">أثناء التشغيل، يعرض Universal TV Cast أزراره (إيقاف مؤقت، ±10 ث، إيقاف) في الإشعارات وعلى شاشة القفل، لتتحكم في التلفاز دون فتح التطبيق. لا شيء آخر: لا إعلانات ولا رسائل أبدًا.</string>
+    <string name="action_notif_allow">عرض جهاز التحكم</string>
+    <string name="action_no_thanks">لا، شكرًا</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>

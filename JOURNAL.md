@@ -1312,3 +1312,11 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   - Liste des partages sur un port autre que 445 (jcifs-ng passe toujours par 445 pour la demander) : donner le
     partage à la main dans ce cas.
   - Photos d'un serveur DLNA (masquées) ; vidéos du réseau absentes de « Reprendre » (comme les vidéos du téléphone).
+
+## 2026-11-27 — Notifications demandées au bon moment
+- Fait : plus de demande d'autorisation des notifications à l'ouverture de l'appli. Pendant une lecture, une carte
+  « Ta télécommande dans les notifications » explique à quoi elles servent (pause, ±10 s, arrêt dans les
+  notifications et sur l'écran verrouillé ; jamais de pub ni de message), avec « Afficher la télécommande »
+  (demande d'Android) ou « Non merci ». Un refus est respecté : la carte ne revient plus. Une carte à la fois
+  (la carte batterie vient après). Textes en 23 langues. Vérifié sur émulateur (installation neuve).
+- Pas fait : rien.

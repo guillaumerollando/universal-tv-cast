@@ -350,7 +350,11 @@
   "net_help_windows": "1. Nhấp chuột phải vào thư mục chứa video → Thuộc tính → thẻ Chia sẻ → Chia sẻ.\n2. Chọn tên của bạn, rồi nhấn Chia sẻ.\n3. Kiểm tra mạng là “Riêng tư”: Cài đặt → Mạng & internet → Wi-Fi hoặc Ethernet của bạn → Riêng tư.\n4. Tại đây, chạm vào máy tính của bạn và đăng nhập bằng tài khoản Windows.",
   "net_help_mac": "1. Cài đặt hệ thống → Cài đặt chung → Chia sẻ → bật Chia sẻ tệp.\n2. Nút ⓘ → thêm thư mục chứa video bằng +.\n3. Tùy chọn → đánh dấu tài khoản của bạn trong “Chia sẻ tệp Windows”.\n4. Tại đây, chạm vào Mac của bạn và đăng nhập bằng tài khoản Mac.",
   "net_help_nas_title": "NAS hoặc router có ổ đĩa",
-  "net_help_nas": "Bật “máy chủ đa phương tiện” (DLNA hoặc UPnP) trong phần cài đặt của nó: nó sẽ tự hiện ở đây, không cần mật khẩu. Các thư mục chia sẻ cũng dùng được, với tài khoản NAS của bạn."
+  "net_help_nas": "Bật “máy chủ đa phương tiện” (DLNA hoặc UPnP) trong phần cài đặt của nó: nó sẽ tự hiện ở đây, không cần mật khẩu. Các thư mục chia sẻ cũng dùng được, với tài khoản NAS của bạn.",
+  "tip_notif_title": "Điều khiển trong thông báo",
+  "tip_notif_body": "Khi phát video, Universal TV Cast hiển thị các nút (tạm dừng, ±10 giây, dừng) trong thông báo và trên màn hình khóa để bạn điều khiển TV mà không cần mở ứng dụng. Không gì khác: không bao giờ có quảng cáo hay tin nhắn.",
+  "action_notif_allow": "Hiện điều khiển",
+  "action_no_thanks": "Không, cảm ơn"
  },
  "plurals": {
   "browser_found": {

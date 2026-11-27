@@ -352,6 +352,10 @@
     <string name="net_help_mac">1. Pengaturan Sistem → Umum → Berbagi → aktifkan Berbagi File.\n2. Tombol ⓘ → tambahkan folder videomu dengan +.\n3. Opsi → centang akunmu di bawah “Berbagi File Windows”.\n4. Di sini, ketuk Mac-mu dan masuk dengan akun Mac.</string>
     <string name="net_help_nas_title">NAS atau router dengan disk</string>
     <string name="net_help_nas">Aktifkan “server media” (DLNA atau UPnP) di pengaturannya: server itu muncul sendiri di sini, tanpa kata sandi. Folder bersamanya juga berfungsi, dengan akun NAS-mu.</string>
+    <string name="tip_notif_title">Remote di notifikasi</string>
+    <string name="tip_notif_body">Saat video diputar, Universal TV Cast menampilkan tombolnya (jeda, ±10 dtk, berhenti) di notifikasi dan layar kunci, agar kamu bisa mengendalikan TV tanpa membuka aplikasi. Tidak ada yang lain: tanpa iklan, tanpa pesan.</string>
+    <string name="action_notif_allow">Tampilkan remote</string>
+    <string name="action_no_thanks">Tidak, terima kasih</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

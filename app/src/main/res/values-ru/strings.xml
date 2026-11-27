@@ -352,6 +352,10 @@
     <string name="net_help_mac">1. Системные настройки → Основные → Общий доступ → включи «Общий доступ к файлам».\n2. Кнопка ⓘ → добавь папку с видео кнопкой +.\n3. Параметры → отметь свою учётную запись в «Общий доступ к файлам Windows».\n4. Здесь нажми на свой Mac и войди с учётной записью Mac.</string>
     <string name="net_help_nas_title">NAS или роутер с диском</string>
     <string name="net_help_nas">Включи в его настройках «медиасервер» (DLNA или UPnP): он появится здесь сам, без пароля. Общие папки тоже работают, с твоей учётной записью NAS.</string>
+    <string name="tip_notif_title">Пульт в уведомлениях</string>
+    <string name="tip_notif_body">Во время воспроизведения Universal TV Cast показывает кнопки (пауза, ±10 с, стоп) в уведомлениях и на экране блокировки, чтобы управлять телевизором, не открывая приложение. Больше ничего: никакой рекламы, никаких сообщений.</string>
+    <string name="action_notif_allow">Показать пульт</string>
+    <string name="action_no_thanks">Нет, спасибо</string>
     <plurals name="browser_found">
         <item quantity="one">%d видео</item>
         <item quantity="few">%d видео</item>

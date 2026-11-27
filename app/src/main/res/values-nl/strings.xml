@@ -49,6 +49,10 @@
     <string name="tip_howto_huawei">In de instellingen: Batterij → App-start → handmatig beheren en uitvoeren op de achtergrond toestaan.</string>
     <string name="tip_howto_oppo">In de instellingen: Batterijgebruik → achtergrondactiviteit toestaan.</string>
     <string name="tip_howto_generic">In de instellingen: Batterij → ‘Onbeperkt’ (of ‘Niet optimaliseren’).</string>
+    <string name="tip_notif_title">Je afstandsbediening in de meldingen</string>
+    <string name="tip_notif_body">Tijdens het afspelen toont Universal TV Cast de knoppen (pauze, ±10 s, stop) in je meldingen en op het vergrendelscherm, zodat je de tv bedient zonder de app te openen. Verder niets: nooit reclame, nooit berichten.</string>
+    <string name="action_notif_allow">Afstandsbediening tonen</string>
+    <string name="action_no_thanks">Nee, bedankt</string>
     <string name="action_dont_show">Niet meer tonen</string>
     <string name="help_section">Problemen oplossen</string>
     <string name="state_expanded">uitgevouwen</string>

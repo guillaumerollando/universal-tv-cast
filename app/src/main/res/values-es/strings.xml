@@ -49,6 +49,10 @@
     <string name="tip_howto_huawei">En sus ajustes: Batería → Inicio de apps → gestionar manualmente y permitir ejecución en segundo plano.</string>
     <string name="tip_howto_oppo">En sus ajustes: Uso de batería → permitir actividad en segundo plano.</string>
     <string name="tip_howto_generic">En sus ajustes: Batería → «Sin restricciones» (o «No optimizar»).</string>
+    <string name="tip_notif_title">Tu mando en las notificaciones</string>
+    <string name="tip_notif_body">Durante la reproducción, Universal TV Cast muestra sus controles (pausa, ±10 s, detener) en las notificaciones y en la pantalla de bloqueo, para manejar la TV sin abrir la app. Nada más: nunca publicidad ni mensajes.</string>
+    <string name="action_notif_allow">Mostrar el mando</string>
+    <string name="action_no_thanks">No, gracias</string>
     <string name="action_dont_show">No volver a mostrar</string>
     <string name="help_section">Solución de problemas</string>
     <string name="state_expanded">abierto</string>

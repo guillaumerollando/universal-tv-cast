@@ -1387,6 +1387,22 @@
   "net_help_nas": {
    "en": "Turn on its “media server” (DLNA or UPnP) in its settings: it shows up here on its own, without a password. Its shared folders work too, with your NAS account.",
    "fr": "Active son « serveur multimédia » (DLNA ou UPnP) dans ses réglages : il apparaît ici tout seul, sans mot de passe. Ses dossiers partagés marchent aussi, avec ton identifiant du NAS."
+  },
+  "tip_notif_title": {
+   "en": "Your remote in the notifications",
+   "fr": "Ta télécommande dans les notifications"
+  },
+  "tip_notif_body": {
+   "en": "While a video plays, Universal TV Cast shows its controls (pause, ±10 s, stop) in your notifications and on the lock screen, so you can control the TV without opening the app. Nothing else: never ads, never messages.",
+   "fr": "Pendant la lecture, Universal TV Cast affiche ses commandes (pause, ±10 s, arrêt) dans tes notifications et sur l’écran verrouillé, pour piloter la télé sans rouvrir l’appli. Rien d’autre : jamais de pub, jamais de message."
+  },
+  "action_notif_allow": {
+   "en": "Show the remote",
+   "fr": "Afficher la télécommande"
+  },
+  "action_no_thanks": {
+   "en": "No thanks",
+   "fr": "Non merci"
   }
  },
  "plurals": {

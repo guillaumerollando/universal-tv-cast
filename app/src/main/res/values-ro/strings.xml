@@ -352,6 +352,10 @@
     <string name="net_help_mac">1. Setări de sistem → General → Partajare → activează Partajarea fișierelor.\n2. Butonul ⓘ → adaugă folderul cu videoclipurile tale cu +.\n3. Opțiuni → bifează-ți contul la „Partajare fișiere Windows”.\n4. Aici, atinge Mac-ul tău și conectează-te cu contul Mac.</string>
     <string name="net_help_nas_title">NAS sau router cu disc</string>
     <string name="net_help_nas">Activează „serverul media” (DLNA sau UPnP) în setările lui: apare aici singur, fără parolă. Folderele partajate merg și ele, cu contul tău NAS.</string>
+    <string name="tip_notif_title">Telecomanda în notificări</string>
+    <string name="tip_notif_body">În timpul redării, Universal TV Cast își afișează comenzile (pauză, ±10 s, oprire) în notificări și pe ecranul de blocare, ca să controlezi televizorul fără să deschizi aplicația. Nimic altceva: niciodată reclame, niciodată mesaje.</string>
+    <string name="action_notif_allow">Afișează telecomanda</string>
+    <string name="action_no_thanks">Nu, mulțumesc</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>

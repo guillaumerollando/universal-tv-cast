@@ -352,6 +352,10 @@
     <string name="net_help_mac">1. 系统设置 → 通用 → 共享 → 打开“文件共享”。\n2. 点 ⓘ 按钮 → 用 + 添加视频文件夹。\n3. 选项 → 在“Windows 文件共享”下勾选你的账户。\n4. 在这里点按你的 Mac，用 Mac 账户登录。</string>
     <string name="net_help_nas_title">NAS 或带硬盘的路由器</string>
     <string name="net_help_nas">在它的设置中打开“媒体服务器”（DLNA 或 UPnP）：它会自动出现在这里，无需密码。它的共享文件夹也能用，使用你的 NAS 账户即可。</string>
+    <string name="tip_notif_title">通知中的遥控器</string>
+    <string name="tip_notif_body">播放时，Universal TV Cast 会在通知栏和锁屏上显示控制按钮（暂停、±10 秒、停止），无需打开应用即可控制电视。除此之外什么都没有：绝无广告，绝无消息。</string>
+    <string name="action_notif_allow">显示遥控器</string>
+    <string name="action_no_thanks">不用了</string>
     <plurals name="browser_found">
         <item quantity="other">%d 个视频</item>
     </plurals>

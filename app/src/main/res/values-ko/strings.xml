@@ -352,6 +352,10 @@
     <string name="net_help_mac">1. 시스템 설정 → 일반 → 공유 → 파일 공유를 켜세요.\n2. ⓘ 버튼 → +로 동영상 폴더를 추가하세요.\n3. 옵션 → \'Windows 파일 공유\'에서 내 계정에 체크하세요.\n4. 여기서 내 Mac을 누르고 Mac 계정으로 로그인하세요.</string>
     <string name="net_help_nas_title">NAS 또는 디스크가 있는 공유기</string>
     <string name="net_help_nas">설정에서 \'미디어 서버\'(DLNA 또는 UPnP)를 켜세요. 비밀번호 없이 여기에 자동으로 나타나요. 공유 폴더도 NAS 계정으로 쓸 수 있어요.</string>
+    <string name="tip_notif_title">알림에 리모컨 표시</string>
+    <string name="tip_notif_body">재생 중에 Universal TV Cast는 조작 버튼(일시정지, ±10초, 정지)을 알림과 잠금 화면에 표시해 앱을 열지 않고도 TV를 조작할 수 있게 합니다. 그 외에는 없습니다. 광고도 메시지도 보내지 않습니다.</string>
+    <string name="action_notif_allow">리모컨 표시</string>
+    <string name="action_no_thanks">괜찮아요</string>
     <plurals name="browser_found">
         <item quantity="other">동영상 %d개</item>
     </plurals>

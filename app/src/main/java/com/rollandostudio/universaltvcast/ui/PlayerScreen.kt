@@ -199,7 +199,8 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
             media.host?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant) }
         }
 
-        BackgroundTip(state)
+        // Une carte à la fois : la télécommande dans les notifications d'abord, puis le conseil batterie.
+        if (needsNotificationTip(state)) NotificationTip() else BackgroundTip(state)
 
         state.notice?.let { n ->
             Card(

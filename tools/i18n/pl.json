@@ -350,7 +350,11 @@
   "net_help_windows": "1. Kliknij prawym przyciskiem folder z filmami → Właściwości → karta Udostępnianie → Udostępnij.\n2. Wybierz swoją nazwę, potem Udostępnij.\n3. Upewnij się, że sieć jest „prywatna”: Ustawienia → Sieć i Internet → twoje Wi-Fi lub Ethernet → Prywatna.\n4. Tutaj dotknij swojego komputera i zaloguj się kontem Windows.",
   "net_help_mac": "1. Ustawienia systemowe → Ogólne → Udostępnianie → włącz Udostępnianie plików.\n2. Przycisk ⓘ → dodaj folder z filmami przyciskiem +.\n3. Opcje → zaznacz swoje konto w „Udostępnianie plików Windows”.\n4. Tutaj dotknij swojego Maca i zaloguj się kontem Maca.",
   "net_help_nas_title": "NAS lub router z dyskiem",
-  "net_help_nas": "Włącz w jego ustawieniach „serwer multimediów” (DLNA lub UPnP): pojawi się tu sam, bez hasła. Foldery udostępnione też działają, z twoim kontem NAS."
+  "net_help_nas": "Włącz w jego ustawieniach „serwer multimediów” (DLNA lub UPnP): pojawi się tu sam, bez hasła. Foldery udostępnione też działają, z twoim kontem NAS.",
+  "tip_notif_title": "Pilot w powiadomieniach",
+  "tip_notif_body": "Podczas odtwarzania Universal TV Cast pokazuje przyciski (pauza, ±10 s, stop) w powiadomieniach i na ekranie blokady, żebyś mógł sterować telewizorem bez otwierania aplikacji. Nic więcej: nigdy reklam, nigdy wiadomości.",
+  "action_notif_allow": "Pokaż pilota",
+  "action_no_thanks": "Nie, dziękuję"
  },
  "plurals": {
   "browser_found": {

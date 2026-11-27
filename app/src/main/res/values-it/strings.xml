@@ -49,6 +49,10 @@
     <string name="tip_howto_huawei">Nelle impostazioni: Batteria → Avvio app → gestisci manualmente e consenti l’esecuzione in background.</string>
     <string name="tip_howto_oppo">Nelle impostazioni: Utilizzo batteria → consenti attività in background.</string>
     <string name="tip_howto_generic">Nelle impostazioni: Batteria → «Senza restrizioni» (o «Non ottimizzare»).</string>
+    <string name="tip_notif_title">Il telecomando nelle notifiche</string>
+    <string name="tip_notif_body">Durante la riproduzione, Universal TV Cast mostra i comandi (pausa, ±10 s, stop) nelle notifiche e sulla schermata di blocco, per controllare la TV senza riaprire l’app. Nient’altro: mai pubblicità, mai messaggi.</string>
+    <string name="action_notif_allow">Mostra il telecomando</string>
+    <string name="action_no_thanks">No, grazie</string>
     <string name="action_dont_show">Non mostrare più</string>
     <string name="help_section">Risoluzione dei problemi</string>
     <string name="state_expanded">aperto</string>

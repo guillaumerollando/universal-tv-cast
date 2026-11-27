@@ -350,7 +350,11 @@
   "net_help_windows": "1. 在影片資料夾上按一下滑鼠右鍵 → 內容 → 「共用」索引標籤 → 共用。\n2. 選擇你的名字，然後按「共用」。\n3. 確認網路是「私人」：設定 → 網路與網際網路 → 你的 Wi-Fi 或 Ethernet → 私人。\n4. 在這裡點你的電腦，用 Windows 帳號登入。",
   "net_help_mac": "1. 系統設定 → 一般 → 共享 → 開啟「檔案共享」。\n2. 點 ⓘ 按鈕 → 用 + 加入影片資料夾。\n3. 選項 → 在「Windows 檔案共享」下勾選你的帳號。\n4. 在這裡點你的 Mac，用 Mac 帳號登入。",
   "net_help_nas_title": "NAS 或附硬碟的路由器",
-  "net_help_nas": "在它的設定中開啟「媒體伺服器」（DLNA 或 UPnP）：它會自動出現在這裡，不需要密碼。它的共用資料夾也能用，使用你的 NAS 帳號即可。"
+  "net_help_nas": "在它的設定中開啟「媒體伺服器」（DLNA 或 UPnP）：它會自動出現在這裡，不需要密碼。它的共用資料夾也能用，使用你的 NAS 帳號即可。",
+  "tip_notif_title": "通知中的遙控器",
+  "tip_notif_body": "播放時，Universal TV Cast 會在通知和鎖定畫面上顯示控制按鈕（暫停、±10 秒、停止），不必打開應用程式就能控制電視。除此之外什麼都沒有：絕無廣告，絕無訊息。",
+  "action_notif_allow": "顯示遙控器",
+  "action_no_thanks": "不用了"
  },
  "plurals": {
   "browser_found": {

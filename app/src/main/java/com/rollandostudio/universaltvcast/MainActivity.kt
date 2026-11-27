@@ -1,10 +1,7 @@
 package com.rollandostudio.universaltvcast
 
-import android.Manifest
 import android.app.Application
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -20,7 +17,6 @@ import kotlin.math.sqrt
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
 import com.rollandostudio.universaltvcast.cast.TvCast
 import com.rollandostudio.universaltvcast.cast.Intake
 import com.rollandostudio.universaltvcast.ui.TvCastApp
@@ -47,8 +43,6 @@ class MainActivity : ComponentActivity(), SensorEventListener {
     private var lastShake = 0L
     private var shakeCount = 0
 
-    private val askNotifications = registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Thème sombre uniquement : icônes claires dans les barres système, quel que soit le réglage du téléphone.
@@ -60,9 +54,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         if (savedInstanceState == null) handle(intent)
         setContent { TvCastTheme { TvCastApp() } }
         if (TvCast.state.value.renderers.isEmpty()) TvCast.discover()
-        if (Build.VERSION.SDK_INT >= 33 &&
-            checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
-        ) askNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
+        // Pas de demande de notifications au démarrage : elle vient au moment de la lecture, expliquée (NotificationTip).
     }
 
     override fun onResume() {

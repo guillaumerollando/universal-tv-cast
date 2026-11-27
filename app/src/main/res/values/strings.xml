@@ -50,6 +50,10 @@
     <string name="tip_howto_huawei">In its settings: Battery → App launch → manage manually and allow running in background.</string>
     <string name="tip_howto_oppo">In its settings: Battery usage → allow background activity.</string>
     <string name="tip_howto_generic">In its settings: Battery → “Unrestricted” (or “Don’t optimize”).</string>
+    <string name="tip_notif_title">Your remote in the notifications</string>
+    <string name="tip_notif_body">While a video plays, Universal TV Cast shows its controls (pause, ±10 s, stop) in your notifications and on the lock screen, so you can control the TV without opening the app. Nothing else: never ads, never messages.</string>
+    <string name="action_notif_allow">Show the remote</string>
+    <string name="action_no_thanks">No thanks</string>
     <string name="action_dont_show">Don’t show again</string>
     <string name="help_section">Troubleshooting</string>
     <string name="state_expanded">expanded</string>

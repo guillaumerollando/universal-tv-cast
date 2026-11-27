@@ -352,6 +352,10 @@
     <string name="net_help_mac">1. Sistem Ayarları → Genel → Paylaşım → Dosya Paylaşımı\'nı aç.\n2. ⓘ düğmesi → videoların klasörünü + ile ekle.\n3. Seçenekler → “Windows Dosya Paylaşımı” altında hesabını işaretle.\n4. Burada Mac\'ine dokun ve Mac hesabınla oturum aç.</string>
     <string name="net_help_nas_title">NAS veya diskli modem</string>
     <string name="net_help_nas">Ayarlarından “medya sunucusunu” (DLNA veya UPnP) aç: burada kendiliğinden görünür, parola gerekmez. Paylaşılan klasörleri de çalışır, NAS hesabınla.</string>
+    <string name="tip_notif_title">Bildirimlerde kumanda</string>
+    <string name="tip_notif_body">Oynatma sırasında Universal TV Cast denetimlerini (duraklat, ±10 sn, durdur) bildirimlerde ve kilit ekranında gösterir; böylece uygulamayı açmadan televizyonu yönetirsin. Başka hiçbir şey yok: asla reklam, asla mesaj.</string>
+    <string name="action_notif_allow">Kumandayı göster</string>
+    <string name="action_no_thanks">Hayır, teşekkürler</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video</item>

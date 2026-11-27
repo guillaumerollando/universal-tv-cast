@@ -49,6 +49,10 @@
     <string name="tip_howto_huawei">In den Einstellungen: Akku → App-Start → manuell verwalten und Ausführung im Hintergrund erlauben.</string>
     <string name="tip_howto_oppo">In den Einstellungen: Akkunutzung → Hintergrundaktivität erlauben.</string>
     <string name="tip_howto_generic">In den Einstellungen: Akku → „Nicht eingeschränkt“ (oder „Nicht optimieren“).</string>
+    <string name="tip_notif_title">Deine Fernbedienung in den Benachrichtigungen</string>
+    <string name="tip_notif_body">Während der Wiedergabe zeigt Universal TV Cast seine Tasten (Pause, ±10 s, Stopp) in den Benachrichtigungen und auf dem Sperrbildschirm, damit du den Fernseher ohne die App steuern kannst. Sonst nichts: nie Werbung, nie Nachrichten.</string>
+    <string name="action_notif_allow">Fernbedienung anzeigen</string>
+    <string name="action_no_thanks">Nein danke</string>
     <string name="action_dont_show">Nicht mehr anzeigen</string>
     <string name="help_section">Fehlerbehebung</string>
     <string name="state_expanded">aufgeklappt</string>

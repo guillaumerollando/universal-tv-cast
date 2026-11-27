@@ -350,7 +350,11 @@
   "net_help_windows": "1. Videoların olduğu klasöre sağ tıkla → Özellikler → Paylaşım sekmesi → Paylaş.\n2. Adını seç, sonra Paylaş.\n3. Ağının “Özel” olduğundan emin ol: Ayarlar → Ağ ve internet → Wi-Fi veya Ethernet → Özel.\n4. Burada bilgisayarına dokun ve Windows hesabınla oturum aç.",
   "net_help_mac": "1. Sistem Ayarları → Genel → Paylaşım → Dosya Paylaşımı'nı aç.\n2. ⓘ düğmesi → videoların klasörünü + ile ekle.\n3. Seçenekler → “Windows Dosya Paylaşımı” altında hesabını işaretle.\n4. Burada Mac'ine dokun ve Mac hesabınla oturum aç.",
   "net_help_nas_title": "NAS veya diskli modem",
-  "net_help_nas": "Ayarlarından “medya sunucusunu” (DLNA veya UPnP) aç: burada kendiliğinden görünür, parola gerekmez. Paylaşılan klasörleri de çalışır, NAS hesabınla."
+  "net_help_nas": "Ayarlarından “medya sunucusunu” (DLNA veya UPnP) aç: burada kendiliğinden görünür, parola gerekmez. Paylaşılan klasörleri de çalışır, NAS hesabınla.",
+  "tip_notif_title": "Bildirimlerde kumanda",
+  "tip_notif_body": "Oynatma sırasında Universal TV Cast denetimlerini (duraklat, ±10 sn, durdur) bildirimlerde ve kilit ekranında gösterir; böylece uygulamayı açmadan televizyonu yönetirsin. Başka hiçbir şey yok: asla reklam, asla mesaj.",
+  "action_notif_allow": "Kumandayı göster",
+  "action_no_thanks": "Hayır, teşekkürler"
  },
  "plurals": {
   "browser_found": {

@@ -49,6 +49,10 @@
     <string name="tip_howto_huawei">Dans ses réglages : Batterie → Lancement d’applis → gérer manuellement et autoriser l’exécution en arrière-plan.</string>
     <string name="tip_howto_oppo">Dans ses réglages : Utilisation de la batterie → autoriser l’activité en arrière-plan.</string>
     <string name="tip_howto_generic">Dans ses réglages : Batterie → « Sans restriction » (ou « Ne pas optimiser »).</string>
+    <string name="tip_notif_title">Ta télécommande dans les notifications</string>
+    <string name="tip_notif_body">Pendant la lecture, Universal TV Cast affiche ses commandes (pause, ±10 s, arrêt) dans tes notifications et sur l’écran verrouillé, pour piloter la télé sans rouvrir l’appli. Rien d’autre : jamais de pub, jamais de message.</string>
+    <string name="action_notif_allow">Afficher la télécommande</string>
+    <string name="action_no_thanks">Non merci</string>
     <string name="action_dont_show">Ne plus afficher</string>
     <string name="help_section">Dépannage</string>
     <string name="state_expanded">ouvert</string>

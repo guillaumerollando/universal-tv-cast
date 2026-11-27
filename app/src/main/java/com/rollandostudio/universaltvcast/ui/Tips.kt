@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.BatteryAlert
+import androidx.compose.material.icons.rounded.SettingsRemote
 import androidx.compose.material.icons.rounded.ExpandLess
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material3.Card
@@ -100,6 +101,53 @@ fun BackgroundTip(s: CastState) {
             }
             TextButton(onClick = { Library.dismissTip(key) }, modifier = Modifier.align(Alignment.End)) {
                 Text(stringResource(R.string.action_dont_show))
+            }
+        }
+    }
+}
+
+/** Faut-il proposer la télécommande dans les notifications (Android 13 et plus, autorisation pas encore donnée) ? */
+@Composable
+fun needsNotificationTip(s: CastState): Boolean {
+    val context = LocalContext.current
+    val dismissed by Library.dismissedTips.collectAsState()
+    if (android.os.Build.VERSION.SDK_INT < 33 || !s.active || "notif" in dismissed) return false
+    // Revérifié à chaque retour dans l'appli (l'autorisation a pu être donnée dans les réglages).
+    val resumed = androidx.lifecycle.compose.LocalLifecycleOwner.current.lifecycle.currentStateFlow.collectAsState().value
+    return androidx.compose.runtime.remember(resumed) {
+        context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != android.content.pm.PackageManager.PERMISSION_GRANTED
+    }
+}
+
+/**
+ * La demande d'autorisation des notifications arrive ici, au moment où l'on pilote une lecture, avec ce qu'elle
+ * apporte : la télécommande dans les notifications et sur l'écran verrouillé. Rien au démarrage de l'appli.
+ * Un refus (ou « Non merci ») est respecté : la carte ne revient plus.
+ */
+@Composable
+fun NotificationTip() {
+    var asked by androidx.compose.runtime.remember { mutableStateOf(false) }
+    val ask = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.RequestPermission(),
+    ) { granted -> asked = true; if (!granted) Library.dismissTip("notif") }
+    if (asked) return
+    val c = MaterialTheme.colorScheme
+    Card(colors = CardDefaults.cardColors(containerColor = c.secondaryContainer), shape = RoundedCornerShape(20.dp)) {
+        Column(Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Rounded.SettingsRemote, null, tint = c.onSecondaryContainer)
+                Spacer(Modifier.width(10.dp))
+                Text(stringResource(R.string.tip_notif_title), style = MaterialTheme.typography.titleSmall, color = c.onSecondaryContainer)
+            }
+            Spacer(Modifier.height(6.dp))
+            Text(stringResource(R.string.tip_notif_body), style = MaterialTheme.typography.bodyMedium, color = c.onSecondaryContainer)
+            Spacer(Modifier.height(8.dp))
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
+                TextButton(onClick = { Library.dismissTip("notif") }) { Text(stringResource(R.string.action_no_thanks)) }
+                Spacer(Modifier.width(8.dp))
+                FilledTonalButton(onClick = { ask.launch(android.Manifest.permission.POST_NOTIFICATIONS) }) {
+                    Text(stringResource(R.string.action_notif_allow))
+                }
             }
         }
     }

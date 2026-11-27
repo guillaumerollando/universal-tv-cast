@@ -352,6 +352,10 @@
     <string name="net_help_mac">1. Nastavení systému → Obecné → Sdílení → zapni Sdílení souborů.\n2. Tlačítko ⓘ → přidej složku s videi tlačítkem +.\n3. Volby → zaškrtni svůj účet u „Sdílení souborů Windows“.\n4. Tady klepni na svůj Mac a přihlas se účtem Macu.</string>
     <string name="net_help_nas_title">NAS nebo router s diskem</string>
     <string name="net_help_nas">Zapni v jeho nastavení „mediální server“ (DLNA nebo UPnP): objeví se tu sám, bez hesla. Sdílené složky fungují taky, s tvým účtem NAS.</string>
+    <string name="tip_notif_title">Ovladač v oznámeních</string>
+    <string name="tip_notif_body">Během přehrávání zobrazuje Universal TV Cast ovládání (pauza, ±10 s, stop) v oznámeních a na zamčené obrazovce, abys mohl ovládat televizi bez otevření aplikace. Nic jiného: nikdy reklamy, nikdy zprávy.</string>
+    <string name="action_notif_allow">Zobrazit ovladač</string>
+    <string name="action_no_thanks">Ne, děkuji</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="few">%d videa</item>

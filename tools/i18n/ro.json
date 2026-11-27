@@ -350,7 +350,11 @@
   "net_help_windows": "1. Click dreapta pe folderul cu videoclipurile tale → Proprietăți → fila Partajare → Partajare.\n2. Alege-ți numele, apoi Partajare.\n3. Verifică să fie rețeaua „Privată”: Setări → Rețea și internet → Wi-Fi sau Ethernet → Privată.\n4. Aici, atinge computerul tău și conectează-te cu contul Windows.",
   "net_help_mac": "1. Setări de sistem → General → Partajare → activează Partajarea fișierelor.\n2. Butonul ⓘ → adaugă folderul cu videoclipurile tale cu +.\n3. Opțiuni → bifează-ți contul la „Partajare fișiere Windows”.\n4. Aici, atinge Mac-ul tău și conectează-te cu contul Mac.",
   "net_help_nas_title": "NAS sau router cu disc",
-  "net_help_nas": "Activează „serverul media” (DLNA sau UPnP) în setările lui: apare aici singur, fără parolă. Folderele partajate merg și ele, cu contul tău NAS."
+  "net_help_nas": "Activează „serverul media” (DLNA sau UPnP) în setările lui: apare aici singur, fără parolă. Folderele partajate merg și ele, cu contul tău NAS.",
+  "tip_notif_title": "Telecomanda în notificări",
+  "tip_notif_body": "În timpul redării, Universal TV Cast își afișează comenzile (pauză, ±10 s, oprire) în notificări și pe ecranul de blocare, ca să controlezi televizorul fără să deschizi aplicația. Nimic altceva: niciodată reclame, niciodată mesaje.",
+  "action_notif_allow": "Afișează telecomanda",
+  "action_no_thanks": "Nu, mulțumesc"
  },
  "plurals": {
   "browser_found": {

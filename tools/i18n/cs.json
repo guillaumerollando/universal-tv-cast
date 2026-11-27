@@ -350,7 +350,11 @@
   "net_help_windows": "1. Klikni pravým tlačítkem na složku s videi → Vlastnosti → karta Sdílení → Sdílet.\n2. Vyber své jméno a pak Sdílet.\n3. Zkontroluj, že síť je „Soukromá“: Nastavení → Síť a internet → tvoje Wi-Fi nebo Ethernet → Soukromá.\n4. Tady klepni na svůj počítač a přihlas se účtem Windows.",
   "net_help_mac": "1. Nastavení systému → Obecné → Sdílení → zapni Sdílení souborů.\n2. Tlačítko ⓘ → přidej složku s videi tlačítkem +.\n3. Volby → zaškrtni svůj účet u „Sdílení souborů Windows“.\n4. Tady klepni na svůj Mac a přihlas se účtem Macu.",
   "net_help_nas_title": "NAS nebo router s diskem",
-  "net_help_nas": "Zapni v jeho nastavení „mediální server“ (DLNA nebo UPnP): objeví se tu sám, bez hesla. Sdílené složky fungují taky, s tvým účtem NAS."
+  "net_help_nas": "Zapni v jeho nastavení „mediální server“ (DLNA nebo UPnP): objeví se tu sám, bez hesla. Sdílené složky fungují taky, s tvým účtem NAS.",
+  "tip_notif_title": "Ovladač v oznámeních",
+  "tip_notif_body": "Během přehrávání zobrazuje Universal TV Cast ovládání (pauza, ±10 s, stop) v oznámeních a na zamčené obrazovce, abys mohl ovládat televizi bez otevření aplikace. Nic jiného: nikdy reklamy, nikdy zprávy.",
+  "action_notif_allow": "Zobrazit ovladač",
+  "action_no_thanks": "Ne, děkuji"
  },
  "plurals": {
   "browser_found": {

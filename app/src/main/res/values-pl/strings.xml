@@ -352,6 +352,10 @@
     <string name="net_help_mac">1. Ustawienia systemowe → Ogólne → Udostępnianie → włącz Udostępnianie plików.\n2. Przycisk ⓘ → dodaj folder z filmami przyciskiem +.\n3. Opcje → zaznacz swoje konto w „Udostępnianie plików Windows”.\n4. Tutaj dotknij swojego Maca i zaloguj się kontem Maca.</string>
     <string name="net_help_nas_title">NAS lub router z dyskiem</string>
     <string name="net_help_nas">Włącz w jego ustawieniach „serwer multimediów” (DLNA lub UPnP): pojawi się tu sam, bez hasła. Foldery udostępnione też działają, z twoim kontem NAS.</string>
+    <string name="tip_notif_title">Pilot w powiadomieniach</string>
+    <string name="tip_notif_body">Podczas odtwarzania Universal TV Cast pokazuje przyciski (pauza, ±10 s, stop) w powiadomieniach i na ekranie blokady, żebyś mógł sterować telewizorem bez otwierania aplikacji. Nic więcej: nigdy reklam, nigdy wiadomości.</string>
+    <string name="action_notif_allow">Pokaż pilota</string>
+    <string name="action_no_thanks">Nie, dziękuję</string>
     <plurals name="browser_found">
         <item quantity="one">%d wideo</item>
         <item quantity="few">%d wideo</item>

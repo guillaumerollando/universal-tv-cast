@@ -49,6 +49,10 @@
     <string name="tip_howto_huawei">Nas configurações: Bateria → Inicialização de apps → gerenciar manualmente e permitir em segundo plano.</string>
     <string name="tip_howto_oppo">Nas configurações: Uso da bateria → permitir atividade em segundo plano.</string>
     <string name="tip_howto_generic">Nas configurações: Bateria → “Sem restrições” (ou “Não otimizar”).</string>
+    <string name="tip_notif_title">Seu controle nas notificações</string>
+    <string name="tip_notif_body">Durante a reprodução, o Universal TV Cast mostra os controles (pausa, ±10 s, parar) nas notificações e na tela de bloqueio, para controlar a TV sem abrir o app. Nada mais: nunca anúncios, nunca mensagens.</string>
+    <string name="action_notif_allow">Mostrar o controle</string>
+    <string name="action_no_thanks">Não, obrigado</string>
     <string name="action_dont_show">Não mostrar de novo</string>
     <string name="help_section">Solução de problemas</string>
     <string name="state_expanded">aberto</string>

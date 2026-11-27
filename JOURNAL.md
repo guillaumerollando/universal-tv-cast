@@ -1242,3 +1242,8 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
   BFM TV, BFM Alsace (portrait et plein écran). Les logos qui ont leur propre fond (BFM TV, Antenne Réunion,
   Paris Première en partie) restent des blocs dans toutes les options.
 - Par défaut : la tuile (A), en attendant le choix.
+
+## 2026-11-27 — Logo de chaîne : on garde la tuile
+**Décision de Guillaume** : la tuile (bloc coloré) reste partout ; plus professionnelle, elle met le logo en valeur.
+Liseré et halo « font bidouille ». Code d'essai retiré (`LogoStyle`, liseré, halo, réglage caché) ; les planches
+restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour les logos sombres (`Logos.darkShare`).

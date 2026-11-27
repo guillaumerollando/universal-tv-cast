@@ -185,7 +185,6 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
             ChannelArt(
                 name = media.channel ?: media.title, logo = media.posterUrl, streamUrl = media.url, pad = ChannelTiles.logoPad,
                 textStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
-                style = LogoLab.style,
                 modifier = Modifier.width(ChannelTiles.width).aspectRatio(16f / 10f).clip(RoundedCornerShape(ChannelTiles.corner))
                     .semantics { contentDescription = media.channel ?: media.title },
             )

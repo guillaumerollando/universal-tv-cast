@@ -279,7 +279,6 @@ fun PhoneFullscreen(state: CastState) {
                     verticalAlignment = Alignment.CenterVertically) {
                     if (m != null && state.live) ChannelArt(
                         name = m.channel ?: m.title, logo = m.posterUrl, streamUrl = m.url, pad = ChannelTiles.logoPad,
-                        style = LogoLab.style,
                         textStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
                         modifier = Modifier.size(width = ChannelTiles.width, height = ChannelTiles.width * 10 / 16)
                             .clip(RoundedCornerShape(ChannelTiles.corner)),

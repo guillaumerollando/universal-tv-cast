@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,72 +44,9 @@ object ChannelArtColors {
 }
 
 /** Comment poser un logo : sur sa propre couleur de fond (logo « en carré »), ou sur un fond qui le fait ressortir. */
-private data class LogoLook(val bitmap: Bitmap, val background: Color?, val ink: Float) {
-    /**
-     * Logo détouré entouré d'un fin liseré (façon autocollant) : blanc autour d'un logo sombre, foncé autour d'un
-     * logo clair (un liseré blanc autour d'un logo blanc ne se verrait pas). Lisible sur n'importe quel fond.
-     */
-    val sticker: Bitmap? by lazy { if (background == null && bitmap.hasAlpha()) Logos.sticker(bitmap, Logos.edgeColor(bitmap)) else null }
-    /** Même idée en halo diffus (comme le logo incrusté d'une chaîne à l'antenne). */
-    val glow: Bitmap? by lazy { if (background == null && bitmap.hasAlpha()) Logos.glow(bitmap, Logos.edgeColor(bitmap)) else null }
-}
-
-/**
- * Présentation du logo dans le lecteur : en tuile colorée (comme l'accueil), détouré, détouré avec liseré blanc, ou
- * sur un verre dépoli. Essais en cours : réglable depuis l'ordinateur (extra « castor_logo_style » au lancement).
- */
-enum class LogoStyle { TILE, BARE, STICKER, GLASS, GLOW }
-object LogoLab { var style by androidx.compose.runtime.mutableStateOf(LogoStyle.TILE) }
+private data class LogoLook(val bitmap: Bitmap, val background: Color?, val ink: Float)
 
 object Logos {
-    /** Couleur du liseré ou du halo : blanc, sauf pour un logo surtout clair (alors un gris très foncé). */
-    fun edgeColor(b: Bitmap): Int = if (lightShare(b) > 0.5f) android.graphics.Color.rgb(20, 22, 26) else android.graphics.Color.WHITE
-
-    /** Part du dessin qui est très claire (logo blanc). */
-    fun lightShare(b: Bitmap): Float {
-        var light = 0; var n = 0
-        val step = maxOf(1, minOf(b.width, b.height) / 30)
-        for (y in 0 until b.height step step) for (x in 0 until b.width step step) {
-            val p = b.getPixel(x, y)
-            if (android.graphics.Color.alpha(p) < 128) continue
-            n++
-            val l = (0.2126 * android.graphics.Color.red(p) + 0.7152 * android.graphics.Color.green(p) + 0.0722 * android.graphics.Color.blue(p)) / 255
-            if (l > 0.8) light++
-        }
-        return if (n == 0) 0f else light.toFloat() / n
-    }
-
-    /** Halo diffus autour du dessin (son masque flouté, deux fois pour qu'il soit dense près du bord). */
-    fun glow(b: Bitmap, color: Int): Bitmap {
-        val r = maxOf(4, maxOf(b.width, b.height) / 14)
-        val out = Bitmap.createBitmap(b.width + 2 * r, b.height + 2 * r, Bitmap.Config.ARGB_8888)
-        val c = android.graphics.Canvas(out)
-        val mask = b.extractAlpha()
-        val p = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply {
-            this.color = color
-            maskFilter = android.graphics.BlurMaskFilter(r * 0.9f, android.graphics.BlurMaskFilter.Blur.NORMAL)
-        }
-        repeat(3) { c.drawBitmap(mask, r.toFloat(), r.toFloat(), p) }
-        c.drawBitmap(b, r.toFloat(), r.toFloat(), null)
-        return out
-    }
-
-    /** Liseré autour d'un dessin détouré (le masque de transparence, répété en cercle autour du dessin). */
-    fun sticker(b: Bitmap, color: Int = android.graphics.Color.WHITE): Bitmap {
-        val r = maxOf(2, maxOf(b.width, b.height) / 40)
-        val out = Bitmap.createBitmap(b.width + 2 * r, b.height + 2 * r, Bitmap.Config.ARGB_8888)
-        val c = android.graphics.Canvas(out)
-        val mask = b.extractAlpha()
-        val p = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply { this.color = color }
-        for (i in 0 until 24) {
-            val a = i * Math.PI * 2 / 24
-            c.drawBitmap(mask, r + (r * Math.cos(a)).toFloat(), r + (r * Math.sin(a)).toFloat(), p)
-        }
-        c.drawBitmap(mask, r.toFloat(), r.toFloat(), p)
-        c.drawBitmap(b, r.toFloat(), r.toFloat(), null)
-        return out
-    }
-
     /** Part du dessin qui est sombre (0 à 1) : sur un fond foncé, ces parties disparaîtraient (le « 5 » de France 5). */
     fun darkShare(b: Bitmap): Float {
         var dark = 0; var n = 0
@@ -205,8 +141,6 @@ fun ChannelArt(
     textStyle: TextStyle,
     pad: Dp = 10.dp,
     label: String = name,
-    /** Dans le lecteur : présentation choisie (LogoLab) ; ailleurs, toujours la tuile. */
-    style: LogoStyle = LogoStyle.TILE,
 ) {
     // Le logo fourni ; s'il manque ou ne se charge pas, celui de la même chaîne dans une liste importée.
     // Logo déjà prêt : posé tout de suite (pas de nom qui s'affiche puis se remplace à chaque retour sur l'écran).
@@ -236,20 +170,6 @@ fun ChannelArt(
             else -> Color(0xFF23262D)
         }
         ChannelArtColors.background[url] = android.graphics.Color.argb(255, (solid.red * 255).toInt(), (solid.green * 255).toInt(), (solid.blue * 255).toInt())
-    }
-    // Logo détouré sans tuile (essais du lecteur) : le dessin seul, avec liseré ou verre dépoli selon le style.
-    if (style != LogoStyle.TILE && l != null && l.background == null) {
-        val glass = style == LogoStyle.GLASS
-        Box(
-            modifier.then(if (glass) Modifier.background(Color.White.copy(alpha = 0.12f)) else Modifier),
-            contentAlignment = Alignment.Center,
-        ) {
-            Image(
-                (when (style) { LogoStyle.STICKER -> l.sticker; LogoStyle.GLOW -> l.glow; else -> null } ?: l.bitmap).asImageBitmap(), contentDescription = null,
-                contentScale = ContentScale.Fit, modifier = Modifier.fillMaxSize().padding(if (glass) pad else pad / 3),
-            )
-        }
-        return
     }
     Box(modifier.background(bg), contentAlignment = Alignment.Center) {
         if (l == null) Text(

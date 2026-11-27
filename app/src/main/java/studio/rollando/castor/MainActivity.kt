@@ -115,11 +115,6 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         // on ne le relance pas sur la télé.
         if (intent != null && intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY != 0) return
         if (widget(intent)) return
-        // Essais de présentation du logo (depuis l'ordinateur) : rien d'autre ne change.
-        intent?.getStringExtra("castor_logo_style")?.let { s ->
-            studio.rollando.castor.ui.LogoStyle.entries.firstOrNull { it.name == s }?.let { studio.rollando.castor.ui.LogoLab.style = it }
-            return
-        }
         val parsed = Intake.parse(this, intent) ?: return
         val from = referrer?.takeIf { it.scheme == "android-app" }?.host?.takeIf { it != packageName }
         val media = parsed.copy(sourceApp = from)

@@ -312,6 +312,16 @@
     <string name="widget_desc_photos">اعرض صورك وفيديوهاتك على التلفزيون بلمسة واحدة</string>
     <string name="start_dw">قناة أخبار دولية، مباشرة</string>
     <string name="resume_series_done">انتهى المسلسل</string>
+    <string name="browser_lp_link">تشغيل فيديو هذا الرابط</string>
+    <string name="browser_lp_find">البحث عن فيديو هذه الصفحة</string>
+    <string name="browser_lp_find_sub">يبدأ مشغّل الموقع بلا صوت، ثم ينتقل الفيديو إلى التطبيق</string>
+    <string name="browser_miss_title">لم يُعثر على الفيديو بعد</string>
+    <string name="browser_miss_body">يمكن للتطبيق البحث مجددًا بتشغيل مشغّل الموقع بنفسه. إن لم ينجح، أبلغنا عن هذا الموقع وسنجعله متوافقًا.</string>
+    <string name="browser_miss_retry">ابحث مجددًا</string>
+    <string name="browser_miss_report">الإبلاغ عن الموقع</string>
+    <string name="browser_miss_drm_title">فيديو محمي</string>
+    <string name="browser_miss_drm">يقفل هذا الموقع فيديوهاته (DRM): لا تُشاهد إلا في مشغّله أو تطبيقه. استخدم تطبيقه أو تطبيق التلفزيون.</string>
+    <string name="report_site_intro">لم يُعثر على فيديو هذه الصفحة. (أضف ما قد يساعد.)</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>

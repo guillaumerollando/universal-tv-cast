@@ -312,6 +312,16 @@
     <string name="widget_desc_photos">Pokaż zdjęcia i filmy na telewizorze jednym dotknięciem</string>
     <string name="start_dw">Międzynarodowy kanał informacyjny na żywo</string>
     <string name="resume_series_done">Serial obejrzany</string>
+    <string name="browser_lp_link">Odtwórz film z tego linku</string>
+    <string name="browser_lp_find">Znajdź film na tej stronie</string>
+    <string name="browser_lp_find_sub">Odtwarzacz strony ruszy bez dźwięku, potem film przejdzie do aplikacji</string>
+    <string name="browser_miss_title">Film jeszcze nie znaleziony</string>
+    <string name="browser_miss_body">Aplikacja może szukać ponownie, sama uruchamiając odtwarzacz strony. Jeśli nie pomoże, zgłoś nam stronę: dostosujemy ją.</string>
+    <string name="browser_miss_retry">Szukaj ponownie</string>
+    <string name="browser_miss_report">Zgłoś stronę</string>
+    <string name="browser_miss_drm_title">Chroniony film</string>
+    <string name="browser_miss_drm">Ta strona blokuje swoje filmy (DRM): działają tylko w jej odtwarzaczu lub aplikacji. Użyj jej aplikacji albo aplikacji telewizora.</string>
+    <string name="report_site_intro">Nie znaleziono filmu na tej stronie. (Dodaj, co może pomóc.)</string>
     <plurals name="browser_found">
         <item quantity="one">%d wideo</item>
         <item quantity="few">%d wideo</item>

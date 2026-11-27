@@ -310,7 +310,17 @@
   "widget_sample_sub": "S1 · B3",
   "widget_desc_photos": "Fotoğraf ve videolarını tek dokunuşla TV'de göster",
   "start_dw": "Uluslararası haber kanalı, canlı",
-  "resume_series_done": "Dizi bitti"
+  "resume_series_done": "Dizi bitti",
+  "browser_lp_link": "Bu bağlantıdaki videoyu oynat",
+  "browser_lp_find": "Bu sayfanın videosunu bul",
+  "browser_lp_find_sub": "Sitenin oynatıcısı sessiz başlar, sonra video uygulamada oynar",
+  "browser_miss_title": "Video henüz bulunamadı",
+  "browser_miss_body": "Uygulama sitenin oynatıcısını kendisi başlatıp yeniden arayabilir. Olmazsa bu siteyi bize bildir: uyumlu hale getireceğiz.",
+  "browser_miss_retry": "Yeniden ara",
+  "browser_miss_report": "Siteyi bildir",
+  "browser_miss_drm_title": "Korumalı video",
+  "browser_miss_drm": "Bu site videolarını kilitliyor (DRM): yalnızca kendi oynatıcısında veya uygulamasında izlenebilir. Sitenin ya da TV'nin uygulamasını kullan.",
+  "report_site_intro": "Bu sayfadaki video bulunamadı. (Yardımcı olacak bilgileri ekle.)"
  },
  "plurals": {
   "browser_found": {

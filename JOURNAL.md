@@ -1197,3 +1197,21 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
   d'ExoPlayer) si un site utile n'a que ça.
 - Vidéos protégées (DRM : Netflix, Disney+, une partie de Canal+…) et lecteurs à morceaux sans liste (YouTube) :
   impossible, voulu par les sites.
+
+## 2026-11-27 — Jamais bloqué : vidéo pas repérée
+**Fait**
+- Vidéo lancée dans la page et rien de repéré au bout de 15 s (8 s avant ; ZDF met parfois 16 s) : message
+  « Vidéo pas encore repérée » avec « Chercher encore » (l'appli démarre elle-même le lecteur du site, son coupé)
+  et « Signaler ce site » (mail `[Site] <site>` avec l'adresse de la page, pour le rendre compatible).
+  Vérifié sur émulateur avec une page piège (vidéo en blob) : le message apparaît, « Signaler » ouvre le mail.
+- Vidéo protégée (DRM) : repérée par `requestMediaKeySystemAccess` ; le message dit franchement qu'elle ne se
+  regarde que dans le site ou son appli (pas de « Chercher encore » inutile).
+- Appui long dans le navigateur : sur un lien → « Lancer la vidéo de ce lien » (ouverte en coulisse, comme
+  l'épisode suivant) ; ailleurs (lecteur, image) → « Trouver la vidéo de cette page ». Texte et champs gardent leur
+  appui long (sélection, coller).
+- Les 3 incontournables : 7 projets poussés ; règle ajoutée à l'Atelier (AGENTS.md, étape 3 de la publication),
+  enregistrée mais pas poussée (dépôt Atelier hors de l'accord donné).
+
+**Pas fait**
+- Appui long et « Chercher encore » pas vus à l'écran : l'émulateur a été fermé de l'extérieur trois fois
+  (une autre session ?). « DRM » non vérifié sur un vrai site.

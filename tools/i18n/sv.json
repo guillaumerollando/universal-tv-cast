@@ -310,7 +310,17 @@
   "widget_sample_sub": "S1 · Avs. 3",
   "widget_desc_photos": "Visa dina bilder och videor på tv:n med ett tryck",
   "start_dw": "Internationell nyhetskanal, direkt",
-  "resume_series_done": "Serien är slut"
+  "resume_series_done": "Serien är slut",
+  "browser_lp_link": "Spela videon från den här länken",
+  "browser_lp_find": "Hitta sidans video",
+  "browser_lp_find_sub": "Sidans spelare startar utan ljud, sedan spelas videon i appen",
+  "browser_miss_title": "Videon har inte hittats än",
+  "browser_miss_body": "Appen kan söka igen genom att själv starta sidans spelare. Funkar det inte, tipsa oss om sidan så fixar vi den.",
+  "browser_miss_retry": "Sök igen",
+  "browser_miss_report": "Rapportera sidan",
+  "browser_miss_drm_title": "Skyddad video",
+  "browser_miss_drm": "Den här sidan låser sina videor (DRM): de spelas bara i sidans egen spelare eller app. Använd dess app eller tv:ns app.",
+  "report_site_intro": "Videon på den här sidan hittades inte. (Lägg till det som kan hjälpa.)"
  },
  "plurals": {
   "browser_found": {

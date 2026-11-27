@@ -310,7 +310,17 @@
   "widget_sample_sub": "S1 · D3",
   "widget_desc_photos": "Ukaž fotky a videa na televizi jedním klepnutím",
   "start_dw": "Mezinárodní zpravodajský kanál, živě",
-  "resume_series_done": "Seriál dokoukán"
+  "resume_series_done": "Seriál dokoukán",
+  "browser_lp_link": "Přehrát video z tohoto odkazu",
+  "browser_lp_find": "Najít video na této stránce",
+  "browser_lp_find_sub": "Přehrávač webu se spustí bez zvuku a video pak poběží v aplikaci",
+  "browser_miss_title": "Video zatím nenalezeno",
+  "browser_miss_body": "Aplikace může hledat znovu a sama spustit přehrávač webu. Když to nepůjde, nahlas nám web: zprovozníme ho.",
+  "browser_miss_retry": "Hledat znovu",
+  "browser_miss_report": "Nahlásit web",
+  "browser_miss_drm_title": "Chráněné video",
+  "browser_miss_drm": "Tento web zamyká svá videa (DRM): jdou přehrát jen v jeho přehrávači nebo aplikaci. Použij jeho aplikaci nebo aplikaci televize.",
+  "report_site_intro": "Video na této stránce nebylo nalezeno. (Přidej, co pomůže.)"
  },
  "plurals": {
   "browser_found": {

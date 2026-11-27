@@ -310,7 +310,17 @@
   "widget_sample_sub": "S1 · Odc. 3",
   "widget_desc_photos": "Pokaż zdjęcia i filmy na telewizorze jednym dotknięciem",
   "start_dw": "Międzynarodowy kanał informacyjny na żywo",
-  "resume_series_done": "Serial obejrzany"
+  "resume_series_done": "Serial obejrzany",
+  "browser_lp_link": "Odtwórz film z tego linku",
+  "browser_lp_find": "Znajdź film na tej stronie",
+  "browser_lp_find_sub": "Odtwarzacz strony ruszy bez dźwięku, potem film przejdzie do aplikacji",
+  "browser_miss_title": "Film jeszcze nie znaleziony",
+  "browser_miss_body": "Aplikacja może szukać ponownie, sama uruchamiając odtwarzacz strony. Jeśli nie pomoże, zgłoś nam stronę: dostosujemy ją.",
+  "browser_miss_retry": "Szukaj ponownie",
+  "browser_miss_report": "Zgłoś stronę",
+  "browser_miss_drm_title": "Chroniony film",
+  "browser_miss_drm": "Ta strona blokuje swoje filmy (DRM): działają tylko w jej odtwarzaczu lub aplikacji. Użyj jej aplikacji albo aplikacji telewizora.",
+  "report_site_intro": "Nie znaleziono filmu na tej stronie. (Dodaj, co może pomóc.)"
  },
  "plurals": {
   "browser_found": {

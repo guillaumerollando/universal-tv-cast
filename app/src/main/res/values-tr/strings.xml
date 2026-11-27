@@ -312,6 +312,16 @@
     <string name="widget_desc_photos">Fotoğraf ve videolarını tek dokunuşla TV\'de göster</string>
     <string name="start_dw">Uluslararası haber kanalı, canlı</string>
     <string name="resume_series_done">Dizi bitti</string>
+    <string name="browser_lp_link">Bu bağlantıdaki videoyu oynat</string>
+    <string name="browser_lp_find">Bu sayfanın videosunu bul</string>
+    <string name="browser_lp_find_sub">Sitenin oynatıcısı sessiz başlar, sonra video uygulamada oynar</string>
+    <string name="browser_miss_title">Video henüz bulunamadı</string>
+    <string name="browser_miss_body">Uygulama sitenin oynatıcısını kendisi başlatıp yeniden arayabilir. Olmazsa bu siteyi bize bildir: uyumlu hale getireceğiz.</string>
+    <string name="browser_miss_retry">Yeniden ara</string>
+    <string name="browser_miss_report">Siteyi bildir</string>
+    <string name="browser_miss_drm_title">Korumalı video</string>
+    <string name="browser_miss_drm">Bu site videolarını kilitliyor (DRM): yalnızca kendi oynatıcısında veya uygulamasında izlenebilir. Sitenin ya da TV\'nin uygulamasını kullan.</string>
+    <string name="report_site_intro">Bu sayfadaki video bulunamadı. (Yardımcı olacak bilgileri ekle.)</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video</item>

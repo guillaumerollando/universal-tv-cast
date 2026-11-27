@@ -312,6 +312,16 @@
     <string name="widget_desc_photos">Visa dina bilder och videor på tv:n med ett tryck</string>
     <string name="start_dw">Internationell nyhetskanal, direkt</string>
     <string name="resume_series_done">Serien är slut</string>
+    <string name="browser_lp_link">Spela videon från den här länken</string>
+    <string name="browser_lp_find">Hitta sidans video</string>
+    <string name="browser_lp_find_sub">Sidans spelare startar utan ljud, sedan spelas videon i appen</string>
+    <string name="browser_miss_title">Videon har inte hittats än</string>
+    <string name="browser_miss_body">Appen kan söka igen genom att själv starta sidans spelare. Funkar det inte, tipsa oss om sidan så fixar vi den.</string>
+    <string name="browser_miss_retry">Sök igen</string>
+    <string name="browser_miss_report">Rapportera sidan</string>
+    <string name="browser_miss_drm_title">Skyddad video</string>
+    <string name="browser_miss_drm">Den här sidan låser sina videor (DRM): de spelas bara i sidans egen spelare eller app. Använd dess app eller tv:ns app.</string>
+    <string name="report_site_intro">Videon på den här sidan hittades inte. (Lägg till det som kan hjälpa.)</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videor</item>

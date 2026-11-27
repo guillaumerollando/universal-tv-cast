@@ -310,7 +310,17 @@
   "widget_sample_sub": "S1 · 第3話",
   "widget_desc_photos": "写真や動画をワンタップでテレビに",
   "start_dw": "国際ニュースチャンネル（ライブ）",
-  "resume_series_done": "シリーズ視聴済み"
+  "resume_series_done": "シリーズ視聴済み",
+  "browser_lp_link": "このリンクの動画を再生",
+  "browser_lp_find": "このページの動画を探す",
+  "browser_lp_find_sub": "サイトのプレーヤーを無音で再生し、動画をアプリで再生します",
+  "browser_miss_title": "動画がまだ見つかりません",
+  "browser_miss_body": "アプリがサイトのプレーヤーを自動で再生して、もう一度探せます。うまくいかない場合はサイトを報告してください。対応します。",
+  "browser_miss_retry": "もう一度探す",
+  "browser_miss_report": "サイトを報告",
+  "browser_miss_drm_title": "保護された動画",
+  "browser_miss_drm": "このサイトは動画を保護しています（DRM）。サイトのプレーヤーかアプリでしか再生できません。サイトのアプリかテレビのアプリをお使いください。",
+  "report_site_intro": "このページの動画が見つかりませんでした。（役立つ情報を追加してください。）"
  },
  "plurals": {
   "browser_found": {

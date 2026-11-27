@@ -310,7 +310,17 @@
   "widget_sample_sub": "S1 · Ep. 3",
   "widget_desc_photos": "Tampilkan foto dan videomu di TV dengan sekali ketuk",
   "start_dw": "Saluran berita internasional, siaran langsung",
-  "resume_series_done": "Serial selesai"
+  "resume_series_done": "Serial selesai",
+  "browser_lp_link": "Putar video dari tautan ini",
+  "browser_lp_find": "Cari video di halaman ini",
+  "browser_lp_find_sub": "Pemutar situs mulai tanpa suara, lalu video diputar di aplikasi",
+  "browser_miss_title": "Video belum ditemukan",
+  "browser_miss_body": "Aplikasi bisa mencari lagi dengan memulai sendiri pemutar situs. Jika gagal, laporkan situs ini: kami akan membuatnya bisa.",
+  "browser_miss_retry": "Cari lagi",
+  "browser_miss_report": "Laporkan situs",
+  "browser_miss_drm_title": "Video dilindungi",
+  "browser_miss_drm": "Situs ini mengunci videonya (DRM): hanya bisa ditonton di pemutar atau aplikasinya. Gunakan aplikasinya atau aplikasi TV.",
+  "report_site_intro": "Video di halaman ini tidak ditemukan. (Tambahkan hal yang membantu.)"
  },
  "plurals": {
   "browser_found": {

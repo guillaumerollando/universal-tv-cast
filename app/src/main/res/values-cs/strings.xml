@@ -312,6 +312,16 @@
     <string name="widget_desc_photos">Ukaž fotky a videa na televizi jedním klepnutím</string>
     <string name="start_dw">Mezinárodní zpravodajský kanál, živě</string>
     <string name="resume_series_done">Seriál dokoukán</string>
+    <string name="browser_lp_link">Přehrát video z tohoto odkazu</string>
+    <string name="browser_lp_find">Najít video na této stránce</string>
+    <string name="browser_lp_find_sub">Přehrávač webu se spustí bez zvuku a video pak poběží v aplikaci</string>
+    <string name="browser_miss_title">Video zatím nenalezeno</string>
+    <string name="browser_miss_body">Aplikace může hledat znovu a sama spustit přehrávač webu. Když to nepůjde, nahlas nám web: zprovozníme ho.</string>
+    <string name="browser_miss_retry">Hledat znovu</string>
+    <string name="browser_miss_report">Nahlásit web</string>
+    <string name="browser_miss_drm_title">Chráněné video</string>
+    <string name="browser_miss_drm">Tento web zamyká svá videa (DRM): jdou přehrát jen v jeho přehrávači nebo aplikaci. Použij jeho aplikaci nebo aplikaci televize.</string>
+    <string name="report_site_intro">Video na této stránce nebylo nalezeno. (Přidej, co pomůže.)</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="few">%d videa</item>

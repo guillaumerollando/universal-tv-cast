@@ -310,7 +310,17 @@
   "widget_sample_sub": "第1季 · 第3集",
   "widget_desc_photos": "一键在电视上显示照片和视频",
   "start_dw": "国际新闻频道，直播",
-  "resume_series_done": "剧集已看完"
+  "resume_series_done": "剧集已看完",
+  "browser_lp_link": "播放此链接的视频",
+  "browser_lp_find": "查找此页面的视频",
+  "browser_lp_find_sub": "网站播放器将静音启动，然后视频在应用中播放",
+  "browser_miss_title": "尚未找到视频",
+  "browser_miss_body": "应用可以自动启动网站播放器再找一次。如果不行，请告诉我们这个网站，我们会让它可用。",
+  "browser_miss_retry": "再找一次",
+  "browser_miss_report": "报告此网站",
+  "browser_miss_drm_title": "受保护的视频",
+  "browser_miss_drm": "此网站对视频加密（DRM）：只能在它自己的播放器或应用中观看。请使用它的应用或电视上的应用。",
+  "report_site_intro": "未找到此页面的视频。（请补充有用的信息。）"
  },
  "plurals": {
   "browser_found": {

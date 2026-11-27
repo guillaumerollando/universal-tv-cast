@@ -312,6 +312,16 @@
     <string name="widget_desc_photos">Tampilkan foto dan videomu di TV dengan sekali ketuk</string>
     <string name="start_dw">Saluran berita internasional, siaran langsung</string>
     <string name="resume_series_done">Serial selesai</string>
+    <string name="browser_lp_link">Putar video dari tautan ini</string>
+    <string name="browser_lp_find">Cari video di halaman ini</string>
+    <string name="browser_lp_find_sub">Pemutar situs mulai tanpa suara, lalu video diputar di aplikasi</string>
+    <string name="browser_miss_title">Video belum ditemukan</string>
+    <string name="browser_miss_body">Aplikasi bisa mencari lagi dengan memulai sendiri pemutar situs. Jika gagal, laporkan situs ini: kami akan membuatnya bisa.</string>
+    <string name="browser_miss_retry">Cari lagi</string>
+    <string name="browser_miss_report">Laporkan situs</string>
+    <string name="browser_miss_drm_title">Video dilindungi</string>
+    <string name="browser_miss_drm">Situs ini mengunci videonya (DRM): hanya bisa ditonton di pemutar atau aplikasinya. Gunakan aplikasinya atau aplikasi TV.</string>
+    <string name="report_site_intro">Video di halaman ini tidak ditemukan. (Tambahkan hal yang membantu.)</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

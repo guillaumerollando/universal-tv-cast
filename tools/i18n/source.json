@@ -1239,6 +1239,46 @@
   "resume_series_done": {
    "en": "Series finished",
    "fr": "Série terminée"
+  },
+  "browser_lp_link": {
+   "en": "Play the video from this link",
+   "fr": "Lancer la vidéo de ce lien"
+  },
+  "browser_lp_find": {
+   "en": "Find this page’s video",
+   "fr": "Trouver la vidéo de cette page"
+  },
+  "browser_lp_find_sub": {
+   "en": "The site’s player starts muted, then the video plays in the app",
+   "fr": "Le lecteur du site démarre son coupé, puis la vidéo passe dans l’appli"
+  },
+  "browser_miss_title": {
+   "en": "Video not found yet",
+   "fr": "Vidéo pas encore repérée"
+  },
+  "browser_miss_body": {
+   "en": "The app can search again by starting the site’s player itself. If that doesn’t work, tell us about this site: we’ll make it work.",
+   "fr": "L’appli peut chercher encore en démarrant elle-même le lecteur du site. Si ça ne marche pas, signale-nous ce site : on le rendra compatible."
+  },
+  "browser_miss_retry": {
+   "en": "Search again",
+   "fr": "Chercher encore"
+  },
+  "browser_miss_report": {
+   "en": "Report this site",
+   "fr": "Signaler ce site"
+  },
+  "browser_miss_drm_title": {
+   "en": "Protected video",
+   "fr": "Vidéo protégée"
+  },
+  "browser_miss_drm": {
+   "en": "This site locks its videos (DRM): they can only be watched in its own player or app, never sent elsewhere. Use its app or the TV’s own app.",
+   "fr": "Ce site verrouille ses vidéos (DRM) : elles ne se regardent que dans son propre lecteur ou son appli, jamais ailleurs. Passe par son appli ou celle de la télé."
+  },
+  "report_site_intro": {
+   "en": "The video on this page wasn’t found. (Add anything useful: what you clicked, what happened.)",
+   "fr": "La vidéo de cette page n’a pas été repérée. (Ajoute ce qui peut aider : ce que tu as touché, ce qui s’est passé.)"
   }
  },
  "plurals": {

@@ -211,7 +211,7 @@ class BrowserController(context: Context) {
         // a été lancé depuis (une chaîne…), la relancer depuis la page la renvoie au lecteur comme la première fois.
         val playing = Castor.state.value.media?.pageUrl?.let(::pageKey)
         if (pageKey(url) in autoOpened && playing == pageKey(url)) return
-        arm(background = false, waitMs = 8000)
+        arm(background = false, waitMs = 15_000)
     }
 
     /** Épisode suivant, chargé sans quitter l'écran de lecture : sa vidéo partira dès qu'elle sera repérée. */
@@ -244,6 +244,7 @@ class BrowserController(context: Context) {
             val settled = best != null && System.currentTimeMillis() - autoSeenAt > 1000
             when {
                 best != null && settled -> {
+                    manualSearch = false
                     autoSeenAt = 0L
                     autoUntil = 0L
                     autoOpened += page
@@ -255,6 +256,12 @@ class BrowserController(context: Context) {
                 System.currentTimeMillis() > autoUntil -> {
                     autoUntil = 0L
                     restoreGesture()
+                    // Vidéo lancée (ou cherchée) par l'utilisateur et rien de repéré : on le lui dit, avec une issue.
+                    if (manualSearch || !autoBackground) {
+                        android.util.Log.i("CastorWeb", "vidéo lancée mais pas repérée${if (sniffer.drm) " (DRM)" else ""}")
+                        manualSearch = false
+                        notFound = true
+                    }
                     if (autoBackground) { android.util.Log.i("CastorWeb", "épisode suivant : pas de vidéo repérée, on montre la page"); onAutoGiveUp?.invoke() }
                 }
                 else -> mainHandler.postDelayed(this, 400)
@@ -269,6 +276,28 @@ class BrowserController(context: Context) {
             webView.settings.mediaPlaybackRequiresUserGesture = false
             webView.evaluateJavascript(NUDGE_PLAY, null)
         }
+    }
+
+    /**
+     * Appui long dans la page : de quoi envoyer la vidéo même quand l'appli ne l'a pas repérée seule. [link] : le
+     * lien touché (épisode, miniature), s'il y en a un.
+     */
+    data class LongPress(val link: String?)
+    var longPress by mutableStateOf<LongPress?>(null)
+    /** Vidéo lancée ou cherchée, rien de repéré : l'écran le dit (avec « Chercher encore », « Signaler ce site »). */
+    var notFound by mutableStateOf(false)
+    private var manualSearch = false
+
+    /** La vidéo de la page est protégée (DRM) : rien à chercher. */
+    val drm: Boolean get() = sniffer.drm
+
+    /** « Trouver la vidéo de cette page » : la vidéo déjà repérée part ; sinon on démarre le lecteur du site (son coupé). */
+    fun findVideoNow() {
+        notFound = false
+        manualSearch = true
+        runCatching { webView.settings.mediaPlaybackRequiresUserGesture = false; webView.evaluateJavascript(NUDGE_PLAY, null) }
+        arm(background = false, waitMs = 12_000)
+        for (d in listOf(2500L, 5000L)) mainHandler.postDelayed({ if (autoUntil != 0L) runCatching { webView.evaluateJavascript(NUDGE_PLAY, null) } }, d)
     }
 
     private fun restoreGesture() { runCatching { webView.settings.mediaPlaybackRequiresUserGesture = true } }
@@ -314,6 +343,27 @@ class BrowserController(context: Context) {
             displayZoomControls = false
         }
         sniffer.userAgent = settings.userAgentString
+        // Appui long : lien (épisode, miniature) ou zone de la page (le lecteur) → « Lancer la vidéo ». Le texte et
+        // les champs à remplir gardent leur appui long habituel (sélection, coller).
+        setOnLongClickListener { v ->
+            val hit = (v as WebView).hitTestResult
+            when (hit.type) {
+                WebView.HitTestResult.SRC_ANCHOR_TYPE, WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> {
+                    // Lien sous une image : l'adresse du lien est demandée à la page (l'extra est celle de l'image).
+                    if (hit.type == WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
+                        val msg = mainHandler.obtainMessage()
+                        v.requestFocusNodeHref(msg)
+                        val href = msg.data.getString("url")?.takeIf { it.startsWith("http") }
+                        longPress = LongPress(href ?: hit.extra?.takeIf { it.startsWith("http") })
+                    } else longPress = LongPress(hit.extra?.takeIf { it.startsWith("http") })
+                    true
+                }
+                WebView.HitTestResult.IMAGE_TYPE, WebView.HitTestResult.UNKNOWN_TYPE -> {
+                    if (v.url.isNullOrEmpty() || v.url!!.startsWith("about:")) false else { longPress = LongPress(null); true }
+                }
+                else -> false
+            }
+        }
         setOnScrollChangeListener { _, _, y, _, oldY ->
             val dy = y - oldY
             val show = when {
@@ -693,6 +743,57 @@ fun BrowserScreen(b: BrowserController) {
                 )
             }
         }
+    }
+
+    b.longPress?.let { lp ->
+        ModalBottomSheet(onDismissRequest = { b.longPress = null }) {
+            Column(Modifier.padding(start = 16.dp, end = 16.dp, bottom = 32.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                if (lp.link != null) ListItem(
+                    headlineContent = { Text(stringResource(R.string.browser_lp_link)) },
+                    supportingContent = { Text(Uri.parse(lp.link).host?.removePrefix("www.").orEmpty() + Uri.parse(lp.link).path.orEmpty(),
+                        maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                    leadingContent = { Icon(Icons.Rounded.Cast, null, tint = c.primary) },
+                    colors = ListItemDefaults.colors(containerColor = c.surfaceContainerLow),
+                    modifier = Modifier.clip(RoundedCornerShape(16.dp)).clickable(role = Role.Button) {
+                        b.longPress = null
+                        // Comme l'épisode suivant : la page s'ouvre en coulisse et sa vidéo part seule.
+                        Nav.tab.value = Tab.PLAYER
+                        Nav.nextEpisode.value = lp.link
+                    },
+                )
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.browser_lp_find)) },
+                    supportingContent = { Text(stringResource(R.string.browser_lp_find_sub)) },
+                    leadingContent = { Icon(Icons.Rounded.Movie, null, tint = c.primary) },
+                    colors = ListItemDefaults.colors(containerColor = c.surfaceContainerLow),
+                    modifier = Modifier.clip(RoundedCornerShape(16.dp)).clickable(role = Role.Button) {
+                        b.longPress = null
+                        b.findVideoNow()
+                    },
+                )
+            }
+        }
+    }
+    if (b.notFound) {
+        val ctx = androidx.compose.ui.platform.LocalContext.current
+        val drm = b.drm
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { b.notFound = false },
+            icon = { Icon(Icons.Rounded.Movie, null) },
+            title = { Text(stringResource(if (drm) R.string.browser_miss_drm_title else R.string.browser_miss_title)) },
+            text = { Text(stringResource(if (drm) R.string.browser_miss_drm else R.string.browser_miss_body)) },
+            // Protégée : rien à réessayer, seulement fermer. Sinon : chercher encore, ou nous signaler le site.
+            confirmButton = {
+                if (drm) androidx.compose.material3.TextButton(onClick = { b.notFound = false }) { Text(stringResource(android.R.string.ok)) }
+                else androidx.compose.material3.TextButton(onClick = { b.notFound = false; b.findVideoNow() }) { Text(stringResource(R.string.browser_miss_retry)) }
+            },
+            dismissButton = {
+                if (!drm) androidx.compose.material3.TextButton(onClick = {
+                    b.notFound = false
+                    studio.rollando.castor.ui.Report.site(ctx, b.url)
+                }) { Text(stringResource(R.string.browser_miss_report)) }
+            },
+        )
     }
 
     if (showFound) {

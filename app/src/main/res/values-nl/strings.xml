@@ -279,6 +279,16 @@
     <string name="start_zdf">Duitse publieke omroep: series, docu’s, shows</string>
     <string name="start_rtve">De Spaanse publieke omroep, live en on demand</string>
     <string name="start_dw">Internationale nieuwszender, live</string>
+    <string name="browser_lp_link">Video van deze link afspelen</string>
+    <string name="browser_lp_find">Video van deze pagina zoeken</string>
+    <string name="browser_lp_find_sub">De speler van de site start zonder geluid, daarna speelt de video in de app</string>
+    <string name="browser_miss_title">Video nog niet gevonden</string>
+    <string name="browser_miss_body">De app kan opnieuw zoeken door zelf de speler van de site te starten. Lukt dat niet, meld ons de site: we maken hem compatibel.</string>
+    <string name="browser_miss_retry">Opnieuw zoeken</string>
+    <string name="browser_miss_report">Site melden</string>
+    <string name="browser_miss_drm_title">Beveiligde video</string>
+    <string name="browser_miss_drm">Deze site vergrendelt zijn video’s (DRM): ze spelen alleen in de eigen speler of app. Gebruik de app van de site of van de tv.</string>
+    <string name="report_site_intro">De video op deze pagina is niet gevonden. (Voeg toe wat helpt: waar je op tikte, wat er gebeurde.)</string>
     <string name="start_arte">Films, documentaires, concerten</string>
     <string name="start_nasa">De ruimte op video</string>
     <string name="start_peertube">Vrije video’s, zonder reclame of tracking</string>

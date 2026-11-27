@@ -310,7 +310,17 @@
   "widget_sample_sub": "P1 · Tập 3",
   "widget_desc_photos": "Chiếu ảnh và video lên TV chỉ với một chạm",
   "start_dw": "Kênh tin tức quốc tế, trực tiếp",
-  "resume_series_done": "Đã xem hết phim bộ"
+  "resume_series_done": "Đã xem hết phim bộ",
+  "browser_lp_link": "Phát video từ liên kết này",
+  "browser_lp_find": "Tìm video của trang này",
+  "browser_lp_find_sub": "Trình phát của trang sẽ bắt đầu không tiếng, rồi video phát trong ứng dụng",
+  "browser_miss_title": "Chưa tìm thấy video",
+  "browser_miss_body": "Ứng dụng có thể tìm lại bằng cách tự mở trình phát của trang. Nếu không được, hãy báo trang này cho chúng tôi để hỗ trợ.",
+  "browser_miss_retry": "Tìm lại",
+  "browser_miss_report": "Báo trang này",
+  "browser_miss_drm_title": "Video được bảo vệ",
+  "browser_miss_drm": "Trang này khóa video (DRM): chỉ xem được trong trình phát hoặc ứng dụng của trang. Hãy dùng ứng dụng của trang hoặc của TV.",
+  "report_site_intro": "Không tìm thấy video trên trang này. (Thêm thông tin có ích.)"
  },
  "plurals": {
   "browser_found": {

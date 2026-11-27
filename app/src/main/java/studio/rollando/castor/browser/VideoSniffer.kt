@@ -76,7 +76,11 @@ class VideoSniffer {
 
     private val fileExt = setOf("mp4", "webm", "mkv", "m4v", "mov", "avi", "mp3", "m4a")
 
+    /** La page a demandé une protection DRM (Netflix, Disney+…) : sa vidéo ne peut être lue que dans le site. */
+    @Volatile var drm = false
+
     fun reset() {
+        drm = false
         _found.value = emptyList(); hidden.clear(); probed.clear(); misses.clear(); audioList = null; pageImage = null; nextEpisode = null; lastLogged = -1
         siteName = null
         _tracks.clear()
@@ -418,6 +422,13 @@ class VideoSniffer {
          * Lecture lancée dans la page par l'utilisateur (le site a reçu un vrai geste, son non coupé) : pas un aperçu
          * muet qui démarre tout seul. Les vidéos d'une minute ou moins (pubs) ne comptent pas.
          */
+        /** Le lecteur de la page demande une clé de déchiffrement (DRM). */
+        @JavascriptInterface
+        fun drm() {
+            if (!drm) android.util.Log.i("CastorWeb", "vidéo protégée (DRM) sur la page")
+            drm = true
+        }
+
         @JavascriptInterface
         fun played(duration: Double) {
             if (duration > 0.5 && duration <= 60.0) return
@@ -488,6 +499,9 @@ class VideoSniffer {
     r.addEventListener('durationchange', function(e){ report(e.target); }, true);
   }
   listen(document);
+  // Vidéo protégée (DRM) : le lecteur demande une clé au navigateur. On le note pour le dire à l'utilisateur.
+  try { if (navigator.requestMediaKeySystemAccess) { var rk = navigator.requestMediaKeySystemAccess.bind(navigator);
+    navigator.requestMediaKeySystemAccess = function(){ try { CastorBridge.drm && CastorBridge.drm(); } catch(e){} return rk.apply(null, arguments); }; } } catch(e){}
   // Listes HLS chargées en coulisse par le lecteur du site, sans « .m3u8 » dans l'adresse : reconnues à leur
   // contenu (« #EXTM3U ») ou à leur type. Les adresses en .m3u8 sont déjà vues par l'appli.
   function hlsSeen(u){ try { if (u && CastorBridge.hls && !/\.m3u8(\?|$)/i.test(u.split('#')[0])) CastorBridge.hls(new URL(u, location.href).href); } catch(e){} }

@@ -279,6 +279,16 @@
     <string name="start_zdf">La télé publique allemande : séries, docs, émissions</string>
     <string name="start_rtve">La télé publique espagnole, en direct et en replay</string>
     <string name="start_dw">Chaîne d’info internationale, en direct</string>
+    <string name="browser_lp_link">Lancer la vidéo de ce lien</string>
+    <string name="browser_lp_find">Trouver la vidéo de cette page</string>
+    <string name="browser_lp_find_sub">Le lecteur du site démarre son coupé, puis la vidéo passe dans l’appli</string>
+    <string name="browser_miss_title">Vidéo pas encore repérée</string>
+    <string name="browser_miss_body">L’appli peut chercher encore en démarrant elle-même le lecteur du site. Si ça ne marche pas, signale-nous ce site : on le rendra compatible.</string>
+    <string name="browser_miss_retry">Chercher encore</string>
+    <string name="browser_miss_report">Signaler ce site</string>
+    <string name="browser_miss_drm_title">Vidéo protégée</string>
+    <string name="browser_miss_drm">Ce site verrouille ses vidéos (DRM) : elles ne se regardent que dans son propre lecteur ou son appli, jamais ailleurs. Passe par son appli ou celle de la télé.</string>
+    <string name="report_site_intro">La vidéo de cette page n’a pas été repérée. (Ajoute ce qui peut aider : ce que tu as touché, ce qui s’est passé.)</string>
     <string name="start_arte">Films, documentaires, concerts</string>
     <string name="start_nasa">L’espace en vidéo</string>
     <string name="start_peertube">Vidéos libres, sans pub ni pistage</string>

@@ -312,6 +312,16 @@
     <string name="widget_desc_photos">Показывайте фото и видео на телевизоре одним касанием</string>
     <string name="start_dw">Международный новостной канал в прямом эфире</string>
     <string name="resume_series_done">Сериал досмотрен</string>
+    <string name="browser_lp_link">Воспроизвести видео по этой ссылке</string>
+    <string name="browser_lp_find">Найти видео на этой странице</string>
+    <string name="browser_lp_find_sub">Плеер сайта запустится без звука, затем видео откроется в приложении</string>
+    <string name="browser_miss_title">Видео пока не найдено</string>
+    <string name="browser_miss_body">Приложение может поискать снова, само запустив плеер сайта. Если не выйдет, сообщите нам о сайте — мы его поддержим.</string>
+    <string name="browser_miss_retry">Искать снова</string>
+    <string name="browser_miss_report">Сообщить о сайте</string>
+    <string name="browser_miss_drm_title">Защищённое видео</string>
+    <string name="browser_miss_drm">Этот сайт защищает видео (DRM): их можно смотреть только в его плеере или приложении. Используйте его приложение или приложение телевизора.</string>
+    <string name="report_site_intro">Видео на этой странице не найдено. (Добавьте, что может помочь.)</string>
     <plurals name="browser_found">
         <item quantity="one">%d видео</item>
         <item quantity="few">%d видео</item>

@@ -61,7 +61,8 @@ object Hls {
 
     /** Charge une liste ; si c'est une liste « maître », choisit la meilleure qualité avec le son. */
     fun load(url: String, headers: Map<String, String>): Plan {
-        val f = Http.fetch(url, headers)
+        // Une liste répond en une ou deux secondes : un serveur muet est vite déclaré absent (pas 15 s d'attente).
+        val f = Http.fetch(url, headers, connectTimeout = 6000)
         val text = String(f.bytes, Charsets.UTF_8)
         if (!text.contains("#EXT-X-STREAM-INF")) return parseMedia(text, f.finalUrl, false)
 

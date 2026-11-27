@@ -170,7 +170,9 @@ object Castor {
             is TvError -> Notice(R.string.err_tv, e.detail, true)
             is studio.rollando.castor.dlna.TvBusy -> Notice(R.string.err_tv_busy, error = true)
             is HttpError -> Notice(if (isChannel()) R.string.err_channel_denied else R.string.err_source, e.code.toString(), true)
-            is UnknownHostException, is ConnectException, is SocketTimeoutException -> Notice(R.string.err_network, error = true)
+            // Le téléphone a son Wi-Fi : c'est la source (le serveur de la chaîne) qui ne répond pas, pas le réseau.
+            is UnknownHostException, is ConnectException, is SocketTimeoutException ->
+                if (Net.localIp() == null) Notice(R.string.err_network, error = true) else Notice(R.string.err_source_unreachable, error = true)
             else -> Notice(R.string.err_generic, e.message ?: e.javaClass.simpleName, true)
         }
         _state.update {
@@ -324,6 +326,9 @@ object Castor {
         pollJob?.cancel()
         Album.slideJob?.cancel()
         Album.stopStream()
+        // Sur le téléphone, l'ancienne vidéo s'arrête tout de suite : elle ne doit pas continuer sous le nom de la
+        // nouvelle pendant que celle-ci se prépare (elle passait pour une « vidéo de quelques secondes »).
+        if (_state.value.onPhone) PhoneEngine.stop()
         _state.update {
             it.copy(media = media, slides = null, phase = Phase.LOADING, isHls = false, splitAudio = false, subIndex = media.defaultSub,
                 position = 0.0, duration = 0.0, notice = null, continuous = Library.continuousHls.value, subDelay = 0.0,
@@ -490,6 +495,8 @@ object Castor {
 
     private fun onPhoneStatus(st: PhoneEngine.Status) {
         val s = _state.value
+        // Nouvelle vidéo en préparation : un dernier état de l'ancienne ne compte plus.
+        if (s.phase == Phase.LOADING) return
         if (st.error) {
             _state.update { it.copy(phase = Phase.STOPPED, notice = Notice(R.string.phone_error, error = true)) }
             return

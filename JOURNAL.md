@@ -1071,3 +1071,8 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
 - Lecteur : coins arrondis retirés autour du programme en cours (ils rognaient le texte).
 - Erreur d'une chaîne : bouton « Masquer cette chaîne » dans le message (puis « Chaîne masquée · Annuler ») ;
   la phrase « Appui long dans la liste pour la masquer » retirée du message (23 langues). Vérifié émulateur (Arte, 403).
+- Bug LCI (téléphone de Guillaume) : « LCI HD » (151.80.18.177:86) ne répond plus ; pendant les 15 s d'attente,
+  l'ancienne chaîne continuait sous le nom de la nouvelle avec une barre « 0:25 / 0:25 » (une « vidéo de 9 s »),
+  puis « Problème de réseau ». Corrigé : sur le téléphone l'ancienne lecture s'arrête dès le changement (et ses
+  derniers états sont ignorés pendant le chargement) ; liste HLS : 6 s pour se connecter au lieu de 15 ; serveur
+  muet avec Wi-Fi présent → « La vidéo ne répond pas… » + « Masquer cette chaîne ». Vérifié émulateur.

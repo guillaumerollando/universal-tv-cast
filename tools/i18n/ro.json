@@ -225,7 +225,7 @@
   "iptv_unhide_all": "Afișează-le din nou pe toate",
   "iptv_remove_recent": "Elimină din recente",
   "action_undo": "Anulează",
-  "err_channel_denied": "Acest canal nu răspunde (eroarea %1$s): poate linkul nu mai funcționează sau canalul e disponibil doar în țara lui. Ține-l apăsat în listă ca să-l ascunzi.",
+  "err_channel_denied": "Acest canal nu răspunde (eroarea %1$s): poate linkul nu mai funcționează sau canalul e disponibil doar în țara lui.",
   "err_source_unreachable": "Videoclipul nu răspunde: site-ul sau canalul poate fi offline. Încearcă din nou mai târziu.",
   "zap_title": "Zapping",
   "zap_random": "Canal aleatoriu",

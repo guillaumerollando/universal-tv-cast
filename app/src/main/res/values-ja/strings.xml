@@ -226,7 +226,7 @@
     <string name="iptv_unhide_all">すべて再表示</string>
     <string name="iptv_remove_recent">最近の項目から削除</string>
     <string name="action_undo">元に戻す</string>
-    <string name="err_channel_denied">このチャンネルが応答しません（エラー %1$s）。リンクが無効になったか、その国でしか視聴できない可能性があります。リストで長押しすると非表示にできます。</string>
+    <string name="err_channel_denied">このチャンネルが応答しません（エラー %1$s）。リンクが無効になったか、その国でしか視聴できない可能性があります。</string>
     <string name="err_source_unreachable">動画が応答しません。サイトやチャンネルがオフラインの可能性があります。しばらくしてからもう一度お試しください。</string>
     <string name="zap_title">ザッピング</string>
     <string name="zap_random">ランダムなチャンネル</string>

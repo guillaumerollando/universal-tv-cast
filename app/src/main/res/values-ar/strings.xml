@@ -226,7 +226,7 @@
     <string name="iptv_unhide_all">إظهار الكل مجددًا</string>
     <string name="iptv_remove_recent">إزالة من الأخيرة</string>
     <string name="action_undo">تراجع</string>
-    <string name="err_channel_denied">هذه القناة لا تستجيب (خطأ %1$s): ربما لم يعد رابطها يعمل، أو أنها متاحة في بلدها فقط. اضغط عليها مطولًا في القائمة لإخفائها.</string>
+    <string name="err_channel_denied">هذه القناة لا تستجيب (خطأ %1$s): ربما لم يعد رابطها يعمل، أو أنها متاحة في بلدها فقط.</string>
     <string name="err_source_unreachable">الفيديو لا يستجيب: ربما الموقع أو القناة غير متصل. حاول مجددًا لاحقًا.</string>
     <string name="zap_title">التنقل بين القنوات</string>
     <string name="zap_random">قناة عشوائية</string>

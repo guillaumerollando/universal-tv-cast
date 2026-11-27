@@ -226,7 +226,7 @@
     <string name="iptv_unhide_all">Visa alla igen</string>
     <string name="iptv_remove_recent">Ta bort från senaste</string>
     <string name="action_undo">Ångra</string>
-    <string name="err_channel_denied">Den här kanalen svarar inte (fel %1$s): länken kanske inte fungerar längre, eller så är den bara tillgänglig i sitt eget land. Tryck länge på den i listan för att dölja den.</string>
+    <string name="err_channel_denied">Den här kanalen svarar inte (fel %1$s): länken kanske inte fungerar längre, eller så är den bara tillgänglig i sitt eget land.</string>
     <string name="err_source_unreachable">Videon svarar inte: sajten eller kanalen kan vara offline. Försök igen senare.</string>
     <string name="zap_title">Zappa</string>
     <string name="zap_random">Slumpmässig kanal</string>

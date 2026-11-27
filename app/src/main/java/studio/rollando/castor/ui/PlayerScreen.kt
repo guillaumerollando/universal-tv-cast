@@ -4,6 +4,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.material.icons.rounded.SkipNext
 import androidx.compose.material.icons.rounded.Smartphone
+import androidx.compose.material.icons.rounded.VisibilityOff
 import android.content.Intent
 import android.os.Build
 import androidx.compose.animation.core.RepeatMode
@@ -215,9 +216,24 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
                     )
                     IconButton(onClick = Castor::dismissNotice) { Icon(Icons.Rounded.Close, stringResource(R.string.cd_dismiss)) }
                 }
-                if (n.error) {
-                    TextButton(onClick = { Nav.help.value = true }, modifier = Modifier.padding(start = 8.dp)) {
+                if (n.error) Row(Modifier.padding(start = 8.dp, end = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                    TextButton(onClick = { Nav.help.value = true }) {
                         Text(stringResource(R.string.action_help))
+                    }
+                    // Chaîne qui ne marche pas : la masquer d'un geste (elle se retrouve dans ⋮ › Chaînes masquées).
+                    if (media.channel != null) {
+                        val hidden by studio.rollando.castor.data.IptvStore.hidden.collectAsState()
+                        val isHidden = media.url in hidden
+                        Spacer(Modifier.weight(1f))
+                        if (isHidden) Text(stringResource(R.string.iptv_hidden_done), style = MaterialTheme.typography.labelLarge,
+                            color = c.onErrorContainer)
+                        TextButton(onClick = {
+                            if (isHidden) studio.rollando.castor.data.IptvStore.unhide(media.url)
+                            else studio.rollando.castor.data.IptvStore.hide(media.url)
+                        }) {
+                            if (!isHidden) { Icon(Icons.Rounded.VisibilityOff, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)) }
+                            Text(stringResource(if (isHidden) R.string.action_undo else R.string.iptv_hide))
+                        }
                     }
                 }
                 val pkg = media.sourceApp

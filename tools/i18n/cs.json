@@ -225,7 +225,7 @@
   "iptv_unhide_all": "Zobrazit vše znovu",
   "iptv_remove_recent": "Odebrat z nedávných",
   "action_undo": "Zpět",
-  "err_channel_denied": "Tento kanál neodpovídá (chyba %1$s): jeho odkaz možná už nefunguje nebo je dostupný jen ve své zemi. Podrž ho v seznamu a skryješ ho.",
+  "err_channel_denied": "Tento kanál neodpovídá (chyba %1$s): jeho odkaz možná už nefunguje nebo je dostupný jen ve své zemi.",
   "err_source_unreachable": "Video neodpovídá: web nebo kanál může být offline. Zkus to později.",
   "zap_title": "Přepínání kanálů",
   "zap_random": "Náhodný kanál",

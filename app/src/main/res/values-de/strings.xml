@@ -226,7 +226,7 @@
     <string name="iptv_unhide_all">Alle wieder zeigen</string>
     <string name="iptv_remove_recent">Aus „Zuletzt“ entfernen</string>
     <string name="action_undo">Rückgängig</string>
-    <string name="err_channel_denied">Dieser Sender antwortet nicht (Fehler %1$s): Der Link funktioniert vielleicht nicht mehr, oder er ist nur in seinem Land verfügbar. In der Liste gedrückt halten, um ihn auszublenden.</string>
+    <string name="err_channel_denied">Dieser Sender antwortet nicht (Fehler %1$s): Der Link funktioniert vielleicht nicht mehr, oder er ist nur in seinem Land verfügbar.</string>
     <string name="err_source_unreachable">Das Video antwortet nicht: Die Seite oder der Sender ist vielleicht offline. Versuch es später erneut.</string>
     <string name="zap_title">Zappen</string>
     <string name="zap_random">Zufälliger Sender</string>

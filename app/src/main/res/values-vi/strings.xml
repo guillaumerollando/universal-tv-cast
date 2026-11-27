@@ -226,7 +226,7 @@
     <string name="iptv_unhide_all">Hiện lại tất cả</string>
     <string name="iptv_remove_recent">Xóa khỏi mục gần đây</string>
     <string name="action_undo">Hoàn tác</string>
-    <string name="err_channel_denied">Kênh này không phản hồi (lỗi %1$s): có thể liên kết không còn hoạt động, hoặc kênh chỉ xem được ở quốc gia của kênh. Nhấn giữ kênh trong danh sách để ẩn.</string>
+    <string name="err_channel_denied">Kênh này không phản hồi (lỗi %1$s): có thể liên kết không còn hoạt động, hoặc kênh chỉ xem được ở quốc gia của kênh.</string>
     <string name="err_source_unreachable">Video không phản hồi: trang web hoặc kênh có thể đang ngoại tuyến. Hãy thử lại sau.</string>
     <string name="zap_title">Lướt kênh</string>
     <string name="zap_random">Kênh ngẫu nhiên</string>

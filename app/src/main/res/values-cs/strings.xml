@@ -226,7 +226,7 @@
     <string name="iptv_unhide_all">Zobrazit vše znovu</string>
     <string name="iptv_remove_recent">Odebrat z nedávných</string>
     <string name="action_undo">Zpět</string>
-    <string name="err_channel_denied">Tento kanál neodpovídá (chyba %1$s): jeho odkaz možná už nefunguje nebo je dostupný jen ve své zemi. Podrž ho v seznamu a skryješ ho.</string>
+    <string name="err_channel_denied">Tento kanál neodpovídá (chyba %1$s): jeho odkaz možná už nefunguje nebo je dostupný jen ve své zemi.</string>
     <string name="err_source_unreachable">Video neodpovídá: web nebo kanál může být offline. Zkus to později.</string>
     <string name="zap_title">Přepínání kanálů</string>
     <string name="zap_random">Náhodný kanál</string>

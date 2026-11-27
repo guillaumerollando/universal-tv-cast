@@ -226,7 +226,7 @@
     <string name="iptv_unhide_all">Показати всі</string>
     <string name="iptv_remove_recent">Прибрати з нещодавніх</string>
     <string name="action_undo">Скасувати</string>
-    <string name="err_channel_denied">Канал не відповідає (помилка %1$s): можливо, посилання більше не працює або канал доступний лише у своїй країні. Утримуй його в списку, щоб приховати.</string>
+    <string name="err_channel_denied">Канал не відповідає (помилка %1$s): можливо, посилання більше не працює або канал доступний лише у своїй країні.</string>
     <string name="err_source_unreachable">Відео не відповідає: сайт або канал може бути недоступний. Спробуй пізніше.</string>
     <string name="zap_title">Перемикати канали</string>
     <string name="zap_random">Випадковий канал</string>

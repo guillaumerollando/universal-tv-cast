@@ -225,7 +225,7 @@
   "iptv_unhide_all": "Tümünü yeniden göster",
   "iptv_remove_recent": "Son izlenenlerden kaldır",
   "action_undo": "Geri al",
-  "err_channel_denied": "Bu kanal yanıt vermiyor (hata %1$s): bağlantısı artık çalışmıyor olabilir ya da yalnızca kendi ülkesinde izlenebiliyor olabilir. Gizlemek için listede basılı tutun.",
+  "err_channel_denied": "Bu kanal yanıt vermiyor (hata %1$s): bağlantısı artık çalışmıyor olabilir ya da yalnızca kendi ülkesinde izlenebiliyor olabilir.",
   "err_source_unreachable": "Video yanıt vermiyor: site veya kanal çevrim dışı olabilir. Daha sonra tekrar deneyin.",
   "zap_title": "Kanal gezintisi",
   "zap_random": "Rastgele kanal",

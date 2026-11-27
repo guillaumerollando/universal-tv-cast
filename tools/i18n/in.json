@@ -225,7 +225,7 @@
   "iptv_unhide_all": "Tampilkan semua lagi",
   "iptv_remove_recent": "Hapus dari terbaru",
   "action_undo": "Urungkan",
-  "err_channel_denied": "Saluran ini tidak merespons (error %1$s): link-nya mungkin sudah tidak berfungsi, atau hanya tersedia di negaranya sendiri. Tekan lama di daftar untuk menyembunyikannya.",
+  "err_channel_denied": "Saluran ini tidak merespons (error %1$s): link-nya mungkin sudah tidak berfungsi, atau hanya tersedia di negaranya sendiri.",
   "err_source_unreachable": "Video tidak merespons: situs atau saluran mungkin sedang offline. Coba lagi nanti.",
   "zap_title": "Ganti-ganti saluran",
   "zap_random": "Saluran acak",

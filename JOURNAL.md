@@ -1069,3 +1069,5 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
   choisie → téléphone tout de suite (la recherche tourne en fond, une télé trouvée se propose par le bouton).
   Vérifié émulateur : 13e Rue → AB1 → Arte en ~3 s chacune (Arte : 403 de la chaîne, sans rapport).
 - Lecteur : coins arrondis retirés autour du programme en cours (ils rognaient le texte).
+- Erreur d'une chaîne : bouton « Masquer cette chaîne » dans le message (puis « Chaîne masquée · Annuler ») ;
+  la phrase « Appui long dans la liste pour la masquer » retirée du message (23 langues). Vérifié émulateur (Arte, 403).

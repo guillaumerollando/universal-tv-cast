@@ -225,7 +225,7 @@
   "iptv_unhide_all": "Hiện lại tất cả",
   "iptv_remove_recent": "Xóa khỏi mục gần đây",
   "action_undo": "Hoàn tác",
-  "err_channel_denied": "Kênh này không phản hồi (lỗi %1$s): có thể liên kết không còn hoạt động, hoặc kênh chỉ xem được ở quốc gia của kênh. Nhấn giữ kênh trong danh sách để ẩn.",
+  "err_channel_denied": "Kênh này không phản hồi (lỗi %1$s): có thể liên kết không còn hoạt động, hoặc kênh chỉ xem được ở quốc gia của kênh.",
   "err_source_unreachable": "Video không phản hồi: trang web hoặc kênh có thể đang ngoại tuyến. Hãy thử lại sau.",
   "zap_title": "Lướt kênh",
   "zap_random": "Kênh ngẫu nhiên",

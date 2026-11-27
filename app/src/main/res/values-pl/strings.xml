@@ -226,7 +226,7 @@
     <string name="iptv_unhide_all">Pokaż wszystkie</string>
     <string name="iptv_remove_recent">Usuń z ostatnich</string>
     <string name="action_undo">Cofnij</string>
-    <string name="err_channel_denied">Ten kanał nie odpowiada (błąd %1$s): jego link mógł przestać działać albo kanał jest dostępny tylko w swoim kraju. Przytrzymaj go na liście, aby go ukryć.</string>
+    <string name="err_channel_denied">Ten kanał nie odpowiada (błąd %1$s): jego link mógł przestać działać albo kanał jest dostępny tylko w swoim kraju.</string>
     <string name="err_source_unreachable">Wideo nie odpowiada: strona lub kanał mogą być offline. Spróbuj później.</string>
     <string name="zap_title">Skakanie po kanałach</string>
     <string name="zap_random">Losowy kanał</string>

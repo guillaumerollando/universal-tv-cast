@@ -226,7 +226,7 @@
     <string name="iptv_unhide_all">Afișează-le din nou pe toate</string>
     <string name="iptv_remove_recent">Elimină din recente</string>
     <string name="action_undo">Anulează</string>
-    <string name="err_channel_denied">Acest canal nu răspunde (eroarea %1$s): poate linkul nu mai funcționează sau canalul e disponibil doar în țara lui. Ține-l apăsat în listă ca să-l ascunzi.</string>
+    <string name="err_channel_denied">Acest canal nu răspunde (eroarea %1$s): poate linkul nu mai funcționează sau canalul e disponibil doar în țara lui.</string>
     <string name="err_source_unreachable">Videoclipul nu răspunde: site-ul sau canalul poate fi offline. Încearcă din nou mai târziu.</string>
     <string name="zap_title">Zapping</string>
     <string name="zap_random">Canal aleatoriu</string>

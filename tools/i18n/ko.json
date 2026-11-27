@@ -225,7 +225,7 @@
   "iptv_unhide_all": "모두 다시 표시",
   "iptv_remove_recent": "최근 항목에서 삭제",
   "action_undo": "실행 취소",
-  "err_channel_denied": "이 채널이 응답하지 않아요(오류 %1$s). 링크가 더 이상 작동하지 않거나 해당 국가에서만 볼 수 있을 수 있어요. 목록에서 길게 눌러 숨기세요.",
+  "err_channel_denied": "이 채널이 응답하지 않아요(오류 %1$s). 링크가 더 이상 작동하지 않거나 해당 국가에서만 볼 수 있을 수 있어요.",
   "err_source_unreachable": "동영상이 응답하지 않아요. 사이트나 채널이 오프라인일 수 있어요. 나중에 다시 시도하세요.",
   "zap_title": "채널 서핑",
   "zap_random": "랜덤 채널",

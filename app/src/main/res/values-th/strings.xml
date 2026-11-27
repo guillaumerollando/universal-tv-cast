@@ -226,7 +226,7 @@
     <string name="iptv_unhide_all">แสดงทั้งหมดอีกครั้ง</string>
     <string name="iptv_remove_recent">นำออกจากรายการล่าสุด</string>
     <string name="action_undo">เลิกทำ</string>
-    <string name="err_channel_denied">ช่องนี้ไม่ตอบสนอง (ข้อผิดพลาด %1$s): ลิงก์อาจใช้งานไม่ได้แล้ว หรืออาจดูได้เฉพาะในประเทศของช่องนั้น แตะช่องค้างไว้ในรายการเพื่อซ่อน</string>
+    <string name="err_channel_denied">ช่องนี้ไม่ตอบสนอง (ข้อผิดพลาด %1$s): ลิงก์อาจใช้งานไม่ได้แล้ว หรืออาจดูได้เฉพาะในประเทศของช่องนั้น</string>
     <string name="err_source_unreachable">วิดีโอไม่ตอบสนอง: เว็บไซต์หรือช่องอาจออฟไลน์อยู่ ลองอีกครั้งในภายหลัง</string>
     <string name="zap_title">สลับช่อง</string>
     <string name="zap_random">สุ่มช่อง</string>

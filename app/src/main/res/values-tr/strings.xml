@@ -226,7 +226,7 @@
     <string name="iptv_unhide_all">Tümünü yeniden göster</string>
     <string name="iptv_remove_recent">Son izlenenlerden kaldır</string>
     <string name="action_undo">Geri al</string>
-    <string name="err_channel_denied">Bu kanal yanıt vermiyor (hata %1$s): bağlantısı artık çalışmıyor olabilir ya da yalnızca kendi ülkesinde izlenebiliyor olabilir. Gizlemek için listede basılı tutun.</string>
+    <string name="err_channel_denied">Bu kanal yanıt vermiyor (hata %1$s): bağlantısı artık çalışmıyor olabilir ya da yalnızca kendi ülkesinde izlenebiliyor olabilir.</string>
     <string name="err_source_unreachable">Video yanıt vermiyor: site veya kanal çevrim dışı olabilir. Daha sonra tekrar deneyin.</string>
     <string name="zap_title">Kanal gezintisi</string>
     <string name="zap_random">Rastgele kanal</string>

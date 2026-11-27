@@ -226,7 +226,7 @@
     <string name="iptv_unhide_all">全部重新顯示</string>
     <string name="iptv_remove_recent">從最近觀看中移除</string>
     <string name="action_undo">復原</string>
-    <string name="err_channel_denied">此頻道沒有回應（錯誤 %1$s）：它的連結可能已失效，或只能在其所屬國家觀看。在清單中長按即可隱藏。</string>
+    <string name="err_channel_denied">此頻道沒有回應（錯誤 %1$s）：它的連結可能已失效，或只能在其所屬國家觀看。</string>
     <string name="err_source_unreachable">影片沒有回應：網站或頻道可能已離線。請稍後再試。</string>
     <string name="zap_title">轉台</string>
     <string name="zap_random">隨機頻道</string>

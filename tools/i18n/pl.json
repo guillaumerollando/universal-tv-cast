@@ -225,7 +225,7 @@
   "iptv_unhide_all": "Pokaż wszystkie",
   "iptv_remove_recent": "Usuń z ostatnich",
   "action_undo": "Cofnij",
-  "err_channel_denied": "Ten kanał nie odpowiada (błąd %1$s): jego link mógł przestać działać albo kanał jest dostępny tylko w swoim kraju. Przytrzymaj go na liście, aby go ukryć.",
+  "err_channel_denied": "Ten kanał nie odpowiada (błąd %1$s): jego link mógł przestać działać albo kanał jest dostępny tylko w swoim kraju.",
   "err_source_unreachable": "Wideo nie odpowiada: strona lub kanał mogą być offline. Spróbuj później.",
   "zap_title": "Skakanie po kanałach",
   "zap_random": "Losowy kanał",

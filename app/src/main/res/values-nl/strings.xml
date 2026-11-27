@@ -226,7 +226,7 @@
     <string name="iptv_unhide_all">Alles weer tonen</string>
     <string name="iptv_remove_recent">Uit recent verwijderen</string>
     <string name="action_undo">Ongedaan maken</string>
-    <string name="err_channel_denied">Deze zender reageert niet (fout %1$s): de link werkt misschien niet meer, of hij is alleen in zijn eigen land te zien. Houd hem ingedrukt in de lijst om hem te verbergen.</string>
+    <string name="err_channel_denied">Deze zender reageert niet (fout %1$s): de link werkt misschien niet meer, of hij is alleen in zijn eigen land te zien.</string>
     <string name="err_source_unreachable">De video reageert niet: de site of zender is misschien offline. Probeer het later opnieuw.</string>
     <string name="zap_title">Zappen</string>
     <string name="zap_random">Willekeurige zender</string>

@@ -226,7 +226,7 @@
     <string name="iptv_unhide_all">सभी फिर से दिखाएँ</string>
     <string name="iptv_remove_recent">हाल के चैनलों से हटाएँ</string>
     <string name="action_undo">पहले जैसा करें</string>
-    <string name="err_channel_denied">यह चैनल जवाब नहीं दे रहा (एरर %1$s): हो सकता है उसका लिंक अब काम न करता हो, या वह सिर्फ़ अपने देश में उपलब्ध हो। उसे छिपाने के लिए लिस्ट में उसे दबाकर रखें।</string>
+    <string name="err_channel_denied">यह चैनल जवाब नहीं दे रहा (एरर %1$s): हो सकता है उसका लिंक अब काम न करता हो, या वह सिर्फ़ अपने देश में उपलब्ध हो।</string>
     <string name="err_source_unreachable">वीडियो जवाब नहीं दे रहा: हो सकता है साइट या चैनल ऑफ़लाइन हो। बाद में फिर कोशिश करें।</string>
     <string name="zap_title">चैनल बदलते रहें</string>
     <string name="zap_random">कोई भी चैनल</string>

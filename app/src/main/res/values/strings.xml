@@ -227,7 +227,7 @@
     <string name="iptv_unhide_all">Show all again</string>
     <string name="iptv_remove_recent">Remove from recent</string>
     <string name="action_undo">Undo</string>
-    <string name="err_channel_denied">This channel isn’t responding (error %1$s): its link may no longer work, or it may only be available in its own country. Press and hold it in the list to hide it.</string>
+    <string name="err_channel_denied">This channel isn’t responding (error %1$s): its link may no longer work, or it may only be available in its own country.</string>
     <string name="err_source_unreachable">The video isn’t responding: the site or channel may be offline. Try again later.</string>
     <string name="zap_title">Channel surfing</string>
     <string name="zap_random">Random channel</string>

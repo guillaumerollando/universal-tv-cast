@@ -226,7 +226,7 @@
     <string name="iptv_unhide_all">Tampilkan semua lagi</string>
     <string name="iptv_remove_recent">Hapus dari terbaru</string>
     <string name="action_undo">Urungkan</string>
-    <string name="err_channel_denied">Saluran ini tidak merespons (error %1$s): link-nya mungkin sudah tidak berfungsi, atau hanya tersedia di negaranya sendiri. Tekan lama di daftar untuk menyembunyikannya.</string>
+    <string name="err_channel_denied">Saluran ini tidak merespons (error %1$s): link-nya mungkin sudah tidak berfungsi, atau hanya tersedia di negaranya sendiri.</string>
     <string name="err_source_unreachable">Video tidak merespons: situs atau saluran mungkin sedang offline. Coba lagi nanti.</string>
     <string name="zap_title">Ganti-ganti saluran</string>
     <string name="zap_random">Saluran acak</string>

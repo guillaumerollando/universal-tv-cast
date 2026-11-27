@@ -226,7 +226,7 @@
     <string name="iptv_unhide_all">Mostrar todos</string>
     <string name="iptv_remove_recent">Quitar de recientes</string>
     <string name="action_undo">Deshacer</string>
-    <string name="err_channel_denied">Este canal no responde (error %1$s): puede que su enlace ya no funcione o que solo se vea en su país. Mantenlo pulsado en la lista para ocultarlo.</string>
+    <string name="err_channel_denied">Este canal no responde (error %1$s): puede que su enlace ya no funcione o que solo se vea en su país.</string>
     <string name="err_source_unreachable">El vídeo no responde: puede que la web o el canal estén sin conexión. Inténtalo más tarde.</string>
     <string name="zap_title">Hacer zapping</string>
     <string name="zap_random">Un canal al azar</string>

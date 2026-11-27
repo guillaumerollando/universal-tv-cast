@@ -309,7 +309,8 @@
   "widget_sample_title": "Můj oblíbený seriál",
   "widget_sample_sub": "S1 · D3",
   "widget_desc_photos": "Ukaž fotky a videa na televizi jedním klepnutím",
-  "start_dw": "Mezinárodní zpravodajský kanál, živě"
+  "start_dw": "Mezinárodní zpravodajský kanál, živě",
+  "resume_series_done": "Seriál dokoukán"
  },
  "plurals": {
   "browser_found": {

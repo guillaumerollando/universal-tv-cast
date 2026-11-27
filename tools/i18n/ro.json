@@ -309,7 +309,8 @@
   "widget_sample_title": "Serialul meu preferat",
   "widget_sample_sub": "S1 · Ep. 3",
   "widget_desc_photos": "Arată pozele și videoclipurile pe televizor dintr-o atingere",
-  "start_dw": "Canal internațional de știri, în direct"
+  "start_dw": "Canal internațional de știri, în direct",
+  "resume_series_done": "Serial terminat"
  },
  "plurals": {
   "browser_found": {

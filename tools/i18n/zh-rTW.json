@@ -309,7 +309,8 @@
   "widget_sample_title": "我最愛的影集",
   "widget_sample_sub": "第1季 · 第3集",
   "widget_desc_photos": "一鍵在電視上顯示照片和影片",
-  "start_dw": "國際新聞頻道，直播"
+  "start_dw": "國際新聞頻道，直播",
+  "resume_series_done": "影集已看完"
  },
  "plurals": {
   "browser_found": {

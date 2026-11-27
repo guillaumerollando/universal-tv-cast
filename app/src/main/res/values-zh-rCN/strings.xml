@@ -311,6 +311,7 @@
     <string name="widget_sample_sub">第1季 · 第3集</string>
     <string name="widget_desc_photos">一键在电视上显示照片和视频</string>
     <string name="start_dw">国际新闻频道，直播</string>
+    <string name="resume_series_done">剧集已看完</string>
     <plurals name="browser_found">
         <item quantity="other">%d 个视频</item>
     </plurals>

@@ -322,6 +322,7 @@ S = {
 "cd_browser_home": ["Browser home", "Accueil du navigateur", "Inicio del navegador", "Browser-Startseite", "Home del browser", "Startpagina browser", "Início do navegador"],
 "resume_season_episode": ["S%1$d · Ep. %2$d", "S%1$d · Ép. %2$d", "T%1$d · Ep. %2$d", "S%1$d · Folge %2$d", "S%1$d · Ep. %2$d", "S%1$d · Afl. %2$d", "T%1$d · Ep. %2$d"],
 "resume_remove": ["Remove from “Pick up”", "Retirer de « Reprendre »", "Quitar de «Continuar»", "Aus „Weiterschauen“ entfernen", "Rimuovi da «Riprendi»", "Verwijderen uit ‘Verder kijken’", "Remover de “Continuar”"],
+"resume_series_done": ["Series finished", "Série terminée", "Serie terminada", "Serie beendet", "Serie finita", "Serie uitgekeken", "Série terminada"],
 "resume_follow": ["Keep it here (bookmark)", "Garder ici (favori)", "Guardar aquí (favorito)", "Hier behalten (Lesezeichen)", "Tienila qui (preferito)", "Hier houden (bladwijzer)", "Manter aqui (favorito)"],
 "home_link_tile": ["Link", "Lien", "Enlace", "Link", "Link", "Link", "Link"],
 "web_err_offline": ["No internet connection", "Pas de connexion Internet", "Sin conexión a Internet", "Keine Internetverbindung", "Nessuna connessione a Internet", "Geen internetverbinding", "Sem conexão com a Internet"],

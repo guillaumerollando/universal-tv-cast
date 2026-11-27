@@ -309,7 +309,8 @@
   "widget_sample_title": "Мій улюблений серіал",
   "widget_sample_sub": "С1 · Еп. 3",
   "widget_desc_photos": "Показуйте фото й відео на телевізорі одним дотиком",
-  "start_dw": "Міжнародний новинний канал наживо"
+  "start_dw": "Міжнародний новинний канал наживо",
+  "resume_series_done": "Серіал переглянуто"
  },
  "plurals": {
   "browser_found": {

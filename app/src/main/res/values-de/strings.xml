@@ -199,6 +199,7 @@
     <string name="cd_browser_home">Browser-Startseite</string>
     <string name="resume_season_episode">S%1$d · Folge %2$d</string>
     <string name="resume_remove">Aus „Weiterschauen“ entfernen</string>
+    <string name="resume_series_done">Serie beendet</string>
     <string name="resume_follow">Hier behalten (Lesezeichen)</string>
     <string name="home_link_tile">Link</string>
     <string name="web_err_offline">Keine Internetverbindung</string>

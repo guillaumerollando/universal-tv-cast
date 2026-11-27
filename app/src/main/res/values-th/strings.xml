@@ -311,6 +311,7 @@
     <string name="widget_sample_sub">S1 · ตอนที่ 3</string>
     <string name="widget_desc_photos">แสดงรูปและวิดีโอบนทีวีในแตะเดียว</string>
     <string name="start_dw">ช่องข่าวต่างประเทศ ถ่ายทอดสด</string>
+    <string name="resume_series_done">ดูซีรีส์จบแล้ว</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>

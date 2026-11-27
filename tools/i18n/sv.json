@@ -309,7 +309,8 @@
   "widget_sample_title": "Min favoritserie",
   "widget_sample_sub": "S1 · Avs. 3",
   "widget_desc_photos": "Visa dina bilder och videor på tv:n med ett tryck",
-  "start_dw": "Internationell nyhetskanal, direkt"
+  "start_dw": "Internationell nyhetskanal, direkt",
+  "resume_series_done": "Serien är slut"
  },
  "plurals": {
   "browser_found": {

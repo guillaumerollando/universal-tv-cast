@@ -30,4 +30,12 @@ class EpisodesTest {
         assertNull(Episodes.find("https://site.tv/films/dune-2021"))
         assertNull(Episodes.find("https://site.tv/search?q=naruto"))
     }
+
+    @org.junit.Test
+    fun arteMemeSerie() {
+        // L'identifiant d'Arte change avec la partie : les quatre parties restent une seule série.
+        val a = Episodes.seriesKey("https://www.arte.tv/fr/videos/130430-002-A/prisonniere-951-2-4/")
+        assertEquals(a, Episodes.seriesKey("https://www.arte.tv/fr/videos/130430-003-A/prisonniere-951-3-4/"))
+        org.junit.Assert.assertNotEquals(a, Episodes.seriesKey("https://www.arte.tv/fr/videos/118925-002-A/autre-serie-2-4/"))
+    }
 }

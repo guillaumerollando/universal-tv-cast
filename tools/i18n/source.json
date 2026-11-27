@@ -1235,6 +1235,10 @@
   "start_dw": {
    "en": "International news channel, live",
    "fr": "Chaîne d’info internationale, en direct"
+  },
+  "resume_series_done": {
+   "en": "Series finished",
+   "fr": "Série terminée"
   }
  },
  "plurals": {

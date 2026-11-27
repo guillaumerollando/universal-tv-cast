@@ -311,6 +311,7 @@
     <string name="widget_sample_sub">S1 · Ep. 3</string>
     <string name="widget_desc_photos">Arată pozele și videoclipurile pe televizor dintr-o atingere</string>
     <string name="start_dw">Canal internațional de știri, în direct</string>
+    <string name="resume_series_done">Serial terminat</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>

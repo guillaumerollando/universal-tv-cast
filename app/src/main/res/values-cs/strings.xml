@@ -311,6 +311,7 @@
     <string name="widget_sample_sub">S1 · D3</string>
     <string name="widget_desc_photos">Ukaž fotky a videa na televizi jedním klepnutím</string>
     <string name="start_dw">Mezinárodní zpravodajský kanál, živě</string>
+    <string name="resume_series_done">Seriál dokoukán</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="few">%d videa</item>

@@ -199,6 +199,7 @@
     <string name="cd_browser_home">Home del browser</string>
     <string name="resume_season_episode">S%1$d · Ep. %2$d</string>
     <string name="resume_remove">Rimuovi da «Riprendi»</string>
+    <string name="resume_series_done">Serie finita</string>
     <string name="resume_follow">Tienila qui (preferito)</string>
     <string name="home_link_tile">Link</string>
     <string name="web_err_offline">Nessuna connessione a Internet</string>

@@ -311,6 +311,7 @@
     <string name="widget_sample_sub">S1 · Odc. 3</string>
     <string name="widget_desc_photos">Pokaż zdjęcia i filmy na telewizorze jednym dotknięciem</string>
     <string name="start_dw">Międzynarodowy kanał informacyjny na żywo</string>
+    <string name="resume_series_done">Serial obejrzany</string>
     <plurals name="browser_found">
         <item quantity="one">%d wideo</item>
         <item quantity="few">%d wideo</item>

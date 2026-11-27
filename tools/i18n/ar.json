@@ -309,7 +309,8 @@
   "widget_sample_title": "مسلسلي المفضل",
   "widget_sample_sub": "م1 · ح3",
   "widget_desc_photos": "اعرض صورك وفيديوهاتك على التلفزيون بلمسة واحدة",
-  "start_dw": "قناة أخبار دولية، مباشرة"
+  "start_dw": "قناة أخبار دولية، مباشرة",
+  "resume_series_done": "انتهى المسلسل"
  },
  "plurals": {
   "browser_found": {

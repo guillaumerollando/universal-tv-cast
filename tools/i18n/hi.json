@@ -309,7 +309,8 @@
   "widget_sample_title": "मेरी पसंदीदा सीरीज़",
   "widget_sample_sub": "S1 · E3",
   "widget_desc_photos": "एक टैप में अपनी फ़ोटो और वीडियो टीवी पर दिखाएँ",
-  "start_dw": "अंतरराष्ट्रीय समाचार चैनल, लाइव"
+  "start_dw": "अंतरराष्ट्रीय समाचार चैनल, लाइव",
+  "resume_series_done": "सीरीज़ पूरी हुई"
  },
  "plurals": {
   "browser_found": {

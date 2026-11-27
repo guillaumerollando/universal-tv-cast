@@ -63,6 +63,12 @@ data class Recent(
         android.net.Uri.parse(pageUrl).path.orEmpty().trim('/').lowercase() in HOME_PATHS
     }.getOrDefault(false)
 
+    /** Autre épisode de la même série : même site, même nom de série, et un numéro d'épisode des deux côtés. */
+    fun sameSeriesAs(o: Recent): Boolean = web && o.web && !live && !o.live &&
+        episodeNumber != null && o.episodeNumber != null &&
+        Library.hostOf(pageUrl!!) == Library.hostOf(o.pageUrl!!) &&
+        seriesTitle.trim().equals(o.seriesTitle.trim(), ignoreCase = true) && seriesTitle.isNotBlank()
+
     /** Titre de la série seule (« Jujutsu Kaisen » plutôt que « Jujutsu Kaisen – Épisode 5 »). */
     val seriesTitle: String get() = when {
         season != null && fileName != null -> studio.rollando.castor.subs.SubtitleFinder.parse(fileName).title
@@ -201,8 +207,9 @@ object Library {
             m.backdropUrl ?: m.posterUrl, m.fileName, m.season, m.episode, live = live, nextUrl = m.nextUrl) // image large : elle remplit la carte
         // Une chaîne garde le nom qu'on lui a donné.
         val r0 = r00.copy(channel = _recents.value.firstOrNull { it.key == r00.key || it.url == r00.url }?.channel ?: m.channel)
-        // Même série : le nouvel épisode remplace l'ancien (et garde son image si celui-ci n'en a pas).
-        val old = _recents.value.filter { it.key == r0.key || it.url == r0.url }
+        // Même série : le nouvel épisode remplace l'ancien (et garde son image si celui-ci n'en a pas). Même clé,
+        // même vidéo, ou même nom de série sur le même site (adresses qui changent d'un épisode à l'autre).
+        val old = _recents.value.filter { it.key == r0.key || it.url == r0.url || it.sameSeriesAs(r0) }
         val r = if (r0.poster == null) r0.copy(poster = old.firstNotNullOfOrNull { it.poster } ?: bookmarkFor(m.pageUrl ?: "")?.image) else r0
         _recents.value = (listOf(r) + (_recents.value - old.toSet())).take(60)
         saveRecents()

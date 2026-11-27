@@ -309,7 +309,8 @@
   "widget_sample_title": "ซีรีส์โปรดของฉัน",
   "widget_sample_sub": "S1 · ตอนที่ 3",
   "widget_desc_photos": "แสดงรูปและวิดีโอบนทีวีในแตะเดียว",
-  "start_dw": "ช่องข่าวต่างประเทศ ถ่ายทอดสด"
+  "start_dw": "ช่องข่าวต่างประเทศ ถ่ายทอดสด",
+  "resume_series_done": "ดูซีรีส์จบแล้ว"
  },
  "plurals": {
   "browser_found": {

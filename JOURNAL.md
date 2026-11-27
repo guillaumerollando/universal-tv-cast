@@ -1172,3 +1172,13 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
   À essayer : NHK World (JP), ABC iview (AU, bloqué hors Australie), CBC Gem (CA), Rai Play (IT), NPO (NL),
   VRT MAX / Auvio (BE), Globoplay (BR, payant en grande partie), PBS (US).
 - Pas revu à l'écran après ce changement (émulateur arrêté).
+
+## 2026-11-27 — « Reprendre » : une carte par série
+**Fait**
+- Cause des 3 cartes Arte : la clé de série gardait l'identifiant du programme (« 130430-003-A »), qui change à
+  chaque partie. `Episodes.seriesKey` le neutralise désormais (test `arteMemeSerie`).
+- Filet de sécurité : `Recent.sameSeriesAs` (même site, même nom de série, épisode connu des deux côtés), utilisé à
+  l'ajout dans l'historique et à l'affichage de « Reprendre » (une carte par série, l'épisode le plus récent). Les
+  doublons déjà enregistrés se regroupent à l'affichage.
+- Épisode fini : « Reprendre » propose le suivant, depuis le début (inchangé). Suite introuvable : l'épisode reste
+  au lieu de disparaître ; appui long → « Série terminée » (23 langues) pour le retirer.

@@ -309,7 +309,8 @@
   "widget_sample_title": "En sevdiğim dizi",
   "widget_sample_sub": "S1 · B3",
   "widget_desc_photos": "Fotoğraf ve videolarını tek dokunuşla TV'de göster",
-  "start_dw": "Uluslararası haber kanalı, canlı"
+  "start_dw": "Uluslararası haber kanalı, canlı",
+  "resume_series_done": "Dizi bitti"
  },
  "plurals": {
   "browser_found": {

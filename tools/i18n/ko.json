@@ -309,7 +309,8 @@
   "widget_sample_title": "좋아하는 시리즈",
   "widget_sample_sub": "S1 · 3화",
   "widget_desc_photos": "사진과 동영상을 한 번의 탭으로 TV에",
-  "start_dw": "국제 뉴스 채널, 생방송"
+  "start_dw": "국제 뉴스 채널, 생방송",
+  "resume_series_done": "시리즈 다 봄"
  },
  "plurals": {
   "browser_found": {

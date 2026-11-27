@@ -283,7 +283,11 @@ internal data class ResumeItem(
 
 internal fun resumeItems(recents: List<Recent>, bookmarks: List<Bookmark>): List<ResumeItem> {
     val series = bookmarks.filter { it.isSeries }
-    val fromRecents = recents.filter { !it.live }.mapNotNull { r ->
+    // Une seule carte par série : l'épisode regardé en dernier (l'historique est rangé du plus récent au plus ancien).
+    val latest = recents.filter { !it.live }.fold(emptyList<Recent>()) { acc, r ->
+        if (acc.any { it.key == r.key || it.sameSeriesAs(r) }) acc else acc + r
+    }
+    val fromRecents = latest.mapNotNull { r ->
         val b = series.firstOrNull { it.sameSeries(r) }
         // Une page de site sans numéro d'épisode (accueil, bande-annonce…) : son titre ne dirait rien.
         // Page de site sans épisode : on la garde (film, vidéo à identifiant), sauf l'accueil d'un site et les
@@ -297,7 +301,8 @@ internal fun resumeItems(recents: List<Recent>, bookmarks: List<Bookmark>): List
             // Le lien repéré sur la page (fiable) avant celui déduit de l'adresse ; dernière partie (« 4/4 ») : pas de suite.
             if (r.nextUrl != null) { ep = cur?.number?.plus(1); open = r.nextUrl }
             else if (cur != null && cur.next.isNotEmpty()) { ep = cur.number + 1; open = cur.next }
-            else if (b == null) return@mapNotNull null
+            // Suite introuvable : un épisode reste là (« Série terminée » à l'appui long le retire) ; un film disparaît.
+            else if (b == null && ep == null) return@mapNotNull null
         }
         // Le favori a pu avancer plus loin (épisode ouvert sans être casté) : on reprend au plus loin.
         val bookmarkAhead = b != null && (b.episode ?: b.titleEpisode ?: 0) > (ep ?: 0)
@@ -360,7 +365,7 @@ private fun ResumeCard(r: ResumeItem, onBrowse: (String?) -> Unit, modifier: Mod
         val page = r.openUrl
         if (r.bookmark != null) add(stringResource(R.string.cd_bookmark_remove) to { Library.removeBookmark(r.bookmark) })
         else if (page != null) add(stringResource(R.string.resume_follow) to { Library.toggleBookmark(r.title, page, r.image) })
-        if (r.recent != null) add(stringResource(R.string.resume_remove) to { Library.removeRecent(r.key) })
+        if (r.recent != null) add(stringResource(if (r.episode != null) R.string.resume_series_done else R.string.resume_remove) to { Library.removeRecent(r.key) })
     }
     PosterCard(
         title = r.title, image = r.image, host = r.host, badge = badge, starred = r.bookmark != null,

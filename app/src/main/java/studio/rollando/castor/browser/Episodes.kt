@@ -17,7 +17,10 @@ object Episodes {
         val u = url.substringBefore('#')
         val ep = find(u)
         val base = if (ep != null) u.substring(0, ep.at) + "#" + u.substring(ep.at + ep.len) else u.substringBefore('?')
-        return base.substringAfter("://").removePrefix("www.").trimEnd('/').lowercase()
+        // Identifiant qui porte aussi le numéro de partie (Arte : « 130430-003-A ») : sans lui, chaque épisode
+        // aurait sa propre clé et « Reprendre » montrerait la série plusieurs fois.
+        val noId = if (ep != null) PROGRAM_ID.replace(base) { m -> "/${m.groupValues[1]}-#-${m.groupValues[3]}/" } else base
+        return noId.substringAfter("://").removePrefix("www.").trimEnd('/').lowercase()
     }
 
     private val QUERY = Regex("(?i)([?&](?:ep|episode|e)=)(\\d{1,4})(?!\\d)")

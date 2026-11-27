@@ -309,7 +309,8 @@
   "widget_sample_title": "Mój ulubiony serial",
   "widget_sample_sub": "S1 · Odc. 3",
   "widget_desc_photos": "Pokaż zdjęcia i filmy na telewizorze jednym dotknięciem",
-  "start_dw": "Międzynarodowy kanał informacyjny na żywo"
+  "start_dw": "Międzynarodowy kanał informacyjny na żywo",
+  "resume_series_done": "Serial obejrzany"
  },
  "plurals": {
   "browser_found": {

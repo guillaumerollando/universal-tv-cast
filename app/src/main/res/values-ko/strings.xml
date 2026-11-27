@@ -311,6 +311,7 @@
     <string name="widget_sample_sub">S1 · 3화</string>
     <string name="widget_desc_photos">사진과 동영상을 한 번의 탭으로 TV에</string>
     <string name="start_dw">국제 뉴스 채널, 생방송</string>
+    <string name="resume_series_done">시리즈 다 봄</string>
     <plurals name="browser_found">
         <item quantity="other">동영상 %d개</item>
     </plurals>

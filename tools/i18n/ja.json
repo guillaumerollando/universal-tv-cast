@@ -309,7 +309,8 @@
   "widget_sample_title": "お気に入りのシリーズ",
   "widget_sample_sub": "S1 · 第3話",
   "widget_desc_photos": "写真や動画をワンタップでテレビに",
-  "start_dw": "国際ニュースチャンネル（ライブ）"
+  "start_dw": "国際ニュースチャンネル（ライブ）",
+  "resume_series_done": "シリーズ視聴済み"
  },
  "plurals": {
   "browser_found": {

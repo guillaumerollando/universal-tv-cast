@@ -509,7 +509,7 @@ object Castor {
         _state.update {
             it.copy(
                 phase = if (it.phase == Phase.SENDING && st.phase == Phase.IDLE) it.phase else st.phase,
-                position = if (it.live) 0.0 else st.position,
+                position = if (it.live) 0.0 else shownPosition(st.position, it.position),
                 duration = if (it.live) 0.0 else if (st.duration > 0) st.duration else it.duration,
                 liveBehind = behind, liveWindow = window,
             )
@@ -745,6 +745,7 @@ object Castor {
         if (!continuous && start > 1) {
             // Reprendre au bon endroit : attendre que la télé lise vraiment, puis s'y placer (2 essais).
             holdPositionUntil = System.currentTimeMillis() + 20_000
+            seekTarget = start
             val end = System.currentTimeMillis() + 15_000
             while (System.currentTimeMillis() < end &&
                 runCatching { Dlna.transportState(r) }.getOrNull() != "PLAYING"
@@ -878,8 +879,7 @@ object Castor {
                         }
                         s.copy(
                             phase = phase,
-                            position = if (System.currentTimeMillis() < holdPositionUntil) s.position
-                                else if (rel > 0 || t == "PLAYING") startOffset + rel else s.position,
+                            position = if (rel > 0 || t == "PLAYING") shownPosition(startOffset + rel, s.position) else s.position,
                             duration = when {
                                 hlsDuration > 0 -> hlsDuration
                                 dur > 0 -> dur
@@ -1064,6 +1064,22 @@ object Castor {
 
     internal var seekJob: Job? = null
     @Volatile private var holdPositionUntil = 0L
+    /** Moment visé par le dernier déplacement : affiché tel quel jusqu'à ce que le lecteur y soit vraiment. */
+    @Volatile private var seekTarget: Double? = null
+
+    /**
+     * Position à afficher : celle que donne le lecteur, sauf juste après un déplacement. Tant qu'il n'a pas rejoint
+     * le moment visé (déplacement pas encore fait, ou ancien état reçu en retard), on garde le moment visé : pas
+     * d'allers-retours « 50:33 → 50:43 → 50:33 » à l'écran.
+     */
+    private fun shownPosition(reported: Double, current: Double): Double {
+        val t = seekTarget ?: return reported
+        if (kotlin.math.abs(reported - t) < 2.5 || System.currentTimeMillis() > holdPositionUntil) {
+            seekTarget = null
+            return reported
+        }
+        return current
+    }
 
     /**
      * Les appuis rapprochés (±10 s, glissement) sont regroupés : la télé refuse un déplacement
@@ -1073,7 +1089,8 @@ object Castor {
         val s = _state.value
         val target = seconds.coerceIn(0.0, if (s.duration > 0) s.duration - 1 else Double.MAX_VALUE)
         _state.update { it.copy(position = target) }
-        holdPositionUntil = System.currentTimeMillis() + debounceMs + 4000
+        seekTarget = target
+        holdPositionUntil = System.currentTimeMillis() + debounceMs + 6000
         seekJob?.cancel()
         seekJob = scope.launch {
             delay(debounceMs)
@@ -1145,7 +1162,7 @@ object Castor {
         val r = target() ?: throw NoTv()
         if (r.cast) {
             CastControl.seek(r, target)
-            holdPositionUntil = System.currentTimeMillis() + 1500
+            holdPositionUntil = maxOf(holdPositionUntil, System.currentTimeMillis() + 1500)
             return
         }
         if (s.isHls && s.continuous) { castAt(target); return }
@@ -1159,7 +1176,7 @@ object Castor {
             Dlna.seek(r, target)
         }
         castTime = System.currentTimeMillis()
-        holdPositionUntil = System.currentTimeMillis() + 1500
+        holdPositionUntil = maxOf(holdPositionUntil, System.currentTimeMillis() + 1500)
     }
 
     /** Pause demandée pendant que la télé chargeait : appliquée dès qu'elle lit (voir le suivi). */

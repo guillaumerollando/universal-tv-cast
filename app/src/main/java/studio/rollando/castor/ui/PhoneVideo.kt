@@ -34,6 +34,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.animation.core.VectorConverter
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.customActions
+import kotlinx.coroutines.launch
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -320,9 +327,11 @@ private fun CenterControls(s: CastState, loading: Boolean, modifier: Modifier) {
     val c = MaterialTheme.colorScheme
     val canSkip = s.active && (!s.live || s.continuous)
     Row(modifier, horizontalArrangement = Arrangement.spacedBy(40.dp), verticalAlignment = Alignment.CenterVertically) {
-        IconButton(onClick = { Castor.skip(-10.0) }, enabled = canSkip,
-            modifier = Modifier.size(52.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.4f))) {
-            Icon(Icons.Rounded.Replay10, stringResource(R.string.cd_rewind), Modifier.size(30.dp), tint = Color.White)
+        AnimatedSkip(forward = false, onSkip = { Castor.skip(-10.0) }, accent = Color.White) { iconMod, click ->
+            IconButton(onClick = click, enabled = canSkip,
+                modifier = Modifier.size(52.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.4f))) {
+                Icon(Icons.Rounded.Replay10, stringResource(R.string.cd_rewind), Modifier.size(30.dp).then(iconMod), tint = Color.White)
+            }
         }
         Box(
             Modifier.size(68.dp).clip(CircleShape).background(c.primary)
@@ -336,27 +345,98 @@ private fun CenterControls(s: CastState, loading: Boolean, modifier: Modifier) {
                     stringResource(if (playing) R.string.action_pause else R.string.action_play), Modifier.size(38.dp), tint = c.onPrimary)
             }
         }
-        IconButton(onClick = { Castor.skip(10.0) }, enabled = canSkip && (!s.live || s.liveBehind >= 1),
-            modifier = Modifier.size(52.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.4f))) {
-            Icon(Icons.Rounded.Forward10, stringResource(R.string.cd_forward10), Modifier.size(30.dp), tint = Color.White)
+        AnimatedSkip(forward = true, onSkip = { Castor.skip(10.0) }, accent = Color.White) { iconMod, click ->
+            IconButton(onClick = click, enabled = canSkip && (!s.live || s.liveBehind >= 1),
+                modifier = Modifier.size(52.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.4f))) {
+                Icon(Icons.Rounded.Forward10, stringResource(R.string.cd_forward10), Modifier.size(30.dp).then(iconMod), tint = Color.White)
+            }
         }
     }
 }
 
+/** Coin où se tient la vignette (gardé d'un écran à l'autre, le temps de la session). */
+private data class MiniCorner(val right: Boolean, val bottom: Boolean)
+private var miniCorner by androidx.compose.runtime.mutableStateOf(MiniCorner(right = true, bottom = true))
+
 /**
  * Hors de l'écran de lecture (accueil, chaînes…) pendant une lecture sur le téléphone : la vidéo continue dans une
- * petite vignette en bas à droite. Un appui ramène à l'écran de lecture.
+ * petite vignette. Un appui ramène à l'écran de lecture. Comme sur YouTube, on la déplace du doigt (elle se range dans
+ * le coin le plus proche), et on la jette hors de l'écran par un côté pour arrêter la lecture.
  */
 @Composable
 fun MiniPlayer(state: CastState, bottom: androidx.compose.ui.unit.Dp, modifier: Modifier = Modifier) {
-    Box(modifier.fillMaxSize().padding(end = 12.dp, bottom = bottom), contentAlignment = Alignment.BottomEnd) {
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    val density = androidx.compose.ui.platform.LocalDensity.current
+    val closeLabel = stringResource(R.string.action_stop)
+    androidx.compose.foundation.layout.BoxWithConstraints(
+        modifier.fillMaxSize().statusBarsPadding().padding(start = 12.dp, end = 12.dp, top = 72.dp, bottom = bottom),
+    ) {
+        val w = with(density) { 192.dp.toPx() }
+        val h = with(density) { 108.dp.toPx() }
+        val maxX = (constraints.maxWidth - w).coerceAtLeast(0f)
+        val maxY = (constraints.maxHeight - h).coerceAtLeast(0f)
+        fun spot(c: MiniCorner) = androidx.compose.ui.geometry.Offset(if (c.right) maxX else 0f, if (c.bottom) maxY else 0f)
+        val pos = remember { androidx.compose.animation.core.Animatable(spot(miniCorner), androidx.compose.ui.geometry.Offset.VectorConverter) }
+        // La place change (bouton « 1 vidéo » du navigateur, rotation) : la vignette suit, en douceur.
+        LaunchedEffect(maxX, maxY) { if (!pos.isRunning) pos.animateTo(spot(miniCorner), androidx.compose.animation.core.tween(220)) }
+        var leaving by remember { mutableStateOf(false) }
+        fun dismiss(toRight: Boolean) {
+            leaving = true
+            scope.launch {
+                pos.animateTo(pos.value.copy(x = if (toRight) maxX + w * 1.4f else -w * 1.4f), androidx.compose.animation.core.tween(200))
+                Castor.stop()
+            }
+        }
         Box(
-            Modifier.size(width = 192.dp, height = 108.dp)
+            Modifier
+                .offset { androidx.compose.ui.unit.IntOffset(pos.value.x.toInt(), pos.value.y.toInt()) }
+                .size(width = 192.dp, height = 108.dp)
+                .graphicsLayer {
+                    // S'efface à mesure qu'elle sort de l'écran.
+                    val out = maxOf(-pos.value.x, pos.value.x - maxX).coerceAtLeast(0f)
+                    alpha = (1f - out / (w * 1.1f)).coerceIn(0f, 1f)
+                }
                 .androidx_shadow()
                 .clip(RoundedCornerShape(16.dp)).background(Color.Black)
-                .clickable(role = androidx.compose.ui.semantics.Role.Button, onClickLabel = state.media?.title) {
+                .pointerInput(maxX, maxY) {
+                    val tracker = androidx.compose.ui.input.pointer.util.VelocityTracker()
+                    var total = androidx.compose.ui.geometry.Offset.Zero
+                    detectDragGestures(
+                        onDragStart = { tracker.resetTracking(); total = androidx.compose.ui.geometry.Offset.Zero },
+                        onDrag = { change, drag ->
+                            change.consume()
+                            total += drag
+                            tracker.addPosition(change.uptimeMillis, total)
+                            scope.launch { pos.snapTo(pos.value + drag) }
+                        },
+                        onDragEnd = {
+                            val v = tracker.calculateVelocity()
+                            val p = pos.value
+                            val fast = with(density) { 1800.dp.toPx() }
+                            // Jetée : plus d’à moitié sortie par un côté, ou lancée vite vers le bord dont elle est proche.
+                            val outLeft = p.x < -w * 0.55f || (v.x < -fast && p.x < maxX * 0.3f)
+                            val outRight = p.x > maxX + w * 0.55f || (v.x > fast && p.x > maxX * 0.7f)
+                            if (outLeft || outRight) dismiss(outRight)
+                            else {
+                                // Sinon, le coin vers lequel elle allait (position + un peu d'élan).
+                                val c = MiniCorner(right = p.x + v.x * 0.12f > maxX / 2, bottom = p.y + v.y * 0.12f > maxY / 2)
+                                miniCorner = c
+                                scope.launch {
+                                    pos.animateTo(spot(c), androidx.compose.animation.core.spring(dampingRatio = 0.72f,
+                                        stiffness = androidx.compose.animation.core.Spring.StiffnessMediumLow),
+                                        initialVelocity = androidx.compose.ui.geometry.Offset(v.x, v.y))
+                                }
+                            }
+                        },
+                        onDragCancel = { scope.launch { pos.animateTo(spot(miniCorner)) } },
+                    )
+                }
+                .clickable(enabled = !leaving, role = androidx.compose.ui.semantics.Role.Button, onClickLabel = state.media?.title) {
                     Nav.iptv.value = null
                     Nav.tab.value = Tab.PLAYER
+                }
+                .semantics {
+                    customActions = listOf(androidx.compose.ui.semantics.CustomAccessibilityAction(closeLabel) { Castor.stop(); true })
                 },
         ) {
             VideoSurface(Modifier.fillMaxSize())

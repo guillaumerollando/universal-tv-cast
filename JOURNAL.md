@@ -1080,3 +1080,11 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
   L'enregistrement du direct (pause) ne prend que l'image ; le lecteur attendait le son. Désormais, son séparé →
   le lecteur d'Android lit la liste lui-même (pas de remontée longue pour ces chaînes-là). Vérifié émulateur :
   image + son AAC en ~2 s. À faire un jour : enregistrer aussi le son séparé pour garder la pause longue.
+- Boutons ±10 s animés (page de lecture et plein écran) : le bouton s'enfonce et rebondit, la flèche pivote, une onde
+  part du bouton, « +10 » / « −10 » monte en s'effaçant ; appuis rapides cumulés (« −20 »). Pas coupés par
+  l'économie d'énergie (moins d'une seconde, sur appui).
+- Position après ±10 s : plus d'allers-retours (50:33 → 50:43 → 50:33). Le moment visé reste affiché tant que le
+  lecteur (téléphone, télé, Cast) ne l'a pas rejoint, 6 s au plus (Castor.shownPosition).
+- Mini-vidéo (lecture sur le téléphone, hors écran de lecture) : se déplace du doigt et se range dans le coin le plus
+  proche (avec l'élan), coin gardé d'un écran à l'autre ; jetée hors de l'écran par un côté (plus de la moitié
+  dehors, ou lancée vite) → s'efface et la lecture s'arrête. Action d'accessibilité « Arrêter ». Vérifié émulateur.

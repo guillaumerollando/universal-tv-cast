@@ -524,8 +524,10 @@ internal fun Controls(s: CastState) {
     }
     val enabled = (s.renderer != null || s.onPhone) && s.phase != Phase.LOADING
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
-        FilledTonalIconButton(onClick = { Castor.skip(-10.0) }, enabled = enabled && s.active && (!s.live || s.continuous), modifier = Modifier.size(56.dp)) {
-            Icon(Icons.Rounded.Replay10, stringResource(R.string.cd_rewind), Modifier.size(28.dp))
+        AnimatedSkip(forward = false, onSkip = { Castor.skip(-10.0) }) { iconMod, click ->
+            FilledTonalIconButton(onClick = click, enabled = enabled && s.active && (!s.live || s.continuous), modifier = Modifier.size(56.dp)) {
+                Icon(Icons.Rounded.Replay10, stringResource(R.string.cd_rewind), Modifier.size(28.dp).then(iconMod))
+            }
         }
         val playing = s.phase == Phase.PLAYING || s.phase == Phase.BUFFERING || s.phase == Phase.SENDING
         FilledIconButton(
@@ -537,8 +539,10 @@ internal fun Controls(s: CastState) {
                 stringResource(if (playing) R.string.action_pause else R.string.action_play), Modifier.size(44.dp),
             )
         }
-        FilledTonalIconButton(onClick = { Castor.skip(10.0) }, enabled = enabled && s.active && (!s.live || s.continuous && s.liveBehind >= 1), modifier = Modifier.size(56.dp)) {
-            Icon(Icons.Rounded.Forward10, stringResource(R.string.cd_forward10), Modifier.size(28.dp))
+        AnimatedSkip(forward = true, onSkip = { Castor.skip(10.0) }) { iconMod, click ->
+            FilledTonalIconButton(onClick = click, enabled = enabled && s.active && (!s.live || s.continuous && s.liveBehind >= 1), modifier = Modifier.size(56.dp)) {
+                Icon(Icons.Rounded.Forward10, stringResource(R.string.cd_forward10), Modifier.size(28.dp).then(iconMod))
+            }
         }
         FilledTonalIconButton(onClick = Castor::stop, enabled = enabled && s.active, modifier = Modifier.size(56.dp)) {
             Icon(Icons.Rounded.Stop, stringResource(R.string.action_stop), Modifier.size(28.dp))

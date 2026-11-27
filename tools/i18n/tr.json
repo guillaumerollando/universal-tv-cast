@@ -284,7 +284,13 @@
   "settings_power": "Güç tasarrufu",
   "settings_power_sub": "Videonun etrafındaki parıltıyı, bulanıklığı ve animasyonları kapatır, canlı yayını daha seyrek kontrol eder. Video kalitesi değişmez. Telefonun pil tasarrufundayken kendiliğinden açılır.",
   "tv_asleep": "Yanıt vermiyor: kapalı mı?",
-  "audio_language": "Dil"
+  "audio_language": "Dil",
+  "epg_schedule": "Kanal yayın akışı",
+  "epg_none": "Bu kanallar için yayın akışı bulunamadı.",
+  "epg_none_channel": "Bu kanal için yayın akışı bulunamadı.",
+  "epg_today": "Bugün",
+  "epg_tomorrow": "Yarın",
+  "epg_yesterday": "Dün"
  },
  "plurals": {
   "browser_found": {

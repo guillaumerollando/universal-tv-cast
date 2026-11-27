@@ -32,13 +32,32 @@ La télé est trouvée par SSDP puis commandée en SOAP UPnP AVTransport / Rende
 - Sous-titres : dépend de la télé (beaucoup ignorent les sous-titres externes en DLNA).
 
 ## Construire
+Deux versions sortent du même code, choisies au moment de construire :
+
+| Version | Pour | Télés | Bibliothèques |
+|---|---|---|---|
+| `play` | Google Play | DLNA **et** Google Cast | Google Cast (non libre) |
+| `libre` | F-Droid, ou qui veut une appli 100 % libre | DLNA seulement | toutes libres |
+
 ```bash
-./gradlew testDebugUnitTest assembleRelease
+./gradlew testPlayDebugUnitTest assemblePlayRelease     # version Play
+./gradlew assembleLibreRelease                          # version libre
 ```
-APK : `app/build/outputs/apk/release/app-release.apk` (signée avec la clé de debug pour l'instant).
+APK : `app/build/outputs/apk/<version>/release/app-<version>-release.apk` (signées avec la clé de debug pour l'instant).
+Le code propre à Google Cast vit dans `app/src/play/` ; `app/src/libre/` le remplace par une version vide.
 Textes : `tools/strings.py` génère `res/values*/strings.xml` (ne pas modifier ces fichiers à la main).
 
 ## Licence
 Universal TV Cast est un logiciel libre, publié sous la licence **GNU GPL version 3** (voir [LICENSE](LICENSE)).
 Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer ; toute version modifiée distribuée doit rester
 sous GPL-3.0 et publier son code source. © 2026 Rollando Studio.
+
+**Exception pour Google Cast.** La version `play` utilise la bibliothèque Google Cast (Google Play Services), qui
+n'est pas libre. Comme permis par l'article 7 de la GPL, Rollando Studio ajoute l'autorisation suivante :
+
+> *Additional permission under GNU GPL version 3 section 7:* if you modify this Program, or any covered work, by
+> linking or combining it with the Google Play Services libraries (or a modified version of those libraries),
+> containing parts covered by the terms of their own licence, the licensors of this Program grant you additional
+> permission to convey the resulting work.
+
+La version `libre` n'en a pas besoin : elle ne contient aucune bibliothèque non libre.

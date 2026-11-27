@@ -284,7 +284,13 @@
   "settings_power": "Hemat daya",
   "settings_power_sub": "Mematikan cahaya di sekitar video, efek blur, dan animasi, serta lebih jarang memeriksa siaran langsung. Kualitas video tetap sama. Aktif sendiri saat ponselmu menghemat baterai.",
   "tv_asleep": "Tidak merespons: mati?",
-  "audio_language": "Bahasa"
+  "audio_language": "Bahasa",
+  "epg_schedule": "Jadwal saluran",
+  "epg_none": "Tidak ada jadwal untuk saluran ini.",
+  "epg_none_channel": "Tidak ada jadwal untuk saluran ini.",
+  "epg_today": "Hari ini",
+  "epg_tomorrow": "Besok",
+  "epg_yesterday": "Kemarin"
  },
  "plurals": {
   "browser_found": {

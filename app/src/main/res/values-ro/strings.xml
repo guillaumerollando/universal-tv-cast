@@ -286,6 +286,12 @@
     <string name="settings_power_sub">Oprește strălucirea din jurul videoclipului, estomparea și animațiile și verifică transmisiunea live mai rar. Calitatea video rămâne aceeași. Pornește singur când telefonul economisește bateria.</string>
     <string name="tv_asleep">Nu răspunde: oprit?</string>
     <string name="audio_language">Limbă</string>
+    <string name="epg_schedule">Programul canalului</string>
+    <string name="epg_none">Nu s-a găsit niciun program pentru aceste canale.</string>
+    <string name="epg_none_channel">Nu s-a găsit niciun program pentru acest canal.</string>
+    <string name="epg_today">Astăzi</string>
+    <string name="epg_tomorrow">Mâine</string>
+    <string name="epg_yesterday">Ieri</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>

@@ -40,6 +40,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Schedule
+import androidx.compose.material.icons.rounded.CalendarViewDay
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.FolderOpen
 import androidx.compose.material.icons.rounded.MoreVert
@@ -360,6 +362,8 @@ private fun AddListPanel(busy: Boolean, onImport: (String) -> Unit, onPickFile: 
 private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
     var query by rememberSaveable { mutableStateOf("") }
     var group by rememberSaveable { mutableStateOf<String?>(null) }
+    // Deux vues des mêmes chaînes : la mosaïque, ou « En ce moment » (ce qui passe sur chacune).
+    var onNow by rememberSaveable { mutableStateOf(false) }
     val all = channels.orEmpty()
     val groups = remember(all) {
         // Le pays du téléphone en premier (les listes classées par pays les nomment en anglais), puis les plus fournis.
@@ -405,13 +409,27 @@ private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
     val glass = remember { dev.chrisbanes.haze.HazeState() }
     val c = MaterialTheme.colorScheme
     val gridState = androidx.compose.foundation.lazy.grid.rememberLazyGridState()
+    val nowState = androidx.compose.foundation.lazy.rememberLazyListState()
     val saving by studio.rollando.castor.data.Power.saving.collectAsState()
     // Rien dessous tant qu'on est tout en haut : pas de verre fumé (pas de bandeau inutile).
-    val overContent by remember { androidx.compose.runtime.derivedStateOf { gridState.firstVisibleItemIndex > 0 || gridState.firstVisibleItemScrollOffset > 0 } }
+    val overContent by remember { androidx.compose.runtime.derivedStateOf {
+        if (onNow) nowState.firstVisibleItemIndex > 0 || nowState.firstVisibleItemScrollOffset > 0
+        else gridState.firstVisibleItemIndex > 0 || gridState.firstVisibleItemScrollOffset > 0
+    } }
     Box(Modifier.fillMaxSize().nestedScroll(conn).clipToBounds()) {
         Box(Modifier.fillMaxSize().hazeSource(glass)) {
         when {
             channels == null -> Box(Modifier.fillMaxWidth().padding(top = headerDp + 32.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+            onNow && shown.isNotEmpty() -> NowOnList(
+                // Les chaînes qu'on regarde d'abord, comme dans la mosaïque.
+                channels = remember(shown, recent, query, group) {
+                    if (query.isBlank() && group == null) (recent + shown).distinctBy { it.url } else shown
+                },
+                state = nowState,
+                contentPadding = PaddingValues(top = headerDp, end = 4.dp,
+                    bottom = 16.dp + androidx.compose.foundation.layout.WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()),
+                onPlay = ::play, onHide = ::hide,
+            )
             shown.isEmpty() -> Text(stringResource(R.string.iptv_none_found), modifier = Modifier.padding(start = 16.dp, top = headerDp + 16.dp),
                 color = c.onSurfaceVariant)
             else -> LazyVerticalGrid(
@@ -457,9 +475,17 @@ private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
                 .padding(bottom = 10.dp),
         ) {
             SearchPill(query, { query = it })
-            if (groups.size > 1) LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                item { Pill(stringResource(R.string.iptv_all), group == null) { group = null } }
-                items(groups) { g -> Pill(g, group == g) { group = if (group == g) null else g } }
+            LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalAlignment = Alignment.CenterVertically) {
+                // La vue « En ce moment » d'abord, séparée des catégories (elle se combine avec elles et la recherche).
+                item { Pill(stringResource(R.string.epg_now), onNow, icon = Icons.Rounded.Schedule) { onNow = !onNow } }
+                if (groups.size > 1) {
+                    item {
+                        Box(Modifier.padding(horizontal = 4.dp).width(1.dp).height(20.dp).background(c.outlineVariant))
+                    }
+                    item { Pill(stringResource(R.string.iptv_all), group == null) { group = null } }
+                    items(groups) { g -> Pill(g, group == g) { group = if (group == g) null else g } }
+                }
             }
         }
         // « Chaîne masquée · Annuler », quelques secondes.
@@ -501,15 +527,18 @@ private fun SearchPill(query: String, onChange: (String) -> Unit) {
 
 /** Filtre rapide, aux couleurs des onglets : ambré quand il est choisi. */
 @Composable
-private fun Pill(label: String, selected: Boolean, onClick: () -> Unit) {
+private fun Pill(label: String, selected: Boolean, icon: androidx.compose.ui.graphics.vector.ImageVector? = null, onClick: () -> Unit) {
     val c = MaterialTheme.colorScheme
     Surface(
         onClick = onClick, shape = RoundedCornerShape(50),
-        color = if (selected) c.primary else c.surfaceContainerHigh.copy(alpha = 0.9f),
-        contentColor = if (selected) c.onPrimary else c.onSurfaceVariant,
+        // La vue (avec icône) choisie : contour et texte ambrés ; un filtre choisi : fond ambré.
+        color = if (selected && icon == null) c.primary else c.surfaceContainerHigh.copy(alpha = 0.9f),
+        contentColor = if (selected) (if (icon == null) c.onPrimary else c.primary) else c.onSurfaceVariant,
+        border = if (selected && icon != null) androidx.compose.foundation.BorderStroke(1.5.dp, c.primary) else null,
         modifier = Modifier.height(36.dp).semantics { this.selected = selected },
     ) {
-        Box(Modifier.padding(horizontal = 14.dp), contentAlignment = Alignment.Center) {
+        Row(Modifier.padding(start = if (icon != null) 10.dp else 14.dp, end = 14.dp), verticalAlignment = Alignment.CenterVertically) {
+            icon?.let { Icon(it, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)) }
             Text(label, style = MaterialTheme.typography.labelLarge, maxLines = 1)
         }
     }
@@ -532,34 +561,41 @@ fun NowNext(media: Media, modifier: Modifier = Modifier, compact: Boolean = fals
     LaunchedEffect(Unit) { while (true) { kotlinx.coroutines.delay(60_000); tick++ } }
     // Remis à zéro à chaque changement de chaîne : jamais le programme de la chaîne d'avant.
     var nn by remember(name, country) { mutableStateOf<Pair<studio.rollando.castor.data.Epg.Prog, studio.rollando.castor.data.Epg.Prog?>?>(null) }
+    var source by remember(name, country) { mutableStateOf<GuideKey?>(null) }
     LaunchedEffect(name, country, tick) {
         // Chaque fiche de la chaîne (elle peut venir de plusieurs listes, chacune avec son guide) ; la première qui répond.
-        nn = runCatching {
+        runCatching {
             val cands = (listOfNotNull(ch) + IptvStore.entries(media.url, name)).distinctBy { Triple(it.name, it.tvgId, it.country) }
-            cands.firstNotNullOfOrNull { c -> studio.rollando.castor.data.Epg.nowNext(c.name, c.country ?: country, c.tvgId) }
-                ?: studio.rollando.castor.data.Epg.nowNext(name, country, null)
-        }.getOrNull()
+                .map { GuideKey(it.name, it.country ?: country, it.tvgId) } + GuideKey(name, country, null)
+            cands.firstNotNullOfOrNull { k -> studio.rollando.castor.data.Epg.nowNext(k.name, k.country, k.tvgId)?.let { k to it } }
+        }.getOrNull().let { found -> nn = found?.second; source = found?.first }
     }
     val (now, next) = nn ?: return
     val c = MaterialTheme.colorScheme
     val fmt = remember { java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT) }
-    Column(modifier, verticalArrangement = Arrangement.spacedBy(2.dp)) {
-        if (!compact) Text(stringResource(R.string.epg_now).uppercase(), style = MaterialTheme.typography.labelSmall, color = c.primary)
+    var guide by remember { mutableStateOf(false) }
+    val guideLabel = stringResource(R.string.epg_schedule)
+    // Un appui sur le programme ouvre la grille de la chaîne (pas dans la version réduite du plein écran).
+    val tap = if (compact) Modifier else Modifier.clip(RoundedCornerShape(12.dp))
+        .clickable(role = Role.Button, onClickLabel = guideLabel) { guide = true }
+    Column(modifier.then(tap), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        if (!compact) Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(stringResource(R.string.epg_now).uppercase(), style = MaterialTheme.typography.labelSmall, color = c.primary,
+                modifier = Modifier.weight(1f))
+            // Discret : dit qu'il y a une suite, sans ajouter de bouton.
+            Icon(Icons.Rounded.CalendarViewDay, null, Modifier.size(14.dp), tint = c.onSurfaceVariant)
+        }
         Text(now.title, style = if (compact) MaterialTheme.typography.titleSmall else MaterialTheme.typography.titleMedium,
             maxLines = if (compact) 1 else 2, overflow = TextOverflow.Ellipsis)
         if (!compact) {
-            val total = (now.stop - now.start).coerceAtLeast(1)
-            val done = ((System.currentTimeMillis() - now.start).toFloat() / total).coerceIn(0f, 1f)
-            androidx.compose.material3.LinearProgressIndicator(
-                progress = { done }, modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp).height(3.dp).clip(RoundedCornerShape(2.dp)),
-                color = c.primary, trackColor = c.surfaceContainerHighest, drawStopIndicator = {},
-            )
+            ProgBar(now, System.currentTimeMillis(), Modifier.padding(vertical = 4.dp))
             next?.let {
                 Text(stringResource(R.string.epg_next) + " · " + fmt.format(java.util.Date(it.start)) + "  " + it.title,
                     style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }
     }
+    if (guide) source?.let { k -> ScheduleSheet(k, ch?.logo ?: media.posterUrl, onDismiss = { guide = false }) }
 }
 
 /** Lance une chaîne d'une liste sur la télé et passe à l'écran de lecture. */

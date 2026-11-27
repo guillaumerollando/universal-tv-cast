@@ -286,6 +286,12 @@
     <string name="settings_power_sub">Отключает свечение вокруг видео, размытие и анимации и реже проверяет прямой эфир. Качество видео не меняется. Включается само, когда телефон экономит заряд.</string>
     <string name="tv_asleep">Не отвечает: выключен?</string>
     <string name="audio_language">Язык</string>
+    <string name="epg_schedule">Программа канала</string>
+    <string name="epg_none">Программа для этих каналов не найдена.</string>
+    <string name="epg_none_channel">Программа для этого канала не найдена.</string>
+    <string name="epg_today">Сегодня</string>
+    <string name="epg_tomorrow">Завтра</string>
+    <string name="epg_yesterday">Вчера</string>
     <plurals name="browser_found">
         <item quantity="one">%d видео</item>
         <item quantity="few">%d видео</item>

@@ -286,6 +286,12 @@
     <string name="settings_power_sub">Wyłącza poświatę wokół wideo, rozmycie i animacje oraz rzadziej sprawdza transmisję na żywo. Jakość wideo się nie zmienia. Włącza się samo, gdy telefon oszczędza baterię.</string>
     <string name="tv_asleep">Nie odpowiada: wyłączony?</string>
     <string name="audio_language">Język</string>
+    <string name="epg_schedule">Program kanału</string>
+    <string name="epg_none">Nie znaleziono programu dla tych kanałów.</string>
+    <string name="epg_none_channel">Nie znaleziono programu dla tego kanału.</string>
+    <string name="epg_today">Dziś</string>
+    <string name="epg_tomorrow">Jutro</string>
+    <string name="epg_yesterday">Wczoraj</string>
     <plurals name="browser_found">
         <item quantity="one">%d wideo</item>
         <item quantity="few">%d wideo</item>

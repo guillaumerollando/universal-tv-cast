@@ -286,6 +286,12 @@
     <string name="settings_power_sub">ปิดแสงรอบวิดีโอ เอฟเฟกต์เบลอ และแอนิเมชัน และตรวจสอบการถ่ายทอดสดน้อยลง คุณภาพวิดีโอไม่เปลี่ยน เปิดเองเมื่อโทรศัพท์ประหยัดแบตเตอรี่</string>
     <string name="tv_asleep">ไม่ตอบสนอง: ปิดอยู่หรือเปล่า?</string>
     <string name="audio_language">ภาษา</string>
+    <string name="epg_schedule">ผังรายการของช่อง</string>
+    <string name="epg_none">ไม่พบผังรายการของช่องเหล่านี้</string>
+    <string name="epg_none_channel">ไม่พบผังรายการของช่องนี้</string>
+    <string name="epg_today">วันนี้</string>
+    <string name="epg_tomorrow">พรุ่งนี้</string>
+    <string name="epg_yesterday">เมื่อวาน</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>

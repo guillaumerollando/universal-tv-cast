@@ -384,6 +384,12 @@ S = {
 "phone_watch_tv": ["Watch on the TV", "Regarder sur la télé", "Ver en la TV", "Auf dem Fernseher ansehen", "Guarda sulla TV", "Kijken op de tv", "Assistir na TV"],
 "epg_now": ["Now", "En ce moment", "Ahora", "Jetzt", "In onda", "Nu", "Agora"],
 "epg_next": ["Next", "Ensuite", "Después", "Danach", "A seguire", "Hierna", "Depois"],
+"epg_schedule": ["Channel schedule", "Programme de la chaîne", "Programación del canal", "Programm des Senders", "Palinsesto del canale", "Programma van de zender", "Programação do canal"],
+"epg_none": ["No programme found for these channels.", "Aucun programme trouvé pour ces chaînes.", "No se encontró la programación de estos canales.", "Kein Programm für diese Sender gefunden.", "Nessun programma trovato per questi canali.", "Geen programma gevonden voor deze zenders.", "Nenhuma programação encontrada para estes canais."],
+"epg_none_channel": ["No programme found for this channel.", "Aucun programme trouvé pour cette chaîne.", "No se encontró la programación de este canal.", "Kein Programm für diesen Sender gefunden.", "Nessun programma trovato per questo canale.", "Geen programma gevonden voor deze zender.", "Nenhuma programação encontrada para este canal."],
+"epg_today": ["Today", "Aujourd’hui", "Hoy", "Heute", "Oggi", "Vandaag", "Hoje"],
+"epg_tomorrow": ["Tomorrow", "Demain", "Mañana", "Morgen", "Domani", "Morgen", "Amanhã"],
+"epg_yesterday": ["Yesterday", "Hier", "Ayer", "Gestern", "Ieri", "Gisteren", "Ontem"],
 "iptv_guide": ["Programme guide", "Guide des programmes", "Guía de programación", "Programmführer", "Guida TV", "Programmagids", "Guia de programação"],
 "iptv_guide_hint": ["Guide address (XMLTV), optional", "Adresse du guide (XMLTV), facultatif", "Dirección de la guía (XMLTV), opcional", "Adresse des Programmführers (XMLTV), optional", "Indirizzo della guida (XMLTV), facoltativo", "Adres van de gids (XMLTV), optioneel", "Endereço do guia (XMLTV), opcional"],
 "iptv_guide_help": [

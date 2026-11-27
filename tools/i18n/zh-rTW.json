@@ -284,7 +284,13 @@
   "settings_power": "省電模式",
   "settings_power_sub": "關閉影片周圍的光暈、模糊效果和動畫，並降低直播檢查頻率。畫質不變。手機開啟省電時會自動開啟。",
   "tv_asleep": "沒有回應：已關機？",
-  "audio_language": "語言"
+  "audio_language": "語言",
+  "epg_schedule": "頻道節目表",
+  "epg_none": "找不到這些頻道的節目表。",
+  "epg_none_channel": "找不到這個頻道的節目表。",
+  "epg_today": "今天",
+  "epg_tomorrow": "明天",
+  "epg_yesterday": "昨天"
  },
  "plurals": {
   "browser_found": {

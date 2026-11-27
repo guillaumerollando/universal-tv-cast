@@ -284,7 +284,13 @@
   "settings_power": "Economisire energie",
   "settings_power_sub": "Oprește strălucirea din jurul videoclipului, estomparea și animațiile și verifică transmisiunea live mai rar. Calitatea video rămâne aceeași. Pornește singur când telefonul economisește bateria.",
   "tv_asleep": "Nu răspunde: oprit?",
-  "audio_language": "Limbă"
+  "audio_language": "Limbă",
+  "epg_schedule": "Programul canalului",
+  "epg_none": "Nu s-a găsit niciun program pentru aceste canale.",
+  "epg_none_channel": "Nu s-a găsit niciun program pentru acest canal.",
+  "epg_today": "Astăzi",
+  "epg_tomorrow": "Mâine",
+  "epg_yesterday": "Ieri"
  },
  "plurals": {
   "browser_found": {

@@ -286,6 +286,12 @@
     <string name="settings_power_sub">Vypne záři kolem videa, rozostření a animace a méně často kontroluje živé vysílání. Kvalita videa se nemění. Zapne se sama, když telefon šetří baterii.</string>
     <string name="tv_asleep">Neodpovídá: vypnutá?</string>
     <string name="audio_language">Jazyk</string>
+    <string name="epg_schedule">Program kanálu</string>
+    <string name="epg_none">Pro tyto kanály nebyl nalezen žádný program.</string>
+    <string name="epg_none_channel">Pro tento kanál nebyl nalezen žádný program.</string>
+    <string name="epg_today">Dnes</string>
+    <string name="epg_tomorrow">Zítra</string>
+    <string name="epg_yesterday">Včera</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="few">%d videa</item>

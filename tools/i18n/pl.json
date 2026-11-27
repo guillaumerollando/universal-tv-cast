@@ -284,7 +284,13 @@
   "settings_power": "Oszczędzanie energii",
   "settings_power_sub": "Wyłącza poświatę wokół wideo, rozmycie i animacje oraz rzadziej sprawdza transmisję na żywo. Jakość wideo się nie zmienia. Włącza się samo, gdy telefon oszczędza baterię.",
   "tv_asleep": "Nie odpowiada: wyłączony?",
-  "audio_language": "Język"
+  "audio_language": "Język",
+  "epg_schedule": "Program kanału",
+  "epg_none": "Nie znaleziono programu dla tych kanałów.",
+  "epg_none_channel": "Nie znaleziono programu dla tego kanału.",
+  "epg_today": "Dziś",
+  "epg_tomorrow": "Jutro",
+  "epg_yesterday": "Wczoraj"
  },
  "plurals": {
   "browser_found": {

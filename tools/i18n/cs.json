@@ -284,7 +284,13 @@
   "settings_power": "Úspora energie",
   "settings_power_sub": "Vypne záři kolem videa, rozostření a animace a méně často kontroluje živé vysílání. Kvalita videa se nemění. Zapne se sama, když telefon šetří baterii.",
   "tv_asleep": "Neodpovídá: vypnutá?",
-  "audio_language": "Jazyk"
+  "audio_language": "Jazyk",
+  "epg_schedule": "Program kanálu",
+  "epg_none": "Pro tyto kanály nebyl nalezen žádný program.",
+  "epg_none_channel": "Pro tento kanál nebyl nalezen žádný program.",
+  "epg_today": "Dnes",
+  "epg_tomorrow": "Zítra",
+  "epg_yesterday": "Včera"
  },
  "plurals": {
   "browser_found": {

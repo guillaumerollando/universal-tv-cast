@@ -286,6 +286,12 @@
     <string name="settings_power_sub">Videonun etrafındaki parıltıyı, bulanıklığı ve animasyonları kapatır, canlı yayını daha seyrek kontrol eder. Video kalitesi değişmez. Telefonun pil tasarrufundayken kendiliğinden açılır.</string>
     <string name="tv_asleep">Yanıt vermiyor: kapalı mı?</string>
     <string name="audio_language">Dil</string>
+    <string name="epg_schedule">Kanal yayın akışı</string>
+    <string name="epg_none">Bu kanallar için yayın akışı bulunamadı.</string>
+    <string name="epg_none_channel">Bu kanal için yayın akışı bulunamadı.</string>
+    <string name="epg_today">Bugün</string>
+    <string name="epg_tomorrow">Yarın</string>
+    <string name="epg_yesterday">Dün</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video</item>

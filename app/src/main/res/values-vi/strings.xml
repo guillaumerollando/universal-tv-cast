@@ -286,6 +286,12 @@
     <string name="settings_power_sub">Tắt hiệu ứng phát sáng quanh video, làm mờ và hoạt ảnh, đồng thời kiểm tra truyền hình trực tiếp ít hơn. Chất lượng video không đổi. Tự bật khi điện thoại tiết kiệm pin.</string>
     <string name="tv_asleep">Không phản hồi: đã tắt?</string>
     <string name="audio_language">Ngôn ngữ</string>
+    <string name="epg_schedule">Lịch phát sóng của kênh</string>
+    <string name="epg_none">Không tìm thấy lịch phát sóng cho các kênh này.</string>
+    <string name="epg_none_channel">Không tìm thấy lịch phát sóng cho kênh này.</string>
+    <string name="epg_today">Hôm nay</string>
+    <string name="epg_tomorrow">Ngày mai</string>
+    <string name="epg_yesterday">Hôm qua</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

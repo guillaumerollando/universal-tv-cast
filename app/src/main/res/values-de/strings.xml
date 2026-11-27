@@ -240,6 +240,12 @@
     <string name="phone_watch_tv">Auf dem Fernseher ansehen</string>
     <string name="epg_now">Jetzt</string>
     <string name="epg_next">Danach</string>
+    <string name="epg_schedule">Programm des Senders</string>
+    <string name="epg_none">Kein Programm für diese Sender gefunden.</string>
+    <string name="epg_none_channel">Kein Programm für diesen Sender gefunden.</string>
+    <string name="epg_today">Heute</string>
+    <string name="epg_tomorrow">Morgen</string>
+    <string name="epg_yesterday">Gestern</string>
     <string name="iptv_guide">Programmführer</string>
     <string name="iptv_guide_hint">Adresse des Programmführers (XMLTV), optional</string>
     <string name="iptv_guide_help">Wenn dein Anbieter eine Programmführer-Adresse (EPG) angibt, füge sie hier ein: Die laufende Sendung erscheint unter seinen Sendern.</string>

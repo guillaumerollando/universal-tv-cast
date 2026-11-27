@@ -44,7 +44,22 @@ object Epg {
      * (en ce moment, ensuite) pour cette chaîne ; null si aucun guide ne la connaît. Cherchée par son identifiant
      * de guide (celui de la liste, quand la liste et le guide viennent du même fournisseur), sinon par son nom.
      */
-    suspend fun nowNext(name: String, country: String?, tvgId: String? = null): Pair<Prog, Prog?>? = withContext(Dispatchers.IO) {
+    suspend fun nowNext(name: String, country: String?, tvgId: String? = null): Pair<Prog, Prog?>? {
+        val now = System.currentTimeMillis()
+        return programmes(name, country, tvgId) { pick(it, now) != null }?.let { pick(it, now) }
+    }
+
+    /**
+     * Grille de la chaîne, d'hier soir à demain, sans les longs blocs « soirée » qui doublent les émissions qui les
+     * composent ; null si aucun guide ne la connaît.
+     */
+    suspend fun schedule(name: String, country: String?, tvgId: String? = null): List<Prog>? {
+        val now = System.currentTimeMillis()
+        return programmes(name, country, tvgId) { pick(it, now) != null }?.let { withoutBlocks(it) }
+    }
+
+    /** Programmes de la chaîne dans le premier guide qui la connaît (et qui satisfait [ok]). */
+    private suspend fun programmes(name: String, country: String?, tvgId: String?, ok: (List<Prog>) -> Boolean): List<Prog>? = withContext(Dispatchers.IO) {
         val cc = country?.lowercase()?.takeIf { it.length == 2 }
         val guides = IptvStore.guideUrls().filter { g ->
             val f = g.url.substringAfterLast('/').substringBefore('?').lowercase()
@@ -59,14 +74,18 @@ object Epg {
         }
         if (guides.isEmpty()) return@withContext null
         val keys = listOfNotNull(tvgId?.lowercase()?.let { "id:$it" }, key(name).takeIf { it.isNotEmpty() })
-        val now = System.currentTimeMillis()
         for (g in guides) {
             val idx = load(g, cc) ?: continue
             val progs = keys.firstNotNullOfOrNull { idx[it] } ?: continue
-            pick(progs, now)?.let { return@withContext it }
+            if (ok(progs)) return@withContext progs
         }
         null
     }
+
+    /** Retire les programmes qui en recouvrent entièrement au moins deux autres (un bloc « soirée » et son détail). */
+    internal fun withoutBlocks(progs: List<Prog>): List<Prog> = progs.filter { p ->
+        progs.count { o -> o !== p && o.start >= p.start && o.stop <= p.stop && (o.start != p.start || o.stop != p.stop) } < 2
+    }.distinctBy { it.start to key(it.title) }
 
     /**
      * En ce moment : le programme commencé le plus récemment (certaines sources se chevauchent : un long bloc

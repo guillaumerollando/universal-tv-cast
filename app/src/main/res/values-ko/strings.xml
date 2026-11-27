@@ -286,6 +286,12 @@
     <string name="settings_power_sub">영상 주변의 빛, 흐림 효과, 애니메이션을 끄고 실시간 방송 확인 빈도를 줄입니다. 화질은 그대로입니다. 휴대폰이 배터리를 절약할 때 자동으로 켜집니다.</string>
     <string name="tv_asleep">응답 없음: 꺼져 있나요?</string>
     <string name="audio_language">언어</string>
+    <string name="epg_schedule">채널 편성표</string>
+    <string name="epg_none">이 채널들의 편성 정보를 찾지 못했어요.</string>
+    <string name="epg_none_channel">이 채널의 편성 정보를 찾지 못했어요.</string>
+    <string name="epg_today">오늘</string>
+    <string name="epg_tomorrow">내일</string>
+    <string name="epg_yesterday">어제</string>
     <plurals name="browser_found">
         <item quantity="other">동영상 %d개</item>
     </plurals>

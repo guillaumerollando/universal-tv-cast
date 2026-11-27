@@ -1021,7 +1021,7 @@
    "fr": "%1$d secondes"
   },
   "next_episode_loading": {
-   "en": "Finding the next episode\u2026",
+   "en": "Finding the next episode…",
    "fr": "Recherche de l’épisode suivant…"
   },
   "start_tv_steps": {
@@ -1123,6 +1123,30 @@
   "bookmark_advanced": {
    "en": "%1$s: bookmark moved to episode %2$d.",
    "fr": "%1$s : marque-page avancé à l’épisode %2$d."
+  },
+  "epg_schedule": {
+   "en": "Channel schedule",
+   "fr": "Programme de la chaîne"
+  },
+  "epg_none": {
+   "en": "No programme found for these channels.",
+   "fr": "Aucun programme trouvé pour ces chaînes."
+  },
+  "epg_none_channel": {
+   "en": "No programme found for this channel.",
+   "fr": "Aucun programme trouvé pour cette chaîne."
+  },
+  "epg_today": {
+   "en": "Today",
+   "fr": "Aujourd’hui"
+  },
+  "epg_tomorrow": {
+   "en": "Tomorrow",
+   "fr": "Demain"
+  },
+  "epg_yesterday": {
+   "en": "Yesterday",
+   "fr": "Hier"
   }
  },
  "plurals": {

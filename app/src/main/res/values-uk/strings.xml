@@ -286,6 +286,12 @@
     <string name="settings_power_sub">Вимикає сяйво навколо відео, розмиття й анімації та рідше перевіряє прямий ефір. Якість відео не змінюється. Вмикається саме, коли телефон заощаджує заряд.</string>
     <string name="tv_asleep">Не відповідає: вимкнено?</string>
     <string name="audio_language">Мова</string>
+    <string name="epg_schedule">Програма каналу</string>
+    <string name="epg_none">Програму для цих каналів не знайдено.</string>
+    <string name="epg_none_channel">Програму для цього каналу не знайдено.</string>
+    <string name="epg_today">Сьогодні</string>
+    <string name="epg_tomorrow">Завтра</string>
+    <string name="epg_yesterday">Учора</string>
     <plurals name="browser_found">
         <item quantity="one">%d відео</item>
         <item quantity="few">%d відео</item>

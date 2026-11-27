@@ -284,7 +284,13 @@
   "settings_power": "省電力",
   "settings_power_sub": "動画のまわりの光、ぼかし、アニメーションをオフにし、ライブの確認回数を減らします。画質は変わりません。スマホが省電力モードのときは自動でオンになります。",
   "tv_asleep": "応答なし：電源オフ？",
-  "audio_language": "言語"
+  "audio_language": "言語",
+  "epg_schedule": "番組表",
+  "epg_none": "これらのチャンネルの番組情報は見つかりませんでした。",
+  "epg_none_channel": "このチャンネルの番組情報は見つかりませんでした。",
+  "epg_today": "今日",
+  "epg_tomorrow": "明日",
+  "epg_yesterday": "昨日"
  },
  "plurals": {
   "browser_found": {

@@ -286,6 +286,12 @@
     <string name="settings_power_sub">वीडियो के आसपास की चमक, धुंधलापन और एनिमेशन बंद करता है, और लाइव को कम बार जाँचता है। वीडियो की क्वालिटी वही रहती है। फ़ोन बैटरी बचाने पर यह अपने आप चालू हो जाता है।</string>
     <string name="tv_asleep">जवाब नहीं: बंद है?</string>
     <string name="audio_language">भाषा</string>
+    <string name="epg_schedule">चैनल का कार्यक्रम</string>
+    <string name="epg_none">इन चैनलों का कोई कार्यक्रम नहीं मिला।</string>
+    <string name="epg_none_channel">इस चैनल का कोई कार्यक्रम नहीं मिला।</string>
+    <string name="epg_today">आज</string>
+    <string name="epg_tomorrow">कल</string>
+    <string name="epg_yesterday">कल (बीता)</string>
     <plurals name="browser_found">
         <item quantity="one">%d वीडियो</item>
         <item quantity="other">%d वीडियो</item>

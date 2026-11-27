@@ -286,6 +286,12 @@
     <string name="settings_power_sub">Mematikan cahaya di sekitar video, efek blur, dan animasi, serta lebih jarang memeriksa siaran langsung. Kualitas video tetap sama. Aktif sendiri saat ponselmu menghemat baterai.</string>
     <string name="tv_asleep">Tidak merespons: mati?</string>
     <string name="audio_language">Bahasa</string>
+    <string name="epg_schedule">Jadwal saluran</string>
+    <string name="epg_none">Tidak ada jadwal untuk saluran ini.</string>
+    <string name="epg_none_channel">Tidak ada jadwal untuk saluran ini.</string>
+    <string name="epg_today">Hari ini</string>
+    <string name="epg_tomorrow">Besok</string>
+    <string name="epg_yesterday">Kemarin</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

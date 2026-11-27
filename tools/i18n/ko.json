@@ -284,7 +284,13 @@
   "settings_power": "절전 모드",
   "settings_power_sub": "영상 주변의 빛, 흐림 효과, 애니메이션을 끄고 실시간 방송 확인 빈도를 줄입니다. 화질은 그대로입니다. 휴대폰이 배터리를 절약할 때 자동으로 켜집니다.",
   "tv_asleep": "응답 없음: 꺼져 있나요?",
-  "audio_language": "언어"
+  "audio_language": "언어",
+  "epg_schedule": "채널 편성표",
+  "epg_none": "이 채널들의 편성 정보를 찾지 못했어요.",
+  "epg_none_channel": "이 채널의 편성 정보를 찾지 못했어요.",
+  "epg_today": "오늘",
+  "epg_tomorrow": "내일",
+  "epg_yesterday": "어제"
  },
  "plurals": {
   "browser_found": {

@@ -286,6 +286,12 @@
     <string name="settings_power_sub">يوقف التوهج حول الفيديو والتمويه والرسوم المتحركة، ويتحقق من البث المباشر بشكل أقل. لا تتغير جودة الفيديو. يعمل تلقائيًا عندما يوفّر هاتفك البطارية.</string>
     <string name="tv_asleep">لا يستجيب: هل هو مطفأ؟</string>
     <string name="audio_language">اللغة</string>
+    <string name="epg_schedule">برنامج القناة</string>
+    <string name="epg_none">لم يُعثر على برامج لهذه القنوات.</string>
+    <string name="epg_none_channel">لم يُعثر على برامج لهذه القناة.</string>
+    <string name="epg_today">اليوم</string>
+    <string name="epg_tomorrow">غدًا</string>
+    <string name="epg_yesterday">أمس</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>

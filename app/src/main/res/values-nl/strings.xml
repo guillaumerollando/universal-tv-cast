@@ -240,6 +240,12 @@
     <string name="phone_watch_tv">Kijken op de tv</string>
     <string name="epg_now">Nu</string>
     <string name="epg_next">Hierna</string>
+    <string name="epg_schedule">Programma van de zender</string>
+    <string name="epg_none">Geen programma gevonden voor deze zenders.</string>
+    <string name="epg_none_channel">Geen programma gevonden voor deze zender.</string>
+    <string name="epg_today">Vandaag</string>
+    <string name="epg_tomorrow">Morgen</string>
+    <string name="epg_yesterday">Gisteren</string>
     <string name="iptv_guide">Programmagids</string>
     <string name="iptv_guide_hint">Adres van de gids (XMLTV), optioneel</string>
     <string name="iptv_guide_help">Geeft je aanbieder een adres voor een programmagids (EPG), plak het hier: het huidige programma verschijnt onder zijn zenders.</string>

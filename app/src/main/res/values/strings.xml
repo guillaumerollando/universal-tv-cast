@@ -241,6 +241,12 @@
     <string name="phone_watch_tv">Watch on the TV</string>
     <string name="epg_now">Now</string>
     <string name="epg_next">Next</string>
+    <string name="epg_schedule">Channel schedule</string>
+    <string name="epg_none">No programme found for these channels.</string>
+    <string name="epg_none_channel">No programme found for this channel.</string>
+    <string name="epg_today">Today</string>
+    <string name="epg_tomorrow">Tomorrow</string>
+    <string name="epg_yesterday">Yesterday</string>
     <string name="iptv_guide">Programme guide</string>
     <string name="iptv_guide_hint">Guide address (XMLTV), optional</string>
     <string name="iptv_guide_help">If your provider gives a programme guide (EPG) address, paste it here: the current programme will show under its channels.</string>

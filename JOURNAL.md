@@ -1054,3 +1054,13 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
   l'écran → champ renommé mainHandler.
 - Vérifié émulateur : Blender (lecture dans la page → lecteur, pas de boucle), Arte 1/4 → 2/4 → 3/4 sans quitter
   la lecture, animation ±10 s / cumul 20 s.
+
+## 2026-11-27 — Version libre (F-Droid), « En ce moment », grille d'une chaîne
+- Licence : exception GPL article 7 pour Google Play Services (README « Licence »). Deux versions du même dépôt
+  (product flavors) : `play` (inchangée, DLNA + Google Cast) et `libre` (aucune bibliothèque non libre, DLNA seul ;
+  `app/src/libre/…/CastControl.kt` vide). Commandes : `assemblePlayRelease`, `assembleLibreRelease`.
+- Chaînes : pilule « En ce moment » en tête des catégories (se combine avec elles et la recherche) : logo, programme
+  en cours, progression, la suite ; appui = regarder ; icône à droite (ou appui long) = grille de la chaîne.
+  Au plus 3 pays de guides chargés.
+- Lecteur : un appui sur le programme en cours ouvre la grille de la chaîne (d'hier soir à demain, jours titrés,
+  passé estompé, en cours mis en avant). Les blocs « soirée » qui recouvrent leurs émissions sont retirés (Epg.withoutBlocks).

@@ -44,4 +44,17 @@ class EpgPickTest {
         assertNull(next)
         assertEquals("The Rookie (2)", Epg.pick(listOf(bloc, ep1, ep2), 30 * m)!!.second?.title)
     }
+
+    @Test fun grilleSansLesBlocs() {
+        val m = 60_000L
+        val bloc = Epg.Prog("Soirée séries", 0, 180 * m)
+        val ep1 = Epg.Prog("The Rookie (1)", 10 * m, 60 * m)
+        val ep2 = Epg.Prog("The Rookie (2)", 60 * m, 110 * m)
+        val film = Epg.Prog("Film", 180 * m, 300 * m)
+        assertEquals(listOf("The Rookie (1)", "The Rookie (2)", "Film"), Epg.withoutBlocks(listOf(bloc, ep1, ep2, film)).map { it.title })
+        // Un programme qui n'en recouvre qu'un seul reste (deux sources pour la même émission).
+        assertEquals(2, Epg.withoutBlocks(listOf(bloc, ep1)).size)
+        // La même émission annoncée par deux sources (majuscules différentes) : une seule fois.
+        assertEquals(1, Epg.withoutBlocks(listOf(Epg.Prog("Journal Météo Climat", 0, m), Epg.Prog("Journal Météo climat", 0, 2 * m))).size)
+    }
 }

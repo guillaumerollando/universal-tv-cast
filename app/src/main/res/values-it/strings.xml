@@ -240,6 +240,12 @@
     <string name="phone_watch_tv">Guarda sulla TV</string>
     <string name="epg_now">In onda</string>
     <string name="epg_next">A seguire</string>
+    <string name="epg_schedule">Palinsesto del canale</string>
+    <string name="epg_none">Nessun programma trovato per questi canali.</string>
+    <string name="epg_none_channel">Nessun programma trovato per questo canale.</string>
+    <string name="epg_today">Oggi</string>
+    <string name="epg_tomorrow">Domani</string>
+    <string name="epg_yesterday">Ieri</string>
     <string name="iptv_guide">Guida TV</string>
     <string name="iptv_guide_hint">Indirizzo della guida (XMLTV), facoltativo</string>
     <string name="iptv_guide_help">Se il tuo fornitore indica l’indirizzo di una guida TV (EPG), incollalo qui: il programma in onda apparirà sotto i suoi canali.</string>

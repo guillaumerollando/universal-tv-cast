@@ -1076,3 +1076,7 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
   puis « Problème de réseau ». Corrigé : sur le téléphone l'ancienne lecture s'arrête dès le changement (et ses
   derniers états sont ignorés pendant le chargement) ; liste HLS : 6 s pour se connecter au lieu de 15 ; serveur
   muet avec Wi-Fi présent → « La vidéo ne répond pas… » + « Masquer cette chaîne ». Vérifié émulateur.
+- Bug CNews (lien Dailymotion, son à part de l'image, fMP4) : chargement sans fin et sans erreur sur le téléphone.
+  L'enregistrement du direct (pause) ne prend que l'image ; le lecteur attendait le son. Désormais, son séparé →
+  le lecteur d'Android lit la liste lui-même (pas de remontée longue pour ces chaînes-là). Vérifié émulateur :
+  image + son AAC en ~2 s. À faire un jour : enregistrer aussi le son séparé pour garder la pause longue.

@@ -486,7 +486,9 @@ object Castor {
                 liveBehind = if (it.live) start else it.liveBehind, position = if (it.live) 0.0 else start)
         }
         // Direct : depuis l'enregistrement du téléphone (comme la télé), pour pouvoir mettre en pause et revenir.
-        val liveUrl = if (s.live && s.isHls && m.audioUrl == null && remoteId != null)
+        // Sauf son à part de l'image (CNews, Dailymotion) : l'enregistrement ne garde que l'image, le lecteur
+        // attendait le son sans fin ; le lecteur d'Android lit alors la liste lui-même (son et image).
+        val liveUrl = if (s.live && s.isHls && !s.splitAudio && m.audioUrl == null && remoteId != null)
             "${proxy.baseUrl()}/ts/$remoteId/stream.${if (fmp4) "mp4" else "ts"}?start=${start.toLong()}" else null
         if (s.live) liveClock.start(start)
         PhoneEngine.play(app, m, start, proxy.subtitle, s.isHls, liveUrl)

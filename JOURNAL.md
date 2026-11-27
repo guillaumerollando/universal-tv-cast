@@ -1064,3 +1064,8 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
   Au plus 3 pays de guides chargés.
 - Lecteur : un appui sur le programme en cours ouvre la grille de la chaîne (d'hier soir à demain, jours titrés,
   passé estompé, en cours mis en avant). Les blocs « soirée » qui recouvrent leurs émissions sont retirés (Epg.withoutBlocks).
+- Corrigé (retour de Guillaume) : sans télé, chaque changement de chaîne relançait une recherche des télés (~5 s)
+  avant de repartir sur le téléphone. Désormais : déjà sur le téléphone → on zappe sur place ; aucune télé
+  choisie → téléphone tout de suite (la recherche tourne en fond, une télé trouvée se propose par le bouton).
+  Vérifié émulateur : 13e Rue → AB1 → Arte en ~3 s chacune (Arte : 403 de la chaîne, sans rapport).
+- Lecteur : coins arrondis retirés autour du programme en cours (ils rognaient le texte).

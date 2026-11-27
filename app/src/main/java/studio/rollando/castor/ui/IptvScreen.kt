@@ -576,8 +576,8 @@ fun NowNext(media: Media, modifier: Modifier = Modifier, compact: Boolean = fals
     var guide by remember { mutableStateOf(false) }
     val guideLabel = stringResource(R.string.epg_schedule)
     // Un appui sur le programme ouvre la grille de la chaîne (pas dans la version réduite du plein écran).
-    val tap = if (compact) Modifier else Modifier.clip(RoundedCornerShape(12.dp))
-        .clickable(role = Role.Button, onClickLabel = guideLabel) { guide = true }
+    // Sans coins arrondis : ils rogneraient le texte, qui va jusqu'au bord.
+    val tap = if (compact) Modifier else Modifier.clickable(role = Role.Button, onClickLabel = guideLabel) { guide = true }
     Column(modifier.then(tap), verticalArrangement = Arrangement.spacedBy(2.dp)) {
         if (!compact) Row(verticalAlignment = Alignment.CenterVertically) {
             Text(stringResource(R.string.epg_now).uppercase(), style = MaterialTheme.typography.labelSmall, color = c.primary,

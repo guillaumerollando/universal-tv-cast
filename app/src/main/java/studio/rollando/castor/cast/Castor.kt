@@ -388,7 +388,17 @@ object Castor {
         _state.update { it.copy(phase = Phase.IDLE) }
         if (autoCast && playOnTv == null) {
             // Pas encore choisi : l'écran de lecture propose la télé ou ce téléphone ; sans télé allumée, téléphone.
-            if (_state.value.renderer == null) { pendingAuto = true; if (_state.value.searching) Unit else discover() }
+            // Jamais d'attente : la recherche des télés tourne déjà en fond (démarrage, retour dans l'appli) ;
+            // une télé qui apparaît se propose par le bouton « Regarder sur la télé ».
+            val s = _state.value
+            when {
+                s.renderer != null -> Unit
+                // Déjà sur le téléphone : on zappe sur place, sans rien rechercher.
+                s.onPhone -> castAt(media.startSec)
+                // Recherche en cours (appli tout juste ouverte) : on attend sa fin, quelques secondes au plus.
+                s.searching -> pendingAuto = true
+                else -> autoPhone()
+            }
         } else if (autoCast) {
             if (_state.value.renderer != null || _state.value.onPhone) castAt(media.startSec)
             else if (!_state.value.searching && _state.value.renderers.none { it.awake }) {

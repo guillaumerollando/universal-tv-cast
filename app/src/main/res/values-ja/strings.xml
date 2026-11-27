@@ -310,6 +310,7 @@
     <string name="widget_sample_title">お気に入りのシリーズ</string>
     <string name="widget_sample_sub">S1 · 第3話</string>
     <string name="widget_desc_photos">写真や動画をワンタップでテレビに</string>
+    <string name="start_dw">国際ニュースチャンネル（ライブ）</string>
     <plurals name="browser_found">
         <item quantity="other">%d 本の動画</item>
     </plurals>

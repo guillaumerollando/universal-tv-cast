@@ -308,7 +308,8 @@
   "widget_empty_channels": "Pusť kanál: objeví se tady.",
   "widget_sample_title": "Můj oblíbený seriál",
   "widget_sample_sub": "S1 · D3",
-  "widget_desc_photos": "Ukaž fotky a videa na televizi jedním klepnutím"
+  "widget_desc_photos": "Ukaž fotky a videa na televizi jedním klepnutím",
+  "start_dw": "Mezinárodní zpravodajský kanál, živě"
  },
  "plurals": {
   "browser_found": {

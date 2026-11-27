@@ -275,6 +275,10 @@
     <string name="start_tv_sub">Free channels available in your country, in one link.</string>
     <string name="start_sites_title">Free, legal sites to try: open a video, then send it to your TV.</string>
     <string name="start_archive">Public-domain films</string>
+    <string name="start_ard">German public TV: films, series, documentaries</string>
+    <string name="start_zdf">German public TV: series, documentaries, shows</string>
+    <string name="start_rtve">Spanish public TV, live and on demand</string>
+    <string name="start_dw">International news channel, live</string>
     <string name="start_arte">Films, documentaries, concerts</string>
     <string name="start_nasa">Space on video</string>
     <string name="start_peertube">Free videos, no ads or tracking</string>

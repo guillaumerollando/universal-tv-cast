@@ -308,7 +308,8 @@
   "widget_empty_channels": "เปิดช่อง แล้วจะแสดงที่นี่",
   "widget_sample_title": "ซีรีส์โปรดของฉัน",
   "widget_sample_sub": "S1 · ตอนที่ 3",
-  "widget_desc_photos": "แสดงรูปและวิดีโอบนทีวีในแตะเดียว"
+  "widget_desc_photos": "แสดงรูปและวิดีโอบนทีวีในแตะเดียว",
+  "start_dw": "ช่องข่าวต่างประเทศ ถ่ายทอดสด"
  },
  "plurals": {
   "browser_found": {

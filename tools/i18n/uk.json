@@ -308,7 +308,8 @@
   "widget_empty_channels": "Увімкніть канал — він з’явиться тут.",
   "widget_sample_title": "Мій улюблений серіал",
   "widget_sample_sub": "С1 · Еп. 3",
-  "widget_desc_photos": "Показуйте фото й відео на телевізорі одним дотиком"
+  "widget_desc_photos": "Показуйте фото й відео на телевізорі одним дотиком",
+  "start_dw": "Міжнародний новинний канал наживо"
  },
  "plurals": {
   "browser_found": {

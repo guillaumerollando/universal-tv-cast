@@ -274,6 +274,10 @@
     <string name="start_tv_sub">Die kostenlosen Sender deines Landes, in einem Link.</string>
     <string name="start_sites_title">Kostenlose, legale Seiten zum Ausprobieren: Video öffnen und an den Fernseher senden.</string>
     <string name="start_archive">Gemeinfreie Filme</string>
+    <string name="start_ard">Filme, Serien und Dokus der ARD</string>
+    <string name="start_zdf">Serien, Dokus und Shows im ZDF</string>
+    <string name="start_rtve">Spanisches öffentliches Fernsehen, live und auf Abruf</string>
+    <string name="start_dw">Internationaler Nachrichtensender, live</string>
     <string name="start_arte">Filme, Dokus, Konzerte</string>
     <string name="start_nasa">Der Weltraum im Video</string>
     <string name="start_peertube">Freie Videos, ohne Werbung und Tracking</string>

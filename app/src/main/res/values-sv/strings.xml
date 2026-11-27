@@ -310,6 +310,7 @@
     <string name="widget_sample_title">Min favoritserie</string>
     <string name="widget_sample_sub">S1 · Avs. 3</string>
     <string name="widget_desc_photos">Visa dina bilder och videor på tv:n med ett tryck</string>
+    <string name="start_dw">Internationell nyhetskanal, direkt</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videor</item>

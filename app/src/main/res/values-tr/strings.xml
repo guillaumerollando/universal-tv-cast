@@ -310,6 +310,7 @@
     <string name="widget_sample_title">En sevdiğim dizi</string>
     <string name="widget_sample_sub">S1 · B3</string>
     <string name="widget_desc_photos">Fotoğraf ve videolarını tek dokunuşla TV\'de göster</string>
+    <string name="start_dw">Uluslararası haber kanalı, canlı</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video</item>

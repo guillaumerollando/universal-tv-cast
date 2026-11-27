@@ -310,6 +310,7 @@
     <string name="widget_sample_title">मेरी पसंदीदा सीरीज़</string>
     <string name="widget_sample_sub">S1 · E3</string>
     <string name="widget_desc_photos">एक टैप में अपनी फ़ोटो और वीडियो टीवी पर दिखाएँ</string>
+    <string name="start_dw">अंतरराष्ट्रीय समाचार चैनल, लाइव</string>
     <plurals name="browser_found">
         <item quantity="one">%d वीडियो</item>
         <item quantity="other">%d वीडियो</item>

@@ -308,7 +308,8 @@
   "widget_empty_channels": "شغّل قناة: ستظهر هنا.",
   "widget_sample_title": "مسلسلي المفضل",
   "widget_sample_sub": "م1 · ح3",
-  "widget_desc_photos": "اعرض صورك وفيديوهاتك على التلفزيون بلمسة واحدة"
+  "widget_desc_photos": "اعرض صورك وفيديوهاتك على التلفزيون بلمسة واحدة",
+  "start_dw": "قناة أخبار دولية، مباشرة"
  },
  "plurals": {
   "browser_found": {

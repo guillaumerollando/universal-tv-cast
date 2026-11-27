@@ -274,6 +274,10 @@
     <string name="start_tv_sub">De gratis zenders in jouw land, in één link.</string>
     <string name="start_sites_title">Gratis, legale sites om te proberen: open een video en stuur hem naar je tv.</string>
     <string name="start_archive">Films uit het publieke domein</string>
+    <string name="start_ard">De Duitse publieke omroep: films, series, docu’s</string>
+    <string name="start_zdf">Duitse publieke omroep: series, docu’s, shows</string>
+    <string name="start_rtve">De Spaanse publieke omroep, live en on demand</string>
+    <string name="start_dw">Internationale nieuwszender, live</string>
     <string name="start_arte">Films, documentaires, concerten</string>
     <string name="start_nasa">De ruimte op video</string>
     <string name="start_peertube">Vrije video’s, zonder reclame of tracking</string>

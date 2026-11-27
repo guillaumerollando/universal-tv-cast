@@ -308,7 +308,8 @@
   "widget_empty_channels": "Putar saluran: akan muncul di sini.",
   "widget_sample_title": "Serial favoritku",
   "widget_sample_sub": "S1 · Ep. 3",
-  "widget_desc_photos": "Tampilkan foto dan videomu di TV dengan sekali ketuk"
+  "widget_desc_photos": "Tampilkan foto dan videomu di TV dengan sekali ketuk",
+  "start_dw": "Saluran berita internasional, siaran langsung"
  },
  "plurals": {
   "browser_found": {

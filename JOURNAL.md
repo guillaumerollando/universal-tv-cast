@@ -1155,3 +1155,20 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
 
 **Pas fait**
 - Le widget à cartes déjà posé sur un téléphone se transforme seul en grille (même widget) : à vérifier sur le sien.
+
+## 2026-11-27 — Sites proposés selon le pays
+**Fait**
+- `ui/Starter.kt` : chaque site proposé peut avoir une liste de pays (`countries`). Le pays vient, sans autorisation,
+  de la SIM, du réseau mobile et des réglages de langue (un des trois suffit). La télé du pays passe en tête.
+- Ajoutés : ARD Mediathek (DE, AT, CH, LU, LI), ZDF (DE, AT, CH), RTVE Play (ES, AD), DW en direct (partout).
+  Arte réservée à l'Europe (35 pays).
+- Essais dans l'appli sur émulateur (en France) : ARD ✅ (vidéo trouvée et lue en 2 s ; certaines avant-premières
+  demandent un compte) ; ZDF ✅ détection (bande-annonce), mais la plupart des émissions sont bloquées hors
+  DE/AT/CH, d'où la restriction ; RTVE ✅ direct 24h, replays bloqués hors d'Espagne ; DW ✅ direct, partout.
+
+**Pas fait**
+- Non retenus faute d'essai concluant : RTP Play (PT, bandeau cookies), ONF/NFB (CA, bandeau sans refus possible),
+  ORF ON (AT, l'émulateur s'est arrêté pendant l'essai), SRF Play (CH), TV5MONDEplus (refuse les robots).
+  À essayer : NHK World (JP), ABC iview (AU, bloqué hors Australie), CBC Gem (CA), Rai Play (IT), NPO (NL),
+  VRT MAX / Auvio (BE), Globoplay (BR, payant en grande partie), PBS (US).
+- Pas revu à l'écran après ce changement (émulateur arrêté).

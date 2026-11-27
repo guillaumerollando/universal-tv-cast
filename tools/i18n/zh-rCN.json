@@ -308,7 +308,8 @@
   "widget_empty_channels": "播放频道后会显示在这里。",
   "widget_sample_title": "我最爱的剧集",
   "widget_sample_sub": "第1季 · 第3集",
-  "widget_desc_photos": "一键在电视上显示照片和视频"
+  "widget_desc_photos": "一键在电视上显示照片和视频",
+  "start_dw": "国际新闻频道，直播"
  },
  "plurals": {
   "browser_found": {

@@ -308,7 +308,8 @@
   "widget_empty_channels": "Mở một kênh: nó sẽ hiện ở đây.",
   "widget_sample_title": "Phim bộ yêu thích",
   "widget_sample_sub": "P1 · Tập 3",
-  "widget_desc_photos": "Chiếu ảnh và video lên TV chỉ với một chạm"
+  "widget_desc_photos": "Chiếu ảnh và video lên TV chỉ với một chạm",
+  "start_dw": "Kênh tin tức quốc tế, trực tiếp"
  },
  "plurals": {
   "browser_found": {

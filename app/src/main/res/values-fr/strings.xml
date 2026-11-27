@@ -274,6 +274,10 @@
     <string name="start_tv_sub">Les chaînes gratuites disponibles dans ton pays, en un seul lien.</string>
     <string name="start_sites_title">Des sites gratuits et légaux à essayer : ouvre une vidéo, puis envoie-la sur ta télé.</string>
     <string name="start_archive">Films du domaine public</string>
+    <string name="start_ard">La télé publique allemande : films, séries, docs</string>
+    <string name="start_zdf">La télé publique allemande : séries, docs, émissions</string>
+    <string name="start_rtve">La télé publique espagnole, en direct et en replay</string>
+    <string name="start_dw">Chaîne d’info internationale, en direct</string>
     <string name="start_arte">Films, documentaires, concerts</string>
     <string name="start_nasa">L’espace en vidéo</string>
     <string name="start_peertube">Vidéos libres, sans pub ni pistage</string>

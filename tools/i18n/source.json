@@ -1219,6 +1219,22 @@
   "widget_desc_photos": {
    "en": "Show your photos and videos on the TV in one tap",
    "fr": "Montre tes photos et vidéos sur la télé en un appui"
+  },
+  "start_ard": {
+   "en": "German public TV: films, series, documentaries",
+   "fr": "La télé publique allemande : films, séries, docs"
+  },
+  "start_zdf": {
+   "en": "German public TV: series, documentaries, shows",
+   "fr": "La télé publique allemande : séries, docs, émissions"
+  },
+  "start_rtve": {
+   "en": "Spanish public TV, live and on demand",
+   "fr": "La télé publique espagnole, en direct et en replay"
+  },
+  "start_dw": {
+   "en": "International news channel, live",
+   "fr": "Chaîne d’info internationale, en direct"
   }
  },
  "plurals": {

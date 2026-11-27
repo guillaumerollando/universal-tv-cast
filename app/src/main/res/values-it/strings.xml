@@ -274,6 +274,10 @@
     <string name="start_tv_sub">I canali gratuiti disponibili nel tuo paese, in un solo link.</string>
     <string name="start_sites_title">Siti gratuiti e legali da provare: apri un video e invialo alla TV.</string>
     <string name="start_archive">Film di pubblico dominio</string>
+    <string name="start_ard">La TV pubblica tedesca: film, serie, documentari</string>
+    <string name="start_zdf">TV pubblica tedesca: serie, documentari, programmi</string>
+    <string name="start_rtve">La TV pubblica spagnola, in diretta e on demand</string>
+    <string name="start_dw">Canale di notizie internazionale, in diretta</string>
     <string name="start_arte">Film, documentari, concerti</string>
     <string name="start_nasa">Lo spazio in video</string>
     <string name="start_peertube">Video liberi, senza pubblicità né tracciamento</string>

@@ -310,6 +310,7 @@
     <string name="widget_sample_title">Můj oblíbený seriál</string>
     <string name="widget_sample_sub">S1 · D3</string>
     <string name="widget_desc_photos">Ukaž fotky a videa na televizi jedním klepnutím</string>
+    <string name="start_dw">Mezinárodní zpravodajský kanál, živě</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="few">%d videa</item>

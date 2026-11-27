@@ -308,7 +308,8 @@
   "widget_empty_channels": "Spela en kanal så visas den här.",
   "widget_sample_title": "Min favoritserie",
   "widget_sample_sub": "S1 · Avs. 3",
-  "widget_desc_photos": "Visa dina bilder och videor på tv:n med ett tryck"
+  "widget_desc_photos": "Visa dina bilder och videor på tv:n med ett tryck",
+  "start_dw": "Internationell nyhetskanal, direkt"
  },
  "plurals": {
   "browser_found": {

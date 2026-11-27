@@ -53,15 +53,37 @@ import studio.rollando.castor.data.IptvStore
  * détectée, lue sur le téléphone, envoyée à la télé). Quelques-unes pour éveiller la curiosité, pas un catalogue :
  * films du domaine public, télé publique, PeerTube (vidéo libre et décentralisée), films libres de Blender,
  * Wikimedia Commons, et la NASA (œuvres publiques).
+ * [countries] : pays où le site est proposé (codes ISO, en majuscules) ; null = partout. La télé publique d'un pays
+ * parle à ses habitants (« Ah, Arte ! ») et ses vidéos y sont visibles, alors qu'ailleurs beaucoup sont bloquées.
  */
-private data class StarterSite(val host: String, val name: String, val url: String, val desc: Int, val icon: String)
+private data class StarterSite(
+    val host: String, val name: String, val url: String, val desc: Int, val icon: String,
+    val countries: Set<String>? = null,
+)
+
+/** Pays de l'Union européenne et voisins proches, où Arte est diffusée (en 6 langues). */
+private val EUROPE = setOf(
+    "FR", "DE", "AT", "CH", "BE", "LU", "NL", "IT", "ES", "PT", "PL", "IE", "GB", "DK", "SE", "FI", "NO", "CZ",
+    "SK", "HU", "SI", "HR", "RO", "BG", "GR", "CY", "MT", "EE", "LV", "LT", "MC", "AD", "LI", "SM", "IS",
+)
 
 /** Icônes publiées par les sites eux-mêmes ou par Wikimedia (avant la première visite, l'appli n'en a pas encore). */
 private val STARTER_SITES = listOf(
+    // Télé publique du pays : en tête quand elle correspond au téléphone.
+    StarterSite("ardmediathek.de", "ARD Mediathek", "https://www.ardmediathek.de", R.string.start_ard,
+        "https://www.ardmediathek.de/apple-touch-icon.png", setOf("DE", "AT", "CH", "LU", "LI")),
+    StarterSite("zdf.de", "ZDF", "https://www.zdf.de", R.string.start_zdf,
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/ZDF_logo%21_Logo_2021.svg/250px-ZDF_logo%21_Logo_2021.svg.png",
+        setOf("DE", "AT", "CH")),
+    StarterSite("rtve.es", "RTVE Play", "https://www.rtve.es/play/", R.string.start_rtve,
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Logo_RTVE.svg/250px-Logo_RTVE.svg.png", setOf("ES", "AD")),
+    StarterSite("arte.tv", "Arte", "https://www.arte.tv", R.string.start_arte,
+        "https://static-cdn.arte.tv/replay/favicons/favicon-194x194.png", EUROPE),
+    // Deutsche Welle : télé publique allemande pour le monde, en direct et visible partout (ici les langues où elle a une chaîne).
+    StarterSite("dw.com", "DW", "https://www.dw.com/en/live-tv/channel-english", R.string.start_dw,
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Deutsche_Welle_symbol_2012.svg/250px-Deutsche_Welle_symbol_2012.svg.png"),
     StarterSite("archive.org", "Internet Archive", "https://archive.org/details/feature_films", R.string.start_archive,
         "https://archive.org/offshoot_assets/apple-touch-icon.png"),
-    StarterSite("arte.tv", "Arte", "https://www.arte.tv", R.string.start_arte,
-        "https://static-cdn.arte.tv/replay/favicons/favicon-194x194.png"),
     StarterSite("sepiasearch.org", "PeerTube", "https://sepiasearch.org", R.string.start_peertube,
         "https://joinpeertube.org/img/icons/apple-touch-icon.png"),
     StarterSite("video.blender.org", "Blender Studio", "https://video.blender.org/c/blender_open_movies/videos?sort=-views", R.string.start_blender,
@@ -72,10 +94,27 @@ private val STARTER_SITES = listOf(
         "https://plus.nasa.gov/wp-content/uploads/2023/03/cropped-nasa-png-placeholder.png?w=192"),
 )
 
-/** Sites gratuits pas encore dans « Mes sites », ni écartés par l'utilisateur (appui long → « Ne plus proposer »). */
-private fun starterSitesFor(known: Set<String>, dismissed: Set<String>) = STARTER_SITES.filter { s ->
-    s.host !in dismissed && known.none { it.removePrefix("www.").endsWith(s.host) }
+/**
+ * Pays du téléphone, sans autorisation ni réseau : celui de la carte SIM, du réseau mobile où l'on se trouve et des
+ * réglages de langue (« fr-FR »). Un Français en voyage garde Arte ; un étranger en France la découvre.
+ */
+private fun phoneCountries(ctx: android.content.Context): Set<String> {
+    val tm = ctx.getSystemService(android.telephony.TelephonyManager::class.java)
+    return listOfNotNull(
+        runCatching { tm?.simCountryIso }.getOrNull(),
+        runCatching { tm?.networkCountryIso }.getOrNull(),
+        java.util.Locale.getDefault().country,
+    ).filter { it.length == 2 }.map { it.uppercase() }.toSet()
 }
+
+/**
+ * Sites gratuits pas encore dans « Mes sites », ni écartés par l'utilisateur (appui long → « Ne plus proposer »),
+ * et proposés dans son pays. La télé de son pays d'abord, puis ce qui se regarde partout.
+ */
+private fun starterSitesFor(known: Set<String>, dismissed: Set<String>, countries: Set<String>) = STARTER_SITES.filter { s ->
+    s.host !in dismissed && known.none { it.removePrefix("www.").endsWith(s.host) } &&
+        (s.countries == null || s.countries.any { it in countries })
+}.sortedBy { if (it.countries != null) 0 else 1 }
 
 /** Identifiant de la carte des chaînes gratuites dans les suggestions écartées. */
 private const val FREE_TV = "free-tv"
@@ -121,7 +160,7 @@ fun StarterSection(
     known: Set<String> = emptySet(),
 ) {
     val dismissed by studio.rollando.castor.data.Library.dismissedStarters.collectAsState()
-    val sites = remember(known, dismissed) { starterSitesFor(known, dismissed) }
+    val sites = run { val ctx0 = LocalContext.current; remember(known, dismissed) { starterSitesFor(known, dismissed, phoneCountries(ctx0)) } }
     val channels = showChannels && FREE_TV !in dismissed
     if (!channels && !(showSites && sites.isNotEmpty())) return
     Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -190,7 +229,7 @@ fun FreeChannelsCard(onPasteLink: () -> Unit) {
 fun StarterSites(onBrowse: (String) -> Unit, known: Set<String> = emptySet()) {
     val c = MaterialTheme.colorScheme
     val dismissed by studio.rollando.castor.data.Library.dismissedStarters.collectAsState()
-    val list = remember(known, dismissed) { starterSitesFor(known, dismissed) }
+    val list = run { val ctx0 = LocalContext.current; remember(known, dismissed) { starterSitesFor(known, dismissed, phoneCountries(ctx0)) } }
     if (list.isEmpty()) return
     Text(stringResource(R.string.start_sites_title), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
     // Une rangée qui défile : quelques sites sans allonger l'accueil ; cartes de même hauteur.

@@ -1277,3 +1277,13 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - Vérifié sur émulateur (installation par-dessus l'ancienne : historique gardé, vidéo repérée et reprise).
 - Note : les journaux plus haut citent encore `Castor.kt`, `CastorApp.kt`, `castor/…` : ce sont désormais
   `TvCast.kt`, `TvCastApp.kt`, `tvcast/…`.
+
+## 2026-11-27 — Identifiant de l'appli : com.rollandostudio.universaltvcast
+**Fait**
+- applicationId et namespace `studio.rollando.castor` → `com.rollandostudio.universaltvcast`, selon la convention du
+  studio (`~/Administratif/Rollando Studio/play-console/convention-identifiants.md`, ligne ajoutée). Code rangé sous
+  le même nom : `app/src/*/java/com/rollandostudio/universaltvcast/` (au lieu de `studio/rollando/tvcast`).
+  Lien de partage (Play Store) mis à jour. Possible sans dégât car rien n'est publié.
+- Vérifié sur émulateur : installation neuve, vidéo repérée et lue.
+- Pour Android c'est une nouvelle appli : sur le téléphone de Guillaume, l'ancienne (`studio.rollando.castor`) reste
+  installée à côté, avec son historique ; à désinstaller par lui quand il veut.

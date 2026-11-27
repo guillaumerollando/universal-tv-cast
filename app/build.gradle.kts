@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "studio.rollando.tvcast"
+    namespace = "com.rollandostudio.universaltvcast"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "studio.rollando.castor"
+        applicationId = "com.rollandostudio.universaltvcast"
         minSdk = 26
         targetSdk = 36
         versionCode = 1
@@ -43,7 +43,7 @@ android {
         // Lien envoyé par « Partager l'appli » : la fiche du store d'où vient cette version.
         create("play") {
             dimension = "store"
-            buildConfigField("String", "SHARE_URL", "\"https://play.google.com/store/apps/details?id=studio.rollando.castor\"")
+            buildConfigField("String", "SHARE_URL", "\"https://play.google.com/store/apps/details?id=com.rollandostudio.universaltvcast\"")
         }
         create("libre") {
             dimension = "store"

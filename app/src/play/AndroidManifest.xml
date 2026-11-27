@@ -4,6 +4,6 @@
     <application>
         <meta-data
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
-            android:value="studio.rollando.tvcast.cast.CastOptionsProvider" />
+            android:value="com.rollandostudio.universaltvcast.cast.CastOptionsProvider" />
     </application>
 </manifest>

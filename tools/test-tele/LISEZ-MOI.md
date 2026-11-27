@@ -10,4 +10,4 @@
   lointain met `délai` secondes la première fois puis devient immédiat.
 
 Sur l'émulateur, Universal TV Cast trouve la fausse télé tout seul (sondage du réseau 10.0.2.x). Vidéo :
-`adb shell am start -a android.intent.action.VIEW -d http://10.0.2.2:8765/film.mp4 -t video/mp4 --esa headers "Referer,https://site.example/" -n studio.rollando.castor/.MainActivity`
+`adb shell am start -a android.intent.action.VIEW -d http://10.0.2.2:8765/film.mp4 -t video/mp4 --esa headers "Referer,https://site.example/" -n com.rollandostudio.universaltvcast/.MainActivity`

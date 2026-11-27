@@ -1355,3 +1355,10 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   - Vérifié sur émulateur avec de vrais noms (Dune, Matrix, Amélie, Oppenheimer, Interstellar, Breaking Bad, The Office).
 - Pas fait / pas vérifié : jaquettes intégrées et balises sur de vrais fichiers (les fichiers de test n'en ont pas) ;
   vrai NAS Synology / Plex / Jellyfin ; photos d'un serveur DLNA toujours masquées.
+
+## 2026-11-27 — Essai avec les vrais films du disque T5 et un fichier à balises
+- Fait : les 4 films du disque Samsung T5 (noms bruités « …MULTi.VFQ.2160p…Wawacity… ») sont reconnus avec affiche
+  et année. Un fichier au nom illisible (VID_…mp4) avec titre, année et jaquette intégrés s'affiche par ses balises.
+  Corrigé : le titre écrit dans le fichier passe avant celui de l'annuaire ; « Épisode suivant » seulement entre
+  épisodes (plus entre deux films d'un même dossier).
+- Pas fait : rien.

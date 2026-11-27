@@ -219,7 +219,8 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
                     val w = watched[url]
                     return Media(url = url, title = title, mime = v.mime, fileName = v.name,
                         posterUrl = i.poster ?: v.thumb, backdropUrl = i.still ?: i.backdrop, logoUrl = i.logo,
-                        season = i.season, episode = i.episode, nextUrl = next?.let(::lanUrl),
+                        // « Épisode suivant » : seulement d'un épisode à l'autre, pas entre deux films.
+                        season = i.season, episode = i.episode, nextUrl = next?.takeIf { i.isEpisode }?.let(::lanUrl),
                         startSec = if (w != null && w.progress != null) w.pos - 5 else 0.0)
                 }
                 val list = order.mapIndexed { n, v -> mediaOf(v, order.getOrNull(n + 1)) }

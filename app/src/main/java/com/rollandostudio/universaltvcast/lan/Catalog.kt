@@ -176,7 +176,8 @@ object Catalog {
         val series = asSeries ?: p.isSeries
         val m = lookup(p.title, p.year, series) ?: return base
         val id = m.optString("id")
-        val title = m.optString("name").ifEmpty { base.title }
+        // Le titre écrit dans le fichier par son propriétaire passe avant celui de l'annuaire (souvent en anglais).
+        val title = tags?.title?.takeIf { it.isNotEmpty() && !named.isEpisode } ?: m.optString("name").ifEmpty { base.title }
         val poster = m.optString("poster").ifEmpty { null }?.replace("/poster/small/", "/poster/medium/")
             ?: "https://images.metahub.space/poster/medium/$id/img"
         return if (base.isEpisode) {

@@ -1031,3 +1031,8 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
     (avant : rien n'arrivait) ;
   - « Mes sites » : nom court sans sous-domaine générique (video.blender.org → Blender).
 - Émulateur : -gpu host plante avec la vidéo ; swiftshader_indirect -memory 4096 tient (plante parfois en lecture longue).
+- Suite : Blender pointe sur la chaîne triée par vues (les films d'abord) ; Wikimedia sur sa recherche vidéo (grille)
+  au lieu des pages de texte « Featured » ; Ogg Theora (.ogv) et versions archivées (« 20120806…! ») ignorés.
+- Navigation interne d'un site (PeerTube, sans rechargement) : la vidéo d'avant est oubliée, la nouvelle proposée seule ✓.
+- Faux problème écarté : clavier qui revenait après le chargement = artefact des touches simulées par adb (mode non
+  tactile) ; avec le clavier à l'écran, rien.

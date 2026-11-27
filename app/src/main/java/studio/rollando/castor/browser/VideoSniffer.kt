@@ -161,6 +161,11 @@ class VideoSniffer {
         // Manifestes DASH / Smooth Streaming (Wikimedia, certains lecteurs) : ni le lecteur du téléphone ni les télés
         // DLNA ne les lisent ; la même vidéo est presque toujours proposée aussi en fichier ou en HLS.
         if (Mime.ext(url) in setOf("mpd", "ism", "f4m")) return
+        // Ogg Theora (vieux fichiers de Wikimedia) : ni les télés ni le lecteur du téléphone ne le lisent ; le site
+        // en propose presque toujours une version WebM ou MP4.
+        if (Mime.ext(url) in setOf("ogv", "ogg")) return
+        // Ancienne version archivée d'un fichier (Wikimedia : « …/archive/…/20120806143806!Film.ogv »).
+        if (Regex("/\\d{14}(!|%21)").containsMatchIn(url)) return
         // Morceaux d'un flux découpé (DASH, MSE : « init-1.3x1080p.vp9.webm », « chunk-0-00001… », « segment_12.mp4 ») :
         // pas une vidéo à part entière.
         if (SEGMENT.containsMatchIn(url.substringBefore('?').substringAfterLast('/'))) return

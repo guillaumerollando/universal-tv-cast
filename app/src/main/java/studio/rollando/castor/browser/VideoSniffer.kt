@@ -73,6 +73,8 @@ class VideoSniffer {
     @Volatile var userAgent: String = ""
     /** L'utilisateur vient de lancer une vidéo dans la page (lecteur du site, avec le son) : passer au lecteur de l'appli. */
     @Volatile var onUserPlay: (() -> Unit)? = null
+    /** Appui long sur une vidéo de la page (pas sur du texte : la sélection reste celle du téléphone). */
+    @Volatile var onVideoPress: (() -> Unit)? = null
 
     private val fileExt = setOf("mp4", "webm", "mkv", "m4v", "mov", "avi", "mp3", "m4a")
 
@@ -422,6 +424,9 @@ class VideoSniffer {
          * Lecture lancée dans la page par l'utilisateur (le site a reçu un vrai geste, son non coupé) : pas un aperçu
          * muet qui démarre tout seul. Les vidéos d'une minute ou moins (pubs) ne comptent pas.
          */
+        @JavascriptInterface
+        fun videoPress() { onVideoPress?.invoke() }
+
         /** Le lecteur de la page demande une clé de déchiffrement (DRM). */
         @JavascriptInterface
         fun drm() {
@@ -492,6 +497,12 @@ class VideoSniffer {
   var roots = [document];
   function scan(){ roots.forEach(function(r){ try { r.querySelectorAll('video, audio, video source').forEach(report); } catch(e){} }); tracks(); }
   function listen(r){
+    // Appui long sur une vidéo (ou sur ce qui la recouvre : commandes du lecteur) : l'appli propose de la lancer.
+    r.addEventListener('contextmenu', function(e){ try { if (!CastorBridge.videoPress) return;
+      var t = e.target, v = t && (t.tagName === 'VIDEO' ? t : (t.closest ? t.closest('video') : null));
+      if (!v && document.elementsFromPoint) { var els = document.elementsFromPoint(e.clientX, e.clientY);
+        for (var i = 0; i < els.length && i < 6; i++) if (els[i].tagName === 'VIDEO') { v = els[i]; break; } }
+      if (v) { e.preventDefault(); CastorBridge.videoPress(); } } catch(x){} }, true);
     r.addEventListener('play', function(e){ report(e.target); tracks();
       try { var v = e.target, act = navigator.userActivation ? navigator.userActivation.hasBeenActive : true;
         if (act && !v.muted && CastorBridge.played) CastorBridge.played(isFinite(v.duration) ? v.duration : 0); } catch(x){} }, true);

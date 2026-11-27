@@ -313,7 +313,7 @@
     <string name="start_dw">国際ニュースチャンネル（ライブ）</string>
     <string name="resume_series_done">シリーズ視聴済み</string>
     <string name="browser_lp_link">このリンクの動画を再生</string>
-    <string name="browser_lp_find">このページの動画を探す</string>
+    <string name="browser_lp_find">この動画を再生</string>
     <string name="browser_lp_find_sub">サイトのプレーヤーを無音で再生し、動画をアプリで再生します</string>
     <string name="browser_miss_title">動画がまだ見つかりません</string>
     <string name="browser_miss_body">アプリがサイトのプレーヤーを自動で再生して、もう一度探せます。うまくいかない場合はサイトを報告してください。対応します。</string>

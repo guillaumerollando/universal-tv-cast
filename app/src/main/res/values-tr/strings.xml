@@ -313,7 +313,7 @@
     <string name="start_dw">Uluslararası haber kanalı, canlı</string>
     <string name="resume_series_done">Dizi bitti</string>
     <string name="browser_lp_link">Bu bağlantıdaki videoyu oynat</string>
-    <string name="browser_lp_find">Bu sayfanın videosunu bul</string>
+    <string name="browser_lp_find">Bu videoyu oynat</string>
     <string name="browser_lp_find_sub">Sitenin oynatıcısı sessiz başlar, sonra video uygulamada oynar</string>
     <string name="browser_miss_title">Video henüz bulunamadı</string>
     <string name="browser_miss_body">Uygulama sitenin oynatıcısını kendisi başlatıp yeniden arayabilir. Olmazsa bu siteyi bize bildir: uyumlu hale getireceğiz.</string>

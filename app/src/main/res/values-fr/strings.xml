@@ -280,7 +280,7 @@
     <string name="start_rtve">La télé publique espagnole, en direct et en replay</string>
     <string name="start_dw">Chaîne d’info internationale, en direct</string>
     <string name="browser_lp_link">Lancer la vidéo de ce lien</string>
-    <string name="browser_lp_find">Trouver la vidéo de cette page</string>
+    <string name="browser_lp_find">Lancer cette vidéo</string>
     <string name="browser_lp_find_sub">Le lecteur du site démarre son coupé, puis la vidéo passe dans l’appli</string>
     <string name="browser_miss_title">Vidéo pas encore repérée</string>
     <string name="browser_miss_body">L’appli peut chercher encore en démarrant elle-même le lecteur du site. Si ça ne marche pas, signale-nous ce site : on le rendra compatible.</string>

@@ -312,7 +312,7 @@
   "start_dw": "Internationell nyhetskanal, direkt",
   "resume_series_done": "Serien är slut",
   "browser_lp_link": "Spela videon från den här länken",
-  "browser_lp_find": "Hitta sidans video",
+  "browser_lp_find": "Spela den här videon",
   "browser_lp_find_sub": "Sidans spelare startar utan ljud, sedan spelas videon i appen",
   "browser_miss_title": "Videon har inte hittats än",
   "browser_miss_body": "Appen kan söka igen genom att själv starta sidans spelare. Funkar det inte, tipsa oss om sidan så fixar vi den.",

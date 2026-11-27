@@ -313,7 +313,7 @@
     <string name="start_dw">Міжнародний новинний канал наживо</string>
     <string name="resume_series_done">Серіал переглянуто</string>
     <string name="browser_lp_link">Відтворити відео за цим посиланням</string>
-    <string name="browser_lp_find">Знайти відео на цій сторінці</string>
+    <string name="browser_lp_find">Відтворити це відео</string>
     <string name="browser_lp_find_sub">Плеєр сайту запуститься без звуку, потім відео відкриється в застосунку</string>
     <string name="browser_miss_title">Відео ще не знайдено</string>
     <string name="browser_miss_body">Застосунок може пошукати знову, сам запустивши плеєр сайту. Якщо не вийде, повідомте нам про сайт — ми його підтримаємо.</string>

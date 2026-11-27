@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tuile claire du widget, derrière les logos sombres (le « 5 » noir de France 5). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#FFEDEAE5" />
+    <corners android:radius="14dp" />
+</shape>

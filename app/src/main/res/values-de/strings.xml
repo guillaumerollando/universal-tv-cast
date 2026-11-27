@@ -280,7 +280,7 @@
     <string name="start_rtve">Spanisches öffentliches Fernsehen, live und auf Abruf</string>
     <string name="start_dw">Internationaler Nachrichtensender, live</string>
     <string name="browser_lp_link">Video dieses Links abspielen</string>
-    <string name="browser_lp_find">Video dieser Seite finden</string>
+    <string name="browser_lp_find">Dieses Video abspielen</string>
     <string name="browser_lp_find_sub">Der Player der Seite startet stumm, dann läuft das Video in der App</string>
     <string name="browser_miss_title">Video noch nicht gefunden</string>
     <string name="browser_miss_body">Die App kann erneut suchen und dabei den Player der Seite selbst starten. Klappt das nicht, melde uns die Seite: Wir machen sie kompatibel.</string>

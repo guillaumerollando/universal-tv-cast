@@ -280,7 +280,7 @@
     <string name="start_rtve">La tele pública: en directo y a la carta</string>
     <string name="start_dw">Canal de noticias internacional, en directo</string>
     <string name="browser_lp_link">Reproducir el vídeo de este enlace</string>
-    <string name="browser_lp_find">Buscar el vídeo de esta página</string>
+    <string name="browser_lp_find">Reproducir este vídeo</string>
     <string name="browser_lp_find_sub">El reproductor del sitio arranca sin sonido y luego el vídeo pasa a la app</string>
     <string name="browser_miss_title">Vídeo aún no encontrado</string>
     <string name="browser_miss_body">La app puede volver a buscar arrancando ella misma el reproductor del sitio. Si no funciona, avísanos de este sitio: lo haremos compatible.</string>

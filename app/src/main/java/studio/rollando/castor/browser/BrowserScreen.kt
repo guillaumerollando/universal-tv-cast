@@ -145,6 +145,7 @@ class BrowserController(context: Context) {
     init {
         studio.rollando.castor.cast.Castor.pausePageMedia = ::pauseMedia
         sniffer.onUserPlay = { mainHandler.post { onUserPlay() } }
+        sniffer.onVideoPress = { mainHandler.post { longPress = LongPress(null, video = true) } }
         // Requêtes faites par le « service worker » d'un site (il charge parfois la vidéo à la place de la page) :
         // inspectées et filtrées comme les autres, sinon ces vidéos et ces pubs passeraient inaperçues.
         if (androidx.webkit.WebViewFeature.isFeatureSupported(androidx.webkit.WebViewFeature.SERVICE_WORKER_BASIC_USAGE) &&
@@ -282,7 +283,7 @@ class BrowserController(context: Context) {
      * Appui long dans la page : de quoi envoyer la vidéo même quand l'appli ne l'a pas repérée seule. [link] : le
      * lien touché (épisode, miniature), s'il y en a un.
      */
-    data class LongPress(val link: String?)
+    data class LongPress(val link: String?, val video: Boolean = false)
     var longPress by mutableStateOf<LongPress?>(null)
     /** Vidéo lancée ou cherchée, rien de repéré : l'écran le dit (avec « Chercher encore », « Signaler ce site »). */
     var notFound by mutableStateOf(false)
@@ -290,6 +291,12 @@ class BrowserController(context: Context) {
 
     /** La vidéo de la page est protégée (DRM) : rien à chercher. */
     val drm: Boolean get() = sniffer.drm
+
+    /** « Lancer cette vidéo » (appui long sur la vidéo) : celle déjà repérée part tout de suite, sinon on la cherche. */
+    fun playVideoNow() {
+        val best = sniffer.found.value.firstOrNull { !it.short && !it.silent }
+        if (best != null) { castFound(best); onAutoCast?.invoke() } else findVideoNow()
+    }
 
     /** « Trouver la vidéo de cette page » : la vidéo déjà repérée part ; sinon on démarre le lecteur du site (son coupé). */
     fun findVideoNow() {
@@ -756,14 +763,14 @@ fun BrowserScreen(b: BrowserController) {
                         Nav.nextEpisode.value = lp.link
                     },
                 )
-                ListItem(
+                if (lp.video) ListItem(
                     headlineContent = { Text(stringResource(R.string.browser_lp_find)) },
                     supportingContent = { Text(stringResource(R.string.browser_lp_find_sub)) },
                     leadingContent = { Icon(Icons.Rounded.Movie, null, tint = c.primary) },
                     colors = ListItemDefaults.colors(containerColor = c.surfaceContainerLow),
                     modifier = Modifier.clip(RoundedCornerShape(16.dp)).clickable(role = Role.Button) {
                         b.longPress = null
-                        b.findVideoNow()
+                        b.playVideoNow()
                     },
                 )
             }

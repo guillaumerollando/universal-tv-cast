@@ -313,7 +313,7 @@
     <string name="start_dw">ช่องข่าวต่างประเทศ ถ่ายทอดสด</string>
     <string name="resume_series_done">ดูซีรีส์จบแล้ว</string>
     <string name="browser_lp_link">เล่นวิดีโอจากลิงก์นี้</string>
-    <string name="browser_lp_find">ค้นหาวิดีโอในหน้านี้</string>
+    <string name="browser_lp_find">เล่นวิดีโอนี้</string>
     <string name="browser_lp_find_sub">เครื่องเล่นของเว็บจะเริ่มแบบปิดเสียง แล้ววิดีโอจะเล่นในแอป</string>
     <string name="browser_miss_title">ยังไม่พบวิดีโอ</string>
     <string name="browser_miss_body">แอปค้นหาใหม่ได้โดยเปิดเครื่องเล่นของเว็บเอง หากไม่ได้ผล แจ้งเว็บนี้ให้เรา เราจะทำให้ใช้ได้</string>

@@ -313,7 +313,7 @@
     <string name="start_dw">Canal internațional de știri, în direct</string>
     <string name="resume_series_done">Serial terminat</string>
     <string name="browser_lp_link">Redă videoclipul din acest link</string>
-    <string name="browser_lp_find">Găsește videoclipul de pe această pagină</string>
+    <string name="browser_lp_find">Redă acest videoclip</string>
     <string name="browser_lp_find_sub">Playerul site-ului pornește fără sunet, apoi videoclipul trece în aplicație</string>
     <string name="browser_miss_title">Videoclipul nu a fost găsit încă</string>
     <string name="browser_miss_body">Aplicația poate căuta din nou pornind singură playerul site-ului. Dacă nu merge, semnalează-ne site-ul: îl vom face compatibil.</string>

@@ -313,7 +313,7 @@
     <string name="start_dw">Internationell nyhetskanal, direkt</string>
     <string name="resume_series_done">Serien är slut</string>
     <string name="browser_lp_link">Spela videon från den här länken</string>
-    <string name="browser_lp_find">Hitta sidans video</string>
+    <string name="browser_lp_find">Spela den här videon</string>
     <string name="browser_lp_find_sub">Sidans spelare startar utan ljud, sedan spelas videon i appen</string>
     <string name="browser_miss_title">Videon har inte hittats än</string>
     <string name="browser_miss_body">Appen kan söka igen genom att själv starta sidans spelare. Funkar det inte, tipsa oss om sidan så fixar vi den.</string>

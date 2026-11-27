@@ -313,7 +313,7 @@
     <string name="start_dw">अंतरराष्ट्रीय समाचार चैनल, लाइव</string>
     <string name="resume_series_done">सीरीज़ पूरी हुई</string>
     <string name="browser_lp_link">इस लिंक का वीडियो चलाएँ</string>
-    <string name="browser_lp_find">इस पेज का वीडियो ढूँढें</string>
+    <string name="browser_lp_find">यह वीडियो चलाएँ</string>
     <string name="browser_lp_find_sub">साइट का प्लेयर बिना आवाज़ शुरू होगा, फिर वीडियो ऐप में चलेगा</string>
     <string name="browser_miss_title">वीडियो अभी नहीं मिला</string>
     <string name="browser_miss_body">ऐप साइट का प्लेयर खुद चलाकर फिर से ढूँढ सकता है। न चले तो हमें यह साइट बताएँ: हम इसे चलने लायक बनाएँगे।</string>

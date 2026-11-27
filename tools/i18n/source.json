@@ -1245,8 +1245,8 @@
    "fr": "Lancer la vidéo de ce lien"
   },
   "browser_lp_find": {
-   "en": "Find this page’s video",
-   "fr": "Trouver la vidéo de cette page"
+   "en": "Play this video",
+   "fr": "Lancer cette vidéo"
   },
   "browser_lp_find_sub": {
    "en": "The site’s player starts muted, then the video plays in the app",

@@ -280,7 +280,7 @@
     <string name="start_rtve">De Spaanse publieke omroep, live en on demand</string>
     <string name="start_dw">Internationale nieuwszender, live</string>
     <string name="browser_lp_link">Video van deze link afspelen</string>
-    <string name="browser_lp_find">Video van deze pagina zoeken</string>
+    <string name="browser_lp_find">Deze video afspelen</string>
     <string name="browser_lp_find_sub">De speler van de site start zonder geluid, daarna speelt de video in de app</string>
     <string name="browser_miss_title">Video nog niet gevonden</string>
     <string name="browser_miss_body">De app kan opnieuw zoeken door zelf de speler van de site te starten. Lukt dat niet, meld ons de site: we maken hem compatibel.</string>

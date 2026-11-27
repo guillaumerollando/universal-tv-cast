@@ -187,7 +187,7 @@ internal object WidgetKit {
             // Case vide gardée (invisible) : les autres gardent leur largeur.
             v.setViewVisibility(cell, if (c == null) View.INVISIBLE else View.VISIBLE)
             if (c == null) return@forEachIndexed
-            fillChannel(v, c, name, logo)
+            fillChannel(v, c, name, logo, cell)
             v.setContentDescription(cell, c.channelName)
             v.setOnClickPendingIntent(cell, activity(ctx, ACTION_CHANNEL, c.key, null, 10 + i))
         }
@@ -212,10 +212,12 @@ internal object WidgetKit {
         }
     }
 
-    /** Une chaîne : son logo s'il se charge, sinon son nom. */
-    fun fillChannel(v: RemoteViews, c: Recent, name: Int, logo: Int) {
+    /** Une chaîne : son logo s'il se charge, sinon son nom. Logo en partie noir : tuile claire, sinon il disparaît. */
+    fun fillChannel(v: RemoteViews, c: Recent, name: Int, logo: Int, cell: Int) {
         v.setTextViewText(name, c.channelName)
         val bmp = c.poster?.let { image(it, 200) }
+        val light = bmp != null && bmp.hasAlpha() && Logos.darkShare(bmp) > 0.18f
+        v.setInt(cell, "setBackgroundResource", if (light) R.drawable.widget_tile_light else R.drawable.widget_tile)
         v.setViewVisibility(logo, if (bmp != null) View.VISIBLE else View.GONE)
         v.setViewVisibility(name, if (bmp != null) View.INVISIBLE else View.VISIBLE)
         if (bmp != null) v.setImageViewBitmap(logo, bmp)
@@ -319,7 +321,7 @@ class WidgetListService : RemoteViewsService() {
             }
             val v = RemoteViews(ctx.packageName, R.layout.widget_channel_item)
             val c = channels.getOrNull(position) ?: return v
-            WidgetKit.fillChannel(v, c, R.id.name, R.id.logo)
+            WidgetKit.fillChannel(v, c, R.id.name, R.id.logo, R.id.item)
             v.setContentDescription(R.id.item, c.channelName)
             v.setOnClickFillInIntent(R.id.item, Intent().setAction(WidgetKit.ACTION_CHANNEL).putExtra(WidgetKit.EXTRA_KEY, c.key))
             return v

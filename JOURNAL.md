@@ -1221,3 +1221,14 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
 - Retour de Guillaume : l'appui long empêchait de sélectionner du texte. Il n'agit plus que sur un lien, et seulement
   si la page n'a encore aucune vidéo repérée (« Lancer la vidéo de ce lien »). Ailleurs, appui long d'origine.
   « Trouver la vidéo » reste dans le message « Vidéo pas encore repérée ».
+
+## 2026-11-27 — Appui long sur une vidéo ; essais du logo de chaîne
+**Fait**
+- Appui long sur une vidéo de la page (élément <video>, ou ce qui la recouvre) : « Lancer cette vidéo » (celle déjà
+  repérée part tout de suite, sinon recherche). Signalé par la page elle-même (événement `contextmenu`), donc le
+  texte garde sa sélection. Vérifié sur émulateur (page de test : menu ; ARD avant lecture : sélection du texte).
+- Widget : tuile claire derrière les logos en partie noirs (`Logos.darkShare` > 18 %), pour France 5 et pareils.
+  Pas revu à l'écran.
+- Logo de chaîne dans le lecteur : 4 présentations à l'essai (`LogoStyle` : tuile, détouré, liseré blanc, verre
+  dépoli), réglables depuis l'ordinateur (`--es castor_logo_style STICKER`). Planche : `docs/design/logos-variantes.png`.
+  Par défaut : la tuile, en attendant le choix de Guillaume.

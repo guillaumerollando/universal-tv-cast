@@ -313,7 +313,7 @@
     <string name="start_dw">國際新聞頻道，直播</string>
     <string name="resume_series_done">影集已看完</string>
     <string name="browser_lp_link">播放此連結的影片</string>
-    <string name="browser_lp_find">尋找此頁面的影片</string>
+    <string name="browser_lp_find">播放此影片</string>
     <string name="browser_lp_find_sub">網站播放器將靜音啟動，然後影片在應用程式中播放</string>
     <string name="browser_miss_title">尚未找到影片</string>
     <string name="browser_miss_body">應用程式可以自動啟動網站播放器再找一次。如果不行，請告訴我們這個網站，我們會讓它可用。</string>

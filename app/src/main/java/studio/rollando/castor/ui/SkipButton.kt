@@ -12,7 +12,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -27,54 +29,40 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-/**
- * Bouton ±10 s animé, comme sur YouTube : le bouton s'enfonce et rebondit, sa flèche pivote dans le sens du saut,
- * une onde part du bouton et « +10 » sort vers le haut en s'effaçant. Les appuis rapprochés s'additionnent (« +20 »…).
- * [button] dessine le bouton lui-même (avec [iconModifier] sur son icône) et appelle le clic reçu.
- */
+/** Les quatre mouvements d'un saut (flèche qui pivote, rebond, onde, « +10 » qui monte), relancés à chaque appui. */
+private class SkipFx {
+    val spin = Animatable(0f)
+    val press = Animatable(1f)
+    val ring = Animatable(1f)
+    val label = Animatable(1f)
+
+    fun fire(scope: CoroutineScope, sign: Float) {
+        scope.launch {
+            spin.snapTo(0f)
+            spin.animateTo(sign, tween(140, easing = FastOutSlowInEasing))
+            spin.animateTo(0f, spring(dampingRatio = 0.4f, stiffness = Spring.StiffnessMediumLow))
+        }
+        scope.launch { press.snapTo(0.84f); press.animateTo(1f, spring(dampingRatio = 0.35f, stiffness = Spring.StiffnessMedium)) }
+        scope.launch { ring.snapTo(0f); ring.animateTo(1f, tween(480, easing = LinearOutSlowInEasing)) }
+        scope.launch { label.snapTo(0f); label.animateTo(1f, tween(950, easing = LinearOutSlowInEasing)) }
+    }
+}
+
+/** Le bouton (ou l'icône) avec son rebond et son onde, puis le « +10 » qui en sort. */
 @Composable
-fun AnimatedSkip(
-    forward: Boolean,
-    onSkip: () -> Unit,
-    accent: Color = MaterialTheme.colorScheme.primary,
-    button: @Composable (iconModifier: Modifier, onClick: () -> Unit) -> Unit,
-) {
-    val scope = rememberCoroutineScope()
-    val spin = remember { Animatable(0f) }
-    val press = remember { Animatable(1f) }
-    val ring = remember { Animatable(1f) }
-    val label = remember { Animatable(1f) }
-    var total by remember { mutableIntStateOf(0) }
-    var lastTap by remember { androidx.compose.runtime.mutableLongStateOf(0L) }
+private fun SkipFxBox(fx: SkipFx, forward: Boolean, total: Int, accent: Color, content: @Composable (iconModifier: Modifier) -> Unit) {
     val sign = if (forward) 1f else -1f
     val density = LocalDensity.current
-
-    val click: () -> Unit = {
-        onSkip()
-        val now = System.currentTimeMillis()
-        total = if (now - lastTap < 900) total + 10 else 10
-        lastTap = now
-        run {
-            scope.launch {
-                spin.snapTo(0f)
-                spin.animateTo(sign, tween(140, easing = FastOutSlowInEasing))
-                spin.animateTo(0f, spring(dampingRatio = 0.4f, stiffness = Spring.StiffnessMediumLow))
-            }
-            scope.launch { press.snapTo(0.84f); press.animateTo(1f, spring(dampingRatio = 0.35f, stiffness = Spring.StiffnessMedium)) }
-            scope.launch { ring.snapTo(0f); ring.animateTo(1f, tween(480, easing = LinearOutSlowInEasing)) }
-            scope.launch { label.snapTo(0f); label.animateTo(1f, tween(950, easing = LinearOutSlowInEasing)) }
-        }
-    }
-
     Box(contentAlignment = Alignment.Center) {
         // L'onde, derrière le bouton (dessinée hors de ses bords).
         Box(
             Modifier
-                .graphicsLayer { scaleX = press.value; scaleY = press.value }
+                .graphicsLayer { scaleX = fx.press.value; scaleY = fx.press.value }
                 .drawBehind {
-                    val p = ring.value
+                    val p = fx.ring.value
                     if (p < 1f) {
                         val r = size.minDimension / 2f
                         drawCircle(accent.copy(alpha = 0.55f * (1f - p)), radius = r * (1f + 0.75f * p), center = center,
@@ -84,10 +72,10 @@ fun AnimatedSkip(
                 },
             contentAlignment = Alignment.Center,
         ) {
-            button(Modifier.graphicsLayer { rotationZ = 38f * spin.value }, click)
+            content(Modifier.graphicsLayer { rotationZ = 38f * fx.spin.value })
         }
         // « +10 » qui sort du bouton et monte en s'effaçant.
-        val p = label.value
+        val p = fx.label.value
         if (p < 1f && total > 0) {
             Text(
                 (if (forward) "+" else "−") + total,
@@ -113,4 +101,42 @@ fun AnimatedSkip(
             )
         }
     }
+}
+
+/**
+ * Bouton ±10 s animé, comme sur YouTube : le bouton s'enfonce et rebondit, sa flèche pivote dans le sens du saut,
+ * une onde part du bouton et « +10 » sort vers le haut en s'effaçant. Les appuis rapprochés s'additionnent (« +20 »…).
+ * [button] dessine le bouton lui-même (avec [iconModifier] sur son icône) et appelle le clic reçu.
+ */
+@Composable
+fun AnimatedSkip(
+    forward: Boolean,
+    onSkip: () -> Unit,
+    accent: Color = MaterialTheme.colorScheme.primary,
+    button: @Composable (iconModifier: Modifier, onClick: () -> Unit) -> Unit,
+) {
+    val scope = rememberCoroutineScope()
+    val fx = remember { SkipFx() }
+    var total by remember { mutableIntStateOf(0) }
+    var lastTap by remember { mutableLongStateOf(0L) }
+    val click: () -> Unit = {
+        onSkip()
+        val now = System.currentTimeMillis()
+        total = if (now - lastTap < 900) total + 10 else 10
+        lastTap = now
+        fx.fire(scope, if (forward) 1f else -1f)
+    }
+    SkipFxBox(fx, forward, total, accent) { iconMod -> button(iconMod, click) }
+}
+
+/**
+ * Même animation, sans bouton à toucher : pour le double appui sur la vidéo. Rejouée à chaque nouveau [tap]
+ * (le geste compte lui-même le [total]).
+ */
+@Composable
+fun SkipBurst(forward: Boolean, tap: Int, total: Int, accent: Color = Color.White, icon: @Composable (iconModifier: Modifier) -> Unit) {
+    val scope = rememberCoroutineScope()
+    val fx = remember { SkipFx() }
+    LaunchedEffect(tap) { fx.fire(scope, if (forward) 1f else -1f) }
+    SkipFxBox(fx, forward, total, accent, icon)
 }

@@ -172,8 +172,8 @@ class BrowserController(context: Context) {
     }
 
     /**
-     * Passage automatique au lecteur de l'appli. Une seule fois par page : revenu sur la page, l'utilisateur peut y
-     * regarder la vidéo sans être renvoyé au lecteur (pas de boucle).
+     * Passage automatique au lecteur de l'appli. Revenu sur une page dont la vidéo est encore dans le lecteur,
+     * l'utilisateur peut l'y regarder sans être renvoyé au lecteur (pas de boucle).
      */
     private val autoOpened = HashSet<String>()
     /** Attente en cours : jusqu'à quand, en arrière-plan (épisode suivant) ou non, et la page d'avant. */
@@ -190,7 +190,11 @@ class BrowserController(context: Context) {
 
     /** Une vidéo de la page vient d'être lancée par l'utilisateur (lecteur du site) : direction le lecteur de l'appli. */
     private fun onUserPlay() {
-        if (pageKey(url) in autoOpened || System.currentTimeMillis() < autoUntil) return
+        if (System.currentTimeMillis() < autoUntil) return
+        // Déjà envoyée et toujours dans le lecteur : on laisse regarder dans la page (pas de boucle). Si autre chose
+        // a été lancé depuis (une chaîne…), la relancer depuis la page la renvoie au lecteur comme la première fois.
+        val playing = Castor.state.value.media?.pageUrl?.let(::pageKey)
+        if (pageKey(url) in autoOpened && playing == pageKey(url)) return
         arm(background = false, waitMs = 8000)
     }
 

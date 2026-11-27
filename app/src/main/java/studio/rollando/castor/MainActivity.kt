@@ -11,6 +11,10 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.view.KeyEvent
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import studio.rollando.castor.data.Library
 import kotlin.math.sqrt
 import androidx.activity.ComponentActivity
@@ -30,6 +34,10 @@ class CastorApplication : Application() {
         Castor.init(this)
     }
 }
+
+/** Extensions de fichiers vidéo ou son : lus directement, sans vérifier s'il s'agit d'une page web. */
+private val MEDIA_EXT = setOf("mp4", "m4v", "mkv", "webm", "ts", "m2ts", "mts", "avi", "mov", "m3u8", "m3u", "mpd",
+    "mp3", "m4a", "aac", "flac", "ogg", "opus", "wav", "jpg", "jpeg", "png", "webp", "gif", "heic")
 
 class MainActivity : ComponentActivity(), SensorEventListener {
     private var lastShake = 0L
@@ -105,7 +113,26 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         val parsed = Intake.parse(this, intent) ?: return
         val from = referrer?.takeIf { it.scheme == "android-app" }?.host?.takeIf { it != packageName }
         val media = parsed.copy(sourceApp = from)
-        // Une autre appli nous envoie une vidéo (« Caster sur la télé ») : la télé est le choix explicite.
+        val url = media.url
+        // Lien sans extension de vidéo (« Partager » depuis un navigateur…) : si c'est une page web, on l'ouvre dans
+        // le navigateur de l'appli, qui y repérera la vidéo, au lieu d'essayer de lire la page elle-même.
+        if ((url.startsWith("http://") || url.startsWith("https://")) && studio.rollando.castor.net.Mime.ext(url) !in MEDIA_EXT) {
+            lifecycleScope.launch {
+                val page = withContext(Dispatchers.IO) {
+                    runCatching {
+                        val c = studio.rollando.castor.net.Http.open(url, media.headers, range = "bytes=0-0", connectTimeout = 5000, readTimeout = 5000)
+                        try { c.contentType?.lowercase()?.startsWith("text/html") == true } finally { c.disconnect() }
+                    }.getOrDefault(false)
+                }
+                if (page) Nav.openUrl.value = url else play(media)
+            }
+            return
+        }
+        play(media)
+    }
+
+    /** Une autre appli nous envoie une vidéo (« Caster sur la télé ») : la télé est le choix explicite. */
+    private fun play(media: studio.rollando.castor.cast.Media) {
         Castor.open(media, toTv = true)
         Nav.tab.value = Tab.PLAYER
     }

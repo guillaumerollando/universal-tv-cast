@@ -465,12 +465,21 @@ class VideoSniffer {
   function tracks(){ try { if (!CastorBridge.track) return; document.querySelectorAll('track').forEach(function(tr){
     var k = (tr.kind || 'subtitles').toLowerCase(); if (k !== 'subtitles' && k !== 'captions') return;
     var s = tr.src; if (s && s.indexOf('http') === 0) CastorBridge.track(s, tr.label || '', tr.srclang || ''); }); } catch(e){} }
-  function scan(){ document.querySelectorAll('video, audio, video source').forEach(report); tracks(); }
-  document.addEventListener('play', function(e){ report(e.target); tracks();
-    try { var v = e.target, act = navigator.userActivation ? navigator.userActivation.hasBeenActive : true;
-      if (act && !v.muted && CastorBridge.played) CastorBridge.played(isFinite(v.duration) ? v.duration : 0); } catch(x){} }, true);
-  document.addEventListener('loadedmetadata', function(e){ report(e.target); }, true);
-  document.addEventListener('durationchange', function(e){ report(e.target); }, true);
+  // Lecteurs rangés dans un « shadow DOM » (Internet Archive…) : leurs événements de lecture ne remontent pas jusqu'à
+  // la page ; on écoute aussi chaque racine cachée, dès sa création.
+  var roots = [document];
+  function scan(){ roots.forEach(function(r){ try { r.querySelectorAll('video, audio, video source').forEach(report); } catch(e){} }); tracks(); }
+  function listen(r){
+    r.addEventListener('play', function(e){ report(e.target); tracks();
+      try { var v = e.target, act = navigator.userActivation ? navigator.userActivation.hasBeenActive : true;
+        if (act && !v.muted && CastorBridge.played) CastorBridge.played(isFinite(v.duration) ? v.duration : 0); } catch(x){} }, true);
+    r.addEventListener('loadedmetadata', function(e){ report(e.target); }, true);
+    r.addEventListener('durationchange', function(e){ report(e.target); }, true);
+  }
+  listen(document);
+  try { var attach = Element.prototype.attachShadow;
+    Element.prototype.attachShadow = function(o){ var r = attach.call(this, o); try { roots.push(r); listen(r); } catch(e){} return r; };
+  } catch(e){}
   function image(){ try { if (window !== window.top) return;
     var m = document.querySelector('meta[property="og:image"],meta[name="og:image"],meta[name="twitter:image"],meta[property="twitter:image"]');
     var u = m && m.content; if (!u) { var v = document.querySelector('video[poster]'); u = v && v.poster; }

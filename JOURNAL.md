@@ -1088,3 +1088,22 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
 - Mini-vidéo (lecture sur le téléphone, hors écran de lecture) : se déplace du doigt et se range dans le coin le plus
   proche (avec l'élan), coin gardé d'un écran à l'autre ; jetée hors de l'écran par un côté (plus de la moitié
   dehors, ou lancée vite) → s'efface et la lecture s'arrête. Action d'accessibilité « Arrêter ». Vérifié émulateur.
+
+## 2026-11-27 — Lancement automatique, double appui, sous-titres en un appui
+**Fait**
+- Internet Archive (Chaplin) : la vidéo lancée dans la page ne passait pas au lecteur. Son lecteur est rangé dans
+  un « shadow DOM », d'où l'événement de lecture ne remonte pas : le script écoute maintenant chaque racine cachée
+  (`attachShadow` enveloppé). Vérifié sur émulateur, aussi après une chaîne (CNews).
+- Page déjà envoyée une fois : elle repart seule au lecteur si autre chose a joué depuis (une chaîne…). On ne
+  s'abstient que si sa vidéo est encore dans le lecteur (pas de boucle).
+- Lien de page web reçu d'une autre appli (Partager, Ouvrir avec) : ouvert dans le navigateur de l'appli (type
+  `text/html` vérifié) au lieu d'être lu comme une vidéo.
+- Double appui en plein écran : même animation que les boutons ±10 s (`SkipBurst`, mouvements mis en commun avec
+  `AnimatedSkip`), à la place des trois flèches.
+- Sous-titres : un appui ouvre la liste directement ; appui long : « Ajouter un fichier » (aussi dans la liste
+  quand il n'y a rien à choisir). Sous-titre choisi : petit bouton « Décalage » qui déplie le réglage.
+
+**Pas fait**
+- Le premier cas signalé (vidéo d'un site de streaming non lancée seule après une chaîne) n'a pas été reproduit
+  tel quel : site inconnu. Les deux causes probables sont corrigées ; à revoir si ça recommence (nom du site).
+- Choix d'un sous-titre réel (Arte) non refait sur émulateur après la refonte.

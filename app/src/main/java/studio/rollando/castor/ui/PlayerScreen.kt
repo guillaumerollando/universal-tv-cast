@@ -46,6 +46,8 @@ import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.ExpandLess
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.animation.animateContentSize
 import androidx.compose.material.icons.automirrored.rounded.VolumeDown
 import androidx.compose.material.icons.automirrored.rounded.VolumeUp
@@ -581,29 +583,43 @@ private fun AudioCard(s: CastState) {
     }
 }
 
+/**
+ * Sous-titres : une ligne « Sous-titres · Français ». Un appui ouvre directement la liste (Aucun, les pistes
+ * proposées) ; un appui long, les options (ajouter un fichier). Sous-titre choisi : un petit bouton « Décalage »
+ * déplie le réglage.
+ */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SubtitlesCard(s: CastState) {
     val context = LocalContext.current
     val media = s.media ?: return
-    var open by remember { mutableStateOf(false) }
+    var list by remember { mutableStateOf(false) }
+    var options by remember { mutableStateOf(false) }
+    // Réglage du décalage déplié (la vidéo attend en pause pendant le réglage).
+    var expanded by rememberSaveable(media.url) { mutableStateOf(false) }
     val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
         uri ?: return@rememberLauncherForActivityResult
         runCatching { context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
         Castor.addSubtitle(uri, Intake.nameOf(context, uri))
+        if (!expanded) Castor.panelClosed()
     }
     // Sous-titres déjà dans la vidéo (MKV) : on le dit simplement, ils se choisissent sur la télé.
     val inVideo = s.embeddedSubs.isNotEmpty()
     val none = stringResource(if (inVideo) R.string.subs_in_video else R.string.subs_none)
     val inVideoLangs = s.embeddedSubs.distinct().joinToString { studio.rollando.castor.subs.SubtitleFinder.label(it) }
     val current = media.subs.getOrNull(s.subIndex)?.name ?: none
-    // Repliée par défaut : une ligne discrète « Sous-titres · Français », dépliée au toucher.
-    var expanded by rememberSaveable(media.url) { mutableStateOf(false) }
+    androidx.compose.runtime.LaunchedEffect(s.subIndex) { if (s.subIndex < 0 && !inVideo) expanded = false }
     // Changer les sous-titres met la vidéo en pause ; refermer le réglage la relance.
     androidx.compose.runtime.DisposableEffect(expanded) {
         val open = expanded // valeur figée : à la fermeture, `expanded` vaut déjà false
         onDispose { if (open) Castor.panelClosed() }
     }
-    val stateText = stringResource(if (expanded) R.string.state_expanded else R.string.state_collapsed)
+    fun choose(i: Int) {
+        list = false
+        Castor.selectSubtitle(i)
+        if (!expanded) Castor.panelClosed()
+    }
+    val addLabel = stringResource(R.string.subs_add)
     val c = MaterialTheme.colorScheme
     Card(
         colors = CardDefaults.cardColors(containerColor = c.surfaceContainerLow),
@@ -611,56 +627,87 @@ private fun SubtitlesCard(s: CastState) {
         modifier = Modifier.animateContentSize(),
     ) {
         Column {
-            // Toute la largeur de la carte réagit au toucher (la surbrillance aussi).
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .clickable(role = Role.Button) { expanded = !expanded }
-                    .semantics { stateDescription = stateText }
-                    .padding(horizontal = 16.dp, vertical = 14.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(Icons.Rounded.Subtitles, null, tint = if (s.subIndex >= 0) c.primary else c.onSurfaceVariant, modifier = Modifier.size(22.dp))
-                Spacer(Modifier.width(10.dp))
-                Text(stringResource(R.string.subs_title), style = MaterialTheme.typography.titleSmall)
-                Spacer(Modifier.width(8.dp))
-                Text(
-                    current + if (s.subIndex >= 0 && s.subDelay != 0.0)
-                        String.format(java.util.Locale.getDefault(), " · %+.1f s", s.subDelay) else "",
-                    style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant,
-                    maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f),
-                )
-                Icon(if (expanded) Icons.Rounded.ExpandLess else Icons.Rounded.ExpandMore, null, tint = c.onSurfaceVariant)
+            Box {
+                // Toute la largeur de la carte réagit au toucher (la surbrillance aussi).
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .combinedClickable(
+                            role = Role.Button,
+                            onClick = { if (inVideo) expanded = !expanded else list = true },
+                            onLongClickLabel = if (inVideo) null else addLabel,
+                            onLongClick = if (inVideo) null else ({ options = true }),
+                        )
+                        .padding(start = 16.dp, end = 8.dp, top = 6.dp, bottom = 6.dp)
+                        .heightIn(min = 40.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(Icons.Rounded.Subtitles, null, tint = if (s.subIndex >= 0) c.primary else c.onSurfaceVariant, modifier = Modifier.size(22.dp))
+                    Spacer(Modifier.width(10.dp))
+                    Text(stringResource(R.string.subs_title), style = MaterialTheme.typography.titleSmall)
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        current, style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant,
+                        maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f),
+                    )
+                    if (s.subIndex >= 0 && !inVideo) {
+                        // Le décalage, à portée d'un appui une fois un sous-titre choisi.
+                        TextButton(onClick = { expanded = !expanded }, contentPadding = PaddingValues(horizontal = 10.dp)) {
+                            Text(
+                                if (s.subDelay != 0.0) String.format(java.util.Locale.getDefault(), "%+.1f s", s.subDelay)
+                                else stringResource(R.string.subs_delay),
+                                style = MaterialTheme.typography.labelLarge,
+                            )
+                        }
+                    } else {
+                        Icon(
+                            if (inVideo && expanded) Icons.Rounded.ExpandLess else Icons.Rounded.ExpandMore, null,
+                            tint = c.onSurfaceVariant, modifier = Modifier.padding(end = 8.dp),
+                        )
+                    }
+                }
+                // La liste, en un appui.
+                DropdownMenu(expanded = list, onDismissRequest = { list = false }) {
+                    DropdownMenuItem(
+                        text = { Text(none) },
+                        leadingIcon = { if (s.subIndex < 0) Icon(Icons.Rounded.Check, null) },
+                        onClick = { choose(-1) },
+                    )
+                    media.subs.forEachIndexed { i, sub ->
+                        DropdownMenuItem(
+                            text = { Text(sub.name) },
+                            leadingIcon = { if (i == s.subIndex) Icon(Icons.Rounded.Check, null) },
+                            onClick = { choose(i) },
+                        )
+                    }
+                    // Rien à choisir : l'ajout d'un fichier est proposé ici aussi (sinon, appui long).
+                    if (media.subs.isEmpty()) DropdownMenuItem(
+                        text = { Text(addLabel) },
+                        leadingIcon = { Icon(Icons.Rounded.Add, null) },
+                        onClick = { list = false; pick.launch(arrayOf("*/*")) },
+                    )
+                }
+                // Les options, à l'appui long.
+                DropdownMenu(expanded = options, onDismissRequest = { options = false }) {
+                    DropdownMenuItem(
+                        text = { Text(addLabel) },
+                        leadingIcon = { Icon(Icons.Rounded.Add, null) },
+                        onClick = { options = false; pick.launch(arrayOf("*/*")) },
+                    )
+                }
             }
             if (expanded) Column(Modifier.padding(horizontal = 16.dp)) {
-            // Sous-titres déjà dans la vidéo : les nôtres ne pourraient pas s'afficher par-dessus, on n'en propose pas.
-            if (!inVideo) Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(Modifier.weight(1f)) {
-                    OutlinedButton(onClick = { open = true }, modifier = Modifier.fillMaxWidth().height(48.dp)) {
-                        Text(current, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    }
-                    DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
-                        DropdownMenuItem(text = { Text(none) }, onClick = { open = false; Castor.selectSubtitle(-1) })
-                        media.subs.forEachIndexed { i, sub ->
-                            DropdownMenuItem(text = { Text(sub.name) }, onClick = { open = false; Castor.selectSubtitle(i) })
-                        }
-                    }
+                if (inVideo) {
+                    // Les langues en entier (la ligne repliée ne dit que « Déjà dans la vidéo »).
+                    Text(inVideoLangs, style = MaterialTheme.typography.titleSmall)
+                    Text(stringResource(R.string.subs_in_video_note), style = MaterialTheme.typography.bodyMedium,
+                        color = c.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp))
+                } else {
+                    SubtitleDelay(s.subDelay)
+                    Spacer(Modifier.height(6.dp))
+                    Text(stringResource(R.string.subs_note), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
                 }
-                Spacer(Modifier.width(8.dp))
-                TextButton(onClick = { pick.launch(arrayOf("*/*")) }, modifier = Modifier.height(48.dp)) {
-                    Text(stringResource(R.string.subs_add))
-                }
-            }
-            if (inVideo) {
-                // Les langues en entier (la ligne repliée ne dit que « Déjà dans la vidéo »).
-                Text(inVideoLangs, style = MaterialTheme.typography.titleSmall)
-                Text(stringResource(R.string.subs_in_video_note), style = MaterialTheme.typography.bodyMedium,
-                    color = c.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp))
-            }
-            if (s.subIndex >= 0 && !inVideo) SubtitleDelay(s.subDelay)
-            Spacer(Modifier.height(6.dp))
-            if (!inVideo) Text(stringResource(R.string.subs_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Spacer(Modifier.height(14.dp))
+                Spacer(Modifier.height(14.dp))
             }
         }
     }

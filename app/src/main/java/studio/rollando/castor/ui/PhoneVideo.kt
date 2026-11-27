@@ -160,8 +160,8 @@ private fun Modifier.skipGestures(skip: SkipState, onTap: () -> Unit) = pointerI
 }
 
 /**
- * Retour visuel d'un saut, du côté touché : une grande vague en arc qui part du bord, une onde depuis le doigt,
- * trois flèches qui s'allument l'une après l'autre et le total (« 10 secondes »).
+ * Retour visuel d'un saut, du côté touché : une grande vague en arc qui part du bord, une onde depuis le doigt et,
+ * au milieu, la même animation que les boutons ±10 s.
  */
 @Composable
 private fun SkipOverlay(skip: SkipState, modifier: Modifier = Modifier) {
@@ -180,11 +180,6 @@ private fun SkipOverlay(skip: SkipState, modifier: Modifier = Modifier) {
     // Onde depuis le doigt, relancée à chaque appui.
     val ripple = remember { androidx.compose.animation.core.Animatable(0f) }
     LaunchedEffect(k.tap) { ripple.snapTo(0f); ripple.animateTo(1f, androidx.compose.animation.core.tween(500)) }
-    // Flèches : une lumière qui passe de la première à la troisième, en boucle.
-    val sweep by androidx.compose.animation.core.rememberInfiniteTransition(label = "chevrons").animateFloat(
-        0f, 3f, androidx.compose.animation.core.infiniteRepeatable(androidx.compose.animation.core.tween(650, easing = androidx.compose.animation.core.LinearEasing)),
-        label = "sweep",
-    )
     androidx.compose.foundation.layout.BoxWithConstraints(modifier.fillMaxSize().graphicsLayer { this.alpha = alpha }) {
         val w = constraints.maxWidth.toFloat()
         val h = constraints.maxHeight.toFloat()
@@ -200,26 +195,18 @@ private fun SkipOverlay(skip: SkipState, modifier: Modifier = Modifier) {
                 drawCircle(Color.White.copy(alpha = 0.22f * (1f - ripple.value)), radius = (w * 0.32f) * ripple.value, center = k.at)
             }
         }
-        val label = stringResource(R.string.skip_seconds, k.total)
-        Column(
+        // Au milieu du côté touché : la même animation que les boutons ±10 s (rebond, flèche qui pivote, onde,
+        // « +10 » qui monte et s'additionne).
+        Box(
             Modifier.fillMaxHeight().fillMaxWidth(0.5f).align(if (left) Alignment.CenterStart else Alignment.CenterEnd),
-            horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center,
+            contentAlignment = Alignment.Center,
         ) {
-            Row(horizontalArrangement = Arrangement.spacedBy((-6).dp)) {
-                for (i in 0 until 3) {
-                    // Dans le sens du saut : de droite à gauche pour reculer.
-                    val pos = if (left) 2 - i else i
-                    val lit = (sweep - pos).let { d -> if (d in 0f..1.2f) 1f else 0.3f }
-                    Icon(
-                        Icons.Rounded.PlayArrow, null, tint = Color.White.copy(alpha = lit),
-                        modifier = Modifier.size(22.dp).graphicsLayer { scaleX = if (left) -1f else 1f },
-                    )
+            SkipBurst(forward = !left, tap = k.tap, total = k.total) { iconMod ->
+                Box(Modifier.size(56.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.35f)), contentAlignment = Alignment.Center) {
+                    Icon(if (left) Icons.Rounded.Replay10 else Icons.Rounded.Forward10,
+                        stringResource(R.string.skip_seconds, k.total), Modifier.size(32.dp).then(iconMod), tint = Color.White)
                 }
             }
-            Spacer(Modifier.height(4.dp))
-            // Ombre douce : lisible sur une image claire.
-            Text(label, color = Color.White, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
-                style = MaterialTheme.typography.labelLarge.copy(shadow = androidx.compose.ui.graphics.Shadow(Color.Black.copy(alpha = 0.6f), blurRadius = 8f)))
         }
     }
 }

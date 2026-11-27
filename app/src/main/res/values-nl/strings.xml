@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Généré par tools/strings.py : ne pas modifier à la main. -->
 <resources>
+    <string name="widget_name_home">Verder kijken + zenders</string>
+    <string name="widget_name_sites">Verder kijken + sites</string>
+    <string name="widget_name_stack">Mijn begonnen video’s</string>
+    <string name="widget_name_channels">Mijn zenders</string>
+    <string name="widget_name_resume">Verder kijken</string>
+    <string name="widget_desc_sites">Je video om verder te kijken en je favoriete sites</string>
+    <string name="widget_desc_stack">Swipe door je begonnen series en films</string>
+    <string name="widget_desc_channels">Je tv-zenders in één tik</string>
+    <string name="widget_desc_resume">Je laatste video, klaar om verder te kijken</string>
+    <string name="widget_empty_channels">Start een zender: die verschijnt hier.</string>
+    <string name="widget_sample_title">Mijn favoriete serie</string>
+    <string name="widget_sample_sub">S1 · Afl. 3</string>
     <string name="widget_desc">Ga verder met je video en zenders in één tik</string>
     <string name="widget_empty">Start een video of zender: die verschijnt hier.</string>
     <string name="settings_share">App delen</string>

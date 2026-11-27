@@ -295,7 +295,19 @@
   "share_text": "Se webbvideor och tv-kanaler på storbilden, gratis: %1$s",
   "report_no_mail": "Ingen e-postapp hittades. Vår adress har kopierats: %1$s",
   "widget_desc": "Fortsätt titta på video och kanaler med ett tryck",
-  "widget_empty": "Spela en video eller kanal så visas den här."
+  "widget_empty": "Spela en video eller kanal så visas den här.",
+  "widget_name_home": "Fortsätt + kanaler",
+  "widget_name_sites": "Fortsätt + webbplatser",
+  "widget_name_stack": "Påbörjade videor",
+  "widget_name_channels": "Mina kanaler",
+  "widget_name_resume": "Fortsätt",
+  "widget_desc_sites": "Videon att fortsätta och dina favoritsajter",
+  "widget_desc_stack": "Bläddra bland påbörjade serier och filmer",
+  "widget_desc_channels": "Dina tv-kanaler med ett tryck",
+  "widget_desc_resume": "Din senaste video, redo att fortsätta",
+  "widget_empty_channels": "Spela en kanal så visas den här.",
+  "widget_sample_title": "Min favoritserie",
+  "widget_sample_sub": "S1 · Avs. 3"
  },
  "plurals": {
   "browser_found": {

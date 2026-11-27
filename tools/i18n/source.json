@@ -1167,6 +1167,54 @@
   "widget_empty": {
    "en": "Play a video or a channel: it will show up here.",
    "fr": "Lance une vidéo ou une chaîne : elle apparaîtra ici."
+  },
+  "widget_name_home": {
+   "en": "Resume + channels",
+   "fr": "Reprendre + chaînes"
+  },
+  "widget_name_sites": {
+   "en": "Resume + sites",
+   "fr": "Reprendre + sites"
+  },
+  "widget_name_stack": {
+   "en": "My videos in progress",
+   "fr": "Mes vidéos en cours"
+  },
+  "widget_name_channels": {
+   "en": "My channels",
+   "fr": "Mes chaînes"
+  },
+  "widget_name_resume": {
+   "en": "Resume",
+   "fr": "Reprendre"
+  },
+  "widget_desc_sites": {
+   "en": "Your video to resume and your favourite sites",
+   "fr": "La vidéo à reprendre et tes sites préférés"
+  },
+  "widget_desc_stack": {
+   "en": "Swipe through the series and films you’ve started",
+   "fr": "Fais défiler tes séries et films commencés"
+  },
+  "widget_desc_channels": {
+   "en": "Your TV channels in one tap",
+   "fr": "Tes chaînes de télé en un appui"
+  },
+  "widget_desc_resume": {
+   "en": "Your last video, ready to resume",
+   "fr": "Ta dernière vidéo, prête à reprendre"
+  },
+  "widget_empty_channels": {
+   "en": "Play a channel: it will show up here.",
+   "fr": "Lance une chaîne : elle apparaîtra ici."
+  },
+  "widget_sample_title": {
+   "en": "My favourite series",
+   "fr": "Ma série préférée"
+  },
+  "widget_sample_sub": {
+   "en": "S1 · Ep. 3",
+   "fr": "S1 · Ép. 3"
   }
  },
  "plurals": {

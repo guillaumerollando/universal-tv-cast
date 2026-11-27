@@ -295,7 +295,19 @@
   "share_text": "Tonton video web dan saluran TV di layar besar, gratis: %1$s",
   "report_no_mail": "Tidak ada aplikasi email. Alamat kami sudah disalin: %1$s",
   "widget_desc": "Lanjutkan video dan saluranmu dengan sekali ketuk",
-  "widget_empty": "Putar video atau saluran: akan muncul di sini."
+  "widget_empty": "Putar video atau saluran: akan muncul di sini.",
+  "widget_name_home": "Lanjutkan + saluran",
+  "widget_name_sites": "Lanjutkan + situs",
+  "widget_name_stack": "Video yang sedang ditonton",
+  "widget_name_channels": "Saluranku",
+  "widget_name_resume": "Lanjutkan",
+  "widget_desc_sites": "Video untuk dilanjutkan dan situs favoritmu",
+  "widget_desc_stack": "Geser serial dan film yang sudah kamu mulai",
+  "widget_desc_channels": "Saluran TV-mu dalam sekali ketuk",
+  "widget_desc_resume": "Video terakhirmu, siap dilanjutkan",
+  "widget_empty_channels": "Putar saluran: akan muncul di sini.",
+  "widget_sample_title": "Serial favoritku",
+  "widget_sample_sub": "S1 · Ep. 3"
  },
  "plurals": {
   "browser_found": {

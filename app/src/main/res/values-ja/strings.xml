@@ -297,6 +297,18 @@
     <string name="report_no_mail">メールアプリが見つかりません。アドレスをコピーしました: %1$s</string>
     <string name="widget_desc">動画とチャンネルをワンタップで再開</string>
     <string name="widget_empty">動画やチャンネルを再生すると、ここに表示されます。</string>
+    <string name="widget_name_home">続きを見る＋チャンネル</string>
+    <string name="widget_name_sites">続きを見る＋サイト</string>
+    <string name="widget_name_stack">視聴中の動画</string>
+    <string name="widget_name_channels">マイチャンネル</string>
+    <string name="widget_name_resume">続きを見る</string>
+    <string name="widget_desc_sites">続きの動画とお気に入りのサイト</string>
+    <string name="widget_desc_stack">見始めたシリーズや映画をスワイプ</string>
+    <string name="widget_desc_channels">テレビのチャンネルをワンタップで</string>
+    <string name="widget_desc_resume">最後の動画、すぐに再開</string>
+    <string name="widget_empty_channels">チャンネルを再生すると、ここに表示されます。</string>
+    <string name="widget_sample_title">お気に入りのシリーズ</string>
+    <string name="widget_sample_sub">S1 · 第3話</string>
     <plurals name="browser_found">
         <item quantity="other">%d 本の動画</item>
     </plurals>

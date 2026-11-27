@@ -295,7 +295,19 @@
   "share_text": "在大螢幕上免費觀看網路影片和電視頻道：%1$s",
   "report_no_mail": "找不到郵件應用程式。已複製我們的地址：%1$s",
   "widget_desc": "一鍵繼續觀看影片和頻道",
-  "widget_empty": "播放影片或頻道後會顯示在這裡。"
+  "widget_empty": "播放影片或頻道後會顯示在這裡。",
+  "widget_name_home": "繼續觀看 + 頻道",
+  "widget_name_sites": "繼續觀看 + 網站",
+  "widget_name_stack": "我在看的影片",
+  "widget_name_channels": "我的頻道",
+  "widget_name_resume": "繼續觀看",
+  "widget_desc_sites": "待繼續的影片和常用網站",
+  "widget_desc_stack": "滑動瀏覽已開始的影集和電影",
+  "widget_desc_channels": "一鍵打開電視頻道",
+  "widget_desc_resume": "上次的影片，隨時繼續",
+  "widget_empty_channels": "播放頻道後會顯示在這裡。",
+  "widget_sample_title": "我最愛的影集",
+  "widget_sample_sub": "第1季 · 第3集"
  },
  "plurals": {
   "browser_found": {

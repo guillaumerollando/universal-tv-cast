@@ -295,7 +295,19 @@
   "share_text": "Web videolarını ve TV kanallarını büyük ekranda ücretsiz izle: %1$s",
   "report_no_mail": "E-posta uygulaması bulunamadı. Adresimiz kopyalandı: %1$s",
   "widget_desc": "Videona ve kanallarına tek dokunuşla devam et",
-  "widget_empty": "Bir video ya da kanal aç: burada görünecek."
+  "widget_empty": "Bir video ya da kanal aç: burada görünecek.",
+  "widget_name_home": "Devam et + kanallar",
+  "widget_name_sites": "Devam et + siteler",
+  "widget_name_stack": "Yarım kalan videolarım",
+  "widget_name_channels": "Kanallarım",
+  "widget_name_resume": "Devam et",
+  "widget_desc_sites": "Devam edilecek video ve favori siteler",
+  "widget_desc_stack": "Başladığın dizi ve filmler arasında kaydır",
+  "widget_desc_channels": "TV kanalların tek dokunuşta",
+  "widget_desc_resume": "Son videon, devam etmeye hazır",
+  "widget_empty_channels": "Bir kanal aç: burada görünecek.",
+  "widget_sample_title": "En sevdiğim dizi",
+  "widget_sample_sub": "S1 · B3"
  },
  "plurals": {
   "browser_found": {

@@ -295,7 +295,19 @@
   "share_text": "شاهد فيديوهات الويب وقنوات التلفزيون على شاشتك الكبيرة مجانًا: %1$s",
   "report_no_mail": "لا يوجد تطبيق بريد. تم نسخ عنواننا: %1$s",
   "widget_desc": "تابع الفيديو والقنوات بلمسة واحدة",
-  "widget_empty": "شغّل فيديو أو قناة: سيظهر هنا."
+  "widget_empty": "شغّل فيديو أو قناة: سيظهر هنا.",
+  "widget_name_home": "متابعة + القنوات",
+  "widget_name_sites": "متابعة + المواقع",
+  "widget_name_stack": "فيديوهاتي الجارية",
+  "widget_name_channels": "قنواتي",
+  "widget_name_resume": "متابعة",
+  "widget_desc_sites": "الفيديو للمتابعة ومواقعك المفضلة",
+  "widget_desc_stack": "تصفّح المسلسلات والأفلام التي بدأتها",
+  "widget_desc_channels": "قنواتك التلفزيونية بلمسة واحدة",
+  "widget_desc_resume": "آخر فيديو لك، جاهز للمتابعة",
+  "widget_empty_channels": "شغّل قناة: ستظهر هنا.",
+  "widget_sample_title": "مسلسلي المفضل",
+  "widget_sample_sub": "م1 · ح3"
  },
  "plurals": {
   "browser_found": {

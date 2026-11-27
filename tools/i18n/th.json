@@ -295,7 +295,19 @@
   "share_text": "ดูวิดีโอจากเว็บและช่องทีวีบนจอใหญ่ ฟรี: %1$s",
   "report_no_mail": "ไม่พบแอปอีเมล คัดลอกที่อยู่ของเราแล้ว: %1$s",
   "widget_desc": "ดูวิดีโอและช่องต่อได้ในแตะเดียว",
-  "widget_empty": "เปิดวิดีโอหรือช่อง แล้วจะแสดงที่นี่"
+  "widget_empty": "เปิดวิดีโอหรือช่อง แล้วจะแสดงที่นี่",
+  "widget_name_home": "ดูต่อ + ช่อง",
+  "widget_name_sites": "ดูต่อ + เว็บไซต์",
+  "widget_name_stack": "วิดีโอที่ดูค้างไว้",
+  "widget_name_channels": "ช่องของฉัน",
+  "widget_name_resume": "ดูต่อ",
+  "widget_desc_sites": "วิดีโอที่ดูต่อได้และเว็บไซต์โปรด",
+  "widget_desc_stack": "ปัดดูซีรีส์และภาพยนตร์ที่ดูค้างไว้",
+  "widget_desc_channels": "ช่องทีวีของคุณในแตะเดียว",
+  "widget_desc_resume": "วิดีโอล่าสุด พร้อมดูต่อ",
+  "widget_empty_channels": "เปิดช่อง แล้วจะแสดงที่นี่",
+  "widget_sample_title": "ซีรีส์โปรดของฉัน",
+  "widget_sample_sub": "S1 · ตอนที่ 3"
  },
  "plurals": {
   "browser_found": {

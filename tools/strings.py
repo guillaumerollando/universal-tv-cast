@@ -5,6 +5,18 @@ import os, html
 LANGS = ["en", "fr", "es", "de", "it", "nl", "pt-rBR"]
 S = {
 "app_name": ["Universal TV Cast"]*7,
+"widget_name_home": ["Resume + channels", "Reprendre + chaînes", "Continuar + canales", "Weiterschauen + Sender", "Riprendi + canali", "Verder kijken + zenders", "Continuar + canais"],
+"widget_name_sites": ["Resume + sites", "Reprendre + sites", "Continuar + sitios", "Weiterschauen + Websites", "Riprendi + siti", "Verder kijken + sites", "Continuar + sites"],
+"widget_name_stack": ["My videos in progress", "Mes vidéos en cours", "Mis vídeos empezados", "Meine angefangenen Videos", "I miei video in corso", "Mijn begonnen video’s", "Meus vídeos em andamento"],
+"widget_name_channels": ["My channels", "Mes chaînes", "Mis canales", "Meine Sender", "I miei canali", "Mijn zenders", "Meus canais"],
+"widget_name_resume": ["Resume", "Reprendre", "Continuar", "Weiterschauen", "Riprendi", "Verder kijken", "Continuar"],
+"widget_desc_sites": ["Your video to resume and your favourite sites", "La vidéo à reprendre et tes sites préférés", "Tu vídeo para continuar y tus sitios favoritos", "Dein Video zum Weiterschauen und deine Lieblingsseiten", "Il video da riprendere e i tuoi siti preferiti", "Je video om verder te kijken en je favoriete sites", "Seu vídeo para continuar e seus sites favoritos"],
+"widget_desc_stack": ["Swipe through the series and films you’ve started", "Fais défiler tes séries et films commencés", "Desliza entre tus series y películas empezadas", "Blättere durch deine angefangenen Serien und Filme", "Scorri le serie e i film che hai iniziato", "Swipe door je begonnen series en films", "Deslize entre as séries e filmes que você começou"],
+"widget_desc_channels": ["Your TV channels in one tap", "Tes chaînes de télé en un appui", "Tus canales de TV en un toque", "Deine TV-Sender mit einem Tipp", "I tuoi canali TV con un tocco", "Je tv-zenders in één tik", "Seus canais de TV com um toque"],
+"widget_desc_resume": ["Your last video, ready to resume", "Ta dernière vidéo, prête à reprendre", "Tu último vídeo, listo para continuar", "Dein letztes Video, bereit zum Weiterschauen", "Il tuo ultimo video, pronto da riprendere", "Je laatste video, klaar om verder te kijken", "Seu último vídeo, pronto para continuar"],
+"widget_empty_channels": ["Play a channel: it will show up here.", "Lance une chaîne : elle apparaîtra ici.", "Reproduce un canal: aparecerá aquí.", "Starte einen Sender: Er erscheint hier.", "Avvia un canale: comparirà qui.", "Start een zender: die verschijnt hier.", "Abra um canal: ele aparecerá aqui."],
+"widget_sample_title": ["My favourite series", "Ma série préférée", "Mi serie favorita", "Meine Lieblingsserie", "La mia serie preferita", "Mijn favoriete serie", "Minha série favorita"],
+"widget_sample_sub": ["S1 · Ep. 3", "S1 · Ép. 3", "T1 · Ep. 3", "S1 · Folge 3", "S1 · Ep. 3", "S1 · Afl. 3", "T1 · Ep. 3"],
 "widget_desc": ["Pick up your video and your channels in one tap", "Reprends ta vidéo et tes chaînes en un geste", "Retoma tu vídeo y tus canales en un toque", "Video und Sender mit einem Tipp weiterschauen", "Riprendi il video e i canali con un tocco", "Ga verder met je video en zenders in één tik", "Retome seu vídeo e seus canais com um toque"],
 "widget_empty": ["Play a video or a channel: it will show up here.", "Lance une vidéo ou une chaîne : elle apparaîtra ici.", "Reproduce un vídeo o un canal: aparecerá aquí.", "Starte ein Video oder einen Sender: Er erscheint hier.", "Avvia un video o un canale: comparirà qui.", "Start een video of zender: die verschijnt hier.", "Abra um vídeo ou canal: ele aparecerá aqui."],
 "settings_share": ["Share the app", "Partager l’appli", "Compartir la app", "App teilen", "Condividi l’app", "App delen", "Compartilhar o app"],

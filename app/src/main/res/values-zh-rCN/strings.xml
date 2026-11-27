@@ -297,6 +297,18 @@
     <string name="report_no_mail">未找到邮件应用。已复制我们的地址：%1$s</string>
     <string name="widget_desc">一键继续观看视频和频道</string>
     <string name="widget_empty">播放视频或频道后会显示在这里。</string>
+    <string name="widget_name_home">继续观看 + 频道</string>
+    <string name="widget_name_sites">继续观看 + 网站</string>
+    <string name="widget_name_stack">我在看的视频</string>
+    <string name="widget_name_channels">我的频道</string>
+    <string name="widget_name_resume">继续观看</string>
+    <string name="widget_desc_sites">待继续的视频和常用网站</string>
+    <string name="widget_desc_stack">滑动浏览已开始的剧集和电影</string>
+    <string name="widget_desc_channels">一键打开电视频道</string>
+    <string name="widget_desc_resume">上次的视频，随时继续</string>
+    <string name="widget_empty_channels">播放频道后会显示在这里。</string>
+    <string name="widget_sample_title">我最爱的剧集</string>
+    <string name="widget_sample_sub">第1季 · 第3集</string>
     <plurals name="browser_found">
         <item quantity="other">%d 个视频</item>
     </plurals>

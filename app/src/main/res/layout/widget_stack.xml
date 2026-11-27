@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- « Mes vidéos en cours » : les cartes se font glisser (StackView). -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <StackView
+        android:id="@+id/stack"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:loopViews="true" />
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/widget_bg"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="@string/widget_empty"
+        android:textColor="#FFA9B2B5"
+        android:textSize="13sp" />
+</FrameLayout>

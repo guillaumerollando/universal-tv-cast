@@ -297,6 +297,18 @@
     <string name="report_no_mail">Không tìm thấy ứng dụng email. Đã sao chép địa chỉ của chúng tôi: %1$s</string>
     <string name="widget_desc">Xem tiếp video và kênh chỉ với một chạm</string>
     <string name="widget_empty">Mở một video hoặc kênh: nó sẽ hiện ở đây.</string>
+    <string name="widget_name_home">Xem tiếp + kênh</string>
+    <string name="widget_name_sites">Xem tiếp + trang web</string>
+    <string name="widget_name_stack">Video đang xem dở</string>
+    <string name="widget_name_channels">Kênh của tôi</string>
+    <string name="widget_name_resume">Xem tiếp</string>
+    <string name="widget_desc_sites">Video để xem tiếp và các trang yêu thích</string>
+    <string name="widget_desc_stack">Vuốt qua các phim bộ và phim đã bắt đầu</string>
+    <string name="widget_desc_channels">Kênh TV chỉ với một chạm</string>
+    <string name="widget_desc_resume">Video gần nhất, sẵn sàng xem tiếp</string>
+    <string name="widget_empty_channels">Mở một kênh: nó sẽ hiện ở đây.</string>
+    <string name="widget_sample_title">Phim bộ yêu thích</string>
+    <string name="widget_sample_sub">P1 · Tập 3</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

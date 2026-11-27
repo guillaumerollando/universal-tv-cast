@@ -297,6 +297,18 @@
     <string name="report_no_mail">메일 앱이 없습니다. 주소를 복사했습니다: %1$s</string>
     <string name="widget_desc">한 번의 탭으로 동영상과 채널 이어 보기</string>
     <string name="widget_empty">동영상이나 채널을 재생하면 여기에 표시됩니다.</string>
+    <string name="widget_name_home">이어 보기 + 채널</string>
+    <string name="widget_name_sites">이어 보기 + 사이트</string>
+    <string name="widget_name_stack">보던 동영상</string>
+    <string name="widget_name_channels">내 채널</string>
+    <string name="widget_name_resume">이어 보기</string>
+    <string name="widget_desc_sites">이어 볼 동영상과 즐겨 찾는 사이트</string>
+    <string name="widget_desc_stack">보던 시리즈와 영화를 넘겨 보기</string>
+    <string name="widget_desc_channels">TV 채널을 한 번의 탭으로</string>
+    <string name="widget_desc_resume">마지막 동영상, 바로 이어 보기</string>
+    <string name="widget_empty_channels">채널을 재생하면 여기에 표시됩니다.</string>
+    <string name="widget_sample_title">좋아하는 시리즈</string>
+    <string name="widget_sample_sub">S1 · 3화</string>
     <plurals name="browser_found">
         <item quantity="other">동영상 %d개</item>
     </plurals>

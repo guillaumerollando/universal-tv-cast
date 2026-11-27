@@ -295,7 +295,19 @@
   "share_text": "Xem video trên web và kênh TV trên màn hình lớn, miễn phí: %1$s",
   "report_no_mail": "Không tìm thấy ứng dụng email. Đã sao chép địa chỉ của chúng tôi: %1$s",
   "widget_desc": "Xem tiếp video và kênh chỉ với một chạm",
-  "widget_empty": "Mở một video hoặc kênh: nó sẽ hiện ở đây."
+  "widget_empty": "Mở một video hoặc kênh: nó sẽ hiện ở đây.",
+  "widget_name_home": "Xem tiếp + kênh",
+  "widget_name_sites": "Xem tiếp + trang web",
+  "widget_name_stack": "Video đang xem dở",
+  "widget_name_channels": "Kênh của tôi",
+  "widget_name_resume": "Xem tiếp",
+  "widget_desc_sites": "Video để xem tiếp và các trang yêu thích",
+  "widget_desc_stack": "Vuốt qua các phim bộ và phim đã bắt đầu",
+  "widget_desc_channels": "Kênh TV chỉ với một chạm",
+  "widget_desc_resume": "Video gần nhất, sẵn sàng xem tiếp",
+  "widget_empty_channels": "Mở một kênh: nó sẽ hiện ở đây.",
+  "widget_sample_title": "Phim bộ yêu thích",
+  "widget_sample_sub": "P1 · Tập 3"
  },
  "plurals": {
   "browser_found": {

@@ -295,7 +295,19 @@
   "share_text": "वेब वीडियो और टीवी चैनल अपनी बड़ी स्क्रीन पर मुफ़्त देखें: %1$s",
   "report_no_mail": "कोई ईमेल ऐप नहीं मिला। हमारा पता कॉपी हो गया: %1$s",
   "widget_desc": "एक टैप में अपना वीडियो और चैनल फिर से देखें",
-  "widget_empty": "कोई वीडियो या चैनल चलाएँ: वह यहाँ दिखेगा।"
+  "widget_empty": "कोई वीडियो या चैनल चलाएँ: वह यहाँ दिखेगा।",
+  "widget_name_home": "जारी रखें + चैनल",
+  "widget_name_sites": "जारी रखें + साइटें",
+  "widget_name_stack": "मेरे अधूरे वीडियो",
+  "widget_name_channels": "मेरे चैनल",
+  "widget_name_resume": "जारी रखें",
+  "widget_desc_sites": "जारी रखने के लिए वीडियो और आपकी पसंदीदा साइटें",
+  "widget_desc_stack": "शुरू की गई सीरीज़ और फ़िल्में स्वाइप करें",
+  "widget_desc_channels": "आपके टीवी चैनल एक टैप में",
+  "widget_desc_resume": "आपका पिछला वीडियो, जारी रखने को तैयार",
+  "widget_empty_channels": "कोई चैनल चलाएँ: वह यहाँ दिखेगा।",
+  "widget_sample_title": "मेरी पसंदीदा सीरीज़",
+  "widget_sample_sub": "S1 · E3"
  },
  "plurals": {
   "browser_found": {

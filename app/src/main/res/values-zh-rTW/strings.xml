@@ -297,6 +297,18 @@
     <string name="report_no_mail">找不到郵件應用程式。已複製我們的地址：%1$s</string>
     <string name="widget_desc">一鍵繼續觀看影片和頻道</string>
     <string name="widget_empty">播放影片或頻道後會顯示在這裡。</string>
+    <string name="widget_name_home">繼續觀看 + 頻道</string>
+    <string name="widget_name_sites">繼續觀看 + 網站</string>
+    <string name="widget_name_stack">我在看的影片</string>
+    <string name="widget_name_channels">我的頻道</string>
+    <string name="widget_name_resume">繼續觀看</string>
+    <string name="widget_desc_sites">待繼續的影片和常用網站</string>
+    <string name="widget_desc_stack">滑動瀏覽已開始的影集和電影</string>
+    <string name="widget_desc_channels">一鍵打開電視頻道</string>
+    <string name="widget_desc_resume">上次的影片，隨時繼續</string>
+    <string name="widget_empty_channels">播放頻道後會顯示在這裡。</string>
+    <string name="widget_sample_title">我最愛的影集</string>
+    <string name="widget_sample_sub">第1季 · 第3集</string>
     <plurals name="browser_found">
         <item quantity="other">%d 部影片</item>
     </plurals>

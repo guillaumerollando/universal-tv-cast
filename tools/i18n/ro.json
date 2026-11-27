@@ -295,7 +295,19 @@
   "share_text": "Vezi videoclipuri de pe web și canale TV pe ecranul mare, gratuit: %1$s",
   "report_no_mail": "Nu există nicio aplicație de e-mail. Adresa noastră a fost copiată: %1$s",
   "widget_desc": "Reia videoclipul și canalele dintr-o atingere",
-  "widget_empty": "Pornește un videoclip sau un canal: va apărea aici."
+  "widget_empty": "Pornește un videoclip sau un canal: va apărea aici.",
+  "widget_name_home": "Reia + canale",
+  "widget_name_sites": "Reia + site-uri",
+  "widget_name_stack": "Videoclipurile mele începute",
+  "widget_name_channels": "Canalele mele",
+  "widget_name_resume": "Reia",
+  "widget_desc_sites": "Videoclipul de reluat și site-urile preferate",
+  "widget_desc_stack": "Derulează serialele și filmele începute",
+  "widget_desc_channels": "Canalele TV dintr-o atingere",
+  "widget_desc_resume": "Ultimul tău videoclip, gata de reluat",
+  "widget_empty_channels": "Pornește un canal: va apărea aici.",
+  "widget_sample_title": "Serialul meu preferat",
+  "widget_sample_sub": "S1 · Ep. 3"
  },
  "plurals": {
   "browser_found": {

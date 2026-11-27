@@ -27,14 +27,15 @@ import studio.rollando.castor.ui.CastorApp
 import studio.rollando.castor.ui.CastorTheme
 import studio.rollando.castor.ui.Nav
 import studio.rollando.castor.ui.Tab
+import studio.rollando.castor.ui.WidgetKit
 
 class CastorApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         Castor.init(this)
         val app = this
-        studio.rollando.castor.data.Library.onChanged = { studio.rollando.castor.ui.HomeWidget.refresh(app) }
-        studio.rollando.castor.ui.HomeWidget.refresh(app)
+        studio.rollando.castor.data.Library.onChanged = { WidgetKit.refresh(app) }
+        WidgetKit.refresh(app)
     }
 }
 
@@ -135,11 +136,13 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         play(media)
     }
 
-    /** Appui sur le widget : reprendre la vidéo, ou relancer une chaîne. */
+    /** Appui sur un widget : reprendre une vidéo, relancer une chaîne, ouvrir un site. */
     private fun widget(intent: Intent?): Boolean {
-        val key = intent?.getStringExtra(studio.rollando.castor.ui.HomeWidget.EXTRA_KEY) ?: return intent?.action == studio.rollando.castor.ui.HomeWidget.ACTION_RESUME
+        intent ?: return false
+        val key = intent.getStringExtra(WidgetKit.EXTRA_KEY)
         when (intent.action) {
-            studio.rollando.castor.ui.HomeWidget.ACTION_RESUME -> {
+            WidgetKit.ACTION_RESUME -> {
+                key ?: return true
                 val r = studio.rollando.castor.ui.resumeItems(Library.recents.value, Library.bookmarks.value).firstOrNull { it.key == key } ?: return true
                 val page = r.openUrl
                 if (page != null) {
@@ -148,12 +151,14 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                     if (Nav.resuming.value == null) { Nav.resuming.value = page; Nav.nextEpisode.value = page }
                 } else r.recent?.let { Castor.open(it.toMedia()); Nav.tab.value = Tab.PLAYER }
             }
-            studio.rollando.castor.ui.HomeWidget.ACTION_CHANNEL -> {
+            WidgetKit.ACTION_CHANNEL -> {
+                key ?: return true
                 val c = Library.recents.value.firstOrNull { it.key == key && it.live } ?: return true
                 val page = c.pageUrl
                 if (page != null && page.startsWith("http")) Nav.openUrl.value = page
                 else { Castor.open(c.toMedia().copy(startSec = 0.0, title = c.channelName)); Nav.tab.value = Tab.PLAYER }
             }
+            WidgetKit.ACTION_SITE -> intent.getStringExtra(WidgetKit.EXTRA_URL)?.let { Nav.openUrl.value = it }
             else -> return false
         }
         return true

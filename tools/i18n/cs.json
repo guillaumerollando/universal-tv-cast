@@ -295,7 +295,19 @@
   "share_text": "Sleduj videa z webu a TV kanály na velké obrazovce, zdarma: %1$s",
   "report_no_mail": "Nenašla se žádná e-mailová aplikace. Naše adresa je zkopírovaná: %1$s",
   "widget_desc": "Pokračuj ve videu a kanálech jedním klepnutím",
-  "widget_empty": "Pusť video nebo kanál: objeví se tady."
+  "widget_empty": "Pusť video nebo kanál: objeví se tady.",
+  "widget_name_home": "Pokračovat + kanály",
+  "widget_name_sites": "Pokračovat + weby",
+  "widget_name_stack": "Rozkoukaná videa",
+  "widget_name_channels": "Moje kanály",
+  "widget_name_resume": "Pokračovat",
+  "widget_desc_sites": "Video k dokoukání a oblíbené weby",
+  "widget_desc_stack": "Listuj rozkoukanými seriály a filmy",
+  "widget_desc_channels": "Tvoje TV kanály jedním klepnutím",
+  "widget_desc_resume": "Tvoje poslední video, připravené k pokračování",
+  "widget_empty_channels": "Pusť kanál: objeví se tady.",
+  "widget_sample_title": "Můj oblíbený seriál",
+  "widget_sample_sub": "S1 · D3"
  },
  "plurals": {
   "browser_found": {

@@ -57,11 +57,11 @@
             </intent-filter>
         </activity>
 
-        <!-- Widget de l'écran d'accueil : reprendre la vidéo, dernières chaînes. -->
+        <!-- Widgets de l'écran d'accueil (ui/Widgets.kt), un par usage. -->
         <receiver
             android:name=".ui.HomeWidget"
             android:exported="false"
-            android:label="@string/app_name">
+            android:label="@string/widget_name_home">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -69,6 +69,54 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_home_info" />
         </receiver>
+        <receiver
+            android:name=".ui.ResumeSitesWidget"
+            android:exported="false"
+            android:label="@string/widget_name_sites">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_resume_sites_info" />
+        </receiver>
+        <receiver
+            android:name=".ui.StackWidget"
+            android:exported="false"
+            android:label="@string/widget_name_stack">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_stack_info" />
+        </receiver>
+        <receiver
+            android:name=".ui.ChannelsWidget"
+            android:exported="false"
+            android:label="@string/widget_name_channels">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_channels_info" />
+        </receiver>
+        <receiver
+            android:name=".ui.ResumeWidget"
+            android:exported="false"
+            android:label="@string/widget_name_resume">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_resume_info" />
+        </receiver>
+        <service
+            android:name=".ui.WidgetListService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <service
             android:name=".cast.CastService"

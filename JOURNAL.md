@@ -1132,3 +1132,15 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
 
 **Pas fait**
 - Aperçu du widget dans la liste des widgets : simple (logo blanc), pas une vraie capture.
+
+## 2026-11-27 — Famille de widgets
+**Fait** (`ui/Widgets.kt`, un fichier pour tous ; `WidgetKit` dessine, `WidgetListService` remplit les listes)
+- « Reprendre + chaînes » (4×2, le premier), « Reprendre + sites » (4×2, sites favoris avec leur icône),
+  « Mes vidéos en cours » (3×3, cartes à faire glisser : StackView), « Mes chaînes » (4×1, grille qui grandit avec
+  le widget), « Reprendre » (2×2, affiche en grand).
+- Aperçus soignés dans la liste des widgets (affiche imaginaire en dégradé, chaînes en couleurs, textes traduits).
+- Vérifié sur émulateur : chaque widget affiché avec les vraies données sauf le petit « Reprendre » (même carte que
+  « Mes vidéos en cours », vérifiée) ; glisser une carte puis l'ouvrir relance la vidéo ; sites et chaînes s'ouvrent.
+
+**Pas fait**
+- Le petit « Reprendre » n'a pas été posé sur l'écran de l'émulateur (seulement son aperçu).

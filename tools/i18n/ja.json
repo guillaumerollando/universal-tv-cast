@@ -295,7 +295,19 @@
   "share_text": "ウェブ動画とテレビ番組を大画面で無料で: %1$s",
   "report_no_mail": "メールアプリが見つかりません。アドレスをコピーしました: %1$s",
   "widget_desc": "動画とチャンネルをワンタップで再開",
-  "widget_empty": "動画やチャンネルを再生すると、ここに表示されます。"
+  "widget_empty": "動画やチャンネルを再生すると、ここに表示されます。",
+  "widget_name_home": "続きを見る＋チャンネル",
+  "widget_name_sites": "続きを見る＋サイト",
+  "widget_name_stack": "視聴中の動画",
+  "widget_name_channels": "マイチャンネル",
+  "widget_name_resume": "続きを見る",
+  "widget_desc_sites": "続きの動画とお気に入りのサイト",
+  "widget_desc_stack": "見始めたシリーズや映画をスワイプ",
+  "widget_desc_channels": "テレビのチャンネルをワンタップで",
+  "widget_desc_resume": "最後の動画、すぐに再開",
+  "widget_empty_channels": "チャンネルを再生すると、ここに表示されます。",
+  "widget_sample_title": "お気に入りのシリーズ",
+  "widget_sample_sub": "S1 · 第3話"
  },
  "plurals": {
   "browser_found": {

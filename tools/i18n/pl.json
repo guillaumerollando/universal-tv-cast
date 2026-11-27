@@ -295,7 +295,19 @@
   "share_text": "Oglądaj filmy z sieci i kanały TV na dużym ekranie, za darmo: %1$s",
   "report_no_mail": "Nie znaleziono aplikacji poczty. Nasz adres został skopiowany: %1$s",
   "widget_desc": "Wróć do filmu i kanałów jednym dotknięciem",
-  "widget_empty": "Włącz film lub kanał: pojawi się tutaj."
+  "widget_empty": "Włącz film lub kanał: pojawi się tutaj.",
+  "widget_name_home": "Wznów + kanały",
+  "widget_name_sites": "Wznów + strony",
+  "widget_name_stack": "Rozpoczęte filmy",
+  "widget_name_channels": "Moje kanały",
+  "widget_name_resume": "Wznów",
+  "widget_desc_sites": "Film do dokończenia i ulubione strony",
+  "widget_desc_stack": "Przewijaj rozpoczęte seriale i filmy",
+  "widget_desc_channels": "Twoje kanały TV jednym dotknięciem",
+  "widget_desc_resume": "Twój ostatni film, gotowy do wznowienia",
+  "widget_empty_channels": "Włącz kanał: pojawi się tutaj.",
+  "widget_sample_title": "Mój ulubiony serial",
+  "widget_sample_sub": "S1 · Odc. 3"
  },
  "plurals": {
   "browser_found": {

@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Généré par tools/strings.py : ne pas modifier à la main. -->
 <resources>
+    <string name="widget_name_home">Continuar + canais</string>
+    <string name="widget_name_sites">Continuar + sites</string>
+    <string name="widget_name_stack">Meus vídeos em andamento</string>
+    <string name="widget_name_channels">Meus canais</string>
+    <string name="widget_name_resume">Continuar</string>
+    <string name="widget_desc_sites">Seu vídeo para continuar e seus sites favoritos</string>
+    <string name="widget_desc_stack">Deslize entre as séries e filmes que você começou</string>
+    <string name="widget_desc_channels">Seus canais de TV com um toque</string>
+    <string name="widget_desc_resume">Seu último vídeo, pronto para continuar</string>
+    <string name="widget_empty_channels">Abra um canal: ele aparecerá aqui.</string>
+    <string name="widget_sample_title">Minha série favorita</string>
+    <string name="widget_sample_sub">T1 · Ep. 3</string>
     <string name="widget_desc">Retome seu vídeo e seus canais com um toque</string>
     <string name="widget_empty">Abra um vídeo ou canal: ele aparecerá aqui.</string>
     <string name="settings_share">Compartilhar o app</string>

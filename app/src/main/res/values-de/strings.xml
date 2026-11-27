@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Généré par tools/strings.py : ne pas modifier à la main. -->
 <resources>
+    <string name="widget_name_home">Weiterschauen + Sender</string>
+    <string name="widget_name_sites">Weiterschauen + Websites</string>
+    <string name="widget_name_stack">Meine angefangenen Videos</string>
+    <string name="widget_name_channels">Meine Sender</string>
+    <string name="widget_name_resume">Weiterschauen</string>
+    <string name="widget_desc_sites">Dein Video zum Weiterschauen und deine Lieblingsseiten</string>
+    <string name="widget_desc_stack">Blättere durch deine angefangenen Serien und Filme</string>
+    <string name="widget_desc_channels">Deine TV-Sender mit einem Tipp</string>
+    <string name="widget_desc_resume">Dein letztes Video, bereit zum Weiterschauen</string>
+    <string name="widget_empty_channels">Starte einen Sender: Er erscheint hier.</string>
+    <string name="widget_sample_title">Meine Lieblingsserie</string>
+    <string name="widget_sample_sub">S1 · Folge 3</string>
     <string name="widget_desc">Video und Sender mit einem Tipp weiterschauen</string>
     <string name="widget_empty">Starte ein Video oder einen Sender: Er erscheint hier.</string>
     <string name="settings_share">App teilen</string>

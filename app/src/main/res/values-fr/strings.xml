@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Généré par tools/strings.py : ne pas modifier à la main. -->
 <resources>
+    <string name="widget_name_home">Reprendre + chaînes</string>
+    <string name="widget_name_sites">Reprendre + sites</string>
+    <string name="widget_name_stack">Mes vidéos en cours</string>
+    <string name="widget_name_channels">Mes chaînes</string>
+    <string name="widget_name_resume">Reprendre</string>
+    <string name="widget_desc_sites">La vidéo à reprendre et tes sites préférés</string>
+    <string name="widget_desc_stack">Fais défiler tes séries et films commencés</string>
+    <string name="widget_desc_channels">Tes chaînes de télé en un appui</string>
+    <string name="widget_desc_resume">Ta dernière vidéo, prête à reprendre</string>
+    <string name="widget_empty_channels">Lance une chaîne : elle apparaîtra ici.</string>
+    <string name="widget_sample_title">Ma série préférée</string>
+    <string name="widget_sample_sub">S1 · Ép. 3</string>
     <string name="widget_desc">Reprends ta vidéo et tes chaînes en un geste</string>
     <string name="widget_empty">Lance une vidéo ou une chaîne : elle apparaîtra ici.</string>
     <string name="settings_share">Partager l’appli</string>

@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Généré par tools/strings.py : ne pas modifier à la main. -->
 <resources>
+    <string name="widget_name_home">Riprendi + canali</string>
+    <string name="widget_name_sites">Riprendi + siti</string>
+    <string name="widget_name_stack">I miei video in corso</string>
+    <string name="widget_name_channels">I miei canali</string>
+    <string name="widget_name_resume">Riprendi</string>
+    <string name="widget_desc_sites">Il video da riprendere e i tuoi siti preferiti</string>
+    <string name="widget_desc_stack">Scorri le serie e i film che hai iniziato</string>
+    <string name="widget_desc_channels">I tuoi canali TV con un tocco</string>
+    <string name="widget_desc_resume">Il tuo ultimo video, pronto da riprendere</string>
+    <string name="widget_empty_channels">Avvia un canale: comparirà qui.</string>
+    <string name="widget_sample_title">La mia serie preferita</string>
+    <string name="widget_sample_sub">S1 · Ep. 3</string>
     <string name="widget_desc">Riprendi il video e i canali con un tocco</string>
     <string name="widget_empty">Avvia un video o un canale: comparirà qui.</string>
     <string name="settings_share">Condividi l’app</string>

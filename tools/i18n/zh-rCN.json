@@ -295,7 +295,19 @@
   "share_text": "在大屏幕上免费观看网络视频和电视频道：%1$s",
   "report_no_mail": "未找到邮件应用。已复制我们的地址：%1$s",
   "widget_desc": "一键继续观看视频和频道",
-  "widget_empty": "播放视频或频道后会显示在这里。"
+  "widget_empty": "播放视频或频道后会显示在这里。",
+  "widget_name_home": "继续观看 + 频道",
+  "widget_name_sites": "继续观看 + 网站",
+  "widget_name_stack": "我在看的视频",
+  "widget_name_channels": "我的频道",
+  "widget_name_resume": "继续观看",
+  "widget_desc_sites": "待继续的视频和常用网站",
+  "widget_desc_stack": "滑动浏览已开始的剧集和电影",
+  "widget_desc_channels": "一键打开电视频道",
+  "widget_desc_resume": "上次的视频，随时继续",
+  "widget_empty_channels": "播放频道后会显示在这里。",
+  "widget_sample_title": "我最爱的剧集",
+  "widget_sample_sub": "第1季 · 第3集"
  },
  "plurals": {
   "browser_found": {

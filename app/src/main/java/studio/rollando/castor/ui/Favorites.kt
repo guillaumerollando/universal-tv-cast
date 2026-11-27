@@ -58,7 +58,7 @@ import java.io.File
 
 /** Logos des sites (favicons), donnés par le navigateur lui-même et gardés sur le téléphone. */
 object Favicons {
-    private fun file(ctx: Context, host: String) = File(File(ctx.filesDir, "favicons").apply { mkdirs() }, host.replace('/', '_') + ".png")
+    internal fun file(ctx: Context, host: String) = File(File(ctx.filesDir, "favicons").apply { mkdirs() }, host.replace('/', '_') + ".png")
 
     fun save(ctx: Context, host: String, icon: Bitmap) {
         if (host.isBlank()) return

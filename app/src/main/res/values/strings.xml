@@ -119,6 +119,7 @@
     <string name="lan_sort_name">Name</string>
     <string name="lan_sort_recent">Recently added</string>
     <string name="lan_sort_year">Year</string>
+    <string name="lan_show_details">Titles under posters</string>
     <string name="lan_hide_watched">Hide watched</string>
     <string name="lan_season">Season %1$d</string>
     <string name="lan_watched">Watched</string>

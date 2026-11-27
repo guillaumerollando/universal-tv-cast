@@ -192,6 +192,7 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
     var sort by remember { mutableStateOf(LanStore.sort) }
     var sortDesc by remember { mutableStateOf(LanStore.sortDesc) }
     var hideWatched by remember { mutableStateOf(LanStore.hideWatched) }
+    var showDetails by remember { mutableStateOf(LanStore.showDetails) }
     fun up() {
         path.removeAt(path.lastIndex)
         if (path.isEmpty()) { entries = null; error = null; loading = false } else open(path.last())
@@ -293,6 +294,11 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
                                 leadingIcon = { Checkbox(hideWatched, null) },
                                 onClick = { hideWatched = !hideWatched; LanStore.hideWatched = hideWatched; menu = false },
                             )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.lan_show_details)) },
+                                leadingIcon = { Checkbox(showDetails, null) },
+                                onClick = { showDetails = !showDetails; LanStore.showDetails = showDetails; menu = false },
+                            )
                         }
                     }
                 }
@@ -374,7 +380,7 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
                     else -> LanFolderView(
                         entries = entries.orEmpty(),
                         parents = path.map { it.title },
-                        sort = sort, sortDesc = sortDesc, hideWatched = hideWatched,
+                        sort = sort, sortDesc = sortDesc, hideWatched = hideWatched, showDetails = showDetails,
                         onFolder = { f -> go(Place(f.device!!, f.ref, f.name)) },
                         onPlay = { e, all, infos -> play(e, all, infos) },
                         // Contenu d'un sous-dossier (les saisons d'une série, montrées dépliables).

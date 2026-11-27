@@ -88,6 +88,7 @@ internal fun LanFolderView(
     sort: String,
     sortDesc: Boolean,
     hideWatched: Boolean,
+    showDetails: Boolean = false,
     onFolder: (LanEntry) -> Unit,
     onPlay: (LanEntry, List<LanEntry>, Map<String, Catalog.Info>) -> Unit,
     load: suspend (LanEntry) -> List<LanEntry> = { emptyList() },
@@ -185,7 +186,7 @@ internal fun LanFolderView(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(start = 14.dp, end = 14.dp, top = 4.dp, bottom = 24.dp + LocalBottomInset.current),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(if (showDetails) 12.dp else 10.dp),
     ) {
         val full: (androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope) -> GridItemSpan = { GridItemSpan(it.maxLineSpan) }
         if (episodesMode) {
@@ -234,7 +235,7 @@ internal fun LanFolderView(
                 }
             }
         }
-        items(if (seriesRoot) folders - seasonFolders.toSet() else folders, key = { "d" + it.ref }) { f -> FolderPoster(f, parents) { onFolder(f) } }
+        items(if (seriesRoot) folders - seasonFolders.toSet() else folders, key = { "d" + it.ref }) { f -> FolderPoster(f, parents, showDetails) { onFolder(f) } }
         if (episodesMode) {
             videos.groupBy { info(it).season ?: 0 }.toSortedMap().forEach { (season, eps) ->
                 item(span = full, key = "s$season") {
@@ -246,7 +247,15 @@ internal fun LanFolderView(
                 }
             }
         } else {
-            items(videos, key = { "v" + it.ref }) { v -> PosterTile(v, info(v), sidecar(v)?.let(::uriOf) ?: info(v).cover, watched[v.url]) { play(v) } }
+            // Badge sur l'affiche : ce qui sert au tri en cours (année, note).
+            val badge: (Catalog.Info) -> String? = when (sort) {
+                "year" -> { i -> i.year?.toString() }
+                "rating" -> { i -> i.rating?.let { "★ %.1f".format(it) } }
+                else -> { _ -> null }
+            }
+            items(videos, key = { "v" + it.ref }) { v ->
+                PosterTile(v, info(v), sidecar(v)?.let(::uriOf) ?: info(v).cover, watched[v.url], showDetails, badge(info(v))) { play(v) }
+            }
         }
         if (others.isNotEmpty()) {
             if (videos0.isNotEmpty()) item(span = full) {
@@ -302,7 +311,7 @@ private fun FileImage(path: String, modifier: Modifier) {
 }
 
 @Composable
-private fun WatchOverlay(w: LanStore.Watch?, modifier: Modifier = Modifier) {
+private fun WatchOverlay(w: LanStore.Watch?, modifier: Modifier = Modifier, checkAtStart: Boolean = false) {
     val c = MaterialTheme.colorScheme
     Box(modifier) {
         w?.progress?.let { p ->
@@ -311,7 +320,7 @@ private fun WatchOverlay(w: LanStore.Watch?, modifier: Modifier = Modifier) {
             }
         }
         if (w?.finished == true) Box(
-            Modifier.align(Alignment.TopEnd).padding(6.dp).size(22.dp).clip(CircleShape).background(c.primary),
+            Modifier.align(if (checkAtStart) Alignment.TopStart else Alignment.TopEnd).padding(6.dp).size(22.dp).clip(CircleShape).background(c.primary),
             contentAlignment = Alignment.Center,
         ) { Icon(Icons.Rounded.Check, stringResource(R.string.lan_watched), tint = c.onPrimary, modifier = Modifier.size(15.dp)) }
     }
@@ -327,25 +336,38 @@ private fun genreLabel(code: String): String {
     return if (id != 0) stringResource(id) else code
 }
 
+/**
+ * Un film : l'affiche seule par défaut (le titre y est déjà, comme sur les applis de streaming) ; le titre n'est
+ * écrit que sur une jaquette sans image. [badge] : l'année ou la note quand on trie dessus, en haut à droite.
+ * [details] : titre, année et note sous l'affiche (option « Titres sous les affiches »).
+ */
 @Composable
-private fun PosterTile(v: LanEntry, info: Catalog.Info, local: String?, w: LanStore.Watch?, onClick: () -> Unit) {
+private fun PosterTile(v: LanEntry, info: Catalog.Info, local: String?, w: LanStore.Watch?, details: Boolean, badge: String?, onClick: () -> Unit) {
     val c = MaterialTheme.colorScheme
-    val desc = listOfNotNull(info.title, info.year?.toString()).joinToString(", ")
+    val desc = listOfNotNull(info.title, info.year?.toString(), info.rating?.let { "★ %.1f".format(it) }).joinToString(", ")
     Column(Modifier.clip(RoundedCornerShape(12.dp)).clickable(onClick = onClick).semantics { contentDescription = desc }) {
         Box(Modifier.fillMaxWidth().aspectRatio(2f / 3f)) {
             PosterArt(info.poster ?: v.thumb, local, info.title, Icons.Rounded.Movie, Modifier.fillMaxSize())
-            WatchOverlay(w, Modifier.fillMaxSize().clip(RoundedCornerShape(12.dp)))
+            WatchOverlay(w, Modifier.fillMaxSize().clip(RoundedCornerShape(12.dp)), checkAtStart = badge != null && !details)
+            if (badge != null && !details) Text(
+                badge, style = MaterialTheme.typography.labelMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                color = Color.White,
+                modifier = Modifier.align(Alignment.TopEnd).padding(6.dp).clip(RoundedCornerShape(8.dp))
+                    .background(Color.Black.copy(alpha = 0.62f)).padding(horizontal = 7.dp, vertical = 2.dp),
+            )
         }
-        Spacer(Modifier.height(6.dp))
-        Text(info.title, style = MaterialTheme.typography.labelLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
-        val sub = listOfNotNull(info.year?.toString(), info.rating?.let { "★ %.1f".format(it) })
-        if (sub.isNotEmpty()) Text(sub.joinToString("  ·  "), style = MaterialTheme.typography.labelSmall, color = c.onSurfaceVariant)
+        if (details) {
+            Spacer(Modifier.height(6.dp))
+            Text(info.title, style = MaterialTheme.typography.labelLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            val sub = listOfNotNull(info.year?.toString(), info.rating?.let { "★ %.1f".format(it) })
+            if (sub.isNotEmpty()) Text(sub.joinToString("  ·  "), style = MaterialTheme.typography.labelSmall, color = c.onSurfaceVariant)
+        }
     }
 }
 
 /** Dossier en tuile : l'affiche de la série ou du film quand on la reconnaît, sinon une jaquette « dossier ». */
 @Composable
-private fun FolderPoster(f: LanEntry, parents: List<String>, onClick: () -> Unit) {
+private fun FolderPoster(f: LanEntry, parents: List<String>, details: Boolean = false, onClick: () -> Unit) {
     val c = MaterialTheme.colorScheme
     val season = SEASON.find(f.name.trim())
     val art by produceState<Catalog.Info?>(null, f.ref) {
@@ -367,8 +389,11 @@ private fun FolderPoster(f: LanEntry, parents: List<String>, onClick: () -> Unit
                 contentAlignment = Alignment.Center,
             ) { Icon(Icons.Rounded.Folder, null, tint = c.primary, modifier = Modifier.size(14.dp)) }
         }
-        Spacer(Modifier.height(6.dp))
-        Text(title, style = MaterialTheme.typography.labelLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
+        // Sous l'affiche : le nom, sauf sur une affiche reconnue (le titre y est) ; toujours pour une saison.
+        if (details || season != null || art?.poster == null) {
+            Spacer(Modifier.height(6.dp))
+            Text(title, style = MaterialTheme.typography.labelLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
+        }
     }
 }
 

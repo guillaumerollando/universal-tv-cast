@@ -425,7 +425,8 @@
   "style_icon": "Pictograma aplicației",
   "style_icon_note": "Noua pictogramă apare după ce ieșiți din aplicație. Poate dispărea o clipă de pe ecranul principal.",
   "notice_tv_standby": "%1$s este în standby. Porniți-l din telecomandă, apoi încercați din nou.",
-  "audio_on_tv_note": "Alegeți-o cu telecomanda televizorului."
+  "audio_on_tv_note": "Alegeți-o cu telecomanda televizorului.",
+  "lan_show_details": "Titluri sub afișe"
  },
  "plurals": {
   "browser_found": {

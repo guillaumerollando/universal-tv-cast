@@ -146,7 +146,7 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
     // L'ambiance (image du film floutée) est dessinée derrière tout l'écran, en-tête compris : voir Ambient().
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         if (state.onPhone) Unit
         else if (film) FilmHeader(state)
@@ -318,7 +318,8 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
         }
         // Direct : pas de sous-titres à régler ; à la place, de quoi zapper. Le mode de lecture des listes HLS
         // (flux continu ou non) se règle seulement dans les Réglages.
-        if (channel) ZapSection(media) else { AudioCard(state); SubtitlesCard(state) }
+        // Langue et sous-titres : deux réglages de même nature, rapprochés.
+        if (channel) ZapSection(media) else Column(verticalArrangement = Arrangement.spacedBy(8.dp)) { AudioCard(state); SubtitlesCard(state) }
         Spacer(Modifier.height(8.dp + LocalBottomInset.current))
     }
     }

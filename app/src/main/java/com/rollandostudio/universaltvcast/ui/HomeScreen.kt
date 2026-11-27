@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -121,57 +122,23 @@ fun HomeScreen(
         var showLink by remember { mutableStateOf(false) }
         androidx.compose.runtime.LaunchedEffect(showLink) { if (showLink) { kotlinx.coroutines.delay(3200); showLink = false } }
         LazyColumn(
-            contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp + LocalBottomInset.current),
-            verticalArrangement = Arrangement.spacedBy(14.dp),
+            contentPadding = PaddingValues(top = 4.dp, bottom = 8.dp + LocalBottomInset.current),
+            verticalArrangement = Arrangement.spacedBy(18.dp),
         ) {
-            if (resume.isNotEmpty()) {
-                item {
-                    Row(Modifier.padding(start = 16.dp, end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                        SectionTitle(stringResource(R.string.home_resume), Modifier.weight(1f).semantics { heading() })
-                        if (resume.size > 2) TextButton(onClick = { showAll = 1 }) {
-                            Text(stringResource(R.string.home_see_all))
-                            Spacer(Modifier.width(4.dp))
-                            Icon(Icons.AutoMirrored.Rounded.ArrowForward, null, Modifier.size(18.dp))
-                        }
-                    }
-                }
-                item {
+            // Chaque rubrique : son titre collé à son contenu ; l'espace entre rubriques marque la hiérarchie.
+            if (resume.isNotEmpty()) item {
+                Column {
+                    SectionHeader(stringResource(R.string.home_resume), if (resume.size > 2) stringResource(R.string.home_see_all) else null) { showAll = 1 }
                     LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         items(resume, key = { "r" + it.key }) { r -> ResumeCard(r, onBrowse) }
                     }
                 }
             }
-            if (channels.isNotEmpty()) {
-                item {
-                    Row(Modifier.padding(start = 16.dp, end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                        SectionTitle(stringResource(R.string.home_channels), Modifier.weight(1f).semantics { heading() })
-                        TextButton(onClick = { Nav.iptv.value = "" }) {
-                            Text(stringResource(R.string.iptv_all_channels))
-                            Spacer(Modifier.width(4.dp))
-                            Icon(Icons.AutoMirrored.Rounded.ArrowForward, null, Modifier.size(18.dp))
-                        }
-                    }
-                }
-                item {
-                    LazyRow(contentPadding = PaddingValues(horizontal = ChannelTiles.edge), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
-                        items(channels, key = { "c" + it.key }) { ch -> ChannelTile(ch, onBrowse) }
-                    }
-                }
-            }
-            // « Mes favoris » : dossiers du réseau mis en ★ (NAS, ordinateur), puis les sites.
-            if (sites.isNotEmpty() || folders.isNotEmpty() || favChannels.isNotEmpty()) {
-                item {
-                    Row(Modifier.padding(start = 16.dp, end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                        SectionTitle(stringResource(if (folders.isEmpty() && favChannels.isEmpty()) R.string.home_sites else R.string.home_favorites),
-                            Modifier.weight(1f).semantics { heading() })
-                        if (sites.size > 4) TextButton(onClick = { showAll = 2 }) {
-                            Text(stringResource(R.string.home_see_all))
-                            Spacer(Modifier.width(4.dp))
-                            Icon(Icons.AutoMirrored.Rounded.ArrowForward, null, Modifier.size(18.dp))
-                        }
-                    }
-                }
-                item {
+            // « Mes favoris » juste sous « Reprendre » : dossiers du réseau mis en ★ (NAS, ordinateur), chaînes en ★, sites.
+            if (sites.isNotEmpty() || folders.isNotEmpty() || favChannels.isNotEmpty()) item {
+                Column {
+                    SectionHeader(stringResource(if (folders.isEmpty() && favChannels.isEmpty()) R.string.home_sites else R.string.home_favorites),
+                        if (sites.size > 4) stringResource(R.string.home_see_all) else null) { showAll = 2 }
                     LazyRow(contentPadding = PaddingValues(horizontal = 12.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                         items(folders, key = { "f" + it.key }) { f -> FolderTile(f, Modifier.width(72.dp)) }
                         items(favChannels, key = { "c" + it.url }) { ch -> FavChannelTile(ch, onBrowse) }
@@ -179,8 +146,16 @@ fun HomeScreen(
                     }
                 }
             }
-            item { SectionTitle(stringResource(R.string.home_cast_more), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
-            item {
+            if (channels.isNotEmpty()) item {
+                Column {
+                    SectionHeader(stringResource(R.string.home_channels), stringResource(R.string.iptv_all_channels)) { Nav.iptv.value = "" }
+                    LazyRow(contentPadding = PaddingValues(horizontal = ChannelTiles.edge), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
+                        items(channels, key = { "c" + it.key }) { ch -> ChannelTile(ch, onBrowse) }
+                    }
+                }
+            }
+            item { Column {
+                SectionHeader(stringResource(R.string.home_cast_more), null) {}
                 Column(Modifier.padding(horizontal = 16.dp).bringIntoViewRequester(linkSpot)) {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         SmallTile(Icons.Rounded.Public, stringResource(R.string.home_browse_tile), Modifier.weight(1f)) { onBrowse(null) }
@@ -191,7 +166,7 @@ fun HomeScreen(
                     }
                     MoreSources(onPickFile, showLists = channels.isEmpty()) // sinon, déjà en tête de « Chaînes »
                 }
-            }
+            } }
             // La découverte continue pas à pas : ce qui n'a pas encore été essayé reste proposé (une liste de chaînes,
             // un site), et disparaît une fois fait.
             item {
@@ -600,6 +575,23 @@ private fun MoreSources(onPickFile: () -> Unit, showLists: Boolean = true) {
             Icon(Icons.Rounded.FolderOpen, null, Modifier.size(18.dp))
             Spacer(Modifier.width(6.dp))
             Text(stringResource(R.string.home_files_other))
+        }
+    }
+}
+
+/**
+ * Titre de rubrique de l'accueil, au plus près de son contenu : le lien « Tout voir » éventuel reste petit pour ne pas
+ * grandir la ligne.
+ */
+@Composable
+private fun SectionHeader(title: String, action: String?, onAction: () -> Unit) {
+    Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 4.dp, bottom = 4.dp).heightIn(min = 32.dp), verticalAlignment = Alignment.CenterVertically) {
+        Text(title, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f).semantics { heading() })
+        if (action != null) TextButton(onClick = onAction, contentPadding = PaddingValues(horizontal = 10.dp, vertical = 0.dp),
+            modifier = Modifier.heightIn(min = 32.dp)) {
+            Text(action)
+            Spacer(Modifier.width(4.dp))
+            Icon(Icons.AutoMirrored.Rounded.ArrowForward, null, Modifier.size(18.dp))
         }
     }
 }

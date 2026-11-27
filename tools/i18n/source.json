@@ -1687,6 +1687,10 @@
   "audio_on_tv_note": {
    "en": "Choose it with your TV remote.",
    "fr": "Choisis-la avec la télécommande de la télé."
+  },
+  "lan_show_details": {
+   "en": "Titles under posters",
+   "fr": "Titres sous les affiches"
   }
  },
  "plurals": {

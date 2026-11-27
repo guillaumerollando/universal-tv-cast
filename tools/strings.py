@@ -192,6 +192,7 @@ S = {
 "lan_sort_name": ["Name", "Nom", "Nombre", "Name", "Nome", "Naam", "Nome"],
 "lan_sort_recent": ["Recently added", "Ajoutés récemment", "Añadidos recientemente", "Zuletzt hinzugefügt", "Aggiunti di recente", "Recent toegevoegd", "Adicionados recentemente"],
 "lan_sort_year": ["Year", "Année", "Año", "Jahr", "Anno", "Jaar", "Ano"],
+"lan_show_details": ["Titles under posters", "Titres sous les affiches", "Títulos bajo los pósteres", "Titel unter den Postern", "Titoli sotto le locandine", "Titels onder de posters", "Títulos sob os pôsteres"],
 "lan_hide_watched": ["Hide watched", "Masquer les vus", "Ocultar vistos", "Gesehene ausblenden", "Nascondi visti", "Bekeken verbergen", "Ocultar assistidos"],
 "lan_season": ["Season %1$d", "Saison %1$d", "Temporada %1$d", "Staffel %1$d", "Stagione %1$d", "Seizoen %1$d", "Temporada %1$d"],
 "lan_watched": ["Watched", "Vu", "Visto", "Gesehen", "Visto", "Bekeken", "Assistido"],

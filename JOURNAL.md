@@ -1570,3 +1570,20 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   reste). Sur la télé, la carte « Langue » d'un fichier liste ses voix et, au toucher, dit « Choisis-la avec la
   télécommande de la télé » (23 langues). Sur le téléphone, le choix reste comme avant. HLS / DASH : inchangés
   (choix depuis le téléphone, la télé ne voit qu'un flux).
+
+## 2026-11-28 — À tester sur un appareil Google Cast (Chromecast, Google TV)
+- Tous les essais télé sont faits sur la Philips Titan OS (le cas le plus difficile : pas d'annonce Cast, DLNA
+  capricieux). À vérifier sur un vrai appareil Cast, dès que Guillaume en a un sous la main : apparition / disparition
+  selon allumé ou éteint, lecture des MKV / MP4 (Dolby Vision, Atmos), sous-titres, et surtout la langue d'un
+  fichier : la carte « Langue » renvoie à la télécommande, ce qui ne marche sans doute pas sur Cast (piloter la voix
+  par Cast, ou dire « voix d'origine »).
+
+## 2026-11-28 — Retouches visuelles : accueil, lecture, vidéothèque
+- Accueil : « Mes favoris » juste sous « Reprendre », les chaînes ensuite ; chaque titre de rubrique collé à son
+  contenu (même élément de liste, lien « Tout voir » compact), écart plus grand entre rubriques pour la hiérarchie.
+- Écran de lecture : éléments resserrés (12 dp au lieu de 16), « Langue » et « Sous-titres » rapprochés (8 dp).
+- Vidéothèque du réseau : affiches seules par défaut, comme les applis de streaming (le titre n'est écrit que sur
+  une jaquette sans image, et sous un dossier « Saison ») ; badge en haut à droite de l'affiche avec l'année (tri
+  par année) ou la note (tri par note), la coche « vu » passe alors à gauche ; option « Titres sous les affiches »
+  dans le menu de tri pour revoir titre, année et note (23 langues). « Reprendre » garde ses titres (les images
+  des épisodes en cours ne les montrent pas toujours). Vérifié par captures sur émulateur.

@@ -45,6 +45,10 @@ object LanStore {
     var hideWatched: Boolean
         get() = prefs.getBoolean("hide_watched", false)
         set(v) { prefs.edit().putBoolean("hide_watched", v).apply() }
+    /** Titre, année et note sous chaque affiche ; par défaut non : l'affiche seule, comme les applis de streaming. */
+    var showDetails: Boolean
+        get() = prefs.getBoolean("show_details", false)
+        set(v) { prefs.edit().putBoolean("show_details", v).apply() }
 
     fun all(): List<Saved> = runCatching {
         val a = JSONArray(prefs.getString("devices", "[]"))

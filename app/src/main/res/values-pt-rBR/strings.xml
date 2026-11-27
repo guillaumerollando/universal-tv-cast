@@ -118,6 +118,7 @@
     <string name="lan_sort_name">Nome</string>
     <string name="lan_sort_recent">Adicionados recentemente</string>
     <string name="lan_sort_year">Ano</string>
+    <string name="lan_show_details">Títulos sob os pôsteres</string>
     <string name="lan_hide_watched">Ocultar assistidos</string>
     <string name="lan_season">Temporada %1$d</string>
     <string name="lan_watched">Assistido</string>

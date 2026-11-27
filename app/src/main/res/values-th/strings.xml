@@ -427,6 +427,7 @@
     <string name="style_icon_note">ไอคอนใหม่จะแสดงเมื่อออกจากแอป และอาจหายไปจากหน้าจอหลักสักครู่</string>
     <string name="notice_tv_standby">%1$s อยู่ในโหมดสแตนด์บาย เปิดด้วยรีโมตแล้วลองอีกครั้ง</string>
     <string name="audio_on_tv_note">เลือกด้วยรีโมตของทีวี</string>
+    <string name="lan_show_details">ชื่อเรื่องใต้โปสเตอร์</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>

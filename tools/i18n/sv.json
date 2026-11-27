@@ -425,7 +425,8 @@
   "style_icon": "Appikon",
   "style_icon_note": "Den nya ikonen visas när du lämnar appen. Den kan försvinna från hemskärmen en kort stund.",
   "notice_tv_standby": "%1$s är i viloläge. Slå på den med fjärrkontrollen och försök igen.",
-  "audio_on_tv_note": "Välj det med tv:ns fjärrkontroll."
+  "audio_on_tv_note": "Välj det med tv:ns fjärrkontroll.",
+  "lan_show_details": "Titlar under affischerna"
  },
  "plurals": {
   "browser_found": {

@@ -118,6 +118,7 @@
     <string name="lan_sort_name">Naam</string>
     <string name="lan_sort_recent">Recent toegevoegd</string>
     <string name="lan_sort_year">Jaar</string>
+    <string name="lan_show_details">Titels onder de posters</string>
     <string name="lan_hide_watched">Bekeken verbergen</string>
     <string name="lan_season">Seizoen %1$d</string>
     <string name="lan_watched">Bekeken</string>

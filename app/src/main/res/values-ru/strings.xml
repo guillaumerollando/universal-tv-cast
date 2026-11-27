@@ -427,6 +427,7 @@
     <string name="style_icon_note">Новый значок появится, когда вы выйдете из приложения. Он может ненадолго исчезнуть с главного экрана.</string>
     <string name="notice_tv_standby">%1$s в режиме ожидания. Включите его пультом и попробуйте снова.</string>
     <string name="audio_on_tv_note">Выберите его пультом телевизора.</string>
+    <string name="lan_show_details">Названия под постерами</string>
     <plurals name="browser_found">
         <item quantity="one">%d видео</item>
         <item quantity="few">%d видео</item>

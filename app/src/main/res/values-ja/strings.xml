@@ -427,6 +427,7 @@
     <string name="style_icon_note">新しいアイコンはアプリを閉じると表示されます。ホーム画面から一瞬消えることがあります。</string>
     <string name="notice_tv_standby">%1$s はスタンバイ中です。リモコンで電源を入れてから、もう一度お試しください。</string>
     <string name="audio_on_tv_note">テレビのリモコンで選んでください。</string>
+    <string name="lan_show_details">ポスターの下にタイトル</string>
     <plurals name="browser_found">
         <item quantity="other">%d 本の動画</item>
     </plurals>

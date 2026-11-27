@@ -425,7 +425,8 @@
   "style_icon": "Ikona aplikace",
   "style_icon_note": "Nová ikona se objeví, jakmile aplikaci opustíte. Může na chvíli zmizet z domovské obrazovky.",
   "notice_tv_standby": "%1$s je v pohotovostním režimu. Zapněte ji dálkovým ovladačem a zkuste to znovu.",
-  "audio_on_tv_note": "Vyberte ji dálkovým ovladačem televize."
+  "audio_on_tv_note": "Vyberte ji dálkovým ovladačem televize.",
+  "lan_show_details": "Názvy pod plakáty"
  },
  "plurals": {
   "browser_found": {

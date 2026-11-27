@@ -118,6 +118,7 @@
     <string name="lan_sort_name">Nome</string>
     <string name="lan_sort_recent">Aggiunti di recente</string>
     <string name="lan_sort_year">Anno</string>
+    <string name="lan_show_details">Titoli sotto le locandine</string>
     <string name="lan_hide_watched">Nascondi visti</string>
     <string name="lan_season">Stagione %1$d</string>
     <string name="lan_watched">Visto</string>

@@ -425,7 +425,8 @@
   "style_icon": "アプリのアイコン",
   "style_icon_note": "新しいアイコンはアプリを閉じると表示されます。ホーム画面から一瞬消えることがあります。",
   "notice_tv_standby": "%1$s はスタンバイ中です。リモコンで電源を入れてから、もう一度お試しください。",
-  "audio_on_tv_note": "テレビのリモコンで選んでください。"
+  "audio_on_tv_note": "テレビのリモコンで選んでください。",
+  "lan_show_details": "ポスターの下にタイトル"
  },
  "plurals": {
   "browser_found": {

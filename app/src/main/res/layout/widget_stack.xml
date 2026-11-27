@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- « Mes vidéos en cours » : les cartes se font glisser (StackView). -->
+<!-- « Mes vidéos en cours » : petites affiches en grille (défile si elles ne tiennent pas toutes). -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <StackView
-        android:id="@+id/stack"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_bg"
+    android:padding="8dp">
+    <GridView
+        android:id="@+id/videos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:loopViews="true" />
+        android:columnWidth="104dp"
+        android:horizontalSpacing="8dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="8dp" />
     <TextView
         android:id="@+id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/widget_bg"
         android:gravity="center"
         android:padding="16dp"
         android:text="@string/widget_empty"

@@ -307,7 +307,8 @@
   "widget_desc_resume": "Tvoje poslední video, připravené k pokračování",
   "widget_empty_channels": "Pusť kanál: objeví se tady.",
   "widget_sample_title": "Můj oblíbený seriál",
-  "widget_sample_sub": "S1 · D3"
+  "widget_sample_sub": "S1 · D3",
+  "widget_desc_photos": "Ukaž fotky a videa na televizi jedním klepnutím"
  },
  "plurals": {
   "browser_found": {

@@ -13,6 +13,7 @@
     <string name="widget_empty_channels">Starte einen Sender: Er erscheint hier.</string>
     <string name="widget_sample_title">Meine Lieblingsserie</string>
     <string name="widget_sample_sub">S1 · Folge 3</string>
+    <string name="widget_desc_photos">Zeig deine Fotos und Videos mit einem Tipp auf dem Fernseher</string>
     <string name="widget_desc">Video und Sender mit einem Tipp weiterschauen</string>
     <string name="widget_empty">Starte ein Video oder einen Sender: Er erscheint hier.</string>
     <string name="settings_share">App teilen</string>

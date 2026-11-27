@@ -307,7 +307,8 @@
   "widget_desc_resume": "最後の動画、すぐに再開",
   "widget_empty_channels": "チャンネルを再生すると、ここに表示されます。",
   "widget_sample_title": "お気に入りのシリーズ",
-  "widget_sample_sub": "S1 · 第3話"
+  "widget_sample_sub": "S1 · 第3話",
+  "widget_desc_photos": "写真や動画をワンタップでテレビに"
  },
  "plurals": {
   "browser_found": {

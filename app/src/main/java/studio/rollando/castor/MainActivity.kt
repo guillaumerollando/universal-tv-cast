@@ -159,6 +159,8 @@ class MainActivity : ComponentActivity(), SensorEventListener {
                 else { Castor.open(c.toMedia().copy(startSec = 0.0, title = c.channelName)); Nav.tab.value = Tab.PLAYER }
             }
             WidgetKit.ACTION_SITE -> intent.getStringExtra(WidgetKit.EXTRA_URL)?.let { Nav.openUrl.value = it }
+            // Photos et vidéos : le sélecteur d'Android s'ouvre tout de suite (voir CastorApp).
+            WidgetKit.ACTION_PICK -> { Nav.tab.value = Tab.HOME; Nav.pick.value = intent.getStringExtra(WidgetKit.EXTRA_WHAT) }
             else -> return false
         }
         return true

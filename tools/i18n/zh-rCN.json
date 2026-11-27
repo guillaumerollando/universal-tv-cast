@@ -307,7 +307,8 @@
   "widget_desc_resume": "上次的视频，随时继续",
   "widget_empty_channels": "播放频道后会显示在这里。",
   "widget_sample_title": "我最爱的剧集",
-  "widget_sample_sub": "第1季 · 第3集"
+  "widget_sample_sub": "第1季 · 第3集",
+  "widget_desc_photos": "一键在电视上显示照片和视频"
  },
  "plurals": {
   "browser_found": {

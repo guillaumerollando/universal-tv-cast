@@ -307,7 +307,8 @@
   "widget_desc_resume": "วิดีโอล่าสุด พร้อมดูต่อ",
   "widget_empty_channels": "เปิดช่อง แล้วจะแสดงที่นี่",
   "widget_sample_title": "ซีรีส์โปรดของฉัน",
-  "widget_sample_sub": "S1 · ตอนที่ 3"
+  "widget_sample_sub": "S1 · ตอนที่ 3",
+  "widget_desc_photos": "แสดงรูปและวิดีโอบนทีวีในแตะเดียว"
  },
  "plurals": {
   "browser_found": {

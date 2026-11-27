@@ -309,6 +309,7 @@
     <string name="widget_empty_channels">Mở một kênh: nó sẽ hiện ở đây.</string>
     <string name="widget_sample_title">Phim bộ yêu thích</string>
     <string name="widget_sample_sub">P1 · Tập 3</string>
+    <string name="widget_desc_photos">Chiếu ảnh và video lên TV chỉ với một chạm</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

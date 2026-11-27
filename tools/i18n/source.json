@@ -1215,6 +1215,10 @@
   "widget_sample_sub": {
    "en": "S1 · Ep. 3",
    "fr": "S1 · Ép. 3"
+  },
+  "widget_desc_photos": {
+   "en": "Show your photos and videos on the TV in one tap",
+   "fr": "Montre tes photos et vidéos sur la télé en un appui"
   }
  },
  "plurals": {

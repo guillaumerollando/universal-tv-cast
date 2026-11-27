@@ -309,6 +309,7 @@
     <string name="widget_empty_channels">Włącz kanał: pojawi się tutaj.</string>
     <string name="widget_sample_title">Mój ulubiony serial</string>
     <string name="widget_sample_sub">S1 · Odc. 3</string>
+    <string name="widget_desc_photos">Pokaż zdjęcia i filmy na telewizorze jednym dotknięciem</string>
     <plurals name="browser_found">
         <item quantity="one">%d wideo</item>
         <item quantity="few">%d wideo</item>

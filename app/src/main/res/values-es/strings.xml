@@ -13,6 +13,7 @@
     <string name="widget_empty_channels">Reproduce un canal: aparecerá aquí.</string>
     <string name="widget_sample_title">Mi serie favorita</string>
     <string name="widget_sample_sub">T1 · Ep. 3</string>
+    <string name="widget_desc_photos">Muestra tus fotos y vídeos en la TV con un toque</string>
     <string name="widget_desc">Retoma tu vídeo y tus canales en un toque</string>
     <string name="widget_empty">Reproduce un vídeo o un canal: aparecerá aquí.</string>
     <string name="settings_share">Compartir la app</string>

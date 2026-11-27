@@ -309,6 +309,7 @@
     <string name="widget_empty_channels">شغّل قناة: ستظهر هنا.</string>
     <string name="widget_sample_title">مسلسلي المفضل</string>
     <string name="widget_sample_sub">م1 · ح3</string>
+    <string name="widget_desc_photos">اعرض صورك وفيديوهاتك على التلفزيون بلمسة واحدة</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>

@@ -307,7 +307,8 @@
   "widget_desc_resume": "上次的影片，隨時繼續",
   "widget_empty_channels": "播放頻道後會顯示在這裡。",
   "widget_sample_title": "我最愛的影集",
-  "widget_sample_sub": "第1季 · 第3集"
+  "widget_sample_sub": "第1季 · 第3集",
+  "widget_desc_photos": "一鍵在電視上顯示照片和影片"
  },
  "plurals": {
   "browser_found": {

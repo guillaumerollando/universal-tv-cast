@@ -307,7 +307,8 @@
   "widget_desc_resume": "आपका पिछला वीडियो, जारी रखने को तैयार",
   "widget_empty_channels": "कोई चैनल चलाएँ: वह यहाँ दिखेगा।",
   "widget_sample_title": "मेरी पसंदीदा सीरीज़",
-  "widget_sample_sub": "S1 · E3"
+  "widget_sample_sub": "S1 · E3",
+  "widget_desc_photos": "एक टैप में अपनी फ़ोटो और वीडियो टीवी पर दिखाएँ"
  },
  "plurals": {
   "browser_found": {

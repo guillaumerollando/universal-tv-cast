@@ -13,6 +13,7 @@
     <string name="widget_empty_channels">Lance une chaîne : elle apparaîtra ici.</string>
     <string name="widget_sample_title">Ma série préférée</string>
     <string name="widget_sample_sub">S1 · Ép. 3</string>
+    <string name="widget_desc_photos">Montre tes photos et vidéos sur la télé en un appui</string>
     <string name="widget_desc">Reprends ta vidéo et tes chaînes en un geste</string>
     <string name="widget_empty">Lance une vidéo ou une chaîne : elle apparaîtra ici.</string>
     <string name="settings_share">Partager l’appli</string>

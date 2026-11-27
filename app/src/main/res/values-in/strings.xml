@@ -309,6 +309,7 @@
     <string name="widget_empty_channels">Putar saluran: akan muncul di sini.</string>
     <string name="widget_sample_title">Serial favoritku</string>
     <string name="widget_sample_sub">S1 · Ep. 3</string>
+    <string name="widget_desc_photos">Tampilkan foto dan videomu di TV dengan sekali ketuk</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

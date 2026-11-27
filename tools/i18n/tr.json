@@ -307,7 +307,8 @@
   "widget_desc_resume": "Son videon, devam etmeye hazır",
   "widget_empty_channels": "Bir kanal aç: burada görünecek.",
   "widget_sample_title": "En sevdiğim dizi",
-  "widget_sample_sub": "S1 · B3"
+  "widget_sample_sub": "S1 · B3",
+  "widget_desc_photos": "Fotoğraf ve videolarını tek dokunuşla TV'de göster"
  },
  "plurals": {
   "browser_found": {

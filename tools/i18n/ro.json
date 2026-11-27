@@ -307,7 +307,8 @@
   "widget_desc_resume": "Ultimul tău videoclip, gata de reluat",
   "widget_empty_channels": "Pornește un canal: va apărea aici.",
   "widget_sample_title": "Serialul meu preferat",
-  "widget_sample_sub": "S1 · Ep. 3"
+  "widget_sample_sub": "S1 · Ep. 3",
+  "widget_desc_photos": "Arată pozele și videoclipurile pe televizor dintr-o atingere"
  },
  "plurals": {
   "browser_found": {

@@ -14,6 +14,7 @@
     <string name="widget_empty_channels">Play a channel: it will show up here.</string>
     <string name="widget_sample_title">My favourite series</string>
     <string name="widget_sample_sub">S1 · Ep. 3</string>
+    <string name="widget_desc_photos">Show your photos and videos on the TV in one tap</string>
     <string name="widget_desc">Pick up your video and your channels in one tap</string>
     <string name="widget_empty">Play a video or a channel: it will show up here.</string>
     <string name="settings_share">Share the app</string>

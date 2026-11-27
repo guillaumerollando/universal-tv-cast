@@ -1144,3 +1144,14 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
 
 **Pas fait**
 - Le petit « Reprendre » n'a pas été posé sur l'écran de l'émulateur (seulement son aperçu).
+
+## 2026-11-27 — Widget Photos et vidéos ; « Mes vidéos en cours » en grille
+**Fait**
+- Widget « Photos et vidéos » (4×1) : « Album » ouvre tout de suite le sélecteur de photos d'Android (diaporama),
+  « Vidéos » celui des vidéos du téléphone (`Nav.pick`). Vérifié sur émulateur.
+- « Mes vidéos en cours » : les cartes à faire glisser (StackView) ne glissaient pas sur le téléphone de Guillaume ;
+  remplacées par une grille de petites affiches (titre, avancement), qui défile. Vérifié sur émulateur : défilement,
+  appui → l'épisode Arte repart où on en était.
+
+**Pas fait**
+- Le widget à cartes déjà posé sur un téléphone se transforme seul en grille (même widget) : à vérifier sur le sien.

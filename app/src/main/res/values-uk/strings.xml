@@ -309,6 +309,7 @@
     <string name="widget_empty_channels">Увімкніть канал — він з’явиться тут.</string>
     <string name="widget_sample_title">Мій улюблений серіал</string>
     <string name="widget_sample_sub">С1 · Еп. 3</string>
+    <string name="widget_desc_photos">Показуйте фото й відео на телевізорі одним дотиком</string>
     <plurals name="browser_found">
         <item quantity="one">%d відео</item>
         <item quantity="few">%d відео</item>

@@ -13,6 +13,7 @@
     <string name="widget_empty_channels">Avvia un canale: comparirà qui.</string>
     <string name="widget_sample_title">La mia serie preferita</string>
     <string name="widget_sample_sub">S1 · Ep. 3</string>
+    <string name="widget_desc_photos">Mostra foto e video sulla TV con un tocco</string>
     <string name="widget_desc">Riprendi il video e i canali con un tocco</string>
     <string name="widget_empty">Avvia un video o un canale: comparirà qui.</string>
     <string name="settings_share">Condividi l’app</string>

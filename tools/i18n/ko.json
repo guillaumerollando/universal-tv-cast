@@ -307,7 +307,8 @@
   "widget_desc_resume": "마지막 동영상, 바로 이어 보기",
   "widget_empty_channels": "채널을 재생하면 여기에 표시됩니다.",
   "widget_sample_title": "좋아하는 시리즈",
-  "widget_sample_sub": "S1 · 3화"
+  "widget_sample_sub": "S1 · 3화",
+  "widget_desc_photos": "사진과 동영상을 한 번의 탭으로 TV에"
  },
  "plurals": {
   "browser_found": {

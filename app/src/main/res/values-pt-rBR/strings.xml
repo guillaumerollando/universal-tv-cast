@@ -13,6 +13,7 @@
     <string name="widget_empty_channels">Abra um canal: ele aparecerá aqui.</string>
     <string name="widget_sample_title">Minha série favorita</string>
     <string name="widget_sample_sub">T1 · Ep. 3</string>
+    <string name="widget_desc_photos">Mostre suas fotos e vídeos na TV com um toque</string>
     <string name="widget_desc">Retome seu vídeo e seus canais com um toque</string>
     <string name="widget_empty">Abra um vídeo ou canal: ele aparecerá aqui.</string>
     <string name="settings_share">Compartilhar o app</string>

@@ -27,9 +27,10 @@ import java.util.concurrent.Executors
  * Les widgets de l'écran d'accueil du téléphone. Chacun répond à un usage :
  *  - HomeWidget          « Reprendre + chaînes »   (4×2)
  *  - ResumeSitesWidget   « Reprendre + sites »     (4×2) : pour qui regarde surtout des séries
- *  - StackWidget         « Mes vidéos en cours »   (3×3) : toutes les reprises, en cartes à faire glisser
+ *  - StackWidget         « Mes vidéos en cours »   (4×2) : toutes les reprises, en petites affiches (grille)
  *  - ChannelsWidget      « Mes chaînes »           (4×1, s'agrandit) : la télé en direct seulement
  *  - ResumeWidget        « Reprendre »             (2×2) : la dernière vidéo, affiche en grand
+ *  - PhotosWidget        « Photos et vidéos »      (4×1) : ouvre tout de suite le choix des photos ou d'une vidéo
  * Un appui relance directement la lecture (MainActivity.widget), sans passer par le site.
  */
 
@@ -49,6 +50,10 @@ class ChannelsWidget : AppWidgetProvider() {
     override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = WidgetKit.refresh(context, now = true)
 }
 
+class PhotosWidget : AppWidgetProvider() {
+    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = WidgetKit.refresh(context, now = true)
+}
+
 class ResumeWidget : AppWidgetProvider() {
     override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = WidgetKit.refresh(context, now = true)
 }
@@ -57,6 +62,8 @@ internal object WidgetKit {
     const val ACTION_RESUME = "studio.rollando.castor.WIDGET_RESUME"
     const val ACTION_CHANNEL = "studio.rollando.castor.WIDGET_CHANNEL"
     const val ACTION_SITE = "studio.rollando.castor.WIDGET_SITE"
+    const val ACTION_PICK = "studio.rollando.castor.WIDGET_PICK"
+    const val EXTRA_WHAT = "what"
     const val EXTRA_KEY = "key"
     const val EXTRA_URL = "url"
 
@@ -96,14 +103,20 @@ internal object WidgetKit {
         val stack = ids(ctx, mgr, StackWidget::class.java)
         val channels = ids(ctx, mgr, ChannelsWidget::class.java)
         val small = ids(ctx, mgr, ResumeWidget::class.java)
+        val photos = ids(ctx, mgr, PhotosWidget::class.java)
+        // Photos et vidéos : rien qui dépende de l'historique, seulement les deux boutons.
+        if (photos.isNotEmpty()) mgr.updateAppWidget(photos, RemoteViews(ctx.packageName, R.layout.widget_photos).apply {
+            setOnClickPendingIntent(R.id.photos, pick(ctx, "photos", 30))
+            setOnClickPendingIntent(R.id.videos, pick(ctx, "videos", 31))
+        })
         if (home.isEmpty() && sites.isEmpty() && stack.isEmpty() && channels.isEmpty() && small.isEmpty()) return
         val d = data(ctx)
         if (home.isNotEmpty()) mgr.updateAppWidget(home, wide(ctx, d, withSites = false))
         if (sites.isNotEmpty()) mgr.updateAppWidget(sites, wide(ctx, d, withSites = true))
         if (small.isNotEmpty()) mgr.updateAppWidget(small, small(ctx, d))
         if (stack.isNotEmpty()) {
-            mgr.updateAppWidget(stack, collection(ctx, R.layout.widget_stack, R.id.stack, "stack"))
-            mgr.notifyAppWidgetViewDataChanged(stack, R.id.stack)
+            mgr.updateAppWidget(stack, collection(ctx, R.layout.widget_stack, R.id.videos, "stack"))
+            mgr.notifyAppWidgetViewDataChanged(stack, R.id.videos)
         }
         if (channels.isNotEmpty()) {
             mgr.updateAppWidget(channels, collection(ctx, R.layout.widget_channels, R.id.grid, "channels"))
@@ -241,6 +254,11 @@ internal object WidgetKit {
         return v
     }
 
+    private fun pick(ctx: Context, what: String, code: Int): PendingIntent {
+        val i = Intent(ctx, MainActivity::class.java).setAction(ACTION_PICK).putExtra(EXTRA_WHAT, what).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        return PendingIntent.getActivity(ctx, code, i, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+    }
+
     private fun activity(ctx: Context, action: String, key: String?, url: String?, code: Int): PendingIntent {
         val i = Intent(ctx, MainActivity::class.java).setAction(action).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         if (key != null) i.putExtra(EXTRA_KEY, key)
@@ -269,7 +287,7 @@ internal object WidgetKit {
     }
 }
 
-/** Remplit les widgets à liste : cartes « Mes vidéos en cours », grille « Mes chaînes ». */
+/** Remplit les widgets à liste : grilles « Mes vidéos en cours » et « Mes chaînes ». */
 class WidgetListService : RemoteViewsService() {
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory = Factory(applicationContext, intent.getStringExtra("kind") ?: "stack")
 
@@ -287,9 +305,14 @@ class WidgetListService : RemoteViewsService() {
         override fun getCount() = if (kind == "stack") resume.size else channels.size
         override fun getViewAt(position: Int): RemoteViews {
             if (kind == "stack") {
-                val v = RemoteViews(ctx.packageName, R.layout.widget_stack_item)
+                val v = RemoteViews(ctx.packageName, R.layout.widget_video_item)
                 val r = resume.getOrNull(position) ?: return v
-                WidgetKit.fillPosterCard(ctx, v, r)
+                v.setTextViewText(R.id.resume_title, r.title)
+                val p = r.progress
+                v.setViewVisibility(R.id.resume_progress, if (p != null) View.VISIBLE else View.GONE)
+                if (p != null) v.setProgressBar(R.id.resume_progress, 1000, (p * 1000).toInt(), false)
+                val poster = r.image?.let { WidgetKit.image(it, 320) }
+                if (poster != null) v.setImageViewBitmap(R.id.poster, poster) else v.setImageViewResource(R.id.poster, R.drawable.widget_poster_empty)
                 v.setContentDescription(R.id.item, r.title)
                 v.setOnClickFillInIntent(R.id.item, Intent().setAction(WidgetKit.ACTION_RESUME).putExtra(WidgetKit.EXTRA_KEY, r.key))
                 return v

@@ -307,7 +307,8 @@
   "widget_desc_resume": "Останнє відео, готове до продовження",
   "widget_empty_channels": "Увімкніть канал — він з’явиться тут.",
   "widget_sample_title": "Мій улюблений серіал",
-  "widget_sample_sub": "С1 · Еп. 3"
+  "widget_sample_sub": "С1 · Еп. 3",
+  "widget_desc_photos": "Показуйте фото й відео на телевізорі одним дотиком"
  },
  "plurals": {
   "browser_found": {

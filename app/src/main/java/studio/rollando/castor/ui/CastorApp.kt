@@ -125,6 +125,8 @@ object Nav {
     val nextLoading = MutableStateFlow(false)
     /** Page d'une carte « Reprendre » rouverte en arrière-plan : sa vidéo part seule, sans montrer le site. */
     val resuming = MutableStateFlow<String?>(null)
+    /** Choix demandé par le widget « Photos et vidéos » : "photos" ou "videos". */
+    val pick = MutableStateFlow<String?>(null)
     /** Panneau d'aide ouvert (bouton « ? », secousse, lien dans une erreur). */
     val help = MutableStateFlow(false)
     /** Demande d'ouvrir le choix de la télé (depuis l'aide). */
@@ -181,6 +183,15 @@ fun CastorApp() {
         if (uris.isEmpty()) return@rememberLauncherForActivityResult
         Castor.openPhotos(uris)
         Nav.tab.value = Tab.PLAYER
+    }
+
+    val pickRequest by Nav.pick.collectAsState()
+    LaunchedEffect(pickRequest) {
+        when (pickRequest) {
+            "photos" -> pickPhotos.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+            "videos" -> pickVideo.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly))
+        }
+        Nav.pick.value = null
     }
 
     // Ambiance derrière l'en-tête : l'image floutée du film en cours, sinon un dégradé vert sombre.

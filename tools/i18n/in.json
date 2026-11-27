@@ -307,7 +307,8 @@
   "widget_desc_resume": "Video terakhirmu, siap dilanjutkan",
   "widget_empty_channels": "Putar saluran: akan muncul di sini.",
   "widget_sample_title": "Serial favoritku",
-  "widget_sample_sub": "S1 · Ep. 3"
+  "widget_sample_sub": "S1 · Ep. 3",
+  "widget_desc_photos": "Tampilkan foto dan videomu di TV dengan sekali ketuk"
  },
  "plurals": {
   "browser_found": {

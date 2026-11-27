@@ -307,7 +307,8 @@
   "widget_desc_resume": "Twój ostatni film, gotowy do wznowienia",
   "widget_empty_channels": "Włącz kanał: pojawi się tutaj.",
   "widget_sample_title": "Mój ulubiony serial",
-  "widget_sample_sub": "S1 · Odc. 3"
+  "widget_sample_sub": "S1 · Odc. 3",
+  "widget_desc_photos": "Pokaż zdjęcia i filmy na telewizorze jednym dotknięciem"
  },
  "plurals": {
   "browser_found": {

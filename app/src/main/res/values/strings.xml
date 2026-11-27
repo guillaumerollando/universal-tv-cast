@@ -238,6 +238,7 @@
     <string name="subs_none">None</string>
     <string name="subs_add">Add a file</string>
     <string name="subs_note">SRT, VTT and ASS files are supported. Some TVs don’t show subtitles sent this way.</string>
+    <string name="notice_tv_standby">%1$s is on standby. Turn it on with its remote, then try again.</string>
     <string name="notice_pick_tv">Choose a TV to start playback.</string>
     <string name="err_no_wifi">Connect your phone to the same Wi-Fi as the TV.</string>
     <string name="err_drm">This video is copy-protected (DRM) and can’t be sent to the TV.</string>

@@ -237,6 +237,7 @@
     <string name="subs_none">Ninguno</string>
     <string name="subs_add">Añadir archivo</string>
     <string name="subs_note">Se admiten archivos SRT, VTT y ASS. Algunas TV no muestran los subtítulos enviados así.</string>
+    <string name="notice_tv_standby">%1$s está en reposo. Enciéndela con su mando y vuelve a intentarlo.</string>
     <string name="notice_pick_tv">Elige una TV para empezar la reproducción.</string>
     <string name="err_no_wifi">Conecta el móvil a la misma wifi que la TV.</string>
     <string name="err_drm">Este vídeo está protegido (DRM) y no se puede enviar a la TV.</string>

@@ -425,6 +425,7 @@
     <string name="style_show_tv">Pokaż na telewizorze</string>
     <string name="style_icon">Ikona aplikacji</string>
     <string name="style_icon_note">Nowa ikona pojawi się po wyjściu z aplikacji. Może na chwilę zniknąć z ekranu głównego.</string>
+    <string name="notice_tv_standby">%1$s jest w trybie czuwania. Włącz go pilotem i spróbuj ponownie.</string>
     <plurals name="browser_found">
         <item quantity="one">%d wideo</item>
         <item quantity="few">%d wideo</item>

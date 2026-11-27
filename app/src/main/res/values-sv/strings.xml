@@ -425,6 +425,7 @@
     <string name="style_show_tv">Visa på tv:n</string>
     <string name="style_icon">Appikon</string>
     <string name="style_icon_note">Den nya ikonen visas när du lämnar appen. Den kan försvinna från hemskärmen en kort stund.</string>
+    <string name="notice_tv_standby">%1$s är i viloläge. Slå på den med fjärrkontrollen och försök igen.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videor</item>

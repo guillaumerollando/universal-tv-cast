@@ -237,6 +237,7 @@
     <string name="subs_none">Nenhuma</string>
     <string name="subs_add">Adicionar arquivo</string>
     <string name="subs_note">Arquivos SRT, VTT e ASS são aceitos. Algumas TVs não mostram legendas enviadas assim.</string>
+    <string name="notice_tv_standby">%1$s está em espera. Ligue-a pelo controle remoto e tente de novo.</string>
     <string name="notice_pick_tv">Escolha uma TV para começar.</string>
     <string name="err_no_wifi">Conecte o celular ao mesmo Wi-Fi da TV.</string>
     <string name="err_drm">Este vídeo é protegido (DRM) e não pode ser enviado à TV.</string>

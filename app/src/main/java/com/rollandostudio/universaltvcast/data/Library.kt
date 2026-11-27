@@ -179,6 +179,17 @@ object Library {
     /** Adresses de description des télés déjà vues : revérifiées en premier à chaque recherche. */
     val knownTvs: Set<String> get() = prefs.getStringSet("tvs", emptySet()).orEmpty()
 
+    /**
+     * Télés dont on a déjà vu le service Google Cast ouvert. Pour elles (Philips Titan OS), un service Cast fermé
+     * veut dire « en veille » : le récepteur DLNA, lui, accepte encore une vidéo et ne la montre pas.
+     */
+    val castHosts: Set<String> get() = prefs.getStringSet("cast_hosts", emptySet()).orEmpty()
+
+    fun rememberCastHost(host: String) {
+        if (host.isBlank() || host in castHosts) return
+        prefs.edit().putStringSet("cast_hosts", (castHosts + host).toList().takeLast(10).toSet()).apply()
+    }
+
     fun rememberTv(location: String) {
         if (location.isBlank() || location in knownTvs) return
         prefs.edit().putStringSet("tvs", (knownTvs + location).toList().takeLast(10).toSet()).apply()

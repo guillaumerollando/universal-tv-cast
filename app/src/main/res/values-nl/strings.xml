@@ -237,6 +237,7 @@
     <string name="subs_none">Geen</string>
     <string name="subs_add">Bestand toevoegen</string>
     <string name="subs_note">SRT-, VTT- en ASS-bestanden worden ondersteund. Sommige tv\'s tonen ondertiteling die zo verstuurd wordt niet.</string>
+    <string name="notice_tv_standby">%1$s staat op stand-by. Zet hem aan met de afstandsbediening en probeer het opnieuw.</string>
     <string name="notice_pick_tv">Kies een tv om het afspelen te starten.</string>
     <string name="err_no_wifi">Verbind je telefoon met hetzelfde wifi-netwerk als de tv.</string>
     <string name="err_drm">Deze video is beveiligd (DRM) en kan niet naar de tv.</string>

@@ -1679,6 +1679,10 @@
   "style_icon_note": {
    "en": "The new icon appears once you leave the app. It may vanish from your home screen for a moment.",
    "fr": "La nouvelle icône apparaît une fois l’appli quittée. Elle peut disparaître un instant de l’écran d’accueil."
+  },
+  "notice_tv_standby": {
+   "en": "%1$s is on standby. Turn it on with its remote, then try again.",
+   "fr": "%1$s est en veille. Allume-la avec sa télécommande, puis réessaie."
   }
  },
  "plurals": {

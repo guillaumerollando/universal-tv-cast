@@ -423,7 +423,8 @@
   "style_live_sub": "Fotona växlar och tiden uppdateras varje minut.",
   "style_show_tv": "Visa på tv:n",
   "style_icon": "Appikon",
-  "style_icon_note": "Den nya ikonen visas när du lämnar appen. Den kan försvinna från hemskärmen en kort stund."
+  "style_icon_note": "Den nya ikonen visas när du lämnar appen. Den kan försvinna från hemskärmen en kort stund.",
+  "notice_tv_standby": "%1$s är i viloläge. Slå på den med fjärrkontrollen och försök igen."
  },
  "plurals": {
   "browser_found": {

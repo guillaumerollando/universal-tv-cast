@@ -423,7 +423,8 @@
   "style_live_sub": "Zdjęcia się zmieniają, a godzina aktualizuje się co minutę.",
   "style_show_tv": "Pokaż na telewizorze",
   "style_icon": "Ikona aplikacji",
-  "style_icon_note": "Nowa ikona pojawi się po wyjściu z aplikacji. Może na chwilę zniknąć z ekranu głównego."
+  "style_icon_note": "Nowa ikona pojawi się po wyjściu z aplikacji. Może na chwilę zniknąć z ekranu głównego.",
+  "notice_tv_standby": "%1$s jest w trybie czuwania. Włącz go pilotem i spróbuj ponownie."
  },
  "plurals": {
   "browser_found": {

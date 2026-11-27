@@ -425,6 +425,7 @@
     <string name="style_show_tv">عرض على التلفزيون</string>
     <string name="style_icon">أيقونة التطبيق</string>
     <string name="style_icon_note">تظهر الأيقونة الجديدة بعد مغادرة التطبيق. قد تختفي لحظة من الشاشة الرئيسية.</string>
+    <string name="notice_tv_standby">%1$s في وضع الاستعداد. شغّله بجهاز التحكم ثم حاول مرة أخرى.</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>

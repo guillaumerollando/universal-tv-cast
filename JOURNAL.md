@@ -1498,3 +1498,16 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   `:1925/6/system` répond (`/6/powerstate` exige l'appairage), AirPlay `:7000/info` statusFlags=580. À comparer
   avec la télé en veille pour savoir la reconnaître allumée sans qu'elle lise. Le téléphone ne voit pas non plus
   la télé en Google Cast (« appareils Cast : aucun ») alors qu'elle l'a : à creuser.
+
+## 2026-11-28 — Reconnaître la Philips allumée ou en veille
+- Relevé (télé allumée au repos, puis en veille à la télécommande) : en veille, le récepteur DLNA, AirPlay,
+  l'interface Philips (1925) et le ping répondent toujours, et le DLNA accepte même une vidéo sans rien montrer.
+  Seul le service Google Cast (`:8008/setup/eureka_info`) se ferme (connexion refusée, 4 fois sur 4).
+- Fait : une télé au repos dont le service Cast est ouvert est reconnue allumée (choisie d'office comme les
+  autres) ; l'appli retient les télés où elle l'a déjà vu ouvert (`Library.castHosts`) et, s'il est fermé au moment
+  d'envoyer, n'envoie rien et dit « … est en veille. Allume-la avec sa télécommande, puis réessaie. » (23 langues).
+- Essai : un paquet Wake-on-LAN envoyé du PC (adresse matérielle lue dans la table ARP du PC) a été suivi du
+  retour du service Cast 9 s plus tard (à confirmer : télé rallumée par le paquet ou par Guillaume ?). Une appli
+  Android ne peut pas lire l'adresse matérielle (table ARP interdite) et la télé ne la donne nulle part (DLNA,
+  Cast, AirPlay, JointSpace, DIAL) : pas d'« Allumer la télé » pour l'instant.
+- Pas vérifié sur le téléphone : télé allumée choisie d'office, message de veille.

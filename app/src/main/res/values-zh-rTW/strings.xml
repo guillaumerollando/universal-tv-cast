@@ -425,6 +425,7 @@
     <string name="style_show_tv">在電視上檢視</string>
     <string name="style_icon">應用程式圖示</string>
     <string name="style_icon_note">離開應用程式後會顯示新圖示。它可能會從主畫面短暫消失。</string>
+    <string name="notice_tv_standby">%1$s 處於待機狀態。請用遙控器開啟電視，然後再試一次。</string>
     <plurals name="browser_found">
         <item quantity="other">%d 部影片</item>
     </plurals>

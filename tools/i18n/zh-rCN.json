@@ -423,7 +423,8 @@
   "style_live_sub": "照片轮换,时间每分钟更新。",
   "style_show_tv": "在电视上查看",
   "style_icon": "应用图标",
-  "style_icon_note": "退出应用后会显示新图标。它可能会从主屏幕上短暂消失。"
+  "style_icon_note": "退出应用后会显示新图标。它可能会从主屏幕上短暂消失。",
+  "notice_tv_standby": "%1$s 处于待机状态。请用遥控器打开电视，然后重试。"
  },
  "plurals": {
   "browser_found": {

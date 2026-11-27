@@ -425,6 +425,7 @@
     <string name="style_show_tv">TV\'de göster</string>
     <string name="style_icon">Uygulama simgesi</string>
     <string name="style_icon_note">Yeni simge uygulamadan çıkınca görünür. Ana ekrandan kısa bir süre kaybolabilir.</string>
+    <string name="notice_tv_standby">%1$s bekleme modunda. Kumandasıyla aç, sonra tekrar dene.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video</item>

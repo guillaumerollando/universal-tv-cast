@@ -425,6 +425,7 @@
     <string name="style_show_tv">แสดงบนทีวี</string>
     <string name="style_icon">ไอคอนแอป</string>
     <string name="style_icon_note">ไอคอนใหม่จะแสดงเมื่อออกจากแอป และอาจหายไปจากหน้าจอหลักสักครู่</string>
+    <string name="notice_tv_standby">%1$s อยู่ในโหมดสแตนด์บาย เปิดด้วยรีโมตแล้วลองอีกครั้ง</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>

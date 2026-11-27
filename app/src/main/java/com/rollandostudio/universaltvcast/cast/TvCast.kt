@@ -211,7 +211,10 @@ object TvCast {
                     // qui lit ou garde une vidéo en pause est forcément allumée : on le lui demande directement.
                     if (r.host !in awake) scope.launch(Dispatchers.IO) {
                         val st = runCatching { Dlna.transportState(r) }.getOrNull()
-                        if (st == "PLAYING" || st == "PAUSED_PLAYBACK") { if (awake.add(r.host)) refresh() }
+                        // Au repos (rien en lecture) : son service Google Cast ouvert dit qu'elle est allumée.
+                        val castUp = Dlna.castServiceUp(r.host)
+                        if (castUp) Library.rememberCastHost(r.host)
+                        if (st == "PLAYING" || st == "PAUSED_PLAYBACK" || castUp) { if (awake.add(r.host)) refresh() }
                     }
                 }
             } catch (e: Exception) {
@@ -789,6 +792,14 @@ object TvCast {
         if (!keepRetry) { liveRetried = false; startRetried = false }
         lastCastStart = start
         val chosen = _state.value.renderer ?: throw NoTv()
+        // Télé en veille (son service Cast, d'habitude ouvert, est fermé) : son récepteur DLNA prendrait la vidéo
+        // sans rien montrer. On ne l'envoie pas, on le dit.
+        if (!chosen.cast && chosen.host in Library.castHosts &&
+            !kotlinx.coroutines.withContext(Dispatchers.IO) { Dlna.castServiceUp(chosen.host) }) {
+            Log.i("TvCast", "${chosen.name} en veille (service Cast fermé) : rien n'est envoyé")
+            _state.update { it.copy(phase = Phase.IDLE, notice = Notice(R.string.notice_tv_standby, chosen.name)) }
+            return
+        }
         val s = _state.value
         val m = s.media ?: return
         Net.localIp() ?: throw NoWifi()

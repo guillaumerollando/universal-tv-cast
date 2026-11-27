@@ -425,6 +425,7 @@
     <string name="style_show_tv">Показать на телевизоре</string>
     <string name="style_icon">Значок приложения</string>
     <string name="style_icon_note">Новый значок появится, когда вы выйдете из приложения. Он может ненадолго исчезнуть с главного экрана.</string>
+    <string name="notice_tv_standby">%1$s в режиме ожидания. Включите его пультом и попробуйте снова.</string>
     <plurals name="browser_found">
         <item quantity="one">%d видео</item>
         <item quantity="few">%d видео</item>

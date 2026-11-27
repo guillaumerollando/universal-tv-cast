@@ -425,6 +425,7 @@
     <string name="style_show_tv">Zobrazit v televizi</string>
     <string name="style_icon">Ikona aplikace</string>
     <string name="style_icon_note">Nová ikona se objeví, jakmile aplikaci opustíte. Může na chvíli zmizet z domovské obrazovky.</string>
+    <string name="notice_tv_standby">%1$s je v pohotovostním režimu. Zapněte ji dálkovým ovladačem a zkuste to znovu.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="few">%d videa</item>

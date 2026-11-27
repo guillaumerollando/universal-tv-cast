@@ -425,6 +425,7 @@
     <string name="style_show_tv">テレビで見る</string>
     <string name="style_icon">アプリのアイコン</string>
     <string name="style_icon_note">新しいアイコンはアプリを閉じると表示されます。ホーム画面から一瞬消えることがあります。</string>
+    <string name="notice_tv_standby">%1$s はスタンバイ中です。リモコンで電源を入れてから、もう一度お試しください。</string>
     <plurals name="browser_found">
         <item quantity="other">%d 本の動画</item>
     </plurals>

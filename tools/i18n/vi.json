@@ -423,7 +423,8 @@
   "style_live_sub": "Ảnh thay đổi và giờ được cập nhật mỗi phút.",
   "style_show_tv": "Hiển thị trên TV",
   "style_icon": "Biểu tượng ứng dụng",
-  "style_icon_note": "Biểu tượng mới sẽ xuất hiện khi bạn thoát ứng dụng. Nó có thể biến mất khỏi màn hình chính trong giây lát."
+  "style_icon_note": "Biểu tượng mới sẽ xuất hiện khi bạn thoát ứng dụng. Nó có thể biến mất khỏi màn hình chính trong giây lát.",
+  "notice_tv_standby": "%1$s đang ở chế độ chờ. Hãy bật bằng điều khiển từ xa rồi thử lại."
  },
  "plurals": {
   "browser_found": {

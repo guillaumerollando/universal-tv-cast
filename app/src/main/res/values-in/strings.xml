@@ -425,6 +425,7 @@
     <string name="style_show_tv">Tampilkan di TV</string>
     <string name="style_icon">Ikon aplikasi</string>
     <string name="style_icon_note">Ikon baru muncul setelah Anda keluar dari aplikasi. Ikon mungkin hilang sejenak dari layar utama.</string>
+    <string name="notice_tv_standby">%1$s sedang siaga. Nyalakan dengan remotnya, lalu coba lagi.</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

@@ -423,7 +423,8 @@
   "style_live_sub": "Fotky se střídají a čas se aktualizuje každou minutu.",
   "style_show_tv": "Zobrazit v televizi",
   "style_icon": "Ikona aplikace",
-  "style_icon_note": "Nová ikona se objeví, jakmile aplikaci opustíte. Může na chvíli zmizet z domovské obrazovky."
+  "style_icon_note": "Nová ikona se objeví, jakmile aplikaci opustíte. Může na chvíli zmizet z domovské obrazovky.",
+  "notice_tv_standby": "%1$s je v pohotovostním režimu. Zapněte ji dálkovým ovladačem a zkuste to znovu."
  },
  "plurals": {
   "browser_found": {

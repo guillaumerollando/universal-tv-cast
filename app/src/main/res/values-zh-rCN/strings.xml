@@ -425,6 +425,7 @@
     <string name="style_show_tv">在电视上查看</string>
     <string name="style_icon">应用图标</string>
     <string name="style_icon_note">退出应用后会显示新图标。它可能会从主屏幕上短暂消失。</string>
+    <string name="notice_tv_standby">%1$s 处于待机状态。请用遥控器打开电视，然后重试。</string>
     <plurals name="browser_found">
         <item quantity="other">%d 个视频</item>
     </plurals>

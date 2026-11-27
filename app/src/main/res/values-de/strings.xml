@@ -237,6 +237,7 @@
     <string name="subs_none">Keine</string>
     <string name="subs_add">Datei hinzufügen</string>
     <string name="subs_note">SRT-, VTT- und ASS-Dateien werden unterstützt. Manche Fernseher zeigen so gesendete Untertitel nicht an.</string>
+    <string name="notice_tv_standby">%1$s ist im Standby. Schalte ihn mit der Fernbedienung ein und versuch es noch einmal.</string>
     <string name="notice_pick_tv">Wähle einen Fernseher, um die Wiedergabe zu starten.</string>
     <string name="err_no_wifi">Verbinde dein Handy mit demselben WLAN wie den Fernseher.</string>
     <string name="err_drm">Dieses Video ist kopiergeschützt (DRM) und kann nicht gesendet werden.</string>

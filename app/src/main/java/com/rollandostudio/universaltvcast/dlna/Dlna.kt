@@ -387,6 +387,17 @@ object Dlna {
 
     fun transportState(r: Renderer): String? = tag(av(r, "GetTransportInfo"), "CurrentTransportState")
 
+    /**
+     * La télé a-t-elle son service Google Cast ouvert ? Sur les Philips Titan OS, il se ferme en veille (connexion
+     * refusée tout de suite) alors que le récepteur DLNA, AirPlay et l'interface Philips répondent encore : c'est le
+     * seul signe qu'elle est vraiment allumée quand elle ne lit rien (relevé du 27/11, 55OLED760).
+     */
+    fun castServiceUp(host: String): Boolean = runCatching {
+        val c = URL("http://$host:8008/setup/eureka_info").openConnection() as HttpURLConnection
+        c.connectTimeout = 1500; c.readTimeout = 1500
+        try { c.responseCode == 200 } finally { c.disconnect() }
+    }.getOrDefault(false)
+
     fun getVolume(r: Renderer): Int =
         tag(rc(r, "GetVolume", "Channel" to "Master"), "CurrentVolume")?.toIntOrNull() ?: 0
 

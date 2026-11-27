@@ -237,6 +237,7 @@
     <string name="subs_none">Aucun</string>
     <string name="subs_add">Ajouter un fichier</string>
     <string name="subs_note">Fichiers SRT, VTT et ASS acceptés. Certaines télés n’affichent pas les sous-titres envoyés ainsi.</string>
+    <string name="notice_tv_standby">%1$s est en veille. Allume-la avec sa télécommande, puis réessaie.</string>
     <string name="notice_pick_tv">Choisis une télé pour lancer la lecture.</string>
     <string name="err_no_wifi">Connecte ton téléphone au même Wi-Fi que la télé.</string>
     <string name="err_drm">Cette vidéo est protégée (DRM) et ne peut pas être envoyée sur la télé.</string>

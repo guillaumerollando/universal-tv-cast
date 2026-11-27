@@ -423,7 +423,8 @@
   "style_live_sub": "Fotografiile se schimbă, iar ora se actualizează în fiecare minut.",
   "style_show_tv": "Arată pe televizor",
   "style_icon": "Pictograma aplicației",
-  "style_icon_note": "Noua pictogramă apare după ce ieșiți din aplicație. Poate dispărea o clipă de pe ecranul principal."
+  "style_icon_note": "Noua pictogramă apare după ce ieșiți din aplicație. Poate dispărea o clipă de pe ecranul principal.",
+  "notice_tv_standby": "%1$s este în standby. Porniți-l din telecomandă, apoi încercați din nou."
  },
  "plurals": {
   "browser_found": {

@@ -423,7 +423,8 @@
   "style_live_sub": "사진이 바뀌고 시간은 1분마다 갱신돼요.",
   "style_show_tv": "TV에서 보기",
   "style_icon": "앱 아이콘",
-  "style_icon_note": "새 아이콘은 앱을 나가면 나타나요. 홈 화면에서 잠시 사라질 수 있어요."
+  "style_icon_note": "새 아이콘은 앱을 나가면 나타나요. 홈 화면에서 잠시 사라질 수 있어요.",
+  "notice_tv_standby": "%1$s이(가) 대기 모드예요. 리모컨으로 켠 다음 다시 시도해 주세요."
  },
  "plurals": {
   "browser_found": {

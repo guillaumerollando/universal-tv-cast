@@ -425,6 +425,7 @@
     <string name="style_show_tv">Показати на телевізорі</string>
     <string name="style_icon">Значок застосунку</string>
     <string name="style_icon_note">Новий значок з’явиться, коли ви вийдете з застосунку. Він може ненадовго зникнути з головного екрана.</string>
+    <string name="notice_tv_standby">%1$s у режимі очікування. Увімкніть його пультом і спробуйте ще раз.</string>
     <plurals name="browser_found">
         <item quantity="one">%d відео</item>
         <item quantity="few">%d відео</item>

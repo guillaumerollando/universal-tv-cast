@@ -423,7 +423,8 @@
   "style_live_sub": "Fotoğraflar değişir, saat her dakika güncellenir.",
   "style_show_tv": "TV'de göster",
   "style_icon": "Uygulama simgesi",
-  "style_icon_note": "Yeni simge uygulamadan çıkınca görünür. Ana ekrandan kısa bir süre kaybolabilir."
+  "style_icon_note": "Yeni simge uygulamadan çıkınca görünür. Ana ekrandan kısa bir süre kaybolabilir.",
+  "notice_tv_standby": "%1$s bekleme modunda. Kumandasıyla aç, sonra tekrar dene."
  },
  "plurals": {
   "browser_found": {

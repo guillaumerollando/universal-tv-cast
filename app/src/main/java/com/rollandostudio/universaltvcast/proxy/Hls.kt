@@ -73,17 +73,22 @@ object Hls {
             .mapNotNull { it["GROUP-ID"] }
             .toSet()
 
-        class Variant(val bandwidth: Long, val audio: String?, val uri: String)
+        class Variant(val bandwidth: Long, val audio: String?, val uri: String, val hevc: Boolean)
         val variants = mutableListOf<Variant>()
         for ((i, line) in lines.withIndex()) {
             if (!line.startsWith("#EXT-X-STREAM-INF:")) continue
             val a = attrs(line.substringAfter(':'))
             val uri = lines.drop(i + 1).firstOrNull { it.isNotEmpty() && !it.startsWith("#") } ?: continue
-            variants += Variant(a["BANDWIDTH"]?.toLongOrNull() ?: 0, a["AUDIO"], uri)
+            val codecs = a["CODECS"].orEmpty().lowercase()
+            variants += Variant(a["BANDWIDTH"]?.toLongOrNull() ?: 0, a["AUDIO"], uri,
+                hevc = codecs.contains("hvc1") || codecs.contains("hev1") || codecs.contains("dvh"))
         }
         if (variants.isEmpty()) return parseMedia(text, f.finalUrl, false)
-        val muxed = variants.filter { it.audio == null || it.audio !in audioGroupsWithUri }
-        val chosen = muxed.ifEmpty { variants }.maxBy { it.bandwidth }
+        // H.264 d'abord : toutes les télés le lisent ; le HEVC (H.265) en flux continu en fige certaines (Philips :
+        // quelques secondes d'image puis plus rien). Le HEVC seulement s'il n'y a rien d'autre.
+        val compatible = variants.filter { !it.hevc }.ifEmpty { variants }
+        val muxed = compatible.filter { it.audio == null || it.audio !in audioGroupsWithUri }
+        val chosen = muxed.ifEmpty { compatible }.maxBy { it.bandwidth }
         val split = muxed.isEmpty()
         val v = Http.fetch(resolve(f.finalUrl, chosen.uri), headers)
         return parseMedia(String(v.bytes, Charsets.UTF_8), v.finalUrl, split)

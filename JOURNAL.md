@@ -1394,3 +1394,14 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   saute plus directement à la fenêtre : l'accueil amène la tuile « Lien » à l'écran et la fait briller (même lueur en
   fondu que la grande tuile du nouveau venu). Vérifié sur émulateur.
 - Pas fait : rien.
+
+## 2026-11-27 — Flow (Arte) figé sur la télé après quelques secondes
+- Cause (journaux du téléphone + flux relayé analysé avec ffprobe) : Arte sert désormais ses vidéos en MP4 par
+  morceaux (CMAF) avec le son à part, et propose du HEVC. La Philips ne lit pas le HLS, donc flux continu : le relais
+  choisissait la variante HEVC (1080p) et ne recollait pas le son (fusion faite seulement pour le TS). La télé
+  affichait quelques secondes puis se figeait (compteur qui avance, 1,3 Mo en attente sur la connexion).
+- Fait : choix de variante H.264 d'abord (HEVC seulement s'il n'y a rien d'autre) ; nouveau `Fmp4Merge` qui recolle
+  le son au MP4 fragmenté (en-tête à deux pistes, fragments renumérotés, son calé dans le temps comme pour le TS, ce
+  qui absorbe l'écart 5,991 / 6,000 s des morceaux d'Arte). Vérifié sur les vrais morceaux de Flow à 2682 s :
+  H.264 + AAC, mêmes horodatages, décodage complet sans erreur (test `Fmp4MergeTest`, avec FMP4_SAMPLES).
+- Pas vérifié : la lecture sur la vraie télé (attendre l'essai de Guillaume).

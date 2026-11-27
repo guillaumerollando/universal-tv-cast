@@ -408,8 +408,14 @@ class ProxyServer(private val ctx: Context) {
         }
         val keys = ConcurrentHashMap<String, ByteArray>()
         // Son servi à part : on le recolle à l'image, morceau par morceau (même début dans le temps).
-        val audioPlan = r.audio?.takeIf { !plan.fmp4 }?.let { runCatching { Hls.load(it, r.headers) }.getOrNull() }
-        val merger = if (audioPlan != null) TsMerge() else null
+        // MP4 par morceaux (CMAF) avec le son à part : piste son choisie, sinon celle par défaut de la liste maîtresse.
+        val fmp4Audio = if (plan.fmp4 && plan.splitAudio) r.audio ?: audioChoice
+            ?: runCatching { Hls.tracks(r.url, r.headers).first.let { t -> t.firstOrNull { it.default } ?: t.firstOrNull() }?.uri }.getOrNull()
+            else null
+        val audioPlan = (if (plan.fmp4) fmp4Audio else r.audio)?.let { runCatching { Hls.load(it, r.headers) }.getOrNull() }
+        val merger = if (audioPlan != null && !plan.fmp4) TsMerge() else null
+        val fmerger = if (audioPlan != null && plan.fmp4) Fmp4Merge() else null
+        var mergedInit = false
         var aIdx = 0
         var aTime = 0.0
         if (audioPlan != null) {
@@ -445,11 +451,27 @@ class ProxyServer(private val ctx: Context) {
                 failures = 0
                 val map = seg.map
                 if (map != null && seg.mapId != currentMap) {
-                    out.write(Hls.bytes(map, seg.mapRange, r.headers))
+                    val vInit = Hls.bytes(map, seg.mapRange, r.headers)
+                    // Son à part (MP4) : un seul en-tête pour les deux pistes, envoyé une fois.
+                    val aSeg0 = audioPlan?.segs?.getOrNull(aIdx)
+                    val merged = if (fmerger != null && !mergedInit && aSeg0?.map != null)
+                        runCatching { fmerger.init(vInit, Hls.bytes(aSeg0.map, aSeg0.mapRange, r.headers)) }.getOrNull() else null
+                    if (merged != null) {
+                        out.write(merged); mergedInit = true
+                        Log.i(TAG, "image et son séparés (MP4) : fusion à partir de ${aTime.toInt()} s")
+                    } else if (!mergedInit) out.write(vInit)
                     currentMap = seg.mapId
                 }
                 vTime += seg.duration
-                if (merger != null && audioPlan != null) {
+                if (fmerger != null && mergedInit && audioPlan != null) {
+                    val sound = java.io.ByteArrayOutputStream()
+                    while (aIdx < audioPlan.segs.size && aTime < vTime) {
+                        val aSeg = audioPlan.segs[aIdx++]
+                        fetchSegment(aSeg, r.headers, keys, false)?.let(sound::write)
+                        aTime += aSeg.duration
+                    }
+                    out.write(fmerger.merge(data, sound.toByteArray()))
+                } else if (merger != null && audioPlan != null) {
                     val sound = java.io.ByteArrayOutputStream()
                     while (aIdx < audioPlan.segs.size && aTime < vTime) {
                         val aSeg = audioPlan.segs[aIdx++]

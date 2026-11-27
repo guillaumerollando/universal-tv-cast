@@ -38,6 +38,10 @@ object LanStore {
     var sort: String
         get() = prefs.getString("sort", "name") ?: "name"
         set(v) { prefs.edit().putString("sort", v).apply() }
+    /** Sens du tri : faux = croissant (A→Z, plus ancien d'abord), vrai = décroissant. */
+    var sortDesc: Boolean
+        get() = prefs.getBoolean("sort_desc", false)
+        set(v) { prefs.edit().putBoolean("sort_desc", v).apply() }
     var hideWatched: Boolean
         get() = prefs.getBoolean("hide_watched", false)
         set(v) { prefs.edit().putBoolean("hide_watched", v).apply() }

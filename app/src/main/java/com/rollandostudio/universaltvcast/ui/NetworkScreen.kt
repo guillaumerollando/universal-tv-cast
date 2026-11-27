@@ -42,6 +42,8 @@ import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.ArrowDownward
+import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.material.icons.automirrored.rounded.Sort
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.StarBorder
@@ -188,6 +190,7 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
     LaunchedEffect(start) { start?.let { go(Place(it.device(), it.ref.ifEmpty { null }, it.title)) } }
     val favs by LanStore.folders.collectAsState()
     var sort by remember { mutableStateOf(LanStore.sort) }
+    var sortDesc by remember { mutableStateOf(LanStore.sortDesc) }
     var hideWatched by remember { mutableStateOf(LanStore.hideWatched) }
     fun up() {
         path.removeAt(path.lastIndex)
@@ -266,11 +269,22 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
                     Box {
                         IconButton(onClick = { menu = true }) { Icon(Icons.AutoMirrored.Rounded.Sort, stringResource(R.string.lan_sort)) }
                         DropdownMenu(menu, onDismissRequest = { menu = false }, shape = RoundedCornerShape(16.dp)) {
-                            listOf("name" to R.string.lan_sort_name, "recent" to R.string.lan_sort_recent, "year" to R.string.lan_sort_year).forEach { (k, label) ->
+                            // Comme l'explorateur de Windows : un tri, et sa flèche (↓ croissant, ↑ décroissant) ;
+                            // retoucher le tri choisi inverse le sens. Un nouveau tri part dans son sens naturel
+                            // (nom de A à Z ; ajout, année et note : les plus récents ou les mieux notés d'abord).
+                            listOf("name" to R.string.lan_sort_name, "recent" to R.string.lan_sort_recent,
+                                "year" to R.string.lan_sort_year, "rating" to R.string.lan_sort_rating).forEach { (k, label) ->
                                 DropdownMenuItem(
                                     text = { Text(stringResource(label)) },
                                     leadingIcon = { if (sort == k) Icon(Icons.Rounded.Check, null) else Spacer(Modifier.size(24.dp)) },
-                                    onClick = { sort = k; LanStore.sort = k; menu = false },
+                                    trailingIcon = {
+                                        if (sort == k) Icon(if (sortDesc) Icons.Rounded.ArrowUpward else Icons.Rounded.ArrowDownward,
+                                            stringResource(if (sortDesc) R.string.lan_sort_desc else R.string.lan_sort_asc), tint = c.primary)
+                                    },
+                                    onClick = {
+                                        if (sort == k) sortDesc = !sortDesc else { sort = k; sortDesc = k != "name" }
+                                        LanStore.sort = sort; LanStore.sortDesc = sortDesc
+                                    },
                                 )
                             }
                             androidx.compose.material3.HorizontalDivider()
@@ -360,7 +374,7 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
                     else -> LanFolderView(
                         entries = entries.orEmpty(),
                         parents = path.map { it.title },
-                        sort = sort, hideWatched = hideWatched,
+                        sort = sort, sortDesc = sortDesc, hideWatched = hideWatched,
                         onFolder = { f -> go(Place(f.device!!, f.ref, f.name)) },
                         onPlay = { e, all, infos -> play(e, all, infos) },
                     )

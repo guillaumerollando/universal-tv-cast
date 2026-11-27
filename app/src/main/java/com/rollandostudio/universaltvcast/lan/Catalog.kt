@@ -34,6 +34,9 @@ object Catalog {
         val still: String? = null,
         /** Jaquette intégrée au fichier (MP4, MKV), copiée en petit sur le téléphone (chemin d'un fichier). */
         val cover: String? = null,
+        /** Genres (codes anglais de l'annuaire : « Drama », « Sci-Fi »…) et note IMDb sur 10. */
+        val genres: List<String> = emptyList(),
+        val rating: Double? = null,
     ) {
         val isEpisode: Boolean get() = season != null && episode != null
     }
@@ -180,6 +183,7 @@ object Catalog {
         val title = tags?.title?.takeIf { it.isNotEmpty() && !named.isEpisode } ?: m.optString("name").ifEmpty { base.title }
         val poster = m.optString("poster").ifEmpty { null }?.replace("/poster/small/", "/poster/medium/")
             ?: "https://images.metahub.space/poster/medium/$id/img"
+        val (genres, rating) = details(m, if (series) "series" else "movie")
         return if (base.isEpisode) {
             val name = episodeTitles(id)["${base.season}:${base.episode}"]
             base.copy(title = title, poster = poster, logo = "https://images.metahub.space/logo/medium/$id/img",
@@ -188,8 +192,29 @@ object Catalog {
         } else base.copy(
             title = title, year = base.year ?: m.optString("year").take(4).toIntOrNull(), poster = poster,
             backdrop = m.optString("background").ifEmpty { null } ?: "https://images.metahub.space/background/medium/$id/img",
-            logo = "https://images.metahub.space/logo/medium/$id/img",
+            logo = "https://images.metahub.space/logo/medium/$id/img", genres = genres, rating = rating,
         )
+    }
+
+    /** Genres et note du film (fiche complète, demandée une fois puis gardée avec la réponse de l'annuaire). */
+    private suspend fun details(m: JSONObject, type: String): Pair<List<String>, Double?> {
+        if (!m.has("g")) withContext(Dispatchers.IO) {
+            gate.withPermit {
+                if (m.has("g")) return@withPermit
+                runCatching {
+                    val j = JSONObject(String(Http.fetch("https://v3-cinemeta.strem.io/meta/$type/${m.optString("id")}.json",
+                        emptyMap(), connectTimeout = 8000).bytes)).optJSONObject("meta") ?: return@runCatching
+                    val g = j.optJSONArray("genres") ?: j.optJSONArray("genre")
+                    synchronized(m) {
+                        m.put("g", org.json.JSONArray().apply { for (i in 0 until (g?.length() ?: 0)) put(g!!.getString(i)) })
+                        j.optString("imdbRating").toDoubleOrNull()?.let { m.put("r", it) }
+                    }
+                    save()
+                }
+            }
+        }
+        val g = m.optJSONArray("g")
+        return (0 until (g?.length() ?: 0)).map { g!!.getString(it) } to m.optDouble("r").takeIf { !it.isNaN() }
     }
 
     /** Une série d'après le nom de son dossier (« Breaking Bad »), pour l'affiche du dossier. */

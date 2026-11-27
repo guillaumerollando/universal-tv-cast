@@ -1362,3 +1362,11 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   Corrigé : le titre écrit dans le fichier passe avant celui de l'annuaire ; « Épisode suivant » seulement entre
   épisodes (plus entre deux films d'un même dossier).
 - Pas fait : rien.
+
+## 2026-11-27 — Vidéothèque : sens du tri, genres, note, « Au hasard »
+- Fait : tri comme l'explorateur Windows (flèche ↓ croissant / ↑ décroissant à côté du tri choisi ; retoucher le
+  tri inverse ; nouveau tri dans son sens naturel : nom A→Z, ajout / année / note les plus récents ou mieux notés
+  d'abord ; sans valeur toujours à la fin). Nouveau tri « Note ». Note ★ IMDb sous chaque affiche. Puces de genres
+  (traduits, 21 genres en 23 langues, tirés de la fiche du film, gardée) pour filtrer, et « Au hasard » (un film
+  pas encore vu parmi ceux affichés). Vérifié sur émulateur.
+- Pas fait : rien.

@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Casino
 import androidx.compose.material.icons.rounded.Folder
 import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material3.Icon
@@ -32,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -82,6 +84,7 @@ internal fun LanFolderView(
     /** Noms des dossiers au-dessus (le dernier est le parent), pour reconnaître « Séries › Breaking Bad › Saison 1 ». */
     parents: List<String>,
     sort: String,
+    sortDesc: Boolean,
     hideWatched: Boolean,
     onFolder: (LanEntry) -> Unit,
     onPlay: (LanEntry, List<LanEntry>, Map<String, Catalog.Info>) -> Unit,
@@ -114,14 +117,38 @@ internal fun LanFolderView(
     fun info(v: LanEntry) = infos[v.name] ?: Catalog.parse(v.name)
 
     val episodesMode = videos0.isNotEmpty() && videos0.count { Catalog.parse(it.name).isEpisode } * 2 >= videos0.size
+    // Genre choisi (puces) : seulement pour les films.
+    var genre by androidx.compose.runtime.saveable.rememberSaveable(entries) { androidx.compose.runtime.mutableStateOf<String?>(null) }
     val visible = videos0.filter { !hideWatched || watched[it.url]?.finished != true }
+        .filter { genre == null || genre in info(it).genres }
+    // Croissant : A→Z, plus ancien, plus petite note ; « décroissant » inverse. Le titre départage toujours de A à Z.
+    val byTitle = Comparator<LanEntry> { a, b -> Lan.natural(info(a).title, info(b).title) }
+    // Sans valeur (année ou note inconnue) : toujours à la fin, quel que soit le sens.
+    fun by(key: (LanEntry) -> Double?): Comparator<LanEntry> = Comparator<LanEntry> { a, b ->
+        val x = key(a); val y = key(b)
+        when {
+            x == null && y == null -> 0
+            x == null -> 1
+            y == null -> -1
+            else -> if (sortDesc) y.compareTo(x) else x.compareTo(y)
+        }
+    }.then(byTitle)
     val videos = when {
         episodesMode -> playOrder(visible)
-        sort == "recent" -> visible.sortedByDescending { it.date ?: 0L }
-        sort == "year" -> visible.sortedWith(compareByDescending<LanEntry> { info(it).year ?: 0 }.then { a, b -> Lan.natural(info(a).title, info(b).title) })
-        else -> visible.sortedWith { a, b -> Lan.natural(info(a).title, info(b).title) }
+        sort == "recent" -> visible.sortedWith(by { it.date?.toDouble() })
+        sort == "year" -> visible.sortedWith(by { info(it).year?.toDouble() })
+        sort == "rating" -> visible.sortedWith(by { info(it).rating })
+        else -> visible.sortedWith(if (sortDesc) byTitle.reversed() else byTitle)
     }
-    val folders = entries.filter { it.folder }.let { f -> if (sort == "recent") f.sortedByDescending { it.date ?: 0L } else f }
+    val folders = entries.filter { it.folder }.let { f ->
+        when {
+            sort == "recent" -> f.sortedWith(compareBy<LanEntry> { it.date ?: 0L }.let { c -> if (sortDesc) c.reversed() else c })
+            sort == "name" && sortDesc -> f.reversed()
+            else -> f
+        }
+    }
+    val genres = if (episodesMode) emptyList() else videos0.flatMap { info(it).genres }.groupingBy { it }.eachCount()
+        .entries.sortedByDescending { it.value }.map { it.key }
     val others = entries.filter { !it.folder && it.kind != LanEntry.Kind.VIDEO && it !in art }
     val order = playOrder(videos0)
     val play = { v: LanEntry -> onPlay(v, order, infos.toMap()) }
@@ -136,6 +163,32 @@ internal fun LanFolderView(
         val full: (androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope) -> GridItemSpan = { GridItemSpan(it.maxLineSpan) }
         if (episodesMode) {
             item(span = full) { SeriesHeader(videos0.firstOrNull()?.let { info(it) }, folderPoster?.let(::uriOf)) }
+        }
+        // « Au hasard » (un film pas encore vu, parmi ceux affichés) et les genres présents dans le dossier.
+        if (!episodesMode && videos0.size >= 2) item(span = full, key = "chips") {
+            androidx.compose.foundation.lazy.LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                item {
+                    androidx.compose.material3.AssistChip(
+                        onClick = {
+                            val pool = videos.filter { watched[it.url]?.finished != true }.ifEmpty { videos }
+                            pool.randomOrNull()?.let(play)
+                        },
+                        label = { Text(stringResource(R.string.lan_random)) },
+                        leadingIcon = { Icon(Icons.Rounded.Casino, null, Modifier.size(18.dp)) },
+                    )
+                }
+                if (genres.size >= 2) {
+                    item {
+                        androidx.compose.material3.FilterChip(selected = genre == null, onClick = { genre = null },
+                            label = { Text(stringResource(R.string.lan_all)) })
+                    }
+                    items(genres.size) { i ->
+                        val g = genres[i]
+                        androidx.compose.material3.FilterChip(selected = genre == g, onClick = { genre = if (genre == g) null else g },
+                            label = { Text(genreLabel(g)) })
+                    }
+                }
+            }
         }
         items(folders, key = { "d" + it.ref }) { f -> FolderPoster(f, parents) { onFolder(f) } }
         if (episodesMode) {
@@ -220,6 +273,16 @@ private fun WatchOverlay(w: LanStore.Watch?, modifier: Modifier = Modifier) {
     }
 }
 
+/** Nom du genre dans la langue de l'appli (l'annuaire le donne en anglais). */
+@Composable
+private fun genreLabel(code: String): String {
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    val id = remember(code) {
+        ctx.resources.getIdentifier("genre_" + code.replace("-", "").replace(" ", "").lowercase(), "string", ctx.packageName)
+    }
+    return if (id != 0) stringResource(id) else code
+}
+
 @Composable
 private fun PosterTile(v: LanEntry, info: Catalog.Info, local: String?, w: LanStore.Watch?, onClick: () -> Unit) {
     val c = MaterialTheme.colorScheme
@@ -231,7 +294,8 @@ private fun PosterTile(v: LanEntry, info: Catalog.Info, local: String?, w: LanSt
         }
         Spacer(Modifier.height(6.dp))
         Text(info.title, style = MaterialTheme.typography.labelLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
-        info.year?.let { Text(it.toString(), style = MaterialTheme.typography.labelSmall, color = c.onSurfaceVariant) }
+        val sub = listOfNotNull(info.year?.toString(), info.rating?.let { "★ %.1f".format(it) })
+        if (sub.isNotEmpty()) Text(sub.joinToString("  ·  "), style = MaterialTheme.typography.labelSmall, color = c.onSurfaceVariant)
     }
 }
 

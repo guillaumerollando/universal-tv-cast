@@ -1455,6 +1455,110 @@
   "net_unreachable": {
    "en": "%1$s isn’t answering. Check that it’s on and on the same Wi-Fi.",
    "fr": "%1$s ne répond pas. Vérifie qu’il est allumé et sur le même Wi-Fi."
+  },
+  "genre_action": {
+   "en": "Action",
+   "fr": "Action"
+  },
+  "genre_adventure": {
+   "en": "Adventure",
+   "fr": "Aventure"
+  },
+  "genre_animation": {
+   "en": "Animation",
+   "fr": "Animation"
+  },
+  "genre_biography": {
+   "en": "Biography",
+   "fr": "Biopic"
+  },
+  "genre_comedy": {
+   "en": "Comedy",
+   "fr": "Comédie"
+  },
+  "genre_crime": {
+   "en": "Crime",
+   "fr": "Policier"
+  },
+  "genre_documentary": {
+   "en": "Documentary",
+   "fr": "Documentaire"
+  },
+  "genre_drama": {
+   "en": "Drama",
+   "fr": "Drame"
+  },
+  "genre_family": {
+   "en": "Family",
+   "fr": "Famille"
+  },
+  "genre_fantasy": {
+   "en": "Fantasy",
+   "fr": "Fantastique"
+  },
+  "genre_history": {
+   "en": "History",
+   "fr": "Historique"
+  },
+  "genre_horror": {
+   "en": "Horror",
+   "fr": "Horreur"
+  },
+  "genre_music": {
+   "en": "Music",
+   "fr": "Musique"
+  },
+  "genre_musical": {
+   "en": "Musical",
+   "fr": "Comédie musicale"
+  },
+  "genre_mystery": {
+   "en": "Mystery",
+   "fr": "Mystère"
+  },
+  "genre_romance": {
+   "en": "Romance",
+   "fr": "Romance"
+  },
+  "genre_scifi": {
+   "en": "Sci-Fi",
+   "fr": "Science-fiction"
+  },
+  "genre_sport": {
+   "en": "Sport",
+   "fr": "Sport"
+  },
+  "genre_thriller": {
+   "en": "Thriller",
+   "fr": "Thriller"
+  },
+  "genre_war": {
+   "en": "War",
+   "fr": "Guerre"
+  },
+  "genre_western": {
+   "en": "Western",
+   "fr": "Western"
+  },
+  "lan_sort_rating": {
+   "en": "Rating",
+   "fr": "Note"
+  },
+  "lan_random": {
+   "en": "Surprise me",
+   "fr": "Au hasard"
+  },
+  "lan_all": {
+   "en": "All",
+   "fr": "Tous"
+  },
+  "lan_sort_asc": {
+   "en": "Ascending",
+   "fr": "Croissant"
+  },
+  "lan_sort_desc": {
+   "en": "Descending",
+   "fr": "Décroissant"
   }
  },
  "plurals": {

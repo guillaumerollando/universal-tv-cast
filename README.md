@@ -33,10 +33,10 @@ Le téléphone fait tourner un petit serveur HTTP (`proxy/ProxyServer.kt`) que l
 La télé est trouvée par SSDP (et Google Cast, version `play`) puis commandée en SOAP UPnP AVTransport /
 RenderingControl (`dlna/Dlna.kt`).
 
-## Où est quoi (`app/src/main/java/studio/rollando/castor/`)
+## Où est quoi (`app/src/main/java/studio/rollando/tvcast/`)
 | Dossier | Rôle |
 |---|---|
-| `cast/` | Le chef d'orchestre `Castor.kt` (télé ou téléphone, envoi, commandes), lecteur du téléphone (`PhoneEngine`), album et diaporama, vérification de la source (`SourceCheck`), état (`CastState`) |
+| `cast/` | Le chef d'orchestre `TvCast.kt` (télé ou téléphone, envoi, commandes), lecteur du téléphone (`PhoneEngine`), album et diaporama, vérification de la source (`SourceCheck`), état (`CastState`) |
 | `browser/` | Navigateur : logique (`BrowserController`), écran (`BrowserScreen`), repérage des vidéos (`VideoSniffer`), épisodes et titres |
 | `proxy/` | Serveur relais pour la télé : HLS, enregistrement du direct, sous-titres, MKV/MP4 |
 | `data/` | Historique et favoris (`Library`), chaînes et listes (`Iptv`, `IptvStore`, `Channels`), guide (`Epg`), économie d'énergie |

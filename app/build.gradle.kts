@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "studio.rollando.castor"
+    namespace = "studio.rollando.tvcast"
     compileSdk = 36
 
     defaultConfig {

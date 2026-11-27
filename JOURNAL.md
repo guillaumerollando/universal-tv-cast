@@ -1265,3 +1265,15 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 
 **Pas fait**
 - Suggestions de style de l'analyse (UseKtx…) et mises à jour de bibliothèques : sans effet, ou à faire à part.
+
+## 2026-11-27 — Fin du nom « Castor » dans le code
+**Fait**
+- Paquet du code `studio.rollando.castor` → `studio.rollando.tvcast` (dossiers main, play, libre, test) ;
+  `Castor` → `TvCast` (objet central, `TvCastApp`, `TvCastApplication`, `TvCastTheme`, `Theme.TvCast`, pont
+  JavaScript `TvCastBridge`) ; étiquettes du journal Android `TvCast…` ; verrous et fils `tvcast-…`.
+- Gardé exprès : l'**identifiant de l'appli** `studio.rollando.castor` (applicationId). Le changer en ferait une
+  autre appli pour Android et le Play Store : désinstallation, historique perdu, nouvelle fiche. Invisible pour
+  les utilisateurs. Les fichiers de données (library, iptv, epg…) n'avaient pas le nom : rien à migrer.
+- Vérifié sur émulateur (installation par-dessus l'ancienne : historique gardé, vidéo repérée et reprise).
+- Note : les journaux plus haut citent encore `Castor.kt`, `CastorApp.kt`, `castor/…` : ce sont désormais
+  `TvCast.kt`, `TvCastApp.kt`, `tvcast/…`.

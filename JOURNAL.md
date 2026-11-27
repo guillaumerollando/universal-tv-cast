@@ -1556,3 +1556,8 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - Vérifié : tests `VoicesTest` / `MkvAudioTest` sur fichiers réels (ffprobe / ffmpeg : seule la voix anglaise reste et
   se décode, image intacte) ; émulateur : voix proposées pour MP4 et TS servis par le réseau, voix anglaise choisie
   sur le téléphone. Pas vérifié : à l'oreille sur la Philips (télé éteinte), le démuxeur TS de GStreamer (absent du PC).
+
+## 2026-11-28 — Cartes « Langue » et « Sous-titres » identiques
+- Fait : une seule ligne commune (`OptionRow`) : icône, titre, choix en cours, un appui ouvre la liste ; même fond,
+  même forme, même hauteur. La flèche des sous-titres est retirée ; le bouton « Décalage » reste en bout de ligne
+  une fois un sous-titre choisi. Vérifié par capture sur émulateur.

@@ -566,16 +566,12 @@ private fun AudioCard(s: CastState) {
     var open by remember { mutableStateOf(false) }
     val current = s.audioTracks.getOrNull(s.audioIndex)?.name.orEmpty()
     Card(
-        onClick = { open = true }, shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        shape = RoundedCornerShape(20.dp),
     ) {
         Box {
-            ListItem(
-                headlineContent = { Text(stringResource(R.string.audio_language)) },
-                supportingContent = { Text(current.replaceFirstChar { it.titlecase() }) },
-                leadingContent = { Icon(Icons.Rounded.Translate, null) },
-                colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-            )
+            OptionRow(Icons.Rounded.Translate, stringResource(R.string.audio_language),
+                current.replaceFirstChar { it.titlecase() }, active = true, onClick = { open = true })
             DropdownMenu(open, onDismissRequest = { open = false }) {
                 s.audioTracks.forEachIndexed { i, t ->
                     DropdownMenuItem(
@@ -586,6 +582,36 @@ private fun AudioCard(s: CastState) {
                 }
             }
         }
+    }
+}
+
+/**
+ * Ligne commune des cartes « Langue » et « Sous-titres » : icône, titre, choix en cours ; toute la largeur réagit au
+ * toucher (un appui ouvre la liste). [trailing] : un bouton en bout de ligne (décalage des sous-titres).
+ */
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun OptionRow(
+    icon: androidx.compose.ui.graphics.vector.ImageVector, title: String, value: String, active: Boolean,
+    onClick: () -> Unit, onLongClick: (() -> Unit)? = null, onLongClickLabel: String? = null,
+    trailing: (@Composable () -> Unit)? = null,
+) {
+    val c = MaterialTheme.colorScheme
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .combinedClickable(role = Role.Button, onClick = onClick, onLongClickLabel = onLongClickLabel, onLongClick = onLongClick)
+            .padding(start = 16.dp, end = if (trailing != null) 8.dp else 16.dp, top = 6.dp, bottom = 6.dp)
+            .heightIn(min = 40.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(icon, null, tint = if (active) c.primary else c.onSurfaceVariant, modifier = Modifier.size(22.dp))
+        Spacer(Modifier.width(10.dp))
+        Text(title, style = MaterialTheme.typography.titleSmall)
+        Spacer(Modifier.width(8.dp))
+        Text(value, style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant,
+            maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+        trailing?.invoke()
     }
 }
 
@@ -643,29 +669,13 @@ private fun SubtitlesCard(s: CastState) {
     ) {
         Column {
             Box {
-                // Toute la largeur de la carte réagit au toucher (la surbrillance aussi).
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .combinedClickable(
-                            role = Role.Button,
-                            onClick = { if (inVideo) expanded = !expanded else list = true },
-                            onLongClickLabel = if (inVideo) null else addLabel,
-                            onLongClick = if (inVideo) null else ({ options = true }),
-                        )
-                        .padding(start = 16.dp, end = 8.dp, top = 6.dp, bottom = 6.dp)
-                        .heightIn(min = 40.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(Icons.Rounded.Subtitles, null, tint = if (s.subIndex >= 0 || (phoneEmbedded && phoneSel >= 0)) c.primary else c.onSurfaceVariant, modifier = Modifier.size(22.dp))
-                    Spacer(Modifier.width(10.dp))
-                    Text(stringResource(R.string.subs_title), style = MaterialTheme.typography.titleSmall)
-                    Spacer(Modifier.width(8.dp))
-                    Text(
-                        current, style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant,
-                        maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f),
-                    )
-                    if (s.subIndex >= 0 && !inVideo) {
+                OptionRow(
+                    Icons.Rounded.Subtitles, stringResource(R.string.subs_title), current,
+                    active = s.subIndex >= 0 || (phoneEmbedded && phoneSel >= 0),
+                    onClick = { if (inVideo) expanded = !expanded else list = true },
+                    onLongClick = if (inVideo) null else ({ options = true }),
+                    onLongClickLabel = if (inVideo) null else addLabel,
+                    trailing = if (s.subIndex >= 0 && !inVideo) ({
                         // Le décalage, à portée d'un appui une fois un sous-titre choisi.
                         TextButton(onClick = { expanded = !expanded }, contentPadding = PaddingValues(horizontal = 10.dp)) {
                             Text(
@@ -674,13 +684,8 @@ private fun SubtitlesCard(s: CastState) {
                                 style = MaterialTheme.typography.labelLarge,
                             )
                         }
-                    } else {
-                        Icon(
-                            if (inVideo && expanded) Icons.Rounded.ExpandLess else Icons.Rounded.ExpandMore, null,
-                            tint = c.onSurfaceVariant, modifier = Modifier.padding(end = 8.dp),
-                        )
-                    }
-                }
+                    }) else null,
+                )
                 // Vidéo lue sur le téléphone avec ses propres sous-titres : on choisit la piste, ou aucune.
                 if (phoneEmbedded) DropdownMenu(expanded = list, onDismissRequest = { list = false }) {
                     DropdownMenuItem(

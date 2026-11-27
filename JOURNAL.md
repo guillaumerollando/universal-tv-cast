@@ -1388,3 +1388,9 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
     nom) et « Aucun », au lieu de « choisissez-les sur la télé ». Vérifié sur émulateur avec un MKV fr + en.
 - Pas fait / pas vérifié : la correction « allumée » sur la vraie télé (Guillaume) ; une télé allumée mais à l'arrêt
   (rien en lecture) reste vue par la recherche seule.
+
+## 2026-11-27 — Guidage « Coller un lien » aussi pour un habitué
+- Fait : sur l'accueil d'un habitué (Reprendre, favoris…), « Coller un lien » de la carte Chaînes TV gratuites ne
+  saute plus directement à la fenêtre : l'accueil amène la tuile « Lien » à l'écran et la fait briller (même lueur en
+  fondu que la grande tuile du nouveau venu). Vérifié sur émulateur.
+- Pas fait : rien.

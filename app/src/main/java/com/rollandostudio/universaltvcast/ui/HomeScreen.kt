@@ -1,5 +1,7 @@
 package com.rollandostudio.universaltvcast.ui
 
+import androidx.compose.foundation.relocation.bringIntoViewRequester
+
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.runtime.remember
@@ -111,6 +113,12 @@ fun HomeScreen(
     // Habitué (des séries en cours, des sites en favori) : ce qu'il regarde d'abord, les façons de caster en
     // une rangée compacte. Nouveau venu : la présentation et les grandes tuiles.
     if (resume.isNotEmpty() || sites.isNotEmpty() || channels.isNotEmpty() || folders.isNotEmpty()) {
+        // « Coller un lien » de la carte des chaînes gratuites : l'accueil remonte jusqu'à la tuile « Lien » et la fait
+        // briller, comme pour un nouveau venu (on saura où la trouver la prochaine fois).
+        val guideScope = androidx.compose.runtime.rememberCoroutineScope()
+        val linkSpot = remember { androidx.compose.foundation.relocation.BringIntoViewRequester() }
+        var showLink by remember { mutableStateOf(false) }
+        androidx.compose.runtime.LaunchedEffect(showLink) { if (showLink) { kotlinx.coroutines.delay(3200); showLink = false } }
         LazyColumn(
             contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp + LocalBottomInset.current),
             verticalArrangement = Arrangement.spacedBy(14.dp),
@@ -171,12 +179,13 @@ fun HomeScreen(
             }
             item { SectionTitle(stringResource(R.string.home_cast_more), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
             item {
-                Column(Modifier.padding(horizontal = 16.dp)) {
+                Column(Modifier.padding(horizontal = 16.dp).bringIntoViewRequester(linkSpot)) {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         SmallTile(Icons.Rounded.Public, stringResource(R.string.home_browse_tile), Modifier.weight(1f)) { onBrowse(null) }
                         SmallTile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), Modifier.weight(1f), onClick = onPickPhotos)
                         SmallTile(Icons.Rounded.Lan, stringResource(R.string.home_network), Modifier.weight(1f), onClick = onNetwork)
-                        SmallTile(Icons.Rounded.Link, stringResource(R.string.home_link_tile), Modifier.weight(1f), onClick = onPasteLink)
+                        SmallTile(Icons.Rounded.Link, stringResource(R.string.home_link_tile), Modifier.weight(1f), highlight = showLink,
+                            onClick = { showLink = false; onPasteLink() })
                     }
                     MoreSources(onPickFile, showLists = channels.isEmpty()) // sinon, déjà en tête de « Chaînes »
                 }
@@ -186,7 +195,9 @@ fun HomeScreen(
             item {
                 val lists by com.rollandostudio.universaltvcast.data.IptvStore.lists.collectAsState()
                 // Sites gratuits suggérés tant que l'accueil n'est pas chargé (moins de 6 sites), sauf ceux déjà connus.
-                StarterSection(onBrowse = { onBrowse(it) }, onPasteLink = onPasteLink,
+                StarterSection(onBrowse = { onBrowse(it) }, onPasteLink = {
+                    guideScope.launch { linkSpot.bringIntoView(); showLink = true }
+                },
                     showChannels = lists.isEmpty(), showSites = sites.size < 6, known = sites.map { it.host }.toSet())
             }
         }
@@ -459,9 +470,33 @@ private fun ChannelTile(r: Recent, onBrowse: (String?) -> Unit) {
 
 /** Une façon de caster, en petit (accueil des habitués). */
 @Composable
-private fun SmallTile(icon: ImageVector, title: String, modifier: Modifier, onClick: () -> Unit) {
+private fun SmallTile(icon: ImageVector, title: String, modifier: Modifier, highlight: Boolean = false, onClick: () -> Unit) {
     val c = MaterialTheme.colorScheme
-    Surface(onClick = onClick, shape = RoundedCornerShape(18.dp), color = c.surfaceContainerHigh, modifier = modifier.height(84.dp)) {
+    // Même repère « c'est ici » que la grande tuile : lueur ambrée en fondu, sans contour.
+    val level by androidx.compose.animation.core.animateFloatAsState(
+        if (highlight) 1f else 0f,
+        androidx.compose.animation.core.tween(if (highlight) 450 else 1100, easing = androidx.compose.animation.core.FastOutSlowInEasing),
+        label = "repère",
+    )
+    val pulse = androidx.compose.animation.core.rememberInfiniteTransition(label = "repère")
+    val beat by pulse.animateFloat(0.25f, 1f, androidx.compose.animation.core.infiniteRepeatable(
+        androidx.compose.animation.core.tween(650), androidx.compose.animation.core.RepeatMode.Reverse), label = "repère")
+    val glow = beat * level
+    Surface(onClick = onClick, shape = RoundedCornerShape(18.dp),
+        color = if (level > 0f) c.primary.copy(alpha = (0.10f + 0.10f * beat) * level).compositeOver(c.surfaceContainerHigh) else c.surfaceContainerHigh,
+        modifier = modifier.height(84.dp).then(if (level > 0f) Modifier
+            .drawBehind {
+                val r = size.maxDimension * (0.95f + 0.35f * glow)
+                drawCircle(
+                    androidx.compose.ui.graphics.Brush.radialGradient(
+                        listOf(c.primary.copy(alpha = 0.85f * glow), c.primary.copy(alpha = 0.35f * glow), androidx.compose.ui.graphics.Color.Transparent),
+                        center = center, radius = r,
+                    ),
+                    radius = r, center = center,
+                )
+            }
+            .shadow((18 * glow).dp, RoundedCornerShape(18.dp), clip = false, ambientColor = c.primary, spotColor = c.primary)
+        else Modifier)) {
         Column(Modifier.padding(horizontal = 4.dp, vertical = 10.dp), horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween) {
             Box(Modifier.size(36.dp).clip(CircleShape).background(c.primary.copy(alpha = 0.16f)), contentAlignment = Alignment.Center) {

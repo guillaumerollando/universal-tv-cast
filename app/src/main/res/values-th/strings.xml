@@ -399,6 +399,8 @@
     <string name="skip_intro">ข้ามอินโทร</string>
     <string name="skip_recap">ข้ามสรุป</string>
     <string name="skip_credits">ข้ามเครดิต</string>
+    <string name="settings_rate">ให้คะแนนแอป</string>
+    <string name="settings_rate_sub">รีวิวช่วยให้คนอื่นค้นพบแอปนี้</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>

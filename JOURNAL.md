@@ -1442,3 +1442,12 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 ## 2026-11-27 — Idée notée : pub discrète + premium
 - Noté dans `~/Dev/Gestion de projet/Universal TV Cast/idees-plus-tard.md` : si un jour Guillaume veut un revenu,
   une seule bannière non bloquante (accueil), achat unique pour l'enlever, version libre sans pub. Pas d'actualité.
+
+## 2026-11-27 — Noter l'appli (nouvel incontournable du studio)
+- Fait : ligne « Noter l'appli » dans les réglages, juste après « Partager » (ouvre la fiche Play), et fenêtre
+  officielle d'avis de Google (`review-ktx`, version Play seulement) proposée au calme : en revenant à l'accueil,
+  rien en lecture, après 3 vidéos regardées 10 min ou plus sur 2 jours, appli installée depuis 3 jours ; 3 fois au
+  plus, espacées de 4 mois (`data/ReviewPrompt.kt`). Aucune question avant, aucune récompense (règles Google).
+  Version libre : ni ligne ni fenêtre. Textes en 23 langues.
+  Standard du studio passé à 4 incontournables (`standard-incontournables.md` § 4, tableau, `~/Dev/CLAUDE.md`).
+- Pas vérifié : la fenêtre de Google elle-même (elle n'apparaît que pour une appli installée depuis le Play Store).

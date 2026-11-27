@@ -397,7 +397,9 @@
   "stream_phone_only": "Den här strömmen (RTSP / RTMP) spelas upp på telefonen, inte på tv:n.",
   "skip_intro": "Hoppa över intro",
   "skip_recap": "Hoppa över sammanfattning",
-  "skip_credits": "Hoppa över eftertexter"
+  "skip_credits": "Hoppa över eftertexter",
+  "settings_rate": "Betygsätt appen",
+  "settings_rate_sub": "Ett omdöme hjälper andra att hitta den"
  },
  "plurals": {
   "browser_found": {

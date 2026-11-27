@@ -399,6 +399,8 @@
     <string name="skip_intro">Bỏ qua đoạn mở đầu</string>
     <string name="skip_recap">Bỏ qua phần tóm tắt</string>
     <string name="skip_credits">Bỏ qua phần giới thiệu cuối</string>
+    <string name="settings_rate">Đánh giá ứng dụng</string>
+    <string name="settings_rate_sub">Một đánh giá giúp người khác tìm thấy ứng dụng</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

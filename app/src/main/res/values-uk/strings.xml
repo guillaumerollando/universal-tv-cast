@@ -399,6 +399,8 @@
     <string name="skip_intro">Пропустити заставку</string>
     <string name="skip_recap">Пропустити переказ</string>
     <string name="skip_credits">Пропустити титри</string>
+    <string name="settings_rate">Оцінити застосунок</string>
+    <string name="settings_rate_sub">Відгук допоможе іншим його знайти</string>
     <plurals name="browser_found">
         <item quantity="one">%d відео</item>
         <item quantity="few">%d відео</item>

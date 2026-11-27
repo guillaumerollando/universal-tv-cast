@@ -397,7 +397,9 @@
   "stream_phone_only": "สตรีมนี้ (RTSP / RTMP) เล่นบนโทรศัพท์ ไม่ใช่บนทีวี",
   "skip_intro": "ข้ามอินโทร",
   "skip_recap": "ข้ามสรุป",
-  "skip_credits": "ข้ามเครดิต"
+  "skip_credits": "ข้ามเครดิต",
+  "settings_rate": "ให้คะแนนแอป",
+  "settings_rate_sub": "รีวิวช่วยให้คนอื่นค้นพบแอปนี้"
  },
  "plurals": {
   "browser_found": {

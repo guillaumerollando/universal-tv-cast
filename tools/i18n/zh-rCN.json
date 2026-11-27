@@ -397,7 +397,9 @@
   "stream_phone_only": "此直播流（RTSP / RTMP）在手机上播放，不在电视上播放。",
   "skip_intro": "跳过片头",
   "skip_recap": "跳过前情回顾",
-  "skip_credits": "跳过片尾"
+  "skip_credits": "跳过片尾",
+  "settings_rate": "为应用评分",
+  "settings_rate_sub": "评价能帮助更多人发现它"
  },
  "plurals": {
   "browser_found": {

@@ -397,7 +397,9 @@
   "stream_phone_only": "このストリーム（RTSP / RTMP）はテレビではなくスマホで再生されます。",
   "skip_intro": "イントロをスキップ",
   "skip_recap": "あらすじをスキップ",
-  "skip_credits": "エンディングをスキップ"
+  "skip_credits": "エンディングをスキップ",
+  "settings_rate": "アプリを評価",
+  "settings_rate_sub": "レビューがほかの人に見つけてもらう助けになります"
  },
  "plurals": {
   "browser_found": {

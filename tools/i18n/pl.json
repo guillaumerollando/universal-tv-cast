@@ -397,7 +397,9 @@
   "stream_phone_only": "Ten strumień (RTSP / RTMP) odtwarza się w telefonie, nie na telewizorze.",
   "skip_intro": "Pomiń czołówkę",
   "skip_recap": "Pomiń streszczenie",
-  "skip_credits": "Pomiń napisy końcowe"
+  "skip_credits": "Pomiń napisy końcowe",
+  "settings_rate": "Oceń aplikację",
+  "settings_rate_sub": "Opinia pomaga innym ją znaleźć"
  },
  "plurals": {
   "browser_found": {

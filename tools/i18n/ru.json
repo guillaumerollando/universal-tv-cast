@@ -397,7 +397,9 @@
   "stream_phone_only": "Этот поток (RTSP / RTMP) воспроизводится на телефоне, а не на телевизоре.",
   "skip_intro": "Пропустить заставку",
   "skip_recap": "Пропустить пересказ",
-  "skip_credits": "Пропустить титры"
+  "skip_credits": "Пропустить титры",
+  "settings_rate": "Оценить приложение",
+  "settings_rate_sub": "Отзыв поможет другим найти его"
  },
  "plurals": {
   "browser_found": {

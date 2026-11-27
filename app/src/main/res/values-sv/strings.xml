@@ -399,6 +399,8 @@
     <string name="skip_intro">Hoppa över intro</string>
     <string name="skip_recap">Hoppa över sammanfattning</string>
     <string name="skip_credits">Hoppa över eftertexter</string>
+    <string name="settings_rate">Betygsätt appen</string>
+    <string name="settings_rate_sub">Ett omdöme hjälper andra att hitta den</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videor</item>

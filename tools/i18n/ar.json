@@ -397,7 +397,9 @@
   "stream_phone_only": "هذا البث (RTSP / RTMP) يُشغَّل على الهاتف، لا على التلفاز.",
   "skip_intro": "تخطي المقدمة",
   "skip_recap": "تخطي الملخص",
-  "skip_credits": "تخطي الشارة"
+  "skip_credits": "تخطي الشارة",
+  "settings_rate": "قيّم التطبيق",
+  "settings_rate_sub": "يساعد تقييمك الآخرين على العثور عليه"
  },
  "plurals": {
   "browser_found": {

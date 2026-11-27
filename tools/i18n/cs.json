@@ -397,7 +397,9 @@
   "stream_phone_only": "Tento stream (RTSP / RTMP) se přehrává v telefonu, ne na televizi.",
   "skip_intro": "Přeskočit úvod",
   "skip_recap": "Přeskočit shrnutí",
-  "skip_credits": "Přeskočit titulky"
+  "skip_credits": "Přeskočit titulky",
+  "settings_rate": "Ohodnotit aplikaci",
+  "settings_rate_sub": "Hodnocení pomůže ostatním ji najít"
  },
  "plurals": {
   "browser_found": {

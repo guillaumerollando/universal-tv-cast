@@ -399,6 +399,8 @@
     <string name="skip_intro">Girişi atla</string>
     <string name="skip_recap">Özeti atla</string>
     <string name="skip_credits">Jeneriği atla</string>
+    <string name="settings_rate">Uygulamayı puanla</string>
+    <string name="settings_rate_sub">Bir yorum, başkalarının onu bulmasına yardımcı olur</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video</item>

@@ -255,6 +255,7 @@ object Library {
 
     /** Avancement de la lecture en cours (noté régulièrement), pour ne pas proposer de reprendre ce qui est fini. */
     fun setProgress(url: String, pos: Double, dur: Double) {
+        ReviewPrompt.watched(url, pos, dur)
         com.rollandostudio.universaltvcast.lan.LanStore.progress(url, pos, dur)
         if (_recents.value.none { it.url == url }) return
         _recents.value = _recents.value.map { if (it.url == url) it.copy(pos = pos, dur = dur) else it }
@@ -268,6 +269,7 @@ object Library {
     }
 
     fun markFinished(url: String) {
+        _recents.value.firstOrNull { it.url == url }?.let { ReviewPrompt.watched(url, it.pos, it.dur, finished = true) }
         com.rollandostudio.universaltvcast.lan.LanStore.finished(url)
         if (_recents.value.none { it.url == url }) return
         _recents.value = _recents.value.map { if (it.url == url) it.copy(done = true) else it }

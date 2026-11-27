@@ -79,6 +79,8 @@ dependencies {
     // Google Cast : version Play seulement.
     "playImplementation"("com.google.android.gms:play-services-cast-framework:22.1.0")
     "playImplementation"("androidx.mediarouter:mediarouter:1.7.0")
+    // Avis sur le Play Store, sans quitter l'appli (version Play).
+    "playImplementation"("com.google.android.play:review-ktx:2.0.2")
     implementation("androidx.fragment:fragment-ktx:1.8.6")
     // Lecture sur le téléphone (vidéos du web, HLS, sous-titres) : le lecteur standard d'Android.
     implementation("androidx.media3:media3-exoplayer:1.6.1")

@@ -16,6 +16,8 @@
     <string name="widget_desc_photos">Zeig deine Fotos und Videos mit einem Tipp auf dem Fernseher</string>
     <string name="widget_desc">Video und Sender mit einem Tipp weiterschauen</string>
     <string name="widget_empty">Starte ein Video oder einen Sender: Er erscheint hier.</string>
+    <string name="settings_rate">App bewerten</string>
+    <string name="settings_rate_sub">Eine Bewertung hilft anderen, sie zu finden</string>
     <string name="settings_share">App teilen</string>
     <string name="settings_share_sub">Schick sie an Freunde</string>
     <string name="share_text">Web-Videos und TV-Sender kostenlos auf dem großen Bildschirm: %1$s</string>

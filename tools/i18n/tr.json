@@ -397,7 +397,9 @@
   "stream_phone_only": "Bu yayın (RTSP / RTMP) televizyonda değil, telefonda oynatılır.",
   "skip_intro": "Girişi atla",
   "skip_recap": "Özeti atla",
-  "skip_credits": "Jeneriği atla"
+  "skip_credits": "Jeneriği atla",
+  "settings_rate": "Uygulamayı puanla",
+  "settings_rate_sub": "Bir yorum, başkalarının onu bulmasına yardımcı olur"
  },
  "plurals": {
   "browser_found": {

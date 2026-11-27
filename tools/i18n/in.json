@@ -397,7 +397,9 @@
   "stream_phone_only": "Siaran ini (RTSP / RTMP) diputar di ponsel, bukan di TV.",
   "skip_intro": "Lewati intro",
   "skip_recap": "Lewati rangkuman",
-  "skip_credits": "Lewati kredit"
+  "skip_credits": "Lewati kredit",
+  "settings_rate": "Beri nilai aplikasi",
+  "settings_rate_sub": "Ulasan membantu orang lain menemukannya"
  },
  "plurals": {
   "browser_found": {

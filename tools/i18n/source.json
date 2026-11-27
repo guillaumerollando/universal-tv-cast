@@ -1575,6 +1575,14 @@
   "skip_credits": {
    "en": "Skip credits",
    "fr": "Passer le générique"
+  },
+  "settings_rate": {
+   "en": "Rate the app",
+   "fr": "Noter l’appli"
+  },
+  "settings_rate_sub": {
+   "en": "A review helps others find it",
+   "fr": "Un avis aide les autres à la trouver"
   }
  },
  "plurals": {

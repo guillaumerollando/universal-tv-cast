@@ -399,6 +399,8 @@
     <string name="skip_intro">इंट्रो छोड़ें</string>
     <string name="skip_recap">सारांश छोड़ें</string>
     <string name="skip_credits">क्रेडिट छोड़ें</string>
+    <string name="settings_rate">ऐप को रेट करें</string>
+    <string name="settings_rate_sub">आपकी समीक्षा दूसरों को इसे खोजने में मदद करती है</string>
     <plurals name="browser_found">
         <item quantity="one">%d वीडियो</item>
         <item quantity="other">%d वीडियो</item>

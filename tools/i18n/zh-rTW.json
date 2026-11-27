@@ -397,7 +397,9 @@
   "stream_phone_only": "此串流（RTSP / RTMP）在手機上播放，不在電視上播放。",
   "skip_intro": "略過片頭",
   "skip_recap": "略過前情提要",
-  "skip_credits": "略過片尾"
+  "skip_credits": "略過片尾",
+  "settings_rate": "為應用程式評分",
+  "settings_rate_sub": "評論能幫助更多人發現它"
  },
  "plurals": {
   "browser_found": {

@@ -397,7 +397,9 @@
   "stream_phone_only": "Цей потік (RTSP / RTMP) відтворюється на телефоні, а не на телевізорі.",
   "skip_intro": "Пропустити заставку",
   "skip_recap": "Пропустити переказ",
-  "skip_credits": "Пропустити титри"
+  "skip_credits": "Пропустити титри",
+  "settings_rate": "Оцінити застосунок",
+  "settings_rate_sub": "Відгук допоможе іншим його знайти"
  },
  "plurals": {
   "browser_found": {

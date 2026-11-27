@@ -45,6 +45,7 @@ import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Share
+import androidx.compose.material.icons.rounded.StarRate
 import androidx.compose.material.icons.rounded.Tv
 import androidx.compose.material.icons.rounded.WifiFind
 import androidx.compose.material3.AlertDialog
@@ -208,6 +209,17 @@ fun TvCastApp() {
             if (uris.size > 1) TvCast.toggleSlideshow()
         }
         Nav.tab.value = Tab.PLAYER
+    }
+
+    // Proposer de noter l'appli (version Play) : en revenant sur l'accueil, rien en lecture, après de bons moments.
+    val reviewActivity = androidx.activity.compose.LocalActivity.current
+    LaunchedEffect(tab, state.active) {
+        if (tab != Tab.HOME || state.active || !StoreReview.AVAILABLE) return@LaunchedEffect
+        kotlinx.coroutines.delay(1500) // le temps d'arriver : pas de fenêtre en plein mouvement
+        if (com.rollandostudio.universaltvcast.data.ReviewPrompt.due()) {
+            com.rollandostudio.universaltvcast.data.ReviewPrompt.asked()
+            reviewActivity?.let { StoreReview.ask(it) }
+        }
     }
 
     val pickRequest by Nav.pick.collectAsState()
@@ -616,6 +628,17 @@ private fun SettingsSheet(onDismiss: () -> Unit) {
                         val send = Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, text)
                         runCatching { context.startActivity(Intent.createChooser(send, title).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
                     },
+                )
+            }
+            // Noter l'appli (version Play) : toujours accessible ici, juste après « Partager ».
+            if (StoreReview.AVAILABLE) item {
+                val act = androidx.activity.compose.LocalActivity.current
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.settings_rate)) },
+                    supportingContent = { Text(stringResource(R.string.settings_rate_sub)) },
+                    leadingContent = { Icon(Icons.Rounded.StarRate, null) },
+                    colors = ListItemDefaults.colors(containerColor = androidx.compose.ui.graphics.Color.Transparent),
+                    modifier = Modifier.selectable(false, role = Role.Button) { act?.let { StoreReview.openStore(it) } },
                 )
             }
             item {

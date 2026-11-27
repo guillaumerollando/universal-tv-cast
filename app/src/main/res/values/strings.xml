@@ -17,6 +17,8 @@
     <string name="widget_desc_photos">Show your photos and videos on the TV in one tap</string>
     <string name="widget_desc">Pick up your video and your channels in one tap</string>
     <string name="widget_empty">Play a video or a channel: it will show up here.</string>
+    <string name="settings_rate">Rate the app</string>
+    <string name="settings_rate_sub">A review helps others find it</string>
     <string name="settings_share">Share the app</string>
     <string name="settings_share_sub">Send it to a friend</string>
     <string name="share_text">Watch web videos and TV channels on your big screen, for free: %1$s</string>

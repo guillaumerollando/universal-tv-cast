@@ -16,6 +16,8 @@
     <string name="widget_desc_photos">Montre tes photos et vidéos sur la télé en un appui</string>
     <string name="widget_desc">Reprends ta vidéo et tes chaînes en un geste</string>
     <string name="widget_empty">Lance une vidéo ou une chaîne : elle apparaîtra ici.</string>
+    <string name="settings_rate">Noter l’appli</string>
+    <string name="settings_rate_sub">Un avis aide les autres à la trouver</string>
     <string name="settings_share">Partager l’appli</string>
     <string name="settings_share_sub">L’envoyer à un proche</string>
     <string name="share_text">Regarde les vidéos du web et les chaînes de télé sur ton grand écran, gratuitement : %1$s</string>

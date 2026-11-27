@@ -399,6 +399,8 @@
     <string name="skip_intro">تخطي المقدمة</string>
     <string name="skip_recap">تخطي الملخص</string>
     <string name="skip_credits">تخطي الشارة</string>
+    <string name="settings_rate">قيّم التطبيق</string>
+    <string name="settings_rate_sub">يساعد تقييمك الآخرين على العثور عليه</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>

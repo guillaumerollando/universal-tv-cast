@@ -399,6 +399,8 @@
     <string name="skip_intro">イントロをスキップ</string>
     <string name="skip_recap">あらすじをスキップ</string>
     <string name="skip_credits">エンディングをスキップ</string>
+    <string name="settings_rate">アプリを評価</string>
+    <string name="settings_rate_sub">レビューがほかの人に見つけてもらう助けになります</string>
     <plurals name="browser_found">
         <item quantity="other">%d 本の動画</item>
     </plurals>

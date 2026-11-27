@@ -397,7 +397,9 @@
   "stream_phone_only": "Luồng này (RTSP / RTMP) phát trên điện thoại, không phát trên TV.",
   "skip_intro": "Bỏ qua đoạn mở đầu",
   "skip_recap": "Bỏ qua phần tóm tắt",
-  "skip_credits": "Bỏ qua phần giới thiệu cuối"
+  "skip_credits": "Bỏ qua phần giới thiệu cuối",
+  "settings_rate": "Đánh giá ứng dụng",
+  "settings_rate_sub": "Một đánh giá giúp người khác tìm thấy ứng dụng"
  },
  "plurals": {
   "browser_found": {

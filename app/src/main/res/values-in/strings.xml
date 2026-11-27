@@ -399,6 +399,8 @@
     <string name="skip_intro">Lewati intro</string>
     <string name="skip_recap">Lewati rangkuman</string>
     <string name="skip_credits">Lewati kredit</string>
+    <string name="settings_rate">Beri nilai aplikasi</string>
+    <string name="settings_rate_sub">Ulasan membantu orang lain menemukannya</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

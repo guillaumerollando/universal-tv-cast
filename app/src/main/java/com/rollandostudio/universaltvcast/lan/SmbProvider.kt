@@ -27,6 +27,7 @@ class SmbProvider : ContentProvider() {
     override fun onCreate(): Boolean {
         LanStore.init(context!!)
         Catalog.init(context!!)
+        com.rollandostudio.universaltvcast.data.ReviewPrompt.init(context!!)
         return true
     }
 

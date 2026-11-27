@@ -399,6 +399,8 @@
     <string name="skip_intro">Pomiń czołówkę</string>
     <string name="skip_recap">Pomiń streszczenie</string>
     <string name="skip_credits">Pomiń napisy końcowe</string>
+    <string name="settings_rate">Oceń aplikację</string>
+    <string name="settings_rate_sub">Opinia pomaga innym ją znaleźć</string>
     <plurals name="browser_found">
         <item quantity="one">%d wideo</item>
         <item quantity="few">%d wideo</item>

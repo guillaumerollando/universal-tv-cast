@@ -397,7 +397,9 @@
   "stream_phone_only": "यह स्ट्रीम (RTSP / RTMP) फ़ोन पर चलती है, टीवी पर नहीं।",
   "skip_intro": "इंट्रो छोड़ें",
   "skip_recap": "सारांश छोड़ें",
-  "skip_credits": "क्रेडिट छोड़ें"
+  "skip_credits": "क्रेडिट छोड़ें",
+  "settings_rate": "ऐप को रेट करें",
+  "settings_rate_sub": "आपकी समीक्षा दूसरों को इसे खोजने में मदद करती है"
  },
  "plurals": {
   "browser_found": {

@@ -399,6 +399,8 @@
     <string name="skip_intro">Sari peste intro</string>
     <string name="skip_recap">Sari peste rezumat</string>
     <string name="skip_credits">Sari peste generic</string>
+    <string name="settings_rate">Evaluează aplicația</string>
+    <string name="settings_rate_sub">O recenzie îi ajută pe alții să o găsească</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>

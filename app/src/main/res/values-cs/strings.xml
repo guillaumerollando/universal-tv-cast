@@ -399,6 +399,8 @@
     <string name="skip_intro">Přeskočit úvod</string>
     <string name="skip_recap">Přeskočit shrnutí</string>
     <string name="skip_credits">Přeskočit titulky</string>
+    <string name="settings_rate">Ohodnotit aplikaci</string>
+    <string name="settings_rate_sub">Hodnocení pomůže ostatním ji najít</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="few">%d videa</item>

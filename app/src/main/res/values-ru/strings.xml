@@ -399,6 +399,8 @@
     <string name="skip_intro">Пропустить заставку</string>
     <string name="skip_recap">Пропустить пересказ</string>
     <string name="skip_credits">Пропустить титры</string>
+    <string name="settings_rate">Оценить приложение</string>
+    <string name="settings_rate_sub">Отзыв поможет другим найти его</string>
     <plurals name="browser_found">
         <item quantity="one">%d видео</item>
         <item quantity="few">%d видео</item>

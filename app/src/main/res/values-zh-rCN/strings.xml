@@ -399,6 +399,8 @@
     <string name="skip_intro">跳过片头</string>
     <string name="skip_recap">跳过前情回顾</string>
     <string name="skip_credits">跳过片尾</string>
+    <string name="settings_rate">为应用评分</string>
+    <string name="settings_rate_sub">评价能帮助更多人发现它</string>
     <plurals name="browser_found">
         <item quantity="other">%d 个视频</item>
     </plurals>

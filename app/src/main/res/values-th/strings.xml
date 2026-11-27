@@ -356,6 +356,7 @@
     <string name="tip_notif_body">ระหว่างเล่นวิดีโอ Universal TV Cast จะแสดงปุ่มควบคุม (หยุดชั่วคราว, ±10 วิ, หยุด) ในการแจ้งเตือนและบนหน้าจอล็อก เพื่อให้คุณควบคุมทีวีได้โดยไม่ต้องเปิดแอป ไม่มีอย่างอื่น: ไม่มีโฆษณา ไม่มีข้อความ</string>
     <string name="action_notif_allow">แสดงรีโมต</string>
     <string name="action_no_thanks">ไม่ ขอบคุณ</string>
+    <string name="net_help_linux">ง่ายที่สุด: การตั้งค่า → การแบ่งปัน → เปิด “การแบ่งปันสื่อ” แล้วเลือกโฟลเดอร์ พีซีจะปรากฏที่นี่เอง (ถ้าไม่เห็นวิดีโอ MP4: ติดตั้ง gstreamer1.0-plugins-good และ gstreamer1.0-libav)\nหรือแบบ Windows: Files → คลิกขวาที่โฟลเดอร์ → “Local Network Share” แล้วตั้งรหัสผ่านสำหรับแชร์หนึ่งครั้ง (sudo smbpasswd -a ชื่อของคุณ)</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>

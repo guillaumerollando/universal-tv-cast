@@ -1320,3 +1320,9 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   (demande d'Android) ou « Non merci ». Un refus est respecté : la carte ne revient plus. Une carte à la fois
   (la carte batterie vient après). Textes en 23 langues. Vérifié sur émulateur (installation neuve).
 - Pas fait : rien.
+
+## 2026-11-27 — Aide Réseau dépliable, Linux ajouté
+- Fait : dans « Regarder les vidéos de ton ordinateur », Windows, Mac, Linux et NAS sont des blocs repliés qu'on
+  déplie au besoin. Nouveau bloc Linux (partage multimédia GNOME, ou partage réseau local + smbpasswd), 23 langues.
+  Vérifié sur émulateur.
+- Pas fait : rien.

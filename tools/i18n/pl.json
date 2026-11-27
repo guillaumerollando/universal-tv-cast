@@ -354,7 +354,8 @@
   "tip_notif_title": "Pilot w powiadomieniach",
   "tip_notif_body": "Podczas odtwarzania Universal TV Cast pokazuje przyciski (pauza, ±10 s, stop) w powiadomieniach i na ekranie blokady, żebyś mógł sterować telewizorem bez otwierania aplikacji. Nic więcej: nigdy reklam, nigdy wiadomości.",
   "action_notif_allow": "Pokaż pilota",
-  "action_no_thanks": "Nie, dziękuję"
+  "action_no_thanks": "Nie, dziękuję",
+  "net_help_linux": "Najprościej: Ustawienia → Udostępnianie → włącz „Udostępnianie multimediów” i wybierz foldery; komputer pojawi się tu sam. (Jeśli brakuje filmów MP4: zainstaluj gstreamer1.0-plugins-good i gstreamer1.0-libav.)\nAlbo jak w Windows: Pliki → prawy przycisk na folderze → „Udostępnianie w sieci lokalnej”, potem raz ustaw hasło udostępniania (sudo smbpasswd -a twoja_nazwa)."
  },
  "plurals": {
   "browser_found": {

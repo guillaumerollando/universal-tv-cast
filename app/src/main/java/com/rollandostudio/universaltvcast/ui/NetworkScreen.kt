@@ -369,21 +369,33 @@ private fun ShareHelp(startOpen: Boolean) {
             Icon(if (open) Icons.Rounded.ExpandLess else Icons.Rounded.ExpandMore, null)
         }
         AnimatedVisibility(open) {
-            Column(Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(stringResource(R.string.net_help_intro), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
+                // Chacun déplie seulement ce qui le concerne.
                 HelpBlock("Windows", stringResource(R.string.net_help_windows))
                 HelpBlock("Mac", stringResource(R.string.net_help_mac))
+                HelpBlock("Linux", stringResource(R.string.net_help_linux))
                 HelpBlock(stringResource(R.string.net_help_nas_title), stringResource(R.string.net_help_nas))
             }
         }
     }
 }
 
+/** Un système (Windows, Mac…) : replié, on ne déplie que le sien. */
 @Composable
 private fun HelpBlock(title: String, body: String) {
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(title, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
-        Text(body, style = MaterialTheme.typography.bodyMedium)
+    val c = MaterialTheme.colorScheme
+    var open by remember { mutableStateOf(false) }
+    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).background(c.surfaceContainerHigh)) {
+        Row(Modifier.fillMaxWidth().clickable { open = !open }.padding(horizontal = 14.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically) {
+            Text(title, style = MaterialTheme.typography.labelLarge, color = c.primary, modifier = Modifier.weight(1f))
+            Icon(if (open) Icons.Rounded.ExpandLess else Icons.Rounded.ExpandMore, null, tint = c.onSurfaceVariant)
+        }
+        AnimatedVisibility(open) {
+            Text(body, style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(start = 14.dp, end = 14.dp, bottom = 14.dp))
+        }
     }
 }
 

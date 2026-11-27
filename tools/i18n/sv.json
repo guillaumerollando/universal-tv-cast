@@ -354,7 +354,8 @@
   "tip_notif_title": "Fjärrkontrollen i aviseringarna",
   "tip_notif_body": "Under uppspelning visar Universal TV Cast sina knappar (paus, ±10 s, stopp) i aviseringarna och på låsskärmen, så att du kan styra tv:n utan att öppna appen. Inget annat: aldrig reklam, aldrig meddelanden.",
   "action_notif_allow": "Visa fjärrkontrollen",
-  "action_no_thanks": "Nej tack"
+  "action_no_thanks": "Nej tack",
+  "net_help_linux": "Enklast: Inställningar → Delning → slå på ”Mediadelning” och välj mappar; datorn dyker upp här av sig själv. (Saknas MP4-videor: installera gstreamer1.0-plugins-good och gstreamer1.0-libav.)\nEller som i Windows: Filer → högerklicka på mappen → ”Delning i lokalt nätverk”, och ange ett delningslösenord en gång (sudo smbpasswd -a ditt_namn)."
  },
  "plurals": {
   "browser_found": {

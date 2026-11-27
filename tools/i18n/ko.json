@@ -354,7 +354,8 @@
   "tip_notif_title": "알림에 리모컨 표시",
   "tip_notif_body": "재생 중에 Universal TV Cast는 조작 버튼(일시정지, ±10초, 정지)을 알림과 잠금 화면에 표시해 앱을 열지 않고도 TV를 조작할 수 있게 합니다. 그 외에는 없습니다. 광고도 메시지도 보내지 않습니다.",
   "action_notif_allow": "리모컨 표시",
-  "action_no_thanks": "괜찮아요"
+  "action_no_thanks": "괜찮아요",
+  "net_help_linux": "가장 쉬운 방법: 설정 → 공유 → '미디어 공유'를 켜고 폴더를 고르면 PC가 여기에 자동으로 나타납니다. (MP4 동영상이 안 보이면 gstreamer1.0-plugins-good, gstreamer1.0-libav를 설치하세요.)\n또는 Windows처럼: 파일 → 폴더를 오른쪽 클릭 → '로컬 네트워크 공유' 후 공유 비밀번호를 한 번 설정합니다 (sudo smbpasswd -a 사용자이름)."
  },
  "plurals": {
   "browser_found": {

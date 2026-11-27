@@ -111,6 +111,7 @@
     <string name="net_help_intro">El móvil, el ordenador y la TV deben estar en la misma red (el mismo router).</string>
     <string name="net_help_windows">1. Clic derecho en la carpeta de tus vídeos → Propiedades → pestaña Compartir → Compartir.\n2. Elige tu nombre y luego Compartir.\n3. Comprueba que tu red es «Privada»: Configuración → Red e Internet → tu wifi o Ethernet → Privada.\n4. Aquí, toca tu ordenador e inicia sesión con tu cuenta de Windows.</string>
     <string name="net_help_mac">1. Ajustes del Sistema → General → Compartir → activa Compartir archivos.\n2. Botón ⓘ → añade la carpeta de tus vídeos con +.\n3. Opciones → marca tu cuenta en «Compartir archivos de Windows».\n4. Aquí, toca tu Mac e inicia sesión con tu cuenta del Mac.</string>
+    <string name="net_help_linux">Lo más fácil: Configuración → Compartir → activa «Compartir multimedia» y elige tus carpetas; tu PC aparecerá aquí solo. (Si faltan los vídeos MP4: instala gstreamer1.0-plugins-good y gstreamer1.0-libav.)\nO, como en Windows: Archivos → clic derecho en la carpeta → «Compartir en la red local» y define una vez una contraseña para compartir (sudo smbpasswd -a tu_nombre).</string>
     <string name="net_help_nas_title">NAS o router con disco</string>
     <string name="net_help_nas">Activa su «servidor multimedia» (DLNA o UPnP) en sus ajustes: aparecerá aquí solo, sin contraseña. Sus carpetas compartidas también funcionan, con tu cuenta del NAS.</string>
     <string name="home_link_short">Vídeo, directo o lista de canales</string>

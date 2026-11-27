@@ -356,6 +356,7 @@
     <string name="tip_notif_body">播放時，Universal TV Cast 會在通知和鎖定畫面上顯示控制按鈕（暫停、±10 秒、停止），不必打開應用程式就能控制電視。除此之外什麼都沒有：絕無廣告，絕無訊息。</string>
     <string name="action_notif_allow">顯示遙控器</string>
     <string name="action_no_thanks">不用了</string>
+    <string name="net_help_linux">最簡單：設定 → 分享 → 開啟「媒體分享」並選擇資料夾，電腦會自動出現在這裡。（如果看不到 MP4 影片：安裝 gstreamer1.0-plugins-good 與 gstreamer1.0-libav。）\n或像 Windows 一樣：檔案 → 在資料夾上按右鍵 → 「本機網路分享」，再設定一次分享密碼（sudo smbpasswd -a 你的使用者名稱）。</string>
     <plurals name="browser_found">
         <item quantity="other">%d 部影片</item>
     </plurals>

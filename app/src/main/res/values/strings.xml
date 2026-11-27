@@ -112,6 +112,7 @@
     <string name="net_help_intro">Your phone, your computer and your TV must be on the same network (the same router).</string>
     <string name="net_help_windows">1. Right-click the folder with your videos → Properties → Sharing tab → Share.\n2. Pick your name, then Share.\n3. Make sure your network is “Private”: Settings → Network &amp; internet → your Wi-Fi or Ethernet → Private.\n4. Here, tap your computer and sign in with your Windows account.</string>
     <string name="net_help_mac">1. System Settings → General → Sharing → turn on File Sharing.\n2. ⓘ button → add the folder with your videos with +.\n3. Options → tick your account under “Windows File Sharing”.\n4. Here, tap your Mac and sign in with your Mac account.</string>
+    <string name="net_help_linux">Easiest: Settings → Sharing → turn on “Media Sharing” and pick your folders; your PC shows up here on its own. (If MP4 videos are missing: install gstreamer1.0-plugins-good and gstreamer1.0-libav.)\nOr, like Windows: Files → right-click the folder → “Local Network Share”, then set a sharing password once (sudo smbpasswd -a your_name).</string>
     <string name="net_help_nas_title">NAS or router with a drive</string>
     <string name="net_help_nas">Turn on its “media server” (DLNA or UPnP) in its settings: it shows up here on its own, without a password. Its shared folders work too, with your NAS account.</string>
     <string name="home_link_short">Video, live stream or channel list</string>

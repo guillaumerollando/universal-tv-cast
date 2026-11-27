@@ -111,6 +111,7 @@
     <string name="net_help_intro">Je telefoon, computer en tv moeten op hetzelfde netwerk zitten (dezelfde router).</string>
     <string name="net_help_windows">1. Klik met rechts op de map met je video’s → Eigenschappen → tabblad Delen → Delen.\n2. Kies je naam en dan Delen.\n3. Controleer dat je netwerk „Privé” is: Instellingen → Netwerk en internet → je wifi of ethernet → Privé.\n4. Tik hier op je computer en meld je aan met je Windows-account.</string>
     <string name="net_help_mac">1. Systeeminstellingen → Algemeen → Delen → zet Bestandsdeling aan.\n2. Knop ⓘ → voeg de map met je video’s toe met +.\n3. Opties → vink je account aan onder „Windows-bestandsdeling”.\n4. Tik hier op je Mac en meld je aan met je Mac-account.</string>
+    <string name="net_help_linux">Het makkelijkst: Instellingen → Delen → zet „Media delen” aan en kies je mappen; je pc verschijnt hier vanzelf. (Ontbreken mp4-video’s: installeer gstreamer1.0-plugins-good en gstreamer1.0-libav.)\nOf, net als Windows: Bestanden → rechtsklik op de map → „Delen in lokaal netwerk”, en stel één keer een deelwachtwoord in (sudo smbpasswd -a jouw_naam).</string>
     <string name="net_help_nas_title">NAS of router met schijf</string>
     <string name="net_help_nas">Zet de „mediaserver” (DLNA of UPnP) aan in de instellingen: die verschijnt hier vanzelf, zonder wachtwoord. Gedeelde mappen werken ook, met je NAS-account.</string>
     <string name="home_link_short">Video, livestream of zenderlijst</string>

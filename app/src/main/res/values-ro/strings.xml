@@ -356,6 +356,7 @@
     <string name="tip_notif_body">În timpul redării, Universal TV Cast își afișează comenzile (pauză, ±10 s, oprire) în notificări și pe ecranul de blocare, ca să controlezi televizorul fără să deschizi aplicația. Nimic altceva: niciodată reclame, niciodată mesaje.</string>
     <string name="action_notif_allow">Afișează telecomanda</string>
     <string name="action_no_thanks">Nu, mulțumesc</string>
+    <string name="net_help_linux">Cel mai simplu: Setări → Partajare → activează „Partajare media” și alege dosarele; PC-ul apare aici singur. (Dacă lipsesc videoclipurile MP4: instalează gstreamer1.0-plugins-good și gstreamer1.0-libav.)\nSau, ca pe Windows: Fișiere → clic dreapta pe dosar → „Partajare în rețeaua locală”, apoi setează o dată o parolă de partajare (sudo smbpasswd -a numele_tau).</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>

@@ -356,6 +356,7 @@
     <string name="tip_notif_body">Khi phát video, Universal TV Cast hiển thị các nút (tạm dừng, ±10 giây, dừng) trong thông báo và trên màn hình khóa để bạn điều khiển TV mà không cần mở ứng dụng. Không gì khác: không bao giờ có quảng cáo hay tin nhắn.</string>
     <string name="action_notif_allow">Hiện điều khiển</string>
     <string name="action_no_thanks">Không, cảm ơn</string>
+    <string name="net_help_linux">Dễ nhất: Cài đặt → Chia sẻ → bật “Chia sẻ đa phương tiện” và chọn thư mục; máy tính sẽ tự hiện ở đây. (Nếu thiếu video MP4: cài gstreamer1.0-plugins-good và gstreamer1.0-libav.)\nHoặc như Windows: Tệp → nhấp chuột phải vào thư mục → “Chia sẻ mạng cục bộ”, rồi đặt mật khẩu chia sẻ một lần (sudo smbpasswd -a ten_ban).</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

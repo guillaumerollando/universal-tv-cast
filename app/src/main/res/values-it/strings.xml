@@ -111,6 +111,7 @@
     <string name="net_help_intro">Telefono, computer e TV devono essere sulla stessa rete (lo stesso router).</string>
     <string name="net_help_windows">1. Clic destro sulla cartella dei tuoi video → Proprietà → scheda Condivisione → Condividi.\n2. Scegli il tuo nome, poi Condividi.\n3. Verifica che la rete sia «Privata»: Impostazioni → Rete e Internet → il tuo Wi-Fi o Ethernet → Privata.\n4. Qui, tocca il computer e accedi con il tuo account Windows.</string>
     <string name="net_help_mac">1. Impostazioni di Sistema → Generali → Condivisione → attiva Condivisione file.\n2. Pulsante ⓘ → aggiungi la cartella dei video con +.\n3. Opzioni → spunta il tuo account in «Condivisione file Windows».\n4. Qui, tocca il Mac e accedi con il tuo account del Mac.</string>
+    <string name="net_help_linux">Il modo più semplice: Impostazioni → Condivisione → attiva «Condivisione multimediale» e scegli le cartelle; il PC comparirà qui da solo. (Se mancano i video MP4: installa gstreamer1.0-plugins-good e gstreamer1.0-libav.)\nOppure, come su Windows: File → clic destro sulla cartella → «Condivisione rete locale», poi imposta una volta una password di condivisione (sudo smbpasswd -a tuo_nome).</string>
     <string name="net_help_nas_title">NAS o router con disco</string>
     <string name="net_help_nas">Attiva il suo «server multimediale» (DLNA o UPnP) nelle impostazioni: comparirà qui da solo, senza password. Funzionano anche le cartelle condivise, con il tuo account del NAS.</string>
     <string name="home_link_short">Video, diretta o lista di canali</string>

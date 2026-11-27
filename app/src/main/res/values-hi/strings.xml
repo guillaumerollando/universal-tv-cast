@@ -356,6 +356,7 @@
     <string name="tip_notif_body">वीडियो चलते समय Universal TV Cast अपने बटन (रोकें, ±10 से, बंद करें) सूचनाओं और लॉक स्क्रीन पर दिखाता है, ताकि आप ऐप खोले बिना टीवी चला सकें। और कुछ नहीं: कभी विज्ञापन नहीं, कभी संदेश नहीं।</string>
     <string name="action_notif_allow">रिमोट दिखाएँ</string>
     <string name="action_no_thanks">नहीं, धन्यवाद</string>
+    <string name="net_help_linux">सबसे आसान: Settings → Sharing → “Media Sharing” चालू करें और अपने फ़ोल्डर चुनें; आपका पीसी यहाँ अपने आप दिखेगा। (अगर MP4 वीडियो न दिखें: gstreamer1.0-plugins-good और gstreamer1.0-libav इंस्टॉल करें।)\nया Windows की तरह: Files → फ़ोल्डर पर राइट-क्लिक → “Local Network Share”, फिर एक बार शेयरिंग पासवर्ड सेट करें (sudo smbpasswd -a आपका_नाम)।</string>
     <plurals name="browser_found">
         <item quantity="one">%d वीडियो</item>
         <item quantity="other">%d वीडियो</item>

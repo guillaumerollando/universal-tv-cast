@@ -354,7 +354,8 @@
   "tip_notif_title": "通知にリモコンを表示",
   "tip_notif_body": "再生中、Universal TV Cast は操作ボタン(一時停止、±10秒、停止)を通知とロック画面に表示し、アプリを開かずにテレビを操作できます。それ以外は何もしません。広告もメッセージも送りません。",
   "action_notif_allow": "リモコンを表示",
-  "action_no_thanks": "いいえ"
+  "action_no_thanks": "いいえ",
+  "net_help_linux": "いちばん簡単：設定 → 共有 → 「メディア共有」をオンにしてフォルダーを選ぶと、PCがここに自動で表示されます。（MP4動画が出ない場合：gstreamer1.0-plugins-good と gstreamer1.0-libav をインストール。）\nまたはWindowsと同じように：ファイル → フォルダーを右クリック → 「ローカルネットワーク共有」、共有用パスワードを一度設定します（sudo smbpasswd -a ユーザー名）。"
  },
  "plurals": {
   "browser_found": {

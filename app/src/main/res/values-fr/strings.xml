@@ -111,6 +111,7 @@
     <string name="net_help_intro">Ton téléphone, ton ordinateur et ta télé doivent être sur le même réseau (la même box).</string>
     <string name="net_help_windows">1. Clic droit sur le dossier de tes vidéos → Propriétés → onglet Partage → Partager.\n2. Choisis ton nom, puis Partager.\n3. Vérifie que ton réseau est « Privé » : Paramètres → Réseau et Internet → ton Wi-Fi ou Ethernet → Privé.\n4. Ici, touche ton ordinateur et connecte-toi avec ton compte Windows.</string>
     <string name="net_help_mac">1. Réglages Système → Général → Partage → active Partage de fichiers.\n2. Bouton ⓘ → ajoute le dossier de tes vidéos avec +.\n3. Options → coche ton compte sous « Partage de fichiers Windows ».\n4. Ici, touche ton Mac et connecte-toi avec ton compte du Mac.</string>
+    <string name="net_help_linux">Le plus simple : Paramètres → Partage → active « Partage multimédia » et choisis tes dossiers ; ton PC apparaît ici tout seul. (S’il manque les vidéos MP4 : installe gstreamer1.0-plugins-good et gstreamer1.0-libav.)\nOu, comme Windows : Fichiers → clic droit sur le dossier → « Partage réseau local », puis donne une fois un mot de passe de partage (sudo smbpasswd -a ton_nom).</string>
     <string name="net_help_nas_title">NAS ou box avec un disque</string>
     <string name="net_help_nas">Active son « serveur multimédia » (DLNA ou UPnP) dans ses réglages : il apparaît ici tout seul, sans mot de passe. Ses dossiers partagés marchent aussi, avec ton identifiant du NAS.</string>
     <string name="home_link_short">Vidéo, direct ou liste de chaînes</string>

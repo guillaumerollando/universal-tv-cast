@@ -1333,3 +1333,9 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   d'un appui directement dans le dossier, retirés par appui long. 30 au plus, gardés dans `LanStore`.
   Titre « Mes favoris » en 23 langues. Vérifié sur émulateur avec le faux NAS du PC.
 - Pas fait : rien.
+
+## 2026-11-27 — Favoris réseau : appareil entier, retour, fil d'Ariane
+- Fait : ★ aussi sur l'appareil entier (NAS, ordinateur ; tuile avec son icône). Arrivé par un favori, « retour »
+  au premier niveau ramène à l'accueil. Fil d'Ariane sous le titre (« NAS › Séries › Saison 1 »), chaque étape
+  touchable pour y remonter, y compris jusqu'à l'appareil quand on est entré par un dossier favori. Vérifié sur émulateur.
+- Pas fait : rien.

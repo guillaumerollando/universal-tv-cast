@@ -23,6 +23,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.Folder
+import androidx.compose.material.icons.rounded.Dns
+import androidx.compose.material.icons.rounded.Computer
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.DropdownMenu
@@ -283,7 +285,13 @@ fun FolderTile(f: com.rollandostudio.universaltvcast.lan.LanStore.Folder, modifi
         ) {
             Box(Modifier.size(52.dp).clip(RoundedCornerShape(15.dp)).background(c.primary.copy(alpha = 0.16f)),
                 contentAlignment = Alignment.Center) {
-                Icon(Icons.Rounded.Folder, null, tint = c.primary, modifier = Modifier.size(28.dp))
+                // L'appareil entier (NAS, ordinateur) ou un de ses dossiers.
+                val icon = when {
+                    f.ref.isNotEmpty() -> Icons.Rounded.Folder
+                    f.kind == com.rollandostudio.universaltvcast.lan.LanDevice.Kind.MEDIA_SERVER -> Icons.Rounded.Dns
+                    else -> Icons.Rounded.Computer
+                }
+                Icon(icon, null, tint = c.primary, modifier = Modifier.size(28.dp))
             }
             Spacer(Modifier.height(6.dp))
             Text(f.title, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,

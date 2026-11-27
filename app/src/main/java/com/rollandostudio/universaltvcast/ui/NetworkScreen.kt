@@ -7,6 +7,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -182,7 +183,7 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
 
     fun go(place: Place) { path += place; open(place) }
     // Ouvert depuis un dossier favori de l'accueil : directement dedans (« retour » mène à la liste des appareils).
-    LaunchedEffect(start) { start?.let { go(Place(it.device(), it.ref, it.title)) } }
+    LaunchedEffect(start) { start?.let { go(Place(it.device(), it.ref.ifEmpty { null }, it.title)) } }
     val favs by LanStore.folders.collectAsState()
     fun up() {
         path.removeAt(path.lastIndex)
@@ -208,26 +209,33 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
         onClose()
     }
 
-    BackHandler { if (path.isNotEmpty()) up() else onClose() }
+    // Arrivé par un favori de l'accueil : revenir au premier niveau ramène à l'accueil, d'où l'on vient.
+    fun back() { if (path.isEmpty() || (start != null && path.size <= 1)) onClose() else up() }
+    BackHandler { back() }
 
     Surface(Modifier.fillMaxSize(), color = c.background, contentColor = c.onBackground) {
     Box(Modifier.fillMaxSize()) {
         Ambient(null)
         Column(Modifier.fillMaxSize().statusBarsPadding()) {
             Row(Modifier.fillMaxWidth().height(64.dp).padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { if (path.isNotEmpty()) up() else onClose() }) {
+                IconButton(onClick = { back() }) {
                     Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.cd_back))
                 }
                 Column(Modifier.weight(1f)) {
                     Text(path.lastOrNull()?.title ?: stringResource(R.string.home_network), style = MaterialTheme.typography.titleLarge,
                         maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.semantics { heading() })
-                    if (path.isNotEmpty() && path.last().title != path.first().device.name) Text(path.first().device.name, style = MaterialTheme.typography.bodySmall,
-                        color = c.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    if (path.isNotEmpty()) Breadcrumb(path) { i ->
+                        // i = -1 : la racine de l'appareil (quand on est arrivé directement dans un dossier favori).
+                        if (i < 0) { val d = path.first().device; path.clear(); go(Place(d, null, d.name)) }
+                        else { while (path.size > i + 1) path.removeAt(path.lastIndex); open(path.last()) }
+                    }
                 }
                 // ★ : le dossier ouvert ressort dans « Mes favoris » sur l'accueil.
-                path.lastOrNull()?.takeIf { it.ref != null }?.let { p ->
-                    val on = favs.any { it.kind == p.device.kind && it.host == p.device.host && it.port == p.device.port && it.ref == p.ref }
-                    IconButton(onClick = { LanStore.toggleFolder(p.device, p.ref!!, p.title) }) {
+                // L'appareil entier (racine) peut aussi être mis en favori.
+                path.lastOrNull()?.let { p ->
+                    val ref = p.ref.orEmpty()
+                    val on = favs.any { it.kind == p.device.kind && it.host == p.device.host && it.port == p.device.port && it.ref == ref }
+                    IconButton(onClick = { LanStore.toggleFolder(p.device, ref, p.title) }) {
                         Icon(if (on) Icons.Rounded.Star else Icons.Rounded.StarBorder,
                             stringResource(if (on) R.string.cd_bookmark_remove else R.string.cd_bookmark_add),
                             tint = if (on) c.primary else c.onSurface)
@@ -330,6 +338,27 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
         devices.removeAll { it.kind == d.kind && it.host == d.host && it.port == d.port }
         devices += d.copy(share = d.share ?: old?.share)
         go(Place(devices.last(), null, d.name))
+    }
+}
+
+/** Où l'on est : « NAS › Séries › Saison 1 », chaque étape touchable pour y remonter. */
+@Composable
+private fun Breadcrumb(path: List<Place>, onPick: (Int) -> Unit) {
+    val c = MaterialTheme.colorScheme
+    val steps = buildList {
+        if (path.first().ref != null) add(-1 to path.first().device.name)
+        path.forEachIndexed { i, p -> add(i to p.title) }
+    }
+    if (steps.size < 2) return
+    Row(Modifier.horizontalScroll(androidx.compose.foundation.rememberScrollState(Int.MAX_VALUE)),
+        verticalAlignment = Alignment.CenterVertically) {
+        steps.forEachIndexed { n, (i, title) ->
+            val last = n == steps.lastIndex
+            Text(title, style = MaterialTheme.typography.bodySmall, maxLines = 1,
+                color = if (last) c.onSurfaceVariant else c.primary,
+                modifier = if (last) Modifier else Modifier.clip(RoundedCornerShape(6.dp)).clickable { onPick(i) }.padding(vertical = 2.dp, horizontal = 2.dp))
+            if (!last) Text(" › ", style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
+        }
     }
 }
 

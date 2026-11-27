@@ -394,7 +394,10 @@
   "lan_all": "الكل",
   "lan_sort_asc": "تصاعدي",
   "lan_sort_desc": "تنازلي",
-  "stream_phone_only": "هذا البث (RTSP / RTMP) يُشغَّل على الهاتف، لا على التلفاز."
+  "stream_phone_only": "هذا البث (RTSP / RTMP) يُشغَّل على الهاتف، لا على التلفاز.",
+  "skip_intro": "تخطي المقدمة",
+  "skip_recap": "تخطي الملخص",
+  "skip_credits": "تخطي الشارة"
  },
  "plurals": {
   "browser_found": {

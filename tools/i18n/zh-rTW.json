@@ -394,7 +394,10 @@
   "lan_all": "全部",
   "lan_sort_asc": "遞增",
   "lan_sort_desc": "遞減",
-  "stream_phone_only": "此串流（RTSP / RTMP）在手機上播放，不在電視上播放。"
+  "stream_phone_only": "此串流（RTSP / RTMP）在手機上播放，不在電視上播放。",
+  "skip_intro": "略過片頭",
+  "skip_recap": "略過前情提要",
+  "skip_credits": "略過片尾"
  },
  "plurals": {
   "browser_found": {

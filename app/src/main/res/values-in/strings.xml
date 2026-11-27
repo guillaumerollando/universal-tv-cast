@@ -396,6 +396,9 @@
     <string name="lan_sort_asc">Naik</string>
     <string name="lan_sort_desc">Turun</string>
     <string name="stream_phone_only">Siaran ini (RTSP / RTMP) diputar di ponsel, bukan di TV.</string>
+    <string name="skip_intro">Lewati intro</string>
+    <string name="skip_recap">Lewati rangkuman</string>
+    <string name="skip_credits">Lewati kredit</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

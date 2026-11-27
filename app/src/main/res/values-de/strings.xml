@@ -124,6 +124,9 @@
     <string name="lan_sort_asc">Aufsteigend</string>
     <string name="lan_sort_desc">Absteigend</string>
     <string name="stream_phone_only">Dieser Stream (RTSP / RTMP) läuft auf dem Handy, nicht auf dem Fernseher.</string>
+    <string name="skip_intro">Intro überspringen</string>
+    <string name="skip_recap">Rückblick überspringen</string>
+    <string name="skip_credits">Abspann überspringen</string>
     <string name="home_network">Netzwerk</string>
     <string name="home_network_short">Computer, NAS</string>
     <string name="net_searching">Suche in deinem Netzwerk…</string>

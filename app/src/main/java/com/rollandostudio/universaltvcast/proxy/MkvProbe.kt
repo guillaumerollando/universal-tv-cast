@@ -52,6 +52,46 @@ object MkvProbe {
         return if (entries > 0) langs else null
     }
 
+    /** Chapitre d'un MKV : début et fin (secondes, fin null si absente) et son nom. */
+    data class Chapter(val start: Double, val end: Double?, val name: String)
+
+    /**
+     * Chapitres d'un MKV (« Opening », « OP », « Partie A », « Ending »…), s'ils sont dans le début du fichier
+     * (le cas habituel : avant les images). Liste vide sinon.
+     */
+    fun chapters(head: ByteArray): List<Chapter> {
+        if (!isMatroska(head)) return emptyList()
+        var from = 0
+        while (true) {
+            val start = indexOf(head, byteArrayOf(0x10, 0x43, 0xA7.toByte(), 0x70), from) ?: return emptyList()
+            val size = readSize(head, start + 4)
+            if (size != null) {
+                val body = start + 4 + size.second
+                val end = if (size.first < 0) head.size else minOf(head.size.toLong(), body + size.first).toInt()
+                val out = mutableListOf<Chapter>()
+                forEachChild(head, body, end) { id, ef, et ->
+                    if (id != 0x45B9L || out.isNotEmpty()) return@forEachChild // EditionEntry : la première seulement
+                    forEachChild(head, ef, et) { cid, af, at ->
+                        if (cid != 0xB6L) return@forEachChild // ChapterAtom
+                        var s0 = -1L; var e0 = -1L; var name = ""
+                        forEachChild(head, af, at) { k, f, t ->
+                            when (k) {
+                                0x91L -> s0 = readUInt(head, f, t) // ChapterTimeStart (ns)
+                                0x92L -> e0 = readUInt(head, f, t) // ChapterTimeEnd (ns)
+                                0x80L -> if (name.isEmpty()) forEachChild(head, f, t) { d, df, dt ->
+                                    if (d == 0x85L && name.isEmpty()) name = String(head, df, dt - df, Charsets.UTF_8).trimEnd('\u0000')
+                                }
+                            }
+                        }
+                        if (s0 >= 0) out += Chapter(s0 / 1e9, e0.takeIf { it > s0 }?.div(1e9), name.trim())
+                    }
+                }
+                if (out.isNotEmpty()) return out.sortedBy { it.start }
+            }
+            from = start + 1
+        }
+    }
+
     private fun forEachChild(b: ByteArray, from: Int, to: Int, f: (Long, Int, Int) -> Unit) {
         var p = from
         while (p < to) {

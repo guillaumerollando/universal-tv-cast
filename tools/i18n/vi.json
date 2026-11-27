@@ -394,7 +394,10 @@
   "lan_all": "Tất cả",
   "lan_sort_asc": "Tăng dần",
   "lan_sort_desc": "Giảm dần",
-  "stream_phone_only": "Luồng này (RTSP / RTMP) phát trên điện thoại, không phát trên TV."
+  "stream_phone_only": "Luồng này (RTSP / RTMP) phát trên điện thoại, không phát trên TV.",
+  "skip_intro": "Bỏ qua đoạn mở đầu",
+  "skip_recap": "Bỏ qua phần tóm tắt",
+  "skip_credits": "Bỏ qua phần giới thiệu cuối"
  },
  "plurals": {
   "browser_found": {

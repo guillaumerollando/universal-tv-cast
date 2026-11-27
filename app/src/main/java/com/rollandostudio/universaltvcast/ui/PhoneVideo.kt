@@ -271,6 +271,8 @@ fun PhoneFullscreen(state: CastState) {
         VideoSurface(Modifier.fillMaxSize())
         SkipOverlay(skip)
         if (loading && !controls) CircularProgressIndicator(Modifier.align(Alignment.Center), color = Color.White)
+        // « Passer l'intro » : visible même quand les commandes sont cachées (en bas à droite, au-dessus de la barre).
+        SkipSegmentButton(state, Modifier.align(Alignment.BottomEnd).safeDrawingPadding().padding(end = 24.dp, bottom = 64.dp))
         AnimatedVisibility(controls, enter = fadeIn(), exit = fadeOut(), modifier = Modifier.fillMaxSize()) {
             Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.35f))) {
                 // En haut : le logo de la chaîne (un film : son titre).

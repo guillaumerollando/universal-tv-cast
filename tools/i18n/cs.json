@@ -394,7 +394,10 @@
   "lan_all": "Vše",
   "lan_sort_asc": "Vzestupně",
   "lan_sort_desc": "Sestupně",
-  "stream_phone_only": "Tento stream (RTSP / RTMP) se přehrává v telefonu, ne na televizi."
+  "stream_phone_only": "Tento stream (RTSP / RTMP) se přehrává v telefonu, ne na televizi.",
+  "skip_intro": "Přeskočit úvod",
+  "skip_recap": "Přeskočit shrnutí",
+  "skip_credits": "Přeskočit titulky"
  },
  "plurals": {
   "browser_found": {

@@ -394,7 +394,10 @@
   "lan_all": "Toate",
   "lan_sort_asc": "Crescător",
   "lan_sort_desc": "Descrescător",
-  "stream_phone_only": "Acest flux (RTSP / RTMP) rulează pe telefon, nu pe televizor."
+  "stream_phone_only": "Acest flux (RTSP / RTMP) rulează pe telefon, nu pe televizor.",
+  "skip_intro": "Sari peste intro",
+  "skip_recap": "Sari peste rezumat",
+  "skip_credits": "Sari peste generic"
  },
  "plurals": {
   "browser_found": {

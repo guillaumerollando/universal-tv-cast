@@ -63,7 +63,7 @@ object Catalog {
         if (loaded) return
         loaded = true
         runCatching {
-            val o = JSONObject(prefs.getString("found", "{}")!!)
+            val o = JSONObject(prefs.getString("found3", "{}")!!)
             o.keys().forEach { k -> found[k] = o.getJSONObject(k) }
         }
     }
@@ -74,7 +74,7 @@ object Catalog {
         val keep = found.entries.sortedByDescending { it.value.optLong("t") }.take(MAX)
         val o = JSONObject()
         keep.forEach { (k, v) -> o.put(k, v) }
-        prefs.edit().putString("found", o.toString()).apply()
+        prefs.edit().remove("found").remove("found2").putString("found3", o.toString()).apply()
     }
 
     /** Ce qu'on lit dans le nom seul, sans réseau (affichage immédiat). */
@@ -275,6 +275,6 @@ object Catalog {
     /** Oublie tout ce qui a été trouvé (réglage éteint, ou « vider le cache »). */
     fun clear() {
         found.clear(); episodes.clear()
-        prefs.edit().remove("found").apply()
+        prefs.edit().remove("found").remove("found2").remove("found3").apply()
     }
 }

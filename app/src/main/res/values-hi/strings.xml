@@ -396,6 +396,9 @@
     <string name="lan_sort_asc">आरोही</string>
     <string name="lan_sort_desc">अवरोही</string>
     <string name="stream_phone_only">यह स्ट्रीम (RTSP / RTMP) फ़ोन पर चलती है, टीवी पर नहीं।</string>
+    <string name="skip_intro">इंट्रो छोड़ें</string>
+    <string name="skip_recap">सारांश छोड़ें</string>
+    <string name="skip_credits">क्रेडिट छोड़ें</string>
     <plurals name="browser_found">
         <item quantity="one">%d वीडियो</item>
         <item quantity="other">%d वीडियो</item>

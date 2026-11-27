@@ -124,6 +124,9 @@
     <string name="lan_sort_asc">Oplopend</string>
     <string name="lan_sort_desc">Aflopend</string>
     <string name="stream_phone_only">Deze stream (RTSP / RTMP) speelt op de telefoon, niet op de tv.</string>
+    <string name="skip_intro">Intro overslaan</string>
+    <string name="skip_recap">Samenvatting overslaan</string>
+    <string name="skip_credits">Aftiteling overslaan</string>
     <string name="home_network">Netwerk</string>
     <string name="home_network_short">Computer, NAS</string>
     <string name="net_searching">Je netwerk doorzoeken…</string>

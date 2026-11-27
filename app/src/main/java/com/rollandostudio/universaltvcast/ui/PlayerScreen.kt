@@ -283,6 +283,8 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
             }
         }
 
+        // « Passer l'intro / le récap / le générique » : juste au-dessus de la barre, à droite.
+        SkipSegmentButton(state, Modifier.align(Alignment.End))
         Progress(state)
         Controls(state)
         // Un seul écran pour les deux : sur la télé, ou sur ce téléphone (finir l'épisode dans son lit), au même endroit.

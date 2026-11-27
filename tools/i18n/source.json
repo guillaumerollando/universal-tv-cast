@@ -1563,6 +1563,18 @@
   "stream_phone_only": {
    "en": "This stream (RTSP / RTMP) plays on the phone, not on the TV.",
    "fr": "Ce flux (RTSP / RTMP) se lit sur le téléphone, pas sur la télé."
+  },
+  "skip_intro": {
+   "en": "Skip intro",
+   "fr": "Passer l’intro"
+  },
+  "skip_recap": {
+   "en": "Skip recap",
+   "fr": "Passer le récap"
+  },
+  "skip_credits": {
+   "en": "Skip credits",
+   "fr": "Passer le générique"
   }
  },
  "plurals": {

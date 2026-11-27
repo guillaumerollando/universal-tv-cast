@@ -396,6 +396,9 @@
     <string name="lan_sort_asc">昇順</string>
     <string name="lan_sort_desc">降順</string>
     <string name="stream_phone_only">このストリーム（RTSP / RTMP）はテレビではなくスマホで再生されます。</string>
+    <string name="skip_intro">イントロをスキップ</string>
+    <string name="skip_recap">あらすじをスキップ</string>
+    <string name="skip_credits">エンディングをスキップ</string>
     <plurals name="browser_found">
         <item quantity="other">%d 本の動画</item>
     </plurals>

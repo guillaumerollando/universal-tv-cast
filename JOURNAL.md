@@ -1424,3 +1424,17 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   - Nom technique « dash.mpd » plus pris pour un titre de film. Appli Play : 6,7 → 7,2 Mo.
 - Pas vérifié : multicast UDP/RTP (l'émulateur ne reçoit pas le multicast du PC), RTSP / RTMP (pas de serveur de
   test), coupures pub sur une vraie chaîne, étoile sur les chaînes à l'écran (compilé, pas essayé).
+
+## 2026-11-27 — « Passer l'intro / le récap / le générique »
+- Fait : `Skips` cherche les passages dans cet ordre : chapitres du fichier MKV (« Opening », « OP », « Ending »,
+  « Générique »…, `MkvProbe.chapters`), TheIntroDB (séries, par IMDb + saison + épisode, gratuit sans clé), AniSkip
+  (animés, MyAnimeList trouvé par Kitsu ; écarté si la durée de l'épisode ne concorde pas). Bouton ambré au-dessus
+  de la barre (et en plein écran) pendant le passage : « Passer l'intro », « Passer le récap », « Passer le
+  générique », ou « Épisode suivant » pendant le générique de fin quand le suivant est connu. Même bouton que l'on
+  regarde sur le téléphone ou sur la télé (déplacement de la lecture). Textes en 23 langues.
+  Vérifié en vrai : Breaking Bad S01E02 (intro 5:14–5:31), Frieren ép. 1 et Jujutsu Kaisen S2E3 (OP/ED), MKV à
+  chapitres sur émulateur (bouton affiché, saut 3 s → 9 s).
+- Corrigé en route : l'annuaire renvoyait n'importe quel titre (« Mon Anime » → « I Love You, Man ») : un mot
+  important en commun est maintenant exigé (cache des titres renouvelé) ; un titre sans extension (DLNA,
+  « Mon.Anime.S01E01 ») perdait son « S01E01 » ; lecture des chapitres tolérante à un serveur qui coupe tôt.
+- Pas vérifié : le bouton « Épisode suivant » pendant le générique de fin à l'écran (même code) ; sur la vraie télé.

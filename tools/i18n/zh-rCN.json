@@ -394,7 +394,10 @@
   "lan_all": "全部",
   "lan_sort_asc": "升序",
   "lan_sort_desc": "降序",
-  "stream_phone_only": "此直播流（RTSP / RTMP）在手机上播放，不在电视上播放。"
+  "stream_phone_only": "此直播流（RTSP / RTMP）在手机上播放，不在电视上播放。",
+  "skip_intro": "跳过片头",
+  "skip_recap": "跳过前情回顾",
+  "skip_credits": "跳过片尾"
  },
  "plurals": {
   "browser_found": {

@@ -394,7 +394,10 @@
   "lan_all": "Tümü",
   "lan_sort_asc": "Artan",
   "lan_sort_desc": "Azalan",
-  "stream_phone_only": "Bu yayın (RTSP / RTMP) televizyonda değil, telefonda oynatılır."
+  "stream_phone_only": "Bu yayın (RTSP / RTMP) televizyonda değil, telefonda oynatılır.",
+  "skip_intro": "Girişi atla",
+  "skip_recap": "Özeti atla",
+  "skip_credits": "Jeneriği atla"
  },
  "plurals": {
   "browser_found": {

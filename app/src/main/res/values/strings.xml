@@ -125,6 +125,9 @@
     <string name="lan_sort_asc">Ascending</string>
     <string name="lan_sort_desc">Descending</string>
     <string name="stream_phone_only">This stream (RTSP / RTMP) plays on the phone, not on the TV.</string>
+    <string name="skip_intro">Skip intro</string>
+    <string name="skip_recap">Skip recap</string>
+    <string name="skip_credits">Skip credits</string>
     <string name="home_network">Network</string>
     <string name="home_network_short">Computer, NAS</string>
     <string name="net_searching">Searching your network…</string>

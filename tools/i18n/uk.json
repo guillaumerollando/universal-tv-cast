@@ -394,7 +394,10 @@
   "lan_all": "Усі",
   "lan_sort_asc": "За зростанням",
   "lan_sort_desc": "За спаданням",
-  "stream_phone_only": "Цей потік (RTSP / RTMP) відтворюється на телефоні, а не на телевізорі."
+  "stream_phone_only": "Цей потік (RTSP / RTMP) відтворюється на телефоні, а не на телевізорі.",
+  "skip_intro": "Пропустити заставку",
+  "skip_recap": "Пропустити переказ",
+  "skip_credits": "Пропустити титри"
  },
  "plurals": {
   "browser_found": {

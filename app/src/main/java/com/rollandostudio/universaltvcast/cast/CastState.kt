@@ -36,6 +36,8 @@ data class CastState(
     val idle: Boolean = false,
     /** Langues des sous-titres déjà présents dans la vidéo (MKV), à choisir sur la télé. */
     val embeddedSubs: List<String> = emptyList(),
+    /** Générique de début, récapitulatif, générique de fin (bouton « Passer »), s'ils sont connus. */
+    val skips: List<Skips.Segment> = emptyList(),
     /** Chaîne ou flux en direct (liste HLS sans fin) : pas de durée, la lecture reprend toujours au direct. */
     val live: Boolean = false,
     /** Direct : retard voulu sur le direct (secondes) et ce que le flux garde en arrière. */

@@ -396,6 +396,9 @@
     <string name="lan_sort_asc">Crescător</string>
     <string name="lan_sort_desc">Descrescător</string>
     <string name="stream_phone_only">Acest flux (RTSP / RTMP) rulează pe telefon, nu pe televizor.</string>
+    <string name="skip_intro">Sari peste intro</string>
+    <string name="skip_recap">Sari peste rezumat</string>
+    <string name="skip_credits">Sari peste generic</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>

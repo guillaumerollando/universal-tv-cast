@@ -48,7 +48,12 @@ object SubtitleFinder {
     )
 
     fun parse(fileName: String): Parsed {
-        val base = fileName.substringAfterLast('/').substringBeforeLast('.').let { if (it.length < 3) fileName else it }
+        // L'extension seulement si c'en est une (« .mkv ») : un titre sans extension (serveur DLNA :
+        // « Mon.Anime.S01E01 ») garderait sinon « S01E01 » pour une extension.
+        val name0 = fileName.substringAfterLast('/')
+        val ext = name0.substringAfterLast('.', "")
+        val looksExt = ext.length in 2..4 && ext.all { it.isLetterOrDigit() } && !Regex("(?i)^s\\d+e\\d+$|^\\d+$").matches(ext)
+        val base = (if (looksExt) name0.substringBeforeLast('.') else name0).let { if (it.length < 3) fileName else it }
         val clean = SEP.replace(base, " ")
             .replace(Regex("[(\\[]((?:19|20)\\d\\d)[)\\]]"), " $1 ") // « (2017) » : on garde l'année
             .replace(Regex("\\[[^]]*]|\\([^)]*\\)"), " ").replace(Regex("\\s+"), " ").trim()
@@ -94,9 +99,24 @@ object SubtitleFinder {
         for (i in 0 until metas.length()) {
             val m = metas.getJSONObject(i)
             val id = m.optString("imdb_id").takeIf { it.startsWith("tt") } ?: continue
+            if (!similar(p.title, m.optString("name")) && !similar(p.title, m.optString("aliases"))) continue
             return Meta(id, m.optString("name", p.title), m.optString("poster").ifEmpty { null }, m.optString("background").ifEmpty { null })
         }
         return null
+    }
+
+    private val STOP = setOf("the", "les", "des", "and", "une", "with", "from", "dans", "pour", "season", "saison", "part", "partie")
+    private fun words(s: String) = java.text.Normalizer.normalize(s.lowercase(Locale.ROOT), java.text.Normalizer.Form.NFD)
+        .replace(Regex("\\p{M}+"), "").split(Regex("[^a-z0-9]+")).filter { (it.length >= 4 || it.all(Char::isDigit)) && it !in STOP }.toSet()
+
+    /**
+     * Le titre trouvé ressemble-t-il à celui cherché ? L'annuaire renvoie toujours quelque chose, même sans rapport
+     * (« Mon Anime » → « I Love You, Man ») : il faut au moins un mot important en commun.
+     */
+    fun similar(query: String, found: String): Boolean {
+        val a = words(query); val b = words(found)
+        if (a.isEmpty() || b.isEmpty()) return query.trim().equals(found.trim(), ignoreCase = true)
+        return a.any { it in b }
     }
 
     private fun cinemeta(p: Parsed, type: String): Meta? {
@@ -105,6 +125,8 @@ object SubtitleFinder {
         var best: JSONObject? = null
         for (i in 0 until metas.length()) {
             val m = metas.getJSONObject(i)
+            // Seuls les résultats dont le nom ressemble au titre cherché comptent.
+            if (!similar(p.title, m.optString("name"))) continue
             if (best == null) best = m
             val ri = m.optString("releaseInfo")
             if (p.year != null && ri.startsWith(p.year.toString())) { best = m; break }

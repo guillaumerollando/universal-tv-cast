@@ -124,6 +124,9 @@
     <string name="lan_sort_asc">Croissant</string>
     <string name="lan_sort_desc">Décroissant</string>
     <string name="stream_phone_only">Ce flux (RTSP / RTMP) se lit sur le téléphone, pas sur la télé.</string>
+    <string name="skip_intro">Passer l’intro</string>
+    <string name="skip_recap">Passer le récap</string>
+    <string name="skip_credits">Passer le générique</string>
     <string name="home_network">Réseau</string>
     <string name="home_network_short">Ordinateur, NAS</string>
     <string name="net_searching">Recherche sur ton réseau…</string>

@@ -396,6 +396,9 @@
     <string name="lan_sort_asc">По возрастанию</string>
     <string name="lan_sort_desc">По убыванию</string>
     <string name="stream_phone_only">Этот поток (RTSP / RTMP) воспроизводится на телефоне, а не на телевизоре.</string>
+    <string name="skip_intro">Пропустить заставку</string>
+    <string name="skip_recap">Пропустить пересказ</string>
+    <string name="skip_credits">Пропустить титры</string>
     <plurals name="browser_found">
         <item quantity="one">%d видео</item>
         <item quantity="few">%d видео</item>

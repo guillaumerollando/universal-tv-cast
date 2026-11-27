@@ -394,7 +394,10 @@
   "lan_all": "ทั้งหมด",
   "lan_sort_asc": "น้อยไปมาก",
   "lan_sort_desc": "มากไปน้อย",
-  "stream_phone_only": "สตรีมนี้ (RTSP / RTMP) เล่นบนโทรศัพท์ ไม่ใช่บนทีวี"
+  "stream_phone_only": "สตรีมนี้ (RTSP / RTMP) เล่นบนโทรศัพท์ ไม่ใช่บนทีวี",
+  "skip_intro": "ข้ามอินโทร",
+  "skip_recap": "ข้ามสรุป",
+  "skip_credits": "ข้ามเครดิต"
  },
  "plurals": {
   "browser_found": {

@@ -396,6 +396,9 @@
     <string name="lan_sort_asc">升序</string>
     <string name="lan_sort_desc">降序</string>
     <string name="stream_phone_only">此直播流（RTSP / RTMP）在手机上播放，不在电视上播放。</string>
+    <string name="skip_intro">跳过片头</string>
+    <string name="skip_recap">跳过前情回顾</string>
+    <string name="skip_credits">跳过片尾</string>
     <plurals name="browser_found">
         <item quantity="other">%d 个视频</item>
     </plurals>

@@ -124,6 +124,9 @@
     <string name="lan_sort_asc">Crescente</string>
     <string name="lan_sort_desc">Decrescente</string>
     <string name="stream_phone_only">Esta transmissão (RTSP / RTMP) toca no celular, não na TV.</string>
+    <string name="skip_intro">Pular abertura</string>
+    <string name="skip_recap">Pular resumo</string>
+    <string name="skip_credits">Pular créditos</string>
     <string name="home_network">Rede</string>
     <string name="home_network_short">Computador, NAS</string>
     <string name="net_searching">Procurando na sua rede…</string>

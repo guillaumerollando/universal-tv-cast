@@ -394,7 +394,10 @@
   "lan_all": "Alla",
   "lan_sort_asc": "Stigande",
   "lan_sort_desc": "Fallande",
-  "stream_phone_only": "Den här strömmen (RTSP / RTMP) spelas upp på telefonen, inte på tv:n."
+  "stream_phone_only": "Den här strömmen (RTSP / RTMP) spelas upp på telefonen, inte på tv:n.",
+  "skip_intro": "Hoppa över intro",
+  "skip_recap": "Hoppa över sammanfattning",
+  "skip_credits": "Hoppa över eftertexter"
  },
  "plurals": {
   "browser_found": {

@@ -396,6 +396,9 @@
     <string name="lan_sort_asc">Tăng dần</string>
     <string name="lan_sort_desc">Giảm dần</string>
     <string name="stream_phone_only">Luồng này (RTSP / RTMP) phát trên điện thoại, không phát trên TV.</string>
+    <string name="skip_intro">Bỏ qua đoạn mở đầu</string>
+    <string name="skip_recap">Bỏ qua phần tóm tắt</string>
+    <string name="skip_credits">Bỏ qua phần giới thiệu cuối</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

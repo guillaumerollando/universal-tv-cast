@@ -344,7 +344,7 @@ object TvCast {
         _state.update {
             it.copy(media = media, slides = null, phase = Phase.LOADING, isHls = false, splitAudio = false, subIndex = media.defaultSub,
                 position = 0.0, duration = 0.0, notice = null, continuous = Library.continuousHls.value, subDelay = 0.0,
-                embeddedSubs = emptyList(), live = false, liveBehind = 0.0, liveWindow = 0.0, audioTracks = emptyList(), audioIndex = -1)
+                embeddedSubs = emptyList(), skips = emptyList(), live = false, liveBehind = 0.0, liveWindow = 0.0, audioTracks = emptyList(), audioIndex = -1)
         }
         proxy.reset()
         remoteId = null
@@ -412,6 +412,7 @@ object TvCast {
             }
         }
         val probe = scope.async { runCatching { MediaProbe.embeddedSubtitles(app, media) }.getOrDefault(emptyList()) }
+        findSkips(media)
         identify()
         val inVideo = kotlinx.coroutines.withTimeoutOrNull(3000) { probe.await() }.orEmpty()
         if (inVideo.isNotEmpty()) {
@@ -622,6 +623,26 @@ object TvCast {
     // ------------------------------------------------------------------ album (photos et vidéos) : voir Album.kt
 
     fun openPhotos(uris: List<Uri>) = Album.open(uris)
+
+    private var skipJob: kotlinx.coroutines.Job? = null
+
+    /**
+     * Cherche où sont les génériques et le récapitulatif (bouton « Passer »), une fois la durée connue
+     * (AniSkip la compare à celle de l'épisode). Pas pour un direct.
+     */
+    private fun findSkips(media: Media) {
+        skipJob?.cancel()
+        skipJob = scope.launch(Dispatchers.IO) {
+            var waited = 0
+            while (_state.value.duration <= 0 && waited < 40) { delay(1000); waited++ }
+            val s = _state.value
+            if (s.live || s.media?.url != media.url) return@launch
+            val found = runCatching { Skips.find(app, s.media ?: media, s.duration) }
+                .onFailure { Log.w("TvCastSkip", "recherche des génériques", it) }.getOrDefault(emptyList())
+            Log.i("TvCastSkip", "${found.size} passage(s) à sauter pour ${s.media?.fileName ?: s.media?.title}")
+            if (found.isNotEmpty()) _state.update { if (it.media?.url == media.url) it.copy(skips = found) else it }
+        }
+    }
 
     /** Un message sur l'écran de lecture (ex. « Le NAS ne répond pas »). */
     fun notify(n: Notice) { _state.update { it.copy(notice = n) } }

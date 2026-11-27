@@ -394,7 +394,10 @@
   "lan_all": "전체",
   "lan_sort_asc": "오름차순",
   "lan_sort_desc": "내림차순",
-  "stream_phone_only": "이 스트림(RTSP / RTMP)은 TV가 아닌 휴대폰에서 재생됩니다."
+  "stream_phone_only": "이 스트림(RTSP / RTMP)은 TV가 아닌 휴대폰에서 재생됩니다.",
+  "skip_intro": "인트로 건너뛰기",
+  "skip_recap": "요약 건너뛰기",
+  "skip_credits": "엔딩 크레딧 건너뛰기"
  },
  "plurals": {
   "browser_found": {

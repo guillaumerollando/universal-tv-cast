@@ -394,7 +394,10 @@
   "lan_all": "Wszystkie",
   "lan_sort_asc": "Rosnąco",
   "lan_sort_desc": "Malejąco",
-  "stream_phone_only": "Ten strumień (RTSP / RTMP) odtwarza się w telefonie, nie na telewizorze."
+  "stream_phone_only": "Ten strumień (RTSP / RTMP) odtwarza się w telefonie, nie na telewizorze.",
+  "skip_intro": "Pomiń czołówkę",
+  "skip_recap": "Pomiń streszczenie",
+  "skip_credits": "Pomiń napisy końcowe"
  },
  "plurals": {
   "browser_found": {

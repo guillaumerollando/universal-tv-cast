@@ -27,10 +27,16 @@ object Report {
         }
         val i = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:")).apply {
             putExtra(Intent.EXTRA_EMAIL, arrayOf(TO))
-            putExtra(Intent.EXTRA_SUBJECT, ctx.getString(R.string.report_subject, BuildConfig.VERSION_NAME))
+            // Sujet fixe, non traduit : la routine qui trie la boîte du studio repère « [Bug] ».
+            putExtra(Intent.EXTRA_SUBJECT, "[Bug] Universal TV Cast " + BuildConfig.VERSION_NAME)
             putExtra(Intent.EXTRA_TEXT, body)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-        runCatching { ctx.startActivity(i) }
+        // Aucune appli de mail : l'adresse est copiée, pour l'écrire depuis où l'on veut.
+        runCatching { ctx.startActivity(i) }.onFailure {
+            val cb = ctx.getSystemService(android.content.ClipboardManager::class.java)
+            cb?.setPrimaryClip(android.content.ClipData.newPlainText("email", TO))
+            android.widget.Toast.makeText(ctx, ctx.getString(R.string.report_no_mail, TO), android.widget.Toast.LENGTH_LONG).show()
+        }
     }
 }

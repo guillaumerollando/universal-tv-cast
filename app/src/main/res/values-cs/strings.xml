@@ -52,7 +52,6 @@
     <string name="action_help">Nápověda</string>
     <string name="help_report">Nahlásit problém</string>
     <string name="help_report_hint">Otevře se tvoje e-mailová aplikace s několika technickými údaji (model telefonu a televize, verze aplikace, poslední zpráva). Nic se neodešle, dokud to sám neodešleš.</string>
-    <string name="report_subject">Universal TV Cast %1$s: problém</string>
     <string name="report_intro">Popiš tady problém:</string>
     <string name="settings_shake">Zatřes pro nápovědu</string>
     <string name="settings_shake_sub">Zatřes telefonem a otevře se nápověda a hlášení problému.</string>
@@ -295,6 +294,7 @@
     <string name="settings_share">Sdílet aplikaci</string>
     <string name="settings_share_sub">Pošli ji kamarádovi</string>
     <string name="share_text">Sleduj videa z webu a TV kanály na velké obrazovce, zdarma: %1$s</string>
+    <string name="report_no_mail">Nenašla se žádná e-mailová aplikace. Naše adresa je zkopírovaná: %1$s</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="few">%d videa</item>

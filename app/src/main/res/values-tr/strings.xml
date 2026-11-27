@@ -52,7 +52,6 @@
     <string name="action_help">Yardım</string>
     <string name="help_report">Sorun bildir</string>
     <string name="help_report_hint">E-posta uygulamanız birkaç teknik bilgiyle açılır (telefon ve TV modeli, uygulama sürümü, son mesaj). Siz göndermedikçe hiçbir şey gönderilmez.</string>
-    <string name="report_subject">Universal TV Cast %1$s: bir sorun</string>
     <string name="report_intro">Sorunu buraya yazın:</string>
     <string name="settings_shake">Yardım için salla</string>
     <string name="settings_shake_sub">Yardımı açmak ve sorun bildirmek için telefonu sallayın.</string>
@@ -295,6 +294,7 @@
     <string name="settings_share">Uygulamayı paylaş</string>
     <string name="settings_share_sub">Bir arkadaşına gönder</string>
     <string name="share_text">Web videolarını ve TV kanallarını büyük ekranda ücretsiz izle: %1$s</string>
+    <string name="report_no_mail">E-posta uygulaması bulunamadı. Adresimiz kopyalandı: %1$s</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video</item>

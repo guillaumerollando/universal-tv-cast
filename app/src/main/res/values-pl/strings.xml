@@ -52,7 +52,6 @@
     <string name="action_help">Pomoc</string>
     <string name="help_report">Zgłoś problem</string>
     <string name="help_report_hint">Otworzy się aplikacja poczty z kilkoma danymi technicznymi (model telefonu i telewizora, wersja aplikacji, ostatni komunikat). Nic nie zostanie wysłane, dopóki sam tego nie wyślesz.</string>
-    <string name="report_subject">Universal TV Cast %1$s: problem</string>
     <string name="report_intro">Opisz tutaj problem:</string>
     <string name="settings_shake">Potrząśnij, aby uzyskać pomoc</string>
     <string name="settings_shake_sub">Potrząśnij telefonem, aby otworzyć pomoc i zgłosić problem.</string>
@@ -295,6 +294,7 @@
     <string name="settings_share">Udostępnij aplikację</string>
     <string name="settings_share_sub">Wyślij znajomemu</string>
     <string name="share_text">Oglądaj filmy z sieci i kanały TV na dużym ekranie, za darmo: %1$s</string>
+    <string name="report_no_mail">Nie znaleziono aplikacji poczty. Nasz adres został skopiowany: %1$s</string>
     <plurals name="browser_found">
         <item quantity="one">%d wideo</item>
         <item quantity="few">%d wideo</item>

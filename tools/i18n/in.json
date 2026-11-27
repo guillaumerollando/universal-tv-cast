@@ -51,7 +51,6 @@
   "action_help": "Bantuan",
   "help_report": "Laporkan masalah",
   "help_report_hint": "Aplikasi email Anda akan terbuka dengan beberapa detail teknis (model ponsel dan TV, versi aplikasi, pesan terakhir). Tidak ada yang terkirim kecuali Anda mengirimnya.",
-  "report_subject": "Universal TV Cast %1$s: ada masalah",
   "report_intro": "Jelaskan masalahnya di sini:",
   "settings_shake": "Goyangkan untuk bantuan",
   "settings_shake_sub": "Goyangkan ponsel untuk membuka bantuan dan melaporkan masalah.",
@@ -293,7 +292,8 @@
   "epg_yesterday": "Kemarin",
   "settings_share": "Bagikan aplikasi",
   "settings_share_sub": "Kirim ke teman",
-  "share_text": "Tonton video web dan saluran TV di layar besar, gratis: %1$s"
+  "share_text": "Tonton video web dan saluran TV di layar besar, gratis: %1$s",
+  "report_no_mail": "Tidak ada aplikasi email. Alamat kami sudah disalin: %1$s"
  },
  "plurals": {
   "browser_found": {

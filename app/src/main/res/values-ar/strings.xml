@@ -52,7 +52,6 @@
     <string name="action_help">المساعدة</string>
     <string name="help_report">الإبلاغ عن مشكلة</string>
     <string name="help_report_hint">سيُفتح تطبيق البريد الإلكتروني مع بعض التفاصيل التقنية (طراز الهاتف والتلفزيون، إصدار التطبيق، آخر رسالة). لن يُرسل أي شيء إلا إذا أرسلته بنفسك.</string>
-    <string name="report_subject">Universal TV Cast %1$s: مشكلة</string>
     <string name="report_intro">صِف المشكلة هنا:</string>
     <string name="settings_shake">هزّ الهاتف للمساعدة</string>
     <string name="settings_shake_sub">هزّ الهاتف لفتح المساعدة والإبلاغ عن مشكلة.</string>
@@ -295,6 +294,7 @@
     <string name="settings_share">مشاركة التطبيق</string>
     <string name="settings_share_sub">أرسله إلى صديق</string>
     <string name="share_text">شاهد فيديوهات الويب وقنوات التلفزيون على شاشتك الكبيرة مجانًا: %1$s</string>
+    <string name="report_no_mail">لا يوجد تطبيق بريد. تم نسخ عنواننا: %1$s</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>

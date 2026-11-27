@@ -52,7 +52,6 @@
     <string name="action_help">ความช่วยเหลือ</string>
     <string name="help_report">รายงานปัญหา</string>
     <string name="help_report_hint">แอปอีเมลของคุณจะเปิดขึ้นพร้อมรายละเอียดทางเทคนิคเล็กน้อย (รุ่นโทรศัพท์และทีวี เวอร์ชันแอป ข้อความล่าสุด) จะไม่มีการส่งสิ่งใดจนกว่าคุณจะกดส่งเอง</string>
-    <string name="report_subject">Universal TV Cast %1$s: แจ้งปัญหา</string>
     <string name="report_intro">อธิบายปัญหาที่นี่:</string>
     <string name="settings_shake">เขย่าเพื่อขอความช่วยเหลือ</string>
     <string name="settings_shake_sub">เขย่าโทรศัพท์เพื่อเปิดความช่วยเหลือและรายงานปัญหา</string>
@@ -295,6 +294,7 @@
     <string name="settings_share">แชร์แอป</string>
     <string name="settings_share_sub">ส่งให้เพื่อน</string>
     <string name="share_text">ดูวิดีโอจากเว็บและช่องทีวีบนจอใหญ่ ฟรี: %1$s</string>
+    <string name="report_no_mail">ไม่พบแอปอีเมล คัดลอกที่อยู่ของเราแล้ว: %1$s</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>

@@ -51,7 +51,6 @@
   "action_help": "Nápověda",
   "help_report": "Nahlásit problém",
   "help_report_hint": "Otevře se tvoje e-mailová aplikace s několika technickými údaji (model telefonu a televize, verze aplikace, poslední zpráva). Nic se neodešle, dokud to sám neodešleš.",
-  "report_subject": "Universal TV Cast %1$s: problém",
   "report_intro": "Popiš tady problém:",
   "settings_shake": "Zatřes pro nápovědu",
   "settings_shake_sub": "Zatřes telefonem a otevře se nápověda a hlášení problému.",
@@ -293,7 +292,8 @@
   "epg_yesterday": "Včera",
   "settings_share": "Sdílet aplikaci",
   "settings_share_sub": "Pošli ji kamarádovi",
-  "share_text": "Sleduj videa z webu a TV kanály na velké obrazovce, zdarma: %1$s"
+  "share_text": "Sleduj videa z webu a TV kanály na velké obrazovce, zdarma: %1$s",
+  "report_no_mail": "Nenašla se žádná e-mailová aplikace. Naše adresa je zkopírovaná: %1$s"
  },
  "plurals": {
   "browser_found": {

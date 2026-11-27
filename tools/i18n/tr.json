@@ -51,7 +51,6 @@
   "action_help": "Yardım",
   "help_report": "Sorun bildir",
   "help_report_hint": "E-posta uygulamanız birkaç teknik bilgiyle açılır (telefon ve TV modeli, uygulama sürümü, son mesaj). Siz göndermedikçe hiçbir şey gönderilmez.",
-  "report_subject": "Universal TV Cast %1$s: bir sorun",
   "report_intro": "Sorunu buraya yazın:",
   "settings_shake": "Yardım için salla",
   "settings_shake_sub": "Yardımı açmak ve sorun bildirmek için telefonu sallayın.",
@@ -293,7 +292,8 @@
   "epg_yesterday": "Dün",
   "settings_share": "Uygulamayı paylaş",
   "settings_share_sub": "Bir arkadaşına gönder",
-  "share_text": "Web videolarını ve TV kanallarını büyük ekranda ücretsiz izle: %1$s"
+  "share_text": "Web videolarını ve TV kanallarını büyük ekranda ücretsiz izle: %1$s",
+  "report_no_mail": "E-posta uygulaması bulunamadı. Adresimiz kopyalandı: %1$s"
  },
  "plurals": {
   "browser_found": {

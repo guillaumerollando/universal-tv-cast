@@ -1112,7 +1112,7 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
 **Fait**
 - Réglages : ligne « Partager l'appli » (feuille de partage d'Android, phrase + lien), en 23 langues. Lien par
   variante : fiche Play Store (`play`), dépôt GitHub (`libre`) via `BuildConfig.SHARE_URL`.
-- Standard commun à toutes les applis : `~/Dev/Gestion de projet/standard-partage.md`, cité dans `~/Dev/CLAUDE.md`.
+- Standard commun à toutes les applis : `~/Dev/Gestion de projet/standard-incontournables.md` (partager, signaler, signature), cité dans `~/Dev/CLAUDE.md`.
 
 **Pas fait**
 - Le lien Play Store ne mène nulle part tant que l'appli n'est pas publiée.

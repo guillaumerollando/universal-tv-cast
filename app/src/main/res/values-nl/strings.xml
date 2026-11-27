@@ -55,7 +55,7 @@
     <string name="action_help">Hulp</string>
     <string name="help_report">Probleem melden</string>
     <string name="help_report_hint">Je e-mailapp opent met wat technische gegevens (model telefoon en tv, appversie, laatste melding). Er wordt niets verstuurd zonder jou.</string>
-    <string name="report_subject">Universal TV Cast %1$s: een probleem</string>
+    <string name="report_no_mail">Geen e-mailapp gevonden. Ons adres is gekopieerd: %1$s</string>
     <string name="report_intro">Beschrijf het probleem hier:</string>
     <string name="settings_shake">Schudden voor hulp</string>
     <string name="settings_shake_sub">Schud je telefoon om hulp te openen en een probleem te melden.</string>

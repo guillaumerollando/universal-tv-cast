@@ -52,7 +52,6 @@
     <string name="action_help">Hjälp</string>
     <string name="help_report">Rapportera ett problem</string>
     <string name="help_report_hint">Din e-postapp öppnas med några tekniska uppgifter (telefon- och tv-modell, appversion, senaste meddelande). Inget skickas förrän du själv skickar det.</string>
-    <string name="report_subject">Universal TV Cast %1$s: ett problem</string>
     <string name="report_intro">Beskriv problemet här:</string>
     <string name="settings_shake">Skaka för hjälp</string>
     <string name="settings_shake_sub">Skaka telefonen för att öppna hjälpen och rapportera ett problem.</string>
@@ -295,6 +294,7 @@
     <string name="settings_share">Dela appen</string>
     <string name="settings_share_sub">Skicka till en vän</string>
     <string name="share_text">Se webbvideor och tv-kanaler på storbilden, gratis: %1$s</string>
+    <string name="report_no_mail">Ingen e-postapp hittades. Vår adress har kopierats: %1$s</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videor</item>

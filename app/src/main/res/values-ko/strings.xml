@@ -52,7 +52,6 @@
     <string name="action_help">도움말</string>
     <string name="help_report">문제 신고</string>
     <string name="help_report_hint">이메일 앱이 몇 가지 기술 정보(휴대폰 및 TV 모델, 앱 버전, 마지막 메시지)와 함께 열려요. 직접 보내기 전에는 아무것도 전송되지 않아요.</string>
-    <string name="report_subject">Universal TV Cast %1$s: 문제 신고</string>
     <string name="report_intro">여기에 문제를 설명해 주세요:</string>
     <string name="settings_shake">흔들어서 도움말</string>
     <string name="settings_shake_sub">휴대폰을 흔들면 도움말을 열고 문제를 신고할 수 있어요.</string>
@@ -295,6 +294,7 @@
     <string name="settings_share">앱 공유</string>
     <string name="settings_share_sub">친구에게 보내기</string>
     <string name="share_text">웹 동영상과 TV 채널을 큰 화면으로 무료로: %1$s</string>
+    <string name="report_no_mail">메일 앱이 없습니다. 주소를 복사했습니다: %1$s</string>
     <plurals name="browser_found">
         <item quantity="other">동영상 %d개</item>
     </plurals>

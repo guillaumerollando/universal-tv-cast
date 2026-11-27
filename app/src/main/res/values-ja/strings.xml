@@ -52,7 +52,6 @@
     <string name="action_help">ヘルプ</string>
     <string name="help_report">問題を報告</string>
     <string name="help_report_hint">メールアプリが開き、いくつかの技術情報（スマホとテレビの機種、アプリのバージョン、最後のメッセージ）が入力されます。あなたが送信しない限り、何も送られません。</string>
-    <string name="report_subject">Universal TV Cast %1$s：問題の報告</string>
     <string name="report_intro">問題の内容をここに書いてください：</string>
     <string name="settings_shake">振ってヘルプ</string>
     <string name="settings_shake_sub">スマホを振るとヘルプを開いて問題を報告できます。</string>
@@ -295,6 +294,7 @@
     <string name="settings_share">アプリを共有</string>
     <string name="settings_share_sub">友だちに送る</string>
     <string name="share_text">ウェブ動画とテレビ番組を大画面で無料で: %1$s</string>
+    <string name="report_no_mail">メールアプリが見つかりません。アドレスをコピーしました: %1$s</string>
     <plurals name="browser_found">
         <item quantity="other">%d 本の動画</item>
     </plurals>

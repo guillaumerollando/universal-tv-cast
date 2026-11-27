@@ -51,7 +51,6 @@
   "action_help": "說明",
   "help_report": "回報問題",
   "help_report_hint": "將開啟你的電子郵件應用程式，並附上一些技術資訊（手機和電視型號、應用程式版本、最後一則訊息）。只有你按下傳送才會寄出。",
-  "report_subject": "Universal TV Cast %1$s：問題回報",
   "report_intro": "請在這裡描述問題：",
   "settings_shake": "搖一搖取得說明",
   "settings_shake_sub": "搖動手機即可開啟說明並回報問題。",
@@ -293,7 +292,8 @@
   "epg_yesterday": "昨天",
   "settings_share": "分享應用程式",
   "settings_share_sub": "傳給朋友",
-  "share_text": "在大螢幕上免費觀看網路影片和電視頻道：%1$s"
+  "share_text": "在大螢幕上免費觀看網路影片和電視頻道：%1$s",
+  "report_no_mail": "找不到郵件應用程式。已複製我們的地址：%1$s"
  },
  "plurals": {
   "browser_found": {

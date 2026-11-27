@@ -204,10 +204,6 @@
    "en": "Your e-mail app opens with a few technical details (phone and TV model, app version, last message). Nothing is sent unless you send it.",
    "fr": "Ton appli e-mail s’ouvre avec quelques infos techniques (modèle du téléphone et de la télé, version de l’appli, dernier message). Rien ne part sans toi."
   },
-  "report_subject": {
-   "en": "Universal TV Cast %1$s: a problem",
-   "fr": "Universal TV Cast %1$s : un problème"
-  },
   "report_intro": {
    "en": "Describe the problem here:",
    "fr": "Décris le problème ici :"
@@ -1147,6 +1143,22 @@
   "epg_yesterday": {
    "en": "Yesterday",
    "fr": "Hier"
+  },
+  "report_no_mail": {
+   "en": "No email app found. Our address is copied: %1$s",
+   "fr": "Aucune appli de mail trouvée. Notre adresse est copiée : %1$s"
+  },
+  "settings_share": {
+   "en": "Share the app",
+   "fr": "Partager l’appli"
+  },
+  "settings_share_sub": {
+   "en": "Send it to a friend",
+   "fr": "L’envoyer à un proche"
+  },
+  "share_text": {
+   "en": "Watch web videos and TV channels on your big screen, for free: %1$s",
+   "fr": "Regarde les vidéos du web et les chaînes de télé sur ton grand écran, gratuitement : %1$s"
   }
  },
  "plurals": {

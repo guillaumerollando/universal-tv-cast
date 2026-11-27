@@ -51,7 +51,6 @@
   "action_help": "도움말",
   "help_report": "문제 신고",
   "help_report_hint": "이메일 앱이 몇 가지 기술 정보(휴대폰 및 TV 모델, 앱 버전, 마지막 메시지)와 함께 열려요. 직접 보내기 전에는 아무것도 전송되지 않아요.",
-  "report_subject": "Universal TV Cast %1$s: 문제 신고",
   "report_intro": "여기에 문제를 설명해 주세요:",
   "settings_shake": "흔들어서 도움말",
   "settings_shake_sub": "휴대폰을 흔들면 도움말을 열고 문제를 신고할 수 있어요.",
@@ -293,7 +292,8 @@
   "epg_yesterday": "어제",
   "settings_share": "앱 공유",
   "settings_share_sub": "친구에게 보내기",
-  "share_text": "웹 동영상과 TV 채널을 큰 화면으로 무료로: %1$s"
+  "share_text": "웹 동영상과 TV 채널을 큰 화면으로 무료로: %1$s",
+  "report_no_mail": "메일 앱이 없습니다. 주소를 복사했습니다: %1$s"
  },
  "plurals": {
   "browser_found": {

@@ -55,7 +55,7 @@
     <string name="action_help">Hilfe</string>
     <string name="help_report">Problem melden</string>
     <string name="help_report_hint">Deine E-Mail-App öffnet sich mit ein paar technischen Angaben (Handy- und TV-Modell, App-Version, letzte Meldung). Ohne dich wird nichts gesendet.</string>
-    <string name="report_subject">Universal TV Cast %1$s: ein Problem</string>
+    <string name="report_no_mail">Keine E-Mail-App gefunden. Unsere Adresse wurde kopiert: %1$s</string>
     <string name="report_intro">Beschreibe das Problem hier:</string>
     <string name="settings_shake">Schütteln für Hilfe</string>
     <string name="settings_shake_sub">Schüttle das Handy, um die Hilfe zu öffnen und ein Problem zu melden.</string>

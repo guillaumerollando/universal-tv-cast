@@ -51,7 +51,6 @@
   "action_help": "Ajutor",
   "help_report": "Raportează o problemă",
   "help_report_hint": "Aplicația ta de e-mail se deschide cu câteva detalii tehnice (modelul telefonului și al televizorului, versiunea aplicației, ultimul mesaj). Nu se trimite nimic dacă nu trimiți tu.",
-  "report_subject": "Universal TV Cast %1$s: o problemă",
   "report_intro": "Descrie problema aici:",
   "settings_shake": "Scutură pentru ajutor",
   "settings_shake_sub": "Scutură telefonul ca să deschizi ajutorul și să raportezi o problemă.",
@@ -293,7 +292,8 @@
   "epg_yesterday": "Ieri",
   "settings_share": "Distribuie aplicația",
   "settings_share_sub": "Trimite-o unui prieten",
-  "share_text": "Vezi videoclipuri de pe web și canale TV pe ecranul mare, gratuit: %1$s"
+  "share_text": "Vezi videoclipuri de pe web și canale TV pe ecranul mare, gratuit: %1$s",
+  "report_no_mail": "Nu există nicio aplicație de e-mail. Adresa noastră a fost copiată: %1$s"
  },
  "plurals": {
   "browser_found": {

@@ -52,7 +52,6 @@
     <string name="action_help">Ajutor</string>
     <string name="help_report">Raportează o problemă</string>
     <string name="help_report_hint">Aplicația ta de e-mail se deschide cu câteva detalii tehnice (modelul telefonului și al televizorului, versiunea aplicației, ultimul mesaj). Nu se trimite nimic dacă nu trimiți tu.</string>
-    <string name="report_subject">Universal TV Cast %1$s: o problemă</string>
     <string name="report_intro">Descrie problema aici:</string>
     <string name="settings_shake">Scutură pentru ajutor</string>
     <string name="settings_shake_sub">Scutură telefonul ca să deschizi ajutorul și să raportezi o problemă.</string>
@@ -295,6 +294,7 @@
     <string name="settings_share">Distribuie aplicația</string>
     <string name="settings_share_sub">Trimite-o unui prieten</string>
     <string name="share_text">Vezi videoclipuri de pe web și canale TV pe ecranul mare, gratuit: %1$s</string>
+    <string name="report_no_mail">Nu există nicio aplicație de e-mail. Adresa noastră a fost copiată: %1$s</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>

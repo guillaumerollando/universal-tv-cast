@@ -52,7 +52,6 @@
     <string name="action_help">Bantuan</string>
     <string name="help_report">Laporkan masalah</string>
     <string name="help_report_hint">Aplikasi email Anda akan terbuka dengan beberapa detail teknis (model ponsel dan TV, versi aplikasi, pesan terakhir). Tidak ada yang terkirim kecuali Anda mengirimnya.</string>
-    <string name="report_subject">Universal TV Cast %1$s: ada masalah</string>
     <string name="report_intro">Jelaskan masalahnya di sini:</string>
     <string name="settings_shake">Goyangkan untuk bantuan</string>
     <string name="settings_shake_sub">Goyangkan ponsel untuk membuka bantuan dan melaporkan masalah.</string>
@@ -295,6 +294,7 @@
     <string name="settings_share">Bagikan aplikasi</string>
     <string name="settings_share_sub">Kirim ke teman</string>
     <string name="share_text">Tonton video web dan saluran TV di layar besar, gratis: %1$s</string>
+    <string name="report_no_mail">Tidak ada aplikasi email. Alamat kami sudah disalin: %1$s</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

@@ -55,7 +55,7 @@
     <string name="action_help">Ayuda</string>
     <string name="help_report">Informar de un problema</string>
     <string name="help_report_hint">Se abre tu app de correo con algunos datos técnicos (modelo del móvil y de la TV, versión de la app, último mensaje). No se envía nada sin ti.</string>
-    <string name="report_subject">Universal TV Cast %1$s: un problema</string>
+    <string name="report_no_mail">No hay ninguna app de correo. Nuestra dirección se ha copiado: %1$s</string>
     <string name="report_intro">Describe el problema aquí:</string>
     <string name="settings_shake">Agitar para obtener ayuda</string>
     <string name="settings_shake_sub">Agita el móvil para abrir la ayuda e informar de un problema.</string>

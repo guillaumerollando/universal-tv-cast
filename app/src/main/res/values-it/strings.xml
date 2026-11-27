@@ -55,7 +55,7 @@
     <string name="action_help">Aiuto</string>
     <string name="help_report">Segnala un problema</string>
     <string name="help_report_hint">Si apre la tua app di posta con alcune info tecniche (modello di telefono e TV, versione dell’app, ultimo messaggio). Non parte nulla senza di te.</string>
-    <string name="report_subject">Universal TV Cast %1$s: un problema</string>
+    <string name="report_no_mail">Nessuna app di posta trovata. Il nostro indirizzo è stato copiato: %1$s</string>
     <string name="report_intro">Descrivi il problema qui:</string>
     <string name="settings_shake">Scuoti per ricevere aiuto</string>
     <string name="settings_shake_sub">Scuoti il telefono per aprire l’aiuto e segnalare un problema.</string>

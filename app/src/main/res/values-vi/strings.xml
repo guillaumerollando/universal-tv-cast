@@ -52,7 +52,6 @@
     <string name="action_help">Trợ giúp</string>
     <string name="help_report">Báo cáo sự cố</string>
     <string name="help_report_hint">Ứng dụng email của bạn sẽ mở kèm một vài thông tin kỹ thuật (mẫu điện thoại và TV, phiên bản ứng dụng, thông báo gần nhất). Không có gì được gửi đi nếu bạn không tự gửi.</string>
-    <string name="report_subject">Universal TV Cast %1$s: báo cáo sự cố</string>
     <string name="report_intro">Mô tả sự cố tại đây:</string>
     <string name="settings_shake">Lắc để được trợ giúp</string>
     <string name="settings_shake_sub">Lắc điện thoại để mở trợ giúp và báo cáo sự cố.</string>
@@ -295,6 +294,7 @@
     <string name="settings_share">Chia sẻ ứng dụng</string>
     <string name="settings_share_sub">Gửi cho bạn bè</string>
     <string name="share_text">Xem video trên web và kênh TV trên màn hình lớn, miễn phí: %1$s</string>
+    <string name="report_no_mail">Không tìm thấy ứng dụng email. Đã sao chép địa chỉ của chúng tôi: %1$s</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

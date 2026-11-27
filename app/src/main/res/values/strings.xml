@@ -56,7 +56,7 @@
     <string name="action_help">Help</string>
     <string name="help_report">Report a problem</string>
     <string name="help_report_hint">Your e-mail app opens with a few technical details (phone and TV model, app version, last message). Nothing is sent unless you send it.</string>
-    <string name="report_subject">Universal TV Cast %1$s: a problem</string>
+    <string name="report_no_mail">No email app found. Our address is copied: %1$s</string>
     <string name="report_intro">Describe the problem here:</string>
     <string name="settings_shake">Shake for help</string>
     <string name="settings_shake_sub">Shake the phone to open help and report a problem.</string>

@@ -51,7 +51,6 @@
   "action_help": "Trợ giúp",
   "help_report": "Báo cáo sự cố",
   "help_report_hint": "Ứng dụng email của bạn sẽ mở kèm một vài thông tin kỹ thuật (mẫu điện thoại và TV, phiên bản ứng dụng, thông báo gần nhất). Không có gì được gửi đi nếu bạn không tự gửi.",
-  "report_subject": "Universal TV Cast %1$s: báo cáo sự cố",
   "report_intro": "Mô tả sự cố tại đây:",
   "settings_shake": "Lắc để được trợ giúp",
   "settings_shake_sub": "Lắc điện thoại để mở trợ giúp và báo cáo sự cố.",
@@ -293,7 +292,8 @@
   "epg_yesterday": "Hôm qua",
   "settings_share": "Chia sẻ ứng dụng",
   "settings_share_sub": "Gửi cho bạn bè",
-  "share_text": "Xem video trên web và kênh TV trên màn hình lớn, miễn phí: %1$s"
+  "share_text": "Xem video trên web và kênh TV trên màn hình lớn, miễn phí: %1$s",
+  "report_no_mail": "Không tìm thấy ứng dụng email. Đã sao chép địa chỉ của chúng tôi: %1$s"
  },
  "plurals": {
   "browser_found": {

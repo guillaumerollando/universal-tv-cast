@@ -52,7 +52,6 @@
     <string name="action_help">मदद</string>
     <string name="help_report">समस्या की रिपोर्ट करें</string>
     <string name="help_report_hint">आपका ईमेल ऐप कुछ तकनीकी जानकारी के साथ खुलेगा (फ़ोन और टीवी मॉडल, ऐप वर्ज़न, आखिरी मैसेज)। जब तक आप खुद न भेजें, कुछ नहीं भेजा जाता।</string>
-    <string name="report_subject">Universal TV Cast %1$s: एक समस्या</string>
     <string name="report_intro">समस्या यहाँ लिखें:</string>
     <string name="settings_shake">मदद के लिए हिलाएँ</string>
     <string name="settings_shake_sub">मदद खोलने और समस्या की रिपोर्ट करने के लिए फ़ोन हिलाएँ।</string>
@@ -295,6 +294,7 @@
     <string name="settings_share">ऐप शेयर करें</string>
     <string name="settings_share_sub">किसी दोस्त को भेजें</string>
     <string name="share_text">वेब वीडियो और टीवी चैनल अपनी बड़ी स्क्रीन पर मुफ़्त देखें: %1$s</string>
+    <string name="report_no_mail">कोई ईमेल ऐप नहीं मिला। हमारा पता कॉपी हो गया: %1$s</string>
     <plurals name="browser_found">
         <item quantity="one">%d वीडियो</item>
         <item quantity="other">%d वीडियो</item>

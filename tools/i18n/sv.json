@@ -51,7 +51,6 @@
   "action_help": "Hjälp",
   "help_report": "Rapportera ett problem",
   "help_report_hint": "Din e-postapp öppnas med några tekniska uppgifter (telefon- och tv-modell, appversion, senaste meddelande). Inget skickas förrän du själv skickar det.",
-  "report_subject": "Universal TV Cast %1$s: ett problem",
   "report_intro": "Beskriv problemet här:",
   "settings_shake": "Skaka för hjälp",
   "settings_shake_sub": "Skaka telefonen för att öppna hjälpen och rapportera ett problem.",
@@ -293,7 +292,8 @@
   "epg_yesterday": "I går",
   "settings_share": "Dela appen",
   "settings_share_sub": "Skicka till en vän",
-  "share_text": "Se webbvideor och tv-kanaler på storbilden, gratis: %1$s"
+  "share_text": "Se webbvideor och tv-kanaler på storbilden, gratis: %1$s",
+  "report_no_mail": "Ingen e-postapp hittades. Vår adress har kopierats: %1$s"
  },
  "plurals": {
   "browser_found": {

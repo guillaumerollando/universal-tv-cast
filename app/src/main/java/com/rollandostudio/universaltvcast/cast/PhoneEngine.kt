@@ -52,6 +52,8 @@ object PhoneEngine {
     @Volatile var last: Status? = null
         private set
     @Volatile var onStatus: ((Status) -> Unit)? = null
+    /** Voix trouvées par le lecteur lui-même (nom, langue), pour les formats que l'appli ne lit pas à l'ouverture. */
+    @Volatile var onAudioTracks: ((List<Pair<String, String?>>) -> Unit)? = null
     private var ended = false
     private var error = false
 
@@ -121,7 +123,7 @@ object PhoneEngine {
             addListener(object : Player.Listener {
                 override fun onPlaybackStateChanged(state: Int) { if (state == Player.STATE_ENDED) ended = true; report() }
                 override fun onIsPlayingChanged(isPlaying: Boolean) = report()
-                override fun onTracksChanged(tracks: androidx.media3.common.Tracks) { applyAudio(); readTextTracks() }
+                override fun onTracksChanged(tracks: androidx.media3.common.Tracks) { applyAudio(); readTextTracks(); reportAudio(tracks) }
                 // Pour comprendre un « problème de son » : qui a interrompu la lecture, et le volume.
                 override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
                     if (reason == Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_FOCUS_LOSS || reason == Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_BECOMING_NOISY)
@@ -209,21 +211,33 @@ object PhoneEngine {
         textSelected.value = index
     }
 
-    /** Piste son voulue (nom ou langue) : appliquée dès que le lecteur connaît les pistes de la vidéo. */
-    @Volatile private var wantedAudio: Pair<String, String?>? = null
+    private fun reportAudio(tracks: androidx.media3.common.Tracks) {
+        val list = tracks.groups.filter { it.type == C.TRACK_TYPE_AUDIO }.flatMap { g ->
+            (0 until g.length).filter { g.isTrackSupported(it) }.map { g.getTrackFormat(it) }
+        }.map { f -> (f.label ?: com.rollandostudio.universaltvcast.proxy.Voices.langName(f.language) ?: "?") to f.language }
+        if (list.size >= 2) onAudioTracks?.invoke(list)
+    }
 
-    fun selectAudio(name: String, lang: String?) = main.post { wantedAudio = name to lang; applyAudio() }
+    /** Piste son voulue (nom, langue, rang parmi les voix) : appliquée dès que le lecteur connaît les pistes. */
+    @Volatile private var wantedAudio: Triple<String, String?, Int>? = null
+
+    fun selectAudio(name: String, lang: String?, index: Int = -1) = main.post { wantedAudio = Triple(name, lang, index); applyAudio() }
+
+    private fun iso3(l: String?) = l?.let { runCatching { java.util.Locale.forLanguageTag(it).isO3Language }.getOrNull()?.ifEmpty { it } ?: it }
 
     private fun applyAudio() {
         val p = player ?: return
-        val (name, lang) = wantedAudio ?: return
-        val groups = p.currentTracks.groups.filter { it.type == C.TRACK_TYPE_AUDIO }
-        val pick = groups.firstNotNullOfOrNull { g -> (0 until g.length).firstOrNull { g.getTrackFormat(it).label == name }?.let { g to it } }
-            ?: groups.firstNotNullOfOrNull { g -> (0 until g.length).firstOrNull { lang != null && g.getTrackFormat(it).language == lang }?.let { g to it } }
+        val (name, lang, index) = wantedAudio ?: return
+        val all = p.currentTracks.groups.filter { it.type == C.TRACK_TYPE_AUDIO }.flatMap { g -> (0 until g.length).map { g to it } }
+        val sameLang = all.filter { (g, i) -> lang != null && iso3(g.getTrackFormat(i).language) == iso3(lang) }
+        val pick = all.firstOrNull { (g, i) -> g.getTrackFormat(i).label == name }
+            ?: sameLang.singleOrNull()
+            ?: all.getOrNull(index)
+            ?: sameLang.firstOrNull()
             ?: return
         p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
             .setOverrideForType(androidx.media3.common.TrackSelectionOverride(pick.first.mediaTrackGroup, pick.second)).build()
-        android.util.Log.i("TvCastPhone", "voix choisie : ${pick.first.getTrackFormat(pick.second).label ?: lang}")
+        android.util.Log.i("TvCastPhone", "voix choisie : ${pick.first.getTrackFormat(pick.second).label ?: pick.first.getTrackFormat(pick.second).language}")
     }
 
     fun pause() = main.post { player?.pause() }

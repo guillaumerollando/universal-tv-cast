@@ -1538,3 +1538,21 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - Double appui sur la vidéo : plus d'icône ±10 au milieu (doublon des boutons), seulement l'onde sous le doigt et
   le « +10 » qui en sort et s'additionne. Vérifié par captures sur émulateur.
 - Pas vérifié : la voix anglaise à l'oreille sur la Philips (télé éteinte pendant les essais).
+
+## 2026-11-28 — Langue au choix pour tous les formats
+- Constat : le correctif MKV précédent (piste écartée déclassée en « métadonnées ») ne suffit pas : GStreamer (le
+  lecteur des Philips Titan OS) reconnaît la piste son à son codec et voyait encore les deux voix.
+- Fait, côté télé DLNA (`proxy/Voices.kt`, `MkvProbe.keepOnlyAudio`, `ProxyServer.patched`) :
+  - MKV / WebM : la déclaration (TrackEntry) des voix écartées est remplacée par un élément vide de même longueur ;
+    GStreamer ne voit plus qu'une voix (vérifié avec gst-discoverer sur l'extrait de Babylon).
+  - MP4 / MOV : la boîte « trak » des voix écartées devient « free » (4 octets), « moov » au début ou à la fin.
+  - TS : la PMT (répétée dans tout le fichier) est réécrite sans les voix écartées (CRC recalculé) et leurs paquets
+    deviennent des paquets vides (PID 0x1FFF), filtre en continu qui tolère un départ au milieu d'un paquet.
+  - HLS et DASH : déjà au choix (pistes de la liste / du manifeste).
+- Côté téléphone : voix lues à l'ouverture (MKV, MP4, TS) ou, pour les autres formats, signalées par le lecteur ;
+  choix par nom, puis langue (codes courts ou longs), puis rang.
+- Corrigé en route : avec un envoi « par blocs » (sans taille annoncée), la correction du relais s'appliquait après
+  le découpage en blocs au lieu du contenu.
+- Vérifié : tests `VoicesTest` / `MkvAudioTest` sur fichiers réels (ffprobe / ffmpeg : seule la voix anglaise reste et
+  se décode, image intacte) ; émulateur : voix proposées pour MP4 et TS servis par le réseau, voix anglaise choisie
+  sur le téléphone. Pas vérifié : à l'oreille sur la Philips (télé éteinte), le démuxeur TS de GStreamer (absent du PC).

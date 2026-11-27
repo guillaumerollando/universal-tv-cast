@@ -86,8 +86,8 @@ object MkvProbe {
     fun isMatroska(head: ByteArray): Boolean =
         head.size >= 4 && head[0] == 0x1A.toByte() && head[1] == 0x45.toByte() && head[2] == 0xDF.toByte() && head[3] == 0xA3.toByte()
 
-    /** Piste son d'un MKV : numéro, nom (« French VFQ »), langue, par défaut, position de l'octet de son type. */
-    data class Audio(val number: Long, val name: String, val lang: String, val default: Boolean, val typeAt: Int)
+    /** Piste son d'un MKV : numéro, nom (« French VFQ »), langue, par défaut, et place de sa déclaration (début, longueur). */
+    data class Audio(val number: Long, val name: String, val lang: String, val default: Boolean, val entryAt: Int, val entryLen: Int)
 
     /** Pistes son d'un MKV, dans l'ordre du fichier (vide si l'en-tête n'est pas lisible). */
     fun audioTracks(head: ByteArray): List<Audio> {
@@ -101,20 +101,28 @@ object MkvProbe {
                 val end = if (size.first < 0) head.size else minOf(head.size.toLong(), body + size.first).toInt()
                 val out = mutableListOf<Audio>()
                 var entries = 0
-                forEachChild(head, body, end) { id, ef, et ->
-                    if (id != TRACK_ENTRY) return@forEachChild
-                    entries++
-                    var type = -1L; var typeAt = -1; var number = -1L; var name = ""; var lang = "eng"; var def = true
-                    forEachChild(head, ef, et) { cid, cf, ct ->
-                        when (cid) {
-                            TRACK_TYPE -> { type = readUInt(head, cf, ct); typeAt = ct - 1 }
-                            0xD7L -> number = readUInt(head, cf, ct)
-                            0x536EL -> name = String(head, cf, ct - cf, Charsets.UTF_8).trimEnd('\u0000')
-                            LANGUAGE, LANGUAGE_BCP47 -> lang = String(head, cf, ct - cf, Charsets.US_ASCII).trimEnd('\u0000')
-                            0x88L -> def = readUInt(head, cf, ct) != 0L
+                var p = body
+                while (p < end) { // enfants de « Tracks » avec la place de leur en-tête (CRC-32, Void, TrackEntry…)
+                    val id = readId(head, p) ?: break
+                    val sz = readSize(head, p + id.second) ?: break
+                    val ef = p + id.second + sz.second
+                    if (sz.first < 0 || sz.first > end - ef) break // élément coupé ou faux « Tracks » (index du début)
+                    val et = ef + sz.first.toInt()
+                    if (id.first == TRACK_ENTRY) {
+                        entries++
+                        var type = -1L; var number = -1L; var name = ""; var lang = "eng"; var def = true
+                        forEachChild(head, ef, et) { cid, cf, ct ->
+                            when (cid) {
+                                TRACK_TYPE -> type = readUInt(head, cf, ct)
+                                0xD7L -> number = readUInt(head, cf, ct)
+                                0x536EL -> name = String(head, cf, ct - cf, Charsets.UTF_8).trimEnd('\u0000')
+                                LANGUAGE, LANGUAGE_BCP47 -> lang = String(head, cf, ct - cf, Charsets.US_ASCII).trimEnd('\u0000')
+                                0x88L -> def = readUInt(head, cf, ct) != 0L
+                            }
                         }
+                        if (type == AUDIO && number >= 0) out += Audio(number, name, lang, def, p, et - p)
                     }
-                    if (type == AUDIO && typeAt >= 0 && number >= 0) out += Audio(number, name, lang, def, typeAt)
+                    p = et
                 }
                 if (entries > 0) return out
             }
@@ -123,18 +131,18 @@ object MkvProbe {
     }
 
     /**
-     * Pour qu'une télé lise la piste son choisie (en DLNA, elle prend toujours la première) : les autres pistes son
-     * deviennent, dans l'en-tête, des pistes de « métadonnées » que la télé ignore. Un seul octet change par piste,
-     * rien ne bouge dans le fichier. Rien à faire si la piste choisie est déjà la première.
+     * Pour qu'une télé lise la voix choisie (en DLNA, elle prend toujours la première) : la déclaration des autres
+     * voix est remplacée par un élément vide (« Void ») de même longueur. Le lecteur ne les connaît plus et saute
+     * leurs données (GStreamer, comme celui des Philips, reconnaît sinon une piste son à son codec même déclassée).
+     * Rien ne bouge dans le fichier. Rien à faire si la voix choisie est déjà la première.
      */
     fun keepOnlyAudio(head: ByteArray, number: Long): List<Pair<Int, ByteArray>> {
         val tracks = audioTracks(head)
         if (tracks.size < 2 || tracks.first().number == number || tracks.none { it.number == number }) return emptyList()
-        return tracks.filter { it.number != number }.map { it.typeAt to byteArrayOf(METADATA_TYPE) }
+        return tracks.filter { it.number != number }.mapNotNull { t -> void(t.entryLen)?.let { t.entryAt to it } }
     }
 
     private const val AUDIO = 2L
-    private const val METADATA_TYPE: Byte = 0x21
 
     /** Langues des pistes de sous-titres (« fre », « eng », « und »…). */
     fun subtitleLanguages(head: ByteArray): List<String> {

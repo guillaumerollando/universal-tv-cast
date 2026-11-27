@@ -80,6 +80,9 @@ pour les essais.
 ## Limites connues
 - Pas de duplication d'écran : l'appli envoie une vidéo, pas l'écran du téléphone.
 - Vidéos protégées par DRM (Netflix, Disney+…) et YouTube : impossibles, voulu par ces sites.
+- Langue (voix) au choix : HLS, DASH, MKV / WebM, MP4 / MOV, TS ; sur le téléphone, aussi tout autre format lu à
+  plusieurs voix. Sur une télé DLNA (qui lit toujours la première voix), le relais masque au passage les autres voix
+  dans le fichier (quelques octets, rien de recopié).
 - Sous-titres en DLNA : dépend de la télé (beaucoup ignorent les sous-titres externes ; Google Cast les affiche).
 - Appareils pris en charge : Google Cast (Chromecast, Google TV, Android TV, télés « Chromecast intégré ») et télés
   DLNA / UPnP (Samsung, LG, Sony, Philips, Panasonic…). Pas les Fire TV d'Amazon (ni Cast ni DLNA d'origine), sauf

@@ -8,19 +8,70 @@ import com.rollandostudio.universaltvcast.proxy.Hls
 
 /** Petites lectures du début d'une source : est-ce une liste HLS, a-t-elle des sous-titres intégrés ? */
 internal object MediaProbe {
-    /** Ce qu'un MKV contient déjà : langues des sous-titres et pistes son. */
-    data class Inside(val subs: List<String>, val audio: List<com.rollandostudio.universaltvcast.proxy.MkvProbe.Audio>)
+    /**
+     * Ce qu'un fichier contient déjà : langues des sous-titres (MKV) et voix (MKV, MP4 / MOV, TS), avec ce qu'il faut
+     * au relais pour faire lire la voix choisie par une télé DLNA.
+     */
+    class Inside(
+        val subs: List<String>,
+        val voices: List<com.rollandostudio.universaltvcast.proxy.Voices.Voice>,
+        val mp4: List<com.rollandostudio.universaltvcast.proxy.Voices.Mp4Track>? = null,
+        val ts: com.rollandostudio.universaltvcast.proxy.Voices.TsInfo? = null,
+    )
 
-    /** Lit le début d'un MKV/WebM (1,5 Mo au plus) pour y repérer ses pistes de sous-titres et de son. */
     fun embedded(app: Context, m: Media): Inside {
-        val head = mkvHead(app, m) ?: return Inside(emptyList(), emptyList())
-        return Inside(com.rollandostudio.universaltvcast.proxy.MkvProbe.subtitleLanguages(head),
-            com.rollandostudio.universaltvcast.proxy.MkvProbe.audioTracks(head))
+        val V = com.rollandostudio.universaltvcast.proxy.Voices
+        val ext = Mime.ext(m.fileName ?: m.title).ifEmpty { Mime.ext(m.url) }
+        val mime = m.mime.orEmpty()
+        val none = Inside(emptyList(), emptyList())
+        return when {
+            ext in setOf("mkv", "webm") || mime.contains("matroska") || mime.contains("webm") -> {
+                val head = mkvHead(app, m) ?: return none
+                val audio = com.rollandostudio.universaltvcast.proxy.MkvProbe.audioTracks(head)
+                Inside(com.rollandostudio.universaltvcast.proxy.MkvProbe.subtitleLanguages(head), audio.mapIndexed { i, a ->
+                    com.rollandostudio.universaltvcast.proxy.Voices.Voice("mkv:${a.number}", a.name.ifBlank { V.langName(a.lang) ?: "#${i + 1}" }, a.lang, a.default)
+                })
+            }
+            ext in setOf("mp4", "m4v", "mov") || mime.contains("mp4") || mime.contains("quicktime") -> {
+                val r = reader(app, m) ?: return none
+                val tracks = V.mp4Tracks(r.first, r.second)
+                Inside(emptyList(), V.mp4Voices(tracks), mp4 = tracks)
+            }
+            ext in setOf("ts", "m2t", "mts") || mime.contains("mp2t") || mime == "video/mpeg" -> {
+                val r = reader(app, m) ?: return none
+                val info = V.tsInfo(r.second(0, minOf(r.first, 2_000_000L).toInt())) ?: return none
+                Inside(emptyList(), V.tsVoices(info), ts = info)
+            }
+            else -> none
+        }
+    }
+
+    /** Lecture d'une plage du fichier (taille, lecteur), sur le téléphone ou par le réseau. */
+    private fun reader(app: Context, m: Media): Pair<Long, (Long, Int) -> ByteArray>? {
+        if (m.isLocal) {
+            val uri = Uri.parse(m.url)
+            val size = runCatching { app.contentResolver.openAssetFileDescriptor(uri, "r")?.use { it.length } }.getOrNull() ?: return null
+            if (size <= 0) return null
+            return size to { off, len ->
+                app.contentResolver.openInputStream(uri)?.use { ins ->
+                    var left = off
+                    while (left > 0) { val k = ins.skip(left); if (k <= 0) break; left -= k }
+                    readUpTo(ins, len)
+                } ?: ByteArray(0)
+            }
+        }
+        val c = Http.open(m.url, m.headers, "bytes=0-0", connectTimeout = 5000, readTimeout = 5000)
+        val size = try {
+            c.getHeaderField("Content-Range")?.substringAfter('/')?.toLongOrNull() ?: -1L
+        } finally { c.disconnect() }
+        if (size <= 0) return null
+        return size to { off, len ->
+            val h = Http.open(m.url, m.headers, "bytes=$off-${off + len - 1}", connectTimeout = 5000, readTimeout = 8000)
+            try { if (h.responseCode == 206 || off == 0L) h.inputStream.use { readUpTo(it, len) } else ByteArray(0) } finally { h.disconnect() }
+        }
     }
 
     private fun mkvHead(app: Context, m: Media): ByteArray? {
-        val ext = Mime.ext(m.fileName ?: m.title).ifEmpty { Mime.ext(m.url) }
-        if (ext !in setOf("mkv", "webm") && m.mime?.contains("matroska") != true) return null
         val max = 1_572_864
         val head = if (m.isLocal) {
             app.contentResolver.openInputStream(Uri.parse(m.url))?.use { readUpTo(it, max) } ?: return null

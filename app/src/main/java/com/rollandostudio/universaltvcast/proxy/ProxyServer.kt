@@ -60,6 +60,9 @@ class ProxyServer(private val ctx: Context) {
     @Volatile var mimeOverride: String? = null
     /** Masquer la déclaration Dolby Vision des MKV (télés DLNA qui refusent ces fichiers ; image en HDR10). */
     @Volatile var maskDolbyVision = false
+    /** Voix de la vidéo en cours, pour garder la bonne en MP4 / TS (fournies par l'appli à l'ouverture). */
+    @Volatile var mp4Tracks: List<Voices.Mp4Track>? = null
+    @Volatile var tsInfo: Voices.TsInfo? = null
     /** Début de chaque MKV relayé (en-tête), pour le corriger au passage. */
     private val heads = ConcurrentHashMap<String, ByteArray>()
 
@@ -79,7 +82,7 @@ class ProxyServer(private val ctx: Context) {
     fun reset() {
         stopLive()
         remotes.clear(); idsByUrl.clear(); locals.clear(); metas.clear(); embedded.clear(); heads.clear()
-        subtitle = null; subtitleUrl = null; mimeOverride = null
+        subtitle = null; subtitleUrl = null; mimeOverride = null; mp4Tracks = null; tsInfo = null
     }
 
     fun register(url: String, headers: Map<String, String>, kind: Kind = Kind.MAIN, audio: String? = null): String =
@@ -306,12 +309,18 @@ class ProxyServer(private val ctx: Context) {
                     if (req.method != "HEAD") {
                         val from = if (code == 206) conn.getHeaderField("Content-Range")
                             ?.let { Regex("bytes (\\d+)-").find(it)?.groupValues?.get(1)?.toLongOrNull() } ?: 0L else 0L
-                        @Suppress("NAME_SHADOWING") val out = patched(id, type, from, out)
+                        // La correction (voix, Dolby Vision) porte sur le contenu, avant un éventuel découpage en blocs.
                         if (chunked) {
                             val c = ChunkedOutputStream(out)
-                            conn.inputStream.use { it.copyTo(c, 64 * 1024) }
+                            val w = patched(id, type, from, c)
+                            conn.inputStream.use { it.copyTo(w, 64 * 1024) }
+                            w.flush()
                             c.finish()
-                        } else conn.inputStream.use { it.copyTo(out, 64 * 1024) }
+                        } else {
+                            val w = patched(id, type, from, out)
+                            conn.inputStream.use { it.copyTo(w, 64 * 1024) }
+                            w.flush()
+                        }
                     }
                 }
             }
@@ -660,9 +669,9 @@ class ProxyServer(private val ctx: Context) {
             if (total > 0) h += "Content-Length" to total.toString() else h += "Transfer-Encoding" to "chunked"
             head(out, 200, "OK", h + dlna(total > 0))
             if (req.method != "HEAD") f.open(0).use { ins ->
-                val out = patched(req.seg.getOrNull(1) ?: "", type, 0, out)
-                if (total > 0) ins.copyTo(out, 64 * 1024)
-                else ChunkedOutputStream(out).let { c -> ins.copyTo(c, 64 * 1024); c.finish() }
+                val lid = req.seg.getOrNull(1) ?: ""
+                if (total > 0) patched(lid, type, 0, out).let { w -> ins.copyTo(w, 64 * 1024); w.flush() }
+                else ChunkedOutputStream(out).let { c -> patched(lid, type, 0, c).let { w -> ins.copyTo(w, 64 * 1024); w.flush() }; c.finish() }
             }
         } else {
             val (a, b) = range
@@ -672,7 +681,9 @@ class ProxyServer(private val ctx: Context) {
                 "Content-Range" to "bytes $a-$b/$total",
                 "Content-Length" to (b - a + 1).toString(),
             ) + dlna(true))
-            if (req.method != "HEAD") f.open(a).use { ins -> copyLimited(ins, patched(req.seg.getOrNull(1) ?: "", type, a, out), b - a + 1) }
+            if (req.method != "HEAD") f.open(a).use { ins ->
+                patched(req.seg.getOrNull(1) ?: "", type, a, out).let { w -> copyLimited(ins, w, b - a + 1); w.flush() }
+            }
         }
     }
 
@@ -729,9 +740,25 @@ class ProxyServer(private val ctx: Context) {
      * masquée : mêmes longueurs, rien d'autre ne bouge, les plages et l'avance rapide restent justes).
      */
     private fun patched(id: String, type: String, from: Long, out: OutputStream): OutputStream {
-        if (!type.contains("matroska", true) && !type.contains("mkv", true)) return out
+        val choice = audioChoice
+        // MP4 / MOV : les boîtes des voix écartées deviennent « free » (le « moov » peut être n'importe où).
+        if (choice?.startsWith("mp4:") == true) {
+            val tracks = mp4Tracks ?: return out
+            val patches = Voices.mp4Patches(tracks, choice.removePrefix("mp4:").toIntOrNull() ?: 0)
+            if (patches.isNotEmpty() && from == 0L) Log.i(TAG, "MP4 : voix ${choice.removePrefix("mp4:")} gardée pour la télé")
+            return if (patches.isEmpty()) out else PatchStream(out, from, patches)
+        }
+        // TS : PMT réécrite et paquets des autres voix vidés, tout au long du flux.
+        if (choice?.startsWith("ts:") == true) {
+            val info = tsInfo ?: return out
+            val pid = choice.removePrefix("ts:").toIntOrNull() ?: return out
+            if (info.audio.firstOrNull()?.first == pid) return out
+            if (from == 0L) Log.i(TAG, "TS : voix (PID $pid) gardée pour la télé")
+            return Voices.TsFilter(out, from, info, pid)
+        }
+        if (!type.contains("matroska", true) && !type.contains("mkv", true) && !type.contains("webm", true)) return out
         if (from >= MkvProbe.HEAD_BYTES) return out
-        val audio = audioChoice?.takeIf { it.startsWith("mkv:") }?.removePrefix("mkv:")?.toLongOrNull()
+        val audio = choice?.takeIf { it.startsWith("mkv:") }?.removePrefix("mkv:")?.toLongOrNull()
         if (!maskDolbyVision && audio == null) return out
         val head = heads.getOrPut(id) {
             runCatching {

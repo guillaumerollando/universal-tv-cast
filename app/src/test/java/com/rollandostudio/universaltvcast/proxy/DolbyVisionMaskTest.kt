@@ -65,7 +65,8 @@ class MkvAudioTest {
         assertTrue(MkvProbe.keepOnlyAudio(head, voices[0].number).isEmpty())
         val p = MkvProbe.keepOnlyAudio(head, voices[1].number)
         assertEquals(1, p.size)
-        assertEquals(2.toByte(), all[p[0].first])
+        assertEquals(0xAE.toByte(), all[p[0].first])
+        assertEquals(0xEC.toByte(), p[0].second[0])
         System.getenv("MKV_OUT")?.let { out ->
             for ((at, b) in MkvProbe.dolbyVisionMask(head) + p) System.arraycopy(b, 0, all, at, b.size)
             File(out).writeBytes(all)

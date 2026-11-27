@@ -91,6 +91,17 @@ object TvCast {
         CastControl.onDevices = { list -> castDevices = list; publish(allDevices()) }
         CastControl.onFinished = { onMediaEnded() }
         PhoneEngine.onStatus = { st -> if (_state.value.onPhone) onPhoneStatus(st) }
+        // Voix vues par le lecteur du téléphone quand l'appli n'en a pas trouvé à l'ouverture (AVI…) : choix sur le téléphone.
+        PhoneEngine.onAudioTracks = { list ->
+            if (_state.value.audioTracks.isEmpty()) _state.update { st ->
+                val names = mutableMapOf<String, Int>()
+                val tracks = list.mapIndexed { i, (n, l) ->
+                    val k = (names[n] ?: 0) + 1; names[n] = k
+                    Hls.Track(if (k > 1) "$n $k" else n, l, "exo:$i", i == 0)
+                }
+                st.copy(audioTracks = tracks, audioIndex = 0)
+            }
+        }
         // Avancement noté toutes les 15 s : « Reprendre » saura ce qui est fini.
         scope.launch {
             var last = 0L
@@ -463,13 +474,12 @@ object TvCast {
         identify()
         val inside = kotlinx.coroutines.withTimeoutOrNull(3000) { probe.await() }
         val inVideo = inside?.subs.orEmpty()
-        // Plusieurs voix dans le MKV (VF, VO…) : au choix, sur le téléphone comme sur la télé.
-        val voices = inside?.audio.orEmpty()
+        // Plusieurs voix dans le fichier (VF, VO… ; MKV, MP4, TS) : au choix, sur le téléphone comme sur la télé.
+        val voices = inside?.voices.orEmpty()
+        proxy.mp4Tracks = inside?.mp4
+        proxy.tsInfo = inside?.ts
         if (voices.size >= 2) {
-            val tracks = voices.map { a ->
-                Hls.Track(a.name.ifBlank { java.util.Locale.forLanguageTag(a.lang).displayLanguage.ifBlank { a.lang } },
-                    a.lang, "mkv:${a.number}", a.default)
-            }
+            val tracks = voices.map { Hls.Track(it.name, it.lang, it.id, it.default) }
             val def = tracks.indexOfFirst { it.default }.takeIf { it >= 0 } ?: 0
             proxy.audioChoice = tracks[def].uri
             Log.i("TvCast", "voix du fichier : ${tracks.joinToString { it.name }}")
@@ -587,7 +597,7 @@ object TvCast {
             else null
         if (s.live) liveClock.start(start)
         PhoneEngine.play(app, m, start, proxy.subtitle, s.isHls, liveUrl)
-        s.audioTracks.getOrNull(s.audioIndex)?.let { PhoneEngine.selectAudio(it.name, it.lang) }
+        s.audioTracks.getOrNull(s.audioIndex)?.let { PhoneEngine.selectAudio(it.name, it.lang, s.audioIndex) }
     }
 
     private fun onPhoneStatus(st: PhoneEngine.Status) {
@@ -1444,7 +1454,7 @@ object TvCast {
         if (index == s.audioIndex) return
         proxy.audioChoice = t.uri
         _state.update { it.copy(audioIndex = index) }
-        if (s.onPhone) PhoneEngine.selectAudio(t.name, t.lang)
+        if (s.onPhone) PhoneEngine.selectAudio(t.name, t.lang, index)
         else if (s.active) exec { castAt(currentPosition()) }
     }
 

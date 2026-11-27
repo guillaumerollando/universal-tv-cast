@@ -28,6 +28,7 @@ class SmbProvider : ContentProvider() {
         LanStore.init(context!!)
         Catalog.init(context!!)
         com.rollandostudio.universaltvcast.data.ReviewPrompt.init(context!!)
+        com.rollandostudio.universaltvcast.data.Look.init(context!!)
         return true
     }
 

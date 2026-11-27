@@ -399,7 +399,31 @@
   "skip_recap": "Özeti atla",
   "skip_credits": "Jeneriği atla",
   "settings_rate": "Uygulamayı puanla",
-  "settings_rate_sub": "Bir yorum, başkalarının onu bulmasına yardımcı olur"
+  "settings_rate_sub": "Bir yorum, başkalarının onu bulmasına yardımcı olur",
+  "style_title": "Kişiselleştirme",
+  "style_sub": "Renkler, TV bekleme ekranı, simge",
+  "pack_title": "Destek paketi",
+  "pack_body": "Universal TV Cast ücretsiz, reklamsız ve öyle kalacak. Destek paketi birkaç stil dokunuşu ekler ve stüdyonun devam etmesine yardımcı olur.",
+  "pack_buy": "Destekle · %1$s",
+  "pack_buy_noprice": "Destekle",
+  "pack_once": "Tek seferlik satın alma, abonelik yok.",
+  "pack_thanks": "Desteğin için teşekkürler!",
+  "pack_unavailable": "Mağaza yanıt vermiyor. Daha sonra tekrar dene.",
+  "style_color": "Renk",
+  "style_oled": "Gerçek siyah (OLED ekranlar)",
+  "style_oled_sub": "Tamamen siyah arka plan: daha derin ve pile biraz daha az yük bindirir.",
+  "style_idle": "TV bekleme ekranı",
+  "style_idle_classic": "Klasik",
+  "style_idle_photo": "Fotoğraf",
+  "style_idle_clock": "Saat",
+  "style_photos": "Fotoğraf seç",
+  "style_message": "Mesaj (isteğe bağlı)",
+  "style_message_hint": "Evimize hoş geldin!",
+  "style_live": "Canlı ekran",
+  "style_live_sub": "Fotoğraflar değişir, saat her dakika güncellenir.",
+  "style_show_tv": "TV'de göster",
+  "style_icon": "Uygulama simgesi",
+  "style_icon_note": "Yeni simge uygulamadan çıkınca görünür. Ana ekrandan kısa bir süre kaybolabilir."
  },
  "plurals": {
   "browser_found": {
@@ -413,6 +437,10 @@
   "lan_episodes": {
    "one": "%d bölüm",
    "other": "%d bölüm"
+  },
+  "style_photos_count": {
+   "one": "%d fotoğraf",
+   "other": "%d fotoğraf"
   }
  }
 }

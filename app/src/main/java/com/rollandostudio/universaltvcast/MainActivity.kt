@@ -30,6 +30,7 @@ class TvCastApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         TvCast.init(this)
+        com.rollandostudio.universaltvcast.data.SupportStore.prepare(this)
         val app = this
         com.rollandostudio.universaltvcast.data.Library.onChanged = { WidgetKit.refresh(app) }
         WidgetKit.refresh(app)
@@ -97,6 +98,8 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         super.onStop()
         // En petite fenêtre, la vidéo continue ; fenêtre fermée (ou appli quittée sans elle) : on met en pause.
         if (!isInPictureInPictureMode) com.rollandostudio.universaltvcast.cast.TvCast.appHidden()
+        // Nouvelle icône choisie : posée seulement une fois l'appli quittée (Android ferme la tâche lancée par l'ancienne).
+        if (!isInPictureInPictureMode && !isChangingConfigurations) com.rollandostudio.universaltvcast.data.Look.applyIcon()
     }
 
     // ------------------------------------------------------------------ image dans l'image

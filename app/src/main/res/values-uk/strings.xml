@@ -401,6 +401,30 @@
     <string name="skip_credits">Пропустити титри</string>
     <string name="settings_rate">Оцінити застосунок</string>
     <string name="settings_rate_sub">Відгук допоможе іншим його знайти</string>
+    <string name="style_title">Персоналізація</string>
+    <string name="style_sub">Кольори, екран очікування телевізора, значок</string>
+    <string name="pack_title">Пакет підтримки</string>
+    <string name="pack_body">Universal TV Cast безкоштовний, без реклами і таким залишиться. Пакет підтримки додає трохи стилю й допомагає студії працювати далі.</string>
+    <string name="pack_buy">Підтримати · %1$s</string>
+    <string name="pack_buy_noprice">Підтримати</string>
+    <string name="pack_once">Разова покупка, без підписки.</string>
+    <string name="pack_thanks">Дякуємо за підтримку!</string>
+    <string name="pack_unavailable">Магазин не відповідає. Спробуйте пізніше.</string>
+    <string name="style_color">Колір</string>
+    <string name="style_oled">Справжній чорний (екрани OLED)</string>
+    <string name="style_oled_sub">Повністю чорне тло: глибше й трохи економніше для батареї.</string>
+    <string name="style_idle">Екран очікування телевізора</string>
+    <string name="style_idle_classic">Класичний</string>
+    <string name="style_idle_photo">Фото</string>
+    <string name="style_idle_clock">Годинник</string>
+    <string name="style_photos">Вибрати фото</string>
+    <string name="style_message">Повідомлення (необов’язково)</string>
+    <string name="style_message_hint">Ласкаво просимо додому!</string>
+    <string name="style_live">Живий екран</string>
+    <string name="style_live_sub">Фото змінюються, а час оновлюється щохвилини.</string>
+    <string name="style_show_tv">Показати на телевізорі</string>
+    <string name="style_icon">Значок застосунку</string>
+    <string name="style_icon_note">Новий значок з’явиться, коли ви вийдете з застосунку. Він може ненадовго зникнути з головного екрана.</string>
     <plurals name="browser_found">
         <item quantity="one">%d відео</item>
         <item quantity="few">%d відео</item>
@@ -418,5 +442,11 @@
         <item quantity="few">%d серії</item>
         <item quantity="many">%d серій</item>
         <item quantity="other">%d серії</item>
+    </plurals>
+    <plurals name="style_photos_count">
+        <item quantity="one">%d фото</item>
+        <item quantity="few">%d фото</item>
+        <item quantity="many">%d фото</item>
+        <item quantity="other">%d фото</item>
     </plurals>
 </resources>

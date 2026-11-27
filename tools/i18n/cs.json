@@ -399,7 +399,31 @@
   "skip_recap": "Přeskočit shrnutí",
   "skip_credits": "Přeskočit titulky",
   "settings_rate": "Ohodnotit aplikaci",
-  "settings_rate_sub": "Hodnocení pomůže ostatním ji najít"
+  "settings_rate_sub": "Hodnocení pomůže ostatním ji najít",
+  "style_title": "Přizpůsobení",
+  "style_sub": "Barvy, čekací obrazovka televize, ikona",
+  "pack_title": "Podpůrný balíček",
+  "pack_body": "Universal TV Cast je zdarma, bez reklam a tak to zůstane. Podpůrný balíček přidává stylové doplňky a pomáhá studiu pokračovat.",
+  "pack_buy": "Podpořit · %1$s",
+  "pack_buy_noprice": "Podpořit",
+  "pack_once": "Jednorázový nákup, bez předplatného.",
+  "pack_thanks": "Děkujeme za podporu!",
+  "pack_unavailable": "Obchod neodpovídá. Zkuste to později.",
+  "style_color": "Barva",
+  "style_oled": "Opravdová černá (displeje OLED)",
+  "style_oled_sub": "Zcela černé pozadí: hlubší a o trochu šetrnější k baterii.",
+  "style_idle": "Čekací obrazovka televize",
+  "style_idle_classic": "Klasická",
+  "style_idle_photo": "Fotka",
+  "style_idle_clock": "Hodiny",
+  "style_photos": "Vybrat fotky",
+  "style_message": "Zpráva (volitelné)",
+  "style_message_hint": "Vítejte doma!",
+  "style_live": "Živá obrazovka",
+  "style_live_sub": "Fotky se střídají a čas se aktualizuje každou minutu.",
+  "style_show_tv": "Zobrazit v televizi",
+  "style_icon": "Ikona aplikace",
+  "style_icon_note": "Nová ikona se objeví, jakmile aplikaci opustíte. Může na chvíli zmizet z domovské obrazovky."
  },
  "plurals": {
   "browser_found": {
@@ -419,6 +443,12 @@
    "few": "%d díly",
    "many": "%d dílu",
    "other": "%d dílů"
+  },
+  "style_photos_count": {
+   "one": "%d fotka",
+   "few": "%d fotky",
+   "many": "%d fotky",
+   "other": "%d fotek"
   }
  }
 }

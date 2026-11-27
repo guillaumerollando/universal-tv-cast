@@ -4,6 +4,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -76,6 +78,30 @@ private val Type = Typography(
 
 @Composable
 fun TvCastTheme(content: @Composable () -> Unit) {
-    // Parti pris : thème sombre uniquement (ambre sur noir, usage le soir devant la télé).
-    MaterialTheme(colorScheme = Dark, typography = Type, content = content)
+    // Parti pris : thème sombre uniquement (usage le soir devant la télé). Couleur d'accent et noir OLED : pack soutien.
+    val unlocked by com.rollandostudio.universaltvcast.data.Supporter.unlocked.collectAsState()
+    val accent by com.rollandostudio.universaltvcast.data.Look.accent.collectAsState()
+    val oled by com.rollandostudio.universaltvcast.data.Look.oled.collectAsState()
+    val scheme = androidx.compose.runtime.remember(unlocked, accent, oled) {
+        scheme(if (unlocked) accent else com.rollandostudio.universaltvcast.data.Look.Accent.AMBER, unlocked && oled)
+    }
+    MaterialTheme(colorScheme = scheme, typography = Type, content = content)
+}
+
+/** Couleurs de l'appli pour un accent (et un fond noir OLED) : l'ambre d'origine reste exactement le même. */
+private fun scheme(a: com.rollandostudio.universaltvcast.data.Look.Accent, oled: Boolean): androidx.compose.material3.ColorScheme {
+    val p = Color(a.argb)
+    fun mix(c1: Color, c2: Color, t: Float) = Color(c1.red + (c2.red - c1.red) * t, c1.green + (c2.green - c1.green) * t, c1.blue + (c2.blue - c1.blue) * t, 1f)
+    var s = if (a == com.rollandostudio.universaltvcast.data.Look.Accent.AMBER) Dark else Dark.copy(
+        primary = p,
+        onPrimary = mix(p, Color.Black, 0.78f),
+        primaryContainer = mix(p, Color(0xFF0F1115), 0.62f),
+        onPrimaryContainer = mix(p, Color.White, 0.65f),
+    )
+    if (oled) s = s.copy(
+        background = Color.Black, surface = Color.Black,
+        surfaceContainerLowest = Color.Black, surfaceContainerLow = Color(0xFF0A0A0B), surfaceContainer = Color(0xFF111113),
+        surfaceContainerHigh = Color(0xFF18181B), surfaceContainerHighest = Color(0xFF202024),
+    )
+    return s
 }

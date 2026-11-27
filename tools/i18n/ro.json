@@ -399,7 +399,31 @@
   "skip_recap": "Sari peste rezumat",
   "skip_credits": "Sari peste generic",
   "settings_rate": "Evaluează aplicația",
-  "settings_rate_sub": "O recenzie îi ajută pe alții să o găsească"
+  "settings_rate_sub": "O recenzie îi ajută pe alții să o găsească",
+  "style_title": "Personalizare",
+  "style_sub": "Culori, ecranul de așteptare al televizorului, pictogramă",
+  "pack_title": "Pachet de susținere",
+  "pack_body": "Universal TV Cast este gratuită, fără reclame și va rămâne așa. Pachetul de susținere adaugă câteva accente de stil și ajută studioul să continue.",
+  "pack_buy": "Susține · %1$s",
+  "pack_buy_noprice": "Susține",
+  "pack_once": "Achiziție unică, fără abonament.",
+  "pack_thanks": "Mulțumim pentru sprijin!",
+  "pack_unavailable": "Magazinul nu răspunde. Încearcă din nou mai târziu.",
+  "style_color": "Culoare",
+  "style_oled": "Negru real (ecrane OLED)",
+  "style_oled_sub": "Fundal complet negru: mai profund și puțin mai blând cu bateria.",
+  "style_idle": "Ecran de așteptare al televizorului",
+  "style_idle_classic": "Clasic",
+  "style_idle_photo": "Fotografie",
+  "style_idle_clock": "Ceas",
+  "style_photos": "Alege fotografii",
+  "style_message": "Mesaj (opțional)",
+  "style_message_hint": "Bun venit acasă!",
+  "style_live": "Ecran viu",
+  "style_live_sub": "Fotografiile se schimbă, iar ora se actualizează în fiecare minut.",
+  "style_show_tv": "Arată pe televizor",
+  "style_icon": "Pictograma aplicației",
+  "style_icon_note": "Noua pictogramă apare după ce ieșiți din aplicație. Poate dispărea o clipă de pe ecranul principal."
  },
  "plurals": {
   "browser_found": {
@@ -416,6 +440,11 @@
    "one": "%d episod",
    "few": "%d episoade",
    "other": "%d de episoade"
+  },
+  "style_photos_count": {
+   "one": "%d fotografie",
+   "few": "%d fotografii",
+   "other": "%d de fotografii"
   }
  }
 }

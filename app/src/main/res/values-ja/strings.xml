@@ -401,6 +401,30 @@
     <string name="skip_credits">エンディングをスキップ</string>
     <string name="settings_rate">アプリを評価</string>
     <string name="settings_rate_sub">レビューがほかの人に見つけてもらう助けになります</string>
+    <string name="style_title">カスタマイズ</string>
+    <string name="style_sub">色、テレビの待機画面、アイコン</string>
+    <string name="pack_title">サポーターパック</string>
+    <string name="pack_body">Universal TV Cast は無料で広告もなく、これからも変わりません。サポーターパックではスタイルの要素が増え、スタジオの活動を支えられます。</string>
+    <string name="pack_buy">応援する · %1$s</string>
+    <string name="pack_buy_noprice">応援する</string>
+    <string name="pack_once">1回きりの購入で、サブスクではありません。</string>
+    <string name="pack_thanks">ご支援ありがとうございます!</string>
+    <string name="pack_unavailable">ストアが応答しません。しばらくしてからもう一度お試しください。</string>
+    <string name="style_color">色</string>
+    <string name="style_oled">真っ黒(OLED画面向け)</string>
+    <string name="style_oled_sub">背景を真っ黒にします。より深い黒で、バッテリーも少し節約できます。</string>
+    <string name="style_idle">テレビの待機画面</string>
+    <string name="style_idle_classic">クラシック</string>
+    <string name="style_idle_photo">写真</string>
+    <string name="style_idle_clock">時計</string>
+    <string name="style_photos">写真を選ぶ</string>
+    <string name="style_message">メッセージ(任意)</string>
+    <string name="style_message_hint">おかえりなさい!</string>
+    <string name="style_live">ライブ画面</string>
+    <string name="style_live_sub">写真が切り替わり、時刻は1分ごとに更新されます。</string>
+    <string name="style_show_tv">テレビで見る</string>
+    <string name="style_icon">アプリのアイコン</string>
+    <string name="style_icon_note">新しいアイコンはアプリを閉じると表示されます。ホーム画面から一瞬消えることがあります。</string>
     <plurals name="browser_found">
         <item quantity="other">%d 本の動画</item>
     </plurals>
@@ -409,5 +433,8 @@
     </plurals>
     <plurals name="lan_episodes">
         <item quantity="other">%d話</item>
+    </plurals>
+    <plurals name="style_photos_count">
+        <item quantity="other">%d枚</item>
     </plurals>
 </resources>

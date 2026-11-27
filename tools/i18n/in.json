@@ -399,7 +399,31 @@
   "skip_recap": "Lewati rangkuman",
   "skip_credits": "Lewati kredit",
   "settings_rate": "Beri nilai aplikasi",
-  "settings_rate_sub": "Ulasan membantu orang lain menemukannya"
+  "settings_rate_sub": "Ulasan membantu orang lain menemukannya",
+  "style_title": "Personalisasi",
+  "style_sub": "Warna, layar tunggu TV, ikon",
+  "pack_title": "Paket dukungan",
+  "pack_body": "Universal TV Cast gratis, tanpa iklan, dan akan tetap begitu. Paket dukungan menambah sentuhan gaya dan membantu studio terus berkarya.",
+  "pack_buy": "Dukung · %1$s",
+  "pack_buy_noprice": "Dukung",
+  "pack_once": "Pembelian sekali bayar, tanpa langganan.",
+  "pack_thanks": "Terima kasih atas dukungan Anda!",
+  "pack_unavailable": "Toko tidak merespons. Coba lagi nanti.",
+  "style_color": "Warna",
+  "style_oled": "Hitam pekat (layar OLED)",
+  "style_oled_sub": "Latar belakang serba hitam: lebih pekat dan sedikit lebih hemat baterai.",
+  "style_idle": "Layar tunggu TV",
+  "style_idle_classic": "Klasik",
+  "style_idle_photo": "Foto",
+  "style_idle_clock": "Jam",
+  "style_photos": "Pilih foto",
+  "style_message": "Pesan (opsional)",
+  "style_message_hint": "Selamat datang di rumah!",
+  "style_live": "Layar hidup",
+  "style_live_sub": "Foto berganti dan waktu diperbarui setiap menit.",
+  "style_show_tv": "Tampilkan di TV",
+  "style_icon": "Ikon aplikasi",
+  "style_icon_note": "Ikon baru muncul setelah Anda keluar dari aplikasi. Ikon mungkin hilang sejenak dari layar utama."
  },
  "plurals": {
   "browser_found": {
@@ -410,6 +434,9 @@
   },
   "lan_episodes": {
    "other": "%d episode"
+  },
+  "style_photos_count": {
+   "other": "%d foto"
   }
  }
 }

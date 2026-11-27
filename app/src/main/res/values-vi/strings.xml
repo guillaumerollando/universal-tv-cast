@@ -401,6 +401,30 @@
     <string name="skip_credits">Bỏ qua phần giới thiệu cuối</string>
     <string name="settings_rate">Đánh giá ứng dụng</string>
     <string name="settings_rate_sub">Một đánh giá giúp người khác tìm thấy ứng dụng</string>
+    <string name="style_title">Cá nhân hóa</string>
+    <string name="style_sub">Màu sắc, màn hình chờ của TV, biểu tượng</string>
+    <string name="pack_title">Gói ủng hộ</string>
+    <string name="pack_body">Universal TV Cast miễn phí, không quảng cáo và sẽ luôn như vậy. Gói ủng hộ thêm vài nét phong cách và giúp studio tiếp tục hoạt động.</string>
+    <string name="pack_buy">Ủng hộ · %1$s</string>
+    <string name="pack_buy_noprice">Ủng hộ</string>
+    <string name="pack_once">Mua một lần, không đăng ký định kỳ.</string>
+    <string name="pack_thanks">Cảm ơn bạn đã ủng hộ!</string>
+    <string name="pack_unavailable">Cửa hàng không phản hồi. Hãy thử lại sau.</string>
+    <string name="style_color">Màu</string>
+    <string name="style_oled">Đen tuyền (màn hình OLED)</string>
+    <string name="style_oled_sub">Nền đen hoàn toàn: sâu hơn và tiết kiệm pin hơn một chút.</string>
+    <string name="style_idle">Màn hình chờ của TV</string>
+    <string name="style_idle_classic">Cổ điển</string>
+    <string name="style_idle_photo">Ảnh</string>
+    <string name="style_idle_clock">Đồng hồ</string>
+    <string name="style_photos">Chọn ảnh</string>
+    <string name="style_message">Lời nhắn (tùy chọn)</string>
+    <string name="style_message_hint">Chào mừng về nhà!</string>
+    <string name="style_live">Màn hình sống động</string>
+    <string name="style_live_sub">Ảnh thay đổi và giờ được cập nhật mỗi phút.</string>
+    <string name="style_show_tv">Hiển thị trên TV</string>
+    <string name="style_icon">Biểu tượng ứng dụng</string>
+    <string name="style_icon_note">Biểu tượng mới sẽ xuất hiện khi bạn thoát ứng dụng. Nó có thể biến mất khỏi màn hình chính trong giây lát.</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>
@@ -409,5 +433,8 @@
     </plurals>
     <plurals name="lan_episodes">
         <item quantity="other">%d tập</item>
+    </plurals>
+    <plurals name="style_photos_count">
+        <item quantity="other">%d ảnh</item>
     </plurals>
 </resources>

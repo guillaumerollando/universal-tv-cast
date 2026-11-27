@@ -399,7 +399,31 @@
   "skip_recap": "Pomiń streszczenie",
   "skip_credits": "Pomiń napisy końcowe",
   "settings_rate": "Oceń aplikację",
-  "settings_rate_sub": "Opinia pomaga innym ją znaleźć"
+  "settings_rate_sub": "Opinia pomaga innym ją znaleźć",
+  "style_title": "Personalizacja",
+  "style_sub": "Kolory, ekran oczekiwania telewizora, ikona",
+  "pack_title": "Pakiet wsparcia",
+  "pack_body": "Universal TV Cast jest darmowa, bez reklam i tak zostanie. Pakiet wsparcia dodaje kilka stylowych dodatków i pomaga studiu działać dalej.",
+  "pack_buy": "Wesprzyj · %1$s",
+  "pack_buy_noprice": "Wesprzyj",
+  "pack_once": "Jednorazowy zakup, bez subskrypcji.",
+  "pack_thanks": "Dziękujemy za wsparcie!",
+  "pack_unavailable": "Sklep nie odpowiada. Spróbuj ponownie później.",
+  "style_color": "Kolor",
+  "style_oled": "Prawdziwa czerń (ekrany OLED)",
+  "style_oled_sub": "Całkowicie czarne tło: głębsze i trochę oszczędniejsze dla baterii.",
+  "style_idle": "Ekran oczekiwania telewizora",
+  "style_idle_classic": "Klasyczny",
+  "style_idle_photo": "Zdjęcie",
+  "style_idle_clock": "Zegar",
+  "style_photos": "Wybierz zdjęcia",
+  "style_message": "Wiadomość (opcjonalnie)",
+  "style_message_hint": "Witaj w domu!",
+  "style_live": "Żywy ekran",
+  "style_live_sub": "Zdjęcia się zmieniają, a godzina aktualizuje się co minutę.",
+  "style_show_tv": "Pokaż na telewizorze",
+  "style_icon": "Ikona aplikacji",
+  "style_icon_note": "Nowa ikona pojawi się po wyjściu z aplikacji. Może na chwilę zniknąć z ekranu głównego."
  },
  "plurals": {
   "browser_found": {
@@ -419,6 +443,12 @@
    "few": "%d odcinki",
    "many": "%d odcinków",
    "other": "%d odcinka"
+  },
+  "style_photos_count": {
+   "one": "%d zdjęcie",
+   "few": "%d zdjęcia",
+   "many": "%d zdjęć",
+   "other": "%d zdjęcia"
   }
  }
 }

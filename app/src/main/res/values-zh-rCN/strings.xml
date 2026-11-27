@@ -401,6 +401,30 @@
     <string name="skip_credits">跳过片尾</string>
     <string name="settings_rate">为应用评分</string>
     <string name="settings_rate_sub">评价能帮助更多人发现它</string>
+    <string name="style_title">个性化</string>
+    <string name="style_sub">颜色、电视待机画面、图标</string>
+    <string name="pack_title">支持者礼包</string>
+    <string name="pack_body">Universal TV Cast 免费、无广告,并将一直如此。支持者礼包增添一些风格小功能,也帮助工作室继续前行。</string>
+    <string name="pack_buy">支持 · %1$s</string>
+    <string name="pack_buy_noprice">支持</string>
+    <string name="pack_once">一次性购买,无需订阅。</string>
+    <string name="pack_thanks">感谢你的支持!</string>
+    <string name="pack_unavailable">商店没有响应,请稍后再试。</string>
+    <string name="style_color">颜色</string>
+    <string name="style_oled">纯黑(OLED 屏幕)</string>
+    <string name="style_oled_sub">全黑背景:更深邃,也更省一点电。</string>
+    <string name="style_idle">电视待机画面</string>
+    <string name="style_idle_classic">经典</string>
+    <string name="style_idle_photo">照片</string>
+    <string name="style_idle_clock">时钟</string>
+    <string name="style_photos">选择照片</string>
+    <string name="style_message">留言(可选)</string>
+    <string name="style_message_hint">欢迎回家!</string>
+    <string name="style_live">动态画面</string>
+    <string name="style_live_sub">照片轮换,时间每分钟更新。</string>
+    <string name="style_show_tv">在电视上查看</string>
+    <string name="style_icon">应用图标</string>
+    <string name="style_icon_note">退出应用后会显示新图标。它可能会从主屏幕上短暂消失。</string>
     <plurals name="browser_found">
         <item quantity="other">%d 个视频</item>
     </plurals>
@@ -409,5 +433,8 @@
     </plurals>
     <plurals name="lan_episodes">
         <item quantity="other">%d 集</item>
+    </plurals>
+    <plurals name="style_photos_count">
+        <item quantity="other">%d 张</item>
     </plurals>
 </resources>

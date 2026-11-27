@@ -399,7 +399,31 @@
   "skip_recap": "Hoppa över sammanfattning",
   "skip_credits": "Hoppa över eftertexter",
   "settings_rate": "Betygsätt appen",
-  "settings_rate_sub": "Ett omdöme hjälper andra att hitta den"
+  "settings_rate_sub": "Ett omdöme hjälper andra att hitta den",
+  "style_title": "Anpassning",
+  "style_sub": "Färger, tv:ns vänteskärm, ikon",
+  "pack_title": "Stödpaket",
+  "pack_body": "Universal TV Cast är gratis, reklamfri och kommer att förbli det. Stödpaketet ger några stilfulla extra och hjälper studion att fortsätta.",
+  "pack_buy": "Stöd · %1$s",
+  "pack_buy_noprice": "Stöd",
+  "pack_once": "Engångsköp, ingen prenumeration.",
+  "pack_thanks": "Tack för ditt stöd!",
+  "pack_unavailable": "Butiken svarar inte. Försök igen senare.",
+  "style_color": "Färg",
+  "style_oled": "Äkta svart (OLED-skärmar)",
+  "style_oled_sub": "Helsvart bakgrund: djupare och lite snällare mot batteriet.",
+  "style_idle": "Tv:ns vänteskärm",
+  "style_idle_classic": "Klassisk",
+  "style_idle_photo": "Foto",
+  "style_idle_clock": "Klocka",
+  "style_photos": "Välj foton",
+  "style_message": "Meddelande (valfritt)",
+  "style_message_hint": "Välkommen hem!",
+  "style_live": "Levande skärm",
+  "style_live_sub": "Fotona växlar och tiden uppdateras varje minut.",
+  "style_show_tv": "Visa på tv:n",
+  "style_icon": "Appikon",
+  "style_icon_note": "Den nya ikonen visas när du lämnar appen. Den kan försvinna från hemskärmen en kort stund."
  },
  "plurals": {
   "browser_found": {
@@ -413,6 +437,10 @@
   "lan_episodes": {
    "one": "%d avsnitt",
    "other": "%d avsnitt"
+  },
+  "style_photos_count": {
+   "one": "%d foto",
+   "other": "%d foton"
   }
  }
 }

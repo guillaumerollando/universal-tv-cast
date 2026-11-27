@@ -401,6 +401,30 @@
     <string name="skip_credits">تخطي الشارة</string>
     <string name="settings_rate">قيّم التطبيق</string>
     <string name="settings_rate_sub">يساعد تقييمك الآخرين على العثور عليه</string>
+    <string name="style_title">التخصيص</string>
+    <string name="style_sub">الألوان وشاشة انتظار التلفزيون والأيقونة</string>
+    <string name="pack_title">حزمة الدعم</string>
+    <string name="pack_body">Universal TV Cast مجانية وبلا إعلانات وستبقى كذلك. تضيف حزمة الدعم لمسات أسلوبية وتساعد الاستوديو على الاستمرار.</string>
+    <string name="pack_buy">دعم · %1$s</string>
+    <string name="pack_buy_noprice">دعم</string>
+    <string name="pack_once">شراء لمرة واحدة، بدون اشتراك.</string>
+    <string name="pack_thanks">شكرًا على دعمك!</string>
+    <string name="pack_unavailable">المتجر لا يستجيب. حاول مرة أخرى لاحقًا.</string>
+    <string name="style_color">اللون</string>
+    <string name="style_oled">أسود حقيقي (شاشات OLED)</string>
+    <string name="style_oled_sub">خلفية سوداء بالكامل: أعمق وأقل استهلاكًا للبطارية قليلًا.</string>
+    <string name="style_idle">شاشة انتظار التلفزيون</string>
+    <string name="style_idle_classic">كلاسيكية</string>
+    <string name="style_idle_photo">صورة</string>
+    <string name="style_idle_clock">ساعة</string>
+    <string name="style_photos">اختيار الصور</string>
+    <string name="style_message">رسالة (اختياري)</string>
+    <string name="style_message_hint">أهلًا بك في المنزل!</string>
+    <string name="style_live">شاشة حيّة</string>
+    <string name="style_live_sub">تتغير الصور ويتحدث الوقت كل دقيقة.</string>
+    <string name="style_show_tv">عرض على التلفزيون</string>
+    <string name="style_icon">أيقونة التطبيق</string>
+    <string name="style_icon_note">تظهر الأيقونة الجديدة بعد مغادرة التطبيق. قد تختفي لحظة من الشاشة الرئيسية.</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>
@@ -424,5 +448,13 @@
         <item quantity="few">%d حلقات</item>
         <item quantity="many">%d حلقة</item>
         <item quantity="other">%d حلقة</item>
+    </plurals>
+    <plurals name="style_photos_count">
+        <item quantity="zero">%d صورة</item>
+        <item quantity="one">صورة واحدة</item>
+        <item quantity="two">صورتان</item>
+        <item quantity="few">%d صور</item>
+        <item quantity="many">%d صورة</item>
+        <item quantity="other">%d صورة</item>
     </plurals>
 </resources>

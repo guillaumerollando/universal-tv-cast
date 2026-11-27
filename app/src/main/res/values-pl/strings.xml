@@ -401,6 +401,30 @@
     <string name="skip_credits">Pomiń napisy końcowe</string>
     <string name="settings_rate">Oceń aplikację</string>
     <string name="settings_rate_sub">Opinia pomaga innym ją znaleźć</string>
+    <string name="style_title">Personalizacja</string>
+    <string name="style_sub">Kolory, ekran oczekiwania telewizora, ikona</string>
+    <string name="pack_title">Pakiet wsparcia</string>
+    <string name="pack_body">Universal TV Cast jest darmowa, bez reklam i tak zostanie. Pakiet wsparcia dodaje kilka stylowych dodatków i pomaga studiu działać dalej.</string>
+    <string name="pack_buy">Wesprzyj · %1$s</string>
+    <string name="pack_buy_noprice">Wesprzyj</string>
+    <string name="pack_once">Jednorazowy zakup, bez subskrypcji.</string>
+    <string name="pack_thanks">Dziękujemy za wsparcie!</string>
+    <string name="pack_unavailable">Sklep nie odpowiada. Spróbuj ponownie później.</string>
+    <string name="style_color">Kolor</string>
+    <string name="style_oled">Prawdziwa czerń (ekrany OLED)</string>
+    <string name="style_oled_sub">Całkowicie czarne tło: głębsze i trochę oszczędniejsze dla baterii.</string>
+    <string name="style_idle">Ekran oczekiwania telewizora</string>
+    <string name="style_idle_classic">Klasyczny</string>
+    <string name="style_idle_photo">Zdjęcie</string>
+    <string name="style_idle_clock">Zegar</string>
+    <string name="style_photos">Wybierz zdjęcia</string>
+    <string name="style_message">Wiadomość (opcjonalnie)</string>
+    <string name="style_message_hint">Witaj w domu!</string>
+    <string name="style_live">Żywy ekran</string>
+    <string name="style_live_sub">Zdjęcia się zmieniają, a godzina aktualizuje się co minutę.</string>
+    <string name="style_show_tv">Pokaż na telewizorze</string>
+    <string name="style_icon">Ikona aplikacji</string>
+    <string name="style_icon_note">Nowa ikona pojawi się po wyjściu z aplikacji. Może na chwilę zniknąć z ekranu głównego.</string>
     <plurals name="browser_found">
         <item quantity="one">%d wideo</item>
         <item quantity="few">%d wideo</item>
@@ -418,5 +442,11 @@
         <item quantity="few">%d odcinki</item>
         <item quantity="many">%d odcinków</item>
         <item quantity="other">%d odcinka</item>
+    </plurals>
+    <plurals name="style_photos_count">
+        <item quantity="one">%d zdjęcie</item>
+        <item quantity="few">%d zdjęcia</item>
+        <item quantity="many">%d zdjęć</item>
+        <item quantity="other">%d zdjęcia</item>
     </plurals>
 </resources>

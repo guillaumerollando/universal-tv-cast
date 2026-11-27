@@ -399,7 +399,31 @@
   "skip_recap": "Bỏ qua phần tóm tắt",
   "skip_credits": "Bỏ qua phần giới thiệu cuối",
   "settings_rate": "Đánh giá ứng dụng",
-  "settings_rate_sub": "Một đánh giá giúp người khác tìm thấy ứng dụng"
+  "settings_rate_sub": "Một đánh giá giúp người khác tìm thấy ứng dụng",
+  "style_title": "Cá nhân hóa",
+  "style_sub": "Màu sắc, màn hình chờ của TV, biểu tượng",
+  "pack_title": "Gói ủng hộ",
+  "pack_body": "Universal TV Cast miễn phí, không quảng cáo và sẽ luôn như vậy. Gói ủng hộ thêm vài nét phong cách và giúp studio tiếp tục hoạt động.",
+  "pack_buy": "Ủng hộ · %1$s",
+  "pack_buy_noprice": "Ủng hộ",
+  "pack_once": "Mua một lần, không đăng ký định kỳ.",
+  "pack_thanks": "Cảm ơn bạn đã ủng hộ!",
+  "pack_unavailable": "Cửa hàng không phản hồi. Hãy thử lại sau.",
+  "style_color": "Màu",
+  "style_oled": "Đen tuyền (màn hình OLED)",
+  "style_oled_sub": "Nền đen hoàn toàn: sâu hơn và tiết kiệm pin hơn một chút.",
+  "style_idle": "Màn hình chờ của TV",
+  "style_idle_classic": "Cổ điển",
+  "style_idle_photo": "Ảnh",
+  "style_idle_clock": "Đồng hồ",
+  "style_photos": "Chọn ảnh",
+  "style_message": "Lời nhắn (tùy chọn)",
+  "style_message_hint": "Chào mừng về nhà!",
+  "style_live": "Màn hình sống động",
+  "style_live_sub": "Ảnh thay đổi và giờ được cập nhật mỗi phút.",
+  "style_show_tv": "Hiển thị trên TV",
+  "style_icon": "Biểu tượng ứng dụng",
+  "style_icon_note": "Biểu tượng mới sẽ xuất hiện khi bạn thoát ứng dụng. Nó có thể biến mất khỏi màn hình chính trong giây lát."
  },
  "plurals": {
   "browser_found": {
@@ -410,6 +434,9 @@
   },
   "lan_episodes": {
    "other": "%d tập"
+  },
+  "style_photos_count": {
+   "other": "%d ảnh"
   }
  }
 }

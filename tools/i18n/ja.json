@@ -399,7 +399,31 @@
   "skip_recap": "あらすじをスキップ",
   "skip_credits": "エンディングをスキップ",
   "settings_rate": "アプリを評価",
-  "settings_rate_sub": "レビューがほかの人に見つけてもらう助けになります"
+  "settings_rate_sub": "レビューがほかの人に見つけてもらう助けになります",
+  "style_title": "カスタマイズ",
+  "style_sub": "色、テレビの待機画面、アイコン",
+  "pack_title": "サポーターパック",
+  "pack_body": "Universal TV Cast は無料で広告もなく、これからも変わりません。サポーターパックではスタイルの要素が増え、スタジオの活動を支えられます。",
+  "pack_buy": "応援する · %1$s",
+  "pack_buy_noprice": "応援する",
+  "pack_once": "1回きりの購入で、サブスクではありません。",
+  "pack_thanks": "ご支援ありがとうございます!",
+  "pack_unavailable": "ストアが応答しません。しばらくしてからもう一度お試しください。",
+  "style_color": "色",
+  "style_oled": "真っ黒(OLED画面向け)",
+  "style_oled_sub": "背景を真っ黒にします。より深い黒で、バッテリーも少し節約できます。",
+  "style_idle": "テレビの待機画面",
+  "style_idle_classic": "クラシック",
+  "style_idle_photo": "写真",
+  "style_idle_clock": "時計",
+  "style_photos": "写真を選ぶ",
+  "style_message": "メッセージ(任意)",
+  "style_message_hint": "おかえりなさい!",
+  "style_live": "ライブ画面",
+  "style_live_sub": "写真が切り替わり、時刻は1分ごとに更新されます。",
+  "style_show_tv": "テレビで見る",
+  "style_icon": "アプリのアイコン",
+  "style_icon_note": "新しいアイコンはアプリを閉じると表示されます。ホーム画面から一瞬消えることがあります。"
  },
  "plurals": {
   "browser_found": {
@@ -410,6 +434,9 @@
   },
   "lan_episodes": {
    "other": "%d話"
+  },
+  "style_photos_count": {
+   "other": "%d枚"
   }
  }
 }

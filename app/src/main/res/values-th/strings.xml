@@ -401,6 +401,30 @@
     <string name="skip_credits">ข้ามเครดิต</string>
     <string name="settings_rate">ให้คะแนนแอป</string>
     <string name="settings_rate_sub">รีวิวช่วยให้คนอื่นค้นพบแอปนี้</string>
+    <string name="style_title">การปรับแต่ง</string>
+    <string name="style_sub">สี หน้าจอรอของทีวี ไอคอน</string>
+    <string name="pack_title">แพ็กสนับสนุน</string>
+    <string name="pack_body">Universal TV Cast ใช้ฟรี ไม่มีโฆษณา และจะเป็นเช่นนี้ต่อไป แพ็กสนับสนุนเพิ่มลูกเล่นด้านสไตล์และช่วยให้สตูดิโอไปต่อได้</string>
+    <string name="pack_buy">สนับสนุน · %1$s</string>
+    <string name="pack_buy_noprice">สนับสนุน</string>
+    <string name="pack_once">ซื้อครั้งเดียว ไม่มีการสมัครสมาชิก</string>
+    <string name="pack_thanks">ขอบคุณที่สนับสนุน!</string>
+    <string name="pack_unavailable">ร้านค้าไม่ตอบสนอง ลองใหม่ภายหลัง</string>
+    <string name="style_color">สี</string>
+    <string name="style_oled">ดำสนิท (หน้าจอ OLED)</string>
+    <string name="style_oled_sub">พื้นหลังสีดำทั้งหมด: ดำลึกขึ้นและประหยัดแบตเตอรี่ขึ้นเล็กน้อย</string>
+    <string name="style_idle">หน้าจอรอของทีวี</string>
+    <string name="style_idle_classic">คลาสสิก</string>
+    <string name="style_idle_photo">รูปภาพ</string>
+    <string name="style_idle_clock">นาฬิกา</string>
+    <string name="style_photos">เลือกรูปภาพ</string>
+    <string name="style_message">ข้อความ (ไม่บังคับ)</string>
+    <string name="style_message_hint">ยินดีต้อนรับกลับบ้าน!</string>
+    <string name="style_live">หน้าจอมีชีวิต</string>
+    <string name="style_live_sub">รูปภาพเปลี่ยนไปเรื่อยๆ และเวลาจะอัปเดตทุกนาที</string>
+    <string name="style_show_tv">แสดงบนทีวี</string>
+    <string name="style_icon">ไอคอนแอป</string>
+    <string name="style_icon_note">ไอคอนใหม่จะแสดงเมื่อออกจากแอป และอาจหายไปจากหน้าจอหลักสักครู่</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>
@@ -409,5 +433,8 @@
     </plurals>
     <plurals name="lan_episodes">
         <item quantity="other">%d ตอน</item>
+    </plurals>
+    <plurals name="style_photos_count">
+        <item quantity="other">%d รูป</item>
     </plurals>
 </resources>

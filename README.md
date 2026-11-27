@@ -24,13 +24,19 @@ sur le téléphone quand il n'y a pas de télé allumée.
   nom du fichier, puis l'annuaire de Stremio (réglage « Affiches des films », seul le titre nettoyé part).
   Tri (nom, ajout récent, année), « masquer les vus », vu / barre d'avancement. Vidéos du réseau dans « Reprendre »,
   « Épisode suivant » dans le dossier ; appareil éteint : « … ne répond pas ».
-- **Lecture sur le téléphone** (ExoPlayer) : plein écran, double appui ±10 s, mini-vidéo déplaçable.
+- **Lecture sur le téléphone** (ExoPlayer) : plein écran, double appui ±10 s, mini-vidéo déplaçable ; en quittant
+  l'appli, la vidéo continue en petite fenêtre (image dans l'image, ±10 s et pause).
 - **Télécommande** : lecture, ±10 s, barre, volume de la télé (boutons du téléphone), notification.
 - **Sous-titres** SRT / VTT / ASS (convertis pour la télé), langue audio, décalage.
 - **Widgets** d'écran d'accueil : reprendre + chaînes, reprendre + sites, vidéos en cours, chaînes, reprendre,
   photos et vidéos.
 - **Sites proposés selon le pays** (télé publique du pays, puis sites libres visibles partout).
 - 23 langues ; partager l'appli, signaler un problème, signature du studio dans les réglages.
+- **Pack soutien** (achat unique et volontaire sur Google Play, produit `pack_soutien`) : rien d'utile n'en dépend,
+  l'appli reste entière, gratuite et sans pub. Il ouvre la **Personnalisation** : 6 couleurs d'accent, noir intégral
+  OLED, écran d'attente de la télé (classique, photo du téléphone, horloge), message perso, écran « vivant » (photos
+  qui défilent, heure mise à jour chaque minute), 5 icônes d'appli. Version libre : tout est ouvert ; version de
+  débogage : ouvert aussi, pour les essais.
 
 ## Comment ça marche
 Le téléphone fait tourner un petit serveur HTTP (`proxy/ProxyServer.kt`) que la télé interroge :
@@ -49,7 +55,7 @@ RenderingControl (`dlna/Dlna.kt`).
 | `cast/` | Le chef d'orchestre `TvCast.kt` (télé ou téléphone, envoi, commandes), lecteur du téléphone (`PhoneEngine`), album et diaporama, vérification de la source (`SourceCheck`), état (`CastState`) |
 | `browser/` | Navigateur : logique (`BrowserController`), écran (`BrowserScreen`), repérage des vidéos (`VideoSniffer`), épisodes et titres |
 | `proxy/` | Serveur relais pour la télé : HLS, enregistrement du direct, sous-titres, MKV/MP4 |
-| `data/` | Historique et favoris (`Library`), chaînes et listes (`Iptv`, `IptvStore`, `Channels`), guide (`Epg`), économie d'énergie |
+| `data/` | Historique et favoris (`Library`), chaînes et listes (`Iptv`, `IptvStore`, `Channels`), guide (`Epg`), économie d'énergie, style (`Look`), pack soutien (`Supporter` ; achat dans `SupportStore`, une version par flavor) |
 | `ui/` | Écrans Compose (accueil, lecteur, chaînes, guide, réglages), widgets (`Widgets.kt`), signalement (`Report`) |
 | `lan/` | Réseau de la maison : serveurs multimédias (`MediaServers`), dossiers partagés (`Smb`, lus en `content://` par `SmbProvider`), appareils, favoris, vu / commencé (`LanStore`), titres et affiches (`Catalog`) ; écran `ui/NetworkScreen` + mosaïque `ui/LanLibrary` |
 | `dlna/`, `net/`, `subs/` | Protocole DLNA, HTTP, recherche de sous-titres |

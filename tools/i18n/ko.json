@@ -399,7 +399,31 @@
   "skip_recap": "요약 건너뛰기",
   "skip_credits": "엔딩 크레딧 건너뛰기",
   "settings_rate": "앱 평가하기",
-  "settings_rate_sub": "리뷰는 다른 사람들이 앱을 찾는 데 도움이 돼요"
+  "settings_rate_sub": "리뷰는 다른 사람들이 앱을 찾는 데 도움이 돼요",
+  "style_title": "맞춤 설정",
+  "style_sub": "색상, TV 대기 화면, 아이콘",
+  "pack_title": "후원자 팩",
+  "pack_body": "Universal TV Cast는 무료이고 광고가 없으며, 앞으로도 그렇습니다. 후원자 팩은 스타일 요소를 더하고 스튜디오가 계속 이어가도록 도와줘요.",
+  "pack_buy": "후원하기 · %1$s",
+  "pack_buy_noprice": "후원하기",
+  "pack_once": "한 번만 결제하며 구독이 아니에요.",
+  "pack_thanks": "후원해 주셔서 감사합니다!",
+  "pack_unavailable": "스토어가 응답하지 않아요. 나중에 다시 시도해 주세요.",
+  "style_color": "색상",
+  "style_oled": "완전한 검정(OLED 화면)",
+  "style_oled_sub": "배경을 완전한 검정으로: 더 깊고 배터리도 조금 아껴요.",
+  "style_idle": "TV 대기 화면",
+  "style_idle_classic": "클래식",
+  "style_idle_photo": "사진",
+  "style_idle_clock": "시계",
+  "style_photos": "사진 선택",
+  "style_message": "메시지(선택)",
+  "style_message_hint": "집에 오신 걸 환영해요!",
+  "style_live": "라이브 화면",
+  "style_live_sub": "사진이 바뀌고 시간은 1분마다 갱신돼요.",
+  "style_show_tv": "TV에서 보기",
+  "style_icon": "앱 아이콘",
+  "style_icon_note": "새 아이콘은 앱을 나가면 나타나요. 홈 화면에서 잠시 사라질 수 있어요."
  },
  "plurals": {
   "browser_found": {
@@ -410,6 +434,9 @@
   },
   "lan_episodes": {
    "other": "%d화"
+  },
+  "style_photos_count": {
+   "other": "%d장"
   }
  }
 }

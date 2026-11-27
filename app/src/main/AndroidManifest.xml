@@ -27,10 +27,6 @@
             android:supportsPictureInPicture="true"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|density"
             android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
             <!-- « Ouvrir avec » / « Lecteur externe » depuis une autre appli -->
             <intent-filter android:label="@string/intent_cast_label">
@@ -57,6 +53,68 @@
                 <data android:mimeType="audio/*" />
             </intent-filter>
         </activity>
+
+        <!-- Icônes de l'appli (pack soutien) : un seul alias actif à la fois, les autres éteints. -->
+        <activity-alias
+            android:name=".LauncherNight"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_launcher"
+            android:roundIcon="@mipmap/ic_launcher"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".LauncherOcean"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_launcher_ocean"
+            android:roundIcon="@mipmap/ic_launcher_ocean"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".LauncherPlum"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_launcher_plum"
+            android:roundIcon="@mipmap/ic_launcher_plum"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".LauncherForest"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_launcher_forest"
+            android:roundIcon="@mipmap/ic_launcher_forest"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".LauncherBlack"
+            android:targetActivity=".MainActivity"
+            android:icon="@mipmap/ic_launcher_black"
+            android:roundIcon="@mipmap/ic_launcher_black"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
 
         <!-- Widgets de l'écran d'accueil (ui/Widgets.kt), un par usage. -->
         <receiver

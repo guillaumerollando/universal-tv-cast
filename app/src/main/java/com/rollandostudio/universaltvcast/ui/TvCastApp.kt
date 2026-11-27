@@ -41,6 +41,7 @@ import androidx.compose.material.icons.rounded.CastConnected
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.LinkOff
+import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Settings
@@ -564,11 +565,23 @@ private fun SettingsSheet(onDismiss: () -> Unit) {
     val context = LocalContext.current
     val adBlock by Library.adBlock.collectAsState()
     val continuous by Library.continuousHls.collectAsState()
+    var showStyle by remember { mutableStateOf(false) }
+    if (showStyle) StyleSheet(onDismiss = { showStyle = false })
     ModalBottomSheet(onDismissRequest = onDismiss, modifier = Modifier.statusBarsPadding()) {
         LazyColumn(contentPadding = PaddingValues(start = 8.dp, end = 8.dp, bottom = 32.dp)) {
             item {
                 Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+            }
+            item {
+                // Personnalisation (pack soutien) : en tête, c'est la seule chose « jolie » des réglages.
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.style_title)) },
+                    supportingContent = { Text(stringResource(R.string.style_sub)) },
+                    leadingContent = { Icon(Icons.Rounded.Palette, null, tint = MaterialTheme.colorScheme.primary) },
+                    colors = ListItemDefaults.colors(containerColor = androidx.compose.ui.graphics.Color.Transparent),
+                    modifier = Modifier.selectable(false, role = Role.Button) { showStyle = true },
+                )
             }
             item {
                 SwitchRow(stringResource(R.string.settings_adblock), stringResource(R.string.settings_adblock_sub), adBlock) {

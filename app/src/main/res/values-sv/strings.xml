@@ -401,6 +401,30 @@
     <string name="skip_credits">Hoppa över eftertexter</string>
     <string name="settings_rate">Betygsätt appen</string>
     <string name="settings_rate_sub">Ett omdöme hjälper andra att hitta den</string>
+    <string name="style_title">Anpassning</string>
+    <string name="style_sub">Färger, tv:ns vänteskärm, ikon</string>
+    <string name="pack_title">Stödpaket</string>
+    <string name="pack_body">Universal TV Cast är gratis, reklamfri och kommer att förbli det. Stödpaketet ger några stilfulla extra och hjälper studion att fortsätta.</string>
+    <string name="pack_buy">Stöd · %1$s</string>
+    <string name="pack_buy_noprice">Stöd</string>
+    <string name="pack_once">Engångsköp, ingen prenumeration.</string>
+    <string name="pack_thanks">Tack för ditt stöd!</string>
+    <string name="pack_unavailable">Butiken svarar inte. Försök igen senare.</string>
+    <string name="style_color">Färg</string>
+    <string name="style_oled">Äkta svart (OLED-skärmar)</string>
+    <string name="style_oled_sub">Helsvart bakgrund: djupare och lite snällare mot batteriet.</string>
+    <string name="style_idle">Tv:ns vänteskärm</string>
+    <string name="style_idle_classic">Klassisk</string>
+    <string name="style_idle_photo">Foto</string>
+    <string name="style_idle_clock">Klocka</string>
+    <string name="style_photos">Välj foton</string>
+    <string name="style_message">Meddelande (valfritt)</string>
+    <string name="style_message_hint">Välkommen hem!</string>
+    <string name="style_live">Levande skärm</string>
+    <string name="style_live_sub">Fotona växlar och tiden uppdateras varje minut.</string>
+    <string name="style_show_tv">Visa på tv:n</string>
+    <string name="style_icon">Appikon</string>
+    <string name="style_icon_note">Den nya ikonen visas när du lämnar appen. Den kan försvinna från hemskärmen en kort stund.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videor</item>
@@ -412,5 +436,9 @@
     <plurals name="lan_episodes">
         <item quantity="one">%d avsnitt</item>
         <item quantity="other">%d avsnitt</item>
+    </plurals>
+    <plurals name="style_photos_count">
+        <item quantity="one">%d foto</item>
+        <item quantity="other">%d foton</item>
     </plurals>
 </resources>

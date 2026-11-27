@@ -399,7 +399,31 @@
   "skip_recap": "跳过前情回顾",
   "skip_credits": "跳过片尾",
   "settings_rate": "为应用评分",
-  "settings_rate_sub": "评价能帮助更多人发现它"
+  "settings_rate_sub": "评价能帮助更多人发现它",
+  "style_title": "个性化",
+  "style_sub": "颜色、电视待机画面、图标",
+  "pack_title": "支持者礼包",
+  "pack_body": "Universal TV Cast 免费、无广告,并将一直如此。支持者礼包增添一些风格小功能,也帮助工作室继续前行。",
+  "pack_buy": "支持 · %1$s",
+  "pack_buy_noprice": "支持",
+  "pack_once": "一次性购买,无需订阅。",
+  "pack_thanks": "感谢你的支持!",
+  "pack_unavailable": "商店没有响应,请稍后再试。",
+  "style_color": "颜色",
+  "style_oled": "纯黑(OLED 屏幕)",
+  "style_oled_sub": "全黑背景:更深邃,也更省一点电。",
+  "style_idle": "电视待机画面",
+  "style_idle_classic": "经典",
+  "style_idle_photo": "照片",
+  "style_idle_clock": "时钟",
+  "style_photos": "选择照片",
+  "style_message": "留言(可选)",
+  "style_message_hint": "欢迎回家!",
+  "style_live": "动态画面",
+  "style_live_sub": "照片轮换,时间每分钟更新。",
+  "style_show_tv": "在电视上查看",
+  "style_icon": "应用图标",
+  "style_icon_note": "退出应用后会显示新图标。它可能会从主屏幕上短暂消失。"
  },
  "plurals": {
   "browser_found": {
@@ -410,6 +434,9 @@
   },
   "lan_episodes": {
    "other": "%d 集"
+  },
+  "style_photos_count": {
+   "other": "%d 张"
   }
  }
 }

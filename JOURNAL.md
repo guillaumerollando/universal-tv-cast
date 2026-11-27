@@ -1451,3 +1451,22 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   Version libre : ni ligne ni fenêtre. Textes en 23 langues.
   Standard du studio passé à 4 incontournables (`standard-incontournables.md` § 4, tableau, `~/Dev/CLAUDE.md`).
 - Pas vérifié : la fenêtre de Google elle-même (elle n'apparaît que pour une appli installée depuis le Play Store).
+
+## 2026-11-27 — Image dans l'image (gratuit) et pack soutien (cosmétique)
+- Image dans l'image (commit précédent) : vidéo du téléphone en petite fenêtre en quittant l'appli, ±10 s et pause.
+  Gratuit pour tout le monde (décision de Guillaume).
+- Pack soutien : achat unique sur Google Play (`billing-ktx` 9.1.0, produit `pack_soutien`, confirmé auprès de
+  Google, revérifié à chaque ouverture, retiré si remboursé). Version libre : tout ouvert, sans bibliothèque de
+  paiement. Version de débogage : ouvert. Seule source de revenu : Google Play (pas de Ko-fi, etc.).
+- Il ouvre « Personnalisation » (en tête des réglages, visible par tous, grisé sans le pack avec le bouton
+  « Soutenir · prix ») : 6 couleurs d'accent (thème de toute l'appli), noir intégral OLED, écran d'attente de la télé
+  au choix (classique coloré, photo du téléphone en plein écran avec heure, grande horloge avec date), message perso,
+  « écran vivant » (l'image est renvoyée à la télé chaque minute : heure à jour, photos qui défilent), 5 icônes
+  d'appli (alias du lanceur, posées en quittant l'appli : Android ferme la tâche lancée par l'ancienne icône),
+  bouton « Voir sur la télé ». Photos copiées réduites (1920 px, 12 au plus) dans l'appli. Textes en 23 langues.
+- Vérifié sur émulateur (débogage) : couleurs et OLED appliqués à toute l'appli, aperçu horloge + message, photo
+  choisie dans le sélecteur d'Android et aperçu, changement d'icône sans fermer l'appli puis relance par la
+  nouvelle icône.
+- Pas vérifié : l'achat réel (le produit `pack_soutien` est à créer par Guillaume dans la Play Console, avec un prix ;
+  les testeurs de licence l'achètent gratuitement), l'écran d'attente vivant sur la vraie télé.
+- À faire avant publication : la politique de confidentialité doit mentionner l'achat via Google Play.

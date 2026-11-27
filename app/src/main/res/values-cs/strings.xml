@@ -401,6 +401,30 @@
     <string name="skip_credits">Přeskočit titulky</string>
     <string name="settings_rate">Ohodnotit aplikaci</string>
     <string name="settings_rate_sub">Hodnocení pomůže ostatním ji najít</string>
+    <string name="style_title">Přizpůsobení</string>
+    <string name="style_sub">Barvy, čekací obrazovka televize, ikona</string>
+    <string name="pack_title">Podpůrný balíček</string>
+    <string name="pack_body">Universal TV Cast je zdarma, bez reklam a tak to zůstane. Podpůrný balíček přidává stylové doplňky a pomáhá studiu pokračovat.</string>
+    <string name="pack_buy">Podpořit · %1$s</string>
+    <string name="pack_buy_noprice">Podpořit</string>
+    <string name="pack_once">Jednorázový nákup, bez předplatného.</string>
+    <string name="pack_thanks">Děkujeme za podporu!</string>
+    <string name="pack_unavailable">Obchod neodpovídá. Zkuste to později.</string>
+    <string name="style_color">Barva</string>
+    <string name="style_oled">Opravdová černá (displeje OLED)</string>
+    <string name="style_oled_sub">Zcela černé pozadí: hlubší a o trochu šetrnější k baterii.</string>
+    <string name="style_idle">Čekací obrazovka televize</string>
+    <string name="style_idle_classic">Klasická</string>
+    <string name="style_idle_photo">Fotka</string>
+    <string name="style_idle_clock">Hodiny</string>
+    <string name="style_photos">Vybrat fotky</string>
+    <string name="style_message">Zpráva (volitelné)</string>
+    <string name="style_message_hint">Vítejte doma!</string>
+    <string name="style_live">Živá obrazovka</string>
+    <string name="style_live_sub">Fotky se střídají a čas se aktualizuje každou minutu.</string>
+    <string name="style_show_tv">Zobrazit v televizi</string>
+    <string name="style_icon">Ikona aplikace</string>
+    <string name="style_icon_note">Nová ikona se objeví, jakmile aplikaci opustíte. Může na chvíli zmizet z domovské obrazovky.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="few">%d videa</item>
@@ -418,5 +442,11 @@
         <item quantity="few">%d díly</item>
         <item quantity="many">%d dílu</item>
         <item quantity="other">%d dílů</item>
+    </plurals>
+    <plurals name="style_photos_count">
+        <item quantity="one">%d fotka</item>
+        <item quantity="few">%d fotky</item>
+        <item quantity="many">%d fotky</item>
+        <item quantity="other">%d fotek</item>
     </plurals>
 </resources>

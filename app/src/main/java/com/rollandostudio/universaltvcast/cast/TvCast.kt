@@ -694,6 +694,45 @@ object TvCast {
             runCatching { Dlna.play(r) }
         }
         _state.update { it.copy(idle = true, phase = Phase.STOPPED) }
+        startIdleRefresh()
+    }
+
+    /** « Voir sur la télé » (Personnalisation) : montre l'écran d'attente choisi, si rien ne joue. Faux sans télé. */
+    fun previewIdle(): Boolean {
+        if (target() == null || _state.value.active) return false
+        exec { if (!_state.value.active) showIdle() }
+        return true
+    }
+
+    private var idleJob: kotlinx.coroutines.Job? = null
+
+    /**
+     * Écran d'attente vivant (pack soutien) : l'horloge, et les photos en mode vivant, changent chaque minute.
+     * On renvoie l'image à la télé à chaque changement de minute, tant qu'elle reste sur l'écran d'attente.
+     */
+    private fun startIdleRefresh() {
+        idleJob?.cancel()
+        val look = com.rollandostudio.universaltvcast.data.Look
+        if (look.idleNow() != com.rollandostudio.universaltvcast.data.Look.Idle.CLOCK && !look.liveNow()) return
+        idleJob = scope.launch {
+            while (true) {
+                delay(60_000 - System.currentTimeMillis() % 60_000 + 500)
+                if (!_state.value.idle || _state.value.active) break
+                val r = target() ?: break
+                val jpeg = kotlinx.coroutines.withContext(Dispatchers.Default) { IdleScreen.jpeg(app) }
+                // Nouvelle adresse à chaque minute : la télé ne réutilise pas l'image précédente.
+                val id = "idle" + (System.currentTimeMillis() / 60_000) % 2
+                proxy.putImage(id, jpeg)
+                val url = "${proxy.baseUrl()}/img/$id/attente.jpg"
+                exec {
+                    if (!_state.value.idle) return@exec
+                    runCatching {
+                        if (r.cast) CastControl.loadPhoto(r, url, app.getString(R.string.app_name))
+                        else { Dlna.setUriQuick(r, url, Dlna.didl(app.getString(R.string.app_name), url, "image/jpeg", null, false)); Dlna.playQuick(r) }
+                    }.onFailure { Log.i("TvCast", "écran d'attente : mise à jour refusée (${it.message})") }
+                }
+            }
+        }
     }
 
     /** Sous-titres choisis, avant décalage. */

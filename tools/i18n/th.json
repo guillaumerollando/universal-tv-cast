@@ -399,7 +399,31 @@
   "skip_recap": "ข้ามสรุป",
   "skip_credits": "ข้ามเครดิต",
   "settings_rate": "ให้คะแนนแอป",
-  "settings_rate_sub": "รีวิวช่วยให้คนอื่นค้นพบแอปนี้"
+  "settings_rate_sub": "รีวิวช่วยให้คนอื่นค้นพบแอปนี้",
+  "style_title": "การปรับแต่ง",
+  "style_sub": "สี หน้าจอรอของทีวี ไอคอน",
+  "pack_title": "แพ็กสนับสนุน",
+  "pack_body": "Universal TV Cast ใช้ฟรี ไม่มีโฆษณา และจะเป็นเช่นนี้ต่อไป แพ็กสนับสนุนเพิ่มลูกเล่นด้านสไตล์และช่วยให้สตูดิโอไปต่อได้",
+  "pack_buy": "สนับสนุน · %1$s",
+  "pack_buy_noprice": "สนับสนุน",
+  "pack_once": "ซื้อครั้งเดียว ไม่มีการสมัครสมาชิก",
+  "pack_thanks": "ขอบคุณที่สนับสนุน!",
+  "pack_unavailable": "ร้านค้าไม่ตอบสนอง ลองใหม่ภายหลัง",
+  "style_color": "สี",
+  "style_oled": "ดำสนิท (หน้าจอ OLED)",
+  "style_oled_sub": "พื้นหลังสีดำทั้งหมด: ดำลึกขึ้นและประหยัดแบตเตอรี่ขึ้นเล็กน้อย",
+  "style_idle": "หน้าจอรอของทีวี",
+  "style_idle_classic": "คลาสสิก",
+  "style_idle_photo": "รูปภาพ",
+  "style_idle_clock": "นาฬิกา",
+  "style_photos": "เลือกรูปภาพ",
+  "style_message": "ข้อความ (ไม่บังคับ)",
+  "style_message_hint": "ยินดีต้อนรับกลับบ้าน!",
+  "style_live": "หน้าจอมีชีวิต",
+  "style_live_sub": "รูปภาพเปลี่ยนไปเรื่อยๆ และเวลาจะอัปเดตทุกนาที",
+  "style_show_tv": "แสดงบนทีวี",
+  "style_icon": "ไอคอนแอป",
+  "style_icon_note": "ไอคอนใหม่จะแสดงเมื่อออกจากแอป และอาจหายไปจากหน้าจอหลักสักครู่"
  },
  "plurals": {
   "browser_found": {
@@ -410,6 +434,9 @@
   },
   "lan_episodes": {
    "other": "%d ตอน"
+  },
+  "style_photos_count": {
+   "other": "%d รูป"
   }
  }
 }

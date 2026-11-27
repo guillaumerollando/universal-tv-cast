@@ -401,6 +401,30 @@
     <string name="skip_credits">Lewati kredit</string>
     <string name="settings_rate">Beri nilai aplikasi</string>
     <string name="settings_rate_sub">Ulasan membantu orang lain menemukannya</string>
+    <string name="style_title">Personalisasi</string>
+    <string name="style_sub">Warna, layar tunggu TV, ikon</string>
+    <string name="pack_title">Paket dukungan</string>
+    <string name="pack_body">Universal TV Cast gratis, tanpa iklan, dan akan tetap begitu. Paket dukungan menambah sentuhan gaya dan membantu studio terus berkarya.</string>
+    <string name="pack_buy">Dukung · %1$s</string>
+    <string name="pack_buy_noprice">Dukung</string>
+    <string name="pack_once">Pembelian sekali bayar, tanpa langganan.</string>
+    <string name="pack_thanks">Terima kasih atas dukungan Anda!</string>
+    <string name="pack_unavailable">Toko tidak merespons. Coba lagi nanti.</string>
+    <string name="style_color">Warna</string>
+    <string name="style_oled">Hitam pekat (layar OLED)</string>
+    <string name="style_oled_sub">Latar belakang serba hitam: lebih pekat dan sedikit lebih hemat baterai.</string>
+    <string name="style_idle">Layar tunggu TV</string>
+    <string name="style_idle_classic">Klasik</string>
+    <string name="style_idle_photo">Foto</string>
+    <string name="style_idle_clock">Jam</string>
+    <string name="style_photos">Pilih foto</string>
+    <string name="style_message">Pesan (opsional)</string>
+    <string name="style_message_hint">Selamat datang di rumah!</string>
+    <string name="style_live">Layar hidup</string>
+    <string name="style_live_sub">Foto berganti dan waktu diperbarui setiap menit.</string>
+    <string name="style_show_tv">Tampilkan di TV</string>
+    <string name="style_icon">Ikon aplikasi</string>
+    <string name="style_icon_note">Ikon baru muncul setelah Anda keluar dari aplikasi. Ikon mungkin hilang sejenak dari layar utama.</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>
@@ -409,5 +433,8 @@
     </plurals>
     <plurals name="lan_episodes">
         <item quantity="other">%d episode</item>
+    </plurals>
+    <plurals name="style_photos_count">
+        <item quantity="other">%d foto</item>
     </plurals>
 </resources>

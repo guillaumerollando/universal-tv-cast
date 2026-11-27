@@ -399,7 +399,31 @@
   "skip_recap": "تخطي الملخص",
   "skip_credits": "تخطي الشارة",
   "settings_rate": "قيّم التطبيق",
-  "settings_rate_sub": "يساعد تقييمك الآخرين على العثور عليه"
+  "settings_rate_sub": "يساعد تقييمك الآخرين على العثور عليه",
+  "style_title": "التخصيص",
+  "style_sub": "الألوان وشاشة انتظار التلفزيون والأيقونة",
+  "pack_title": "حزمة الدعم",
+  "pack_body": "Universal TV Cast مجانية وبلا إعلانات وستبقى كذلك. تضيف حزمة الدعم لمسات أسلوبية وتساعد الاستوديو على الاستمرار.",
+  "pack_buy": "دعم · %1$s",
+  "pack_buy_noprice": "دعم",
+  "pack_once": "شراء لمرة واحدة، بدون اشتراك.",
+  "pack_thanks": "شكرًا على دعمك!",
+  "pack_unavailable": "المتجر لا يستجيب. حاول مرة أخرى لاحقًا.",
+  "style_color": "اللون",
+  "style_oled": "أسود حقيقي (شاشات OLED)",
+  "style_oled_sub": "خلفية سوداء بالكامل: أعمق وأقل استهلاكًا للبطارية قليلًا.",
+  "style_idle": "شاشة انتظار التلفزيون",
+  "style_idle_classic": "كلاسيكية",
+  "style_idle_photo": "صورة",
+  "style_idle_clock": "ساعة",
+  "style_photos": "اختيار الصور",
+  "style_message": "رسالة (اختياري)",
+  "style_message_hint": "أهلًا بك في المنزل!",
+  "style_live": "شاشة حيّة",
+  "style_live_sub": "تتغير الصور ويتحدث الوقت كل دقيقة.",
+  "style_show_tv": "عرض على التلفزيون",
+  "style_icon": "أيقونة التطبيق",
+  "style_icon_note": "تظهر الأيقونة الجديدة بعد مغادرة التطبيق. قد تختفي لحظة من الشاشة الرئيسية."
  },
  "plurals": {
   "browser_found": {
@@ -425,6 +449,14 @@
    "few": "%d حلقات",
    "many": "%d حلقة",
    "other": "%d حلقة"
+  },
+  "style_photos_count": {
+   "zero": "%d صورة",
+   "one": "صورة واحدة",
+   "two": "صورتان",
+   "few": "%d صور",
+   "many": "%d صورة",
+   "other": "%d صورة"
   }
  }
 }

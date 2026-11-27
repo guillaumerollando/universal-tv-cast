@@ -401,6 +401,30 @@
     <string name="skip_credits">Sari peste generic</string>
     <string name="settings_rate">Evaluează aplicația</string>
     <string name="settings_rate_sub">O recenzie îi ajută pe alții să o găsească</string>
+    <string name="style_title">Personalizare</string>
+    <string name="style_sub">Culori, ecranul de așteptare al televizorului, pictogramă</string>
+    <string name="pack_title">Pachet de susținere</string>
+    <string name="pack_body">Universal TV Cast este gratuită, fără reclame și va rămâne așa. Pachetul de susținere adaugă câteva accente de stil și ajută studioul să continue.</string>
+    <string name="pack_buy">Susține · %1$s</string>
+    <string name="pack_buy_noprice">Susține</string>
+    <string name="pack_once">Achiziție unică, fără abonament.</string>
+    <string name="pack_thanks">Mulțumim pentru sprijin!</string>
+    <string name="pack_unavailable">Magazinul nu răspunde. Încearcă din nou mai târziu.</string>
+    <string name="style_color">Culoare</string>
+    <string name="style_oled">Negru real (ecrane OLED)</string>
+    <string name="style_oled_sub">Fundal complet negru: mai profund și puțin mai blând cu bateria.</string>
+    <string name="style_idle">Ecran de așteptare al televizorului</string>
+    <string name="style_idle_classic">Clasic</string>
+    <string name="style_idle_photo">Fotografie</string>
+    <string name="style_idle_clock">Ceas</string>
+    <string name="style_photos">Alege fotografii</string>
+    <string name="style_message">Mesaj (opțional)</string>
+    <string name="style_message_hint">Bun venit acasă!</string>
+    <string name="style_live">Ecran viu</string>
+    <string name="style_live_sub">Fotografiile se schimbă, iar ora se actualizează în fiecare minut.</string>
+    <string name="style_show_tv">Arată pe televizor</string>
+    <string name="style_icon">Pictograma aplicației</string>
+    <string name="style_icon_note">Noua pictogramă apare după ce ieșiți din aplicație. Poate dispărea o clipă de pe ecranul principal.</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>
@@ -415,5 +439,10 @@
         <item quantity="one">%d episod</item>
         <item quantity="few">%d episoade</item>
         <item quantity="other">%d de episoade</item>
+    </plurals>
+    <plurals name="style_photos_count">
+        <item quantity="one">%d fotografie</item>
+        <item quantity="few">%d fotografii</item>
+        <item quantity="other">%d de fotografii</item>
     </plurals>
 </resources>

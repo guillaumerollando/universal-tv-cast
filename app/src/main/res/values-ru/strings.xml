@@ -401,6 +401,30 @@
     <string name="skip_credits">Пропустить титры</string>
     <string name="settings_rate">Оценить приложение</string>
     <string name="settings_rate_sub">Отзыв поможет другим найти его</string>
+    <string name="style_title">Персонализация</string>
+    <string name="style_sub">Цвета, экран ожидания телевизора, значок</string>
+    <string name="pack_title">Пакет поддержки</string>
+    <string name="pack_body">Universal TV Cast бесплатна, без рекламы и такой останется. Пакет поддержки добавляет немного стиля и помогает студии работать дальше.</string>
+    <string name="pack_buy">Поддержать · %1$s</string>
+    <string name="pack_buy_noprice">Поддержать</string>
+    <string name="pack_once">Разовая покупка, без подписки.</string>
+    <string name="pack_thanks">Спасибо за поддержку!</string>
+    <string name="pack_unavailable">Магазин не отвечает. Попробуйте позже.</string>
+    <string name="style_color">Цвет</string>
+    <string name="style_oled">Настоящий чёрный (экраны OLED)</string>
+    <string name="style_oled_sub">Полностью чёрный фон: глубже и немного экономнее для батареи.</string>
+    <string name="style_idle">Экран ожидания телевизора</string>
+    <string name="style_idle_classic">Классический</string>
+    <string name="style_idle_photo">Фото</string>
+    <string name="style_idle_clock">Часы</string>
+    <string name="style_photos">Выбрать фото</string>
+    <string name="style_message">Сообщение (необязательно)</string>
+    <string name="style_message_hint">Добро пожаловать домой!</string>
+    <string name="style_live">Живой экран</string>
+    <string name="style_live_sub">Фото сменяются, а время обновляется каждую минуту.</string>
+    <string name="style_show_tv">Показать на телевизоре</string>
+    <string name="style_icon">Значок приложения</string>
+    <string name="style_icon_note">Новый значок появится, когда вы выйдете из приложения. Он может ненадолго исчезнуть с главного экрана.</string>
     <plurals name="browser_found">
         <item quantity="one">%d видео</item>
         <item quantity="few">%d видео</item>
@@ -418,5 +442,11 @@
         <item quantity="few">%d серии</item>
         <item quantity="many">%d серий</item>
         <item quantity="other">%d серии</item>
+    </plurals>
+    <plurals name="style_photos_count">
+        <item quantity="one">%d фото</item>
+        <item quantity="few">%d фото</item>
+        <item quantity="many">%d фото</item>
+        <item quantity="other">%d фото</item>
     </plurals>
 </resources>

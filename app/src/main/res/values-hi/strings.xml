@@ -401,6 +401,30 @@
     <string name="skip_credits">क्रेडिट छोड़ें</string>
     <string name="settings_rate">ऐप को रेट करें</string>
     <string name="settings_rate_sub">आपकी समीक्षा दूसरों को इसे खोजने में मदद करती है</string>
+    <string name="style_title">वैयक्तिकरण</string>
+    <string name="style_sub">रंग, टीवी की प्रतीक्षा स्क्रीन, आइकन</string>
+    <string name="pack_title">सपोर्टर पैक</string>
+    <string name="pack_body">Universal TV Cast मुफ़्त है, विज्ञापन-रहित है और ऐसा ही रहेगा। सपोर्टर पैक कुछ स्टाइल जोड़ता है और स्टूडियो को आगे बढ़ने में मदद करता है।</string>
+    <string name="pack_buy">सपोर्ट करें · %1$s</string>
+    <string name="pack_buy_noprice">सपोर्ट करें</string>
+    <string name="pack_once">एक बार की खरीद, कोई सब्सक्रिप्शन नहीं।</string>
+    <string name="pack_thanks">आपके सहयोग के लिए धन्यवाद!</string>
+    <string name="pack_unavailable">स्टोर जवाब नहीं दे रहा। बाद में फिर कोशिश करें।</string>
+    <string name="style_color">रंग</string>
+    <string name="style_oled">गहरा काला (OLED स्क्रीन)</string>
+    <string name="style_oled_sub">पूरी तरह काली पृष्ठभूमि: ज़्यादा गहरी और बैटरी पर थोड़ी हल्की।</string>
+    <string name="style_idle">टीवी की प्रतीक्षा स्क्रीन</string>
+    <string name="style_idle_classic">क्लासिक</string>
+    <string name="style_idle_photo">फ़ोटो</string>
+    <string name="style_idle_clock">घड़ी</string>
+    <string name="style_photos">फ़ोटो चुनें</string>
+    <string name="style_message">संदेश (वैकल्पिक)</string>
+    <string name="style_message_hint">घर में स्वागत है!</string>
+    <string name="style_live">जीवंत स्क्रीन</string>
+    <string name="style_live_sub">फ़ोटो बदलती रहती हैं और समय हर मिनट अपडेट होता है।</string>
+    <string name="style_show_tv">टीवी पर दिखाएँ</string>
+    <string name="style_icon">ऐप आइकन</string>
+    <string name="style_icon_note">नया आइकन ऐप से बाहर निकलने पर दिखेगा। यह होम स्क्रीन से एक पल के लिए गायब हो सकता है।</string>
     <plurals name="browser_found">
         <item quantity="one">%d वीडियो</item>
         <item quantity="other">%d वीडियो</item>
@@ -412,5 +436,9 @@
     <plurals name="lan_episodes">
         <item quantity="one">%d एपिसोड</item>
         <item quantity="other">%d एपिसोड</item>
+    </plurals>
+    <plurals name="style_photos_count">
+        <item quantity="one">%d फ़ोटो</item>
+        <item quantity="other">%d फ़ोटो</item>
     </plurals>
 </resources>

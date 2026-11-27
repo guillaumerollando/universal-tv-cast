@@ -81,6 +81,8 @@ dependencies {
     "playImplementation"("androidx.mediarouter:mediarouter:1.7.0")
     // Avis sur le Play Store, sans quitter l'appli (version Play).
     "playImplementation"("com.google.android.play:review-ktx:2.0.2")
+    // Pack soutien (achat unique, Google Play Billing ; même version que les jeux du studio).
+    "playImplementation"("com.android.billingclient:billing-ktx:9.1.0")
     implementation("androidx.fragment:fragment-ktx:1.8.6")
     // Lecture sur le téléphone (vidéos du web, HLS, sous-titres) : le lecteur standard d'Android.
     implementation("androidx.media3:media3-exoplayer:1.6.1")

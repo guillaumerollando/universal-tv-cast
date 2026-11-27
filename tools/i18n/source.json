@@ -1583,6 +1583,102 @@
   "settings_rate_sub": {
    "en": "A review helps others find it",
    "fr": "Un avis aide les autres à la trouver"
+  },
+  "style_title": {
+   "en": "Personalization",
+   "fr": "Personnalisation"
+  },
+  "style_sub": {
+   "en": "Colors, TV waiting screen, icon",
+   "fr": "Couleurs, écran d’attente de la télé, icône"
+  },
+  "pack_title": {
+   "en": "Supporter pack",
+   "fr": "Pack soutien"
+  },
+  "pack_body": {
+   "en": "Universal TV Cast is free, ad-free, and will stay that way. The supporter pack adds a few style touches and helps the studio keep going.",
+   "fr": "Universal TV Cast est gratuite, sans pub, et le restera. Le pack soutien ajoute des touches de style et aide le studio à continuer."
+  },
+  "pack_buy": {
+   "en": "Support · %1$s",
+   "fr": "Soutenir · %1$s"
+  },
+  "pack_buy_noprice": {
+   "en": "Support",
+   "fr": "Soutenir"
+  },
+  "pack_once": {
+   "en": "One-time purchase, no subscription.",
+   "fr": "Achat unique, sans abonnement."
+  },
+  "pack_thanks": {
+   "en": "Thanks for your support!",
+   "fr": "Merci pour ton soutien !"
+  },
+  "pack_unavailable": {
+   "en": "The store isn’t answering. Try again later.",
+   "fr": "La boutique ne répond pas. Réessaie plus tard."
+  },
+  "style_color": {
+   "en": "Color",
+   "fr": "Couleur"
+  },
+  "style_oled": {
+   "en": "True black (OLED screens)",
+   "fr": "Noir intégral (écrans OLED)"
+  },
+  "style_oled_sub": {
+   "en": "An all-black background: deeper, and a little easier on the battery.",
+   "fr": "Fond tout noir : plus profond, et un peu moins de batterie."
+  },
+  "style_idle": {
+   "en": "TV waiting screen",
+   "fr": "Écran d’attente de la télé"
+  },
+  "style_idle_classic": {
+   "en": "Classic",
+   "fr": "Classique"
+  },
+  "style_idle_photo": {
+   "en": "Photo",
+   "fr": "Photo"
+  },
+  "style_idle_clock": {
+   "en": "Clock",
+   "fr": "Horloge"
+  },
+  "style_photos": {
+   "en": "Choose photos",
+   "fr": "Choisir des photos"
+  },
+  "style_message": {
+   "en": "Message (optional)",
+   "fr": "Message (facultatif)"
+  },
+  "style_message_hint": {
+   "en": "Welcome home!",
+   "fr": "Bienvenue chez nous !"
+  },
+  "style_live": {
+   "en": "Live screen",
+   "fr": "Écran vivant"
+  },
+  "style_live_sub": {
+   "en": "Photos change and the time updates every minute.",
+   "fr": "Les photos défilent et l’heure se met à jour chaque minute."
+  },
+  "style_show_tv": {
+   "en": "Show on the TV",
+   "fr": "Voir sur la télé"
+  },
+  "style_icon": {
+   "en": "App icon",
+   "fr": "Icône de l’appli"
+  },
+  "style_icon_note": {
+   "en": "The new icon appears once you leave the app. It may vanish from your home screen for a moment.",
+   "fr": "La nouvelle icône apparaît une fois l’appli quittée. Elle peut disparaître un instant de l’écran d’accueil."
   }
  },
  "plurals": {
@@ -1614,6 +1710,16 @@
    "fr": [
     "%d épisode",
     "%d épisodes"
+   ]
+  },
+  "style_photos_count": {
+   "en": [
+    "%d photo",
+    "%d photos"
+   ],
+   "fr": [
+    "%d photo",
+    "%d photos"
    ]
   }
  }

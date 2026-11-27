@@ -357,6 +357,7 @@
     <string name="action_notif_allow">리모컨 표시</string>
     <string name="action_no_thanks">괜찮아요</string>
     <string name="net_help_linux">가장 쉬운 방법: 설정 → 공유 → \'미디어 공유\'를 켜고 폴더를 고르면 PC가 여기에 자동으로 나타납니다. (MP4 동영상이 안 보이면 gstreamer1.0-plugins-good, gstreamer1.0-libav를 설치하세요.)\n또는 Windows처럼: 파일 → 폴더를 오른쪽 클릭 → \'로컬 네트워크 공유\' 후 공유 비밀번호를 한 번 설정합니다 (sudo smbpasswd -a 사용자이름).</string>
+    <string name="home_favorites">즐겨찾기</string>
     <plurals name="browser_found">
         <item quantity="other">동영상 %d개</item>
     </plurals>

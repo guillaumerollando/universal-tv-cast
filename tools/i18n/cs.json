@@ -355,7 +355,8 @@
   "tip_notif_body": "Během přehrávání zobrazuje Universal TV Cast ovládání (pauza, ±10 s, stop) v oznámeních a na zamčené obrazovce, abys mohl ovládat televizi bez otevření aplikace. Nic jiného: nikdy reklamy, nikdy zprávy.",
   "action_notif_allow": "Zobrazit ovladač",
   "action_no_thanks": "Ne, děkuji",
-  "net_help_linux": "Nejjednodušší: Nastavení → Sdílení → zapni „Sdílení médií“ a vyber složky; počítač se tu objeví sám. (Chybí-li videa MP4: nainstaluj gstreamer1.0-plugins-good a gstreamer1.0-libav.)\nNebo jako ve Windows: Soubory → pravé tlačítko na složce → „Sdílení v místní síti“ a jednou nastav heslo pro sdílení (sudo smbpasswd -a tvoje_jmeno)."
+  "net_help_linux": "Nejjednodušší: Nastavení → Sdílení → zapni „Sdílení médií“ a vyber složky; počítač se tu objeví sám. (Chybí-li videa MP4: nainstaluj gstreamer1.0-plugins-good a gstreamer1.0-libav.)\nNebo jako ve Windows: Soubory → pravé tlačítko na složce → „Sdílení v místní síti“ a jednou nastav heslo pro sdílení (sudo smbpasswd -a tvoje_jmeno).",
+  "home_favorites": "Moje oblíbené"
  },
  "plurals": {
   "browser_found": {

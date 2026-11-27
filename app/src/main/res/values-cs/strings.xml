@@ -357,6 +357,7 @@
     <string name="action_notif_allow">Zobrazit ovladač</string>
     <string name="action_no_thanks">Ne, děkuji</string>
     <string name="net_help_linux">Nejjednodušší: Nastavení → Sdílení → zapni „Sdílení médií“ a vyber složky; počítač se tu objeví sám. (Chybí-li videa MP4: nainstaluj gstreamer1.0-plugins-good a gstreamer1.0-libav.)\nNebo jako ve Windows: Soubory → pravé tlačítko na složce → „Sdílení v místní síti“ a jednou nastav heslo pro sdílení (sudo smbpasswd -a tvoje_jmeno).</string>
+    <string name="home_favorites">Moje oblíbené</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="few">%d videa</item>

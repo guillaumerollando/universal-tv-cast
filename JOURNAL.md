@@ -1326,3 +1326,10 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   déplie au besoin. Nouveau bloc Linux (partage multimédia GNOME, ou partage réseau local + smbpasswd), 23 langues.
   Vérifié sur émulateur.
 - Pas fait : rien.
+
+## 2026-11-27 — Dossiers du réseau en favoris
+- Fait : ★ dans un dossier ouvert du Réseau (NAS, ordinateur) ; les dossiers étoilés ressortent sur l'accueil dans
+  « Mes favoris » (avant les sites ; la rangée garde « Mes sites » tant qu'aucun dossier n'est en favori), ouverts
+  d'un appui directement dans le dossier, retirés par appui long. 30 au plus, gardés dans `LanStore`.
+  Titre « Mes favoris » en 23 langues. Vérifié sur émulateur avec le faux NAS du PC.
+- Pas fait : rien.

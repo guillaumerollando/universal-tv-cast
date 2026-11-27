@@ -357,6 +357,7 @@
     <string name="action_notif_allow">Показати пульт</string>
     <string name="action_no_thanks">Ні, дякую</string>
     <string name="net_help_linux">Найпростіше: Налаштування → Спільний доступ → увімкніть «Спільний доступ до медіа» й виберіть теки; комп’ютер з’явиться тут сам. (Якщо немає відео MP4: установіть gstreamer1.0-plugins-good і gstreamer1.0-libav.)\nАбо як у Windows: Файли → правий клік на теці → «Спільний доступ у локальній мережі», потім один раз задайте пароль (sudo smbpasswd -a ваше_ім’я).</string>
+    <string name="home_favorites">Обране</string>
     <plurals name="browser_found">
         <item quantity="one">%d відео</item>
         <item quantity="few">%d відео</item>

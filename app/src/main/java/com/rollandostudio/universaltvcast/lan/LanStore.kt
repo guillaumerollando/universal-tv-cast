@@ -75,6 +75,49 @@ object LanStore {
         prefs.edit().putString("devices", a.toString()).remove("pw:$key").apply()
     }
 
+    // ------------------------------------------------------------------ dossiers favoris
+
+    /** Un dossier du réseau mis en favori (★) : il ressort sur l'accueil, ouvert d'un appui. */
+    data class Folder(val kind: LanDevice.Kind, val host: String, val port: Int, val deviceName: String,
+        val ref: String, val title: String, val share: String? = null, val location: String? = null) {
+        val key: String get() = "${kind.name}:$host:$port:$ref"
+        fun device() = LanDevice(kind, deviceName, host, port, location = location, share = share)
+    }
+
+    private const val MAX_FOLDERS = 30
+    private val _folders = kotlinx.coroutines.flow.MutableStateFlow<List<Folder>>(emptyList())
+    val folders: kotlinx.coroutines.flow.StateFlow<List<Folder>> get() {
+        if (!loaded) { loaded = true; _folders.value = readFolders() }
+        return _folders
+    }
+    @Volatile private var loaded = false
+
+    private fun readFolders(): List<Folder> = runCatching {
+        val a = JSONArray(prefs.getString("folders", "[]"))
+        (0 until a.length()).map { i ->
+            val o = a.getJSONObject(i)
+            Folder(LanDevice.Kind.valueOf(o.getString("kind")), o.getString("host"), o.optInt("port", -1),
+                o.getString("device"), o.getString("ref"), o.getString("title"),
+                o.optString("share").ifEmpty { null }, o.optString("location").ifEmpty { null })
+        }
+    }.getOrDefault(emptyList())
+
+    fun isFolder(d: LanDevice, ref: String) = folders.value.any { it.kind == d.kind && it.host == d.host && it.port == d.port && it.ref == ref }
+
+    @Synchronized
+    fun toggleFolder(d: LanDevice, ref: String, title: String) {
+        val cur = folders.value
+        val f = Folder(d.kind, d.host, d.port, d.name, ref, title, d.share, d.location)
+        val next = if (cur.any { it.key == f.key }) cur.filter { it.key != f.key } else (cur + f).takeLast(MAX_FOLDERS)
+        _folders.value = next
+        val a = JSONArray()
+        next.forEach { x ->
+            a.put(JSONObject().put("kind", x.kind.name).put("host", x.host).put("port", x.port).put("device", x.deviceName)
+                .put("ref", x.ref).put("title", x.title).put("share", x.share.orEmpty()).put("location", x.location.orEmpty()))
+        }
+        prefs.edit().putString("folders", a.toString()).apply()
+    }
+
     fun password(s: Saved): String? = prefs.getString("pw:${s.key}", null)?.let { runCatching { decrypt(it) }.getOrNull() }
 
     private fun key(): SecretKey {

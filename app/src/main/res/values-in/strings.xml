@@ -357,6 +357,7 @@
     <string name="action_notif_allow">Tampilkan remote</string>
     <string name="action_no_thanks">Tidak, terima kasih</string>
     <string name="net_help_linux">Paling mudah: Pengaturan → Berbagi → aktifkan “Berbagi Media” dan pilih folder; PC kamu muncul di sini dengan sendirinya. (Jika video MP4 tidak muncul: pasang gstreamer1.0-plugins-good dan gstreamer1.0-libav.)\nAtau seperti Windows: Berkas → klik kanan folder → “Berbagi Jaringan Lokal”, lalu atur sandi berbagi sekali (sudo smbpasswd -a nama_kamu).</string>
+    <string name="home_favorites">Favoritku</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

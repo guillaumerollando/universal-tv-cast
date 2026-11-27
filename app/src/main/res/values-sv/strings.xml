@@ -357,6 +357,7 @@
     <string name="action_notif_allow">Visa fjärrkontrollen</string>
     <string name="action_no_thanks">Nej tack</string>
     <string name="net_help_linux">Enklast: Inställningar → Delning → slå på ”Mediadelning” och välj mappar; datorn dyker upp här av sig själv. (Saknas MP4-videor: installera gstreamer1.0-plugins-good och gstreamer1.0-libav.)\nEller som i Windows: Filer → högerklicka på mappen → ”Delning i lokalt nätverk”, och ange ett delningslösenord en gång (sudo smbpasswd -a ditt_namn).</string>
+    <string name="home_favorites">Mina favoriter</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videor</item>

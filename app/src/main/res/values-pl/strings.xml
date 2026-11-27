@@ -357,6 +357,7 @@
     <string name="action_notif_allow">Pokaż pilota</string>
     <string name="action_no_thanks">Nie, dziękuję</string>
     <string name="net_help_linux">Najprościej: Ustawienia → Udostępnianie → włącz „Udostępnianie multimediów” i wybierz foldery; komputer pojawi się tu sam. (Jeśli brakuje filmów MP4: zainstaluj gstreamer1.0-plugins-good i gstreamer1.0-libav.)\nAlbo jak w Windows: Pliki → prawy przycisk na folderze → „Udostępnianie w sieci lokalnej”, potem raz ustaw hasło udostępniania (sudo smbpasswd -a twoja_nazwa).</string>
+    <string name="home_favorites">Moje ulubione</string>
     <plurals name="browser_found">
         <item quantity="one">%d wideo</item>
         <item quantity="few">%d wideo</item>

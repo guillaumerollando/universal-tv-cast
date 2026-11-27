@@ -135,6 +135,8 @@ object Nav {
     val iptv = MutableStateFlow<String?>(null)
     /** Page « Réseau » (ordinateurs, NAS) ouverte par-dessus l'accueil. */
     val network = MutableStateFlow(false)
+    /** Dossier favori à ouvrir directement en arrivant sur « Réseau ». */
+    val networkFolder = MutableStateFlow<com.rollandostudio.universaltvcast.lan.LanStore.Folder?>(null)
     /** Le navigateur affiche son bouton « N vidéos » (en bas à droite). */
     val browserVideoButton = MutableStateFlow(false)
 }
@@ -324,7 +326,8 @@ fun TvCastApp() {
     val iptvOpen by Nav.iptv.collectAsState()
     if (iptvOpen != null) IptvScreen(onClose = { Nav.iptv.value = null })
     val networkOpen by Nav.network.collectAsState()
-    if (networkOpen) NetworkScreen(onClose = { Nav.network.value = false })
+    if (networkOpen) NetworkScreen(onClose = { Nav.network.value = false; Nav.networkFolder.value = null },
+        start = Nav.networkFolder.collectAsState().value)
     // Lecture sur le téléphone, ailleurs que sur l'écran de lecture : la vidéo continue en vignette.
     val playingOnPhone = state.onPhone && (state.active || state.phase == com.rollandostudio.universaltvcast.cast.Phase.SENDING)
     if (playingOnPhone && !landscape && (tab != Tab.PLAYER || iptvOpen != null)) {

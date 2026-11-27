@@ -98,6 +98,7 @@ fun HomeScreen(
     val resume = resumeItems(recents, bookmarks)
     val sites = siteItems(recents, bookmarks, hidden)
     val channels = recents.filter { it.live }
+    val folders by com.rollandostudio.universaltvcast.lan.LanStore.folders.collectAsState()
     // « Tout voir » : 1 = tout « Reprendre », 2 = tous les sites.
     var showAll by rememberSaveable { androidx.compose.runtime.mutableIntStateOf(0) }
     if (showAll == 1 && resume.isNotEmpty() || showAll == 2 && sites.isNotEmpty()) {
@@ -109,7 +110,7 @@ fun HomeScreen(
 
     // Habitué (des séries en cours, des sites en favori) : ce qu'il regarde d'abord, les façons de caster en
     // une rangée compacte. Nouveau venu : la présentation et les grandes tuiles.
-    if (resume.isNotEmpty() || sites.isNotEmpty() || channels.isNotEmpty()) {
+    if (resume.isNotEmpty() || sites.isNotEmpty() || channels.isNotEmpty() || folders.isNotEmpty()) {
         LazyColumn(
             contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp + LocalBottomInset.current),
             verticalArrangement = Arrangement.spacedBy(14.dp),
@@ -148,10 +149,12 @@ fun HomeScreen(
                     }
                 }
             }
-            if (sites.isNotEmpty()) {
+            // « Mes favoris » : dossiers du réseau mis en ★ (NAS, ordinateur), puis les sites.
+            if (sites.isNotEmpty() || folders.isNotEmpty()) {
                 item {
                     Row(Modifier.padding(start = 16.dp, end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                        SectionTitle(stringResource(R.string.home_sites), Modifier.weight(1f).semantics { heading() })
+                        SectionTitle(stringResource(if (folders.isEmpty()) R.string.home_sites else R.string.home_favorites),
+                            Modifier.weight(1f).semantics { heading() })
                         if (sites.size > 4) TextButton(onClick = { showAll = 2 }) {
                             Text(stringResource(R.string.home_see_all))
                             Spacer(Modifier.width(4.dp))
@@ -161,6 +164,7 @@ fun HomeScreen(
                 }
                 item {
                     LazyRow(contentPadding = PaddingValues(horizontal = 12.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        items(folders, key = { "f" + it.key }) { f -> FolderTile(f, Modifier.width(72.dp)) }
                         items(sites, key = { "s" + it.id }) { s -> SiteTile(s, Modifier.width(72.dp)) { onBrowse(it) } }
                     }
                 }

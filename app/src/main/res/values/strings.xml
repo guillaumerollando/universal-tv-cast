@@ -267,6 +267,7 @@
     <string name="live_back">Back to live</string>
     <string name="home_see_all">See all</string>
     <string name="site_hide">Stop suggesting</string>
+    <string name="home_favorites">My favourites</string>
     <string name="home_sites">My sites</string>
     <string name="home_cast_more">Cast something else</string>
     <string name="start_dismiss">Don’t suggest again</string>

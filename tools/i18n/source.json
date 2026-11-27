@@ -1407,6 +1407,10 @@
   "net_help_linux": {
    "en": "Easiest: Settings → Sharing → turn on “Media Sharing” and pick your folders; your PC shows up here on its own. (If MP4 videos are missing: install gstreamer1.0-plugins-good and gstreamer1.0-libav.)\nOr, like Windows: Files → right-click the folder → “Local Network Share”, then set a sharing password once (sudo smbpasswd -a your_name).",
    "fr": "Le plus simple : Paramètres → Partage → active « Partage multimédia » et choisis tes dossiers ; ton PC apparaît ici tout seul. (S’il manque les vidéos MP4 : installe gstreamer1.0-plugins-good et gstreamer1.0-libav.)\nOu, comme Windows : Fichiers → clic droit sur le dossier → « Partage réseau local », puis donne une fois un mot de passe de partage (sudo smbpasswd -a ton_nom)."
+  },
+  "home_favorites": {
+   "en": "My favourites",
+   "fr": "Mes favoris"
   }
  },
  "plurals": {

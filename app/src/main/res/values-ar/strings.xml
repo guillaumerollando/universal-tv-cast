@@ -357,6 +357,7 @@
     <string name="action_notif_allow">عرض جهاز التحكم</string>
     <string name="action_no_thanks">لا، شكرًا</string>
     <string name="net_help_linux">الأسهل: الإعدادات ← المشاركة ← فعّل «مشاركة الوسائط» واختر مجلداتك؛ سيظهر حاسوبك هنا تلقائيًا. (إذا غابت مقاطع MP4: ثبّت gstreamer1.0-plugins-good و gstreamer1.0-libav.)\nأو مثل ويندوز: الملفات ← انقر بزر الفأرة الأيمن على المجلد ← «مشاركة الشبكة المحلية»، ثم عيّن كلمة مرور للمشاركة مرة واحدة (sudo smbpasswd -a اسمك).</string>
+    <string name="home_favorites">مفضلاتي</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>

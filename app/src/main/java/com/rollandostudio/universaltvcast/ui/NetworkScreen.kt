@@ -40,6 +40,8 @@ import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.StarBorder
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.AlertDialog
@@ -56,6 +58,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -98,7 +101,7 @@ private data class Place(val device: LanDevice, val ref: String?, val title: Str
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NetworkScreen(onClose: () -> Unit) {
+fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
     val ctx = LocalContext.current
     val scope = rememberCoroutineScope()
     val c = MaterialTheme.colorScheme
@@ -178,6 +181,9 @@ fun NetworkScreen(onClose: () -> Unit) {
     }
 
     fun go(place: Place) { path += place; open(place) }
+    // Ouvert depuis un dossier favori de l'accueil : directement dedans (« retour » mène à la liste des appareils).
+    LaunchedEffect(start) { start?.let { go(Place(it.device(), it.ref, it.title)) } }
+    val favs by LanStore.folders.collectAsState()
     fun up() {
         path.removeAt(path.lastIndex)
         if (path.isEmpty()) { entries = null; error = null; loading = false } else open(path.last())
@@ -215,8 +221,17 @@ fun NetworkScreen(onClose: () -> Unit) {
                 Column(Modifier.weight(1f)) {
                     Text(path.lastOrNull()?.title ?: stringResource(R.string.home_network), style = MaterialTheme.typography.titleLarge,
                         maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.semantics { heading() })
-                    if (path.size > 1) Text(path.first().device.name, style = MaterialTheme.typography.bodySmall,
+                    if (path.isNotEmpty() && path.last().title != path.first().device.name) Text(path.first().device.name, style = MaterialTheme.typography.bodySmall,
                         color = c.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
+                // ★ : le dossier ouvert ressort dans « Mes favoris » sur l'accueil.
+                path.lastOrNull()?.takeIf { it.ref != null }?.let { p ->
+                    val on = favs.any { it.kind == p.device.kind && it.host == p.device.host && it.port == p.device.port && it.ref == p.ref }
+                    IconButton(onClick = { LanStore.toggleFolder(p.device, p.ref!!, p.title) }) {
+                        Icon(if (on) Icons.Rounded.Star else Icons.Rounded.StarBorder,
+                            stringResource(if (on) R.string.cd_bookmark_remove else R.string.cd_bookmark_add),
+                            tint = if (on) c.primary else c.onSurface)
+                    }
                 }
                 if (path.isEmpty() && !scanning) IconButton(onClick = { scanTick++ }) {
                     Icon(Icons.Rounded.Refresh, stringResource(R.string.tv_search_again))

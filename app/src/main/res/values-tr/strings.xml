@@ -357,6 +357,7 @@
     <string name="action_notif_allow">Kumandayı göster</string>
     <string name="action_no_thanks">Hayır, teşekkürler</string>
     <string name="net_help_linux">En kolayı: Ayarlar → Paylaşım → “Ortam Paylaşımı”nı aç ve klasörleri seç; bilgisayarın burada kendiliğinden görünür. (MP4 videolar yoksa: gstreamer1.0-plugins-good ve gstreamer1.0-libav yükle.)\nYa da Windows gibi: Dosyalar → klasöre sağ tık → “Yerel Ağ Paylaşımı”, ardından bir kez paylaşım parolası belirle (sudo smbpasswd -a adın).</string>
+    <string name="home_favorites">Favorilerim</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video</item>

@@ -357,6 +357,7 @@
     <string name="action_notif_allow">リモコンを表示</string>
     <string name="action_no_thanks">いいえ</string>
     <string name="net_help_linux">いちばん簡単：設定 → 共有 → 「メディア共有」をオンにしてフォルダーを選ぶと、PCがここに自動で表示されます。（MP4動画が出ない場合：gstreamer1.0-plugins-good と gstreamer1.0-libav をインストール。）\nまたはWindowsと同じように：ファイル → フォルダーを右クリック → 「ローカルネットワーク共有」、共有用パスワードを一度設定します（sudo smbpasswd -a ユーザー名）。</string>
+    <string name="home_favorites">お気に入り</string>
     <plurals name="browser_found">
         <item quantity="other">%d 本の動画</item>
     </plurals>

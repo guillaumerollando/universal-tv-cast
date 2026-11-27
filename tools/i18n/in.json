@@ -355,7 +355,8 @@
   "tip_notif_body": "Saat video diputar, Universal TV Cast menampilkan tombolnya (jeda, ±10 dtk, berhenti) di notifikasi dan layar kunci, agar kamu bisa mengendalikan TV tanpa membuka aplikasi. Tidak ada yang lain: tanpa iklan, tanpa pesan.",
   "action_notif_allow": "Tampilkan remote",
   "action_no_thanks": "Tidak, terima kasih",
-  "net_help_linux": "Paling mudah: Pengaturan → Berbagi → aktifkan “Berbagi Media” dan pilih folder; PC kamu muncul di sini dengan sendirinya. (Jika video MP4 tidak muncul: pasang gstreamer1.0-plugins-good dan gstreamer1.0-libav.)\nAtau seperti Windows: Berkas → klik kanan folder → “Berbagi Jaringan Lokal”, lalu atur sandi berbagi sekali (sudo smbpasswd -a nama_kamu)."
+  "net_help_linux": "Paling mudah: Pengaturan → Berbagi → aktifkan “Berbagi Media” dan pilih folder; PC kamu muncul di sini dengan sendirinya. (Jika video MP4 tidak muncul: pasang gstreamer1.0-plugins-good dan gstreamer1.0-libav.)\nAtau seperti Windows: Berkas → klik kanan folder → “Berbagi Jaringan Lokal”, lalu atur sandi berbagi sekali (sudo smbpasswd -a nama_kamu).",
+  "home_favorites": "Favoritku"
  },
  "plurals": {
   "browser_found": {

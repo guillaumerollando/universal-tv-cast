@@ -266,6 +266,7 @@
     <string name="live_back">Volver al directo</string>
     <string name="home_see_all">Ver todo</string>
     <string name="site_hide">No volver a sugerir</string>
+    <string name="home_favorites">Mis favoritos</string>
     <string name="home_sites">Mis sitios</string>
     <string name="home_cast_more">Enviar otra cosa</string>
     <string name="start_dismiss">No volver a sugerir</string>

@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.Folder
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.DropdownMenu
@@ -249,6 +250,43 @@ fun SiteTile(s: SiteItem, modifier: Modifier = Modifier.width(80.dp), onOpen: (S
             }
             Spacer(Modifier.height(6.dp))
             Text(s.title, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(horizontal = 2.dp))
+        }
+        CardMenu(open, { open = false }, menu)
+    }
+}
+
+/** Dossier du réseau en favori (« Films » du NAS) : ouvert directement d'un appui ; appui long pour le retirer. */
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+@Composable
+fun FolderTile(f: com.rollandostudio.universaltvcast.lan.LanStore.Folder, modifier: Modifier = Modifier.width(80.dp)) {
+    val c = MaterialTheme.colorScheme
+    var open by remember { mutableStateOf(false) }
+    val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
+    val menu = listOf(stringResource(R.string.cd_bookmark_remove) to {
+        com.rollandostudio.universaltvcast.lan.LanStore.toggleFolder(f.device(), f.ref, f.title)
+    })
+    Box(modifier) {
+        Column(
+            Modifier.fillMaxWidth().clip(RoundedCornerShape(18.dp))
+                .combinedClickable(
+                    role = Role.Button,
+                    onClick = { Nav.networkFolder.value = f; Nav.network.value = true },
+                    onLongClick = { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); open = true },
+                )
+                .semantics {
+                    contentDescription = f.title + ", " + f.deviceName
+                    customActions = menu.map { (label, action) -> CustomAccessibilityAction(label) { action(); true } }
+                }
+                .padding(vertical = 6.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Box(Modifier.size(52.dp).clip(RoundedCornerShape(15.dp)).background(c.primary.copy(alpha = 0.16f)),
+                contentAlignment = Alignment.Center) {
+                Icon(Icons.Rounded.Folder, null, tint = c.primary, modifier = Modifier.size(28.dp))
+            }
+            Spacer(Modifier.height(6.dp))
+            Text(f.title, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(horizontal = 2.dp))
         }
         CardMenu(open, { open = false }, menu)

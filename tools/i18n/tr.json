@@ -355,7 +355,8 @@
   "tip_notif_body": "Oynatma sırasında Universal TV Cast denetimlerini (duraklat, ±10 sn, durdur) bildirimlerde ve kilit ekranında gösterir; böylece uygulamayı açmadan televizyonu yönetirsin. Başka hiçbir şey yok: asla reklam, asla mesaj.",
   "action_notif_allow": "Kumandayı göster",
   "action_no_thanks": "Hayır, teşekkürler",
-  "net_help_linux": "En kolayı: Ayarlar → Paylaşım → “Ortam Paylaşımı”nı aç ve klasörleri seç; bilgisayarın burada kendiliğinden görünür. (MP4 videolar yoksa: gstreamer1.0-plugins-good ve gstreamer1.0-libav yükle.)\nYa da Windows gibi: Dosyalar → klasöre sağ tık → “Yerel Ağ Paylaşımı”, ardından bir kez paylaşım parolası belirle (sudo smbpasswd -a adın)."
+  "net_help_linux": "En kolayı: Ayarlar → Paylaşım → “Ortam Paylaşımı”nı aç ve klasörleri seç; bilgisayarın burada kendiliğinden görünür. (MP4 videolar yoksa: gstreamer1.0-plugins-good ve gstreamer1.0-libav yükle.)\nYa da Windows gibi: Dosyalar → klasöre sağ tık → “Yerel Ağ Paylaşımı”, ardından bir kez paylaşım parolası belirle (sudo smbpasswd -a adın).",
+  "home_favorites": "Favorilerim"
  },
  "plurals": {
   "browser_found": {

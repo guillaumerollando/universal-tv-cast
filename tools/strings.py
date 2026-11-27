@@ -389,6 +389,7 @@ S = {
 "live_back": ["Back to live", "Revenir au direct", "Volver al directo", "Zurück zum Live", "Torna alla diretta", "Terug naar live", "Voltar ao vivo"],
 "home_see_all": ["See all", "Tout voir", "Ver todo", "Alle ansehen", "Vedi tutto", "Alles bekijken", "Ver tudo"],
 "site_hide": ["Stop suggesting", "Ne plus proposer", "No volver a sugerir", "Nicht mehr vorschlagen", "Non proporre più", "Niet meer voorstellen", "Não sugerir mais"],
+"home_favorites": ["My favourites", "Mes favoris", "Mis favoritos", "Meine Favoriten", "I miei preferiti", "Mijn favorieten", "Meus favoritos"],
 "home_sites": ["My sites", "Mes sites", "Mis sitios", "Meine Seiten", "I miei siti", "Mijn sites", "Meus sites"],
 "home_cast_more": ["Cast something else", "Caster autre chose", "Enviar otra cosa", "Etwas anderes senden", "Trasmetti altro", "Iets anders casten", "Transmitir outra coisa"],
 "start_dismiss": ["Don’t suggest again", "Ne plus proposer", "No volver a sugerir", "Nicht mehr vorschlagen", "Non proporre più", "Niet meer voorstellen", "Não sugerir mais"],

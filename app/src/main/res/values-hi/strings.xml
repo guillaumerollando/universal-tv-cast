@@ -295,6 +295,8 @@
     <string name="settings_share_sub">किसी दोस्त को भेजें</string>
     <string name="share_text">वेब वीडियो और टीवी चैनल अपनी बड़ी स्क्रीन पर मुफ़्त देखें: %1$s</string>
     <string name="report_no_mail">कोई ईमेल ऐप नहीं मिला। हमारा पता कॉपी हो गया: %1$s</string>
+    <string name="widget_desc">एक टैप में अपना वीडियो और चैनल फिर से देखें</string>
+    <string name="widget_empty">कोई वीडियो या चैनल चलाएँ: वह यहाँ दिखेगा।</string>
     <plurals name="browser_found">
         <item quantity="one">%d वीडियो</item>
         <item quantity="other">%d वीडियो</item>

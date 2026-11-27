@@ -293,7 +293,9 @@
   "settings_share": "Dela appen",
   "settings_share_sub": "Skicka till en vän",
   "share_text": "Se webbvideor och tv-kanaler på storbilden, gratis: %1$s",
-  "report_no_mail": "Ingen e-postapp hittades. Vår adress har kopierats: %1$s"
+  "report_no_mail": "Ingen e-postapp hittades. Vår adress har kopierats: %1$s",
+  "widget_desc": "Fortsätt titta på video och kanaler med ett tryck",
+  "widget_empty": "Spela en video eller kanal så visas den här."
  },
  "plurals": {
   "browser_found": {

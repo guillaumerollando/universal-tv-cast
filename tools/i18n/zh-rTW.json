@@ -293,7 +293,9 @@
   "settings_share": "分享應用程式",
   "settings_share_sub": "傳給朋友",
   "share_text": "在大螢幕上免費觀看網路影片和電視頻道：%1$s",
-  "report_no_mail": "找不到郵件應用程式。已複製我們的地址：%1$s"
+  "report_no_mail": "找不到郵件應用程式。已複製我們的地址：%1$s",
+  "widget_desc": "一鍵繼續觀看影片和頻道",
+  "widget_empty": "播放影片或頻道後會顯示在這裡。"
  },
  "plurals": {
   "browser_found": {

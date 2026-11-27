@@ -5,6 +5,8 @@ import os, html
 LANGS = ["en", "fr", "es", "de", "it", "nl", "pt-rBR"]
 S = {
 "app_name": ["Universal TV Cast"]*7,
+"widget_desc": ["Pick up your video and your channels in one tap", "Reprends ta vidéo et tes chaînes en un geste", "Retoma tu vídeo y tus canales en un toque", "Video und Sender mit einem Tipp weiterschauen", "Riprendi il video e i canali con un tocco", "Ga verder met je video en zenders in één tik", "Retome seu vídeo e seus canais com um toque"],
+"widget_empty": ["Play a video or a channel: it will show up here.", "Lance une vidéo ou une chaîne : elle apparaîtra ici.", "Reproduce un vídeo o un canal: aparecerá aquí.", "Starte ein Video oder einen Sender: Er erscheint hier.", "Avvia un video o un canale: comparirà qui.", "Start een video of zender: die verschijnt hier.", "Abra um vídeo ou canal: ele aparecerá aqui."],
 "settings_share": ["Share the app", "Partager l’appli", "Compartir la app", "App teilen", "Condividi l’app", "App delen", "Compartilhar o app"],
 "settings_share_sub": ["Send it to a friend", "L’envoyer à un proche", "Envíala a un amigo", "Schick sie an Freunde", "Inviala a un amico", "Stuur hem naar een vriend", "Envie para um amigo"],
 "share_text": ["Watch web videos and TV channels on your big screen, for free: %1$s", "Regarde les vidéos du web et les chaînes de télé sur ton grand écran, gratuitement : %1$s", "Mira vídeos de la web y canales de TV en tu pantalla grande, gratis: %1$s", "Web-Videos und TV-Sender kostenlos auf dem großen Bildschirm: %1$s", "Guarda i video del web e i canali TV sul grande schermo, gratis: %1$s", "Bekijk webvideo’s en tv-zenders gratis op je grote scherm: %1$s", "Assista a vídeos da web e canais de TV na tela grande, de graça: %1$s"],

@@ -295,6 +295,8 @@
     <string name="settings_share_sub">Kirim ke teman</string>
     <string name="share_text">Tonton video web dan saluran TV di layar besar, gratis: %1$s</string>
     <string name="report_no_mail">Tidak ada aplikasi email. Alamat kami sudah disalin: %1$s</string>
+    <string name="widget_desc">Lanjutkan video dan saluranmu dengan sekali ketuk</string>
+    <string name="widget_empty">Putar video atau saluran: akan muncul di sini.</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

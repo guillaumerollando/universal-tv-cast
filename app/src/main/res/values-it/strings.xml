@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Généré par tools/strings.py : ne pas modifier à la main. -->
 <resources>
+    <string name="widget_desc">Riprendi il video e i canali con un tocco</string>
+    <string name="widget_empty">Avvia un video o un canale: comparirà qui.</string>
     <string name="settings_share">Condividi l’app</string>
     <string name="settings_share_sub">Inviala a un amico</string>
     <string name="share_text">Guarda i video del web e i canali TV sul grande schermo, gratis: %1$s</string>

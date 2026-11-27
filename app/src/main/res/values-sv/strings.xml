@@ -295,6 +295,8 @@
     <string name="settings_share_sub">Skicka till en vän</string>
     <string name="share_text">Se webbvideor och tv-kanaler på storbilden, gratis: %1$s</string>
     <string name="report_no_mail">Ingen e-postapp hittades. Vår adress har kopierats: %1$s</string>
+    <string name="widget_desc">Fortsätt titta på video och kanaler med ett tryck</string>
+    <string name="widget_empty">Spela en video eller kanal så visas den här.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videor</item>

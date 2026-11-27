@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Généré par tools/strings.py : ne pas modifier à la main. -->
 <resources>
+    <string name="widget_desc">Ga verder met je video en zenders in één tik</string>
+    <string name="widget_empty">Start een video of zender: die verschijnt hier.</string>
     <string name="settings_share">App delen</string>
     <string name="settings_share_sub">Stuur hem naar een vriend</string>
     <string name="share_text">Bekijk webvideo’s en tv-zenders gratis op je grote scherm: %1$s</string>

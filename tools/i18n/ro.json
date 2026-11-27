@@ -293,7 +293,9 @@
   "settings_share": "Distribuie aplicația",
   "settings_share_sub": "Trimite-o unui prieten",
   "share_text": "Vezi videoclipuri de pe web și canale TV pe ecranul mare, gratuit: %1$s",
-  "report_no_mail": "Nu există nicio aplicație de e-mail. Adresa noastră a fost copiată: %1$s"
+  "report_no_mail": "Nu există nicio aplicație de e-mail. Adresa noastră a fost copiată: %1$s",
+  "widget_desc": "Reia videoclipul și canalele dintr-o atingere",
+  "widget_empty": "Pornește un videoclip sau un canal: va apărea aici."
  },
  "plurals": {
   "browser_found": {

@@ -295,6 +295,8 @@
     <string name="settings_share_sub">ส่งให้เพื่อน</string>
     <string name="share_text">ดูวิดีโอจากเว็บและช่องทีวีบนจอใหญ่ ฟรี: %1$s</string>
     <string name="report_no_mail">ไม่พบแอปอีเมล คัดลอกที่อยู่ของเราแล้ว: %1$s</string>
+    <string name="widget_desc">ดูวิดีโอและช่องต่อได้ในแตะเดียว</string>
+    <string name="widget_empty">เปิดวิดีโอหรือช่อง แล้วจะแสดงที่นี่</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>

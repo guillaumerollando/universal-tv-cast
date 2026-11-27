@@ -274,14 +274,14 @@ fun HomeScreen(
  * Une carte « Reprendre » : une série (ou un film) avec l'épisode où l'on en est. Réunit l'historique (une entrée
  * par série) et les séries en favori, qui y restent même sans avoir été regardées récemment.
  */
-private data class ResumeItem(
+internal data class ResumeItem(
     val key: String, val title: String, val image: String?, val host: String,
     val season: Int?, val episode: Int?, val time: Long,
     val recent: Recent?, val bookmark: Bookmark?, val openUrl: String?,
     val progress: Float? = null,
 )
 
-private fun resumeItems(recents: List<Recent>, bookmarks: List<Bookmark>): List<ResumeItem> {
+internal fun resumeItems(recents: List<Recent>, bookmarks: List<Bookmark>): List<ResumeItem> {
     val series = bookmarks.filter { it.isSeries }
     val fromRecents = recents.filter { !it.live }.mapNotNull { r ->
         val b = series.firstOrNull { it.sameSeries(r) }
@@ -350,6 +350,7 @@ private fun AllResume(items: List<ResumeItem>, onBrowse: (String?) -> Unit, onCl
 
 @Composable
 private fun ResumeCard(r: ResumeItem, onBrowse: (String?) -> Unit, modifier: Modifier = Modifier.width(200.dp)) {
+    val resuming by Nav.resuming.collectAsState()
     val badge = when {
         r.season != null && r.episode != null -> stringResource(R.string.resume_season_episode, r.season, r.episode)
         r.episode != null -> stringResource(R.string.bookmark_episode, r.episode)
@@ -365,14 +366,18 @@ private fun ResumeCard(r: ResumeItem, onBrowse: (String?) -> Unit, modifier: Mod
         title = r.title, image = r.image, host = r.host, badge = badge, starred = r.bookmark != null,
         onClick = {
             val page = r.openUrl
-            // Vidéo trouvée sur un site : son lien a souvent expiré, on rouvre la page de l'épisode.
-            if (page != null) onBrowse(page)
-            else r.recent?.let {
+            // Vidéo trouvée sur un site : son lien a souvent expiré. La page de l'épisode est rouverte en
+            // arrière-plan, sa vidéo repérée et lancée là où on s'était arrêté, sans passer par le site (ses pubs,
+            // son lecteur). Introuvable : le navigateur montre la page.
+            if (page != null) {
+                if (Nav.resuming.value == null) { Nav.resuming.value = page; Nav.nextEpisode.value = page }
+            } else r.recent?.let {
                 Castor.open(it.toMedia())
                 Nav.tab.value = Tab.PLAYER
             }
         },
         menu = menu, modifier = modifier, progress = r.progress,
+        loading = resuming != null && resuming == r.openUrl,
     )
 }
 

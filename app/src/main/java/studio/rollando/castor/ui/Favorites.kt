@@ -118,6 +118,8 @@ fun PosterCard(
     onClick: () -> Unit, menu: List<Pair<String, () -> Unit>>, modifier: Modifier = Modifier.width(200.dp),
     /** Avancement dans la vidéo (0 à 1), montré par une fine barre au bas de l'image. */
     progress: Float? = null,
+    /** Vidéo en cours de reprise : un rond de chargement sur l'image. */
+    loading: Boolean = false,
 ) {
     val c = MaterialTheme.colorScheme
     var open by remember { mutableStateOf(false) }
@@ -141,6 +143,9 @@ fun PosterCard(
                 }
                 Box(Modifier.matchParentSize().background(androidx.compose.ui.graphics.Brush.verticalGradient(
                     0.45f to androidx.compose.ui.graphics.Color.Transparent, 1f to androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.75f))))
+                if (loading) Box(Modifier.matchParentSize().background(androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.45f)), contentAlignment = Alignment.Center) {
+                    androidx.compose.material3.CircularProgressIndicator(Modifier.size(36.dp), color = androidx.compose.ui.graphics.Color.White, strokeWidth = 3.dp)
+                }
                 // Pastille : épisode où l'on en est, ou « Reprendre » pour un film.
                 Row(
                     Modifier.align(Alignment.BottomStart).padding(8.dp).clip(RoundedCornerShape(50)).background(c.primary)

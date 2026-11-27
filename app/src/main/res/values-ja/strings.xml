@@ -295,6 +295,8 @@
     <string name="settings_share_sub">友だちに送る</string>
     <string name="share_text">ウェブ動画とテレビ番組を大画面で無料で: %1$s</string>
     <string name="report_no_mail">メールアプリが見つかりません。アドレスをコピーしました: %1$s</string>
+    <string name="widget_desc">動画とチャンネルをワンタップで再開</string>
+    <string name="widget_empty">動画やチャンネルを再生すると、ここに表示されます。</string>
     <plurals name="browser_found">
         <item quantity="other">%d 本の動画</item>
     </plurals>

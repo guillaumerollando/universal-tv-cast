@@ -32,6 +32,9 @@ class CastorApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         Castor.init(this)
+        val app = this
+        studio.rollando.castor.data.Library.onChanged = { studio.rollando.castor.ui.HomeWidget.refresh(app) }
+        studio.rollando.castor.ui.HomeWidget.refresh(app)
     }
 }
 
@@ -110,6 +113,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         // Rouverte depuis les applis récentes : Android redonne le lien d'origine. Ce n'est pas une nouvelle demande,
         // on ne le relance pas sur la télé.
         if (intent != null && intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY != 0) return
+        if (widget(intent)) return
         val parsed = Intake.parse(this, intent) ?: return
         val from = referrer?.takeIf { it.scheme == "android-app" }?.host?.takeIf { it != packageName }
         val media = parsed.copy(sourceApp = from)
@@ -129,6 +133,30 @@ class MainActivity : ComponentActivity(), SensorEventListener {
             return
         }
         play(media)
+    }
+
+    /** Appui sur le widget : reprendre la vidéo, ou relancer une chaîne. */
+    private fun widget(intent: Intent?): Boolean {
+        val key = intent?.getStringExtra(studio.rollando.castor.ui.HomeWidget.EXTRA_KEY) ?: return intent?.action == studio.rollando.castor.ui.HomeWidget.ACTION_RESUME
+        when (intent.action) {
+            studio.rollando.castor.ui.HomeWidget.ACTION_RESUME -> {
+                val r = studio.rollando.castor.ui.resumeItems(Library.recents.value, Library.bookmarks.value).firstOrNull { it.key == key } ?: return true
+                val page = r.openUrl
+                if (page != null) {
+                    // Page d'un site : rouverte en arrière-plan, la vidéo part seule (l'accueil montre la reprise).
+                    Nav.tab.value = Tab.HOME
+                    if (Nav.resuming.value == null) { Nav.resuming.value = page; Nav.nextEpisode.value = page }
+                } else r.recent?.let { Castor.open(it.toMedia()); Nav.tab.value = Tab.PLAYER }
+            }
+            studio.rollando.castor.ui.HomeWidget.ACTION_CHANNEL -> {
+                val c = Library.recents.value.firstOrNull { it.key == key && it.live } ?: return true
+                val page = c.pageUrl
+                if (page != null && page.startsWith("http")) Nav.openUrl.value = page
+                else { Castor.open(c.toMedia().copy(startSec = 0.0, title = c.channelName)); Nav.tab.value = Tab.PLAYER }
+            }
+            else -> return false
+        }
+        return true
     }
 
     /** Une autre appli nous envoie une vidéo (« Caster sur la télé ») : la télé est le choix explicite. */

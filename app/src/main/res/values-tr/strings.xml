@@ -295,6 +295,8 @@
     <string name="settings_share_sub">Bir arkadaşına gönder</string>
     <string name="share_text">Web videolarını ve TV kanallarını büyük ekranda ücretsiz izle: %1$s</string>
     <string name="report_no_mail">E-posta uygulaması bulunamadı. Adresimiz kopyalandı: %1$s</string>
+    <string name="widget_desc">Videona ve kanallarına tek dokunuşla devam et</string>
+    <string name="widget_empty">Bir video ya da kanal aç: burada görünecek.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video</item>

@@ -1159,6 +1159,14 @@
   "share_text": {
    "en": "Watch web videos and TV channels on your big screen, for free: %1$s",
    "fr": "Regarde les vidéos du web et les chaînes de télé sur ton grand écran, gratuitement : %1$s"
+  },
+  "widget_desc": {
+   "en": "Pick up your video and your channels in one tap",
+   "fr": "Reprends ta vidéo et tes chaînes en un geste"
+  },
+  "widget_empty": {
+   "en": "Play a video or a channel: it will show up here.",
+   "fr": "Lance une vidéo ou une chaîne : elle apparaîtra ici."
   }
  },
  "plurals": {

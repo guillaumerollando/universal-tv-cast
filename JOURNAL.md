@@ -1117,3 +1117,18 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
 **Pas fait**
 - Le lien Play Store ne mène nulle part tant que l'appli n'est pas publiée.
 - Les autres applis et jeux n'ont pas encore le bouton (à faire dans chacune, par sa session).
+
+## 2026-11-27 — Reprendre en un appui, widget
+**Fait**
+- « Reprendre » sur l'accueil : la page de l'épisode est rouverte en arrière-plan (même mécanisme que l'épisode
+  suivant), sa vidéo repérée et lancée là où on s'était arrêté, sans afficher le site. Un rond de chargement tourne
+  sur la carte ; si la vidéo reste introuvable (25 s), le navigateur montre la page. Vérifié sur émulateur (~2 s).
+- Widget d'écran d'accueil (`ui/HomeWidget.kt`, RemoteViews, sans dépendance) : la vidéo à reprendre (affiche,
+  titre, épisode, avancement, bouton lecture) et les 4 dernières chaînes avec leur logo. Redessiné quand
+  l'historique change (au plus toutes les 2 s). Appuis vérifiés sur émulateur (reprise Chaplin, CNews).
+- Signalement : sujet `[Bug] Universal TV Cast <version>` fixe ; sans appli de mail, l'adresse est copiée.
+- Standard des 3 incontournables (`~/Dev/Gestion de projet/standard-incontournables.md`) appliqué à 7 autres
+  projets (commits locaux, non poussés).
+
+**Pas fait**
+- Aperçu du widget dans la liste des widgets : simple (logo blanc), pas une vraie capture.

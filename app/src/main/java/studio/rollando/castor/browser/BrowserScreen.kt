@@ -200,7 +200,8 @@ class BrowserController(context: Context) {
 
     /** Épisode suivant, chargé sans quitter l'écran de lecture : sa vidéo partira dès qu'elle sera repérée. */
     fun playNextInBackground(next: String) {
-        autoFrom = url
+        // Même page que celle affichée (reprise de l'épisode ouvert) : elle est rechargée, sa vidéo compte.
+        autoFrom = url.takeIf { pageKey(it) != pageKey(next) }
         load(next)
         arm(background = true, waitMs = 25_000)
         // Beaucoup de lecteurs ne chargent la vidéo qu'à la lecture : on la lance dans la page (son coupé).

@@ -302,6 +302,7 @@ object Library {
     }
 
     private fun saveBookmarks() {
+        onChanged?.invoke()
         prefs.edit().putString("bookmarks", JSONArray().apply {
             _bookmarks.value.forEach {
                 put(JSONObject().put("title", it.title).put("url", it.url).put("ep", it.episode ?: -1).put("time", it.time).put("img", it.image ?: ""))
@@ -332,7 +333,11 @@ object Library {
         saveBookmarks()
     }
 
+    /** Appelé quand l'historique ou les favoris changent (le widget se redessine). */
+    @Volatile var onChanged: (() -> Unit)? = null
+
     private fun saveRecents() {
+        onChanged?.invoke()
         val arr = JSONArray()
         for (r in _recents.value) arr.put(JSONObject().apply {
             put("title", r.title); put("url", r.url); put("mime", r.mime ?: ""); put("page", r.pageUrl ?: ""); put("poster", r.poster ?: ""); put("file", r.fileName ?: "")

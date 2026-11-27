@@ -293,7 +293,9 @@
   "settings_share": "Bagikan aplikasi",
   "settings_share_sub": "Kirim ke teman",
   "share_text": "Tonton video web dan saluran TV di layar besar, gratis: %1$s",
-  "report_no_mail": "Tidak ada aplikasi email. Alamat kami sudah disalin: %1$s"
+  "report_no_mail": "Tidak ada aplikasi email. Alamat kami sudah disalin: %1$s",
+  "widget_desc": "Lanjutkan video dan saluranmu dengan sekali ketuk",
+  "widget_empty": "Putar video atau saluran: akan muncul di sini."
  },
  "plurals": {
   "browser_found": {

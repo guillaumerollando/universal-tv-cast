@@ -295,6 +295,8 @@
     <string name="settings_share_sub">Gửi cho bạn bè</string>
     <string name="share_text">Xem video trên web và kênh TV trên màn hình lớn, miễn phí: %1$s</string>
     <string name="report_no_mail">Không tìm thấy ứng dụng email. Đã sao chép địa chỉ của chúng tôi: %1$s</string>
+    <string name="widget_desc">Xem tiếp video và kênh chỉ với một chạm</string>
+    <string name="widget_empty">Mở một video hoặc kênh: nó sẽ hiện ở đây.</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

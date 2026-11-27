@@ -295,6 +295,8 @@
     <string name="settings_share_sub">发给朋友</string>
     <string name="share_text">在大屏幕上免费观看网络视频和电视频道：%1$s</string>
     <string name="report_no_mail">未找到邮件应用。已复制我们的地址：%1$s</string>
+    <string name="widget_desc">一键继续观看视频和频道</string>
+    <string name="widget_empty">播放视频或频道后会显示在这里。</string>
     <plurals name="browser_found">
         <item quantity="other">%d 个视频</item>
     </plurals>

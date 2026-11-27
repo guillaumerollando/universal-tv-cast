@@ -295,6 +295,8 @@
     <string name="settings_share_sub">Pošli ji kamarádovi</string>
     <string name="share_text">Sleduj videa z webu a TV kanály na velké obrazovce, zdarma: %1$s</string>
     <string name="report_no_mail">Nenašla se žádná e-mailová aplikace. Naše adresa je zkopírovaná: %1$s</string>
+    <string name="widget_desc">Pokračuj ve videu a kanálech jedním klepnutím</string>
+    <string name="widget_empty">Pusť video nebo kanál: objeví se tady.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="few">%d videa</item>

@@ -293,7 +293,9 @@
   "settings_share": "Sdílet aplikaci",
   "settings_share_sub": "Pošli ji kamarádovi",
   "share_text": "Sleduj videa z webu a TV kanály na velké obrazovce, zdarma: %1$s",
-  "report_no_mail": "Nenašla se žádná e-mailová aplikace. Naše adresa je zkopírovaná: %1$s"
+  "report_no_mail": "Nenašla se žádná e-mailová aplikace. Naše adresa je zkopírovaná: %1$s",
+  "widget_desc": "Pokračuj ve videu a kanálech jedním klepnutím",
+  "widget_empty": "Pusť video nebo kanál: objeví se tady."
  },
  "plurals": {
   "browser_found": {

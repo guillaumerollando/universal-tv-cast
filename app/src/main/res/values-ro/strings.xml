@@ -295,6 +295,8 @@
     <string name="settings_share_sub">Trimite-o unui prieten</string>
     <string name="share_text">Vezi videoclipuri de pe web și canale TV pe ecranul mare, gratuit: %1$s</string>
     <string name="report_no_mail">Nu există nicio aplicație de e-mail. Adresa noastră a fost copiată: %1$s</string>
+    <string name="widget_desc">Reia videoclipul și canalele dintr-o atingere</string>
+    <string name="widget_empty">Pornește un videoclip sau un canal: va apărea aici.</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>

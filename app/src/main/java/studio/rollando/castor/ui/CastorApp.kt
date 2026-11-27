@@ -123,6 +123,8 @@ object Nav {
     val nextEpisode = MutableStateFlow<String?>(null)
     /** Épisode suivant en cours de recherche (le bouton le montre). */
     val nextLoading = MutableStateFlow(false)
+    /** Page d'une carte « Reprendre » rouverte en arrière-plan : sa vidéo part seule, sans montrer le site. */
+    val resuming = MutableStateFlow<String?>(null)
     /** Panneau d'aide ouvert (bouton « ? », secousse, lien dans une erreur). */
     val help = MutableStateFlow(false)
     /** Demande d'ouvrir le choix de la télé (depuis l'aide). */
@@ -150,8 +152,8 @@ fun CastorApp() {
     // Ouvrir une page dans le navigateur depuis un autre écran (épisode à reprendre…).
     // Vidéo lancée dans le navigateur (ou épisode suivant trouvé) : on passe à l'écran de lecture.
     LaunchedEffect(browser) {
-        browser.onAutoCast = { Nav.nextLoading.value = false; Nav.tab.value = Tab.PLAYER }
-        browser.onAutoGiveUp = { Nav.nextLoading.value = false; Nav.tab.value = Tab.BROWSER }
+        browser.onAutoCast = { Nav.nextLoading.value = false; Nav.resuming.value = null; Nav.tab.value = Tab.PLAYER }
+        browser.onAutoGiveUp = { Nav.nextLoading.value = false; Nav.resuming.value = null; Nav.tab.value = Tab.BROWSER }
     }
     // « Épisode suivant » depuis l'écran de lecture : chargé en arrière-plan, la vidéo part toute seule.
     val nextRequest by Nav.nextEpisode.collectAsState()

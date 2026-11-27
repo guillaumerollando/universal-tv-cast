@@ -293,7 +293,9 @@
   "settings_share": "分享应用",
   "settings_share_sub": "发给朋友",
   "share_text": "在大屏幕上免费观看网络视频和电视频道：%1$s",
-  "report_no_mail": "未找到邮件应用。已复制我们的地址：%1$s"
+  "report_no_mail": "未找到邮件应用。已复制我们的地址：%1$s",
+  "widget_desc": "一键继续观看视频和频道",
+  "widget_empty": "播放视频或频道后会显示在这里。"
  },
  "plurals": {
   "browser_found": {

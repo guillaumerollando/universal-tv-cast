@@ -293,7 +293,9 @@
   "settings_share": "アプリを共有",
   "settings_share_sub": "友だちに送る",
   "share_text": "ウェブ動画とテレビ番組を大画面で無料で: %1$s",
-  "report_no_mail": "メールアプリが見つかりません。アドレスをコピーしました: %1$s"
+  "report_no_mail": "メールアプリが見つかりません。アドレスをコピーしました: %1$s",
+  "widget_desc": "動画とチャンネルをワンタップで再開",
+  "widget_empty": "動画やチャンネルを再生すると、ここに表示されます。"
  },
  "plurals": {
   "browser_found": {

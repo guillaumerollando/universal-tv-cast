@@ -295,6 +295,8 @@
     <string name="settings_share_sub">أرسله إلى صديق</string>
     <string name="share_text">شاهد فيديوهات الويب وقنوات التلفزيون على شاشتك الكبيرة مجانًا: %1$s</string>
     <string name="report_no_mail">لا يوجد تطبيق بريد. تم نسخ عنواننا: %1$s</string>
+    <string name="widget_desc">تابع الفيديو والقنوات بلمسة واحدة</string>
+    <string name="widget_empty">شغّل فيديو أو قناة: سيظهر هنا.</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>

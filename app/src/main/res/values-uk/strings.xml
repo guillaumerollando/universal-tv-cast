@@ -295,6 +295,8 @@
     <string name="settings_share_sub">Надіслати другові</string>
     <string name="share_text">Дивіться відео з інтернету й ТБ-канали на великому екрані безкоштовно: %1$s</string>
     <string name="report_no_mail">Поштовий застосунок не знайдено. Нашу адресу скопійовано: %1$s</string>
+    <string name="widget_desc">Продовжуйте відео й канали одним дотиком</string>
+    <string name="widget_empty">Увімкніть відео чи канал — він з’явиться тут.</string>
     <plurals name="browser_found">
         <item quantity="one">%d відео</item>
         <item quantity="few">%d відео</item>

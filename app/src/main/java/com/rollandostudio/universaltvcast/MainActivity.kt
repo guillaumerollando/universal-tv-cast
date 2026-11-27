@@ -91,11 +91,14 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         super.onStart()
         // Retour dans l'appli : on revérifie quelles télés sont allumées (rien ne passe : pas de risque de couper).
         val s = com.rollandostudio.universaltvcast.cast.TvCast.state.value
-        if (!s.active && !s.searching && s.renderers.isNotEmpty()) com.rollandostudio.universaltvcast.cast.TvCast.discover()
+        // Même sans télé proposée : celle qu'on vient d'allumer doit apparaître.
+        if (!s.active && !s.searching) com.rollandostudio.universaltvcast.cast.TvCast.discover()
+        com.rollandostudio.universaltvcast.cast.TvCast.watchTvs(true)
     }
 
     override fun onStop() {
         super.onStop()
+        com.rollandostudio.universaltvcast.cast.TvCast.watchTvs(false)
         // En petite fenêtre, la vidéo continue ; fenêtre fermée (ou appli quittée sans elle) : on met en pause.
         if (!isInPictureInPictureMode) com.rollandostudio.universaltvcast.cast.TvCast.appHidden()
         // Nouvelle icône choisie : posée seulement une fois l'appli quittée (Android ferme la tâche lancée par l'ancienne).

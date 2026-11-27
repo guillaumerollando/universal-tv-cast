@@ -196,25 +196,25 @@ object TvCast {
         CastControl.scan(active = true)
         scope.launch {
             val found = mutableListOf<Renderer>()
-            // Appareils qui ont répondu à la recherche du réseau : allumés (une télé en veille ne répond plus).
-            val awake = java.util.concurrent.ConcurrentHashMap.newKeySet<String>()
+            // Allumée = a répondu à la recherche du réseau (SSDP), ou, pour celles qui n'y répondent jamais (Philips
+            // Titan OS), lit une vidéo ou a son service Google Cast ouvert. Une télé déjà vue allumée le reste le temps
+            // de la revérifier (pas de clignotement de la télé choisie pendant la recherche).
+            val before = dlnaDevices.filter { it.awake }.map { it.host }.toSet()
+            val ssdp = java.util.concurrent.ConcurrentHashMap.newKeySet<String>()
+            val probed = java.util.concurrent.ConcurrentHashMap<String, Boolean>()
+            fun isAwake(h: String) = h in ssdp || (probed[h] ?: (h in before))
             fun refresh() {
-                dlnaDevices = synchronized(found) { found.map { it.copy(awake = it.host in awake) } }
+                dlnaDevices = synchronized(found) { found.map { it.copy(awake = isAwake(it.host)) } }
                 publish(allDevices())
             }
             try {
-                Dlna.discover(app, Library.knownTvs, onAwake = { h -> if (awake.add(h)) refresh() }) { r ->
+                Dlna.discover(app, Library.knownTvs, onAwake = { h -> if (ssdp.add(h)) refresh() }) { r ->
                     Library.rememberTv(r.location)
                     synchronized(found) { if (found.none { it.udn == r.udn }) found += r }
                     refresh()
-                    // Certaines télés (Philips 55OLED760) ne répondent jamais à la recherche, même allumées. Une télé
-                    // qui lit ou garde une vidéo en pause est forcément allumée : on le lui demande directement.
-                    if (r.host !in awake) scope.launch(Dispatchers.IO) {
-                        val st = runCatching { Dlna.transportState(r) }.getOrNull()
-                        // Au repos (rien en lecture) : son service Google Cast ouvert dit qu'elle est allumée.
-                        val castUp = Dlna.castServiceUp(r.host)
-                        if (castUp) Library.rememberCastHost(r.host)
-                        if (st == "PLAYING" || st == "PAUSED_PLAYBACK" || castUp) { if (awake.add(r.host)) refresh() }
+                    if (r.host !in ssdp) scope.launch(Dispatchers.IO) {
+                        probed[r.host] = probeAwake(r)
+                        refresh()
                     }
                 }
             } catch (e: Exception) {
@@ -249,6 +249,46 @@ object TvCast {
         }
     }
 
+    /**
+     * Une télé qui ne répond pas à la recherche du réseau est-elle allumée ? Oui si elle lit ou garde une vidéo en
+     * pause, ou si son service Google Cast est ouvert (il se ferme en veille sur les Philips Titan OS, alors que leur
+     * récepteur DLNA, lui, répond encore et accepterait une vidéo sans rien montrer).
+     */
+    private fun probeAwake(r: Renderer): Boolean {
+        val st = runCatching { Dlna.transportState(r) }.getOrNull()
+        if (st == "PLAYING" || st == "PAUSED_PLAYBACK") return true
+        val castUp = Dlna.castServiceUp(r.host)
+        if (castUp) Library.rememberCastHost(r.host)
+        return castUp
+    }
+
+    private var watchJob: kotlinx.coroutines.Job? = null
+
+    /**
+     * Pendant que l'appli est ouverte : une télé qui s'éteint disparaît de la liste (et n'est plus affichée comme
+     * connectée), une télé qui s'allume apparaît, sans relancer de recherche. Seulement pour les télés reconnues à
+     * leur service Cast ; les autres répondent d'elles-mêmes à la recherche (relancée au retour dans l'appli).
+     */
+    fun watchTvs(on: Boolean) {
+        watchJob?.cancel()
+        if (!on) return
+        watchJob = scope.launch(Dispatchers.IO) {
+            while (true) {
+                delay(15_000)
+                val s = _state.value
+                if (s.searching || s.active) continue
+                var changed = false
+                dlnaDevices = dlnaDevices.map { r ->
+                    if (r.host !in Library.castHosts) return@map r
+                    val up = probeAwake(r)
+                    if (up != r.awake) { changed = true; Log.i("TvCast", "${r.name} ${if (up) "allumée" else "éteinte"}") }
+                    r.copy(awake = up)
+                }
+                if (changed) publish(allDevices())
+            }
+        }
+    }
+
     /** Ajout manuel d'une télé par son adresse IP. */
     fun addByIp(ip: String) {
         _state.update { it.copy(searching = true) }
@@ -267,13 +307,14 @@ object TvCast {
     }
 
     private fun publish(list: List<Renderer>) {
-        val sorted = list.sortedBy { it.name.lowercase() }
         _state.update { s ->
             fun matches(r: Renderer, udn: String?) = udn != null && (r.udn == udn || r.fallback?.udn == udn)
-            // La télé en cours reste choisie si elle répond, si une vidéo y passe, ou si on vient de la choisir ;
-            // sinon (éteinte), on ne l'affiche plus comme connectée. Choix automatique : seulement parmi les allumées.
-            val keep = s.renderer?.let { cur -> sorted.firstOrNull { matches(it, cur.udn) } ?: cur }
-                ?.takeIf { it.awake || s.active || it.udn == chosenNow }
+            // Comme les autres applis : seules les télés allumées sont proposées (une Google TV, un Chromecast s'annoncent
+            // eux-mêmes ; une télé DLNA doit répondre). Exception : celle où une vidéo passe en ce moment.
+            val sorted = list.filter { it.awake || (s.active && matches(it, s.renderer?.udn)) }.sortedBy { it.name.lowercase() }
+            // La télé en cours reste choisie tant qu'elle est allumée (ou qu'une vidéo y passe) ; éteinte, elle n'est plus
+            // affichée comme connectée. Choix automatique : la dernière utilisée, ou la seule allumée.
+            val keep = s.renderer?.let { cur -> sorted.firstOrNull { matches(it, cur.udn) } ?: cur.takeIf { s.active } }
             val awake = sorted.filter { it.awake }
             val sel = keep ?: awake.firstOrNull { matches(it, Library.lastTv) } ?: awake.singleOrNull()
             s.copy(renderers = sorted, renderer = sel)

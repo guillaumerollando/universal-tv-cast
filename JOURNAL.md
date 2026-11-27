@@ -1511,3 +1511,17 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   Android ne peut pas lire l'adresse matérielle (table ARP interdite) et la télé ne la donne nulle part (DLNA,
   Cast, AirPlay, JointSpace, DIAL) : pas d'« Allumer la télé » pour l'instant.
 - Pas vérifié sur le téléphone : télé allumée choisie d'office, message de veille.
+
+## 2026-11-28 — Seules les télés allumées sont proposées (comme YouTube)
+- Fait : la liste des télés, le bouton « Regarder sur la télé » et la télé choisie ne montrent plus que les
+  appareils allumés : Google Cast (Chromecast, Google TV, Android TV) tels que les annonce le réseau ; télés DLNA
+  qui répondent à la recherche, ou (Philips Titan OS) qui lisent ou ont leur service Cast ouvert. Une télé éteinte
+  disparaît et n'est plus affichée comme connectée ; pendant que l'appli est ouverte, une Philips qui s'éteint ou
+  s'allume est revue toutes les 15 s ; au retour dans l'appli, la recherche est relancée même sans télé connue.
+  Remplace le correctif de la veille (« toute télé déjà vue proposée »).
+- Constat : la Philips a le service Google Cast (8008/8009) mais ne s'annonce pas en mDNS (`_googlecast._tcp`
+  sans réponse, AirPlay oui) : Android ne peut pas la voir en Cast ; elle passe donc par le DLNA.
+- Retiré avant commit : un journal de l'appli par `logcat` sur le téléphone (Android 13+ affiche une fenêtre
+  « autoriser l'accès aux journaux ») ; à refaire en écrivant soi-même ses lignes dans un fichier.
+- Vérifié sur le téléphone : télé en veille → aucune télé proposée. Pas vérifié : la télé qui apparaît à
+  l'allumage pendant que l'appli est ouverte ; Fire TV (sans Cast ni DLNA d'origine, voir README).

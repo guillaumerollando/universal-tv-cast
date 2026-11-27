@@ -289,6 +289,7 @@
     <string name="settings_smooth_slides_sub">Experimental. Sends the album as one live video, with a fade between photos. Many TVs show it late: leave off if photos change slowly.</string>
     <string name="episode_label">Season %1$d · Episode %2$d</string>
     <string name="subs_in_video">Already in the video</string>
+    <string name="audio_on_tv_note">Choose it with your TV remote.</string>
     <string name="subs_in_video_note">Choose them with your TV remote.</string>
     <string name="browser_live">Live</string>
     <string name="browser_next_episode">Episode %1$d</string>

@@ -564,23 +564,33 @@ internal fun Controls(s: CastState) {
 private fun AudioCard(s: CastState) {
     if (s.audioTracks.size < 2) return
     var open by remember { mutableStateOf(false) }
+    var note by remember { mutableStateOf(false) }
     val current = s.audioTracks.getOrNull(s.audioIndex)?.name.orEmpty()
+    // Voix d'un fichier (MKV, MP4, TS) lu sur la télé : c'est elle qui les propose, comme les sous-titres intégrés.
+    val fileVoices = s.audioTracks.none { it.uri.startsWith("http") || it.uri.startsWith(com.rollandostudio.universaltvcast.proxy.Dash.AUDIO) }
+    val onTv = fileVoices && !s.onPhone
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         shape = RoundedCornerShape(20.dp),
+        modifier = Modifier.animateContentSize(),
     ) {
-        Box {
-            OptionRow(Icons.Rounded.Translate, stringResource(R.string.audio_language),
-                current.replaceFirstChar { it.titlecase() }, active = true, onClick = { open = true })
-            DropdownMenu(open, onDismissRequest = { open = false }) {
-                s.audioTracks.forEachIndexed { i, t ->
-                    DropdownMenuItem(
-                        text = { Text(t.name.replaceFirstChar { it.titlecase() }) },
-                        leadingIcon = { if (i == s.audioIndex) Icon(Icons.Rounded.Check, null) },
-                        onClick = { open = false; TvCast.selectAudio(i) },
-                    )
+        Column {
+            Box {
+                OptionRow(Icons.Rounded.Translate, stringResource(R.string.audio_language),
+                    if (onTv) s.audioTracks.joinToString { it.name } else current.replaceFirstChar { it.titlecase() },
+                    active = !onTv, onClick = { if (onTv) note = !note else open = true })
+                DropdownMenu(open && !onTv, onDismissRequest = { open = false }) {
+                    s.audioTracks.forEachIndexed { i, t ->
+                        DropdownMenuItem(
+                            text = { Text(t.name.replaceFirstChar { it.titlecase() }) },
+                            leadingIcon = { if (i == s.audioIndex) Icon(Icons.Rounded.Check, null) },
+                            onClick = { open = false; TvCast.selectAudio(i) },
+                        )
+                    }
                 }
             }
+            if (onTv && note) Text(stringResource(R.string.audio_on_tv_note), style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 14.dp))
         }
     }
 }

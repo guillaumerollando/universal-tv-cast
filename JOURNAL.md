@@ -1561,3 +1561,12 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - Fait : une seule ligne commune (`OptionRow`) : icône, titre, choix en cours, un appui ouvre la liste ; même fond,
   même forme, même hauteur. La flèche des sous-titres est retirée ; le bouton « Décalage » reste en bout de ligne
   une fois un sous-titre choisi. Vérifié par capture sur émulateur.
+
+## 2026-11-28 — Voix d'un fichier sur la télé : choisies avec la télécommande
+- Constat (Guillaume) : changer de voix depuis le téléphone pendant la lecture sur la télé bloquait la Philips :
+  elle reprenait à l'endroit voulu puis cessait de lire (en-tête MKV dont une voix était effacée). Et la télé
+  propose elle-même les voix du fichier, comme les sous-titres intégrés.
+- Fait : plus aucune retouche des voix par le relais (retirée pour MKV, MP4, TS ; seul le masquage Dolby Vision
+  reste). Sur la télé, la carte « Langue » d'un fichier liste ses voix et, au toucher, dit « Choisis-la avec la
+  télécommande de la télé » (23 langues). Sur le téléphone, le choix reste comme avant. HLS / DASH : inchangés
+  (choix depuis le téléphone, la télé ne voit qu'un flux).

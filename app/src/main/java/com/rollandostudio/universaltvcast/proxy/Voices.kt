@@ -1,15 +1,13 @@
 package com.rollandostudio.universaltvcast.proxy
 
-import java.io.OutputStream
 import java.util.Locale
 
 /**
- * Les voix (pistes son) des fichiers MP4 / MOV et MPEG-TS, et ce qu'il faut changer au passage pour qu'une télé
- * DLNA, qui lit toujours la première voix, lise celle qu'on a choisie (le MKV est traité par [MkvProbe]).
- * Rien n'est recopié ni réencodé : quelques octets changent, aux mêmes places, et les plages restent justes.
+ * Les voix (pistes son) des fichiers MP4 / MOV et MPEG-TS (le MKV : [MkvProbe]), pour les proposer sur le téléphone.
+ * Sur la télé, c'est elle qui les propose (télécommande), comme les sous-titres intégrés.
  */
 object Voices {
-    /** Une voix : identifiant pour le relais (« mp4:<n> », « ts:<pid> »), nom, langue, par défaut. */
+    /** Une voix : identifiant (« mkv:<n> », « mp4:<n> », « ts:<pid> »), nom, langue, par défaut. */
     data class Voice(val id: String, val name: String, val lang: String?, val default: Boolean)
 
     fun langName(code: String?): String? {
@@ -91,15 +89,6 @@ object Voices {
     }
 
     fun mp4Voices(tracks: List<Mp4Track>): List<Voice> = named(tracks.mapIndexed { i, t -> Triple("mp4:$i", t.lang, t.label) })
-
-    /**
-     * Pour faire lire la voix n° [keep] : les boîtes « trak » des autres voix deviennent des boîtes « free », que les
-     * lecteurs sautent (4 octets chacune). Rien si c'est déjà la première.
-     */
-    fun mp4Patches(tracks: List<Mp4Track>, keep: Int): List<Pair<Long, ByteArray>> {
-        if (tracks.size < 2 || keep <= 0 || keep >= tracks.size) return emptyList()
-        return tracks.filterIndexed { i, _ -> i != keep }.map { it.trakAt + 4 to "free".toByteArray(Charsets.ISO_8859_1) }
-    }
 
     private inline fun children(b: ByteArray, from: Int, to: Int, f: (String, Int, Int) -> Unit) {
         var p = from
@@ -192,76 +181,4 @@ object Voices {
         return out
     }
 
-    private fun crc32(b: ByteArray, from: Int, to: Int): Int {
-        var crc = -1
-        for (i in from until to) {
-            crc = crc xor ((b[i].toInt() and 0xFF) shl 24)
-            repeat(8) { crc = if (crc and Int.MIN_VALUE != 0) (crc shl 1) xor 0x04C11DB7 else crc shl 1 }
-        }
-        return crc
-    }
-
-    /**
-     * Le TS envoyé à la télé, corrigé au passage pour ne garder que la voix [keepPid] : la PMT (répétée tout au long
-     * du fichier) ne la déclare plus seule, et les paquets des autres voix deviennent des paquets vides (PID 0x1FFF)
-     * que tout lecteur jette. Les paquets gardent leur taille et leur place. [pos] : position du premier octet écrit.
-     */
-    class TsFilter(private val out: OutputStream, private var pos: Long, private val info: TsInfo, private val keepPid: Int) : OutputStream() {
-        private val drop = info.audio.map { it.first }.filter { it != keepPid }.toSet()
-        private val pkt = ByteArray(188)
-        private var fill = 0
-
-        override fun write(b: Int) = write(byteArrayOf(b.toByte()), 0, 1)
-
-        override fun write(b: ByteArray, off: Int, len: Int) {
-            var i = off
-            val end = off + len
-            while (i < end) {
-                // Début non aligné (avance rapide au milieu d'un paquet) : ces octets passent tels quels.
-                if (fill == 0 && pos % 188 != 0L) {
-                    val n = minOf((188 - pos % 188).toInt(), end - i)
-                    out.write(b, i, n); i += n; pos += n
-                    continue
-                }
-                val n = minOf(188 - fill, end - i)
-                System.arraycopy(b, i, pkt, fill, n)
-                fill += n; i += n; pos += n
-                if (fill == 188) { fix(); out.write(pkt); fill = 0 }
-            }
-        }
-
-        private fun fix() {
-            if (pkt[0] != 0x47.toByte()) return
-            val pid = pid(pkt, 0)
-            if (pid in drop) { // paquet vide : PID 0x1FFF, contenu effacé
-                pkt[1] = 0x1F; pkt[2] = 0xFF.toByte(); pkt[3] = 0x10
-                java.util.Arrays.fill(pkt, 4, 188, 0xFF.toByte())
-                return
-            }
-            if (pid != info.pmtPid) return
-            val (o, sl) = section(pkt, 0) ?: return
-            val es = streams(pkt, o, sl)
-            val gone = es.filter { it.pid in drop }
-            if (gone.isEmpty()) return
-            val pil = ((pkt[o + 10].toInt() and 0x0F) shl 8) or (pkt[o + 11].toInt() and 0xFF)
-            val head = pkt.copyOfRange(o, o + 12 + pil)
-            val body = java.io.ByteArrayOutputStream()
-            es.filter { it.pid !in drop }.forEach { body.write(pkt, it.at, it.len) }
-            val newSl = sl - gone.sumOf { it.len }
-            val sec = head + body.toByteArray()
-            sec[1] = ((sec[1].toInt() and 0xF0) or ((newSl shr 8) and 0x0F)).toByte()
-            sec[2] = (newSl and 0xFF).toByte()
-            val crc = crc32(sec, 0, sec.size)
-            val full = sec + byteArrayOf((crc ushr 24).toByte(), (crc ushr 16).toByte(), (crc ushr 8).toByte(), crc.toByte())
-            System.arraycopy(full, 0, pkt, o, full.size)
-            java.util.Arrays.fill(pkt, o + full.size, 188, 0xFF.toByte())
-        }
-
-        override fun flush() {
-            if (fill > 0) { out.write(pkt, 0, fill); fill = 0 }
-            out.flush()
-        }
-
-        override fun close() = flush()
-    }
 }

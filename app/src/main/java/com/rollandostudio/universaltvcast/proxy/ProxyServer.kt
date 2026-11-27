@@ -60,9 +60,6 @@ class ProxyServer(private val ctx: Context) {
     @Volatile var mimeOverride: String? = null
     /** Masquer la déclaration Dolby Vision des MKV (télés DLNA qui refusent ces fichiers ; image en HDR10). */
     @Volatile var maskDolbyVision = false
-    /** Voix de la vidéo en cours, pour garder la bonne en MP4 / TS (fournies par l'appli à l'ouverture). */
-    @Volatile var mp4Tracks: List<Voices.Mp4Track>? = null
-    @Volatile var tsInfo: Voices.TsInfo? = null
     /** Début de chaque MKV relayé (en-tête), pour le corriger au passage. */
     private val heads = ConcurrentHashMap<String, ByteArray>()
 
@@ -82,7 +79,7 @@ class ProxyServer(private val ctx: Context) {
     fun reset() {
         stopLive()
         remotes.clear(); idsByUrl.clear(); locals.clear(); metas.clear(); embedded.clear(); heads.clear()
-        subtitle = null; subtitleUrl = null; mimeOverride = null; mp4Tracks = null; tsInfo = null
+        subtitle = null; subtitleUrl = null; mimeOverride = null
     }
 
     fun register(url: String, headers: Map<String, String>, kind: Kind = Kind.MAIN, audio: String? = null): String =
@@ -738,28 +735,13 @@ class ProxyServer(private val ctx: Context) {
     /**
      * Le flux envoyé à la télé, corrigé au passage si le début de la vidéo doit l'être (déclaration Dolby Vision
      * masquée : mêmes longueurs, rien d'autre ne bouge, les plages et l'avance rapide restent justes).
+     * Les voix, elles, ne sont pas retouchées : la télé les propose elle-même (une Philips s'arrêtait sur un en-tête
+     * dont une voix était effacée).
      */
     private fun patched(id: String, type: String, from: Long, out: OutputStream): OutputStream {
-        val choice = audioChoice
-        // MP4 / MOV : les boîtes des voix écartées deviennent « free » (le « moov » peut être n'importe où).
-        if (choice?.startsWith("mp4:") == true) {
-            val tracks = mp4Tracks ?: return out
-            val patches = Voices.mp4Patches(tracks, choice.removePrefix("mp4:").toIntOrNull() ?: 0)
-            if (patches.isNotEmpty() && from == 0L) Log.i(TAG, "MP4 : voix ${choice.removePrefix("mp4:")} gardée pour la télé")
-            return if (patches.isEmpty()) out else PatchStream(out, from, patches)
-        }
-        // TS : PMT réécrite et paquets des autres voix vidés, tout au long du flux.
-        if (choice?.startsWith("ts:") == true) {
-            val info = tsInfo ?: return out
-            val pid = choice.removePrefix("ts:").toIntOrNull() ?: return out
-            if (info.audio.firstOrNull()?.first == pid) return out
-            if (from == 0L) Log.i(TAG, "TS : voix (PID $pid) gardée pour la télé")
-            return Voices.TsFilter(out, from, info, pid)
-        }
         if (!type.contains("matroska", true) && !type.contains("mkv", true) && !type.contains("webm", true)) return out
         if (from >= MkvProbe.HEAD_BYTES) return out
-        val audio = choice?.takeIf { it.startsWith("mkv:") }?.removePrefix("mkv:")?.toLongOrNull()
-        if (!maskDolbyVision && audio == null) return out
+        if (!maskDolbyVision) return out
         val head = heads.getOrPut(id) {
             runCatching {
                 val (total, read) = sourceReader(id) ?: return@runCatching ByteArray(0)
@@ -768,9 +750,7 @@ class ProxyServer(private val ctx: Context) {
         }
         val patches = mutableListOf<Pair<Long, ByteArray>>()
         if (maskDolbyVision) MkvProbe.dolbyVisionMask(head).forEach { (at, b) -> patches += at.toLong() to b }
-        if (audio != null) MkvProbe.keepOnlyAudio(head, audio).forEach { (at, b) -> patches += at.toLong() to b }
-        if (patches.isNotEmpty() && from == 0L) Log.i(TAG, "MKV corrigé pour la télé : ${patches.size} endroit(s) " +
-            "(Dolby Vision masqué : $maskDolbyVision, piste son : ${audio ?: "d'origine"})")
+        if (patches.isNotEmpty() && from == 0L) Log.i(TAG, "MKV Dolby Vision : déclaration masquée pour la télé (HDR10)")
         return if (patches.isEmpty()) out else PatchStream(out, from, patches)
     }
 

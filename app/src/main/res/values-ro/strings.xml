@@ -426,6 +426,7 @@
     <string name="style_icon">Pictograma aplicației</string>
     <string name="style_icon_note">Noua pictogramă apare după ce ieșiți din aplicație. Poate dispărea o clipă de pe ecranul principal.</string>
     <string name="notice_tv_standby">%1$s este în standby. Porniți-l din telecomandă, apoi încercați din nou.</string>
+    <string name="audio_on_tv_note">Alegeți-o cu telecomanda televizorului.</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>

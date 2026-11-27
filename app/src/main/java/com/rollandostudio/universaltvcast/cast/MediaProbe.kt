@@ -9,8 +9,7 @@ import com.rollandostudio.universaltvcast.proxy.Hls
 /** Petites lectures du début d'une source : est-ce une liste HLS, a-t-elle des sous-titres intégrés ? */
 internal object MediaProbe {
     /**
-     * Ce qu'un fichier contient déjà : langues des sous-titres (MKV) et voix (MKV, MP4 / MOV, TS), avec ce qu'il faut
-     * au relais pour faire lire la voix choisie par une télé DLNA.
+     * Ce qu'un fichier contient déjà : langues des sous-titres (MKV) et voix (MKV, MP4 / MOV, TS).
      */
     class Inside(
         val subs: List<String>,

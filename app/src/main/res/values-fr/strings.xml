@@ -288,6 +288,7 @@
     <string name="settings_smooth_slides_sub">Expérimental. Envoie l’album comme une seule vidéo en direct, avec un fondu entre les photos. Beaucoup de télés l’affichent en retard : laisse désactivé si les photos changent lentement.</string>
     <string name="episode_label">Saison %1$d · Épisode %2$d</string>
     <string name="subs_in_video">Déjà dans la vidéo</string>
+    <string name="audio_on_tv_note">Choisis-la avec la télécommande de la télé.</string>
     <string name="subs_in_video_note">Choisis-les avec la télécommande de la télé.</string>
     <string name="browser_live">Direct</string>
     <string name="browser_next_episode">Épisode %1$d</string>

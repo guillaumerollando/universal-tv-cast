@@ -288,6 +288,7 @@
     <string name="settings_smooth_slides_sub">Experimenteel. Stuurt het album als één livevideo, met een overgang tussen foto’s. Veel tv’s tonen het met vertraging: laat uit als foto’s traag wisselen.</string>
     <string name="episode_label">Seizoen %1$d · Aflevering %2$d</string>
     <string name="subs_in_video">Al in de video</string>
+    <string name="audio_on_tv_note">Kies deze met de afstandsbediening van de tv.</string>
     <string name="subs_in_video_note">Kies ze met de afstandsbediening van de tv.</string>
     <string name="browser_live">Live</string>
     <string name="browser_next_episode">Aflevering %1$d</string>

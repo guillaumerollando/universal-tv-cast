@@ -130,18 +130,6 @@ object MkvProbe {
         }
     }
 
-    /**
-     * Pour qu'une télé lise la voix choisie (en DLNA, elle prend toujours la première) : la déclaration des autres
-     * voix est remplacée par un élément vide (« Void ») de même longueur. Le lecteur ne les connaît plus et saute
-     * leurs données (GStreamer, comme celui des Philips, reconnaît sinon une piste son à son codec même déclassée).
-     * Rien ne bouge dans le fichier. Rien à faire si la voix choisie est déjà la première.
-     */
-    fun keepOnlyAudio(head: ByteArray, number: Long): List<Pair<Int, ByteArray>> {
-        val tracks = audioTracks(head)
-        if (tracks.size < 2 || tracks.first().number == number || tracks.none { it.number == number }) return emptyList()
-        return tracks.filter { it.number != number }.mapNotNull { t -> void(t.entryLen)?.let { t.entryAt to it } }
-    }
-
     private const val AUDIO = 2L
 
     /** Langues des pistes de sous-titres (« fre », « eng », « und »…). */

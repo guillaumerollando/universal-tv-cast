@@ -426,6 +426,7 @@
     <string name="style_icon">Biểu tượng ứng dụng</string>
     <string name="style_icon_note">Biểu tượng mới sẽ xuất hiện khi bạn thoát ứng dụng. Nó có thể biến mất khỏi màn hình chính trong giây lát.</string>
     <string name="notice_tv_standby">%1$s đang ở chế độ chờ. Hãy bật bằng điều khiển từ xa rồi thử lại.</string>
+    <string name="audio_on_tv_note">Hãy chọn bằng điều khiển của TV.</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

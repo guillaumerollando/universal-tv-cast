@@ -426,6 +426,7 @@
     <string name="style_icon">앱 아이콘</string>
     <string name="style_icon_note">새 아이콘은 앱을 나가면 나타나요. 홈 화면에서 잠시 사라질 수 있어요.</string>
     <string name="notice_tv_standby">%1$s이(가) 대기 모드예요. 리모컨으로 켠 다음 다시 시도해 주세요.</string>
+    <string name="audio_on_tv_note">TV 리모컨으로 선택해 주세요.</string>
     <plurals name="browser_found">
         <item quantity="other">동영상 %d개</item>
     </plurals>

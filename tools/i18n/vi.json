@@ -424,7 +424,8 @@
   "style_show_tv": "Hiển thị trên TV",
   "style_icon": "Biểu tượng ứng dụng",
   "style_icon_note": "Biểu tượng mới sẽ xuất hiện khi bạn thoát ứng dụng. Nó có thể biến mất khỏi màn hình chính trong giây lát.",
-  "notice_tv_standby": "%1$s đang ở chế độ chờ. Hãy bật bằng điều khiển từ xa rồi thử lại."
+  "notice_tv_standby": "%1$s đang ở chế độ chờ. Hãy bật bằng điều khiển từ xa rồi thử lại.",
+  "audio_on_tv_note": "Hãy chọn bằng điều khiển của TV."
  },
  "plurals": {
   "browser_found": {

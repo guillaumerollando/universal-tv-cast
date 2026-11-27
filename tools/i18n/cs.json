@@ -424,7 +424,8 @@
   "style_show_tv": "Zobrazit v televizi",
   "style_icon": "Ikona aplikace",
   "style_icon_note": "Nová ikona se objeví, jakmile aplikaci opustíte. Může na chvíli zmizet z domovské obrazovky.",
-  "notice_tv_standby": "%1$s je v pohotovostním režimu. Zapněte ji dálkovým ovladačem a zkuste to znovu."
+  "notice_tv_standby": "%1$s je v pohotovostním režimu. Zapněte ji dálkovým ovladačem a zkuste to znovu.",
+  "audio_on_tv_note": "Vyberte ji dálkovým ovladačem televize."
  },
  "plurals": {
   "browser_found": {

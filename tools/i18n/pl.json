@@ -424,7 +424,8 @@
   "style_show_tv": "Pokaż na telewizorze",
   "style_icon": "Ikona aplikacji",
   "style_icon_note": "Nowa ikona pojawi się po wyjściu z aplikacji. Może na chwilę zniknąć z ekranu głównego.",
-  "notice_tv_standby": "%1$s jest w trybie czuwania. Włącz go pilotem i spróbuj ponownie."
+  "notice_tv_standby": "%1$s jest w trybie czuwania. Włącz go pilotem i spróbuj ponownie.",
+  "audio_on_tv_note": "Wybierz go pilotem telewizora."
  },
  "plurals": {
   "browser_found": {

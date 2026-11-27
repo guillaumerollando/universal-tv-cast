@@ -288,6 +288,7 @@
     <string name="settings_smooth_slides_sub">Experimentell. Sendet das Album als ein Live-Video mit Überblendung. Viele Fernseher zeigen es verzögert: ausgeschaltet lassen, wenn die Fotos langsam wechseln.</string>
     <string name="episode_label">Staffel %1$d · Folge %2$d</string>
     <string name="subs_in_video">Schon im Video</string>
+    <string name="audio_on_tv_note">Wähle sie mit der TV-Fernbedienung.</string>
     <string name="subs_in_video_note">Wähle sie mit der TV-Fernbedienung.</string>
     <string name="browser_live">Live</string>
     <string name="browser_next_episode">Folge %1$d</string>

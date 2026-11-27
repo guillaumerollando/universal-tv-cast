@@ -476,12 +476,11 @@ object TvCast {
         val inVideo = inside?.subs.orEmpty()
         // Plusieurs voix dans le fichier (VF, VO… ; MKV, MP4, TS) : au choix, sur le téléphone comme sur la télé.
         val voices = inside?.voices.orEmpty()
-        proxy.mp4Tracks = inside?.mp4
-        proxy.tsInfo = inside?.ts
         if (voices.size >= 2) {
             val tracks = voices.map { Hls.Track(it.name, it.lang, it.id, it.default) }
             val def = tracks.indexOfFirst { it.default }.takeIf { it >= 0 } ?: 0
-            proxy.audioChoice = tracks[def].uri
+            // Voix d'un fichier : choisies sur le téléphone ; sur la télé, avec sa télécommande (rien à retoucher).
+            proxy.audioChoice = null
             Log.i("TvCast", "voix du fichier : ${tracks.joinToString { it.name }}")
             _state.update { it.copy(audioTracks = tracks, audioIndex = def) }
         } else if (_state.value.audioTracks.isEmpty()) proxy.audioChoice = null
@@ -1452,7 +1451,9 @@ object TvCast {
         val s = _state.value
         val t = s.audioTracks.getOrNull(index) ?: return
         if (index == s.audioIndex) return
-        proxy.audioChoice = t.uri
+        val fileVoice = !t.uri.startsWith("http") && !t.uri.startsWith(com.rollandostudio.universaltvcast.proxy.Dash.AUDIO)
+        if (fileVoice && !s.onPhone) return // sur la télé, la voix d'un fichier se choisit avec sa télécommande
+        if (!fileVoice) proxy.audioChoice = t.uri
         _state.update { it.copy(audioIndex = index) }
         if (s.onPhone) PhoneEngine.selectAudio(t.name, t.lang, index)
         else if (s.active) exec { castAt(currentPosition()) }

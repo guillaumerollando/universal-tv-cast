@@ -424,7 +424,8 @@
   "style_show_tv": "Tampilkan di TV",
   "style_icon": "Ikon aplikasi",
   "style_icon_note": "Ikon baru muncul setelah Anda keluar dari aplikasi. Ikon mungkin hilang sejenak dari layar utama.",
-  "notice_tv_standby": "%1$s sedang siaga. Nyalakan dengan remotnya, lalu coba lagi."
+  "notice_tv_standby": "%1$s sedang siaga. Nyalakan dengan remotnya, lalu coba lagi.",
+  "audio_on_tv_note": "Pilih dengan remote TV."
  },
  "plurals": {
   "browser_found": {

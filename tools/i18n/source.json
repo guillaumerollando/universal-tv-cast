@@ -1683,6 +1683,10 @@
   "notice_tv_standby": {
    "en": "%1$s is on standby. Turn it on with its remote, then try again.",
    "fr": "%1$s est en veille. Allume-la avec sa télécommande, puis réessaie."
+  },
+  "audio_on_tv_note": {
+   "en": "Choose it with your TV remote.",
+   "fr": "Choisis-la avec la télécommande de la télé."
   }
  },
  "plurals": {

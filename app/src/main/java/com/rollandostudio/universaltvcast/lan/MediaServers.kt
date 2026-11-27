@@ -168,10 +168,14 @@ object MediaServers {
                 .firstOrNull { r -> r !== best && r.getAttribute("protocolInfo").contains("image/") }?.textContent?.trim()
             out += LanEntry(name = title, folder = false, ref = url, kind = kind, mime = mime,
                 size = best.getAttribute("size").toLongOrNull(), duration = hms(best.getAttribute("duration")),
-                thumb = thumb, device = d)
+                thumb = thumb, device = d, date = text(it, "dc:date")?.let(::isoDate))
         }
         return out
     }
+
+    private fun isoDate(s: String): Long? = runCatching {
+        java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.ROOT).parse(s.take(10))?.time
+    }.getOrNull()
 
     private fun hms(s: String?): Double? {
         val p = s?.takeIf { it.isNotBlank() }?.split(':') ?: return null

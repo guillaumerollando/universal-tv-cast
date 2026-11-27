@@ -358,6 +358,17 @@
     <string name="action_no_thanks">ไม่ ขอบคุณ</string>
     <string name="net_help_linux">ง่ายที่สุด: การตั้งค่า → การแบ่งปัน → เปิด “การแบ่งปันสื่อ” แล้วเลือกโฟลเดอร์ พีซีจะปรากฏที่นี่เอง (ถ้าไม่เห็นวิดีโอ MP4: ติดตั้ง gstreamer1.0-plugins-good และ gstreamer1.0-libav)\nหรือแบบ Windows: Files → คลิกขวาที่โฟลเดอร์ → “Local Network Share” แล้วตั้งรหัสผ่านสำหรับแชร์หนึ่งครั้ง (sudo smbpasswd -a ชื่อของคุณ)</string>
     <string name="home_favorites">รายการโปรดของฉัน</string>
+    <string name="settings_art">โปสเตอร์ภาพยนตร์</string>
+    <string name="settings_art_sub">แสดงโปสเตอร์และชื่อจริงของวิดีโอบน NAS หรือคอมพิวเตอร์ของคุณ ค้นหาเฉพาะชื่อที่จัดระเบียบแล้ว (แค็ตตาล็อกของ Stremio) ไม่เคยส่งไฟล์</string>
+    <string name="lan_sort">เรียงลำดับ</string>
+    <string name="lan_sort_name">ชื่อ</string>
+    <string name="lan_sort_recent">เพิ่มล่าสุด</string>
+    <string name="lan_sort_year">ปี</string>
+    <string name="lan_hide_watched">ซ่อนที่ดูแล้ว</string>
+    <string name="lan_season">ซีซัน %1$d</string>
+    <string name="lan_watched">ดูแล้ว</string>
+    <string name="lan_other_files">ไฟล์อื่น</string>
+    <string name="net_unreachable">%1$s ไม่ตอบสนอง ตรวจสอบว่าเปิดอยู่และอยู่ใน Wi-Fi เดียวกัน</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>

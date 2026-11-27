@@ -86,6 +86,17 @@
     <string name="home_videos_short">Du téléphone</string>
     <string name="home_photos">Album</string>
     <string name="home_photos_short">Photos et vidéos</string>
+    <string name="settings_art">Affiches des films</string>
+    <string name="settings_art_sub">Montre l’affiche et le vrai titre des vidéos de ton NAS ou de ton ordinateur. Seul le titre nettoyé est cherché (annuaire de Stremio), jamais le fichier.</string>
+    <string name="lan_sort">Trier</string>
+    <string name="lan_sort_name">Nom</string>
+    <string name="lan_sort_recent">Ajoutés récemment</string>
+    <string name="lan_sort_year">Année</string>
+    <string name="lan_hide_watched">Masquer les vus</string>
+    <string name="lan_season">Saison %1$d</string>
+    <string name="lan_watched">Vu</string>
+    <string name="lan_other_files">Autres fichiers</string>
+    <string name="net_unreachable">%1$s ne répond pas. Vérifie qu’il est allumé et sur le même Wi-Fi.</string>
     <string name="home_network">Réseau</string>
     <string name="home_network_short">Ordinateur, NAS</string>
     <string name="net_searching">Recherche sur ton réseau…</string>

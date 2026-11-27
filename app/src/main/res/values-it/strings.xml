@@ -86,6 +86,17 @@
     <string name="home_videos_short">Dal telefono</string>
     <string name="home_photos">Album</string>
     <string name="home_photos_short">Foto e video</string>
+    <string name="settings_art">Locandine dei film</string>
+    <string name="settings_art_sub">Mostra la locandina e il titolo vero dei video del NAS o del computer. Si cerca solo il titolo ripulito (catalogo di Stremio), mai il file.</string>
+    <string name="lan_sort">Ordina</string>
+    <string name="lan_sort_name">Nome</string>
+    <string name="lan_sort_recent">Aggiunti di recente</string>
+    <string name="lan_sort_year">Anno</string>
+    <string name="lan_hide_watched">Nascondi visti</string>
+    <string name="lan_season">Stagione %1$d</string>
+    <string name="lan_watched">Visto</string>
+    <string name="lan_other_files">Altri file</string>
+    <string name="net_unreachable">%1$s non risponde. Controlla che sia acceso e sulla stessa rete Wi-Fi.</string>
     <string name="home_network">Rete</string>
     <string name="home_network_short">Computer, NAS</string>
     <string name="net_searching">Ricerca nella tua rete…</string>

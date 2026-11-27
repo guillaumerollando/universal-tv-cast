@@ -137,11 +137,12 @@ object Smb {
         dir.listFiles().mapNotNull { f ->
             val name = f.name.trimEnd('/')
             if (name.startsWith(".") || runCatching { f.isHidden }.getOrDefault(false)) return@mapNotNull null
-            if (f.isDirectory) LanEntry(name = name, folder = true, ref = "$ref/$name", device = d)
+            val date = runCatching { f.lastModified() }.getOrNull()?.takeIf { it > 0 }
+            if (f.isDirectory) LanEntry(name = name, folder = true, ref = "$ref/$name", device = d, date = date)
             else {
                 val kind = Lan.kindOf(null, name).takeIf { it != LanEntry.Kind.OTHER } ?: return@mapNotNull null
                 LanEntry(name = name, folder = false, ref = "$ref/$name", kind = kind, mime = Lan.mimeOf(name),
-                    size = runCatching { f.length() }.getOrNull(), device = d)
+                    size = runCatching { f.length() }.getOrNull(), device = d, date = date)
             }
         }.sortedWith(Lan.ORDER)
     } catch (e: SmbAuthException) {

@@ -356,7 +356,18 @@
   "action_notif_allow": "แสดงรีโมต",
   "action_no_thanks": "ไม่ ขอบคุณ",
   "net_help_linux": "ง่ายที่สุด: การตั้งค่า → การแบ่งปัน → เปิด “การแบ่งปันสื่อ” แล้วเลือกโฟลเดอร์ พีซีจะปรากฏที่นี่เอง (ถ้าไม่เห็นวิดีโอ MP4: ติดตั้ง gstreamer1.0-plugins-good และ gstreamer1.0-libav)\nหรือแบบ Windows: Files → คลิกขวาที่โฟลเดอร์ → “Local Network Share” แล้วตั้งรหัสผ่านสำหรับแชร์หนึ่งครั้ง (sudo smbpasswd -a ชื่อของคุณ)",
-  "home_favorites": "รายการโปรดของฉัน"
+  "home_favorites": "รายการโปรดของฉัน",
+  "settings_art": "โปสเตอร์ภาพยนตร์",
+  "settings_art_sub": "แสดงโปสเตอร์และชื่อจริงของวิดีโอบน NAS หรือคอมพิวเตอร์ของคุณ ค้นหาเฉพาะชื่อที่จัดระเบียบแล้ว (แค็ตตาล็อกของ Stremio) ไม่เคยส่งไฟล์",
+  "lan_sort": "เรียงลำดับ",
+  "lan_sort_name": "ชื่อ",
+  "lan_sort_recent": "เพิ่มล่าสุด",
+  "lan_sort_year": "ปี",
+  "lan_hide_watched": "ซ่อนที่ดูแล้ว",
+  "lan_season": "ซีซัน %1$d",
+  "lan_watched": "ดูแล้ว",
+  "lan_other_files": "ไฟล์อื่น",
+  "net_unreachable": "%1$s ไม่ตอบสนอง ตรวจสอบว่าเปิดอยู่และอยู่ใน Wi-Fi เดียวกัน"
  },
  "plurals": {
   "browser_found": {

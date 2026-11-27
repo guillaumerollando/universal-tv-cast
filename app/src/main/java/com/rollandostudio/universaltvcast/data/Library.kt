@@ -202,7 +202,8 @@ object Library {
     fun setContinuous(on: Boolean) { _continuous.value = on; prefs.edit().putBoolean("continuous", on).apply() }
 
     fun addRecent(m: Media, live: Boolean = false) {
-        if (m.isLocal) return
+        // Fichiers du téléphone : pas dans « Reprendre » ; ceux du réseau (NAS, ordinateur) : oui.
+        if (m.isLocal && !com.rollandostudio.universaltvcast.lan.LanStore.isLan(m.url)) return
         val r00 = Recent(m.title, m.url, m.mime, m.headers, m.pageUrl, System.currentTimeMillis(),
             m.backdropUrl ?: m.posterUrl, m.fileName, m.season, m.episode, live = live, nextUrl = m.nextUrl) // image large : elle remplit la carte
         // Une chaîne garde le nom qu'on lui a donné.
@@ -231,6 +232,7 @@ object Library {
 
     /** Avancement de la lecture en cours (noté régulièrement), pour ne pas proposer de reprendre ce qui est fini. */
     fun setProgress(url: String, pos: Double, dur: Double) {
+        com.rollandostudio.universaltvcast.lan.LanStore.progress(url, pos, dur)
         if (_recents.value.none { it.url == url }) return
         _recents.value = _recents.value.map { if (it.url == url) it.copy(pos = pos, dur = dur) else it }
         saveRecents()
@@ -243,6 +245,7 @@ object Library {
     }
 
     fun markFinished(url: String) {
+        com.rollandostudio.universaltvcast.lan.LanStore.finished(url)
         if (_recents.value.none { it.url == url }) return
         _recents.value = _recents.value.map { if (it.url == url) it.copy(done = true) else it }
         saveRecents()

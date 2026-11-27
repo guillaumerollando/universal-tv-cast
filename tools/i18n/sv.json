@@ -356,7 +356,18 @@
   "action_notif_allow": "Visa fjärrkontrollen",
   "action_no_thanks": "Nej tack",
   "net_help_linux": "Enklast: Inställningar → Delning → slå på ”Mediadelning” och välj mappar; datorn dyker upp här av sig själv. (Saknas MP4-videor: installera gstreamer1.0-plugins-good och gstreamer1.0-libav.)\nEller som i Windows: Filer → högerklicka på mappen → ”Delning i lokalt nätverk”, och ange ett delningslösenord en gång (sudo smbpasswd -a ditt_namn).",
-  "home_favorites": "Mina favoriter"
+  "home_favorites": "Mina favoriter",
+  "settings_art": "Filmaffischer",
+  "settings_art_sub": "Visar affisch och riktig titel för videor på din NAS eller dator. Bara den rensade titeln slås upp (Stremios katalog), aldrig filen.",
+  "lan_sort": "Sortera",
+  "lan_sort_name": "Namn",
+  "lan_sort_recent": "Nyligen tillagda",
+  "lan_sort_year": "År",
+  "lan_hide_watched": "Dölj sedda",
+  "lan_season": "Säsong %1$d",
+  "lan_watched": "Sedd",
+  "lan_other_files": "Andra filer",
+  "net_unreachable": "%1$s svarar inte. Kontrollera att den är på och i samma wifi."
  },
  "plurals": {
   "browser_found": {

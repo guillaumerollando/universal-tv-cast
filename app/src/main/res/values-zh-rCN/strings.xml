@@ -358,6 +358,17 @@
     <string name="action_no_thanks">不用了</string>
     <string name="net_help_linux">最简单：设置 → 共享 → 打开“媒体共享”并选择文件夹，电脑会自动出现在这里。（如果看不到 MP4 视频：安装 gstreamer1.0-plugins-good 和 gstreamer1.0-libav。）\n或者像 Windows 一样：文件 → 右键点击文件夹 → “本地网络共享”，然后设置一次共享密码（sudo smbpasswd -a 你的用户名）。</string>
     <string name="home_favorites">我的收藏</string>
+    <string name="settings_art">电影海报</string>
+    <string name="settings_art_sub">显示 NAS 或电脑上视频的海报和正式片名。只会查询整理后的片名(Stremio 目录),绝不会上传文件。</string>
+    <string name="lan_sort">排序</string>
+    <string name="lan_sort_name">名称</string>
+    <string name="lan_sort_recent">最近添加</string>
+    <string name="lan_sort_year">年份</string>
+    <string name="lan_hide_watched">隐藏已看</string>
+    <string name="lan_season">第 %1$d 季</string>
+    <string name="lan_watched">已看</string>
+    <string name="lan_other_files">其他文件</string>
+    <string name="net_unreachable">%1$s 没有响应。请确认它已开机，并连接在同一个 Wi-Fi。</string>
     <plurals name="browser_found">
         <item quantity="other">%d 个视频</item>
     </plurals>

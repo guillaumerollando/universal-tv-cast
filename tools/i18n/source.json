@@ -1411,6 +1411,50 @@
   "home_favorites": {
    "en": "My favourites",
    "fr": "Mes favoris"
+  },
+  "settings_art": {
+   "en": "Film posters",
+   "fr": "Affiches des films"
+  },
+  "settings_art_sub": {
+   "en": "Shows the poster and real title of videos on your NAS or computer. Only the cleaned-up title is looked up (Stremio’s catalogue), never the file.",
+   "fr": "Montre l’affiche et le vrai titre des vidéos de ton NAS ou de ton ordinateur. Seul le titre nettoyé est cherché (annuaire de Stremio), jamais le fichier."
+  },
+  "lan_sort": {
+   "en": "Sort",
+   "fr": "Trier"
+  },
+  "lan_sort_name": {
+   "en": "Name",
+   "fr": "Nom"
+  },
+  "lan_sort_recent": {
+   "en": "Recently added",
+   "fr": "Ajoutés récemment"
+  },
+  "lan_sort_year": {
+   "en": "Year",
+   "fr": "Année"
+  },
+  "lan_hide_watched": {
+   "en": "Hide watched",
+   "fr": "Masquer les vus"
+  },
+  "lan_season": {
+   "en": "Season %1$d",
+   "fr": "Saison %1$d"
+  },
+  "lan_watched": {
+   "en": "Watched",
+   "fr": "Vu"
+  },
+  "lan_other_files": {
+   "en": "Other files",
+   "fr": "Autres fichiers"
+  },
+  "net_unreachable": {
+   "en": "%1$s isn’t answering. Check that it’s on and on the same Wi-Fi.",
+   "fr": "%1$s ne répond pas. Vérifie qu’il est allumé et sur le même Wi-Fi."
   }
  },
  "plurals": {

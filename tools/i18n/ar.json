@@ -356,7 +356,18 @@
   "action_notif_allow": "عرض جهاز التحكم",
   "action_no_thanks": "لا، شكرًا",
   "net_help_linux": "الأسهل: الإعدادات ← المشاركة ← فعّل «مشاركة الوسائط» واختر مجلداتك؛ سيظهر حاسوبك هنا تلقائيًا. (إذا غابت مقاطع MP4: ثبّت gstreamer1.0-plugins-good و gstreamer1.0-libav.)\nأو مثل ويندوز: الملفات ← انقر بزر الفأرة الأيمن على المجلد ← «مشاركة الشبكة المحلية»، ثم عيّن كلمة مرور للمشاركة مرة واحدة (sudo smbpasswd -a اسمك).",
-  "home_favorites": "مفضلاتي"
+  "home_favorites": "مفضلاتي",
+  "settings_art": "ملصقات الأفلام",
+  "settings_art_sub": "يعرض ملصق الفيديوهات واسمها الحقيقي على جهاز NAS أو الكمبيوتر. يتم البحث عن العنوان المنظَّف فقط (فهرس Stremio) وليس الملف أبدًا.",
+  "lan_sort": "ترتيب",
+  "lan_sort_name": "الاسم",
+  "lan_sort_recent": "المضافة حديثًا",
+  "lan_sort_year": "السنة",
+  "lan_hide_watched": "إخفاء ما تمت مشاهدته",
+  "lan_season": "الموسم %1$d",
+  "lan_watched": "تمت المشاهدة",
+  "lan_other_files": "ملفات أخرى",
+  "net_unreachable": "%1$s لا يستجيب. تأكد من أنه يعمل وعلى شبكة Wi-Fi نفسها."
  },
  "plurals": {
   "browser_found": {

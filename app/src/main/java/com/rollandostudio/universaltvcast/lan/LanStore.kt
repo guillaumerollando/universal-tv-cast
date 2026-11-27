@@ -34,6 +34,14 @@ object LanStore {
 
     fun init(ctx: Context) { app = ctx.applicationContext }
 
+    /** Tri des dossiers (« name », « recent », « year ») et « masquer les vus », retenus d'une fois sur l'autre. */
+    var sort: String
+        get() = prefs.getString("sort", "name") ?: "name"
+        set(v) { prefs.edit().putString("sort", v).apply() }
+    var hideWatched: Boolean
+        get() = prefs.getBoolean("hide_watched", false)
+        set(v) { prefs.edit().putBoolean("hide_watched", v).apply() }
+
     fun all(): List<Saved> = runCatching {
         val a = JSONArray(prefs.getString("devices", "[]"))
         (0 until a.length()).map { i ->
@@ -74,6 +82,105 @@ object LanStore {
         }
         prefs.edit().putString("devices", a.toString()).remove("pw:$key").apply()
     }
+
+    // ------------------------------------------------------------------ vu, commencé, et vidéos lancées
+
+    /** Où l'on en est d'une vidéo du réseau (pour la mosaïque : barre d'avancement, « vu »). */
+    data class Watch(val pos: Double, val dur: Double, val done: Boolean) {
+        val finished: Boolean get() = done || (dur > 60 && pos >= dur - minOf(300.0, dur * 0.08))
+        val progress: Float? get() = if (dur > 0 && pos >= 30 && !finished) (pos / dur).toFloat() else null
+    }
+
+    private const val MAX_WATCH = 800
+    private val _watched = kotlinx.coroutines.flow.MutableStateFlow<Map<String, Watch>>(emptyMap())
+    @Volatile private var watchLoaded = false
+    val watched: kotlinx.coroutines.flow.StateFlow<Map<String, Watch>> get() {
+        if (!watchLoaded) {
+            watchLoaded = true
+            _watched.value = runCatching {
+                val o = JSONObject(prefs.getString("watched", "{}")!!)
+                o.keys().asSequence().associateWith { k -> o.getJSONArray(k).let { Watch(it.getDouble(0), it.getDouble(1), it.getBoolean(2)) } }
+            }.getOrDefault(emptyMap())
+        }
+        return _watched
+    }
+
+    /** Vidéos lancées depuis le réseau : de quoi les rouvrir (« Reprendre », épisode suivant) sans le dossier. */
+    private const val MAX_MEDIA = 300
+    private val known = java.util.concurrent.ConcurrentHashMap<String, JSONObject>()
+    @Volatile private var knownLoaded = false
+
+    private fun loadKnown() {
+        if (knownLoaded) return
+        knownLoaded = true
+        runCatching { val o = JSONObject(prefs.getString("media", "{}")!!); o.keys().forEach { known[it] = o.getJSONObject(it) } }
+    }
+
+    /** Retient une vidéo du réseau (et la suivante du dossier, pour « Épisode suivant »). */
+    @Synchronized
+    fun remember(m: com.rollandostudio.universaltvcast.cast.Media, device: LanDevice? = null) {
+        loadKnown()
+        known[m.url] = JSONObject().put("title", m.title)
+            .put("device", device?.name ?: known[m.url]?.optString("device").orEmpty())
+            .put("host", device?.host ?: known[m.url]?.optString("host").orEmpty())
+            .put("port", device?.port ?: known[m.url]?.optInt("port", -1) ?: -1)
+            .put("smb", device?.kind == LanDevice.Kind.SHARE).put("mime", m.mime ?: "").put("file", m.fileName ?: "")
+            .put("poster", m.posterUrl ?: "").put("backdrop", m.backdropUrl ?: "").put("logo", m.logoUrl ?: "")
+            .put("season", m.season ?: -1).put("episode", m.episode ?: -1).put("next", m.nextUrl ?: "")
+            .put("t", System.currentTimeMillis())
+        val keep = known.entries.sortedByDescending { it.value.optLong("t") }.take(MAX_MEDIA)
+        val o = JSONObject(); keep.forEach { (k, v) -> o.put(k, v) }
+        known.keys.retainAll(keep.map { it.key }.toSet())
+        prefs.edit().putString("media", o.toString()).apply()
+    }
+
+    fun isLan(url: String): Boolean { loadKnown(); return known.containsKey(url) }
+
+    fun mediaFor(url: String): com.rollandostudio.universaltvcast.cast.Media? {
+        loadKnown()
+        val o = known[url] ?: return null
+        fun s(k: String) = o.optString(k).ifEmpty { null }
+        return com.rollandostudio.universaltvcast.cast.Media(
+            url = url, title = o.optString("title"), mime = s("mime"), fileName = s("file"),
+            posterUrl = s("poster"), backdropUrl = s("backdrop"), logoUrl = s("logo"),
+            season = o.optInt("season", -1).takeIf { it >= 0 }, episode = o.optInt("episode", -1).takeIf { it >= 0 },
+            nextUrl = s("next"),
+            // Reprendre là où l'on s'était arrêté (quelques secondes avant).
+            startSec = watched.value[url]?.takeIf { it.progress != null }?.let { it.pos - 5 } ?: 0.0,
+        )
+    }
+
+    /** Nom de l'appareil d'où vient la vidéo (pour « … ne répond pas »). */
+    fun deviceName(url: String): String = known[url]?.optString("device")?.ifEmpty { null } ?: android.net.Uri.parse(url).host.orEmpty()
+
+    /**
+     * La vidéo est-elle encore là (appareil allumé, fichier présent) ? Une vraie demande à l'appareil, pas seulement
+     * « le port répond » (certains réseaux répondent à sa place). 6 s au plus ; à appeler hors du fil principal.
+     */
+    fun reachable(url: String): Boolean = runCatching {
+        if (url.startsWith("content:")) Smb.open(android.net.Uri.parse(url)).exists()
+        else {
+            val c = java.net.URL(url).openConnection() as java.net.HttpURLConnection
+            try {
+                c.requestMethod = "HEAD"; c.connectTimeout = 4000; c.readTimeout = 4000
+                c.responseCode in 200..399 || c.responseCode == 405
+            } finally { c.disconnect() }
+        }
+    }.getOrDefault(false)
+
+    @Synchronized
+    fun progress(url: String, pos: Double, dur: Double, done: Boolean = false) {
+        if (!isLan(url)) return
+        val cur = watched.value
+        val w = Watch(pos, dur, done || cur[url]?.done == true && pos < 1)
+        val next = (cur - url) + (url to w)
+        _watched.value = if (next.size > MAX_WATCH) next.entries.drop(next.size - MAX_WATCH).associate { it.key to it.value } else next
+        val o = JSONObject()
+        _watched.value.forEach { (k, v) -> o.put(k, org.json.JSONArray().put(v.pos).put(v.dur).put(v.done)) }
+        prefs.edit().putString("watched", o.toString()).apply()
+    }
+
+    fun finished(url: String) { val w = watched.value[url]; progress(url, w?.pos ?: 0.0, w?.dur ?: 0.0, done = true) }
 
     // ------------------------------------------------------------------ dossiers favoris
 

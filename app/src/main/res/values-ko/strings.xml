@@ -358,6 +358,17 @@
     <string name="action_no_thanks">괜찮아요</string>
     <string name="net_help_linux">가장 쉬운 방법: 설정 → 공유 → \'미디어 공유\'를 켜고 폴더를 고르면 PC가 여기에 자동으로 나타납니다. (MP4 동영상이 안 보이면 gstreamer1.0-plugins-good, gstreamer1.0-libav를 설치하세요.)\n또는 Windows처럼: 파일 → 폴더를 오른쪽 클릭 → \'로컬 네트워크 공유\' 후 공유 비밀번호를 한 번 설정합니다 (sudo smbpasswd -a 사용자이름).</string>
     <string name="home_favorites">즐겨찾기</string>
+    <string name="settings_art">영화 포스터</string>
+    <string name="settings_art_sub">NAS나 컴퓨터에 있는 동영상의 포스터와 실제 제목을 보여 줍니다. 정리된 제목만 검색하며(Stremio 카탈로그) 파일은 절대 보내지 않습니다.</string>
+    <string name="lan_sort">정렬</string>
+    <string name="lan_sort_name">이름</string>
+    <string name="lan_sort_recent">최근 추가</string>
+    <string name="lan_sort_year">연도</string>
+    <string name="lan_hide_watched">시청한 항목 숨기기</string>
+    <string name="lan_season">시즌 %1$d</string>
+    <string name="lan_watched">시청함</string>
+    <string name="lan_other_files">기타 파일</string>
+    <string name="net_unreachable">%1$s이(가) 응답하지 않습니다. 켜져 있고 같은 Wi-Fi에 연결되어 있는지 확인하세요.</string>
     <plurals name="browser_found">
         <item quantity="other">동영상 %d개</item>
     </plurals>

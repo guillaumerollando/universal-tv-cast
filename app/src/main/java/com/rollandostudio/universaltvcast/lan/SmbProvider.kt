@@ -26,6 +26,7 @@ import java.io.FileNotFoundException
 class SmbProvider : ContentProvider() {
     override fun onCreate(): Boolean {
         LanStore.init(context!!)
+        Catalog.init(context!!)
         return true
     }
 

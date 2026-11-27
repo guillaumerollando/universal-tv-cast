@@ -358,6 +358,17 @@
     <string name="action_no_thanks">Nej tack</string>
     <string name="net_help_linux">Enklast: Inställningar → Delning → slå på ”Mediadelning” och välj mappar; datorn dyker upp här av sig själv. (Saknas MP4-videor: installera gstreamer1.0-plugins-good och gstreamer1.0-libav.)\nEller som i Windows: Filer → högerklicka på mappen → ”Delning i lokalt nätverk”, och ange ett delningslösenord en gång (sudo smbpasswd -a ditt_namn).</string>
     <string name="home_favorites">Mina favoriter</string>
+    <string name="settings_art">Filmaffischer</string>
+    <string name="settings_art_sub">Visar affisch och riktig titel för videor på din NAS eller dator. Bara den rensade titeln slås upp (Stremios katalog), aldrig filen.</string>
+    <string name="lan_sort">Sortera</string>
+    <string name="lan_sort_name">Namn</string>
+    <string name="lan_sort_recent">Nyligen tillagda</string>
+    <string name="lan_sort_year">År</string>
+    <string name="lan_hide_watched">Dölj sedda</string>
+    <string name="lan_season">Säsong %1$d</string>
+    <string name="lan_watched">Sedd</string>
+    <string name="lan_other_files">Andra filer</string>
+    <string name="net_unreachable">%1$s svarar inte. Kontrollera att den är på och i samma wifi.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videor</item>

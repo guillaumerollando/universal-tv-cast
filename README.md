@@ -17,7 +17,13 @@ sur le téléphone quand il n'y a pas de télé allumée.
 - **Réseau** : NAS, box et ordinateurs de la maison. Serveurs multimédias DLNA / UPnP trouvés tout seuls (la télé
   lit leurs vidéos directement chez eux) et dossiers partagés Windows / Mac / NAS en SMB 1 à 3.0.2 (le téléphone
   relaie le fichier, rien n'est copié). Appareils retenus, mot de passe chiffré par le Keystore d'Android ; aide
-  « partager un dossier » pour Windows, Mac et NAS.
+  « partager un dossier » pour Windows, Mac, Linux et NAS (blocs dépliables). Dossiers et appareils en favoris (★).
+- **Vidéothèque du réseau** : dossiers d'abord, puis les films en mosaïque d'affiches ; un dossier d'épisodes devient
+  une série (affiche, saisons, épisodes avec image et titre). Informations prises dans cet ordre : balises du fichier
+  (titre, année, jaquette intégrée), images posées à côté (`poster.jpg`, `Film.jpg`, conventions Kodi / Jellyfin),
+  nom du fichier, puis l'annuaire de Stremio (réglage « Affiches des films », seul le titre nettoyé part).
+  Tri (nom, ajout récent, année), « masquer les vus », vu / barre d'avancement. Vidéos du réseau dans « Reprendre »,
+  « Épisode suivant » dans le dossier ; appareil éteint : « … ne répond pas ».
 - **Lecture sur le téléphone** (ExoPlayer) : plein écran, double appui ±10 s, mini-vidéo déplaçable.
 - **Télécommande** : lecture, ±10 s, barre, volume de la télé (boutons du téléphone), notification.
 - **Sous-titres** SRT / VTT / ASS (convertis pour la télé), langue audio, décalage.
@@ -45,7 +51,7 @@ RenderingControl (`dlna/Dlna.kt`).
 | `proxy/` | Serveur relais pour la télé : HLS, enregistrement du direct, sous-titres, MKV/MP4 |
 | `data/` | Historique et favoris (`Library`), chaînes et listes (`Iptv`, `IptvStore`, `Channels`), guide (`Epg`), économie d'énergie |
 | `ui/` | Écrans Compose (accueil, lecteur, chaînes, guide, réglages), widgets (`Widgets.kt`), signalement (`Report`) |
-| `lan/` | Réseau de la maison : serveurs multimédias (`MediaServers`), dossiers partagés (`Smb`, lus en `content://` par `SmbProvider`), appareils retenus (`LanStore`) |
+| `lan/` | Réseau de la maison : serveurs multimédias (`MediaServers`), dossiers partagés (`Smb`, lus en `content://` par `SmbProvider`), appareils, favoris, vu / commencé (`LanStore`), titres et affiches (`Catalog`) ; écran `ui/NetworkScreen` + mosaïque `ui/LanLibrary` |
 | `dlna/`, `net/`, `subs/` | Protocole DLNA, HTTP, recherche de sous-titres |
 
 Les textes des 23 langues viennent de `tools/strings.py` et `tools/i18n/*.json` (`python3 -I tools/strings.py`

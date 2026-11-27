@@ -358,6 +358,17 @@
     <string name="action_no_thanks">Ne, děkuji</string>
     <string name="net_help_linux">Nejjednodušší: Nastavení → Sdílení → zapni „Sdílení médií“ a vyber složky; počítač se tu objeví sám. (Chybí-li videa MP4: nainstaluj gstreamer1.0-plugins-good a gstreamer1.0-libav.)\nNebo jako ve Windows: Soubory → pravé tlačítko na složce → „Sdílení v místní síti“ a jednou nastav heslo pro sdílení (sudo smbpasswd -a tvoje_jmeno).</string>
     <string name="home_favorites">Moje oblíbené</string>
+    <string name="settings_art">Plakáty filmů</string>
+    <string name="settings_art_sub">Zobrazí plakát a skutečný název videí na tvém NAS nebo počítači. Hledá se jen upravený název (katalog Stremio), nikdy soubor.</string>
+    <string name="lan_sort">Řadit</string>
+    <string name="lan_sort_name">Název</string>
+    <string name="lan_sort_recent">Nedávno přidané</string>
+    <string name="lan_sort_year">Rok</string>
+    <string name="lan_hide_watched">Skrýt zhlédnuté</string>
+    <string name="lan_season">Řada %1$d</string>
+    <string name="lan_watched">Zhlédnuto</string>
+    <string name="lan_other_files">Ostatní soubory</string>
+    <string name="net_unreachable">%1$s neodpovídá. Zkontroluj, že je zapnuté a ve stejné síti Wi-Fi.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="few">%d videa</item>

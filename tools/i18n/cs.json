@@ -356,7 +356,18 @@
   "action_notif_allow": "Zobrazit ovladač",
   "action_no_thanks": "Ne, děkuji",
   "net_help_linux": "Nejjednodušší: Nastavení → Sdílení → zapni „Sdílení médií“ a vyber složky; počítač se tu objeví sám. (Chybí-li videa MP4: nainstaluj gstreamer1.0-plugins-good a gstreamer1.0-libav.)\nNebo jako ve Windows: Soubory → pravé tlačítko na složce → „Sdílení v místní síti“ a jednou nastav heslo pro sdílení (sudo smbpasswd -a tvoje_jmeno).",
-  "home_favorites": "Moje oblíbené"
+  "home_favorites": "Moje oblíbené",
+  "settings_art": "Plakáty filmů",
+  "settings_art_sub": "Zobrazí plakát a skutečný název videí na tvém NAS nebo počítači. Hledá se jen upravený název (katalog Stremio), nikdy soubor.",
+  "lan_sort": "Řadit",
+  "lan_sort_name": "Název",
+  "lan_sort_recent": "Nedávno přidané",
+  "lan_sort_year": "Rok",
+  "lan_hide_watched": "Skrýt zhlédnuté",
+  "lan_season": "Řada %1$d",
+  "lan_watched": "Zhlédnuto",
+  "lan_other_files": "Ostatní soubory",
+  "net_unreachable": "%1$s neodpovídá. Zkontroluj, že je zapnuté a ve stejné síti Wi-Fi."
  },
  "plurals": {
   "browser_found": {

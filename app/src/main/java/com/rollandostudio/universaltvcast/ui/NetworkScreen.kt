@@ -41,6 +41,8 @@ import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.automirrored.rounded.Sort
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.StarBorder
 import androidx.compose.material.icons.rounded.Visibility
@@ -185,12 +187,14 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
     // Ouvert depuis un dossier favori de l'accueil : directement dedans (« retour » mène à la liste des appareils).
     LaunchedEffect(start) { start?.let { go(Place(it.device(), it.ref.ifEmpty { null }, it.title)) } }
     val favs by LanStore.folders.collectAsState()
+    var sort by remember { mutableStateOf(LanStore.sort) }
+    var hideWatched by remember { mutableStateOf(LanStore.hideWatched) }
     fun up() {
         path.removeAt(path.lastIndex)
         if (path.isEmpty()) { entries = null; error = null; loading = false } else open(path.last())
     }
 
-    fun play(e: LanEntry, all: List<LanEntry>) {
+    fun play(e: LanEntry, all: List<LanEntry>, infos: Map<String, com.rollandostudio.universaltvcast.lan.Catalog.Info> = emptyMap()) {
         val d = e.device ?: return
         when (e.kind) {
             LanEntry.Kind.PHOTO -> {
@@ -199,9 +203,33 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
                 val i = photos.indexOf(e).coerceAtLeast(0)
                 TvCast.openPhotos((photos.drop(i) + photos.take(i)).map { Smb.contentUri(d, it.ref) })
             }
+            LanEntry.Kind.VIDEO -> {
+                // Toutes les vidéos du dossier sont retenues dans l'ordre : « Épisode suivant » et « Reprendre » les
+                // rouvrent sans repasser par le dossier.
+                val order = all.filter { it.kind == LanEntry.Kind.VIDEO }
+                val watched = LanStore.watched.value
+                fun mediaOf(v: LanEntry, next: LanEntry?): Media {
+                    val i = infos[v.name] ?: com.rollandostudio.universaltvcast.lan.Catalog.parse(v.name)
+                    val title = when {
+                        i.isEpisode && i.episodeTitle != null -> "${i.title} – ${i.episodeTitle}"
+                        i.isEpisode -> "${i.title} S%02dE%02d".format(i.season, i.episode)
+                        else -> i.title
+                    }
+                    val url = lanUrl(v)
+                    val w = watched[url]
+                    return Media(url = url, title = title, mime = v.mime, fileName = v.name,
+                        posterUrl = i.poster ?: v.thumb, backdropUrl = i.still ?: i.backdrop, logoUrl = i.logo,
+                        season = i.season, episode = i.episode, nextUrl = next?.let(::lanUrl),
+                        startSec = if (w != null && w.progress != null) w.pos - 5 else 0.0)
+                }
+                val list = order.mapIndexed { n, v -> mediaOf(v, order.getOrNull(n + 1)) }
+                list.forEach { LanStore.remember(it, d) }
+                TvCast.open(list.firstOrNull { it.url == lanUrl(e) } ?: mediaOf(e, null))
+            }
             else -> {
                 val m = if (d.kind == LanDevice.Kind.MEDIA_SERVER) Media(url = e.ref, title = e.name, mime = e.mime, posterUrl = e.thumb)
                 else Media(url = Smb.contentUri(d, e.ref).toString(), title = e.name, mime = e.mime, fileName = e.name)
+                LanStore.remember(m, d)
                 TvCast.open(m)
             }
         }
@@ -231,6 +259,28 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
                     }
                 }
                 // ★ : le dossier ouvert ressort dans « Mes favoris » sur l'accueil.
+                // Tri et « masquer les vus », quand le dossier contient des vidéos.
+                if (entries.orEmpty().any { it.kind == LanEntry.Kind.VIDEO }) {
+                    var menu by remember { mutableStateOf(false) }
+                    Box {
+                        IconButton(onClick = { menu = true }) { Icon(Icons.AutoMirrored.Rounded.Sort, stringResource(R.string.lan_sort)) }
+                        DropdownMenu(menu, onDismissRequest = { menu = false }, shape = RoundedCornerShape(16.dp)) {
+                            listOf("name" to R.string.lan_sort_name, "recent" to R.string.lan_sort_recent, "year" to R.string.lan_sort_year).forEach { (k, label) ->
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(label)) },
+                                    leadingIcon = { if (sort == k) Icon(Icons.Rounded.Check, null) else Spacer(Modifier.size(24.dp)) },
+                                    onClick = { sort = k; LanStore.sort = k; menu = false },
+                                )
+                            }
+                            androidx.compose.material3.HorizontalDivider()
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.lan_hide_watched)) },
+                                leadingIcon = { Checkbox(hideWatched, null) },
+                                onClick = { hideWatched = !hideWatched; LanStore.hideWatched = hideWatched; menu = false },
+                            )
+                        }
+                    }
+                }
                 // L'appareil entier (racine) peut aussi être mis en favori.
                 path.lastOrNull()?.let { p ->
                     val ref = p.ref.orEmpty()
@@ -306,16 +356,13 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
                     loading -> Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
                     error != null -> Text(error!!, color = c.error, modifier = Modifier.padding(16.dp))
                     entries?.isEmpty() == true -> Text(stringResource(R.string.net_empty_folder), color = c.onSurfaceVariant, modifier = Modifier.padding(16.dp))
-                    else -> {
-                        val list = entries.orEmpty()
-                        LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(12.dp, 0.dp, 12.dp, 24.dp)) {
-                            items(list) { e ->
-                                EntryRow(e) {
-                                    if (e.folder) go(Place(e.device!!, e.ref, e.name)) else play(e, list)
-                                }
-                            }
-                        }
-                    }
+                    else -> LanFolderView(
+                        entries = entries.orEmpty(),
+                        parents = path.map { it.title },
+                        sort = sort, hideWatched = hideWatched,
+                        onFolder = { f -> go(Place(f.device!!, f.ref, f.name)) },
+                        onPlay = { e, all, infos -> play(e, all, infos) },
+                    )
                 }
             }
         }
@@ -363,6 +410,9 @@ private fun Breadcrumb(path: List<Place>, onPick: (Int) -> Unit) {
 }
 
 @Composable
+internal fun EntryRowPublic(e: LanEntry, onClick: () -> Unit) = EntryRow(e, onClick)
+
+@Composable
 private fun EntryRow(e: LanEntry, onClick: () -> Unit) {
     val c = MaterialTheme.colorScheme
     Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).clickable(onClick = onClick).padding(8.dp),
@@ -381,13 +431,13 @@ private fun EntryRow(e: LanEntry, onClick: () -> Unit) {
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f)) {
             Text(e.name, style = MaterialTheme.typography.bodyLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
-            val info = listOfNotNull(e.duration?.let { formatDuration(it) }, e.size?.takeIf { it > 0 }?.let { formatSize(it) })
+            val info = listOfNotNull(e.duration?.let { formatLanDuration(it) }, e.size?.takeIf { it > 0 }?.let { formatLanSize(it) })
             if (info.isNotEmpty()) Text(info.joinToString(" · "), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
         }
     }
 }
 
-private fun formatDuration(s: Double): String {
+internal fun formatLanDuration(s: Double): String {
     val t = s.toLong()
     return when {
         t >= 3600 -> "%d h %02d".format(t / 3600, t % 3600 / 60)
@@ -396,7 +446,7 @@ private fun formatDuration(s: Double): String {
     }
 }
 
-private fun formatSize(b: Long): String = when {
+internal fun formatLanSize(b: Long): String = when {
     b >= 1L shl 30 -> "%.1f Go".format(b / (1L shl 30).toDouble())
     b >= 1L shl 20 -> "%d Mo".format(b / (1L shl 20))
     else -> "%d ko".format((b / 1024).coerceAtLeast(1))

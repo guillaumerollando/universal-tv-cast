@@ -87,6 +87,17 @@
     <string name="home_videos_short">From this phone</string>
     <string name="home_photos">Album</string>
     <string name="home_photos_short">Photos and videos</string>
+    <string name="settings_art">Film posters</string>
+    <string name="settings_art_sub">Shows the poster and real title of videos on your NAS or computer. Only the cleaned-up title is looked up (Stremio’s catalogue), never the file.</string>
+    <string name="lan_sort">Sort</string>
+    <string name="lan_sort_name">Name</string>
+    <string name="lan_sort_recent">Recently added</string>
+    <string name="lan_sort_year">Year</string>
+    <string name="lan_hide_watched">Hide watched</string>
+    <string name="lan_season">Season %1$d</string>
+    <string name="lan_watched">Watched</string>
+    <string name="lan_other_files">Other files</string>
+    <string name="net_unreachable">%1$s isn’t answering. Check that it’s on and on the same Wi-Fi.</string>
     <string name="home_network">Network</string>
     <string name="home_network_short">Computer, NAS</string>
     <string name="net_searching">Searching your network…</string>

@@ -86,6 +86,17 @@
     <string name="home_videos_short">Van je telefoon</string>
     <string name="home_photos">Album</string>
     <string name="home_photos_short">Foto’s en video’s</string>
+    <string name="settings_art">Filmposters</string>
+    <string name="settings_art_sub">Toont de poster en echte titel van video’s op je NAS of computer. Alleen de opgeschoonde titel wordt opgezocht (catalogus van Stremio), nooit het bestand.</string>
+    <string name="lan_sort">Sorteren</string>
+    <string name="lan_sort_name">Naam</string>
+    <string name="lan_sort_recent">Recent toegevoegd</string>
+    <string name="lan_sort_year">Jaar</string>
+    <string name="lan_hide_watched">Bekeken verbergen</string>
+    <string name="lan_season">Seizoen %1$d</string>
+    <string name="lan_watched">Bekeken</string>
+    <string name="lan_other_files">Andere bestanden</string>
+    <string name="net_unreachable">%1$s reageert niet. Controleer of het aanstaat en op hetzelfde wifi-netwerk zit.</string>
     <string name="home_network">Netwerk</string>
     <string name="home_network_short">Computer, NAS</string>
     <string name="net_searching">Je netwerk doorzoeken…</string>

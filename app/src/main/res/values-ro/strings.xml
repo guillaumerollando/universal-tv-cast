@@ -358,6 +358,17 @@
     <string name="action_no_thanks">Nu, mulțumesc</string>
     <string name="net_help_linux">Cel mai simplu: Setări → Partajare → activează „Partajare media” și alege dosarele; PC-ul apare aici singur. (Dacă lipsesc videoclipurile MP4: instalează gstreamer1.0-plugins-good și gstreamer1.0-libav.)\nSau, ca pe Windows: Fișiere → clic dreapta pe dosar → „Partajare în rețeaua locală”, apoi setează o dată o parolă de partajare (sudo smbpasswd -a numele_tau).</string>
     <string name="home_favorites">Favoritele mele</string>
+    <string name="settings_art">Afișe de filme</string>
+    <string name="settings_art_sub">Arată afișul și titlul real al videoclipurilor de pe NAS-ul sau computerul tău. Se caută doar titlul curățat (catalogul Stremio), niciodată fișierul.</string>
+    <string name="lan_sort">Sortează</string>
+    <string name="lan_sort_name">Nume</string>
+    <string name="lan_sort_recent">Adăugate recent</string>
+    <string name="lan_sort_year">An</string>
+    <string name="lan_hide_watched">Ascunde vizionatele</string>
+    <string name="lan_season">Sezonul %1$d</string>
+    <string name="lan_watched">Vizionat</string>
+    <string name="lan_other_files">Alte fișiere</string>
+    <string name="net_unreachable">%1$s nu răspunde. Verifică dacă e pornit și în aceeași rețea Wi-Fi.</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>

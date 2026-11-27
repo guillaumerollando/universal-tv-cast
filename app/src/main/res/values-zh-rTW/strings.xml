@@ -358,6 +358,17 @@
     <string name="action_no_thanks">不用了</string>
     <string name="net_help_linux">最簡單：設定 → 分享 → 開啟「媒體分享」並選擇資料夾，電腦會自動出現在這裡。（如果看不到 MP4 影片：安裝 gstreamer1.0-plugins-good 與 gstreamer1.0-libav。）\n或像 Windows 一樣：檔案 → 在資料夾上按右鍵 → 「本機網路分享」，再設定一次分享密碼（sudo smbpasswd -a 你的使用者名稱）。</string>
     <string name="home_favorites">我的最愛</string>
+    <string name="settings_art">電影海報</string>
+    <string name="settings_art_sub">顯示 NAS 或電腦上影片的海報和正式片名。只會查詢整理後的片名(Stremio 目錄),絕不會上傳檔案。</string>
+    <string name="lan_sort">排序</string>
+    <string name="lan_sort_name">名稱</string>
+    <string name="lan_sort_recent">最近新增</string>
+    <string name="lan_sort_year">年份</string>
+    <string name="lan_hide_watched">隱藏已看</string>
+    <string name="lan_season">第 %1$d 季</string>
+    <string name="lan_watched">已看</string>
+    <string name="lan_other_files">其他檔案</string>
+    <string name="net_unreachable">%1$s 沒有回應。請確認它已開機，並連在同一個 Wi-Fi。</string>
     <plurals name="browser_found">
         <item quantity="other">%d 部影片</item>
     </plurals>

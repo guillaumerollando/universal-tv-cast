@@ -86,6 +86,17 @@
     <string name="home_videos_short">Do celular</string>
     <string name="home_photos">Álbum</string>
     <string name="home_photos_short">Fotos e vídeos</string>
+    <string name="settings_art">Pôsteres dos filmes</string>
+    <string name="settings_art_sub">Mostra o pôster e o título real dos vídeos do seu NAS ou computador. Só o título limpo é pesquisado (catálogo do Stremio), nunca o arquivo.</string>
+    <string name="lan_sort">Ordenar</string>
+    <string name="lan_sort_name">Nome</string>
+    <string name="lan_sort_recent">Adicionados recentemente</string>
+    <string name="lan_sort_year">Ano</string>
+    <string name="lan_hide_watched">Ocultar assistidos</string>
+    <string name="lan_season">Temporada %1$d</string>
+    <string name="lan_watched">Assistido</string>
+    <string name="lan_other_files">Outros arquivos</string>
+    <string name="net_unreachable">%1$s não responde. Verifique se está ligado e na mesma rede Wi-Fi.</string>
     <string name="home_network">Rede</string>
     <string name="home_network_short">Computador, NAS</string>
     <string name="net_searching">Procurando na sua rede…</string>

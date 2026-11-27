@@ -356,7 +356,18 @@
   "action_notif_allow": "Kumandayı göster",
   "action_no_thanks": "Hayır, teşekkürler",
   "net_help_linux": "En kolayı: Ayarlar → Paylaşım → “Ortam Paylaşımı”nı aç ve klasörleri seç; bilgisayarın burada kendiliğinden görünür. (MP4 videolar yoksa: gstreamer1.0-plugins-good ve gstreamer1.0-libav yükle.)\nYa da Windows gibi: Dosyalar → klasöre sağ tık → “Yerel Ağ Paylaşımı”, ardından bir kez paylaşım parolası belirle (sudo smbpasswd -a adın).",
-  "home_favorites": "Favorilerim"
+  "home_favorites": "Favorilerim",
+  "settings_art": "Film afişleri",
+  "settings_art_sub": "NAS'ınızdaki veya bilgisayarınızdaki videoların afişini ve gerçek adını gösterir. Yalnızca temizlenmiş ad aranır (Stremio kataloğu), dosya asla gönderilmez.",
+  "lan_sort": "Sırala",
+  "lan_sort_name": "Ad",
+  "lan_sort_recent": "Yeni eklenenler",
+  "lan_sort_year": "Yıl",
+  "lan_hide_watched": "İzlenenleri gizle",
+  "lan_season": "Sezon %1$d",
+  "lan_watched": "İzlendi",
+  "lan_other_files": "Diğer dosyalar",
+  "net_unreachable": "%1$s yanıt vermiyor. Açık ve aynı Wi-Fi ağında olduğundan emin ol."
  },
  "plurals": {
   "browser_found": {

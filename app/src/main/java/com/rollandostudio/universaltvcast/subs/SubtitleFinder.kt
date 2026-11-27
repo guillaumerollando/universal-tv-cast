@@ -80,10 +80,10 @@ object SubtitleFinder {
     private fun enc(s: String) = URLEncoder.encode(s, "UTF-8").replace("+", "%20")
 
     /** Cherche l'identifiant IMDb du film ou de la série. */
-    private class Meta(val id: String, val name: String, val poster: String?, val background: String?)
+    internal class Meta(val id: String, val name: String, val poster: String?, val background: String?)
 
     /** Identifiant IMDb : Cinemeta (le bon type, puis l'autre), puis l'annuaire des animés (Kitsu, titres japonais). */
-    private fun imdb(p: Parsed): Meta? =
+    internal fun imdb(p: Parsed): Meta? =
         cinemeta(p, if (p.isSeries) "series" else "movie")
             ?: cinemeta(p, if (p.isSeries) "movie" else "series")
             ?: runCatching { kitsu(p) }.getOrNull()

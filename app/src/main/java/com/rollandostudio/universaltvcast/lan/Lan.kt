@@ -38,6 +38,8 @@ data class LanEntry(
     val duration: Double? = null,
     val thumb: String? = null,
     val device: LanDevice? = null,
+    /** Date de modification (ms), pour « ajoutés récemment ». */
+    val date: Long? = null,
 ) {
     enum class Kind { VIDEO, AUDIO, PHOTO, OTHER }
 }

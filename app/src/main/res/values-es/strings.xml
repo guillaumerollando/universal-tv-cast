@@ -86,6 +86,17 @@
     <string name="home_videos_short">Del móvil</string>
     <string name="home_photos">Álbum</string>
     <string name="home_photos_short">Fotos y vídeos</string>
+    <string name="settings_art">Carteles de películas</string>
+    <string name="settings_art_sub">Muestra el cartel y el título real de los vídeos de tu NAS u ordenador. Solo se busca el título limpio (catálogo de Stremio), nunca el archivo.</string>
+    <string name="lan_sort">Ordenar</string>
+    <string name="lan_sort_name">Nombre</string>
+    <string name="lan_sort_recent">Añadidos recientemente</string>
+    <string name="lan_sort_year">Año</string>
+    <string name="lan_hide_watched">Ocultar vistos</string>
+    <string name="lan_season">Temporada %1$d</string>
+    <string name="lan_watched">Visto</string>
+    <string name="lan_other_files">Otros archivos</string>
+    <string name="net_unreachable">%1$s no responde. Comprueba que esté encendido y en la misma red wifi.</string>
     <string name="home_network">Red</string>
     <string name="home_network_short">Ordenador, NAS</string>
     <string name="net_searching">Buscando en tu red…</string>

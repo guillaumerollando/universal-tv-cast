@@ -592,6 +592,9 @@ object TvCast {
     // ------------------------------------------------------------------ album (photos et vidéos) : voir Album.kt
 
     fun openPhotos(uris: List<Uri>) = Album.open(uris)
+
+    /** Un message sur l'écran de lecture (ex. « Le NAS ne répond pas »). */
+    fun notify(n: Notice) { _state.update { it.copy(notice = n) } }
     fun photoAt(i: Int) = Album.photoAt(i)
     fun nextPhoto(delta: Int) = Album.nextPhoto(delta)
     fun toggleSlideshow() = Album.toggleSlideshow()

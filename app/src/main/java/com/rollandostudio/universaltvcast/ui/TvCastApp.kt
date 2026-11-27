@@ -164,7 +164,21 @@ fun TvCastApp() {
     // « Épisode suivant » depuis l'écran de lecture : chargé en arrière-plan, la vidéo part toute seule.
     val nextRequest by Nav.nextEpisode.collectAsState()
     LaunchedEffect(nextRequest) {
-        nextRequest?.let { Nav.nextLoading.value = true; browser.playNextInBackground(it); Nav.nextEpisode.value = null }
+        nextRequest?.let { url ->
+            // Vidéo du réseau (épisode suivant d'un dossier, « Reprendre ») : rouverte directement, sans le navigateur.
+            val lan = com.rollandostudio.universaltvcast.lan.LanStore.mediaFor(url)
+            if (lan != null) {
+                // L'appareil d'abord : éteint ou hors du Wi-Fi, on le dit clairement plutôt qu'un échec de lecture.
+                val ok = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { com.rollandostudio.universaltvcast.lan.LanStore.reachable(url) }
+                if (ok) { TvCast.open(lan); Nav.tab.value = Tab.PLAYER }
+                // Message là où l'on a touché (accueil ou lecture), sans changer d'écran.
+                else android.widget.Toast.makeText(context, context.getString(R.string.net_unreachable,
+                    com.rollandostudio.universaltvcast.lan.LanStore.deviceName(url)), android.widget.Toast.LENGTH_LONG).show()
+                Nav.nextEpisode.value = null; Nav.resuming.value = null; Nav.nextLoading.value = false
+                return@LaunchedEffect
+            }
+            Nav.nextLoading.value = true; browser.playNextInBackground(url); Nav.nextEpisode.value = null
+        }
     }
     val urlRequest by Nav.openUrl.collectAsState()
     LaunchedEffect(urlRequest) {
@@ -556,6 +570,14 @@ private fun SettingsSheet(onDismiss: () -> Unit) {
                 val embed by Library.embedSubs.collectAsState()
                 SwitchRow(stringResource(R.string.settings_embed), stringResource(R.string.settings_embed_sub), embed) {
                     Library.setEmbedSubs(it)
+                }
+            }
+            item {
+                // Affiches et vrais titres des vidéos du réseau : seul le titre nettoyé part vers l'annuaire de Stremio.
+                var art by remember { mutableStateOf(com.rollandostudio.universaltvcast.lan.Catalog.online) }
+                SwitchRow(stringResource(R.string.settings_art), stringResource(R.string.settings_art_sub), art) {
+                    art = it; com.rollandostudio.universaltvcast.lan.Catalog.online = it
+                    if (!it) com.rollandostudio.universaltvcast.lan.Catalog.clear()
                 }
             }
             item {

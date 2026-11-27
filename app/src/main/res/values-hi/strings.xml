@@ -358,6 +358,17 @@
     <string name="action_no_thanks">नहीं, धन्यवाद</string>
     <string name="net_help_linux">सबसे आसान: Settings → Sharing → “Media Sharing” चालू करें और अपने फ़ोल्डर चुनें; आपका पीसी यहाँ अपने आप दिखेगा। (अगर MP4 वीडियो न दिखें: gstreamer1.0-plugins-good और gstreamer1.0-libav इंस्टॉल करें।)\nया Windows की तरह: Files → फ़ोल्डर पर राइट-क्लिक → “Local Network Share”, फिर एक बार शेयरिंग पासवर्ड सेट करें (sudo smbpasswd -a आपका_नाम)।</string>
     <string name="home_favorites">मेरे पसंदीदा</string>
+    <string name="settings_art">फ़िल्म पोस्टर</string>
+    <string name="settings_art_sub">आपके NAS या कंप्यूटर के वीडियो का पोस्टर और असली नाम दिखाता है। सिर्फ़ साफ़ किया हुआ नाम खोजा जाता है (Stremio का कैटलॉग), फ़ाइल कभी नहीं।</string>
+    <string name="lan_sort">क्रमबद्ध करें</string>
+    <string name="lan_sort_name">नाम</string>
+    <string name="lan_sort_recent">हाल ही में जोड़े गए</string>
+    <string name="lan_sort_year">वर्ष</string>
+    <string name="lan_hide_watched">देखे हुए छिपाएँ</string>
+    <string name="lan_season">सीज़न %1$d</string>
+    <string name="lan_watched">देखा हुआ</string>
+    <string name="lan_other_files">अन्य फ़ाइलें</string>
+    <string name="net_unreachable">%1$s जवाब नहीं दे रहा। जाँचें कि वह चालू है और उसी Wi-Fi पर है।</string>
     <plurals name="browser_found">
         <item quantity="one">%d वीडियो</item>
         <item quantity="other">%d वीडियो</item>

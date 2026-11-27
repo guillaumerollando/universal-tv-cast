@@ -358,6 +358,17 @@
     <string name="action_no_thanks">Ні, дякую</string>
     <string name="net_help_linux">Найпростіше: Налаштування → Спільний доступ → увімкніть «Спільний доступ до медіа» й виберіть теки; комп’ютер з’явиться тут сам. (Якщо немає відео MP4: установіть gstreamer1.0-plugins-good і gstreamer1.0-libav.)\nАбо як у Windows: Файли → правий клік на теці → «Спільний доступ у локальній мережі», потім один раз задайте пароль (sudo smbpasswd -a ваше_ім’я).</string>
     <string name="home_favorites">Обране</string>
+    <string name="settings_art">Постери фільмів</string>
+    <string name="settings_art_sub">Показує постер і справжню назву відео на вашому NAS або комп’ютері. Шукається лише очищена назва (каталог Stremio), але не файл.</string>
+    <string name="lan_sort">Сортування</string>
+    <string name="lan_sort_name">Назва</string>
+    <string name="lan_sort_recent">Нещодавно додані</string>
+    <string name="lan_sort_year">Рік</string>
+    <string name="lan_hide_watched">Сховати переглянуті</string>
+    <string name="lan_season">Сезон %1$d</string>
+    <string name="lan_watched">Переглянуто</string>
+    <string name="lan_other_files">Інші файли</string>
+    <string name="net_unreachable">%1$s не відповідає. Перевірте, що пристрій увімкнено й він у тій самій мережі Wi-Fi.</string>
     <plurals name="browser_found">
         <item quantity="one">%d відео</item>
         <item quantity="few">%d відео</item>

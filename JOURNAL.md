@@ -1339,3 +1339,20 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   au premier niveau ramène à l'accueil. Fil d'Ariane sous le titre (« NAS › Séries › Saison 1 »), chaque étape
   touchable pour y remonter, y compris jusqu'à l'appareil quand on est entré par un dossier favori. Vérifié sur émulateur.
 - Pas fait : rien.
+
+## 2026-11-27 — Vidéothèque du réseau
+- Fait :
+  - Mosaïque d'affiches : dossiers d'abord (affiche de la série ou du film quand le nom est reconnu), puis les films.
+    Dossier d'épisodes → série : affiche et titre, saisons, épisodes avec image et vrai titre (« 1. Pilot »).
+  - Informations dans l'ordre demandé par Guillaume : balises du fichier (titre, année, jaquette intégrée, lues par
+    Android sans tout télécharger), images posées à côté (poster.jpg, Film.jpg…), nom du fichier, puis l'annuaire de
+    Stremio en complément (réglage « Affiches des films », éteint = rien ne part et le cache est vidé).
+  - Tri (nom, ajoutés récemment, année) et « masquer les vus », retenus ; coche « vu » et barre d'avancement.
+  - Vidéos du réseau dans « Reprendre » (épisode suivant proposé quand le précédent est fini), « Épisode suivant »
+    dans l'ordre du dossier, reprise à la bonne position. Avant de relancer : vraie demande à l'appareil ; éteint →
+    « NAS … ne répond pas. Vérifie qu'il est allumé et sur le même Wi-Fi. » (23 langues).
+  - Tuiles favoris sobres (gris des sites), plus d'orange sur les jaquettes en attente.
+  - Mémoire bornée : réponses de l'annuaire 600, balises 600, vidéos retenues 300, « vu » 800, jaquettes 25 Mo.
+  - Vérifié sur émulateur avec de vrais noms (Dune, Matrix, Amélie, Oppenheimer, Interstellar, Breaking Bad, The Office).
+- Pas fait / pas vérifié : jaquettes intégrées et balises sur de vrais fichiers (les fichiers de test n'en ont pas) ;
+  vrai NAS Synology / Plex / Jellyfin ; photos d'un serveur DLNA toujours masquées.

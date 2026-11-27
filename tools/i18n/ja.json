@@ -356,7 +356,18 @@
   "action_notif_allow": "リモコンを表示",
   "action_no_thanks": "いいえ",
   "net_help_linux": "いちばん簡単：設定 → 共有 → 「メディア共有」をオンにしてフォルダーを選ぶと、PCがここに自動で表示されます。（MP4動画が出ない場合：gstreamer1.0-plugins-good と gstreamer1.0-libav をインストール。）\nまたはWindowsと同じように：ファイル → フォルダーを右クリック → 「ローカルネットワーク共有」、共有用パスワードを一度設定します（sudo smbpasswd -a ユーザー名）。",
-  "home_favorites": "お気に入り"
+  "home_favorites": "お気に入り",
+  "settings_art": "映画のポスター",
+  "settings_art_sub": "NASやパソコン内の動画のポスターと正式なタイトルを表示します。検索されるのは整えたタイトルだけ(Stremioのカタログ)で、ファイルは送られません。",
+  "lan_sort": "並べ替え",
+  "lan_sort_name": "名前",
+  "lan_sort_recent": "最近追加",
+  "lan_sort_year": "年",
+  "lan_hide_watched": "視聴済みを隠す",
+  "lan_season": "シーズン%1$d",
+  "lan_watched": "視聴済み",
+  "lan_other_files": "その他のファイル",
+  "net_unreachable": "%1$s が応答しません。電源が入っていて、同じWi-Fiにつながっているか確認してください。"
  },
  "plurals": {
   "browser_found": {

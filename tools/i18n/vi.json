@@ -356,7 +356,18 @@
   "action_notif_allow": "Hiện điều khiển",
   "action_no_thanks": "Không, cảm ơn",
   "net_help_linux": "Dễ nhất: Cài đặt → Chia sẻ → bật “Chia sẻ đa phương tiện” và chọn thư mục; máy tính sẽ tự hiện ở đây. (Nếu thiếu video MP4: cài gstreamer1.0-plugins-good và gstreamer1.0-libav.)\nHoặc như Windows: Tệp → nhấp chuột phải vào thư mục → “Chia sẻ mạng cục bộ”, rồi đặt mật khẩu chia sẻ một lần (sudo smbpasswd -a ten_ban).",
-  "home_favorites": "Mục yêu thích"
+  "home_favorites": "Mục yêu thích",
+  "settings_art": "Áp phích phim",
+  "settings_art_sub": "Hiển thị áp phích và tên thật của video trên NAS hoặc máy tính của bạn. Chỉ tìm tên đã làm sạch (danh mục của Stremio), không bao giờ gửi tệp.",
+  "lan_sort": "Sắp xếp",
+  "lan_sort_name": "Tên",
+  "lan_sort_recent": "Mới thêm",
+  "lan_sort_year": "Năm",
+  "lan_hide_watched": "Ẩn phim đã xem",
+  "lan_season": "Mùa %1$d",
+  "lan_watched": "Đã xem",
+  "lan_other_files": "Tệp khác",
+  "net_unreachable": "%1$s không phản hồi. Hãy kiểm tra thiết bị đang bật và cùng mạng Wi-Fi."
  },
  "plurals": {
   "browser_found": {

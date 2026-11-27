@@ -382,6 +382,8 @@ private fun ResumeCard(r: ResumeItem, onBrowse: (String?) -> Unit, modifier: Mod
             if (page != null) {
                 if (Nav.resuming.value == null) { Nav.resuming.value = page; Nav.nextEpisode.value = page }
             } else r.recent?.let {
+                // Vidéo du NAS ou de l'ordinateur : vérifiée (appareil allumé ?) avant d'être relancée.
+                if (com.rollandostudio.universaltvcast.lan.LanStore.isLan(it.url)) { Nav.nextEpisode.value = it.url; return@let }
                 TvCast.open(it.toMedia())
                 Nav.tab.value = Tab.PLAYER
             }

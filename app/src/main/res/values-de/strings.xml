@@ -86,6 +86,17 @@
     <string name="home_videos_short">Vom Handy</string>
     <string name="home_photos">Album</string>
     <string name="home_photos_short">Fotos und Videos</string>
+    <string name="settings_art">Filmplakate</string>
+    <string name="settings_art_sub">Zeigt Plakat und echten Titel der Videos auf deinem NAS oder Computer. Gesucht wird nur der bereinigte Titel (Stremio-Katalog), nie die Datei.</string>
+    <string name="lan_sort">Sortieren</string>
+    <string name="lan_sort_name">Name</string>
+    <string name="lan_sort_recent">Zuletzt hinzugefügt</string>
+    <string name="lan_sort_year">Jahr</string>
+    <string name="lan_hide_watched">Gesehene ausblenden</string>
+    <string name="lan_season">Staffel %1$d</string>
+    <string name="lan_watched">Gesehen</string>
+    <string name="lan_other_files">Andere Dateien</string>
+    <string name="net_unreachable">%1$s antwortet nicht. Prüfe, ob es eingeschaltet und im selben WLAN ist.</string>
     <string name="home_network">Netzwerk</string>
     <string name="home_network_short">Computer, NAS</string>
     <string name="net_searching">Suche in deinem Netzwerk…</string>

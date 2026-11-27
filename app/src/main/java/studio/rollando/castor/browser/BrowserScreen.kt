@@ -343,26 +343,21 @@ class BrowserController(context: Context) {
             displayZoomControls = false
         }
         sniffer.userAgent = settings.userAgentString
-        // Appui long : lien (épisode, miniature) ou zone de la page (le lecteur) → « Lancer la vidéo ». Le texte et
-        // les champs à remplir gardent leur appui long habituel (sélection, coller).
+        // Appui long sur un lien (épisode, miniature), quand la page n'a encore aucune vidéo repérée :
+        // « Lancer la vidéo de ce lien ». Partout ailleurs, l'appui long reste celui du téléphone (sélection, copier).
         setOnLongClickListener { v ->
             val hit = (v as WebView).hitTestResult
-            when (hit.type) {
-                WebView.HitTestResult.SRC_ANCHOR_TYPE, WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> {
-                    // Lien sous une image : l'adresse du lien est demandée à la page (l'extra est celle de l'image).
-                    if (hit.type == WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
-                        val msg = mainHandler.obtainMessage()
-                        v.requestFocusNodeHref(msg)
-                        val href = msg.data.getString("url")?.takeIf { it.startsWith("http") }
-                        longPress = LongPress(href ?: hit.extra?.takeIf { it.startsWith("http") })
-                    } else longPress = LongPress(hit.extra?.takeIf { it.startsWith("http") })
-                    true
-                }
-                WebView.HitTestResult.IMAGE_TYPE, WebView.HitTestResult.UNKNOWN_TYPE -> {
-                    if (v.url.isNullOrEmpty() || v.url!!.startsWith("about:")) false else { longPress = LongPress(null); true }
-                }
-                else -> false
-            }
+            val onLink = hit.type == WebView.HitTestResult.SRC_ANCHOR_TYPE || hit.type == WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE
+            if (!onLink || sniffer.found.value.any { !it.short }) return@setOnLongClickListener false
+            // Lien sous une image : l'adresse du lien est demandée à la page (l'extra est celle de l'image).
+            val link = if (hit.type == WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
+                val msg = mainHandler.obtainMessage()
+                v.requestFocusNodeHref(msg)
+                msg.data.getString("url")?.takeIf { it.startsWith("http") } ?: hit.extra?.takeIf { it.startsWith("http") }
+            } else hit.extra?.takeIf { it.startsWith("http") }
+            if (link == null) return@setOnLongClickListener false
+            longPress = LongPress(link)
+            true
         }
         setOnScrollChangeListener { _, _, y, _, oldY ->
             val dy = y - oldY

@@ -1215,3 +1215,9 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
 **Pas fait**
 - Appui long et « Chercher encore » pas vus à l'écran : l'émulateur a été fermé de l'extérieur trois fois
   (une autre session ?). « DRM » non vérifié sur un vrai site.
+
+## 2026-11-27 — Appui long moins envahissant
+**Fait**
+- Retour de Guillaume : l'appui long empêchait de sélectionner du texte. Il n'agit plus que sur un lien, et seulement
+  si la page n'a encore aucune vidéo repérée (« Lancer la vidéo de ce lien »). Ailleurs, appui long d'origine.
+  « Trouver la vidéo » reste dans le message « Vidéo pas encore repérée ».

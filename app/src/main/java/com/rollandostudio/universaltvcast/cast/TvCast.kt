@@ -458,10 +458,23 @@ object TvCast {
                 }
             }
         }
-        val probe = scope.async { runCatching { MediaProbe.embeddedSubtitles(app, media) }.getOrDefault(emptyList()) }
+        val probe = scope.async { runCatching { MediaProbe.embedded(app, media) }.getOrNull() }
         findSkips(media)
         identify()
-        val inVideo = kotlinx.coroutines.withTimeoutOrNull(3000) { probe.await() }.orEmpty()
+        val inside = kotlinx.coroutines.withTimeoutOrNull(3000) { probe.await() }
+        val inVideo = inside?.subs.orEmpty()
+        // Plusieurs voix dans le MKV (VF, VO…) : au choix, sur le téléphone comme sur la télé.
+        val voices = inside?.audio.orEmpty()
+        if (voices.size >= 2) {
+            val tracks = voices.map { a ->
+                Hls.Track(a.name.ifBlank { java.util.Locale.forLanguageTag(a.lang).displayLanguage.ifBlank { a.lang } },
+                    a.lang, "mkv:${a.number}", a.default)
+            }
+            val def = tracks.indexOfFirst { it.default }.takeIf { it >= 0 } ?: 0
+            proxy.audioChoice = tracks[def].uri
+            Log.i("TvCast", "voix du fichier : ${tracks.joinToString { it.name }}")
+            _state.update { it.copy(audioTracks = tracks, audioIndex = def) }
+        } else if (_state.value.audioTracks.isEmpty()) proxy.audioChoice = null
         if (inVideo.isNotEmpty()) {
             // La vidéo a ses propres sous-titres (réglables sur la télé) : on n'en superpose pas d'autres.
             Log.i("TvCastSubs", "sous-titres déjà dans la vidéo : ${inVideo.joinToString()}")

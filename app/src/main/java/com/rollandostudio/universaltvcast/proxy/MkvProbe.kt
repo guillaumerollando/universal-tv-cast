@@ -86,6 +86,56 @@ object MkvProbe {
     fun isMatroska(head: ByteArray): Boolean =
         head.size >= 4 && head[0] == 0x1A.toByte() && head[1] == 0x45.toByte() && head[2] == 0xDF.toByte() && head[3] == 0xA3.toByte()
 
+    /** Piste son d'un MKV : numéro, nom (« French VFQ »), langue, par défaut, position de l'octet de son type. */
+    data class Audio(val number: Long, val name: String, val lang: String, val default: Boolean, val typeAt: Int)
+
+    /** Pistes son d'un MKV, dans l'ordre du fichier (vide si l'en-tête n'est pas lisible). */
+    fun audioTracks(head: ByteArray): List<Audio> {
+        if (!isMatroska(head)) return emptyList()
+        var from = 0
+        while (true) {
+            val start = indexOf(head, byteArrayOf(0x16, 0x54, 0xAE.toByte(), 0x6B), from) ?: return emptyList()
+            val size = readSize(head, start + 4)
+            if (size != null) {
+                val body = start + 4 + size.second
+                val end = if (size.first < 0) head.size else minOf(head.size.toLong(), body + size.first).toInt()
+                val out = mutableListOf<Audio>()
+                var entries = 0
+                forEachChild(head, body, end) { id, ef, et ->
+                    if (id != TRACK_ENTRY) return@forEachChild
+                    entries++
+                    var type = -1L; var typeAt = -1; var number = -1L; var name = ""; var lang = "eng"; var def = true
+                    forEachChild(head, ef, et) { cid, cf, ct ->
+                        when (cid) {
+                            TRACK_TYPE -> { type = readUInt(head, cf, ct); typeAt = ct - 1 }
+                            0xD7L -> number = readUInt(head, cf, ct)
+                            0x536EL -> name = String(head, cf, ct - cf, Charsets.UTF_8).trimEnd('\u0000')
+                            LANGUAGE, LANGUAGE_BCP47 -> lang = String(head, cf, ct - cf, Charsets.US_ASCII).trimEnd('\u0000')
+                            0x88L -> def = readUInt(head, cf, ct) != 0L
+                        }
+                    }
+                    if (type == AUDIO && typeAt >= 0 && number >= 0) out += Audio(number, name, lang, def, typeAt)
+                }
+                if (entries > 0) return out
+            }
+            from = start + 1
+        }
+    }
+
+    /**
+     * Pour qu'une télé lise la piste son choisie (en DLNA, elle prend toujours la première) : les autres pistes son
+     * deviennent, dans l'en-tête, des pistes de « métadonnées » que la télé ignore. Un seul octet change par piste,
+     * rien ne bouge dans le fichier. Rien à faire si la piste choisie est déjà la première.
+     */
+    fun keepOnlyAudio(head: ByteArray, number: Long): List<Pair<Int, ByteArray>> {
+        val tracks = audioTracks(head)
+        if (tracks.size < 2 || tracks.first().number == number || tracks.none { it.number == number }) return emptyList()
+        return tracks.filter { it.number != number }.map { it.typeAt to byteArrayOf(METADATA_TYPE) }
+    }
+
+    private const val AUDIO = 2L
+    private const val METADATA_TYPE: Byte = 0x21
+
     /** Langues des pistes de sous-titres (« fre », « eng », « und »…). */
     fun subtitleLanguages(head: ByteArray): List<String> {
         if (!isMatroska(head)) return emptyList()

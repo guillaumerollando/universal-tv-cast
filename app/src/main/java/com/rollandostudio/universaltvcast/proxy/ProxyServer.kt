@@ -60,8 +60,8 @@ class ProxyServer(private val ctx: Context) {
     @Volatile var mimeOverride: String? = null
     /** Masquer la déclaration Dolby Vision des MKV (télés DLNA qui refusent ces fichiers ; image en HDR10). */
     @Volatile var maskDolbyVision = false
-    /** Octets à remplacer au début de chaque vidéo (position, nouveaux octets) : vide si rien à changer. */
-    private val headPatches = ConcurrentHashMap<String, List<Pair<Long, ByteArray>>>()
+    /** Début de chaque MKV relayé (en-tête), pour le corriger au passage. */
+    private val heads = ConcurrentHashMap<String, ByteArray>()
 
     init {
         // Enregistrements de directs laissés par une session interrompue (appli fermée de force) : jamais réutilisés.
@@ -78,7 +78,7 @@ class ProxyServer(private val ctx: Context) {
 
     fun reset() {
         stopLive()
-        remotes.clear(); idsByUrl.clear(); locals.clear(); metas.clear(); embedded.clear(); headPatches.clear()
+        remotes.clear(); idsByUrl.clear(); locals.clear(); metas.clear(); embedded.clear(); heads.clear()
         subtitle = null; subtitleUrl = null; mimeOverride = null
     }
 
@@ -729,16 +729,21 @@ class ProxyServer(private val ctx: Context) {
      * masquée : mêmes longueurs, rien d'autre ne bouge, les plages et l'avance rapide restent justes).
      */
     private fun patched(id: String, type: String, from: Long, out: OutputStream): OutputStream {
-        if (!maskDolbyVision || !type.contains("matroska", true) && !type.contains("mkv", true)) return out
+        if (!type.contains("matroska", true) && !type.contains("mkv", true)) return out
         if (from >= MkvProbe.HEAD_BYTES) return out
-        val patches = headPatches.getOrPut(id) {
+        val audio = audioChoice?.takeIf { it.startsWith("mkv:") }?.removePrefix("mkv:")?.toLongOrNull()
+        if (!maskDolbyVision && audio == null) return out
+        val head = heads.getOrPut(id) {
             runCatching {
-                val (total, read) = sourceReader(id) ?: return@runCatching emptyList()
-                val head = read(0, minOf(total, MkvProbe.HEAD_BYTES.toLong())).use { it.readNBytesCompat(MkvProbe.HEAD_BYTES) }
-                MkvProbe.dolbyVisionMask(head).map { (at, bytes) -> at.toLong() to bytes }
-            }.getOrElse { Log.i(TAG, "début du MKV illisible : ${it.message}"); emptyList() }
-                .also { if (it.isNotEmpty()) Log.i(TAG, "MKV Dolby Vision : déclaration masquée pour la télé (HDR10)") }
+                val (total, read) = sourceReader(id) ?: return@runCatching ByteArray(0)
+                read(0, minOf(total, MkvProbe.HEAD_BYTES.toLong())).use { it.readNBytesCompat(MkvProbe.HEAD_BYTES) }
+            }.getOrElse { Log.i(TAG, "début du MKV illisible : ${it.message}"); ByteArray(0) }
         }
+        val patches = mutableListOf<Pair<Long, ByteArray>>()
+        if (maskDolbyVision) MkvProbe.dolbyVisionMask(head).forEach { (at, b) -> patches += at.toLong() to b }
+        if (audio != null) MkvProbe.keepOnlyAudio(head, audio).forEach { (at, b) -> patches += at.toLong() to b }
+        if (patches.isNotEmpty() && from == 0L) Log.i(TAG, "MKV corrigé pour la télé : ${patches.size} endroit(s) " +
+            "(Dolby Vision masqué : $maskDolbyVision, piste son : ${audio ?: "d'origine"})")
         return if (patches.isEmpty()) out else PatchStream(out, from, patches)
     }
 

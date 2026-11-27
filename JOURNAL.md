@@ -1525,3 +1525,16 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   « autoriser l'accès aux journaux ») ; à refaire en écrivant soi-même ses lignes dans un fichier.
 - Vérifié sur le téléphone : télé en veille → aucune télé proposée. Pas vérifié : la télé qui apparaît à
   l'allumage pendant que l'appli est ouverte ; Fire TV (sans Cast ni DLNA d'origine, voir README).
+
+## 2026-11-28 — Voix des MKV au choix ; double appui plus discret
+- Constat : Babylon a deux voix (« French VFQ » par défaut, « English », E-AC-3 5.1) ; l'appli ne proposait le
+  choix de la langue que pour le HLS / DASH.
+- Fait : les voix d'un MKV sont lues dans son en-tête (`MkvProbe.audioTracks`) et proposées dans la carte
+  « Langue ». Sur le téléphone, ExoPlayer change de piste. Sur la télé (DLNA, qui lit toujours la première voix) :
+  le relais transforme au passage, dans l'en-tête, les autres pistes son en pistes de « métadonnées » que la télé
+  ignore (1 octet par piste, rien ne bouge dans le fichier ; `MkvProbe.keepOnlyAudio`), cumulé avec le masquage
+  Dolby Vision. Vérifié : sur l'extrait de Babylon, ffprobe ne voit plus que la voix anglaise et la décode ; sur
+  émulateur (MKV léger à deux voix), menu « Langue » affiché et voix anglaise choisie par le lecteur.
+- Double appui sur la vidéo : plus d'icône ±10 au milieu (doublon des boutons), seulement l'onde sous le doigt et
+  le « +10 » qui en sort et s'additionne. Vérifié par captures sur émulateur.
+- Pas vérifié : la voix anglaise à l'oreille sur la Philips (télé éteinte pendant les essais).

@@ -65,6 +65,8 @@ import androidx.media3.ui.PlayerView
 import com.rollandostudio.universaltvcast.R
 import androidx.compose.ui.draw.shadow
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.key
@@ -160,8 +162,8 @@ private fun Modifier.skipGestures(skip: SkipState, onTap: () -> Unit) = pointerI
 }
 
 /**
- * Retour visuel d'un saut, du côté touché : une grande vague en arc qui part du bord, une onde depuis le doigt et,
- * au milieu, la même animation que les boutons ±10 s.
+ * Retour visuel d'un saut, sous le doigt seulement : une onde qui part du point touché et « +10 » qui en sort et
+ * s'additionne (« +20 », « +30 »…). Pas d'icône : les boutons ±10 s sont déjà à l'écran.
  */
 @Composable
 private fun SkipOverlay(skip: SkipState, modifier: Modifier = Modifier) {
@@ -180,34 +182,21 @@ private fun SkipOverlay(skip: SkipState, modifier: Modifier = Modifier) {
     // Onde depuis le doigt, relancée à chaque appui.
     val ripple = remember { androidx.compose.animation.core.Animatable(0f) }
     LaunchedEffect(k.tap) { ripple.snapTo(0f); ripple.animateTo(1f, androidx.compose.animation.core.tween(500)) }
-    androidx.compose.foundation.layout.BoxWithConstraints(modifier.fillMaxSize().graphicsLayer { this.alpha = alpha }) {
-        val w = constraints.maxWidth.toFloat()
-        val h = constraints.maxHeight.toFloat()
-        val left = k.side < 0
+    Box(modifier.fillMaxSize().graphicsLayer { this.alpha = alpha }) {
+        val density = androidx.compose.ui.platform.LocalDensity.current
         androidx.compose.foundation.Canvas(Modifier.fillMaxSize()) {
-            val half = androidx.compose.ui.geometry.Rect(if (left) 0f else w / 2f, 0f, if (left) w / 2f else w, h)
-            clipRect(half.left, half.top, half.right, half.bottom) {
-                // Arc : un grand cercle dont le centre est hors de l'image, côté bord.
-                val r = h * 0.95f + w * 0.12f
-                val cx = if (left) w * 0.42f - r else w * 0.58f + r
-                drawCircle(Color.White.copy(alpha = 0.13f), radius = r, center = androidx.compose.ui.geometry.Offset(cx, h / 2f))
-                // Onde depuis le doigt.
-                drawCircle(Color.White.copy(alpha = 0.22f * (1f - ripple.value)), radius = (w * 0.32f) * ripple.value, center = k.at)
+            drawCircle(Color.White.copy(alpha = 0.22f * (1f - ripple.value)), radius = 90.dp.toPx() * ripple.value, center = k.at)
+        }
+        // Le « +10 » (et son anneau) part du doigt.
+        val half = with(density) { 22.dp.roundToPx() }
+        Box(Modifier.offset { androidx.compose.ui.unit.IntOffset(k.at.x.toInt() - half, k.at.y.toInt() - half) }) {
+            SkipBurst(forward = k.side > 0, tap = k.tap, total = k.total) { _ ->
+                Box(Modifier.size(44.dp).semantics { contentDescription = "" })
             }
         }
-        // Au milieu du côté touché : la même animation que les boutons ±10 s (rebond, flèche qui pivote, onde,
-        // « +10 » qui monte et s'additionne).
-        Box(
-            Modifier.fillMaxHeight().fillMaxWidth(0.5f).align(if (left) Alignment.CenterStart else Alignment.CenterEnd),
-            contentAlignment = Alignment.Center,
-        ) {
-            SkipBurst(forward = !left, tap = k.tap, total = k.total) { iconMod ->
-                Box(Modifier.size(56.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.35f)), contentAlignment = Alignment.Center) {
-                    Icon(if (left) Icons.Rounded.Replay10 else Icons.Rounded.Forward10,
-                        stringResource(R.string.skip_seconds, k.total), Modifier.size(32.dp).then(iconMod), tint = Color.White)
-                }
-            }
-        }
+        // Lecteurs d'écran : le saut est annoncé.
+        val said = stringResource(R.string.skip_seconds, k.total)
+        Box(Modifier.size(1.dp).semantics { contentDescription = said; liveRegion = androidx.compose.ui.semantics.LiveRegionMode.Polite })
     }
 }
 

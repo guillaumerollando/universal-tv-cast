@@ -223,6 +223,7 @@ object PhoneEngine {
             ?: return
         p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
             .setOverrideForType(androidx.media3.common.TrackSelectionOverride(pick.first.mediaTrackGroup, pick.second)).build()
+        android.util.Log.i("TvCastPhone", "voix choisie : ${pick.first.getTrackFormat(pick.second).label ?: lang}")
     }
 
     fun pause() = main.post { player?.pause() }

@@ -50,3 +50,25 @@ class DolbyVisionMaskTest {
         assertArrayEquals(ok!!.inputStream().use { it.readNBytes(MkvProbe.HEAD_BYTES) }, patched)
     }
 }
+
+class MkvAudioTest {
+    /** Vrai fichier (essai manuel) : MKV_DV=fichier.mkv ; MKV_OUT=copie où seule la 2e voix reste (pour la télé). */
+    @Test fun voixDuVraiFichier() {
+        val src = System.getenv("MKV_DV")?.let(::File)
+        assumeTrue(src != null && src.exists())
+        val all = src!!.readBytes()
+        val head = all.copyOf(MkvProbe.HEAD_BYTES)
+        val voices = MkvProbe.audioTracks(head)
+        println("voix : $voices")
+        assertEquals(2, voices.size)
+        assertEquals("fre", voices[0].lang); assertEquals("eng", voices[1].lang)
+        assertTrue(MkvProbe.keepOnlyAudio(head, voices[0].number).isEmpty())
+        val p = MkvProbe.keepOnlyAudio(head, voices[1].number)
+        assertEquals(1, p.size)
+        assertEquals(2.toByte(), all[p[0].first])
+        System.getenv("MKV_OUT")?.let { out ->
+            for ((at, b) in MkvProbe.dolbyVisionMask(head) + p) System.arraycopy(b, 0, all, at, b.size)
+            File(out).writeBytes(all)
+        }
+    }
+}

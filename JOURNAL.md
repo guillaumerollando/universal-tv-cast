@@ -1405,3 +1405,22 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   qui absorbe l'écart 5,991 / 6,000 s des morceaux d'Arte). Vérifié sur les vrais morceaux de Flow à 2682 s :
   H.264 + AAC, mêmes horodatages, décodage complet sans erreur (test `Fmp4MergeTest`, avec FMP4_SAMPLES).
 - Pas vérifié : la lecture sur la vraie télé (attendre l'essai de Guillaume).
+
+## 2026-11-27 — Audit des formats : DASH, coupures pub, sous-titres des diffuseurs, IPTV, chaînes en favoris
+- Fait :
+  - Coupures HLS (#EXT-X-DISCONTINUITY : pubs insérées, pré-roll) : `TsClock` (PTS/DTS/PCR) et `Fmp4Clock` (tfdt)
+    recalent l'horloge du flux continu et de l'enregistrement des directs. Testé : morceau à 5000 s recollé à la suite.
+  - DASH sans DRM (`Dash`) traduit en liste interne : SegmentTemplate (Number, Time, SegmentTimeline), SegmentList,
+    SegmentBase, index dans le fichier (sidx simple et à plusieurs niveaux). Télé : flux continu MP4 image + son
+    (`Fmp4Merge`) ; téléphone : module DASH de Media3 ; pistes son du MPD ; directs DASH sur le téléphone seulement.
+    Testé sur 7 manifestes publics (Akamai, DASH-IF Netflix/Sony, Shaka, Unified Streaming) et sur émulateur
+    (lecture téléphone, 5 langues, sous-titres, envoi à la fausse télé).
+  - Sous-titres : TTML / EBU-TT-D / IMSC → SRT ; WebVTT HLS découpé recollé (X-TIMESTAMP-MAP) ; sous-titres DASH en
+    fichier ou en MP4 (wvtt, stpp, `Mp4Text`), répliques coupées refusionnées. Sur le téléphone, seuls les sous-titres
+    choisis dans la carte s'affichent (le lecteur n'en impose plus d'autres).
+  - IPTV : listes acceptant UDP / RTP multicast (relayés en HTTP par le téléphone, à la télé et à son lecteur) et
+    RTSP / RTMP (téléphone seulement, message « Ce flux se lit sur le téléphone »). Modules RTSP et RTMP de Media3.
+  - Chaînes en favoris (★, appui long sur une chaîne de l'accueil ou de la mosaïque) dans « Mes favoris ».
+  - Nom technique « dash.mpd » plus pris pour un titre de film. Appli Play : 6,7 → 7,2 Mo.
+- Pas vérifié : multicast UDP/RTP (l'émulateur ne reçoit pas le multicast du PC), RTSP / RTMP (pas de serveur de
+  test), coupures pub sur une vraie chaîne, étoile sur les chaînes à l'écran (compilé, pas essayé).

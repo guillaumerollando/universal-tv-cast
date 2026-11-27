@@ -395,6 +395,7 @@
     <string name="lan_all">Toate</string>
     <string name="lan_sort_asc">Crescător</string>
     <string name="lan_sort_desc">Descrescător</string>
+    <string name="stream_phone_only">Acest flux (RTSP / RTMP) rulează pe telefon, nu pe televizor.</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>

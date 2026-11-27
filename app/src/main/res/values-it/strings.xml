@@ -123,6 +123,7 @@
     <string name="lan_all">Tutti</string>
     <string name="lan_sort_asc">Crescente</string>
     <string name="lan_sort_desc">Decrescente</string>
+    <string name="stream_phone_only">Questo flusso (RTSP / RTMP) si guarda sul telefono, non sulla TV.</string>
     <string name="home_network">Rete</string>
     <string name="home_network_short">Computer, NAS</string>
     <string name="net_searching">Ricerca nella tua rete…</string>

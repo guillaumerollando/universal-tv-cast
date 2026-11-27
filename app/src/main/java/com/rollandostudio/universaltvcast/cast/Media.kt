@@ -107,7 +107,7 @@ object Intake {
             }
             else -> return null
         }
-        if (uri.scheme !in setOf("http", "https", "content", "file")) return null
+        if (uri.scheme !in setOf("http", "https", "content", "file") && !com.rollandostudio.universaltvcast.net.Streams.supported(uri.toString())) return null
 
         // Convention « MX Player » reprise par la plupart des applis : tableau clé, valeur, clé, valeur…
         val headers = LinkedHashMap<String, String>()

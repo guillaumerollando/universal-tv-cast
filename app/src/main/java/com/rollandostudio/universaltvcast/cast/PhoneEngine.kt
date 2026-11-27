@@ -33,6 +33,7 @@ import java.io.File
  */
 @OptIn(UnstableApi::class)
 object PhoneEngine {
+    private const val OWN_SUBS = "tvcast-subs"
     /** Ce que l'écran de lecture a besoin de savoir, à chaque instant. */
     data class Status(val phase: Phase, val position: Double, val duration: Double, val ended: Boolean, val error: Boolean)
 
@@ -62,6 +63,10 @@ object PhoneEngine {
         p.trackSelectionParameters = p.trackSelectionParameters.buildUpon().clearOverridesOfType(C.TRACK_TYPE_AUDIO)
             .clearOverridesOfType(C.TRACK_TYPE_TEXT).setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false).build()
         textTracks.value = emptyList(); textSelected.value = -1
+        // Sous-titres choisis par l'appli (carte « Sous-titres ») : le lecteur n'affiche que ceux-là, jamais d'autres
+        // pistes de la vidéo de lui-même (DASH, HLS : il prenait la langue du téléphone).
+        appSubs = m.subs.isNotEmpty() || subtitle != null
+        appSubtitle = subtitle != null
         ended = false
         error = false
         val ua = m.headers.entries.firstOrNull { it.key.equals("User-Agent", true) }?.value
@@ -77,11 +82,15 @@ object PhoneEngine {
         } else {
             val subs = subtitle?.let { bytes ->
                 val f = File(ctx.cacheDir, "phone_subtitles.srt").apply { writeBytes(bytes) }
-                listOf(MediaItem.SubtitleConfiguration.Builder(Uri.fromFile(f))
+                listOf(MediaItem.SubtitleConfiguration.Builder(Uri.fromFile(f)).setId(OWN_SUBS)
                     .setMimeType(MimeTypes.APPLICATION_SUBRIP).setSelectionFlags(C.SELECTION_FLAG_DEFAULT).build())
             }.orEmpty()
             val item = MediaItem.Builder().setUri(m.url).setSubtitleConfigurations(subs)
-                .apply { if (hls) setMimeType(MimeTypes.APPLICATION_M3U8) }.build()
+                .apply {
+                    // DASH : le lecteur du téléphone le lit directement (module DASH de Media3).
+                    val dash = m.mime?.contains("dash", true) == true || m.url.substringBefore('?').endsWith(".mpd", true)
+                    if (dash) setMimeType(MimeTypes.APPLICATION_MPD) else if (hls) setMimeType(MimeTypes.APPLICATION_M3U8)
+                }.build()
             var s: MediaSource = DefaultMediaSourceFactory(data).createMediaSource(item)
             // Image et son servis à part (certains sites) : joués ensemble.
             m.audioUrl?.let { a ->
@@ -147,8 +156,23 @@ object PhoneEngine {
     /** Piste de sous-titres affichée sur le téléphone : son rang dans [textTracks], ou -1 (aucune). */
     val textSelected = kotlinx.coroutines.flow.MutableStateFlow(-1)
 
+    @Volatile private var appSubs = false
+    @Volatile private var appSubtitle = false
+
     private fun readTextTracks() {
         val p = player ?: return
+        if (appSubs) {
+            val groups = p.currentTracks.groups.filter { it.type == C.TRACK_TYPE_TEXT }
+            val own = groups.firstNotNullOfOrNull { g -> (0 until g.length).firstOrNull { g.getTrackFormat(it).id?.contains(OWN_SUBS) == true }?.let { g to it } }
+            val b = p.trackSelectionParameters.buildUpon()
+            if (appSubtitle && own != null) b.setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false)
+                .setOverrideForType(androidx.media3.common.TrackSelectionOverride(own.first.mediaTrackGroup, own.second))
+            else b.setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true)
+            val next = b.build()
+            if (next != p.trackSelectionParameters) p.trackSelectionParameters = next
+            textTracks.value = emptyList()
+            return
+        }
         val groups = p.currentTracks.groups.filter { it.type == C.TRACK_TYPE_TEXT }
         val list = mutableListOf<TextTrack>()
         var sel = -1

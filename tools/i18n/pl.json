@@ -393,7 +393,8 @@
   "lan_random": "Losowo",
   "lan_all": "Wszystkie",
   "lan_sort_asc": "Rosnąco",
-  "lan_sort_desc": "Malejąco"
+  "lan_sort_desc": "Malejąco",
+  "stream_phone_only": "Ten strumień (RTSP / RTMP) odtwarza się w telefonie, nie na telewizorze."
  },
  "plurals": {
   "browser_found": {

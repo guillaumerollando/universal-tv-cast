@@ -37,7 +37,7 @@ import java.util.concurrent.Executors
 
 private val GENERIC_NAMES = setOf(
     "index", "master", "playlist", "manifest", "stream", "video", "chunklist", "main", "live", "prog_index",
-    "media", "mono", "output", "file", "default", "hls", "play", "embed",
+    "media", "mono", "output", "file", "default", "hls", "play", "embed", "dash", "mpd", "stream_dash", "manifest_dash",
     // Mots qui ne désignent aucun film : sans ça, « film.mp4 » était pris pour un vrai film (affiche comprise).
     "film", "movie", "movies", "episode", "ep", "clip", "sample", "test", "trailer", "bande-annonce", "vod",
     "watch", "player", "source", "download", "telechargement", "fichier", "sans titre", "untitled", "new",
@@ -59,6 +59,8 @@ object TvCast {
     private var remoteId: String? = null
     private var hlsDuration = 0.0
     private var fmp4 = false
+    /** La vidéo est un manifeste DASH (envoyé à la télé en flux continu). */
+    private var dash = false
     private var startOffset = 0.0
     private var castTime = 0L
     private var subVersion = 0
@@ -348,12 +350,30 @@ object TvCast {
         remoteId = null
         hlsDuration = 0.0
         fmp4 = false
+        dash = false
         if (!media.isLocal) {
             remoteId = proxy.register(media.url, media.headers, audio = media.audioUrl)
+            // Multicast ou RTSP / RTMP : un direct, sans durée ni retour en arrière.
+            if (!media.url.startsWith("http", true)) _state.update {
+                it.copy(live = true, media = it.media?.copy(mime = if (com.rollandostudio.universaltvcast.net.Streams.multicast(media.url)) "video/mp2t" else it.media.mime))
+            }
             remoteId?.let { id -> scope.launch { runCatching { proxy.prefetchMeta(id) } } }
-            val hls = media.mime?.contains("mpegurl", true) == true || Mime.ext(media.url) == "m3u8" || MediaProbe.sniffHls(media)
+            val hls = media.mime?.contains("mpegurl", true) == true || media.mime?.contains("dash", true) == true ||
+                Mime.ext(media.url) == "m3u8" || Mime.ext(media.url) == "mpd" || MediaProbe.sniffHls(media)
             if (hls) {
-                val plan = Hls.load(media.url, media.headers)
+                val plan = try {
+                    Hls.load(media.url, media.headers)
+                } catch (e: com.rollandostudio.universaltvcast.proxy.Dash.Protected) {
+                    throw Drm()
+                } catch (e: com.rollandostudio.universaltvcast.proxy.Dash.Live) {
+                    null
+                }
+                // DASH : toujours en flux continu (aucune télé ne lit le .mpd par le relais), lecteur du téléphone prévenu.
+                dash = plan?.dash == true
+                if (dash) _state.update { it.copy(media = it.media?.copy(mime = "application/dash+xml")) }
+                // Direct en DASH : le téléphone le lit lui-même (pas de flux continu possible vers la télé).
+                if (plan == null) _state.update { it.copy(media = it.media?.copy(mime = "application/dash+xml")) }
+                else {
                 if (plan.encryptedSample) throw Drm()
                 // Langues et sous-titres de la vidéo (liste maîtresse) : à choisir, sur la télé comme sur le téléphone.
                 if (plan.endList) runCatching { Hls.tracks(media.url, media.headers) }
@@ -373,7 +393,7 @@ object TvCast {
                 _state.update {
                     it.copy(isHls = true, splitAudio = plan.splitAudio, duration = hlsDuration, live = !plan.endList,
                         liveWindow = if (plan.endList) 0.0 else plan.duration,
-                        continuous = if (plan.splitAudio) false else it.continuous)
+                        continuous = if (dash) true else if (plan.splitAudio) false else it.continuous)
                 }
                 // Titre lisible pour un direct ouvert par son lien (« index.m3u8 ») : le nom de la chaîne.
                 val t = _state.value.media?.title.orEmpty()
@@ -387,6 +407,7 @@ object TvCast {
                     com.rollandostudio.universaltvcast.data.IptvStore.logoFor(m0?.channel ?: m0?.title, media.url)?.let { logo ->
                         _state.update { it.copy(media = it.media?.copy(posterUrl = logo)) }
                     }
+                }
                 }
             }
         }
@@ -499,7 +520,10 @@ object TvCast {
         // Sauf son à part de l'image (CNews, Dailymotion) : l'enregistrement ne garde que l'image, le lecteur
         // attendait le son sans fin ; le lecteur d'Android lit alors la liste lui-même (son et image).
         val liveUrl = if (s.live && s.isHls && !s.splitAudio && m.audioUrl == null && remoteId != null)
-            "${proxy.baseUrl()}/ts/$remoteId/stream.${if (fmp4) "mp4" else "ts"}?start=${start.toLong()}" else null
+            "${proxy.baseUrl()}/ts/$remoteId/stream.${if (fmp4) "mp4" else "ts"}?start=${start.toLong()}"
+            // Multicast (UDP / RTP) : reçu et relayé en HTTP par le téléphone, que son lecteur lit comme un direct.
+            else if (com.rollandostudio.universaltvcast.net.Streams.multicast(m.url) && remoteId != null) "${proxy.baseUrl()}/r/$remoteId/stream.ts"
+            else null
         if (s.live) liveClock.start(start)
         PhoneEngine.play(app, m, start, proxy.subtitle, s.isHls, liveUrl)
         s.audioTracks.getOrNull(s.audioIndex)?.let { PhoneEngine.selectAudio(it.name, it.lang) }
@@ -668,7 +692,10 @@ object TvCast {
         val sub = s.media?.subs?.getOrNull(s.subIndex) ?: return
         try {
             val uri = Uri.parse(sub.uri)
-            val bytes = if (uri.scheme == "http" || uri.scheme == "https") Http.fetch(sub.uri, s.media.headers).bytes
+            val bytes = if (sub.uri.startsWith(Hls.VTT_JOIN)) Hls.vttJoin(sub.uri.removePrefix(Hls.VTT_JOIN), s.media.headers)
+            else if (sub.uri.startsWith(com.rollandostudio.universaltvcast.proxy.Dash.TEXT))
+                com.rollandostudio.universaltvcast.proxy.Dash.textBytes(sub.uri, s.media.headers)
+            else if (uri.scheme == "http" || uri.scheme == "https") Http.fetch(sub.uri, s.media.headers).bytes
             else app.contentResolver.openInputStream(uri)?.use { it.readBytes() } ?: throw IOException("unreadable")
             rawSubtitle = Subtitles.toSrt(bytes)
             applySubtitle()
@@ -690,6 +717,12 @@ object TvCast {
         pausePageMedia?.invoke()
         // Lecture sur le téléphone : même demande (reprise, déplacement dans le direct, chaîne suivante…), autre écran.
         if (_state.value.onPhone) { phonePlay(start); return }
+        // RTSP / RTMP : seul le lecteur du téléphone sait les lire ; on le dit et la chaîne passe sur le téléphone.
+        _state.value.media?.url?.takeIf { com.rollandostudio.universaltvcast.net.Streams.phoneOnly(it) }?.let {
+            autoPhone()
+            _state.update { st -> st.copy(notice = Notice(R.string.stream_phone_only)) }
+            return
+        }
         if (!keepRetry) { liveRetried = false; startRetried = false }
         lastCastStart = start
         val chosen = _state.value.renderer ?: throw NoTv()
@@ -727,7 +760,7 @@ object TvCast {
         val tvMimes = sinksOf(r)
         // Une télé qui ne lit pas le HLS reçoit toujours le flux continu.
         // Image et son séparés : seul le flux continu (fusionné par le relais) les réunit.
-        val continuous = s.isHls && (s.continuous || m.audioUrl != null || !Dlna.accepts(tvMimes, "application/vnd.apple.mpegurl"))
+        val continuous = s.isHls && (dash || s.continuous || m.audioUrl != null || !Dlna.accepts(tvMimes, "application/vnd.apple.mpegurl"))
         if (continuous != (s.isHls && s.continuous)) _state.update { it.copy(continuous = true) }
         // Télé DLNA qui ignore les sous-titres externes : on les intègre au MP4 (piste texte), sans réencodage.
         val embedUrl = embeddedUrl(m, s, continuous, base)
@@ -741,6 +774,7 @@ object TvCast {
             continuous -> "$base/ts/$remoteId/stream.${if (fmp4) "mp4" else "ts"}?start=${start.toLong()}" to
                 (if (fmp4) "video/mp4" else "video/mp2t")
             s.isHls -> "$base/r/$remoteId/index.m3u8" to "application/vnd.apple.mpegurl"
+            com.rollandostudio.universaltvcast.net.Streams.multicast(m.url) -> "$base/r/$remoteId/stream.ts" to "video/mp2t"
             else -> "$base/r/$remoteId/video.${Mime.ext(m.url).ifEmpty { "mp4" }}" to
                 (m.mime?.takeIf { Mime.isMedia(it) } ?: Mime.guess(m.url))
         }
@@ -752,7 +786,8 @@ object TvCast {
         // N'arrêter que si la télé lit déjà quelque chose : sur certaines télés (Philips Titan OS),
         // un « Stop » à vide ferme le lecteur et renvoie sur la dernière source (HDMI…).
         // Description minimale : une affiche (albumArtURI) faisait clignoter la Philips à chaque déplacement.
-        TvSteps.replaceMedia(r, url, Dlna.didl(m.title, url, mime, subUrl, seekable = !continuous))
+        TvSteps.replaceMedia(r, url, Dlna.didl(m.title, url, mime, subUrl,
+            seekable = !continuous && !com.rollandostudio.universaltvcast.net.Streams.multicast(m.url)))
         TvSteps.playWhenReady(r)
         castTime = System.currentTimeMillis()
         CastService.start(app)
@@ -815,6 +850,9 @@ object TvCast {
                 val type = app.contentResolver.getType(uri)?.takeIf { Mime.isMedia(it) } ?: m.mime ?: Mime.guess(m.title)
                 "$base/l/${proxy.registerLocal(uri)}/media.${Mime.ext(m.title).ifEmpty { "mp4" }}" to type
             }
+            // DASH : le flux continu du relais (image et son recollés), en MP4.
+            dash -> "$base/ts/$remoteId/stream.mp4?start=${start.toLong()}" to "video/mp4"
+            com.rollandostudio.universaltvcast.net.Streams.multicast(m.url) -> "$base/r/$remoteId/stream.ts" to "video/mp2t"
             s.isHls -> "$base/r/$remoteId/index.m3u8" to "application/x-mpegurl"
             else -> "$base/r/$remoteId/video.${Mime.ext(m.url).ifEmpty { "mp4" }}" to
                 (m.mime?.takeIf { Mime.isMedia(it) && it != "video/*" } ?: Mime.guess(m.url))

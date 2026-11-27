@@ -395,6 +395,7 @@
     <string name="lan_all">Vše</string>
     <string name="lan_sort_asc">Vzestupně</string>
     <string name="lan_sort_desc">Sestupně</string>
+    <string name="stream_phone_only">Tento stream (RTSP / RTMP) se přehrává v telefonu, ne na televizi.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="few">%d videa</item>

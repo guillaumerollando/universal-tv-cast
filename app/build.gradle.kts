@@ -83,6 +83,10 @@ dependencies {
     // Lecture sur le téléphone (vidéos du web, HLS, sous-titres) : le lecteur standard d'Android.
     implementation("androidx.media3:media3-exoplayer:1.6.1")
     implementation("androidx.media3:media3-exoplayer-hls:1.6.1")
+    implementation("androidx.media3:media3-exoplayer-dash:1.6.1")
+    // RTSP et RTMP (listes de chaînes) : lus par le lecteur du téléphone.
+    implementation("androidx.media3:media3-exoplayer-rtsp:1.6.1")
+    implementation("androidx.media3:media3-datasource-rtmp:1.6.1")
     implementation("androidx.media3:media3-ui:1.6.1")
     // Dossiers partagés du réseau (Windows, Mac, NAS : SMB 1 à 3).
     implementation("eu.agno3.jcifs:jcifs-ng:2.1.10")

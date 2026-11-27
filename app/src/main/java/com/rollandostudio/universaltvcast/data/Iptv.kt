@@ -54,7 +54,8 @@ object Iptv {
                     val inf = info ?: continue
                     info = null
                     val url = line
-                    if (!url.startsWith("http://", true) && !url.startsWith("https://", true)) continue
+                    // HTTP, et aussi UDP / RTP multicast (box), RTSP / RTMP (lus sur le téléphone).
+                    if (!com.rollandostudio.universaltvcast.net.Streams.supported(url)) continue
                     val host = runCatching { java.net.URI(url).host?.lowercase() }.getOrNull().orEmpty()
                     if (PAGE_HOSTS.any { host == it || host.endsWith(".$it") }) continue
                     if (!seen.add(url)) continue

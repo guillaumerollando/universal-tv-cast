@@ -395,6 +395,7 @@
     <string name="lan_all">Wszystkie</string>
     <string name="lan_sort_asc">Rosnąco</string>
     <string name="lan_sort_desc">Malejąco</string>
+    <string name="stream_phone_only">Ten strumień (RTSP / RTMP) odtwarza się w telefonie, nie na telewizorze.</string>
     <plurals name="browser_found">
         <item quantity="one">%d wideo</item>
         <item quantity="few">%d wideo</item>

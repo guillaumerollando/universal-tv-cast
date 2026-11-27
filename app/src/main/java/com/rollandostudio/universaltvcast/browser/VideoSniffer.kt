@@ -119,7 +119,7 @@ class VideoSniffer {
         val ext = Mime.ext(url)
         // Une liste HLS se termine par .m3u8 dans son chemin ; pas « m3u8 » au milieu des paramètres (mesures
         // d'audience d'Arte, journaux de lecteurs…), qui faisaient apparaître des dizaines de fausses vidéos.
-        val hls = ext == "m3u8" || req.url.path.orEmpty().endsWith(".m3u8", ignoreCase = true)
+        val hls = ext == "m3u8" || ext == "mpd" || req.url.path.orEmpty().endsWith(".m3u8", ignoreCase = true)
         if (AdBlock.isAd(req.url)) return
         if (hls || ext in fileExt) { add(url, hls, req.requestHeaders); return }
         // Adresse sans extension connue : un lecteur vidéo qui demande « à partir de l'octet 0 », ou une adresse
@@ -146,7 +146,8 @@ class VideoSniffer {
                     val type = c.contentType.orEmpty().lowercase()
                     val head = c.inputStream.use { ins -> ByteArray(1024).let { b -> val n = ins.read(b); if (n > 0) b.copyOf(n) else ByteArray(0) } }
                     val text = String(head, Charsets.ISO_8859_1)
-                    val isHls = type.contains("mpegurl") || text.trimStart().startsWith("#EXTM3U")
+                    val isHls = type.contains("mpegurl") || text.trimStart().startsWith("#EXTM3U") ||
+                        type.contains("dash+xml") || text.contains("<MPD")
                     val isFile = type.startsWith("video/") || (head.size > 8 && text.substring(4, 8) == "ftyp") ||
                         (head.size > 4 && head[0] == 0x1A.toByte() && head[1] == 0x45.toByte() && head[2] == 0xDF.toByte())
                     // Morceaux d'un flux déjà trouvé (listes de variantes, fragments vidéo), ou fichier trop petit pour
@@ -168,7 +169,9 @@ class VideoSniffer {
         val url = url0.substringBefore('#')
         // Manifestes DASH / Smooth Streaming (Wikimedia, certains lecteurs) : ni le lecteur du téléphone ni les télés
         // DLNA ne les lisent ; la même vidéo est presque toujours proposée aussi en fichier ou en HLS.
-        if (Mime.ext(url) in setOf("mpd", "ism", "f4m")) return
+        // Smooth Streaming et HDS (Flash) : abandonnés par les sites, ni le téléphone ni les télés ne les lisent.
+        // Le DASH (.mpd), lui, est gardé : traité comme une liste HLS (flux continu vers la télé).
+        if (Mime.ext(url) in setOf("ism", "f4m")) return
         // Ogg Theora (vieux fichiers de Wikimedia) : ni les télés ni le lecteur du téléphone ne le lisent ; le site
         // en propose presque toujours une version WebM ou MP4.
         if (Mime.ext(url) in setOf("ogv", "ogg")) return
@@ -515,19 +518,19 @@ class VideoSniffer {
     navigator.requestMediaKeySystemAccess = function(){ try { TvCastBridge.drm && TvCastBridge.drm(); } catch(e){} return rk.apply(null, arguments); }; } } catch(e){}
   // Listes HLS chargées en coulisse par le lecteur du site, sans « .m3u8 » dans l'adresse : reconnues à leur
   // contenu (« #EXTM3U ») ou à leur type. Les adresses en .m3u8 sont déjà vues par l'appli.
-  function hlsSeen(u){ try { if (u && TvCastBridge.hls && !/\.m3u8(\?|$)/i.test(u.split('#')[0])) TvCastBridge.hls(new URL(u, location.href).href); } catch(e){} }
+  function hlsSeen(u){ try { if (u && TvCastBridge.hls && !/\.(m3u8|mpd)(\?|$)/i.test(u.split('#')[0])) TvCastBridge.hls(new URL(u, location.href).href); } catch(e){} }
   try { var xo = XMLHttpRequest.prototype.open, xs = XMLHttpRequest.prototype.send;
     XMLHttpRequest.prototype.open = function(m, u){ this.__tvcastUrl = u; return xo.apply(this, arguments); };
     XMLHttpRequest.prototype.send = function(){ var x = this;
       x.addEventListener('load', function(){ try { if ((x.responseType === '' || x.responseType === 'text') &&
-        typeof x.responseText === 'string' && x.responseText.lastIndexOf('#EXTM3U', 0) === 0) hlsSeen(x.responseURL || x.__tvcastUrl); } catch(e){} });
+        typeof x.responseText === 'string' && (x.responseText.lastIndexOf('#EXTM3U', 0) === 0 || x.responseText.indexOf('<MPD') >= 0)) hlsSeen(x.responseURL || x.__tvcastUrl); } catch(e){} });
       return xs.apply(this, arguments); };
   } catch(e){}
   try { var fo = window.fetch; if (fo) window.fetch = function(){ return fo.apply(this, arguments).then(function(r){
       try { var ct = (r.headers.get('content-type') || '').toLowerCase();
-        if (ct.indexOf('mpegurl') >= 0) hlsSeen(r.url);
+        if (ct.indexOf('mpegurl') >= 0 || ct.indexOf('dash+xml') >= 0) hlsSeen(r.url);
         else if (ct.indexOf('text') >= 0 || ct === '' || ct.indexOf('octet') >= 0) r.clone().text().then(function(t){
-          if (t.lastIndexOf('#EXTM3U', 0) === 0) hlsSeen(r.url); }).catch(function(){}); } catch(e){}
+          if (t.lastIndexOf('#EXTM3U', 0) === 0 || t.indexOf('<MPD') >= 0) hlsSeen(r.url); }).catch(function(){}); } catch(e){}
       return r; }); };
   } catch(e){}
   try { var attach = Element.prototype.attachShadow;

@@ -58,6 +58,19 @@ Les textes des 23 langues viennent de `tools/strings.py` et `tools/i18n/*.json` 
 régénère les `strings.xml` : ne pas les modifier à la main). `tools/test-tele/` : fausse télé DLNA et site lent
 pour les essais.
 
+## Formats pris en charge
+- **HLS** : TS ou MP4 par morceaux (CMAF), son à part recollé (TS et MP4), AES-128, plages d'octets, directs,
+  coupures (#EXT-X-DISCONTINUITY : pubs insérées) avec horloge recalée ; variante H.264 préférée au HEVC pour la télé.
+- **DASH** (.mpd, sans DRM) : SegmentTemplate ($Number$, $Time$, SegmentTimeline), SegmentList, SegmentBase / index
+  dans le fichier (sidx, à plusieurs niveaux) ; envoyé à la télé en flux continu MP4, image et son recollés ; directs
+  DASH lus sur le téléphone seulement.
+- **Fichiers** : MP4, MKV, WebM, MOV, AVI, TS (envoyés tels quels : la télé décide de ce qu'elle lit).
+- **Sous-titres** : SRT, WebVTT (aussi découpé en morceaux), ASS/SSA, TTML / EBU-TT-D / IMSC, WebVTT et TTML
+  dans du MP4 (DASH) ; intégrés aux MKV / MP4 (choix sur le téléphone, gérés par la télé sinon).
+- **Chaînes IPTV** : HTTP(S), UDP / RTP multicast (relayés en HTTP par le téléphone), RTSP / RTMP (téléphone seulement).
+- **Impossible** : DRM (Widevine, FairPlay, PlayReady), et sources uniquement HEVC / AV1 / VP9 que la télé ne lit pas
+  (pas de réencodage sur le téléphone).
+
 ## Limites connues
 - Pas de duplication d'écran : l'appli envoie une vidéo, pas l'écran du téléphone.
 - Vidéos protégées par DRM (Netflix, Disney+…) et YouTube : impossibles, voulu par ces sites.

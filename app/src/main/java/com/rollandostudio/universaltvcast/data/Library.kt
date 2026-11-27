@@ -147,6 +147,29 @@ object Library {
         _powerSaver.value = prefs.getBoolean("power_saver", false)
         _hiddenSites.value = prefs.getStringSet("hidden_sites", emptySet()).orEmpty().toSet()
         _dismissedTips.value = prefs.getStringSet("tips_dismissed", emptySet()).orEmpty().toSet()
+        _favChannels.value = runCatching {
+            val a = JSONArray(prefs.getString("fav_channels", "[]"))
+            (0 until a.length()).map { i -> a.getJSONObject(i).let { o ->
+                val h = o.optJSONObject("headers")
+                FavChannel(o.getString("url"), o.getString("name"), o.optString("logo").ifEmpty { null },
+                    h?.keys()?.asSequence()?.associateWith { h.getString(it) } ?: emptyMap(), o.optString("page").ifEmpty { null })
+            } }
+        }.getOrDefault(emptyList())
+    }
+
+    /** Chaîne mise en favori (★) : elle ressort dans « Mes favoris », comme un site ou un dossier du réseau. */
+    data class FavChannel(val url: String, val name: String, val logo: String?, val headers: Map<String, String> = emptyMap(), val page: String? = null)
+    private val _favChannels = MutableStateFlow<List<FavChannel>>(emptyList())
+    val favChannels: StateFlow<List<FavChannel>> = _favChannels
+    fun isFavChannel(url: String) = _favChannels.value.any { it.url == url }
+    fun toggleFavChannel(f: FavChannel) {
+        _favChannels.value = if (isFavChannel(f.url)) _favChannels.value.filter { it.url != f.url } else (_favChannels.value + f).takeLast(40)
+        val a = JSONArray()
+        _favChannels.value.forEach { c ->
+            a.put(org.json.JSONObject().put("url", c.url).put("name", c.name).put("logo", c.logo ?: "")
+                .put("headers", org.json.JSONObject(c.headers)).put("page", c.page ?: ""))
+        }
+        prefs.edit().putString("fav_channels", a.toString()).apply()
     }
 
     var lastTv: String?

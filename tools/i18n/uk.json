@@ -393,7 +393,8 @@
   "lan_random": "Навмання",
   "lan_all": "Усі",
   "lan_sort_asc": "За зростанням",
-  "lan_sort_desc": "За спаданням"
+  "lan_sort_desc": "За спаданням",
+  "stream_phone_only": "Цей потік (RTSP / RTMP) відтворюється на телефоні, а не на телевізорі."
  },
  "plurals": {
   "browser_found": {

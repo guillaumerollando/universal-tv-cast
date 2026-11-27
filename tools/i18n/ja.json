@@ -393,7 +393,8 @@
   "lan_random": "おまかせ",
   "lan_all": "すべて",
   "lan_sort_asc": "昇順",
-  "lan_sort_desc": "降順"
+  "lan_sort_desc": "降順",
+  "stream_phone_only": "このストリーム（RTSP / RTMP）はテレビではなくスマホで再生されます。"
  },
  "plurals": {
   "browser_found": {

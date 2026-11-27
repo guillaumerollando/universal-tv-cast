@@ -1559,6 +1559,10 @@
   "lan_sort_desc": {
    "en": "Descending",
    "fr": "Décroissant"
+  },
+  "stream_phone_only": {
+   "en": "This stream (RTSP / RTMP) plays on the phone, not on the TV.",
+   "fr": "Ce flux (RTSP / RTMP) se lit sur le téléphone, pas sur la télé."
   }
  },
  "plurals": {

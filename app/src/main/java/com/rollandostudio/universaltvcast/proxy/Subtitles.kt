@@ -12,11 +12,61 @@ object Subtitles {
         val head = text.trimStart()
         text = when {
             head.startsWith("WEBVTT") -> fromVtt(text)
+            // TTML / EBU-TT-D / IMSC (sous-titres des diffuseurs européens, du DASH).
+            Regex("<(\\w+:)?tt[\\s>]").containsMatchIn(head.take(4000)) -> fromTtml(text)
             head.startsWith("[Script Info]") || text.contains("\n[Events]") -> fromAss(text)
             else -> text
         }
         return ("\uFEFF" + text.trim() + "\n").toByteArray(Charsets.UTF_8)
     }
+
+    /** TTML : chaque <p begin end> devient une réplique ; <br/> = retour à la ligne ; les styles sont ignorés. */
+    private fun fromTtml(text: String): String = runCatching {
+        val doc = javax.xml.parsers.DocumentBuilderFactory.newInstance().apply { isNamespaceAware = false; isExpandEntityReferences = false }
+            .newDocumentBuilder().parse(java.io.ByteArrayInputStream(text.toByteArray(Charsets.UTF_8)))
+        val root = doc.documentElement
+        fun a(e: org.w3c.dom.Element, n: String) = e.getAttribute(n).ifEmpty { e.getAttribute("ttp:$n") }.ifEmpty { null }
+        val frameRate = a(root, "frameRate")?.toDoubleOrNull() ?: 30.0
+        val tickRate = a(root, "tickRate")?.toDoubleOrNull() ?: 10_000_000.0
+        fun seconds(v: String?): Double? {
+            val s = v?.trim() ?: return null
+            Regex("^(\\d+):(\\d{2}):(\\d{2})(?:([.:])(\\d+))?$").find(s)?.let { m ->
+                val (h, mi, se, sep, f) = m.destructured
+                val frac = when { f.isEmpty() -> 0.0; sep == "." -> "0.$f".toDouble(); else -> f.toDouble() / frameRate }
+                return h.toLong() * 3600 + mi.toLong() * 60 + se.toLong() + frac
+            }
+            Regex("^([\\d.]+)(h|m|s|ms|f|t)$").find(s)?.let { m ->
+                val n = m.groupValues[1].toDouble()
+                return when (m.groupValues[2]) { "h" -> n * 3600; "m" -> n * 60; "s" -> n; "ms" -> n / 1000; "f" -> n / frameRate; else -> n / tickRate }
+            }
+            return null
+        }
+        fun textOf(n: org.w3c.dom.Node): String = buildString {
+            var c = n.firstChild
+            while (c != null) {
+                when {
+                    c.nodeType == org.w3c.dom.Node.TEXT_NODE -> append(c.nodeValue.replace(Regex("\\s+"), " "))
+                    c is org.w3c.dom.Element && c.tagName.substringAfter(':') == "br" -> append('\n')
+                    c is org.w3c.dom.Element -> append(textOf(c))
+                }
+                c = c.nextSibling
+            }
+        }
+        val ps = doc.getElementsByTagName("*")
+        val out = StringBuilder()
+        var n = 1
+        for (i in 0 until ps.length) {
+            val p = ps.item(i) as org.w3c.dom.Element
+            if (p.tagName.substringAfter(':') != "p") continue
+            val b = seconds(p.getAttribute("begin")) ?: continue
+            val e = seconds(p.getAttribute("end")) ?: seconds(p.getAttribute("dur"))?.let { b + it } ?: continue
+            val t = textOf(p).lines().joinToString("\n") { it.trim() }.trim()
+            if (t.isEmpty()) continue
+            out.append(n++).append('\n').append(srtTime((b * 1000).toLong())).append(" --> ").append(srtTime((e * 1000).toLong()))
+                .append('\n').append(t).append("\n\n")
+        }
+        out.toString()
+    }.getOrDefault(text)
 
     private val SRT_TIME = Regex("(\\d{1,2}):(\\d{2}):(\\d{2})[,.](\\d{3})\\s*-->\\s*(\\d{1,2}):(\\d{2}):(\\d{2})[,.](\\d{3})")
 

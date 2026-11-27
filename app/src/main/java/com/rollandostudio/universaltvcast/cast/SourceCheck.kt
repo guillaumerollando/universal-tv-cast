@@ -31,6 +31,8 @@ internal object SourceCheck {
 
     suspend fun verify(m: Media, isHls: Boolean) = withContext(Dispatchers.IO) {
         if (m.isLocal) return@withContext
+        // UDP / RTP / RTSP / RTMP : pas de vérification HTTP possible.
+        if (!m.url.startsWith("http", true)) return@withContext
         verified?.let { (u, t) -> if (u == m.url && System.currentTimeMillis() - t < 60_000) return@withContext }
         val probe = if (isHls) {
             val plan = try { Hls.load(m.url, m.headers) } catch (e: HttpError) {

@@ -395,6 +395,7 @@
     <string name="lan_all">すべて</string>
     <string name="lan_sort_asc">昇順</string>
     <string name="lan_sort_desc">降順</string>
+    <string name="stream_phone_only">このストリーム（RTSP / RTMP）はテレビではなくスマホで再生されます。</string>
     <plurals name="browser_found">
         <item quantity="other">%d 本の動画</item>
     </plurals>

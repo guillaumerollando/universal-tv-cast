@@ -395,6 +395,7 @@
     <string name="lan_all">전체</string>
     <string name="lan_sort_asc">오름차순</string>
     <string name="lan_sort_desc">내림차순</string>
+    <string name="stream_phone_only">이 스트림(RTSP / RTMP)은 TV가 아닌 휴대폰에서 재생됩니다.</string>
     <plurals name="browser_found">
         <item quantity="other">동영상 %d개</item>
     </plurals>

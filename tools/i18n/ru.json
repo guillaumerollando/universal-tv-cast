@@ -393,7 +393,8 @@
   "lan_random": "Наугад",
   "lan_all": "Все",
   "lan_sort_asc": "По возрастанию",
-  "lan_sort_desc": "По убыванию"
+  "lan_sort_desc": "По убыванию",
+  "stream_phone_only": "Этот поток (RTSP / RTMP) воспроизводится на телефоне, а не на телевизоре."
  },
  "plurals": {
   "browser_found": {

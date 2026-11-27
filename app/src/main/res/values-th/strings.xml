@@ -395,6 +395,7 @@
     <string name="lan_all">ทั้งหมด</string>
     <string name="lan_sort_asc">น้อยไปมาก</string>
     <string name="lan_sort_desc">มากไปน้อย</string>
+    <string name="stream_phone_only">สตรีมนี้ (RTSP / RTMP) เล่นบนโทรศัพท์ ไม่ใช่บนทีวี</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>

@@ -131,3 +131,70 @@ class Fmp4Merge {
         return out.toByteArray()
     }
 }
+
+/**
+ * Horloge continue pour un MP4 fragmenté assemblé de morceaux HLS : après une coupure (publicité, pré-roll), le temps
+ * de départ des fragments (`tfdt`) repart d'ailleurs ; on le décale pour qu'il suive le morceau précédent, piste par
+ * piste (chacune a sa propre échelle de temps, lue dans l'en-tête).
+ */
+class Fmp4Clock {
+    private val timescale = HashMap<Int, Long>()
+    private val offset = HashMap<Int, Long>()
+    private val nextStart = HashMap<Int, Long>()
+
+    private fun u32(b: ByteArray, at: Int) = java.nio.ByteBuffer.wrap(b, at, 4).int.toLong() and 0xFFFFFFFFL
+    private fun u64(b: ByteArray, at: Int) = java.nio.ByteBuffer.wrap(b, at, 8).long
+
+    /** Boîtes filles de [from, to) : (type, début, fin, début du contenu). */
+    private fun kids(b: ByteArray, from: Int, to: Int): List<IntArray> {
+        val out = mutableListOf<IntArray>()
+        var p = from
+        while (p + 8 <= to) {
+            var size = u32(b, p)
+            var h = 8
+            if (size == 1L && p + 16 <= to) { size = u64(b, p + 8); h = 16 }
+            if (size == 0L) size = (to - p).toLong()
+            if (size < h || p + size > to) break
+            out += intArrayOf(type(b, p), p, (p + size).toInt(), p + h)
+            p += size.toInt()
+        }
+        return out
+    }
+    private fun type(b: ByteArray, p: Int) = java.nio.ByteBuffer.wrap(b, p + 4, 4).int
+    private fun t(s: String) = java.nio.ByteBuffer.wrap(s.toByteArray(Charsets.ISO_8859_1)).int
+
+    /** Lit l'échelle de temps de chaque piste dans un en-tête (moov → trak → tkhd + mdia/mdhd). */
+    fun init(b: ByteArray) {
+        for (top in kids(b, 0, b.size).filter { it[0] == t("moov") }) for (trak in kids(b, top[3], top[2]).filter { it[0] == t("trak") }) {
+            val k = kids(b, trak[3], trak[2])
+            val tkhd = k.firstOrNull { it[0] == t("tkhd") } ?: continue
+            val id = u32(b, tkhd[3] + 4 + if (b[tkhd[3]].toInt() == 1) 16 else 8).toInt()
+            val mdia = k.firstOrNull { it[0] == t("mdia") } ?: continue
+            val mdhd = kids(b, mdia[3], mdia[2]).firstOrNull { it[0] == t("mdhd") } ?: continue
+            timescale[id] = u32(b, mdhd[3] + 4 + if (b[mdhd[3]].toInt() == 1) 16 else 8)
+        }
+    }
+
+    /** Morceau suivant ([seconds] : sa durée) ; [discontinuity] : il suit une coupure. Modifie [data] sur place. */
+    fun process(data: ByteArray, seconds: Double, discontinuity: Boolean): ByteArray {
+        val seen = HashSet<Int>()
+        for (moof in kids(data, 0, data.size).filter { it[0] == t("moof") }) for (traf in kids(data, moof[3], moof[2]).filter { it[0] == t("traf") }) {
+            val k = kids(data, traf[3], traf[2])
+            val tfhd = k.firstOrNull { it[0] == t("tfhd") } ?: continue
+            val tfdt = k.firstOrNull { it[0] == t("tfdt") } ?: continue
+            val id = u32(data, tfhd[3] + 4).toInt()
+            val v1 = data[tfdt[3]].toInt() == 1
+            val at = tfdt[3] + 4
+            val base = if (v1) u64(data, at) else u32(data, at)
+            if (discontinuity && id !in seen) nextStart[id]?.let { offset[id] = it - base }
+            val moved = base + (offset[id] ?: 0L)
+            if (v1) java.nio.ByteBuffer.wrap(data, at, 8).putLong(moved)
+            else java.nio.ByteBuffer.wrap(data, at, 4).putInt(moved.coerceIn(0, 0xFFFFFFFFL).toInt())
+            if (id !in seen) {
+                seen += id
+                timescale[id]?.let { ts -> nextStart[id] = moved + (seconds * ts).toLong() }
+            }
+        }
+        return data
+    }
+}

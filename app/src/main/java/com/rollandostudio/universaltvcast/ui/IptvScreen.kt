@@ -698,6 +698,13 @@ private fun ChannelTile(ch: Iptv.Channel, modifier: Modifier, onClick: () -> Uni
             )
         }
         DropdownMenu(menu, onDismissRequest = { menu = false }, shape = RoundedCornerShape(16.dp)) {
+            // Une chaîne est une source : elle peut aller dans « Mes favoris » de l'accueil.
+            val fav = com.rollandostudio.universaltvcast.data.Library.favChannels.collectAsState().value.any { it.url == ch.url }
+            DropdownMenuItem(text = { Text(stringResource(if (fav) R.string.cd_bookmark_remove else R.string.cd_bookmark_add)) }, onClick = {
+                menu = false
+                com.rollandostudio.universaltvcast.data.Library.toggleFavChannel(
+                    com.rollandostudio.universaltvcast.data.Library.FavChannel(ch.url, ch.name, ch.logo, ch.headers))
+            })
             if (onForget != null) DropdownMenuItem(text = { Text(forgetLabel) }, onClick = { menu = false; onForget() })
             DropdownMenuItem(text = { Text(hideLabel) }, onClick = { menu = false; onHide() })
         }

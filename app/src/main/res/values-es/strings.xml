@@ -123,6 +123,7 @@
     <string name="lan_all">Todos</string>
     <string name="lan_sort_asc">Ascendente</string>
     <string name="lan_sort_desc">Descendente</string>
+    <string name="stream_phone_only">Esta emisión (RTSP / RTMP) se ve en el móvil, no en la TV.</string>
     <string name="home_network">Red</string>
     <string name="home_network_short">Ordenador, NAS</string>
     <string name="net_searching">Buscando en tu red…</string>

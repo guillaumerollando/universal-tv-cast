@@ -393,7 +393,8 @@
   "lan_random": "कोई भी",
   "lan_all": "सभी",
   "lan_sort_asc": "आरोही",
-  "lan_sort_desc": "अवरोही"
+  "lan_sort_desc": "अवरोही",
+  "stream_phone_only": "यह स्ट्रीम (RTSP / RTMP) फ़ोन पर चलती है, टीवी पर नहीं।"
  },
  "plurals": {
   "browser_found": {

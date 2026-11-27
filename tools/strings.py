@@ -197,6 +197,7 @@ S = {
 "lan_all": ["All", "Tous", "Todos", "Alle", "Tutti", "Alle", "Todos"],
 "lan_sort_asc": ["Ascending", "Croissant", "Ascendente", "Aufsteigend", "Crescente", "Oplopend", "Crescente"],
 "lan_sort_desc": ["Descending", "Décroissant", "Descendente", "Absteigend", "Decrescente", "Aflopend", "Decrescente"],
+"stream_phone_only": ["This stream (RTSP / RTMP) plays on the phone, not on the TV.", "Ce flux (RTSP / RTMP) se lit sur le téléphone, pas sur la télé.", "Esta emisión (RTSP / RTMP) se ve en el móvil, no en la TV.", "Dieser Stream (RTSP / RTMP) läuft auf dem Handy, nicht auf dem Fernseher.", "Questo flusso (RTSP / RTMP) si guarda sul telefono, non sulla TV.", "Deze stream (RTSP / RTMP) speelt op de telefoon, niet op de tv.", "Esta transmissão (RTSP / RTMP) toca no celular, não na TV."],
 "home_network": ["Network", "Réseau", "Red", "Netzwerk", "Rete", "Netwerk", "Rede"],
 "home_network_short": ["Computer, NAS", "Ordinateur, NAS", "Ordenador, NAS", "Computer, NAS", "Computer, NAS", "Computer, NAS", "Computador, NAS"],
 "net_searching": ["Searching your network…", "Recherche sur ton réseau…", "Buscando en tu red…", "Suche in deinem Netzwerk…", "Ricerca nella tua rete…", "Je netwerk doorzoeken…", "Procurando na sua rede…"],

@@ -13,6 +13,8 @@ object Hls {
     class Seg(
         val url: String, val duration: Double, val seq: Long, val key: Key?, val map: String?,
         val range: String? = null, val mapRange: String? = null,
+        /** Le morceau suit une coupure (#EXT-X-DISCONTINUITY : publicité, pré-roll) : ses horodatages repartent ailleurs. */
+        val discontinuity: Boolean = false,
     ) {
         /** Identifie l'en-tête (fichier et plage) : on ne le renvoie que s'il change. */
         val mapId: String? get() = map?.let { it + (mapRange?.let { r -> "#$r" } ?: "") }
@@ -44,6 +46,8 @@ object Hls {
         /** Le son est dans une piste à part : le flux continu n'aurait pas de son. */
         val splitAudio: Boolean,
         val encryptedSample: Boolean,
+        /** Traduit d'un manifeste DASH. */
+        val dash: Boolean = false,
     ) {
         val duration: Double get() = segs.sumOf { it.duration }
     }
@@ -61,8 +65,11 @@ object Hls {
 
     /** Charge une liste ; si c'est une liste « maître », choisit la meilleure qualité avec le son. */
     fun load(url: String, headers: Map<String, String>): Plan {
+        // Manifeste DASH (.mpd) : traduit en liste équivalente.
+        if (Dash.isDash(url)) return Dash.plan(url, headers)
         // Une liste répond en une ou deux secondes : un serveur muet est vite déclaré absent (pas 15 s d'attente).
         val f = Http.fetch(url, headers, connectTimeout = 6000)
+        if (Dash.isDash("", f.bytes)) return Dash.plan(f.finalUrl, headers)
         val text = String(f.bytes, Charsets.UTF_8)
         if (!text.contains("#EXT-X-STREAM-INF")) return parseMedia(text, f.finalUrl, false)
 
@@ -102,7 +109,9 @@ object Hls {
      * en un seul fichier WebVTT (cas d'Arte) : l'appli sait les envoyer à la télé et au lecteur du téléphone.
      */
     fun tracks(url: String, headers: Map<String, String>): Pair<List<Track>, List<Track>> {
+        if (Dash.isDash(url)) return Dash.tracks(url, headers) to runCatching { Dash.subtitles(url, headers) }.getOrDefault(emptyList())
         val f = Http.fetch(url, headers)
+        if (Dash.isDash("", f.bytes)) return Dash.tracks(f.finalUrl, headers) to runCatching { Dash.subtitles(f.finalUrl, headers) }.getOrDefault(emptyList())
         val text = String(f.bytes, Charsets.UTF_8)
         if (!text.contains("#EXT-X-STREAM-INF")) return emptyList<Track>() to emptyList()
         val media = text.lines().map { it.trim() }.filter { it.startsWith("#EXT-X-MEDIA:") }.map { attrs(it.substringAfter(':')) }
@@ -114,11 +123,60 @@ object Hls {
             runCatching {
                 val p = Http.fetch(t.uri, headers)
                 val segs = String(p.bytes, Charsets.UTF_8).lines().map { it.trim() }.filter { it.isNotEmpty() && !it.startsWith("#") }
-                segs.singleOrNull()?.let { resolve(p.finalUrl, it) }?.takeIf { it.substringBefore('?').let { s -> s.endsWith(".vtt") || s.endsWith(".webvtt") } }
-                    ?.let { t.copy(uri = it) }
+                val vtt = { u: String -> u.substringBefore('?').let { s -> s.endsWith(".vtt") || s.endsWith(".webvtt") } }
+                when {
+                    segs.size == 1 -> segs.single().let { resolve(p.finalUrl, it) }.takeIf(vtt)?.let { t.copy(uri = it) }
+                    // WebVTT découpé en morceaux (beaucoup de diffuseurs) : recollé au chargement ([vttJoin]).
+                    segs.isNotEmpty() && segs.all(vtt) -> t.copy(uri = VTT_JOIN + p.finalUrl)
+                    else -> null
+                }
             }.getOrNull()
         }
         return audio to subs
+    }
+
+    /** Adresse d'une piste de sous-titres WebVTT découpée (« hlsvtt:<liste> »). */
+    const val VTT_JOIN = "hlsvtt:"
+
+    /**
+     * Recolle les morceaux d'une piste WebVTT en un seul fichier. Chaque morceau peut porter son propre calage
+     * (X-TIMESTAMP-MAP) : les répliques sont ramenées sur la même ligne de temps que le premier.
+     */
+    fun vttJoin(listUrl: String, headers: Map<String, String>): ByteArray {
+        val p = Http.fetch(listUrl, headers)
+        val urls = String(p.bytes, Charsets.UTF_8).lines().map { it.trim() }.filter { it.isNotEmpty() && !it.startsWith("#") }
+            .map { resolve(p.finalUrl, it) }.distinct()
+        val pool = java.util.concurrent.Executors.newFixedThreadPool(6)
+        val parts = try {
+            urls.map { u -> pool.submit<String> { runCatching { String(Http.fetch(u, headers).bytes, Charsets.UTF_8) }.getOrDefault("") } }.map { it.get() }
+        } finally { pool.shutdown() }
+        val map = Regex("X-TIMESTAMP-MAP=.*?MPEGTS:(\\d+).*?LOCAL:([\\d:.]+)|X-TIMESTAMP-MAP=.*?LOCAL:([\\d:.]+).*?MPEGTS:(\\d+)")
+        val cueTime = Regex("((?:\\d+:)?\\d{2}:\\d{2}\\.\\d{3})")
+        fun secs(t: String): Double { val f = t.split(':').map { it.toDouble() }; return f.fold(0.0) { acc, v -> acc * 60 + v } }
+        fun fmt(s: Double): String { val ms = (s.coerceAtLeast(0.0) * 1000).toLong()
+            return String.format(java.util.Locale.ROOT, "%02d:%02d:%02d.%03d", ms / 3_600_000, ms / 60_000 % 60, ms / 1000 % 60, ms % 1000) }
+        var base: Double? = null
+        val out = StringBuilder("WEBVTT\n\n")
+        val seen = HashSet<String>()
+        for (text in parts) {
+            val m = map.find(text)
+            val mpegts = (m?.groupValues?.get(1)?.ifEmpty { m.groupValues[4] })?.toDoubleOrNull()
+            val local = (m?.groupValues?.get(2)?.ifEmpty { m.groupValues[3] })?.let(::secs) ?: 0.0
+            val origin = (mpegts?.div(90_000.0) ?: 0.0) - local
+            if (base == null) base = origin
+            val shift = origin - base!!
+            for (block in text.replace("\r\n", "\n").split(Regex("\n\\s*\n"))) {
+                val lines = block.trim('\n').lines()
+                val i = lines.indexOfFirst { it.contains("-->") }
+                if (i < 0) continue
+                val times = cueTime.findAll(lines[i]).map { it.value }.toList()
+                if (times.size < 2) continue
+                val cue = fmt(secs(times[0]) + shift) + " --> " + fmt(secs(times[1]) + shift) + "\n" + lines.drop(i + 1).joinToString("\n")
+                // Une réplique à cheval sur deux morceaux y est souvent répétée.
+                if (seen.add(cue)) out.append(cue).append("\n\n")
+            }
+        }
+        return out.toString().toByteArray(Charsets.UTF_8)
     }
 
     fun reload(plan: Plan, headers: Map<String, String>): Plan {
@@ -139,6 +197,7 @@ object Hls {
         var range: String? = null
         val nextByte = HashMap<String, Long>()
         var pendingRange: String? = null
+        var cut = false
         val segs = mutableListOf<Seg>()
         for (raw in text.lines()) {
             val line = raw.trim()
@@ -161,12 +220,14 @@ object Hls {
                 }
                 line.startsWith("#EXT-X-BYTERANGE:") -> pendingRange = line.substringAfter(':').trim()
                 line.startsWith("#EXT-X-ENDLIST") -> end = true
+                line == "#EXT-X-DISCONTINUITY" -> cut = true
                 line.startsWith("#") -> Unit
                 else -> {
                     val u = resolve(base, line)
                     range = pendingRange?.let { spec -> byteRange(spec, nextByte[u] ?: 0)?.also { nextByte[u] = it.second }?.first }
                     pendingRange = null
-                    segs += Seg(u, dur, seq, key, map, range, mapRange)
+                    segs += Seg(u, dur, seq, key, map, range, mapRange, discontinuity = cut)
+                    cut = false
                     seq++
                     dur = 0.0
                 }

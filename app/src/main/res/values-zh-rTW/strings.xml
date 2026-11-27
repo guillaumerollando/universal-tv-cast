@@ -395,6 +395,7 @@
     <string name="lan_all">全部</string>
     <string name="lan_sort_asc">遞增</string>
     <string name="lan_sort_desc">遞減</string>
+    <string name="stream_phone_only">此串流（RTSP / RTMP）在手機上播放，不在電視上播放。</string>
     <plurals name="browser_found">
         <item quantity="other">%d 部影片</item>
     </plurals>

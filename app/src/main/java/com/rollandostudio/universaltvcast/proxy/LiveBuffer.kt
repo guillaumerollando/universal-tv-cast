@@ -105,6 +105,9 @@ class LiveBuffer(
 
     // ---------------------------------------------------------------- enregistrement
 
+    private val tsClock = TsClock()
+    private var recorded = 0
+
     private fun run() {
         var lastReload = System.currentTimeMillis()
         while (alive) {
@@ -112,7 +115,11 @@ class LiveBuffer(
                 entries.firstOrNull { it.seg.seq >= fromSeq && it.file == null && !it.failed }
             }
             if (next != null) {
-                val data = fetch(next.seg)
+                // Coupures (publicités insérées des chaînes gratuites) : horloge recalée à l'enregistrement, pour que
+                // tout ce qui est relu forme une seule ligne de temps continue.
+                val data = fetch(next.seg)?.let { d ->
+                    if (d.size >= 188 && d[0].toInt() == 0x47) tsClock.process(d, next.seg.discontinuity && recorded > 0) else d
+                }?.also { recorded++ }
                 synchronized(lock) {
                     if (data == null) next.failed = true
                     else runCatching {

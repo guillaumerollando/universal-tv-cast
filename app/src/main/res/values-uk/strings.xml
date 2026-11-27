@@ -395,6 +395,7 @@
     <string name="lan_all">Усі</string>
     <string name="lan_sort_asc">За зростанням</string>
     <string name="lan_sort_desc">За спаданням</string>
+    <string name="stream_phone_only">Цей потік (RTSP / RTMP) відтворюється на телефоні, а не на телевізорі.</string>
     <plurals name="browser_found">
         <item quantity="one">%d відео</item>
         <item quantity="few">%d відео</item>

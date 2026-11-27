@@ -101,6 +101,7 @@ fun HomeScreen(
     val sites = siteItems(recents, bookmarks, hidden)
     val channels = recents.filter { it.live }
     val folders by com.rollandostudio.universaltvcast.lan.LanStore.folders.collectAsState()
+    val favChannels by Library.favChannels.collectAsState()
     // « Tout voir » : 1 = tout « Reprendre », 2 = tous les sites.
     var showAll by rememberSaveable { androidx.compose.runtime.mutableIntStateOf(0) }
     if (showAll == 1 && resume.isNotEmpty() || showAll == 2 && sites.isNotEmpty()) {
@@ -112,7 +113,7 @@ fun HomeScreen(
 
     // Habitué (des séries en cours, des sites en favori) : ce qu'il regarde d'abord, les façons de caster en
     // une rangée compacte. Nouveau venu : la présentation et les grandes tuiles.
-    if (resume.isNotEmpty() || sites.isNotEmpty() || channels.isNotEmpty() || folders.isNotEmpty()) {
+    if (resume.isNotEmpty() || sites.isNotEmpty() || channels.isNotEmpty() || folders.isNotEmpty() || favChannels.isNotEmpty()) {
         // « Coller un lien » de la carte des chaînes gratuites : l'accueil remonte jusqu'à la tuile « Lien » et la fait
         // briller, comme pour un nouveau venu (on saura où la trouver la prochaine fois).
         val guideScope = androidx.compose.runtime.rememberCoroutineScope()
@@ -158,10 +159,10 @@ fun HomeScreen(
                 }
             }
             // « Mes favoris » : dossiers du réseau mis en ★ (NAS, ordinateur), puis les sites.
-            if (sites.isNotEmpty() || folders.isNotEmpty()) {
+            if (sites.isNotEmpty() || folders.isNotEmpty() || favChannels.isNotEmpty()) {
                 item {
                     Row(Modifier.padding(start = 16.dp, end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                        SectionTitle(stringResource(if (folders.isEmpty()) R.string.home_sites else R.string.home_favorites),
+                        SectionTitle(stringResource(if (folders.isEmpty() && favChannels.isEmpty()) R.string.home_sites else R.string.home_favorites),
                             Modifier.weight(1f).semantics { heading() })
                         if (sites.size > 4) TextButton(onClick = { showAll = 2 }) {
                             Text(stringResource(R.string.home_see_all))
@@ -173,6 +174,7 @@ fun HomeScreen(
                 item {
                     LazyRow(contentPadding = PaddingValues(horizontal = 12.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                         items(folders, key = { "f" + it.key }) { f -> FolderTile(f, Modifier.width(72.dp)) }
+                        items(favChannels, key = { "c" + it.url }) { ch -> FavChannelTile(ch, onBrowse) }
                         items(sites, key = { "s" + it.id }) { s -> SiteTile(s, Modifier.width(72.dp)) { onBrowse(it) } }
                     }
                 }
@@ -404,9 +406,37 @@ private fun ResumeCard(r: ResumeItem, onBrowse: (String?) -> Unit, modifier: Mod
     )
 }
 
+/** Chaîne en favori : son logo, ouverte d'un appui (sur son site si elle en vient), retirée par appui long. */
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+@Composable
+private fun FavChannelTile(ch: Library.FavChannel, onBrowse: (String?) -> Unit) {
+    var menu by remember { mutableStateOf(false) }
+    val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
+    Box(Modifier.padding(horizontal = 2.dp, vertical = 6.dp)) {
+        Box(Modifier.width(ChannelTiles.width).aspectRatio(16f / 10f).clip(RoundedCornerShape(ChannelTiles.corner))
+            .combinedClickable(
+                role = Role.Button,
+                onClick = {
+                    if (ch.page != null) onBrowse(ch.page)
+                    else playChannel(com.rollandostudio.universaltvcast.data.Iptv.Channel(ch.name, ch.url, ch.logo, headers = ch.headers))
+                },
+                onLongClick = { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); menu = true },
+            )
+            .semantics { contentDescription = ch.name }) {
+            ChannelArt(name = ch.name, logo = ch.logo, streamUrl = ch.url, pad = ChannelTiles.logoPad,
+                textStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
+                modifier = Modifier.matchParentSize())
+        }
+        androidx.compose.material3.DropdownMenu(expanded = menu, onDismissRequest = { menu = false }, shape = RoundedCornerShape(16.dp)) {
+            androidx.compose.material3.DropdownMenuItem(text = { Text(stringResource(R.string.cd_bookmark_remove)) },
+                onClick = { menu = false; Library.toggleFavChannel(ch) })
+        }
+    }
+}
+
 /**
  * Chaîne en direct : tuile à sa couleur (connue, sinon tirée de son nom), son nom, « ● Direct ».
- * Un toucher la relance au direct ; appui long : renommer, retirer.
+ * Un toucher la relance au direct ; appui long : favori, renommer, retirer.
  */
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
@@ -449,6 +479,11 @@ private fun ChannelTile(r: Recent, onBrowse: (String?) -> Unit) {
             }
         }
         androidx.compose.material3.DropdownMenu(expanded = menu, onDismissRequest = { menu = false }, shape = RoundedCornerShape(16.dp)) {
+            val fav = Library.favChannels.collectAsState().value.any { it.url == r.url }
+            androidx.compose.material3.DropdownMenuItem(
+                text = { Text(stringResource(if (fav) R.string.cd_bookmark_remove else R.string.cd_bookmark_add)) },
+                onClick = { menu = false; Library.toggleFavChannel(Library.FavChannel(r.url, name, r.poster, r.headers, r.pageUrl?.takeIf { it.startsWith("http") })) },
+            )
             androidx.compose.material3.DropdownMenuItem(text = { Text(renameLabel) }, onClick = { menu = false; rename = true })
             androidx.compose.material3.DropdownMenuItem(text = { Text(removeLabel) }, onClick = { menu = false; Library.removeRecent(r.key) })
         }

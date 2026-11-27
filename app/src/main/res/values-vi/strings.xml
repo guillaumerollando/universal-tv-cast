@@ -395,6 +395,7 @@
     <string name="lan_all">Tất cả</string>
     <string name="lan_sort_asc">Tăng dần</string>
     <string name="lan_sort_desc">Giảm dần</string>
+    <string name="stream_phone_only">Luồng này (RTSP / RTMP) phát trên điện thoại, không phát trên TV.</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

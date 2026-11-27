@@ -38,10 +38,11 @@ internal object MediaProbe {
         val c = Http.open(m.url, m.headers, "bytes=0-63", connectTimeout = 8000)
         try {
             if (c.responseCode >= 400) return@runCatching false
-            if (c.contentType?.contains("mpegurl", true) == true) return@runCatching true
-            val buf = ByteArray(64)
+            if (c.contentType?.contains("mpegurl", true) == true || c.contentType?.contains("dash+xml", true) == true) return@runCatching true
+            val buf = ByteArray(512)
             val n = c.inputStream.use { it.read(buf) }
-            n > 0 && Hls.isPlaylist(buf.copyOf(n))
+            // Liste HLS, ou manifeste DASH (traité de la même façon).
+            n > 0 && (Hls.isPlaylist(buf.copyOf(n)) || com.rollandostudio.universaltvcast.proxy.Dash.isDash("", buf.copyOf(n)))
         } finally {
             c.disconnect()
         }

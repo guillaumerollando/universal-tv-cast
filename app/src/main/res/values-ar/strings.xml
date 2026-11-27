@@ -395,6 +395,7 @@
     <string name="lan_all">الكل</string>
     <string name="lan_sort_asc">تصاعدي</string>
     <string name="lan_sort_desc">تنازلي</string>
+    <string name="stream_phone_only">هذا البث (RTSP / RTMP) يُشغَّل على الهاتف، لا على التلفاز.</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>

@@ -393,7 +393,8 @@
   "lan_random": "Rastgele",
   "lan_all": "Tümü",
   "lan_sort_asc": "Artan",
-  "lan_sort_desc": "Azalan"
+  "lan_sort_desc": "Azalan",
+  "stream_phone_only": "Bu yayın (RTSP / RTMP) televizyonda değil, telefonda oynatılır."
  },
  "plurals": {
   "browser_found": {

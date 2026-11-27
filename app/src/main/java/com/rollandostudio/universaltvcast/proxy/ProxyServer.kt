@@ -225,6 +225,7 @@ class ProxyServer(private val ctx: Context) {
     private fun serveRemote(req: Req, out: OutputStream) {
         val id = req.seg.getOrNull(1) ?: ""
         val r = remotes[id] ?: return empty(out, 404, "Not Found")
+        if (com.rollandostudio.universaltvcast.net.Streams.multicast(r.url)) return serveMulticast(r.url, req, out)
         if (r.kind == Kind.MAIN && req.method == "HEAD") {
             if (metas[id] == null) prefetchMeta(id)
             metas[id]?.let { m ->
@@ -359,6 +360,47 @@ class ProxyServer(private val ctx: Context) {
         return "${baseUrl()}/r/$id/$name"
     }
 
+    // ------------------------------------------------------------------ UDP / RTP multicast (box des opérateurs)
+
+    /**
+     * Chaîne diffusée en multicast sur le réseau de la maison (MPEG-TS sur UDP, ou sur RTP) : le téléphone rejoint
+     * le groupe et renvoie les paquets en HTTP, flux continu que la télé (ou le lecteur du téléphone) lit comme un direct.
+     */
+    private fun serveMulticast(url: String, req: Req, out0: OutputStream) {
+        val (group, port) = com.rollandostudio.universaltvcast.net.Streams.group(url) ?: return empty(out0, 404, "Not Found")
+        val h = listOf("Content-Type" to "video/mp2t", "Cache-Control" to "no-cache")
+        if (req.method == "HEAD") { head(out0, 200, "OK", h + dlna(false)); return }
+        val wifi = ctx.applicationContext.getSystemService(android.content.Context.WIFI_SERVICE) as android.net.wifi.WifiManager
+        val lock = wifi.createMulticastLock("tvcast-multicast").apply { setReferenceCounted(false); acquire() }
+        try {
+            java.net.MulticastSocket(port).use { sock ->
+                sock.soTimeout = 15_000
+                sock.receiveBufferSize = 1 shl 20
+                @Suppress("DEPRECATION") sock.joinGroup(java.net.InetAddress.getByName(group))
+                head(out0, 200, "OK", h + ("Transfer-Encoding" to "chunked") + dlna(false))
+                val out = ChunkedOutputStream(out0)
+                val buf = ByteArray(65536)
+                Log.i(TAG, "multicast $group:$port : réception")
+                while (true) {
+                    val p = java.net.DatagramPacket(buf, buf.size)
+                    sock.receive(p) // 15 s sans rien : la chaîne ne passe pas (ou plus) sur ce réseau
+                    var off = 0
+                    // En-tête RTP (version 2) devant le MPEG-TS : 12 octets, plus les sources et l'extension.
+                    if (p.length > 12 && (buf[0].toInt() and 0xC0) == 0x80 && buf[0].toInt() != 0x47) {
+                        off = 12 + 4 * (buf[0].toInt() and 0x0F)
+                        if (buf[0].toInt() and 0x10 != 0 && off + 4 <= p.length) off += 4 + 4 * (((buf[off + 2].toInt() and 0xFF) shl 8) or (buf[off + 3].toInt() and 0xFF))
+                    }
+                    if (off < p.length) out.write(buf, off, p.length - off)
+                    out.flush()
+                }
+            }
+        } catch (e: IOException) {
+            Log.i(TAG, "multicast $group:$port : fin (${e.javaClass.simpleName})")
+        } finally {
+            lock.release()
+        }
+    }
+
     // ------------------------------------------------------------------ HLS en flux continu
 
     private fun serveContinuous(req: Req, out0: OutputStream) {
@@ -416,13 +458,16 @@ class ProxyServer(private val ctx: Context) {
         val merger = if (audioPlan != null && !plan.fmp4) TsMerge() else null
         val fmerger = if (audioPlan != null && plan.fmp4) Fmp4Merge() else null
         var mergedInit = false
+        // Coupures (publicités, pré-roll) : horloge recalée pour que la télé ne se fige pas à la jonction.
+        val tsClock = TsClock()
+        val mp4Clock = Fmp4Clock()
         var aIdx = 0
         var aTime = 0.0
         if (audioPlan != null) {
             while (aIdx < audioPlan.segs.size - 1 && aTime + audioPlan.segs[aIdx].duration <= vTime) {
                 aTime += audioPlan.segs[aIdx].duration; aIdx++
             }
-            Log.i(TAG, "image et son séparés : fusion (son à partir de ${aTime.toInt()} s)")
+            if (merger != null) Log.i(TAG, "image et son séparés (TS) : fusion (son à partir de ${aTime.toInt()} s)")
         }
         val queue = ArrayDeque<Pair<Hls.Seg, Future<ByteArray?>>>()
         var lastSeq = -1L
@@ -452,17 +497,23 @@ class ProxyServer(private val ctx: Context) {
                 val map = seg.map
                 if (map != null && seg.mapId != currentMap) {
                     val vInit = Hls.bytes(map, seg.mapRange, r.headers)
+                    mp4Clock.init(vInit)
                     // Son à part (MP4) : un seul en-tête pour les deux pistes, envoyé une fois.
                     val aSeg0 = audioPlan?.segs?.getOrNull(aIdx)
                     val merged = if (fmerger != null && !mergedInit && aSeg0?.map != null)
                         runCatching { fmerger.init(vInit, Hls.bytes(aSeg0.map, aSeg0.mapRange, r.headers)) }.getOrNull() else null
                     if (merged != null) {
-                        out.write(merged); mergedInit = true
+                        out.write(merged); mergedInit = true; mp4Clock.init(merged)
                         Log.i(TAG, "image et son séparés (MP4) : fusion à partir de ${aTime.toInt()} s")
                     } else if (!mergedInit) out.write(vInit)
                     currentMap = seg.mapId
                 }
                 vTime += seg.duration
+                // Le premier morceau envoyé n'est pas une « coupure » (rien avant lui dans ce flux). L'horloge est
+                // recalée sur le morceau complet (image et son recollés), pour que les deux restent ensemble.
+                val cut = seg.discontinuity && lastSeq >= 0
+                fun send(bytes: ByteArray) =
+                    out.write(if (plan.fmp4) mp4Clock.process(bytes, seg.duration, cut) else tsClock.process(bytes, cut))
                 if (fmerger != null && mergedInit && audioPlan != null) {
                     val sound = java.io.ByteArrayOutputStream()
                     while (aIdx < audioPlan.segs.size && aTime < vTime) {
@@ -470,7 +521,7 @@ class ProxyServer(private val ctx: Context) {
                         fetchSegment(aSeg, r.headers, keys, false)?.let(sound::write)
                         aTime += aSeg.duration
                     }
-                    out.write(fmerger.merge(data, sound.toByteArray()))
+                    send(fmerger.merge(data, sound.toByteArray()))
                 } else if (merger != null && audioPlan != null) {
                     val sound = java.io.ByteArrayOutputStream()
                     while (aIdx < audioPlan.segs.size && aTime < vTime) {
@@ -478,8 +529,8 @@ class ProxyServer(private val ctx: Context) {
                         fetchSegment(aSeg, r.headers, keys, true)?.let(sound::write)
                         aTime += aSeg.duration
                     }
-                    out.write(merger.merge(data, sound.toByteArray()))
-                } else out.write(data)
+                    send(merger.merge(data, sound.toByteArray()))
+                } else send(data)
                 out.flush()
                 lastSeq = seg.seq
             }

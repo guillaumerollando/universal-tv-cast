@@ -395,6 +395,7 @@
     <string name="lan_all">Tümü</string>
     <string name="lan_sort_asc">Artan</string>
     <string name="lan_sort_desc">Azalan</string>
+    <string name="stream_phone_only">Bu yayın (RTSP / RTMP) televizyonda değil, telefonda oynatılır.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video</item>

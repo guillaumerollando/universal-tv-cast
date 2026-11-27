@@ -395,6 +395,7 @@
     <string name="lan_all">Alla</string>
     <string name="lan_sort_asc">Stigande</string>
     <string name="lan_sort_desc">Fallande</string>
+    <string name="stream_phone_only">Den här strömmen (RTSP / RTMP) spelas upp på telefonen, inte på tv:n.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videor</item>

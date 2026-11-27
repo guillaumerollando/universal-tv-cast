@@ -393,7 +393,8 @@
   "lan_random": "Acak",
   "lan_all": "Semua",
   "lan_sort_asc": "Naik",
-  "lan_sort_desc": "Turun"
+  "lan_sort_desc": "Turun",
+  "stream_phone_only": "Siaran ini (RTSP / RTMP) diputar di ponsel, bukan di TV."
  },
  "plurals": {
   "browser_found": {

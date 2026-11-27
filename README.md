@@ -81,6 +81,9 @@ pour les essais.
 - Pas de duplication d'écran : l'appli envoie une vidéo, pas l'écran du téléphone.
 - Vidéos protégées par DRM (Netflix, Disney+…) et YouTube : impossibles, voulu par ces sites.
 - Sous-titres en DLNA : dépend de la télé (beaucoup ignorent les sous-titres externes ; Google Cast les affiche).
+- Appareils pris en charge : Google Cast (Chromecast, Google TV, Android TV, télés « Chromecast intégré ») et télés
+  DLNA / UPnP (Samsung, LG, Sony, Philips, Panasonic…). Pas les Fire TV d'Amazon (ni Cast ni DLNA d'origine), sauf
+  avec une appli de réception DLNA installée dessus. Seuls les appareils allumés sont proposés.
 
 ## Construire
 Deux versions sortent du même code, choisies au moment de construire :

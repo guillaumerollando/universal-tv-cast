@@ -469,14 +469,20 @@ private fun SmallTile(icon: ImageVector, title: String, modifier: Modifier, onCl
 private fun Tile(icon: ImageVector, title: String, sub: String, modifier: Modifier, highlight: Boolean = false, onClick: () -> Unit) {
     val c = MaterialTheme.colorScheme
     // Mise en surbrillance (« c'est ici ») : une lueur ambrée qui pulse autour de la tuile, comme la lumière de la vidéo.
+    // Pas de contour : la lueur suffit. Elle s'allume et s'éteint en fondu (« level »), jamais d'un coup.
+    val level by androidx.compose.animation.core.animateFloatAsState(
+        if (highlight) 1f else 0f,
+        androidx.compose.animation.core.tween(if (highlight) 450 else 1100, easing = androidx.compose.animation.core.FastOutSlowInEasing),
+        label = "repère",
+    )
     val pulse = androidx.compose.animation.core.rememberInfiniteTransition(label = "repère")
-    val glow by pulse.animateFloat(0.25f, 1f, androidx.compose.animation.core.infiniteRepeatable(
+    val beat by pulse.animateFloat(0.25f, 1f, androidx.compose.animation.core.infiniteRepeatable(
         androidx.compose.animation.core.tween(650), androidx.compose.animation.core.RepeatMode.Reverse), label = "repère")
+    val glow = beat * level
     Surface(
         onClick = onClick, shape = RoundedCornerShape(22.dp),
-        color = if (highlight) c.primary.copy(alpha = 0.10f + 0.10f * glow).compositeOver(c.surfaceContainerHigh) else c.surfaceContainerHigh,
-        border = if (highlight) androidx.compose.foundation.BorderStroke(1.5.dp, c.primary.copy(alpha = 0.5f + 0.5f * glow)) else null,
-        modifier = modifier.height(118.dp).then(if (highlight) Modifier
+        color = if (level > 0f) c.primary.copy(alpha = (0.10f + 0.10f * beat) * level).compositeOver(c.surfaceContainerHigh) else c.surfaceContainerHigh,
+        modifier = modifier.height(118.dp).then(if (level > 0f) Modifier
             .drawBehind {
                 // Halo : un dégradé ambré qui déborde largement de la tuile et respire.
                 val r = size.maxDimension * (0.95f + 0.35f * glow)
@@ -489,7 +495,7 @@ private fun Tile(icon: ImageVector, title: String, sub: String, modifier: Modifi
                 )
             }
             // Ombre lumineuse ambrée sous la tuile (lumière qui en émane).
-            .shadow((10 + 22 * glow).dp, RoundedCornerShape(22.dp), clip = false, ambientColor = c.primary, spotColor = c.primary)
+            .shadow((22 * glow).dp, RoundedCornerShape(22.dp), clip = false, ambientColor = c.primary, spotColor = c.primary)
         else Modifier),
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.SpaceBetween) {

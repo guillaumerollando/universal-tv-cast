@@ -1287,3 +1287,8 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - Vérifié sur émulateur : installation neuve, vidéo repérée et lue.
 - Pour Android c'est une nouvelle appli : sur le téléphone de Guillaume, l'ancienne (`studio.rollando.castor`) reste
   installée à côté, avec son historique ; à désinstaller par lui quand il veut.
+
+## 2026-11-27 — Repère de la tuile « Lien » plus doux
+- Fait : la tuile « Coller un lien » (montrée depuis les chaînes gratuites) n'a plus de contour orange ; la lueur
+  s'allume en fondu (0,45 s) et s'éteint en fondu (1,1 s) au lieu de disparaître d'un coup. Installé sur le téléphone.
+- Pas fait : rien.

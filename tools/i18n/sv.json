@@ -426,7 +426,22 @@
   "style_icon_note": "Den nya ikonen visas när du lämnar appen. Den kan försvinna från hemskärmen en kort stund.",
   "notice_tv_standby": "%1$s är i viloläge. Slå på den med fjärrkontrollen och försök igen.",
   "audio_on_tv_note": "Välj det med tv:ns fjärrkontroll.",
-  "lan_show_details": "Titlar under affischerna"
+  "lan_show_details": "Titlar under affischerna",
+  "fav_customize": "Anpassa",
+  "fav_customize_title": "Anpassa favorit",
+  "fav_added_title": "Tillagd i favoriter",
+  "fav_name": "Namn",
+  "fav_icon": "Ikon",
+  "fav_keep_default": "Behåll som det är",
+  "fav_icon_folder": "Mapp",
+  "fav_icon_movie": "Filmer",
+  "fav_icon_series": "Serier",
+  "fav_icon_videos": "Videor",
+  "fav_icon_kids": "Barn",
+  "fav_icon_music": "Musik",
+  "fav_icon_photo": "Foton",
+  "fav_icon_sport": "Sport",
+  "fav_icon_star": "Favorit"
  },
  "plurals": {
   "browser_found": {

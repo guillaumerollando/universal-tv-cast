@@ -426,7 +426,22 @@
   "style_icon_note": "ไอคอนใหม่จะแสดงเมื่อออกจากแอป และอาจหายไปจากหน้าจอหลักสักครู่",
   "notice_tv_standby": "%1$s อยู่ในโหมดสแตนด์บาย เปิดด้วยรีโมตแล้วลองอีกครั้ง",
   "audio_on_tv_note": "เลือกด้วยรีโมตของทีวี",
-  "lan_show_details": "ชื่อเรื่องใต้โปสเตอร์"
+  "lan_show_details": "ชื่อเรื่องใต้โปสเตอร์",
+  "fav_customize": "ปรับแต่ง",
+  "fav_customize_title": "ปรับแต่งรายการโปรด",
+  "fav_added_title": "เพิ่มในรายการโปรดแล้ว",
+  "fav_name": "ชื่อ",
+  "fav_icon": "ไอคอน",
+  "fav_keep_default": "คงไว้แบบนี้",
+  "fav_icon_folder": "โฟลเดอร์",
+  "fav_icon_movie": "ภาพยนตร์",
+  "fav_icon_series": "ซีรีส์",
+  "fav_icon_videos": "วิดีโอ",
+  "fav_icon_kids": "เด็ก",
+  "fav_icon_music": "เพลง",
+  "fav_icon_photo": "รูปภาพ",
+  "fav_icon_sport": "กีฬา",
+  "fav_icon_star": "รายการโปรด"
  },
  "plurals": {
   "browser_found": {

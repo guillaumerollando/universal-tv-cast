@@ -194,8 +194,12 @@ object LanStore {
 
     /** Un dossier du réseau mis en favori (★) : il ressort sur l'accueil, ouvert d'un appui. */
     data class Folder(val kind: LanDevice.Kind, val host: String, val port: Int, val deviceName: String,
-        val ref: String, val title: String, val share: String? = null, val location: String? = null) {
+        val ref: String, val title: String, val share: String? = null, val location: String? = null,
+        /** Personnalisation (appui long) : nom affiché, icône (« movie », « series »…), couleur ARGB. */
+        val label: String? = null, val icon: String? = null, val color: Long? = null) {
         val key: String get() = "${kind.name}:$host:$port:$ref"
+        /** Nom sur l'accueil : celui choisi, sinon celui du dossier. */
+        val name: String get() = label?.takeIf { it.isNotBlank() } ?: title
         fun device() = LanDevice(kind, deviceName, host, port, location = location, share = share)
     }
 
@@ -213,7 +217,9 @@ object LanStore {
             val o = a.getJSONObject(i)
             Folder(LanDevice.Kind.valueOf(o.getString("kind")), o.getString("host"), o.optInt("port", -1),
                 o.getString("device"), o.getString("ref"), o.getString("title"),
-                o.optString("share").ifEmpty { null }, o.optString("location").ifEmpty { null })
+                o.optString("share").ifEmpty { null }, o.optString("location").ifEmpty { null },
+                o.optString("label").ifEmpty { null }, o.optString("icon").ifEmpty { null },
+                if (o.has("color")) o.getLong("color") else null)
         }
     }.getOrDefault(emptyList())
 
@@ -223,12 +229,25 @@ object LanStore {
     fun toggleFolder(d: LanDevice, ref: String, title: String) {
         val cur = folders.value
         val f = Folder(d.kind, d.host, d.port, d.name, ref, title, d.share, d.location)
-        val next = if (cur.any { it.key == f.key }) cur.filter { it.key != f.key } else (cur + f).takeLast(MAX_FOLDERS)
+        saveFolders(if (cur.any { it.key == f.key }) cur.filter { it.key != f.key } else (cur + f).takeLast(MAX_FOLDERS))
+    }
+
+    /** Nom, icône et couleur d'un favori (vides : ceux d'origine). */
+    @Synchronized
+    fun customizeFolder(key: String, label: String?, icon: String?, color: Long?) {
+        saveFolders(folders.value.map { if (it.key == key) it.copy(label = label?.trim()?.takeIf { l -> l.isNotEmpty() && l != it.title }, icon = icon, color = color) else it })
+    }
+
+    private fun saveFolders(next: List<Folder>) {
         _folders.value = next
         val a = JSONArray()
         next.forEach { x ->
-            a.put(JSONObject().put("kind", x.kind.name).put("host", x.host).put("port", x.port).put("device", x.deviceName)
-                .put("ref", x.ref).put("title", x.title).put("share", x.share.orEmpty()).put("location", x.location.orEmpty()))
+            val o = JSONObject().put("kind", x.kind.name).put("host", x.host).put("port", x.port).put("device", x.deviceName)
+                .put("ref", x.ref).put("title", x.title).put("share", x.share.orEmpty()).put("location", x.location.orEmpty())
+            x.label?.let { o.put("label", it) }
+            x.icon?.let { o.put("icon", it) }
+            x.color?.let { o.put("color", it) }
+            a.put(o)
         }
         prefs.edit().putString("folders", a.toString()).apply()
     }

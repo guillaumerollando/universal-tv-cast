@@ -428,6 +428,21 @@
     <string name="notice_tv_standby">%1$s이(가) 대기 모드예요. 리모컨으로 켠 다음 다시 시도해 주세요.</string>
     <string name="audio_on_tv_note">TV 리모컨으로 선택해 주세요.</string>
     <string name="lan_show_details">포스터 아래 제목</string>
+    <string name="fav_customize">맞춤 설정</string>
+    <string name="fav_customize_title">즐겨찾기 맞춤 설정</string>
+    <string name="fav_added_title">즐겨찾기에 추가됨</string>
+    <string name="fav_name">이름</string>
+    <string name="fav_icon">아이콘</string>
+    <string name="fav_keep_default">그대로 두기</string>
+    <string name="fav_icon_folder">폴더</string>
+    <string name="fav_icon_movie">영화</string>
+    <string name="fav_icon_series">시리즈</string>
+    <string name="fav_icon_videos">동영상</string>
+    <string name="fav_icon_kids">어린이</string>
+    <string name="fav_icon_music">음악</string>
+    <string name="fav_icon_photo">사진</string>
+    <string name="fav_icon_sport">스포츠</string>
+    <string name="fav_icon_star">즐겨찾기</string>
     <plurals name="browser_found">
         <item quantity="other">동영상 %d개</item>
     </plurals>

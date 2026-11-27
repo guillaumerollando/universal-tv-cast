@@ -426,7 +426,22 @@
   "style_icon_note": "नया आइकन ऐप से बाहर निकलने पर दिखेगा। यह होम स्क्रीन से एक पल के लिए गायब हो सकता है।",
   "notice_tv_standby": "%1$s स्टैंडबाय पर है। रिमोट से चालू करें, फिर दोबारा कोशिश करें।",
   "audio_on_tv_note": "इसे टीवी के रिमोट से चुनें।",
-  "lan_show_details": "पोस्टर के नीचे शीर्षक"
+  "lan_show_details": "पोस्टर के नीचे शीर्षक",
+  "fav_customize": "अनुकूलित करें",
+  "fav_customize_title": "पसंदीदा को अनुकूलित करें",
+  "fav_added_title": "पसंदीदा में जोड़ा गया",
+  "fav_name": "नाम",
+  "fav_icon": "आइकन",
+  "fav_keep_default": "जैसा है रहने दें",
+  "fav_icon_folder": "फ़ोल्डर",
+  "fav_icon_movie": "फ़िल्में",
+  "fav_icon_series": "सीरीज़",
+  "fav_icon_videos": "वीडियो",
+  "fav_icon_kids": "बच्चे",
+  "fav_icon_music": "संगीत",
+  "fav_icon_photo": "फ़ोटो",
+  "fav_icon_sport": "खेल",
+  "fav_icon_star": "पसंदीदा"
  },
  "plurals": {
   "browser_found": {

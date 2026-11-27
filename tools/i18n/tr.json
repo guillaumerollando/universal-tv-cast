@@ -426,7 +426,22 @@
   "style_icon_note": "Yeni simge uygulamadan çıkınca görünür. Ana ekrandan kısa bir süre kaybolabilir.",
   "notice_tv_standby": "%1$s bekleme modunda. Kumandasıyla aç, sonra tekrar dene.",
   "audio_on_tv_note": "TV kumandasıyla seç.",
-  "lan_show_details": "Afişlerin altında başlıklar"
+  "lan_show_details": "Afişlerin altında başlıklar",
+  "fav_customize": "Özelleştir",
+  "fav_customize_title": "Favoriyi özelleştir",
+  "fav_added_title": "Favorilere eklendi",
+  "fav_name": "Ad",
+  "fav_icon": "Simge",
+  "fav_keep_default": "Böyle kalsın",
+  "fav_icon_folder": "Klasör",
+  "fav_icon_movie": "Filmler",
+  "fav_icon_series": "Diziler",
+  "fav_icon_videos": "Videolar",
+  "fav_icon_kids": "Çocuklar",
+  "fav_icon_music": "Müzik",
+  "fav_icon_photo": "Fotoğraflar",
+  "fav_icon_sport": "Spor",
+  "fav_icon_star": "Favori"
  },
  "plurals": {
   "browser_found": {

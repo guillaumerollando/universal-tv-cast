@@ -264,10 +264,15 @@ fun SiteTile(s: SiteItem, modifier: Modifier = Modifier.width(80.dp), onOpen: (S
 fun FolderTile(f: com.rollandostudio.universaltvcast.lan.LanStore.Folder, modifier: Modifier = Modifier.width(80.dp)) {
     val c = MaterialTheme.colorScheme
     var open by remember { mutableStateOf(false) }
+    var edit by remember { mutableStateOf(false) }
     val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
-    val menu = listOf(stringResource(R.string.cd_bookmark_remove) to {
-        com.rollandostudio.universaltvcast.lan.LanStore.toggleFolder(f.device(), f.ref, f.title)
-    })
+    // Appui long : personnaliser (nom, icône, couleur) ou retirer.
+    val menu = listOf(
+        stringResource(R.string.fav_customize) to { edit = true },
+        stringResource(R.string.cd_bookmark_remove) to { com.rollandostudio.universaltvcast.lan.LanStore.toggleFolder(f.device(), f.ref, f.title) },
+    )
+    if (edit) FolderStyleDialog(f, justAdded = false) { edit = false }
+    val tint = f.color?.let { androidx.compose.ui.graphics.Color(it) } ?: c.primary
     Box(modifier) {
         Column(
             Modifier.fillMaxWidth().clip(RoundedCornerShape(18.dp))
@@ -277,24 +282,19 @@ fun FolderTile(f: com.rollandostudio.universaltvcast.lan.LanStore.Folder, modifi
                     onLongClick = { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); open = true },
                 )
                 .semantics {
-                    contentDescription = f.title + ", " + f.deviceName
+                    contentDescription = f.name + ", " + f.deviceName
                     customActions = menu.map { (label, action) -> CustomAccessibilityAction(label) { action(); true } }
                 }
                 .padding(vertical = 6.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Box(Modifier.size(52.dp).clip(RoundedCornerShape(15.dp)).background(c.primary.copy(alpha = 0.16f)),
+            Box(Modifier.size(52.dp).clip(RoundedCornerShape(15.dp)).background(tint.copy(alpha = 0.16f)),
                 contentAlignment = Alignment.Center) {
-                // L'appareil entier (NAS, ordinateur) ou un de ses dossiers.
-                val icon = when {
-                    f.ref.isNotEmpty() -> Icons.Rounded.Folder
-                    f.kind == com.rollandostudio.universaltvcast.lan.LanDevice.Kind.MEDIA_SERVER -> Icons.Rounded.Dns
-                    else -> Icons.Rounded.Computer
-                }
-                Icon(icon, null, tint = c.primary, modifier = Modifier.size(28.dp))
+                // L'icône choisie, sinon : l'appareil entier (NAS, ordinateur) ou un de ses dossiers.
+                Icon(FolderStyle.icon(f), null, tint = tint, modifier = Modifier.size(28.dp))
             }
             Spacer(Modifier.height(6.dp))
-            Text(f.title, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,
+            Text(f.name, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(horizontal = 2.dp))
         }
         CardMenu(open, { open = false }, menu)

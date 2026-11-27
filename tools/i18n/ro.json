@@ -426,7 +426,22 @@
   "style_icon_note": "Noua pictogramă apare după ce ieșiți din aplicație. Poate dispărea o clipă de pe ecranul principal.",
   "notice_tv_standby": "%1$s este în standby. Porniți-l din telecomandă, apoi încercați din nou.",
   "audio_on_tv_note": "Alegeți-o cu telecomanda televizorului.",
-  "lan_show_details": "Titluri sub afișe"
+  "lan_show_details": "Titluri sub afișe",
+  "fav_customize": "Personalizați",
+  "fav_customize_title": "Personalizați favoritul",
+  "fav_added_title": "Adăugat la favorite",
+  "fav_name": "Nume",
+  "fav_icon": "Pictogramă",
+  "fav_keep_default": "Lăsați așa",
+  "fav_icon_folder": "Dosar",
+  "fav_icon_movie": "Filme",
+  "fav_icon_series": "Seriale",
+  "fav_icon_videos": "Videoclipuri",
+  "fav_icon_kids": "Copii",
+  "fav_icon_music": "Muzică",
+  "fav_icon_photo": "Fotografii",
+  "fav_icon_sport": "Sport",
+  "fav_icon_star": "Favorit"
  },
  "plurals": {
   "browser_found": {

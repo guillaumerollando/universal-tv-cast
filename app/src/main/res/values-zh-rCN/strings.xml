@@ -428,6 +428,21 @@
     <string name="notice_tv_standby">%1$s 处于待机状态。请用遥控器打开电视，然后重试。</string>
     <string name="audio_on_tv_note">请用电视遥控器选择。</string>
     <string name="lan_show_details">海报下显示标题</string>
+    <string name="fav_customize">自定义</string>
+    <string name="fav_customize_title">自定义收藏</string>
+    <string name="fav_added_title">已加入收藏</string>
+    <string name="fav_name">名称</string>
+    <string name="fav_icon">图标</string>
+    <string name="fav_keep_default">保持原样</string>
+    <string name="fav_icon_folder">文件夹</string>
+    <string name="fav_icon_movie">电影</string>
+    <string name="fav_icon_series">剧集</string>
+    <string name="fav_icon_videos">视频</string>
+    <string name="fav_icon_kids">儿童</string>
+    <string name="fav_icon_music">音乐</string>
+    <string name="fav_icon_photo">照片</string>
+    <string name="fav_icon_sport">体育</string>
+    <string name="fav_icon_star">收藏</string>
     <plurals name="browser_found">
         <item quantity="other">%d 个视频</item>
     </plurals>

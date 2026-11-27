@@ -426,7 +426,22 @@
   "style_icon_note": "Biểu tượng mới sẽ xuất hiện khi bạn thoát ứng dụng. Nó có thể biến mất khỏi màn hình chính trong giây lát.",
   "notice_tv_standby": "%1$s đang ở chế độ chờ. Hãy bật bằng điều khiển từ xa rồi thử lại.",
   "audio_on_tv_note": "Hãy chọn bằng điều khiển của TV.",
-  "lan_show_details": "Tiêu đề dưới áp phích"
+  "lan_show_details": "Tiêu đề dưới áp phích",
+  "fav_customize": "Tùy chỉnh",
+  "fav_customize_title": "Tùy chỉnh mục yêu thích",
+  "fav_added_title": "Đã thêm vào yêu thích",
+  "fav_name": "Tên",
+  "fav_icon": "Biểu tượng",
+  "fav_keep_default": "Giữ nguyên",
+  "fav_icon_folder": "Thư mục",
+  "fav_icon_movie": "Phim",
+  "fav_icon_series": "Phim bộ",
+  "fav_icon_videos": "Video",
+  "fav_icon_kids": "Trẻ em",
+  "fav_icon_music": "Âm nhạc",
+  "fav_icon_photo": "Ảnh",
+  "fav_icon_sport": "Thể thao",
+  "fav_icon_star": "Yêu thích"
  },
  "plurals": {
   "browser_found": {

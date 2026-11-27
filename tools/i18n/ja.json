@@ -426,7 +426,22 @@
   "style_icon_note": "新しいアイコンはアプリを閉じると表示されます。ホーム画面から一瞬消えることがあります。",
   "notice_tv_standby": "%1$s はスタンバイ中です。リモコンで電源を入れてから、もう一度お試しください。",
   "audio_on_tv_note": "テレビのリモコンで選んでください。",
-  "lan_show_details": "ポスターの下にタイトル"
+  "lan_show_details": "ポスターの下にタイトル",
+  "fav_customize": "カスタマイズ",
+  "fav_customize_title": "お気に入りをカスタマイズ",
+  "fav_added_title": "お気に入りに追加しました",
+  "fav_name": "名前",
+  "fav_icon": "アイコン",
+  "fav_keep_default": "このままにする",
+  "fav_icon_folder": "フォルダ",
+  "fav_icon_movie": "映画",
+  "fav_icon_series": "シリーズ",
+  "fav_icon_videos": "動画",
+  "fav_icon_kids": "キッズ",
+  "fav_icon_music": "音楽",
+  "fav_icon_photo": "写真",
+  "fav_icon_sport": "スポーツ",
+  "fav_icon_star": "お気に入り"
  },
  "plurals": {
   "browser_found": {

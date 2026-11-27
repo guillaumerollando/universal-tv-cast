@@ -426,7 +426,22 @@
   "style_icon_note": "Новый значок появится, когда вы выйдете из приложения. Он может ненадолго исчезнуть с главного экрана.",
   "notice_tv_standby": "%1$s в режиме ожидания. Включите его пультом и попробуйте снова.",
   "audio_on_tv_note": "Выберите его пультом телевизора.",
-  "lan_show_details": "Названия под постерами"
+  "lan_show_details": "Названия под постерами",
+  "fav_customize": "Настроить",
+  "fav_customize_title": "Настроить избранное",
+  "fav_added_title": "Добавлено в избранное",
+  "fav_name": "Название",
+  "fav_icon": "Значок",
+  "fav_keep_default": "Оставить как есть",
+  "fav_icon_folder": "Папка",
+  "fav_icon_movie": "Фильмы",
+  "fav_icon_series": "Сериалы",
+  "fav_icon_videos": "Видео",
+  "fav_icon_kids": "Детям",
+  "fav_icon_music": "Музыка",
+  "fav_icon_photo": "Фото",
+  "fav_icon_sport": "Спорт",
+  "fav_icon_star": "Избранное"
  },
  "plurals": {
   "browser_found": {

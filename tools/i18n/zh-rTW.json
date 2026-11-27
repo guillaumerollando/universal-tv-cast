@@ -426,7 +426,22 @@
   "style_icon_note": "離開應用程式後會顯示新圖示。它可能會從主畫面短暫消失。",
   "notice_tv_standby": "%1$s 處於待機狀態。請用遙控器開啟電視，然後再試一次。",
   "audio_on_tv_note": "請用電視遙控器選擇。",
-  "lan_show_details": "海報下顯示標題"
+  "lan_show_details": "海報下顯示標題",
+  "fav_customize": "自訂",
+  "fav_customize_title": "自訂收藏",
+  "fav_added_title": "已加入收藏",
+  "fav_name": "名稱",
+  "fav_icon": "圖示",
+  "fav_keep_default": "保持原樣",
+  "fav_icon_folder": "資料夾",
+  "fav_icon_movie": "電影",
+  "fav_icon_series": "影集",
+  "fav_icon_videos": "影片",
+  "fav_icon_kids": "兒童",
+  "fav_icon_music": "音樂",
+  "fav_icon_photo": "相片",
+  "fav_icon_sport": "運動",
+  "fav_icon_star": "收藏"
  },
  "plurals": {
   "browser_found": {

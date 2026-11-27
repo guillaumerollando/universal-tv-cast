@@ -426,7 +426,22 @@
   "style_icon_note": "تظهر الأيقونة الجديدة بعد مغادرة التطبيق. قد تختفي لحظة من الشاشة الرئيسية.",
   "notice_tv_standby": "%1$s في وضع الاستعداد. شغّله بجهاز التحكم ثم حاول مرة أخرى.",
   "audio_on_tv_note": "اخترها بجهاز التحكم في التلفزيون.",
-  "lan_show_details": "العناوين تحت الملصقات"
+  "lan_show_details": "العناوين تحت الملصقات",
+  "fav_customize": "تخصيص",
+  "fav_customize_title": "تخصيص المفضلة",
+  "fav_added_title": "أُضيفت إلى المفضلة",
+  "fav_name": "الاسم",
+  "fav_icon": "الأيقونة",
+  "fav_keep_default": "إبقاؤها كما هي",
+  "fav_icon_folder": "مجلد",
+  "fav_icon_movie": "أفلام",
+  "fav_icon_series": "مسلسلات",
+  "fav_icon_videos": "فيديوهات",
+  "fav_icon_kids": "أطفال",
+  "fav_icon_music": "موسيقى",
+  "fav_icon_photo": "صور",
+  "fav_icon_sport": "رياضة",
+  "fav_icon_star": "مفضلة"
  },
  "plurals": {
   "browser_found": {

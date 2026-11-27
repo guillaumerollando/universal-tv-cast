@@ -426,7 +426,22 @@
   "style_icon_note": "Nová ikona se objeví, jakmile aplikaci opustíte. Může na chvíli zmizet z domovské obrazovky.",
   "notice_tv_standby": "%1$s je v pohotovostním režimu. Zapněte ji dálkovým ovladačem a zkuste to znovu.",
   "audio_on_tv_note": "Vyberte ji dálkovým ovladačem televize.",
-  "lan_show_details": "Názvy pod plakáty"
+  "lan_show_details": "Názvy pod plakáty",
+  "fav_customize": "Přizpůsobit",
+  "fav_customize_title": "Přizpůsobit oblíbenou položku",
+  "fav_added_title": "Přidáno do oblíbených",
+  "fav_name": "Název",
+  "fav_icon": "Ikona",
+  "fav_keep_default": "Ponechat",
+  "fav_icon_folder": "Složka",
+  "fav_icon_movie": "Filmy",
+  "fav_icon_series": "Seriály",
+  "fav_icon_videos": "Videa",
+  "fav_icon_kids": "Děti",
+  "fav_icon_music": "Hudba",
+  "fav_icon_photo": "Fotky",
+  "fav_icon_sport": "Sport",
+  "fav_icon_star": "Oblíbené"
  },
  "plurals": {
   "browser_found": {

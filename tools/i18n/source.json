@@ -1691,6 +1691,66 @@
   "lan_show_details": {
    "en": "Titles under posters",
    "fr": "Titres sous les affiches"
+  },
+  "fav_customize": {
+   "en": "Customize",
+   "fr": "Personnaliser"
+  },
+  "fav_customize_title": {
+   "en": "Customize favorite",
+   "fr": "Personnaliser le favori"
+  },
+  "fav_added_title": {
+   "en": "Added to favorites",
+   "fr": "Ajouté aux favoris"
+  },
+  "fav_name": {
+   "en": "Name",
+   "fr": "Nom"
+  },
+  "fav_icon": {
+   "en": "Icon",
+   "fr": "Icône"
+  },
+  "fav_keep_default": {
+   "en": "Keep as is",
+   "fr": "Garder tel quel"
+  },
+  "fav_icon_folder": {
+   "en": "Folder",
+   "fr": "Dossier"
+  },
+  "fav_icon_movie": {
+   "en": "Movies",
+   "fr": "Films"
+  },
+  "fav_icon_series": {
+   "en": "Series",
+   "fr": "Séries"
+  },
+  "fav_icon_videos": {
+   "en": "Videos",
+   "fr": "Vidéos"
+  },
+  "fav_icon_kids": {
+   "en": "Kids",
+   "fr": "Enfants"
+  },
+  "fav_icon_music": {
+   "en": "Music",
+   "fr": "Musique"
+  },
+  "fav_icon_photo": {
+   "en": "Photos",
+   "fr": "Photos"
+  },
+  "fav_icon_sport": {
+   "en": "Sports",
+   "fr": "Sport"
+  },
+  "fav_icon_star": {
+   "en": "Favorite",
+   "fr": "Favori"
   }
  },
  "plurals": {

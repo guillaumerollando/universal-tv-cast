@@ -428,6 +428,21 @@
     <string name="notice_tv_standby">%1$s sedang siaga. Nyalakan dengan remotnya, lalu coba lagi.</string>
     <string name="audio_on_tv_note">Pilih dengan remote TV.</string>
     <string name="lan_show_details">Judul di bawah poster</string>
+    <string name="fav_customize">Sesuaikan</string>
+    <string name="fav_customize_title">Sesuaikan favorit</string>
+    <string name="fav_added_title">Ditambahkan ke favorit</string>
+    <string name="fav_name">Nama</string>
+    <string name="fav_icon">Ikon</string>
+    <string name="fav_keep_default">Biarkan saja</string>
+    <string name="fav_icon_folder">Folder</string>
+    <string name="fav_icon_movie">Film</string>
+    <string name="fav_icon_series">Serial</string>
+    <string name="fav_icon_videos">Video</string>
+    <string name="fav_icon_kids">Anak-anak</string>
+    <string name="fav_icon_music">Musik</string>
+    <string name="fav_icon_photo">Foto</string>
+    <string name="fav_icon_sport">Olahraga</string>
+    <string name="fav_icon_star">Favorit</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

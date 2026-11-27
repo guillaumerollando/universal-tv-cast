@@ -1587,3 +1587,11 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   par année) ou la note (tri par note), la coche « vu » passe alors à gauche ; option « Titres sous les affiches »
   dans le menu de tri pour revoir titre, année et note (23 langues). « Reprendre » garde ses titres (les images
   des épisodes en cours ne les montrent pas toujours). Vérifié par captures sur émulateur.
+
+## 2026-11-28 — Favoris du réseau personnalisables
+- Fait : un dossier ou un appareil du réseau en favori peut recevoir un nom, une icône (dossier, films, séries,
+  vidéos, enfants, musique, photos, sport, étoile) et une couleur (celle de l'appli ou 8 autres). Proposé à l'ajout
+  (fenêtre « Ajouté aux favoris », « Garder tel quel » ou « Enregistrer », nom du dossier par défaut) et à l'appui
+  long sur le favori de l'accueil (« Personnaliser » / « Retirer des favoris »). Enregistré avec le favori
+  (`LanStore.customizeFolder`). Fenêtre défilable, clavier refermé par « OK ». Textes en 23 langues.
+- Vérifié sur émulateur : « Films » devenu « Cinema », icône clap orange sur l'accueil ; fenêtre à l'ajout.

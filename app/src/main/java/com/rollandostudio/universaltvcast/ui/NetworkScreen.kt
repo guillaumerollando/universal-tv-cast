@@ -193,6 +193,7 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
     var sortDesc by remember { mutableStateOf(LanStore.sortDesc) }
     var hideWatched by remember { mutableStateOf(LanStore.hideWatched) }
     var showDetails by remember { mutableStateOf(LanStore.showDetails) }
+    var styleKey by remember { mutableStateOf<String?>(null) }
     fun up() {
         path.removeAt(path.lastIndex)
         if (path.isEmpty()) { entries = null; error = null; loading = false } else open(path.last())
@@ -302,11 +303,18 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
                         }
                     }
                 }
+                styleKey?.let { k -> LanStore.folders.value.firstOrNull { it.key == k } }?.let { f ->
+                    FolderStyleDialog(f, justAdded = true) { styleKey = null }
+                }
                 // L'appareil entier (racine) peut aussi être mis en favori.
                 path.lastOrNull()?.let { p ->
                     val ref = p.ref.orEmpty()
                     val on = favs.any { it.kind == p.device.kind && it.host == p.device.host && it.port == p.device.port && it.ref == ref }
-                    IconButton(onClick = { LanStore.toggleFolder(p.device, ref, p.title) }) {
+                    IconButton(onClick = {
+                        LanStore.toggleFolder(p.device, ref, p.title)
+                        // Juste ajouté : on propose de le personnaliser (nom, icône, couleur), sans obligation.
+                        if (!on) styleKey = LanStore.folders.value.lastOrNull()?.key
+                    }) {
                         Icon(if (on) Icons.Rounded.Star else Icons.Rounded.StarBorder,
                             stringResource(if (on) R.string.cd_bookmark_remove else R.string.cd_bookmark_add),
                             tint = if (on) c.primary else c.onSurface)

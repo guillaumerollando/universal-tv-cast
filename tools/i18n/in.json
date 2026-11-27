@@ -426,7 +426,22 @@
   "style_icon_note": "Ikon baru muncul setelah Anda keluar dari aplikasi. Ikon mungkin hilang sejenak dari layar utama.",
   "notice_tv_standby": "%1$s sedang siaga. Nyalakan dengan remotnya, lalu coba lagi.",
   "audio_on_tv_note": "Pilih dengan remote TV.",
-  "lan_show_details": "Judul di bawah poster"
+  "lan_show_details": "Judul di bawah poster",
+  "fav_customize": "Sesuaikan",
+  "fav_customize_title": "Sesuaikan favorit",
+  "fav_added_title": "Ditambahkan ke favorit",
+  "fav_name": "Nama",
+  "fav_icon": "Ikon",
+  "fav_keep_default": "Biarkan saja",
+  "fav_icon_folder": "Folder",
+  "fav_icon_movie": "Film",
+  "fav_icon_series": "Serial",
+  "fav_icon_videos": "Video",
+  "fav_icon_kids": "Anak-anak",
+  "fav_icon_music": "Musik",
+  "fav_icon_photo": "Foto",
+  "fav_icon_sport": "Olahraga",
+  "fav_icon_star": "Favorit"
  },
  "plurals": {
   "browser_found": {

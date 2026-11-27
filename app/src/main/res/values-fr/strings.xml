@@ -395,6 +395,11 @@
     <string name="bookmark_followed_series">« %1$s » suivie : le marque-page avancera tout seul à chaque épisode regardé.</string>
     <string name="bookmark_added">« %1$s » ajouté aux favoris.</string>
     <string name="bookmark_advanced">%1$s : marque-page avancé à l’épisode %2$d.</string>
+    <plurals name="lan_episodes">
+        <item quantity="one">%d épisode</item>
+        <item quantity="many">%d épisodes</item>
+        <item quantity="other">%d épisodes</item>
+    </plurals>
     <plurals name="browser_found">
         <item quantity="one">%d vidéo</item>
         <item quantity="many">%d vidéos</item>

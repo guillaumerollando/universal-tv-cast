@@ -401,4 +401,7 @@
     <plurals name="iptv_count">
         <item quantity="other">%d kênh</item>
     </plurals>
+    <plurals name="lan_episodes">
+        <item quantity="other">%d tập</item>
+    </plurals>
 </resources>

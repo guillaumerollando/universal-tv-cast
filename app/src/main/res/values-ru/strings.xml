@@ -407,4 +407,10 @@
         <item quantity="many">%d каналов</item>
         <item quantity="other">%d канала</item>
     </plurals>
+    <plurals name="lan_episodes">
+        <item quantity="one">%d серия</item>
+        <item quantity="few">%d серии</item>
+        <item quantity="many">%d серий</item>
+        <item quantity="other">%d серии</item>
+    </plurals>
 </resources>

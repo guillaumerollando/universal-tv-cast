@@ -411,4 +411,12 @@
         <item quantity="many">%d قناة</item>
         <item quantity="other">%d قناة</item>
     </plurals>
+    <plurals name="lan_episodes">
+        <item quantity="zero">%d حلقة</item>
+        <item quantity="one">حلقة واحدة</item>
+        <item quantity="two">حلقتان</item>
+        <item quantity="few">%d حلقات</item>
+        <item quantity="many">%d حلقة</item>
+        <item quantity="other">%d حلقة</item>
+    </plurals>
 </resources>

@@ -395,6 +395,10 @@
     <string name="bookmark_followed_series">„%1$s“ wird verfolgt: Das Lesezeichen rückt mit jeder Folge mit.</string>
     <string name="bookmark_added">„%1$s“ zu Favoriten hinzugefügt.</string>
     <string name="bookmark_advanced">%1$s: Lesezeichen auf Folge %2$d gesetzt.</string>
+    <plurals name="lan_episodes">
+        <item quantity="one">%d Folge</item>
+        <item quantity="other">%d Folgen</item>
+    </plurals>
     <plurals name="browser_found">
         <item quantity="one">%d Video</item>
         <item quantity="other">%d Videos</item>

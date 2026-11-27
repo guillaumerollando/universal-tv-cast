@@ -395,6 +395,11 @@
     <string name="bookmark_followed_series">«%1$s» seguida: el marcador avanzará solo con cada episodio que veas.</string>
     <string name="bookmark_added">«%1$s» añadido a favoritos.</string>
     <string name="bookmark_advanced">%1$s: marcador avanzado al episodio %2$d.</string>
+    <plurals name="lan_episodes">
+        <item quantity="one">%d episodio</item>
+        <item quantity="many">%d episodios</item>
+        <item quantity="other">%d episodios</item>
+    </plurals>
     <plurals name="browser_found">
         <item quantity="one">%d vídeo</item>
         <item quantity="many">%d vídeos</item>

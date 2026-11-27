@@ -403,4 +403,8 @@
         <item quantity="one">%d kanal</item>
         <item quantity="other">%d kanaler</item>
     </plurals>
+    <plurals name="lan_episodes">
+        <item quantity="one">%d avsnitt</item>
+        <item quantity="other">%d avsnitt</item>
+    </plurals>
 </resources>

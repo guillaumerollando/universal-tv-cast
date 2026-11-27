@@ -403,4 +403,8 @@
         <item quantity="one">%d kanal</item>
         <item quantity="other">%d kanal</item>
     </plurals>
+    <plurals name="lan_episodes">
+        <item quantity="one">%d bölüm</item>
+        <item quantity="other">%d bölüm</item>
+    </plurals>
 </resources>

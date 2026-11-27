@@ -407,6 +407,12 @@
    "few": "%d kanały",
    "many": "%d kanałów",
    "other": "%d kanału"
+  },
+  "lan_episodes": {
+   "one": "%d odcinek",
+   "few": "%d odcinki",
+   "many": "%d odcinków",
+   "other": "%d odcinka"
   }
  }
 }

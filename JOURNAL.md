@@ -1370,3 +1370,10 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   (traduits, 21 genres en 23 langues, tirés de la fiche du film, gardée) pour filtrer, et « Au hasard » (un film
   pas encore vu parmi ceux affichés). Vérifié sur émulateur.
 - Pas fait : rien.
+
+## 2026-11-27 — Vue série dans le dossier de la série
+- Fait : un dossier de série (« Breaking Bad » avec « Saison 1 », « Saison 2 ») s'affiche en vue série : affiche et
+  titre, puis chaque saison en bloc dépliable (nombre d'épisodes, combien sont vus) avec ses épisodes. La première
+  saison qui reste à voir est ouverte d'office. « Épisode suivant » passe d'une saison à l'autre (vérifié S01E03 →
+  S02E01). Pluriel « épisodes » en 23 langues. Vérifié sur émulateur.
+- Pas fait : rien.

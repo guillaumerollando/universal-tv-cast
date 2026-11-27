@@ -401,4 +401,7 @@
     <plurals name="iptv_count">
         <item quantity="other">%d チャンネル</item>
     </plurals>
+    <plurals name="lan_episodes">
+        <item quantity="other">%d話</item>
+    </plurals>
 </resources>

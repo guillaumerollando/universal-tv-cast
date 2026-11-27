@@ -407,4 +407,10 @@
         <item quantity="many">%d kanálu</item>
         <item quantity="other">%d kanálů</item>
     </plurals>
+    <plurals name="lan_episodes">
+        <item quantity="one">%d díl</item>
+        <item quantity="few">%d díly</item>
+        <item quantity="many">%d dílu</item>
+        <item quantity="other">%d dílů</item>
+    </plurals>
 </resources>

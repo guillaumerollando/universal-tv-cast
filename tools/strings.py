@@ -575,7 +575,10 @@ S = {
 "bookmark_added": ["“%1$s” added to favorites.", "« %1$s » ajouté aux favoris.", "«%1$s» añadido a favoritos.", "„%1$s“ zu Favoriten hinzugefügt.", "«%1$s» aggiunto ai preferiti.", "‘%1$s’ toegevoegd aan favorieten.", "“%1$s” adicionado aos favoritos."],
 "bookmark_advanced": ["%1$s: bookmark moved to episode %2$d.", "%1$s : marque-page avancé à l’épisode %2$d.", "%1$s: marcador avanzado al episodio %2$d.", "%1$s: Lesezeichen auf Folge %2$d gesetzt.", "%1$s: segnalibro spostato all’episodio %2$d.", "%1$s: bladwijzer naar aflevering %2$d.", "%1$s: marcador avançou para o episódio %2$d."],
 }
-PLURALS = {"browser_found": [
+PLURALS = {"lan_episodes": [
+ ("%d episode", "%d episodes"), ("%d épisode", "%d épisodes"), ("%d episodio", "%d episodios"), ("%d Folge", "%d Folgen"),
+ ("%d episodio", "%d episodi"), ("%d aflevering", "%d afleveringen"), ("%d episódio", "%d episódios")],
+"browser_found": [
  ("%d video", "%d videos"), ("%d vidéo", "%d vidéos"), ("%d vídeo", "%d vídeos"), ("%d Video", "%d Videos"),
  ("%d video", "%d video"), ("%d video", "%d video's"), ("%d vídeo", "%d vídeos")],
 "iptv_count": [

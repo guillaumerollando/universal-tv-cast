@@ -23,6 +23,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.ExpandLess
+import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.Casino
 import androidx.compose.material.icons.rounded.Folder
 import androidx.compose.material.icons.rounded.Movie
@@ -88,6 +90,7 @@ internal fun LanFolderView(
     hideWatched: Boolean,
     onFolder: (LanEntry) -> Unit,
     onPlay: (LanEntry, List<LanEntry>, Map<String, Catalog.Info>) -> Unit,
+    load: suspend (LanEntry) -> List<LanEntry> = { emptyList() },
 ) {
     val c = MaterialTheme.colorScheme
     val watched by LanStore.watched.collectAsState()
@@ -147,7 +150,31 @@ internal fun LanFolderView(
             else -> f
         }
     }
-    val genres = if (episodesMode) emptyList() else videos0.flatMap { info(it).genres }.groupingBy { it }.eachCount()
+    // Dossier d'une série (« Breaking Bad » avec « Saison 1 », « Saison 2 ») : vue série, saisons dépliables.
+    val seasonFolders = entries.filter { it.folder && SEASON.find(it.name.trim()) != null }
+        .sortedBy { SEASON.find(it.name.trim())!!.groupValues[1].toInt() }
+    val seriesRoot = seasonFolders.isNotEmpty() && seasonFolders.size * 2 >= entries.count { it.folder } && videos0.size <= 2
+    val seasonEps = remember(entries) { mutableStateMapOf<String, List<LanEntry>>() }
+    val expanded = remember(entries) { mutableStateMapOf<String, Boolean>() }
+    var seriesInfo by remember(entries) { androidx.compose.runtime.mutableStateOf<Catalog.Info?>(null) }
+    if (seriesRoot) LaunchedEffect(entries) {
+        launch { seriesInfo = parents.lastOrNull()?.let { Catalog.series(it) } ?: parents.lastOrNull()?.let { Catalog.Info(it) } }
+        seasonFolders.forEach { s ->
+            launch {
+                val eps = load(s).filter { !it.folder && it.kind == LanEntry.Kind.VIDEO }
+                seasonEps[s.ref] = eps
+                eps.forEach { v -> infos[v.name] = Catalog.parse(v.name) }
+                eps.forEach { v -> launch { infos[v.name] = Catalog.info(v.name, url = lanUrl(v)) } }
+            }
+        }
+    }
+    // Saison ouverte d'office : la première qui a encore des épisodes à voir.
+    LaunchedEffect(seasonEps.size, watched) {
+        if (!seriesRoot || expanded.isNotEmpty() || seasonEps.size < seasonFolders.size) return@LaunchedEffect
+        val first = seasonFolders.firstOrNull { s -> seasonEps[s.ref].orEmpty().any { watched[lanUrl(it)]?.finished != true } } ?: seasonFolders.first()
+        expanded[first.ref] = true
+    }
+    val genres = if (episodesMode || seriesRoot) emptyList() else videos0.flatMap { info(it).genres }.groupingBy { it }.eachCount()
         .entries.sortedByDescending { it.value }.map { it.key }
     val others = entries.filter { !it.folder && it.kind != LanEntry.Kind.VIDEO && it !in art }
     val order = playOrder(videos0)
@@ -190,7 +217,24 @@ internal fun LanFolderView(
                 }
             }
         }
-        items(folders, key = { "d" + it.ref }) { f -> FolderPoster(f, parents) { onFolder(f) } }
+        if (seriesRoot) {
+            // Toute la série dans l'ordre : « Épisode suivant » passe de la saison 1 à la saison 2.
+            val allEps = playOrder(seasonFolders.flatMap { seasonEps[it.ref].orEmpty() })
+            item(span = full, key = "series") { SeriesHeader(seriesInfo ?: allEps.firstOrNull()?.let { info(it) }, folderPoster?.let(::uriOf)) }
+            seasonFolders.forEach { s ->
+                val eps = playOrder(seasonEps[s.ref].orEmpty()).filter { !hideWatched || watched[lanUrl(it)]?.finished != true }
+                val open = expanded[s.ref] == true
+                item(span = full, key = "h" + s.ref) {
+                    SeasonHeader(s.name.trim(), seasonEps[s.ref]?.size, seasonEps[s.ref]?.count { watched[lanUrl(it)]?.finished == true } ?: 0, open) {
+                        expanded[s.ref] = !open
+                    }
+                }
+                if (open) items(eps, key = { "e" + it.ref }, span = { GridItemSpan(maxLineSpan) }) { v ->
+                    EpisodeRow(v, info(v), null, watched[lanUrl(v)]) { onPlay(v, allEps, infos.toMap()) }
+                }
+            }
+        }
+        items(if (seriesRoot) folders - seasonFolders.toSet() else folders, key = { "d" + it.ref }) { f -> FolderPoster(f, parents) { onFolder(f) } }
         if (episodesMode) {
             videos.groupBy { info(it).season ?: 0 }.toSortedMap().forEach { (season, eps) ->
                 item(span = full, key = "s$season") {
@@ -336,6 +380,25 @@ private fun SeriesHeader(info: Catalog.Info?, local: String?) {
         Spacer(Modifier.width(14.dp))
         Text(info.title, style = MaterialTheme.typography.headlineSmall, maxLines = 3, overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f).semantics { heading() })
+    }
+}
+
+/** Titre d'une saison, touché pour la déplier ou la replier ; nombre d'épisodes et combien sont vus. */
+@Composable
+private fun SeasonHeader(title: String, count: Int?, seen: Int, open: Boolean, onToggle: () -> Unit) {
+    val c = MaterialTheme.colorScheme
+    Row(Modifier.fillMaxWidth().padding(top = 6.dp).clip(RoundedCornerShape(14.dp)).background(c.surfaceContainerHigh)
+        .clickable(onClick = onToggle).padding(horizontal = 16.dp, vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically) {
+        Column(Modifier.weight(1f)) {
+            Text(title, style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+            if (count != null) Text(
+                if (seen > 0) "${androidx.compose.ui.res.pluralStringResource(R.plurals.lan_episodes, count, count)} · $seen ✓"
+                else androidx.compose.ui.res.pluralStringResource(R.plurals.lan_episodes, count, count),
+                style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
+        }
+        if (count == null) androidx.compose.material3.CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp)
+        else Icon(if (open) Icons.Rounded.ExpandLess else Icons.Rounded.ExpandMore, null, tint = c.onSurfaceVariant)
     }
 }
 

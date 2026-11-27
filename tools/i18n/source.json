@@ -1581,6 +1581,16 @@
     "one": "%d chaîne",
     "other": "%d chaînes"
    }
+  },
+  "lan_episodes": {
+   "en": [
+    "%d episode",
+    "%d episodes"
+   ],
+   "fr": [
+    "%d épisode",
+    "%d épisodes"
+   ]
   }
  }
 }

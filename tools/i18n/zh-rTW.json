@@ -401,6 +401,9 @@
   },
   "iptv_count": {
    "other": "%d 個頻道"
+  },
+  "lan_episodes": {
+   "other": "%d 集"
   }
  }
 }

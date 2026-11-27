@@ -403,4 +403,8 @@
         <item quantity="one">%d चैनल</item>
         <item quantity="other">%d चैनल</item>
     </plurals>
+    <plurals name="lan_episodes">
+        <item quantity="one">%d एपिसोड</item>
+        <item quantity="other">%d एपिसोड</item>
+    </plurals>
 </resources>

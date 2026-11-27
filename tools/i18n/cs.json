@@ -407,6 +407,12 @@
    "few": "%d kanály",
    "many": "%d kanálu",
    "other": "%d kanálů"
+  },
+  "lan_episodes": {
+   "one": "%d díl",
+   "few": "%d díly",
+   "many": "%d dílu",
+   "other": "%d dílů"
   }
  }
 }

@@ -401,4 +401,7 @@
     <plurals name="iptv_count">
         <item quantity="other">%d saluran</item>
     </plurals>
+    <plurals name="lan_episodes">
+        <item quantity="other">%d episode</item>
+    </plurals>
 </resources>

@@ -377,6 +377,15 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
                         sort = sort, sortDesc = sortDesc, hideWatched = hideWatched,
                         onFolder = { f -> go(Place(f.device!!, f.ref, f.name)) },
                         onPlay = { e, all, infos -> play(e, all, infos) },
+                        // Contenu d'un sous-dossier (les saisons d'une série, montrées dépliables).
+                        load = { f ->
+                            withContext(Dispatchers.IO) {
+                                runCatching {
+                                    val d = f.device!!
+                                    if (d.kind == LanDevice.Kind.MEDIA_SERVER) MediaServers.browse(d, f.ref) else Smb.list(d, f.ref)
+                                }.getOrDefault(emptyList())
+                            }
+                        },
                     )
                 }
             }

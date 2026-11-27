@@ -401,6 +401,9 @@
   },
   "iptv_count": {
    "other": "%d kênh"
+  },
+  "lan_episodes": {
+   "other": "%d tập"
   }
  }
 }

@@ -403,6 +403,10 @@
   "iptv_count": {
    "one": "%d चैनल",
    "other": "%d चैनल"
+  },
+  "lan_episodes": {
+   "one": "%d एपिसोड",
+   "other": "%d एपिसोड"
   }
  }
 }

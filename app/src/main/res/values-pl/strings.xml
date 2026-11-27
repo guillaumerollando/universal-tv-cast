@@ -407,4 +407,10 @@
         <item quantity="many">%d kanałów</item>
         <item quantity="other">%d kanału</item>
     </plurals>
+    <plurals name="lan_episodes">
+        <item quantity="one">%d odcinek</item>
+        <item quantity="few">%d odcinki</item>
+        <item quantity="many">%d odcinków</item>
+        <item quantity="other">%d odcinka</item>
+    </plurals>
 </resources>

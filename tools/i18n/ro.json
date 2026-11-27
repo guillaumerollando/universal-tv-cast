@@ -405,6 +405,11 @@
    "one": "%d canal",
    "few": "%d canale",
    "other": "%d de canale"
+  },
+  "lan_episodes": {
+   "one": "%d episod",
+   "few": "%d episoade",
+   "other": "%d de episoade"
   }
  }
 }

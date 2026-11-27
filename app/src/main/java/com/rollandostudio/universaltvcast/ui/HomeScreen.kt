@@ -44,6 +44,7 @@ import androidx.compose.material.icons.rounded.Link
 import androidx.compose.material.icons.rounded.LiveTv
 import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material.icons.rounded.PhotoLibrary
+import androidx.compose.material.icons.rounded.Lan
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.VideoLibrary
@@ -85,7 +86,7 @@ import com.rollandostudio.universaltvcast.data.Recent
 fun HomeScreen(
     onBrowse: (String?) -> Unit,
     onPickFile: () -> Unit,
-    onPickVideo: () -> Unit,
+    onNetwork: () -> Unit,
     onPickPhotos: () -> Unit,
     onPasteLink: () -> Unit,
 ) {
@@ -169,8 +170,8 @@ fun HomeScreen(
                 Column(Modifier.padding(horizontal = 16.dp)) {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         SmallTile(Icons.Rounded.Public, stringResource(R.string.home_browse_tile), Modifier.weight(1f)) { onBrowse(null) }
-                        SmallTile(Icons.Rounded.VideoLibrary, stringResource(R.string.home_videos), Modifier.weight(1f), onClick = onPickVideo)
                         SmallTile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), Modifier.weight(1f), onClick = onPickPhotos)
+                        SmallTile(Icons.Rounded.Lan, stringResource(R.string.home_network), Modifier.weight(1f), onClick = onNetwork)
                         SmallTile(Icons.Rounded.Link, stringResource(R.string.home_link_tile), Modifier.weight(1f), onClick = onPasteLink)
                     }
                     MoreSources(onPickFile, showLists = channels.isEmpty()) // sinon, déjà en tête de « Chaînes »
@@ -226,10 +227,10 @@ fun HomeScreen(
             Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Tile(Icons.Rounded.Public, stringResource(R.string.home_browse_tile), stringResource(R.string.home_browse_short), Modifier.weight(1f)) { onBrowse(null) }
-                    Tile(Icons.Rounded.VideoLibrary, stringResource(R.string.home_videos), stringResource(R.string.home_videos_short), Modifier.weight(1f), onClick = onPickVideo)
+                    Tile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), stringResource(R.string.home_photos_short), Modifier.weight(1f), onClick = onPickPhotos)
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Tile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), stringResource(R.string.home_photos_short), Modifier.weight(1f), onClick = onPickPhotos)
+                    Tile(Icons.Rounded.Lan, stringResource(R.string.home_network), stringResource(R.string.home_network_short), Modifier.weight(1f), onClick = onNetwork)
                     Tile(Icons.Rounded.Link, stringResource(R.string.home_link), stringResource(R.string.home_link_short), Modifier.weight(1f),
                         highlight = showLinkTile, onClick = { showLinkTile = false; onPasteLink() })
                 }

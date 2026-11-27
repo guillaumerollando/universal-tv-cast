@@ -1292,3 +1292,23 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - Fait : la tuile « Coller un lien » (montrée depuis les chaînes gratuites) n'a plus de contour orange ; la lueur
   s'allume en fondu (0,45 s) et s'éteint en fondu (1,1 s) au lieu de disparaître d'un coup. Installé sur le téléphone.
 - Pas fait : rien.
+
+## 2026-11-27 — Réseau (NAS, ordinateurs) et album intelligent
+- Fait :
+  - Accueil : Sites web, Album, **Réseau**, Coller un lien (la tuile Vidéos disparaît, l'Album fait les deux).
+  - Album : une vidéo seule se lit comme une vidéo ; plusieurs éléments lancent le diaporama.
+  - Réseau : serveurs multimédias DLNA trouvés tout seuls (recherche SSDP), dossiers partagés SMB (sondage du port
+    445 + nom NetBIOS), ajout à la main (« 192.168.1.40 », « \\PC\Films », « nas:8200 »), connexion avec
+    identifiant retenu (mot de passe chiffré par le Keystore), oublier un appareil (appui long), aide Windows / Mac / NAS.
+  - Fichiers SMB lus par `SmbProvider` (adresse `content://`, lecture à la demande, rien n'est copié) : relais vers la
+    télé, lecteur du téléphone et sous-titres marchent sans changement.
+  - jcifs-ng 2.1.10 (SMB 1 à 3.0.2 ; la 3.1.1 échouait à vérifier la signature). Appli : 4,9 → 6,6 Mo (Play).
+  - Ménage : les enregistrements de direct laissés par une appli fermée de force sont effacés au démarrage.
+  - Textes en 23 langues ; tests `LanTest`.
+  - Vérifié sur émulateur : faux NAS DLNA (Browse, ordre naturel, lecture), faux partage SMB protégé (connexion,
+    dossiers, lecture sur le téléphone, envoi à la fausse télé, mot de passe retenu après redémarrage).
+- Pas fait / pas vérifié :
+  - Vrai Windows, vrai Mac, vrai NAS, vraie recherche sur le Wi-Fi (l'émulateur ne voit pas la diffusion du réseau).
+  - Liste des partages sur un port autre que 445 (jcifs-ng passe toujours par 445 pour la demander) : donner le
+    partage à la main dans ce cas.
+  - Photos d'un serveur DLNA (masquées) ; vidéos du réseau absentes de « Reprendre » (comme les vidéos du téléphone).

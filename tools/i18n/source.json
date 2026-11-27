@@ -1279,6 +1279,114 @@
   "report_site_intro": {
    "en": "The video on this page wasn’t found. (Add anything useful: what you clicked, what happened.)",
    "fr": "La vidéo de cette page n’a pas été repérée. (Ajoute ce qui peut aider : ce que tu as touché, ce qui s’est passé.)"
+  },
+  "home_network": {
+   "en": "Network",
+   "fr": "Réseau"
+  },
+  "home_network_short": {
+   "en": "Computer, NAS",
+   "fr": "Ordinateur, NAS"
+  },
+  "net_searching": {
+   "en": "Searching your network…",
+   "fr": "Recherche sur ton réseau…"
+  },
+  "net_found": {
+   "en": "On your network",
+   "fr": "Sur ton réseau"
+  },
+  "net_none": {
+   "en": "Nothing found yet. Check that the computer or NAS is on, on the same network, and shares a folder (see below).",
+   "fr": "Rien trouvé pour l’instant. Vérifie que l’ordinateur ou le NAS est allumé, sur le même réseau, et qu’il partage un dossier (voir plus bas)."
+  },
+  "net_media_server": {
+   "en": "Media server",
+   "fr": "Serveur multimédia"
+  },
+  "net_shared_folders": {
+   "en": "Shared folders",
+   "fr": "Dossiers partagés"
+  },
+  "net_add": {
+   "en": "Add a computer",
+   "fr": "Ajouter un ordinateur"
+  },
+  "net_add_hint": {
+   "en": "Address (e.g. 192.168.1.40)",
+   "fr": "Adresse (ex. 192.168.1.40)"
+  },
+  "net_add_help": {
+   "en": "You’ll find the computer’s address in its network settings (IPv4 address) or on your router’s page.",
+   "fr": "Tu trouves l’adresse de l’ordinateur dans ses réglages réseau (adresse IPv4) ou sur la page de ta box."
+  },
+  "net_add_none": {
+   "en": "Nothing answers at this address.",
+   "fr": "Rien ne répond à cette adresse."
+  },
+  "net_forget": {
+   "en": "Forget",
+   "fr": "Oublier"
+  },
+  "net_login_title": {
+   "en": "Sign in to %1$s",
+   "fr": "Se connecter à %1$s"
+  },
+  "net_login_help": {
+   "en": "The name and password of an account on this device. Windows: your Microsoft account email and its password (not the PIN).",
+   "fr": "Le nom et le mot de passe d’un compte de cet appareil. Windows : l’adresse e-mail de ton compte Microsoft et son mot de passe (pas le code PIN)."
+  },
+  "net_user": {
+   "en": "User name",
+   "fr": "Nom d’utilisateur"
+  },
+  "net_password": {
+   "en": "Password",
+   "fr": "Mot de passe"
+  },
+  "net_remember": {
+   "en": "Remember on this phone",
+   "fr": "Retenir sur ce téléphone"
+  },
+  "net_login": {
+   "en": "Sign in",
+   "fr": "Se connecter"
+  },
+  "net_login_failed": {
+   "en": "Name or password refused.",
+   "fr": "Nom ou mot de passe refusé."
+  },
+  "net_empty_folder": {
+   "en": "No video, music or photo here.",
+   "fr": "Pas de vidéo, musique ou photo ici."
+  },
+  "net_error": {
+   "en": "Can’t open this folder. Is the device still on?",
+   "fr": "Impossible d’ouvrir ce dossier. L’appareil est-il toujours allumé ?"
+  },
+  "net_help_title": {
+   "en": "Watch your computer’s videos here",
+   "fr": "Regarder les vidéos de ton ordinateur"
+  },
+  "net_help_intro": {
+   "en": "Your phone, your computer and your TV must be on the same network (the same router).",
+   "fr": "Ton téléphone, ton ordinateur et ta télé doivent être sur le même réseau (la même box)."
+  },
+  "net_help_windows": {
+   "en": "1. Right-click the folder with your videos → Properties → Sharing tab → Share.\n2. Pick your name, then Share.\n3. Make sure your network is “Private”: Settings → Network & internet → your Wi-Fi or Ethernet → Private.\n4. Here, tap your computer and sign in with your Windows account.",
+   "fr": "1. Clic droit sur le dossier de tes vidéos → Propriétés → onglet Partage → Partager.\n2. Choisis ton nom, puis Partager.\n3. Vérifie que ton réseau est « Privé » : Paramètres → Réseau et Internet → ton Wi-Fi ou Ethernet → Privé.\n4. Ici, touche ton ordinateur et connecte-toi avec ton compte Windows."
+  },
+  "net_help_mac": {
+   "en": "1. System Settings → General → Sharing → turn on File Sharing.\n2. ⓘ button → add the folder with your videos with +.\n3. Options → tick your account under “Windows File Sharing”.\n4. Here, tap your Mac and sign in with your Mac account.",
+   "fr": "1. Réglages Système → Général → Partage → active Partage de fichiers.\n2. Bouton ⓘ → ajoute le dossier de tes vidéos avec +.\n3. Options → coche ton compte sous « Partage de fichiers Windows ».\n4. Ici, touche ton Mac et connecte-toi avec ton compte du Mac."
+  },
+  "net_help_nas_title": {
+   "en": "NAS or router with a drive",
+   "fr": "NAS ou box avec un disque"
+  },
+  "net_help_nas": {
+   "en": "Turn on its “media server” (DLNA or UPnP) in its settings: it shows up here on its own, without a password. Its shared folders work too, with your NAS account.",
+   "fr": "Active son « serveur multimédia » (DLNA ou UPnP) dans ses réglages : il apparaît ici tout seul, sans mot de passe. Ses dossiers partagés marchent aussi, avec ton identifiant du NAS."
   }
  },
  "plurals": {

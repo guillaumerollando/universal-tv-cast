@@ -84,6 +84,8 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer:1.6.1")
     implementation("androidx.media3:media3-exoplayer-hls:1.6.1")
     implementation("androidx.media3:media3-ui:1.6.1")
+    // Dossiers partagés du réseau (Windows, Mac, NAS : SMB 1 à 3).
+    implementation("eu.agno3.jcifs:jcifs-ng:2.1.10")
     debugImplementation("androidx.compose.ui:ui-tooling")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.json:json:20240303")

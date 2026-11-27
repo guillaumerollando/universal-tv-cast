@@ -13,7 +13,11 @@ sur le téléphone quand il n'y a pas de télé allumée.
   grille par chaîne), zapping, pause du direct.
 - **Lecteur externe** : « Ouvrir avec » / « Partager » des autres applis (en-têtes, titre et sous-titres, conventions
   MX Player et VLC) ; un lien de page web s'ouvre dans le navigateur.
-- **Album** : photos et vidéos du téléphone, une par une ou en diaporama.
+- **Album** : photos et vidéos du téléphone ; une vidéo seule se lit comme une vidéo, plusieurs éléments font un diaporama.
+- **Réseau** : NAS, box et ordinateurs de la maison. Serveurs multimédias DLNA / UPnP trouvés tout seuls (la télé
+  lit leurs vidéos directement chez eux) et dossiers partagés Windows / Mac / NAS en SMB 1 à 3.0.2 (le téléphone
+  relaie le fichier, rien n'est copié). Appareils retenus, mot de passe chiffré par le Keystore d'Android ; aide
+  « partager un dossier » pour Windows, Mac et NAS.
 - **Lecture sur le téléphone** (ExoPlayer) : plein écran, double appui ±10 s, mini-vidéo déplaçable.
 - **Télécommande** : lecture, ±10 s, barre, volume de la télé (boutons du téléphone), notification.
 - **Sous-titres** SRT / VTT / ASS (convertis pour la télé), langue audio, décalage.
@@ -41,6 +45,7 @@ RenderingControl (`dlna/Dlna.kt`).
 | `proxy/` | Serveur relais pour la télé : HLS, enregistrement du direct, sous-titres, MKV/MP4 |
 | `data/` | Historique et favoris (`Library`), chaînes et listes (`Iptv`, `IptvStore`, `Channels`), guide (`Epg`), économie d'énergie |
 | `ui/` | Écrans Compose (accueil, lecteur, chaînes, guide, réglages), widgets (`Widgets.kt`), signalement (`Report`) |
+| `lan/` | Réseau de la maison : serveurs multimédias (`MediaServers`), dossiers partagés (`Smb`, lus en `content://` par `SmbProvider`), appareils retenus (`LanStore`) |
 | `dlna/`, `net/`, `subs/` | Protocole DLNA, HTTP, recherche de sous-titres |
 
 Les textes des 23 langues viennent de `tools/strings.py` et `tools/i18n/*.json` (`python3 -I tools/strings.py`

@@ -60,6 +60,8 @@ class ProxyServer(private val ctx: Context) {
     @Volatile var mimeOverride: String? = null
 
     init {
+        // Enregistrements de directs laissés par une session interrompue (appli fermée de force) : jamais réutilisés.
+        thread(isDaemon = true, name = "tvcast-cleanup") { runCatching { java.io.File(ctx.cacheDir, "direct").deleteRecursively() } }
         thread(isDaemon = true, name = "tvcast-proxy") {
             while (!server.isClosed) {
                 val s = try { server.accept() } catch (_: IOException) { break }

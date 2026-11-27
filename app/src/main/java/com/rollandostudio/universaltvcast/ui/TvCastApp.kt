@@ -133,6 +133,8 @@ object Nav {
     val tvs = MutableStateFlow(false)
     /** Écran des listes de chaînes ouvert : id de la liste à montrer ("" : la première). */
     val iptv = MutableStateFlow<String?>(null)
+    /** Page « Réseau » (ordinateurs, NAS) ouverte par-dessus l'accueil. */
+    val network = MutableStateFlow(false)
     /** Le navigateur affiche son bouton « N vidéos » (en bas à droite). */
     val browserVideoButton = MutableStateFlow(false)
 }
@@ -179,9 +181,16 @@ fun TvCastApp() {
         TvCast.open(Media(url = uri.toString(), title = Intake.nameOf(context, uri), mime = context.contentResolver.getType(uri)))
         Nav.tab.value = Tab.PLAYER
     }
+    // L'album : une vidéo seule se lit comme une vidéo (reprise, sous-titres…) ; plusieurs éléments font un diaporama.
     val pickPhotos = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(100)) { uris: List<Uri> ->
         if (uris.isEmpty()) return@rememberLauncherForActivityResult
-        TvCast.openPhotos(uris)
+        val one = uris.singleOrNull()
+        if (one != null && context.contentResolver.getType(one)?.startsWith("video/") == true) {
+            TvCast.open(Media(url = one.toString(), title = Intake.nameOf(context, one), mime = context.contentResolver.getType(one)))
+        } else {
+            TvCast.openPhotos(uris)
+            if (uris.size > 1) TvCast.toggleSlideshow()
+        }
         Nav.tab.value = Tab.PLAYER
     }
 
@@ -296,7 +305,7 @@ fun TvCastApp() {
                 Tab.HOME -> HomeScreen(
                     onBrowse = { url -> url?.let { browser.load(it) }; Nav.tab.value = Tab.BROWSER },
                     onPickFile = { pickFile.launch(arrayOf("video/*", "audio/*")) },
-                    onPickVideo = { pickVideo.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly)) },
+                    onNetwork = { Nav.network.value = true },
                     onPickPhotos = { pickPhotos.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)) },
                     onPasteLink = { showLink = true },
                 )
@@ -314,6 +323,8 @@ fun TvCastApp() {
     // Page de détail « Chaînes » : plein écran, sans l'en-tête ni la barre d'onglets de l'appli.
     val iptvOpen by Nav.iptv.collectAsState()
     if (iptvOpen != null) IptvScreen(onClose = { Nav.iptv.value = null })
+    val networkOpen by Nav.network.collectAsState()
+    if (networkOpen) NetworkScreen(onClose = { Nav.network.value = false })
     // Lecture sur le téléphone, ailleurs que sur l'écran de lecture : la vidéo continue en vignette.
     val playingOnPhone = state.onPhone && (state.active || state.phase == com.rollandostudio.universaltvcast.cast.Phase.SENDING)
     if (playingOnPhone && !landscape && (tab != Tab.PLAYER || iptvOpen != null)) {

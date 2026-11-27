@@ -133,5 +133,10 @@
             android:name=".cast.CastService"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback" />
+        <!-- Fichiers des dossiers partagés du réseau, lus comme des fichiers du téléphone (privé à l'appli). -->
+        <provider
+            android:name=".lan.SmbProvider"
+            android:authorities="${applicationId}.smb"
+            android:exported="false" />
     </application>
 </manifest>

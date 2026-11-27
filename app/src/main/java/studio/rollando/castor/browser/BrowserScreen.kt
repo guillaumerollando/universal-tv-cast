@@ -145,6 +145,22 @@ class BrowserController(context: Context) {
     init {
         studio.rollando.castor.cast.Castor.pausePageMedia = ::pauseMedia
         sniffer.onUserPlay = { mainHandler.post { onUserPlay() } }
+        // Requêtes faites par le « service worker » d'un site (il charge parfois la vidéo à la place de la page) :
+        // inspectées et filtrées comme les autres, sinon ces vidéos et ces pubs passeraient inaperçues.
+        if (androidx.webkit.WebViewFeature.isFeatureSupported(androidx.webkit.WebViewFeature.SERVICE_WORKER_BASIC_USAGE) &&
+            androidx.webkit.WebViewFeature.isFeatureSupported(androidx.webkit.WebViewFeature.SERVICE_WORKER_SHOULD_INTERCEPT_REQUEST)
+        ) runCatching {
+            androidx.webkit.ServiceWorkerControllerCompat.getInstance().setServiceWorkerClient(object : androidx.webkit.ServiceWorkerClientCompat() {
+                override fun shouldInterceptRequest(request: WebResourceRequest): WebResourceResponse? {
+                    if (Library.adBlock.value && adsAllowedHost == null && AdBlock.isAd(request.url)) {
+                        blockedCount++
+                        return WebResourceResponse("text/plain", "utf-8", ByteArrayInputStream(ByteArray(0)))
+                    }
+                    sniffer.inspect(request)
+                    return null
+                }
+            })
+        }
     }
 
     /** Envoie une vidéo trouvée sur la page au lecteur de l'appli (télé, ou téléphone). */

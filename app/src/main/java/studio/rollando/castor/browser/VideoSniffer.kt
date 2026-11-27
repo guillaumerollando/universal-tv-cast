@@ -446,6 +446,17 @@ class VideoSniffer {
             }
         }
 
+        /**
+         * Liste HLS reconnue à son contenu (« #EXTM3U ») ou à son type, dont l'adresse ne finit pas par .m3u8
+         * (« /manifest », « /playlist?id=… ») : le lecteur du site l'a chargée en coulisse (fetch, XHR).
+         */
+        @JavascriptInterface
+        fun hls(url: String?) {
+            if (url.isNullOrBlank() || !url.startsWith("http")) return
+            if (AdBlock.isAd(Uri.parse(url))) return
+            add(url, true)
+        }
+
         /** Le script tourne aussi dans les cadres des lecteurs intégrés (autre site que la page). */
         @JavascriptInterface
         fun found(url: String?, duration: Double) {
@@ -477,6 +488,23 @@ class VideoSniffer {
     r.addEventListener('durationchange', function(e){ report(e.target); }, true);
   }
   listen(document);
+  // Listes HLS chargées en coulisse par le lecteur du site, sans « .m3u8 » dans l'adresse : reconnues à leur
+  // contenu (« #EXTM3U ») ou à leur type. Les adresses en .m3u8 sont déjà vues par l'appli.
+  function hlsSeen(u){ try { if (u && CastorBridge.hls && !/\.m3u8(\?|$)/i.test(u.split('#')[0])) CastorBridge.hls(new URL(u, location.href).href); } catch(e){} }
+  try { var xo = XMLHttpRequest.prototype.open, xs = XMLHttpRequest.prototype.send;
+    XMLHttpRequest.prototype.open = function(m, u){ this.__castorUrl = u; return xo.apply(this, arguments); };
+    XMLHttpRequest.prototype.send = function(){ var x = this;
+      x.addEventListener('load', function(){ try { if ((x.responseType === '' || x.responseType === 'text') &&
+        typeof x.responseText === 'string' && x.responseText.lastIndexOf('#EXTM3U', 0) === 0) hlsSeen(x.responseURL || x.__castorUrl); } catch(e){} });
+      return xs.apply(this, arguments); };
+  } catch(e){}
+  try { var fo = window.fetch; if (fo) window.fetch = function(){ return fo.apply(this, arguments).then(function(r){
+      try { var ct = (r.headers.get('content-type') || '').toLowerCase();
+        if (ct.indexOf('mpegurl') >= 0) hlsSeen(r.url);
+        else if (ct.indexOf('text') >= 0 || ct === '' || ct.indexOf('octet') >= 0) r.clone().text().then(function(t){
+          if (t.lastIndexOf('#EXTM3U', 0) === 0) hlsSeen(r.url); }).catch(function(){}); } catch(e){}
+      return r; }); };
+  } catch(e){}
   try { var attach = Element.prototype.attachShadow;
     Element.prototype.attachShadow = function(o){ var r = attach.call(this, o); try { roots.push(r); listen(r); } catch(e){} return r; };
   } catch(e){}

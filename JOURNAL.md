@@ -1182,3 +1182,18 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
   doublons déjà enregistrés se regroupent à l'affichage.
 - Épisode fini : « Reprendre » propose le suivant, depuis le début (inchangé). Suite introuvable : l'épisode reste
   au lieu de disparaître ; appui long → « Série terminée » (23 langues) pour le retirer.
+
+## 2026-11-27 — Reconnaître plus de vidéos
+**Fait**
+- Listes HLS chargées en coulisse sans « .m3u8 » dans l'adresse (« /manifest », « /playlist?id=… ») : le script
+  enveloppe `fetch` et `XMLHttpRequest` et signale toute réponse qui commence par `#EXTM3U` ou dont le type est
+  « mpegurl » (`CastorBridge.hls`). Vérifié sur émulateur avec une page de test locale (fetch de /manifest) :
+  repérée (10 min, 5 qualités, 1080p) et lue.
+- Requêtes des « service workers » des sites : inspectées (vidéos) et filtrées (pubs) comme les autres
+  (`ServiceWorkerControllerCompat`). Pas de site d'essai sous la main : non vérifié en vrai.
+
+**Pas fait / limites**
+- DASH (.mpd) seul, sans HLS : ni les télés DLNA ni le relais ne le gèrent ; le téléphone le pourrait (module DASH
+  d'ExoPlayer) si un site utile n'a que ça.
+- Vidéos protégées (DRM : Netflix, Disney+, une partie de Canal+…) et lecteurs à morceaux sans liste (YouTube) :
+  impossible, voulu par les sites.

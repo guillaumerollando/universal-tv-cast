@@ -1438,3 +1438,7 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   important en commun est maintenant exigé (cache des titres renouvelé) ; un titre sans extension (DLNA,
   « Mon.Anime.S01E01 ») perdait son « S01E01 » ; lecture des chapitres tolérante à un serveur qui coupe tôt.
 - Pas vérifié : le bouton « Épisode suivant » pendant le générique de fin à l'écran (même code) ; sur la vraie télé.
+
+## 2026-11-27 — Idée notée : pub discrète + premium
+- Noté dans `~/Dev/Gestion de projet/Universal TV Cast/idees-plus-tard.md` : si un jour Guillaume veut un revenu,
+  une seule bannière non bloquante (accueil), achat unique pour l'enlever, version libre sans pub. Pas d'actualité.

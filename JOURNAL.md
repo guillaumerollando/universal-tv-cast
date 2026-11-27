@@ -1232,3 +1232,13 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
 - Logo de chaîne dans le lecteur : 4 présentations à l'essai (`LogoStyle` : tuile, détouré, liseré blanc, verre
   dépoli), réglables depuis l'ordinateur (`--es castor_logo_style STICKER`). Planche : `docs/design/logos-variantes.png`.
   Par défaut : la tuile, en attendant le choix de Guillaume.
+
+## 2026-11-27 — Logo de chaîne : liseré adaptatif, halo doux
+**Fait**
+- Liseré (option C) adaptatif : blanc autour d'un logo sombre, gris très foncé autour d'un logo surtout blanc
+  (`Logos.edgeColor`, part de pixels très clairs > 50 %). Nouvelle option E « halo doux » (`LogoStyle.GLOW`) : masque
+  du logo flouté, même couleur adaptative. B (détouré seul) et D (verre dépoli) écartés par Guillaume.
+- Planche `docs/design/logos-variantes-2.png` : A, C, E sur France 5, Antenne Réunion, Novo 19, Paris Première, 6ter,
+  BFM TV, BFM Alsace (portrait et plein écran). Les logos qui ont leur propre fond (BFM TV, Antenne Réunion,
+  Paris Première en partie) restent des blocs dans toutes les options.
+- Par défaut : la tuile (A), en attendant le choix.

@@ -41,6 +41,9 @@ object PhoneEngine {
     private val _player = kotlinx.coroutines.flow.MutableStateFlow<ExoPlayer?>(null)
     /** Le lecteur en cours (l'écran l'affiche) ; null quand rien ne joue sur le téléphone. */
     val playerFlow: kotlinx.coroutines.flow.StateFlow<ExoPlayer?> = _player
+
+    /** Proportions de l'image (largeur / hauteur), pour la petite fenêtre « image dans l'image ». */
+    val aspect: Float get() = player?.videoSize?.let { if (it.width > 0 && it.height > 0) it.width * it.pixelWidthHeightRatio / it.height else null } ?: (16f / 9f)
     private val player: ExoPlayer? get() = _player.value
     /** Couleur dominante de l'image en cours (ARGB), pour la lueur de l'écran de lecture ; null : aucune. */
     val glow = kotlinx.coroutines.flow.MutableStateFlow<Int?>(null)

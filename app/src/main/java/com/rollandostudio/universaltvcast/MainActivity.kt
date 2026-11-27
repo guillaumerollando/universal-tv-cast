@@ -9,6 +9,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.view.KeyEvent
 import androidx.lifecycle.lifecycleScope
+import android.os.Build
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -94,8 +95,52 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
     override fun onStop() {
         super.onStop()
-        com.rollandostudio.universaltvcast.cast.TvCast.appHidden()
+        // En petite fenêtre, la vidéo continue ; fenêtre fermée (ou appli quittée sans elle) : on met en pause.
+        if (!isInPictureInPictureMode) com.rollandostudio.universaltvcast.cast.TvCast.appHidden()
     }
+
+    // ------------------------------------------------------------------ image dans l'image
+
+    /** Vidéo en cours sur le téléphone : en quittant l'appli, elle continue dans une petite fenêtre. */
+    private fun pipWanted(): Boolean {
+        val s = com.rollandostudio.universaltvcast.cast.TvCast.state.value
+        return s.onPhone && s.media != null && s.slides == null &&
+            (s.phase == com.rollandostudio.universaltvcast.cast.Phase.PLAYING || s.phase == com.rollandostudio.universaltvcast.cast.Phase.BUFFERING) &&
+            packageManager.hasSystemFeature(android.content.pm.PackageManager.FEATURE_PICTURE_IN_PICTURE)
+    }
+
+    private fun pipParams(): android.app.PictureInPictureParams {
+        val a = com.rollandostudio.universaltvcast.cast.PhoneEngine.aspect.coerceIn(0.42f, 2.38f) // limites d'Android
+        val ratio = android.util.Rational((a * 1000).toInt(), 1000)
+        fun action(icon: Int, label: Int, act: String, code: Int) = android.app.RemoteAction(
+            android.graphics.drawable.Icon.createWithResource(this, icon), getString(label), getString(label),
+            android.app.PendingIntent.getService(this, 100 + code,
+                Intent(this, com.rollandostudio.universaltvcast.cast.CastService::class.java).setAction(act),
+                android.app.PendingIntent.FLAG_IMMUTABLE),
+        )
+        val paused = com.rollandostudio.universaltvcast.cast.TvCast.state.value.phase == com.rollandostudio.universaltvcast.cast.Phase.PAUSED
+        return android.app.PictureInPictureParams.Builder().setAspectRatio(ratio).setActions(listOf(
+            action(R.drawable.ic_n_rewind, R.string.cd_rewind, com.rollandostudio.universaltvcast.cast.CastService.ACTION_BACK, 1),
+            action(if (paused) R.drawable.ic_n_play else R.drawable.ic_n_pause, R.string.action_play, com.rollandostudio.universaltvcast.cast.CastService.ACTION_TOGGLE, 2),
+            action(R.drawable.ic_n_forward, R.string.cd_forward10, com.rollandostudio.universaltvcast.cast.CastService.ACTION_FWD, 3),
+        )).apply { if (Build.VERSION.SDK_INT >= 31) setSeamlessResizeEnabled(true) }.build()
+    }
+
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        if (pipWanted()) runCatching { enterPictureInPictureMode(pipParams()) }
+    }
+
+    override fun onPictureInPictureModeChanged(inPip: Boolean, newConfig: android.content.res.Configuration) {
+        super.onPictureInPictureModeChanged(inPip, newConfig)
+        com.rollandostudio.universaltvcast.ui.Nav.pip.value = inPip
+        // Lecture / pause : l'icône de la petite fenêtre suit.
+        if (inPip) pipWatch = lifecycleScope.launch {
+            com.rollandostudio.universaltvcast.cast.TvCast.state.collect { runCatching { setPictureInPictureParams(pipParams()) } }
+        } else pipWatch?.cancel()
+    }
+
+    private var pipWatch: kotlinx.coroutines.Job? = null
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)

@@ -257,11 +257,11 @@ class CastService : Service() {
         private const val CHANNEL = "cast"
         private const val ID = 1
         private const val ACTION_STOP = "com.rollandostudio.universaltvcast.STOP"
-        private const val ACTION_TOGGLE = "com.rollandostudio.universaltvcast.TOGGLE"
-        private const val ACTION_BACK = "com.rollandostudio.universaltvcast.BACK"
+        internal const val ACTION_TOGGLE = "com.rollandostudio.universaltvcast.TOGGLE"
+        internal const val ACTION_BACK = "com.rollandostudio.universaltvcast.BACK"
         private const val CUSTOM_BACK = "back10"
         private const val CUSTOM_FWD = "fwd10"
-        private const val ACTION_FWD = "com.rollandostudio.universaltvcast.FWD"
+        internal const val ACTION_FWD = "com.rollandostudio.universaltvcast.FWD"
 
         fun start(ctx: Context) {
             runCatching { ctx.startForegroundService(Intent(ctx, CastService::class.java)) }

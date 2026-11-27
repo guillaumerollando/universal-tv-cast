@@ -239,6 +239,12 @@ fun PhoneVideo(state: CastState, active: Boolean = true, onGlow: ((Color) -> Uni
  * Téléphone tourné : la vidéo en plein écran. Un appui fait apparaître les commandes habituelles (barre, pause,
  * ±10 s, direct), un autre les cache.
  */
+/** La vidéo seule, pour la petite fenêtre « image dans l'image » (commandes : celles d'Android). */
+@Composable
+fun PipVideo() {
+    Box(Modifier.fillMaxSize().background(Color.Black)) { VideoSurface(Modifier.fillMaxSize()) }
+}
+
 @Composable
 fun PhoneFullscreen(state: CastState) {
     val activity = androidx.activity.compose.LocalActivity.current

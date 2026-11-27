@@ -1486,3 +1486,15 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - Pas vérifié : la lecture du film entier depuis le téléphone (à relancer par Guillaume) ; l'image et le son à
   l'écran (seul l'état « lecture » de la télé a été relevé). Pas fait : message clair quand une télé refuse un
   fichier, au lieu de le renvoyer.
+
+## 2026-11-27 — Télé allumée mais pas proposée
+- Constat : la Philips ne répond jamais à la recherche réseau ; au repos (allumée, rien en lecture) l'appli la
+  croyait éteinte. Le bouton « Regarder sur la télé » n'apparaissait qu'avec une télé « allumée » ; et même la
+  télé demandée à la main, la recherche finie sans télé « allumée », la vidéo repartait seule sur le téléphone.
+- Fait : toute télé déjà vue sur le Wi-Fi est proposée (bouton « Regarder sur la télé » sur l'écran de lecture,
+  même pendant la lecture sur le téléphone, qui ouvre le choix de la télé) ; le téléphone reste le choix par défaut
+  à l'ouverture d'une vidéo sans télé repérée allumée, mais plus jamais après que l'utilisateur a demandé la télé.
+- Relevé pour plus tard (télé allumée, au repos) : Cast `:8008/setup/eureka_info` répond, JointSpace
+  `:1925/6/system` répond (`/6/powerstate` exige l'appairage), AirPlay `:7000/info` statusFlags=580. À comparer
+  avec la télé en veille pour savoir la reconnaître allumée sans qu'elle lise. Le téléphone ne voit pas non plus
+  la télé en Google Cast (« appareils Cast : aucun ») alors qu'elle l'a : à creuser.

@@ -229,8 +229,11 @@ object TvCast {
             // Télé voulue, mais aucune n'est allumée : pas de « Choisis une télé » inutile, la vidéo part sur le téléphone.
             if (pendingCast && _state.value.renderer == null) {
                 val s = _state.value
-                if (s.renderers.none { it.awake } && s.media != null && !s.active && !s.onPhone) { pendingCast = false; autoPhone() }
-                else if (s.media != null) _state.update { it.copy(notice = Notice(R.string.notice_pick_tv)) }
+                // Sauf si l'utilisateur vient de demander la télé : une Philips au repos ne répond pas à la recherche
+                // et passerait pour éteinte ; on lui laisse le choix au lieu de repartir sur le téléphone.
+                if (playOnTv != true && s.renderers.none { it.awake } && s.media != null && !s.active && !s.onPhone) {
+                    pendingCast = false; autoPhone()
+                } else if (s.media != null && s.renderers.isNotEmpty()) _state.update { it.copy(notice = Notice(R.string.notice_pick_tv)) }
             }
             if (pendingCast && _state.value.renderer != null && _state.value.media != null) {
                 pendingCast = false
@@ -557,7 +560,7 @@ object TvCast {
         _state.update { it.copy(media = m.copy(startSec = pos), position = pos) }
         if (_state.value.renderer == null) {
             pendingCast = true
-            if (_state.value.renderers.any { it.awake }) _state.update { it.copy(notice = Notice(R.string.notice_pick_tv)) }
+            if (_state.value.renderers.isNotEmpty()) _state.update { it.copy(notice = Notice(R.string.notice_pick_tv)) }
             discover()
             return
         }

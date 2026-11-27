@@ -257,8 +257,9 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
             }
         }
 
-        // Une télé à qui envoyer : celle choisie, ou une qui répond sur le Wi-Fi. Sans télé, tout se passe sur le téléphone.
-        val tvAvailable = state.renderer != null || state.renderers.any { it.awake }
+        // Une télé à qui envoyer : celle choisie, ou une déjà vue sur le Wi-Fi, même si elle semble en veille (certaines,
+        // comme les Philips Titan OS, ne répondent pas à la recherche une fois au repos). Sans aucune télé : le téléphone.
+        val tvAvailable = state.renderer != null || state.renderers.isNotEmpty()
         if (!state.active && !state.onPhone && !tvAvailable) {
             Button(
                 onClick = { TvCast.toPhone() },
@@ -289,7 +290,9 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
         Controls(state)
         // Un seul écran pour les deux : sur la télé, ou sur ce téléphone (finir l'épisode dans son lit), au même endroit.
         if (tvAvailable || (state.active && !state.onPhone)) OutlinedButton(
-            onClick = { if (state.onPhone) TvCast.toTv() else TvCast.toPhone() },
+            onClick = {
+                if (state.onPhone) { TvCast.toTv(); if (state.renderer == null) onChooseTv() } else TvCast.toPhone()
+            },
             enabled = state.phase != Phase.LOADING,
             modifier = Modifier.fillMaxWidth().height(52.dp),
         ) {

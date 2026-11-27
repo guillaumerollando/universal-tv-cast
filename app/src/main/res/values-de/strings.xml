@@ -252,6 +252,9 @@
     <string name="start_archive">Gemeinfreie Filme</string>
     <string name="start_arte">Filme, Dokus, Konzerte</string>
     <string name="start_nasa">Der Weltraum im Video</string>
+    <string name="start_peertube">Freie Videos, ohne Werbung und Tracking</string>
+    <string name="start_blender">Freie Animationsfilme</string>
+    <string name="start_commons">Die freien Videos der Wikipedia</string>
     <string name="start_tv_steps">Kopiere diesen Link, tippe auf „Link einfügen“ und füge ihn ein: Alle Sender sind da. Das klappt mit jeder Senderliste (M3U).</string>
     <string name="start_copy">Link kopieren</string>
     <string name="start_copied">Link kopiert</string>

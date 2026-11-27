@@ -267,8 +267,35 @@ class BrowserController(context: Context) {
                 // Titre nettoyé (sans le nom du site ni « Regarder maintenant : ») pour la télé et la liste.
                 sniffer.pageTitle = PageTitle.clean(t.orEmpty(), Uri.parse(view.url ?: "").host ?: "")
             }
-            // Fenêtres surgissantes (souvent des pubs) : refusées.
-            override fun onCreateWindow(view: WebView, isDialog: Boolean, isUserGesture: Boolean, resultMsg: Message?) = false
+            /**
+             * Lien « nouvel onglet » (target=_blank) touché par l'utilisateur : la page s'ouvre ici, dans le même onglet
+             * (sans ça, le lien ne faisait rien : résultats de Sepia Search, catalogues…). Les fenêtres qui s'ouvrent
+             * toutes seules (pubs) restent refusées. On récupère l'adresse par une vue jetable, puis on la charge ici.
+             */
+            override fun onCreateWindow(view: WebView, isDialog: Boolean, isUserGesture: Boolean, resultMsg: Message?): Boolean {
+                if (!isUserGesture || isDialog || resultMsg == null) return false
+                var done = false
+                val temp = WebView(view.context)
+                fun take(v: WebView, url: String?) {
+                    if (done || url.isNullOrBlank() || url == "about:blank") return
+                    done = true
+                    v.stopLoading()
+                    view.post { v.destroy() }
+                    val u = Uri.parse(url)
+                    if (u.scheme != "http" && u.scheme != "https") return
+                    if (Library.adBlock.value && adsAllowedHost == null && AdBlock.blocked(u)) return
+                    android.util.Log.i("CastorWeb", "lien « nouvel onglet » ouvert ici : ${u.host}")
+                    view.loadUrl(url)
+                }
+                temp.webViewClient = object : WebViewClient() {
+                    override fun shouldOverrideUrlLoading(v: WebView, request: WebResourceRequest): Boolean { take(v, request.url.toString()); return true }
+                    override fun onPageStarted(v: WebView, url: String?, favicon: Bitmap?) = take(v, url)
+                }
+                val transport = resultMsg.obj as? WebView.WebViewTransport ?: run { temp.destroy(); return false }
+                transport.webView = temp
+                resultMsg.sendToTarget()
+                return true
+            }
         }
     }
 
@@ -580,6 +607,8 @@ fun BrowserScreen(b: BrowserController) {
                                     pageUrl = f.pageUrl,
                                     nextUrl = b.sniffer.nextEpisode ?: Episodes.find(f.pageUrl)?.next?.takeIf { it.isNotEmpty() },
                                     audioUrl = f.audio,
+                                    // Sous-titres que le lecteur du site propose (choisis ensuite dans « Sous-titres »).
+                                    subs = b.sniffer.tracks,
                                     // Même épisode déjà commencé : on reprend là où on s'était arrêté.
                                     startSec = Library.resumeAt(f.pageUrl),
                                     // L'image de la page (celle du favori) : en-tête du lecteur, fond, « Reprendre », notification.

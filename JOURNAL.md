@@ -1007,3 +1007,27 @@ fait toute seule.
 - Texte « Appui long sur une carte pour la retirer ou la garder en favori » supprimé (mal placé, sans effet sur
   les suggestions) ; clé remplacée par `start_dismiss` dans les 23 langues.
 - Vérifié émulateur : NASA+ écarté → disparu de l'accueil et du navigateur, et le reste après redémarrage.
+
+## 2026-11-27 (nuit) — Sites libres et ouverts : tests et « universel »
+Vision de Guillaume : ne suggérer que du gratuit ET libre/ouvert (domaine public, PeerTube, Blender, Wikimedia, télé
+publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques suggestions, jamais un catalogue.
+- Suggestions « Pour commencer » (rangée qui défile) : Internet Archive, Arte, PeerTube (Sepia Search), Blender Studio
+  (video.blender.org, films libres), Wikimedia Commons (vidéos de qualité), NASA+. Descriptions dans les 23 langues.
+- Testé sur émulateur (détection, nom, lecture téléphone ; envoi fausse télé pour HLS PeerTube et WebM Commons) :
+  Blender ✓, Sepia → PeerTube ✓, Commons ✓ (1080p, sous-titres), Internet Archive ✓, NASA+ ✓, Arte ✓ (Flow),
+  Vimeo ✓, Dailymotion ✓ (après « Continuer sans accepter »). Library of Congress : vérification anti-robot
+  (Cloudflare), non testée. Europeana : vidéo intégrée Vimeo derrière un consentement, non chargée.
+- Corrections générales (tous sites) :
+  - liens « nouvel onglet » (target=_blank) : s'ouvrent ici après un vrai toucher (avant : rien) ;
+  - qualités d'une même vidéo regroupées (stemOf / fileScore : ≤ 1080p, MP4 d'abord), et montée auto en 1080p/720p
+    quand le nom de fichier porte sa qualité (« .480p. ») ;
+  - ignorés : manifestes DASH (.mpd), morceaux DASH/MSE (init-…, chunk-…), « -fragmented.mp4 » de PeerTube,
+    la page elle-même, le « #… » final des adresses ; même liste HLS sur un autre serveur du site = une seule ;
+  - og:video / twitter:player:stream lus : vidéo proposée avant même la lecture (Internet Archive) ;
+  - og:site_name retiré des titres (« – Maternelle Éducatif ») ; titre suivi s'il arrive après la vidéo ;
+    nom de fichier = identifiant de la page (« xjfs17.m3u8 ») → titre de la page ; « File:… .webm » nettoyé ;
+  - sous-titres <track> de la page proposés avec la vidéo (langue du téléphone d'abord) : Commons ✓ ;
+  - relais : HLS en plages d'octets (EXT-X-BYTERANGE, EXT-X-MAP BYTERANGE) → PeerTube part sur la télé
+    (avant : rien n'arrivait) ;
+  - « Mes sites » : nom court sans sous-domaine générique (video.blender.org → Blender).
+- Émulateur : -gpu host plante avec la vidéo ; swiftshader_indirect -memory 4096 tient (plante parfois en lecture longue).

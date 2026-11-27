@@ -442,9 +442,9 @@ class ProxyServer(private val ctx: Context) {
                 }
                 failures = 0
                 val map = seg.map
-                if (map != null && map != currentMap) {
-                    out.write(Http.fetch(map, r.headers).bytes)
-                    currentMap = map
+                if (map != null && seg.mapId != currentMap) {
+                    out.write(Hls.bytes(map, seg.mapRange, r.headers))
+                    currentMap = seg.mapId
                 }
                 vTime += seg.duration
                 if (merger != null && audioPlan != null) {
@@ -485,9 +485,9 @@ class ProxyServer(private val ctx: Context) {
             seq = e.seg.seq + 1
             val data = runCatching { e.file?.readBytes() }.getOrNull() ?: continue // effacé entre-temps : suivant
             val map = e.seg.map
-            if (map != null && map != currentMap) {
-                out.write(Http.fetch(map, r.headers).bytes)
-                currentMap = map
+            if (map != null && e.seg.mapId != currentMap) {
+                out.write(Hls.bytes(map, e.seg.mapRange, r.headers))
+                currentMap = e.seg.mapId
             }
             out.write(data)
             out.flush()
@@ -500,7 +500,7 @@ class ProxyServer(private val ctx: Context) {
     private fun fetchSegment(s: Hls.Seg, headers: Map<String, String>, keys: MutableMap<String, ByteArray>, ts: Boolean): ByteArray? {
         var data: ByteArray? = null
         for (attempt in 0 until 3) {
-            data = runCatching { Http.fetch(s.url, headers).bytes }.getOrNull()
+            data = runCatching { Hls.bytes(s.url, s.range, headers) }.getOrNull()
             if (data != null) break
             Thread.sleep(500L * (attempt + 1))
         }

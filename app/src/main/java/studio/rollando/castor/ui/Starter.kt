@@ -1,11 +1,16 @@
 package studio.rollando.castor.ui
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -44,17 +49,25 @@ import studio.rollando.castor.R
 import studio.rollando.castor.data.IptvStore
 
 /**
- * Sites gratuits et légaux où l'appli trouve bien la vidéo (vérifié : la vidéo est détectée et peut partir sur la télé).
- * Internet Archive et NASA+ : partout dans le monde ; Arte : surtout en Europe, en plusieurs langues.
+ * Vidéos gratuites, légales, et autant que possible libres, où l'appli trouve bien la vidéo (chacun vérifié : vidéo
+ * détectée, lue sur le téléphone, envoyée à la télé). Quelques-unes pour éveiller la curiosité, pas un catalogue :
+ * films du domaine public, télé publique, PeerTube (vidéo libre et décentralisée), films libres de Blender,
+ * Wikimedia Commons, et la NASA (œuvres publiques).
  */
 private data class StarterSite(val host: String, val name: String, val url: String, val desc: Int, val icon: String)
 
-/** Icônes publiées par les sites eux-mêmes (avant la première visite, l'appli n'en a pas encore). */
+/** Icônes publiées par les sites eux-mêmes ou par Wikimedia (avant la première visite, l'appli n'en a pas encore). */
 private val STARTER_SITES = listOf(
     StarterSite("archive.org", "Internet Archive", "https://archive.org/details/feature_films", R.string.start_archive,
         "https://archive.org/offshoot_assets/apple-touch-icon.png"),
     StarterSite("arte.tv", "Arte", "https://www.arte.tv", R.string.start_arte,
         "https://static-cdn.arte.tv/replay/favicons/favicon-194x194.png"),
+    StarterSite("sepiasearch.org", "PeerTube", "https://sepiasearch.org", R.string.start_peertube,
+        "https://joinpeertube.org/img/icons/apple-touch-icon.png"),
+    StarterSite("video.blender.org", "Blender Studio", "https://video.blender.org/c/blender_open_movies/videos", R.string.start_blender,
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Blender_logo_no_text.svg/250px-Blender_logo_no_text.svg.png"),
+    StarterSite("commons.wikimedia.org", "Wikimedia Commons", "https://commons.wikimedia.org/wiki/Commons:Featured_videos", R.string.start_commons,
+        "https://commons.wikimedia.org/static/apple-touch/commons.png"),
     StarterSite("plus.nasa.gov", "NASA+", "https://plus.nasa.gov", R.string.start_nasa,
         "https://plus.nasa.gov/wp-content/uploads/2023/03/cropped-nasa-png-placeholder.png?w=192"),
 )
@@ -172,7 +185,7 @@ fun FreeChannelsCard(onPasteLink: () -> Unit) {
     } }
 }
 
-/** Trois sites gratuits et légaux à essayer dans le navigateur de l'appli. */
+/** Quelques sites gratuits et légaux à essayer dans le navigateur de l'appli. */
 @Composable
 fun StarterSites(onBrowse: (String) -> Unit, known: Set<String> = emptySet()) {
     val c = MaterialTheme.colorScheme
@@ -180,12 +193,16 @@ fun StarterSites(onBrowse: (String) -> Unit, known: Set<String> = emptySet()) {
     val list = remember(known, dismissed) { starterSitesFor(known, dismissed) }
     if (list.isEmpty()) return
     Text(stringResource(R.string.start_sites_title), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    // Une rangée qui défile : quelques sites sans allonger l'accueil ; cartes de même hauteur.
+    Row(
+        Modifier.height(androidx.compose.foundation.layout.IntrinsicSize.Max).horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
         list.forEach { s ->
-            androidx.compose.foundation.layout.Box(Modifier.weight(1f)) { Dismissable(s.host, onClick = { onBrowse(s.url) }) { press -> Card(
+            androidx.compose.foundation.layout.Box(Modifier.width(156.dp).fillMaxHeight()) { Dismissable(s.host, onClick = { onBrowse(s.url) }) { press -> Card(
                 colors = CardDefaults.cardColors(containerColor = c.surfaceContainerHigh),
                 shape = RoundedCornerShape(18.dp),
-                modifier = Modifier.fillMaxWidth().then(press),
+                modifier = Modifier.fillMaxSize().then(press),
             ) {
                 Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     androidx.compose.foundation.layout.Box(Modifier.size(36.dp)) {

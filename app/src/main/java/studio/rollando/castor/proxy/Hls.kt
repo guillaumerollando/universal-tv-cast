@@ -6,7 +6,34 @@ import java.net.URL
 /** Lecture des listes de lecture HLS (.m3u8). */
 object Hls {
     class Key(val method: String, val uri: String?, val iv: ByteArray?)
-    class Seg(val url: String, val duration: Double, val seq: Long, val key: Key?, val map: String?)
+    /**
+     * Un morceau de la vidéo. [range] : plage d'octets dans un fichier commun (« bytes=1394-243885 », balise
+     * EXT-X-BYTERANGE : PeerTube découpe ainsi un seul MP4) ; [mapRange] : de même pour l'en-tête (EXT-X-MAP).
+     */
+    class Seg(
+        val url: String, val duration: Double, val seq: Long, val key: Key?, val map: String?,
+        val range: String? = null, val mapRange: String? = null,
+    ) {
+        /** Identifie l'en-tête (fichier et plage) : on ne le renvoie que s'il change. */
+        val mapId: String? get() = map?.let { it + (mapRange?.let { r -> "#$r" } ?: "") }
+    }
+
+    /** Contenu d'un fichier, ou d'une plage d'octets de ce fichier. */
+    fun bytes(url: String, range: String?, headers: Map<String, String>): ByteArray {
+        if (range == null) return Http.fetch(url, headers).bytes
+        val c = Http.open(url, headers, range, connectTimeout = 15_000, readTimeout = 30_000)
+        try {
+            if (c.responseCode >= 400) throw studio.rollando.castor.net.HttpError(c.responseCode)
+            return c.inputStream.use { it.readBytes() }
+        } finally { c.disconnect() }
+    }
+
+    /** « 242492@1394 » (longueur@début ; début absent : à la suite du morceau précédent) → « bytes=1394-243885 ». */
+    private fun byteRange(spec: String, next: Long): Pair<String, Long>? {
+        val len = spec.substringBefore('@').trim().toLongOrNull() ?: return null
+        val start = if (spec.contains('@')) spec.substringAfter('@').trim().toLongOrNull() ?: return null else next
+        return "bytes=$start-${start + len - 1}" to start + len
+    }
 
     class Plan(
         val url: String,
@@ -102,6 +129,10 @@ object Hls {
         var end = false
         var fmp4 = false
         var sample = false
+        var mapRange: String? = null
+        var range: String? = null
+        val nextByte = HashMap<String, Long>()
+        var pendingRange: String? = null
         val segs = mutableListOf<Seg>()
         for (raw in text.lines()) {
             val line = raw.trim()
@@ -117,13 +148,19 @@ object Hls {
                     key = if (method == "NONE") null else Key(method, a["URI"]?.let { resolve(base, it) }, a["IV"]?.let(::hex))
                 }
                 line.startsWith("#EXT-X-MAP:") -> {
-                    map = attrs(line.substringAfter(':'))["URI"]?.let { resolve(base, it) }
+                    val a = attrs(line.substringAfter(':'))
+                    map = a["URI"]?.let { resolve(base, it) }
+                    mapRange = a["BYTERANGE"]?.let { byteRange(it, 0)?.first }
                     fmp4 = true
                 }
+                line.startsWith("#EXT-X-BYTERANGE:") -> pendingRange = line.substringAfter(':').trim()
                 line.startsWith("#EXT-X-ENDLIST") -> end = true
                 line.startsWith("#") -> Unit
                 else -> {
-                    segs += Seg(resolve(base, line), dur, seq, key, map)
+                    val u = resolve(base, line)
+                    range = pendingRange?.let { spec -> byteRange(spec, nextByte[u] ?: 0)?.also { nextByte[u] = it.second }?.first }
+                    pendingRange = null
+                    segs += Seg(u, dur, seq, key, map, range, mapRange)
                     seq++
                     dur = 0.0
                 }

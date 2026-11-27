@@ -252,6 +252,9 @@
     <string name="start_archive">公共领域电影</string>
     <string name="start_arte">电影、纪录片、音乐会</string>
     <string name="start_nasa">太空影像</string>
+    <string name="start_peertube">自由视频，无广告无跟踪</string>
+    <string name="start_blender">开放的动画电影</string>
+    <string name="start_commons">维基百科的自由视频</string>
     <string name="start_tv_steps">复制此链接，然后点“粘贴链接”并粘贴：所有频道都会添加进来。也适用于你找到的任何频道列表（M3U）。</string>
     <string name="start_copy">复制链接</string>
     <string name="start_copied">链接已复制</string>

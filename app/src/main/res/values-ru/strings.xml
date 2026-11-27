@@ -252,6 +252,9 @@
     <string name="start_archive">Фильмы в общественном достоянии</string>
     <string name="start_arte">Фильмы, документалки, концерты</string>
     <string name="start_nasa">Космос на видео</string>
+    <string name="start_peertube">Свободные видео без рекламы и слежки</string>
+    <string name="start_blender">Открытые анимационные фильмы</string>
+    <string name="start_commons">Свободные видео Википедии</string>
     <string name="start_tv_steps">Скопируй эту ссылку, нажми «Вставить ссылку» и вставь её: появятся все каналы. Подходит любой найденный список каналов (M3U).</string>
     <string name="start_copy">Копировать ссылку</string>
     <string name="start_copied">Ссылка скопирована</string>

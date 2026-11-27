@@ -252,6 +252,9 @@
     <string name="start_archive">퍼블릭 도메인 영화</string>
     <string name="start_arte">영화, 다큐멘터리, 콘서트</string>
     <string name="start_nasa">영상으로 보는 우주</string>
+    <string name="start_peertube">광고도 추적도 없는 자유 동영상</string>
+    <string name="start_blender">오픈 애니메이션 영화</string>
+    <string name="start_commons">위키백과의 자유 동영상</string>
     <string name="start_tv_steps">이 링크를 복사한 다음 “링크 붙여넣기”를 탭해 붙여넣으면 모든 채널이 추가돼요. 어떤 채널 목록(M3U)이든 사용할 수 있어요.</string>
     <string name="start_copy">링크 복사</string>
     <string name="start_copied">링크를 복사했어요</string>

@@ -42,4 +42,18 @@ class PageTitleTest {
         org.junit.Assert.assertEquals("Charlie Chaplin Festival",
             studio.rollando.castor.browser.PageTitle.display("Charlie Chaplin Festival : Free Download, Borrow, and Streaming : Internet Archive", "archive.org"))
     }
+
+    @Test fun mediaFilePage() {
+        org.junit.Assert.assertEquals("Big Buck Bunny 4K",
+            studio.rollando.castor.browser.PageTitle.display("File:Big Buck Bunny 4K.webm - Wikimedia Commons", "commons.wikimedia.org"))
+        org.junit.Assert.assertEquals("Big Buck Bunny 4K",
+            studio.rollando.castor.browser.PageTitle.display("Fichier:Big Buck Bunny 4K.webm — Wikimedia Commons", "commons.wikimedia.org"))
+    }
+
+    @Test fun declaredSiteName() {
+        org.junit.Assert.assertEquals("Le loup (documentaire)",
+            studio.rollando.castor.browser.PageTitle.withoutSite("Le loup (documentaire) - Maternelle Éducatif", "Maternelle Éducatif"))
+        org.junit.Assert.assertEquals("Charge – Blender Open Movie",
+            studio.rollando.castor.browser.PageTitle.withoutSite("Charge - Blender Open Movie - Blender Video", "Blender Video"))
+    }
 }

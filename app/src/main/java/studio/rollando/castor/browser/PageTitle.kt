@@ -32,7 +32,20 @@ object PageTitle {
     private val WATCH_TAIL = Regex("(?iu)\\s*[–—|:-]\\s*(regarder|voir|watch|ansehen|guarda|ver|kijk|free download|téléchargement)\\b.*$")
 
     /** Titre à montrer pour une vidéo : nettoyé, sans « – Regarder la série » / « – Watch now » à la fin. */
-    fun display(title: String, host: String): String = WATCH_TAIL.replace(clean(title, host), "").trim().ifBlank { clean(title, host) }
+    fun display(title: String, host: String): String =
+        MEDIA_FILE.replace(WATCH_TAIL.replace(clean(title, host), "").trim(), "").trim().ifBlank { clean(title, host) }
+
+    /** Page d'un fichier (Wikimedia Commons…) : « File:Big Buck Bunny 4K.webm » → « Big Buck Bunny 4K ». */
+    private val MEDIA_FILE = Regex("(?i)^(file|fichier|datei|archivo|bestand|ficheiro|arquivo|plik|soubor|файл|dosya):\\s*|\\.(webm|ogv|ogg|mp4|m4v|mkv|mov)$")
+
+    /** Retire le nom du site déclaré par la page (« Le loup - Maternelle Éducatif » → « Le loup »). */
+    fun withoutSite(title: String, site: String?): String {
+        if (site.isNullOrBlank() || title.isBlank()) return title
+        val s = site.lowercase().filter { it.isLetterOrDigit() }
+        if (s.length < 3) return title
+        val parts = SEPARATORS.split(title.trim()).filter { p -> p.lowercase().filter { it.isLetterOrDigit() } != s }
+        return parts.joinToString(" – ").ifBlank { title }
+    }
 
     fun clean(title: String, host: String): String {
         if (title.isBlank()) return title

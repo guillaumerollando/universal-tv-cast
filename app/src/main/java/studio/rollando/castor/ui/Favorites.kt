@@ -183,6 +183,16 @@ private fun CardMenu(open: Boolean, onDismiss: () -> Unit, menu: List<Pair<Strin
 /** Un site de « Mes sites » : en favori (site ou page sans épisode), ou simplement déjà utilisé pour caster. */
 data class SiteItem(val id: String, val host: String, val title: String, val url: String, val bookmark: Bookmark?, val time: Long)
 
+/** Premiers mots d'adresse qui ne disent rien du site (« video.blender.org », « tube-maternelle… », « m.site.fr »). */
+private val GENERIC_SUBDOMAINS = setOf("www", "m", "video", "videos", "tv", "tube", "watch", "play", "player", "media", "stream", "live", "replay", "plus", "app", "web")
+
+/** Nom court d'un site : « video.blender.org » → « Blender », « commons.wikimedia.org » → « Commons ». */
+fun shortSiteName(host: String): String {
+    val labels = host.removePrefix("www.").split('.')
+    val name = labels.dropLast(1).firstOrNull { it !in GENERIC_SUBDOMAINS } ?: labels.first()
+    return name.replaceFirstChar { it.uppercase() }
+}
+
 fun siteItems(recents: List<studio.rollando.castor.data.Recent>, bookmarks: List<Bookmark>, hidden: Set<String>): List<SiteItem> {
     val fav = bookmarks.filter { !it.isSeries && it.host !in hidden }.map {
         // Nom court sur la tuile : « Otakubinge - Accueil » → « Otakubinge ».
@@ -194,7 +204,7 @@ fun siteItems(recents: List<studio.rollando.castor.data.Recent>, bookmarks: List
         .filter { (h, _) -> h.isNotEmpty() && h !in hidden && fav.none { f -> f.host == h } }
         .map { (h, l) ->
             val p = android.net.Uri.parse(l.first().first)
-            SiteItem(h, h, h.substringBefore('.').replaceFirstChar { it.uppercase() }, "${p.scheme}://${p.authority}/", null, l.maxOf { it.second })
+            SiteItem(h, h, shortSiteName(h), "${p.scheme}://${p.authority}/", null, l.maxOf { it.second })
         }
     return fav.sortedByDescending { it.time } + used.sortedByDescending { it.time }
 }

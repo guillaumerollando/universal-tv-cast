@@ -410,6 +410,9 @@ S = {
 "start_archive": ["Public-domain films", "Films du domaine public", "Películas de dominio público", "Gemeinfreie Filme", "Film di pubblico dominio", "Films uit het publieke domein", "Filmes em domínio público"],
 "start_arte": ["Films, documentaries, concerts", "Films, documentaires, concerts", "Películas, documentales, conciertos", "Filme, Dokus, Konzerte", "Film, documentari, concerti", "Films, documentaires, concerten", "Filmes, documentários, shows"],
 "start_nasa": ["Space on video", "L’espace en vidéo", "El espacio en vídeo", "Der Weltraum im Video", "Lo spazio in video", "De ruimte op video", "O espaço em vídeo"],
+"start_peertube": ["Free videos, no ads or tracking", "Vidéos libres, sans pub ni pistage", "Vídeos libres, sin anuncios ni rastreo", "Freie Videos, ohne Werbung und Tracking", "Video liberi, senza pubblicità né tracciamento", "Vrije video’s, zonder reclame of tracking", "Vídeos livres, sem anúncios nem rastreamento"],
+"start_blender": ["Open animated films", "Films d’animation libres", "Películas de animación libres", "Freie Animationsfilme", "Film d’animazione liberi", "Vrije animatiefilms", "Filmes de animação livres"],
+"start_commons": ["Wikipedia’s free videos", "Les vidéos libres de Wikipédia", "Los vídeos libres de Wikipedia", "Die freien Videos der Wikipedia", "I video liberi di Wikipedia", "De vrije video’s van Wikipedia", "Os vídeos livres da Wikipédia"],
 "start_tv_steps": [
  "Copy this link, then tap “Paste a link” and paste it: all the channels arrive. It works with any channel list (M3U) you find.",
  "Copie ce lien, puis touche « Coller un lien » et colle-le : toutes les chaînes arrivent. Ça marche avec n’importe quelle liste de chaînes (M3U) que tu trouveras.",

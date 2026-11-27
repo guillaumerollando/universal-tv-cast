@@ -840,6 +840,9 @@ object TvCast {
         }
         val mime = Dlna.adaptMime(rawMime, tvMimes)
         proxy.mimeOverride = mime.takeIf { it != rawMime }
+        // Télés DLNA : la déclaration Dolby Vision d'un MKV en fait refuser la lecture (Philips Titan OS) ; on la
+        // masque, l'image reste en HDR10 (couche de base). Les appareils Google Cast la reçoivent intacte.
+        proxy.maskDolbyVision = !r.cast
         val subUrl = proxy.subtitle?.let { "$base/sub/$subVersion/subtitles.srt" }
         proxy.subtitleUrl = subUrl
         startOffset = if (continuous) start.toLong().toDouble() else 0.0

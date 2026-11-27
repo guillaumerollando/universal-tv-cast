@@ -13,6 +13,76 @@ object MkvProbe {
     private const val LANGUAGE_BCP47 = 0x22B59DL
     private const val SUBTITLE = 0x11L
 
+    /** Ce qu'on lit du début d'un MKV pour trouver ses pistes (l'en-tête « Tracks » y est presque toujours). */
+    const val HEAD_BYTES = 256 * 1024
+
+    /**
+     * Où masquer la déclaration Dolby Vision d'un MKV (élément BlockAdditionMapping « dvcC / dvvC » des pistes) :
+     * chaque élément est remplacé par un élément vide (« Void ») de même longueur. Le décodeur de la télé lit alors
+     * la couche de base HDR10 et ignore les données Dolby Vision des images. Seulement quand cette couche de base est
+     * compatible (profils 8.x, 7) : un profil 5 n'a pas d'image lisible sans Dolby Vision, on n'y touche pas.
+     */
+    fun dolbyVisionMask(head: ByteArray): List<Pair<Int, ByteArray>> {
+        if (!isMatroska(head)) return emptyList()
+        val out = mutableListOf<Pair<Int, ByteArray>>()
+        var from = 0
+        while (out.isEmpty()) {
+            val start = indexOf(head, byteArrayOf(0x16, 0x54, 0xAE.toByte(), 0x6B), from) ?: break
+            val size = readSize(head, start + 4)
+            if (size != null) {
+                val body = start + 4 + size.second
+                val end = if (size.first < 0) head.size else minOf(head.size.toLong(), body + size.first).toInt()
+                forEachChild(head, body, end) { id, ef, et ->
+                    if (id != TRACK_ENTRY) return@forEachChild
+                    var p = ef
+                    while (p < et) { // les enfants de la piste, avec la position de leur en-tête
+                        val cid = readId(head, p) ?: break
+                        val csz = readSize(head, p + cid.second) ?: break
+                        val dataStart = p + cid.second + csz.second
+                        val dataEnd = dataStart + csz.first.toInt()
+                        if (csz.first < 0 || dataEnd > et) break
+                        if (cid.first == BLOCK_ADDITION_MAPPING && hasHdr10Base(head, dataStart, dataEnd)) {
+                            void(dataEnd - p)?.let { out += p to it }
+                        }
+                        p = dataEnd
+                    }
+                }
+            }
+            from = start + 1
+        }
+        return out
+    }
+
+    private const val BLOCK_ADDITION_MAPPING = 0x41E4L
+    private const val BLOCK_ADD_ID_EXTRA_DATA = 0x41EDL
+
+    /** Configuration Dolby Vision (dvcC / dvvC) dont la couche de base se lit seule (compatibilité ≠ 0). */
+    private fun hasHdr10Base(b: ByteArray, from: Int, to: Int): Boolean {
+        var ok = false
+        forEachChild(b, from, to) { id, f, t ->
+            if (id == BLOCK_ADD_ID_EXTRA_DATA && t - f >= 5) {
+                val profile = (b[f + 2].toInt() and 0xFF) shr 1
+                val compat = (b[f + 4].toInt() and 0xFF) shr 4
+                ok = profile != 5 && compat != 0
+            }
+        }
+        return ok
+    }
+
+    /** Élément « Void » (0xEC) d'exactement [total] octets, ou null si impossible. */
+    private fun void(total: Int): ByteArray? {
+        if (total < 2) return null
+        val content = total - 2
+        if (content > 126) { // taille sur 8 octets
+            if (total < 9) return null
+            val c = (total - 9).toLong()
+            val v = ByteArray(total); v[0] = 0xEC.toByte(); v[1] = 0x01
+            for (i in 0 until 7) v[2 + i] = (c shr (8 * (6 - i))).toByte()
+            return v
+        }
+        return ByteArray(total).also { it[0] = 0xEC.toByte(); it[1] = (0x80 or content).toByte() }
+    }
+
     fun isMatroska(head: ByteArray): Boolean =
         head.size >= 4 && head[0] == 0x1A.toByte() && head[1] == 0x45.toByte() && head[2] == 0xDF.toByte() && head[3] == 0xA3.toByte()
 

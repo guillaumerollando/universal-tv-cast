@@ -58,6 +58,10 @@ class ProxyServer(private val ctx: Context) {
     @Volatile var onSourceError: ((Int) -> Unit)? = null
     /** Nom du format tel que la télé l'accepte (ex. « video/mpeg » au lieu de « video/mp2t »). */
     @Volatile var mimeOverride: String? = null
+    /** Masquer la déclaration Dolby Vision des MKV (télés DLNA qui refusent ces fichiers ; image en HDR10). */
+    @Volatile var maskDolbyVision = false
+    /** Octets à remplacer au début de chaque vidéo (position, nouveaux octets) : vide si rien à changer. */
+    private val headPatches = ConcurrentHashMap<String, List<Pair<Long, ByteArray>>>()
 
     init {
         // Enregistrements de directs laissés par une session interrompue (appli fermée de force) : jamais réutilisés.
@@ -74,7 +78,7 @@ class ProxyServer(private val ctx: Context) {
 
     fun reset() {
         stopLive()
-        remotes.clear(); idsByUrl.clear(); locals.clear(); metas.clear(); embedded.clear()
+        remotes.clear(); idsByUrl.clear(); locals.clear(); metas.clear(); embedded.clear(); headPatches.clear()
         subtitle = null; subtitleUrl = null; mimeOverride = null
     }
 
@@ -300,6 +304,9 @@ class ProxyServer(private val ctx: Context) {
                     h += dlna(seekable = true)
                     if (code == 206) head(out, 206, "Partial Content", h) else head(out, 200, "OK", h)
                     if (req.method != "HEAD") {
+                        val from = if (code == 206) conn.getHeaderField("Content-Range")
+                            ?.let { Regex("bytes (\\d+)-").find(it)?.groupValues?.get(1)?.toLongOrNull() } ?: 0L else 0L
+                        @Suppress("NAME_SHADOWING") val out = patched(id, type, from, out)
                         if (chunked) {
                             val c = ChunkedOutputStream(out)
                             conn.inputStream.use { it.copyTo(c, 64 * 1024) }
@@ -653,6 +660,7 @@ class ProxyServer(private val ctx: Context) {
             if (total > 0) h += "Content-Length" to total.toString() else h += "Transfer-Encoding" to "chunked"
             head(out, 200, "OK", h + dlna(total > 0))
             if (req.method != "HEAD") f.open(0).use { ins ->
+                val out = patched(req.seg.getOrNull(1) ?: "", type, 0, out)
                 if (total > 0) ins.copyTo(out, 64 * 1024)
                 else ChunkedOutputStream(out).let { c -> ins.copyTo(c, 64 * 1024); c.finish() }
             }
@@ -664,7 +672,7 @@ class ProxyServer(private val ctx: Context) {
                 "Content-Range" to "bytes $a-$b/$total",
                 "Content-Length" to (b - a + 1).toString(),
             ) + dlna(true))
-            if (req.method != "HEAD") f.open(a).use { ins -> copyLimited(ins, out, b - a + 1) }
+            if (req.method != "HEAD") f.open(a).use { ins -> copyLimited(ins, patched(req.seg.getOrNull(1) ?: "", type, a, out), b - a + 1) }
         }
     }
 
@@ -714,6 +722,42 @@ class ProxyServer(private val ctx: Context) {
         var got = 0
         while (got < n) { val k = read(buf, got, n - got); if (k < 0) break; got += k }
         return if (got == n) buf else buf.copyOf(got)
+    }
+
+    /**
+     * Le flux envoyé à la télé, corrigé au passage si le début de la vidéo doit l'être (déclaration Dolby Vision
+     * masquée : mêmes longueurs, rien d'autre ne bouge, les plages et l'avance rapide restent justes).
+     */
+    private fun patched(id: String, type: String, from: Long, out: OutputStream): OutputStream {
+        if (!maskDolbyVision || !type.contains("matroska", true) && !type.contains("mkv", true)) return out
+        if (from >= MkvProbe.HEAD_BYTES) return out
+        val patches = headPatches.getOrPut(id) {
+            runCatching {
+                val (total, read) = sourceReader(id) ?: return@runCatching emptyList()
+                val head = read(0, minOf(total, MkvProbe.HEAD_BYTES.toLong())).use { it.readNBytesCompat(MkvProbe.HEAD_BYTES) }
+                MkvProbe.dolbyVisionMask(head).map { (at, bytes) -> at.toLong() to bytes }
+            }.getOrElse { Log.i(TAG, "début du MKV illisible : ${it.message}"); emptyList() }
+                .also { if (it.isNotEmpty()) Log.i(TAG, "MKV Dolby Vision : déclaration masquée pour la télé (HDR10)") }
+        }
+        return if (patches.isEmpty()) out else PatchStream(out, from, patches)
+    }
+
+    /** Écrit en remplaçant, aux positions données du fichier, les octets par d'autres de même longueur. */
+    private class PatchStream(private val inner: OutputStream, private var pos: Long,
+                              private val patches: List<Pair<Long, ByteArray>>) : OutputStream() {
+        override fun write(b: Int) { write(byteArrayOf(b.toByte()), 0, 1) }
+        override fun write(b: ByteArray, off: Int, len: Int) {
+            var buf = b; var o = off
+            for ((at, bytes) in patches) {
+                val s = maxOf(at, pos); val e = minOf(at + bytes.size, pos + len)
+                if (s >= e) continue
+                if (buf === b) { buf = b.copyOfRange(off, off + len); o = 0 }
+                System.arraycopy(bytes, (s - at).toInt(), buf, (s - pos).toInt(), (e - s).toInt())
+            }
+            inner.write(buf, o, len)
+            pos += len
+        }
+        override fun flush() = inner.flush()
     }
 
     private class LimitedStream(private val inner: InputStream, private var left: Long) : InputStream() {

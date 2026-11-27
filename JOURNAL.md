@@ -1470,3 +1470,19 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - Pas vérifié : l'achat réel (le produit `pack_soutien` est à créer par Guillaume dans la Play Console, avec un prix ;
   les testeurs de licence l'achètent gratuitement), l'écran d'attente vivant sur la vraie télé.
 - À faire avant publication : la politique de confidentialité doit mentionner l'achat via Google Play.
+
+## 2026-11-27 — Films Dolby Vision refusés par la télé (Babylon)
+- Constat : Babylon (MKV 4K HEVC, Dolby Vision profil 8.1 + HDR10+, son E-AC-3 / Atmos) : la Philips lit le début
+  du fichier puis s'arrête (durée 0:00:00) ; l'appli renvoyait la vidéo en boucle. Sur le téléphone, beaucoup
+  d'images sautées et le son jeté par le décodeur.
+- Essais depuis le PC vers la télé (extraits de 90 s) : MKV d'origine, MKV une seule piste audio, MKV son AAC
+  → refusés ; MKV sans Dolby Vision, TS (avec ou sans Dolby Vision), MP4 → lus. Puis : même MKV d'origine dont
+  seule la déclaration Dolby Vision de l'en-tête (BlockAdditionMapping dvvC, 66 octets) est remplacée par un
+  élément vide de même taille → lu, deux fois sur deux. C'est donc cette déclaration qui fait refuser le fichier.
+- Fait : le relais masque cette déclaration au passage pour les télés DLNA (`MkvProbe.dolbyVisionMask`,
+  `ProxyServer.patched`), même longueur, donc plages et avance rapide intactes ; image en HDR10 (couche de base).
+  Pas pour le profil 5 (sans couche de base lisible), ni pour Google Cast. Tests `DolbyVisionMaskTest`, dont un
+  sur le vrai film : flux corrigé identique au fichier accepté par la télé.
+- Pas vérifié : la lecture du film entier depuis le téléphone (à relancer par Guillaume) ; l'image et le son à
+  l'écran (seul l'état « lecture » de la télé a été relevé). Pas fait : message clair quand une télé refuse un
+  fichier, au lieu de le renvoyer.

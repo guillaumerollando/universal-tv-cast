@@ -280,13 +280,17 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
         val nextEp = remember(media.nextUrl, media.pageUrl) {
             if (channel) null else media.nextUrl ?: media.pageUrl?.let { studio.rollando.castor.browser.Episodes.find(it)?.next?.takeIf { n -> n.isNotEmpty() } }
         }
+        // Chargé en arrière-plan : la vidéo en cours continue jusqu'à ce que l'épisode suivant prenne le relais.
+        val nextLoading by Nav.nextLoading.collectAsState()
         if (nextEp != null) OutlinedButton(
-            onClick = { Nav.openUrl.value = nextEp },
+            onClick = { Nav.nextEpisode.value = nextEp },
+            enabled = !nextLoading,
             modifier = Modifier.fillMaxWidth().height(52.dp),
         ) {
-            Icon(Icons.Rounded.SkipNext, null)
+            if (nextLoading) androidx.compose.material3.CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
+            else Icon(Icons.Rounded.SkipNext, null)
             Spacer(Modifier.width(10.dp))
-            Text(stringResource(R.string.next_episode))
+            Text(stringResource(if (nextLoading) R.string.next_episode_loading else R.string.next_episode))
         }
         // Direct : pas de sous-titres à régler ; à la place, de quoi zapper. Le mode de lecture des listes HLS
         // (flux continu ou non) se règle seulement dans les Réglages.

@@ -32,7 +32,7 @@ class PageTitleTest {
         org.junit.Assert.assertEquals(1, studio.rollando.castor.browser.PageTitle.episode("Prisonnière 951 (1/4) - Regarder le film complet | ARTE"))
         val e = studio.rollando.castor.browser.Episodes.find("https://www.arte.tv/fr/videos/130430-001-A/prisonniere-951-1-4/")
         org.junit.Assert.assertEquals(1, e?.number)
-        org.junit.Assert.assertEquals("https://www.arte.tv/fr/videos/130430-001-A/prisonniere-951-2-4/", e?.next)
+        org.junit.Assert.assertEquals("https://www.arte.tv/fr/videos/130430-002-A/prisonniere-951-2-4/", e?.next) // vérifié : vraie page de la partie 2
         org.junit.Assert.assertEquals(12, studio.rollando.castor.browser.Episodes.find("https://site.tv/anime/x/episode-12")?.number)
     }
 

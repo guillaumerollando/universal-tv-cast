@@ -40,11 +40,21 @@ object Episodes {
             val n = m.groupValues[1].toInt(); val of = m.groupValues[2].toInt()
             if (n in 1..of && of in 2..99) return build(url, after + m.groups[1]!!.range.first, m.groupValues[1])?.let { e ->
                 // Dernière partie : pas de suivant.
-                if (n == of) e.copy(next = "") else e
+                if (n == of) e.copy(next = "") else e.copy(next = bumpProgramId(e.next, n))
             }
         }
         val t = TRAILING.find(p) ?: return null
         return build(url, after + t.groups[1]!!.range.first, t.groupValues[1])?.copy(explicit = false)
+    }
+
+    /** Identifiant de programme qui porte aussi le numéro de partie (Arte : « 130430-001-A » → « 130430-002-A »). */
+    private val PROGRAM_ID = Regex("/(\\d{4,})-(\\d{3})-([A-Z])/")
+
+    internal fun bumpProgramId(next: String, n: Int): String {
+        val m = PROGRAM_ID.find(next) ?: return next
+        if (m.groupValues[2].toInt() != n) return next
+        val id = "/${m.groupValues[1]}-${(n + 1).toString().padStart(3, '0')}-${m.groupValues[3]}/"
+        return next.replaceRange(m.range, id)
     }
 
     private fun build(url: String, at: Int, digits: String): Ep? {

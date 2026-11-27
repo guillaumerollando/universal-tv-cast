@@ -254,6 +254,8 @@
   "start_peertube": "広告も追跡もない自由な動画",
   "start_blender": "オープンなアニメーション映画",
   "start_commons": "ウィキペディアの自由な動画",
+  "skip_seconds": "%1$d秒",
+  "next_episode_loading": "次のエピソードを探しています…",
   "start_tv_steps": "このリンクをコピーし、「リンクを貼り付け」をタップして貼り付けると、すべてのチャンネルが追加されます。見つけたどのチャンネルリスト（M3U）でも使えます。",
   "start_copy": "リンクをコピー",
   "start_copied": "リンクをコピーしました",

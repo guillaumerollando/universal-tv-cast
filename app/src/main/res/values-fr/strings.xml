@@ -255,6 +255,8 @@
     <string name="start_peertube">Vidéos libres, sans pub ni pistage</string>
     <string name="start_blender">Films d’animation libres</string>
     <string name="start_commons">Les vidéos libres de Wikipédia</string>
+    <string name="skip_seconds">%1$d secondes</string>
+    <string name="next_episode_loading">Recherche de l’épisode suivant…</string>
     <string name="start_tv_steps">Copie ce lien, puis touche « Coller un lien » et colle-le : toutes les chaînes arrivent. Ça marche avec n’importe quelle liste de chaînes (M3U) que tu trouveras.</string>
     <string name="start_copy">Copier le lien</string>
     <string name="start_copied">Lien copié</string>

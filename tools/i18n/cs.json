@@ -254,6 +254,8 @@
   "start_peertube": "Svobodná videa bez reklam a sledování",
   "start_blender": "Otevřené animované filmy",
   "start_commons": "Svobodná videa Wikipedie",
+  "skip_seconds": "%1$d sekund",
+  "next_episode_loading": "Hledám další díl…",
   "start_tv_steps": "Zkopíruj tento odkaz, klepni na „Vložit odkaz“ a vlož ho: objeví se všechny kanály. Funguje s jakýmkoli seznamem kanálů (M3U), který najdeš.",
   "start_copy": "Kopírovat odkaz",
   "start_copied": "Odkaz zkopírován",

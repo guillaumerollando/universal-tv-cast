@@ -254,6 +254,8 @@
   "start_peertube": "Video tự do, không quảng cáo, không theo dõi",
   "start_blender": "Phim hoạt hình mở",
   "start_commons": "Video tự do của Wikipedia",
+  "skip_seconds": "%1$d giây",
+  "next_episode_loading": "Đang tìm tập tiếp theo…",
   "start_tv_steps": "Sao chép liên kết này, rồi nhấn “Dán liên kết” và dán vào: tất cả các kênh sẽ hiện ra. Cách này dùng được với mọi danh sách kênh (M3U) bạn tìm thấy.",
   "start_copy": "Sao chép liên kết",
   "start_copied": "Đã sao chép liên kết",

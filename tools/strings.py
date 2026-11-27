@@ -413,6 +413,8 @@ S = {
 "start_peertube": ["Free videos, no ads or tracking", "Vidéos libres, sans pub ni pistage", "Vídeos libres, sin anuncios ni rastreo", "Freie Videos, ohne Werbung und Tracking", "Video liberi, senza pubblicità né tracciamento", "Vrije video’s, zonder reclame of tracking", "Vídeos livres, sem anúncios nem rastreamento"],
 "start_blender": ["Open animated films", "Films d’animation libres", "Películas de animación libres", "Freie Animationsfilme", "Film d’animazione liberi", "Vrije animatiefilms", "Filmes de animação livres"],
 "start_commons": ["Wikipedia’s free videos", "Les vidéos libres de Wikipédia", "Los vídeos libres de Wikipedia", "Die freien Videos der Wikipedia", "I video liberi di Wikipedia", "De vrije video’s van Wikipedia", "Os vídeos livres da Wikipédia"],
+"skip_seconds": ["%1$d seconds", "%1$d secondes", "%1$d segundos", "%1$d Sekunden", "%1$d secondi", "%1$d seconden", "%1$d segundos"],
+"next_episode_loading": ["Finding the next episode…", "Recherche de l’épisode suivant…", "Buscando el siguiente episodio…", "Nächste Folge wird gesucht…", "Ricerca dell’episodio successivo…", "Volgende aflevering zoeken…", "Procurando o próximo episódio…"],
 "start_tv_steps": [
  "Copy this link, then tap “Paste a link” and paste it: all the channels arrive. It works with any channel list (M3U) you find.",
  "Copie ce lien, puis touche « Coller un lien » et colle-le : toutes les chaînes arrivent. Ça marche avec n’importe quelle liste de chaînes (M3U) que tu trouveras.",

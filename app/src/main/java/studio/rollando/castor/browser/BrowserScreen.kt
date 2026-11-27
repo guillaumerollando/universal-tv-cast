@@ -116,6 +116,17 @@ data class WebProblem(val kind: Kind, val url: String, val code: Int = 0) {
     val host: String get() = Uri.parse(url).host?.removePrefix("www.") ?: url
 }
 
+/**
+ * Lance la lecture dans la page, son coupé : vidéos déjà là, sinon le bouton de lecture du lecteur (vidéo.js, JW Player,
+ * Plyr, boutons « Lecture / Play »). Dans la page et dans les cadres du même site.
+ */
+private const val NUDGE_PLAY = """(function(){function go(d){try{
+var vs=d.querySelectorAll('video');vs.forEach(function(v){try{v.muted=true;var p=v.play();if(p&&p.catch)p.catch(function(){})}catch(e){}});
+var b=d.querySelector('.vjs-big-play-button,.jw-display-icon-container,.plyr__control--overlaid,[data-plyr="play"],button[aria-label*="play" i],button[aria-label*="lecture" i],button[title*="play" i],button[title*="lecture" i],.play-button,.playButton,.btn-play');
+if(b&&!vs.length)b.click();
+d.querySelectorAll('iframe').forEach(function(f){try{go(f.contentDocument)}catch(e){}});
+}catch(e){}}go(document)})()"""
+
 class BrowserController(context: Context) {
     val sniffer = VideoSniffer()
 
@@ -123,7 +134,7 @@ class BrowserController(context: Context) {
      * Met en pause les vidéos et sons de la page : quand la lecture part sur le téléphone ou la télé, le lecteur du
      * site ne doit pas continuer derrière (deux sons, ou notre lecteur qui perd le son du téléphone).
      */
-    fun pauseMedia() = handler.post {
+    fun pauseMedia() = mainHandler.post {
         runCatching {
             webView.evaluateJavascript(
                 "(function(){function p(d){try{d.querySelectorAll('video,audio').forEach(function(m){try{m.pause()}catch(e){}});" +
@@ -131,7 +142,115 @@ class BrowserController(context: Context) {
         }
     }
 
-    init { studio.rollando.castor.cast.Castor.pausePageMedia = ::pauseMedia }
+    init {
+        studio.rollando.castor.cast.Castor.pausePageMedia = ::pauseMedia
+        sniffer.onUserPlay = { mainHandler.post { onUserPlay() } }
+    }
+
+    /** Envoie une vidéo trouvée sur la page au lecteur de l'appli (télé, ou téléphone). */
+    fun castFound(f: Found) {
+        // On retient la page (l'épisode) : l'accueil proposera d'y revenir.
+        Library.advanceBookmark(f.pageUrl, image = sniffer.pageImage)
+        Castor.open(
+            Media(
+                url = f.url,
+                title = f.pageTitle.takeIf { it.isNotBlank() }?.let { PageTitle.display(it, Uri.parse(f.pageUrl).host.orEmpty()) } ?: f.label,
+                mime = if (f.hls) "application/vnd.apple.mpegurl" else null,
+                headers = f.headers,
+                pageUrl = f.pageUrl,
+                nextUrl = sniffer.nextEpisode ?: Episodes.find(f.pageUrl)?.next?.takeIf { it.isNotEmpty() },
+                audioUrl = f.audio,
+                // Sous-titres que le lecteur du site propose (choisis ensuite dans « Sous-titres »).
+                subs = sniffer.tracks,
+                // Même épisode déjà commencé : on reprend là où on s'était arrêté.
+                startSec = Library.resumeAt(f.pageUrl),
+                // L'image de la page (celle du favori) : en-tête du lecteur, fond, « Reprendre », notification.
+                posterUrl = (sniffer.pageImage ?: Library.bookmarkFor(f.pageUrl)?.image),
+                backdropUrl = (sniffer.pageImage ?: Library.bookmarkFor(f.pageUrl)?.image),
+            )
+        )
+    }
+
+    /**
+     * Passage automatique au lecteur de l'appli. Une seule fois par page : revenu sur la page, l'utilisateur peut y
+     * regarder la vidéo sans être renvoyé au lecteur (pas de boucle).
+     */
+    private val autoOpened = HashSet<String>()
+    /** Attente en cours : jusqu'à quand, en arrière-plan (épisode suivant) ou non, et la page d'avant. */
+    private var autoUntil = 0L
+    private var autoBackground = false
+    private var autoFrom: String? = null
+    private var autoSeenAt = 0L
+    /** Appelé quand la vidéo part toute seule : l'écran de lecture s'affiche (sauf en arrière-plan, où il l'est déjà). */
+    var onAutoCast: (() -> Unit)? = null
+    /** Épisode suivant introuvable en arrière-plan : on montre la page pour que l'utilisateur lance la vidéo. */
+    var onAutoGiveUp: (() -> Unit)? = null
+
+    private fun pageKey(u: String) = u.substringBefore('#')
+
+    /** Une vidéo de la page vient d'être lancée par l'utilisateur (lecteur du site) : direction le lecteur de l'appli. */
+    private fun onUserPlay() {
+        if (pageKey(url) in autoOpened || System.currentTimeMillis() < autoUntil) return
+        arm(background = false, waitMs = 8000)
+    }
+
+    /** Épisode suivant, chargé sans quitter l'écran de lecture : sa vidéo partira dès qu'elle sera repérée. */
+    fun playNextInBackground(next: String) {
+        autoFrom = url
+        load(next)
+        arm(background = true, waitMs = 25_000)
+        // Beaucoup de lecteurs ne chargent la vidéo qu'à la lecture : on la lance dans la page (son coupé).
+        for (d in listOf(3000L, 6000L, 10_000L, 15_000L)) mainHandler.postDelayed({ nudgePlayback() }, d)
+    }
+
+    private fun arm(background: Boolean, waitMs: Long) {
+        autoSeenAt = 0L
+        autoBackground = background
+        autoUntil = System.currentTimeMillis() + waitMs
+        mainHandler.removeCallbacks(autoCheck)
+        mainHandler.post(autoCheck)
+    }
+
+    private val autoCheck: Runnable = object : Runnable {
+        override fun run() {
+            if (autoUntil == 0L) return
+            val page = pageKey(url)
+            val ready = !autoBackground || (url.isNotEmpty() && page != autoFrom?.let(::pageKey))
+            val best = if (ready) sniffer.found.value.firstOrNull { !it.short && !it.silent } else null
+            // Une seconde de patience après la première vidéo vue : la liste complète (toutes les qualités) arrive
+            // souvent juste après un fichier en petite qualité.
+            if (best != null && autoSeenAt == 0L) autoSeenAt = System.currentTimeMillis()
+            val settled = best != null && System.currentTimeMillis() - autoSeenAt > 1000
+            when {
+                best != null && settled -> {
+                    autoSeenAt = 0L
+                    autoUntil = 0L
+                    autoOpened += page
+                    android.util.Log.i("CastorWeb", "vidéo lancée : passage automatique au lecteur (${if (autoBackground) "épisode suivant" else "lecture dans la page"})")
+                    restoreGesture()
+                    castFound(best)
+                    onAutoCast?.invoke()
+                }
+                System.currentTimeMillis() > autoUntil -> {
+                    autoUntil = 0L
+                    restoreGesture()
+                    if (autoBackground) { android.util.Log.i("CastorWeb", "épisode suivant : pas de vidéo repérée, on montre la page"); onAutoGiveUp?.invoke() }
+                }
+                else -> mainHandler.postDelayed(this, 400)
+            }
+        }
+    }
+
+    /** Lance la lecture dans la page (son coupé), pour que le site charge la vidéo et que l'appli la repère. */
+    private fun nudgePlayback() {
+        if (autoUntil == 0L || !autoBackground || sniffer.found.value.any { !it.short }) return
+        runCatching {
+            webView.settings.mediaPlaybackRequiresUserGesture = false
+            webView.evaluateJavascript(NUDGE_PLAY, null)
+        }
+    }
+
+    private fun restoreGesture() { runCatching { webView.settings.mediaPlaybackRequiresUserGesture = true } }
     /** Problème de la page en cours (erreur de chargement, page restée vide), ou null. */
     var problem by mutableStateOf<WebProblem?>(null)
     /** Signale un problème ; la barre montre l'adresse demandée (sinon elle resterait vide). */
@@ -142,7 +261,11 @@ class BrowserController(context: Context) {
     /** Site pour lequel l'utilisateur a demandé de réessayer sans bloqueur de pubs. */
     private var adsAllowedHost: String? = null
     private var mainStatus = 0
-    private val handler = android.os.Handler(android.os.Looper.getMainLooper())
+    /**
+     * File du fil principal de l'appli. Pas « handler » : dans le bloc de la vue web, ce nom désignerait
+     * View.getHandler(), vide quand la page n'est pas à l'écran (épisode suivant chargé depuis la lecture → plantage).
+     */
+    private val mainHandler = android.os.Handler(android.os.Looper.getMainLooper())
     private var blankCheck: Runnable? = null
     var url by mutableStateOf("")
     var title by mutableStateOf("")
@@ -234,7 +357,7 @@ class BrowserController(context: Context) {
                     mainStatus = 0
                     if (adsAllowedHost != null && Uri.parse(u).host != adsAllowedHost) adsAllowedHost = null
                 }
-                blankCheck?.let { handler.removeCallbacks(it) }
+                blankCheck?.let { mainHandler.removeCallbacks(it) }
                 newPage(u)
                 if (!u.startsWith("about:")) this@BrowserController.url = u
                 sniffer.pageUrl = u
@@ -310,7 +433,7 @@ class BrowserController(context: Context) {
      * souvent un script bloqué ou un site qui refuse les navigateurs intégrés. On le dit, avec des solutions.
      */
     private fun scheduleBlankCheck(view: WebView, u: String, delay: Long = 4000) {
-        blankCheck?.let { handler.removeCallbacks(it) }
+        blankCheck?.let { mainHandler.removeCallbacks(it) }
         val r = Runnable {
             if (view.url != u || problem != null || !started) return@Runnable
             view.evaluateJavascript(
@@ -328,7 +451,7 @@ class BrowserController(context: Context) {
             }
         }
         blankCheck = r
-        handler.postDelayed(r, delay)
+        mainHandler.postDelayed(r, delay)
     }
 
     /** Revérifie tout de suite que la page affichée n'est pas vide (retour sur l'onglet). */
@@ -596,26 +719,7 @@ fun BrowserScreen(b: BrowserController) {
                         modifier = Modifier.clip(RoundedCornerShape(16.dp))
                             .clickable(role = Role.Button) {
                             showFound = false
-                            // On retient la page (l'épisode) : l'accueil proposera d'y revenir.
-                            Library.advanceBookmark(f.pageUrl, image = b.sniffer.pageImage)
-                            Castor.open(
-                                Media(
-                                    url = f.url,
-                                    title = f.pageTitle.takeIf { it.isNotBlank() }?.let { PageTitle.display(it, Uri.parse(f.pageUrl).host.orEmpty()) } ?: f.label,
-                                    mime = if (f.hls) "application/vnd.apple.mpegurl" else null,
-                                    headers = f.headers,
-                                    pageUrl = f.pageUrl,
-                                    nextUrl = b.sniffer.nextEpisode ?: Episodes.find(f.pageUrl)?.next?.takeIf { it.isNotEmpty() },
-                                    audioUrl = f.audio,
-                                    // Sous-titres que le lecteur du site propose (choisis ensuite dans « Sous-titres »).
-                                    subs = b.sniffer.tracks,
-                                    // Même épisode déjà commencé : on reprend là où on s'était arrêté.
-                                    startSec = Library.resumeAt(f.pageUrl),
-                                    // L'image de la page (celle du favori) : en-tête du lecteur, fond, « Reprendre », notification.
-                                    posterUrl = (b.sniffer.pageImage ?: Library.bookmarkFor(f.pageUrl)?.image),
-                                    backdropUrl = (b.sniffer.pageImage ?: Library.bookmarkFor(f.pageUrl)?.image),
-                                )
-                            )
+                            b.castFound(f)
                             Nav.tab.value = Tab.PLAYER
                         },
                     )

@@ -255,6 +255,8 @@
     <string name="start_peertube">विज्ञापन और ट्रैकिंग के बिना मुक्त वीडियो</string>
     <string name="start_blender">मुक्त एनिमेशन फ़िल्में</string>
     <string name="start_commons">विकिपीडिया के मुक्त वीडियो</string>
+    <string name="skip_seconds">%1$d सेकंड</string>
+    <string name="next_episode_loading">अगला एपिसोड खोजा जा रहा है…</string>
     <string name="start_tv_steps">यह लिंक कॉपी करें, फिर “लिंक पेस्ट करें” टैप करके उसे पेस्ट करें: सारे चैनल आ जाएँगे। यह आपको मिलने वाली किसी भी चैनल लिस्ट (M3U) के साथ काम करता है।</string>
     <string name="start_copy">लिंक कॉपी करें</string>
     <string name="start_copied">लिंक कॉपी हो गया</string>

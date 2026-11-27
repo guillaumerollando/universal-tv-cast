@@ -255,6 +255,8 @@
     <string name="start_peertube">Freie Videos, ohne Werbung und Tracking</string>
     <string name="start_blender">Freie Animationsfilme</string>
     <string name="start_commons">Die freien Videos der Wikipedia</string>
+    <string name="skip_seconds">%1$d Sekunden</string>
+    <string name="next_episode_loading">Nächste Folge wird gesucht…</string>
     <string name="start_tv_steps">Kopiere diesen Link, tippe auf „Link einfügen“ und füge ihn ein: Alle Sender sind da. Das klappt mit jeder Senderliste (M3U).</string>
     <string name="start_copy">Link kopieren</string>
     <string name="start_copied">Link kopiert</string>

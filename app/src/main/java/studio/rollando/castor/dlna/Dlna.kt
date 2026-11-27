@@ -66,6 +66,13 @@ object Dlna {
         "ssdp:all",
     )
 
+    /** Message SSDP (annonce ou réponse) qui parle de lecture vidéo : récepteur, transport, volume. */
+    internal fun isRendererMessage(text: String): Boolean = text.lines().any { l ->
+        val h = l.substringBefore(':').trim().uppercase()
+        (h == "NT" || h == "ST" || h == "USN") &&
+            Regex("(?i)MediaRenderer|AVTransport|RenderingControl").containsMatchIn(l.substringAfter(':'))
+    }
+
     /** Ports et chemins habituels des récepteurs DLNA, pour les télés qui ne répondent pas à la recherche SSDP. */
     private val PROBE_PORTS = listOf(49152, 49153, 49154, 49155, 9197, 2869, 8080)
     private val DESC_PATHS = listOf(
@@ -139,7 +146,9 @@ object Dlna {
                             try { m.receive(p) } catch (_: SocketTimeoutException) { continue }
                             val text = String(p.data, 0, p.length)
                             if (!text.startsWith("NOTIFY")) continue
-                            if (text.contains("ssdp:alive", true)) p.address?.hostAddress?.let(onAwake)
+                            // Allumée seulement si l'annonce concerne la lecture : en veille, la Philips continue
+                            // d'annoncer d'autres services (« PhotoFrame » de TPV) sans répondre à la recherche.
+                            if (text.contains("ssdp:alive", true) && isRendererMessage(text)) p.address?.hostAddress?.let(onAwake)
                             location(text)?.let(::tryLocation)
                             p.address?.hostAddress?.let { if (probedHosts.add(it)) probeHost(it) }
                         }
@@ -171,8 +180,10 @@ object Dlna {
                     } catch (_: SocketTimeoutException) {
                         continue
                     }
-                    p.address?.hostAddress?.let(onAwake)
-                    location(String(p.data, 0, p.length))?.let(::tryLocation)
+                    val reply = String(p.data, 0, p.length)
+                    // Réponse à « ssdp:all » pour un autre service (veille réseau) : pas une preuve que la télé est allumée.
+                    if (isRendererMessage(reply)) p.address?.hostAddress?.let(onAwake)
+                    location(reply)?.let(::tryLocation)
                 }
             }
             listener.join(1000)

@@ -1016,6 +1016,14 @@
    "en": "Wikipedia’s free videos",
    "fr": "Les vidéos libres de Wikipédia"
   },
+  "skip_seconds": {
+   "en": "%1$d seconds",
+   "fr": "%1$d secondes"
+  },
+  "next_episode_loading": {
+   "en": "Finding the next episode\u2026",
+   "fr": "Recherche de l’épisode suivant…"
+  },
   "start_tv_steps": {
    "en": "Copy this link, then tap “Paste a link” and paste it: all the channels arrive. It works with any channel list (M3U) you find.",
    "fr": "Copie ce lien, puis touche « Coller un lien » et colle-le : toutes les chaînes arrivent. Ça marche avec n’importe quelle liste de chaînes (M3U) que tu trouveras."

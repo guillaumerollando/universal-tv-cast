@@ -254,6 +254,8 @@
   "start_peertube": "Wolne filmy, bez reklam i śledzenia",
   "start_blender": "Otwarte filmy animowane",
   "start_commons": "Wolne filmy z Wikipedii",
+  "skip_seconds": "%1$d sekund",
+  "next_episode_loading": "Szukam następnego odcinka…",
   "start_tv_steps": "Skopiuj ten link, stuknij „Wklej link” i wklej go: pojawią się wszystkie kanały. Działa z każdą znalezioną listą kanałów (M3U).",
   "start_copy": "Kopiuj link",
   "start_copied": "Link skopiowany",

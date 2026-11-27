@@ -71,6 +71,8 @@ class VideoSniffer {
     /** Lien « épisode suivant » trouvé dans la page (lien marqué suivant, ou « Épisode suivant », « Next »…). */
     @Volatile var nextEpisode: String? = null
     @Volatile var userAgent: String = ""
+    /** L'utilisateur vient de lancer une vidéo dans la page (lecteur du site, avec le son) : passer au lecteur de l'appli. */
+    @Volatile var onUserPlay: (() -> Unit)? = null
 
     private val fileExt = setOf("mp4", "webm", "mkv", "m4v", "mov", "avi", "mp3", "m4a")
 
@@ -315,8 +317,8 @@ class VideoSniffer {
         return f
     }
 
-    /** Hauteur d'image écrite dans un nom de fichier, entourée de séparateurs (« .480p. », « _720p », « -360p- »). */
-    private val HEIGHT_TOKEN = Regex("(?i)(^|[._-])(240|360|480|540|576|720)p(?=[._-]|$)")
+    /** Hauteur d'image écrite dans un nom de fichier : « .480p. », « _720p », ou « -480.mp4 » (PeerTube). */
+    private val HEIGHT_TOKEN = Regex("(?i)(^|[._-])(240|360|480|540|576|720)(?:p(?=[._-]|$)|(?=\\.(mp4|m4v|webm)$))")
 
     /** Appelé par le script de la page : durée connue du lecteur. */
     fun durationFromPage(url: String, d: Double) {
@@ -412,6 +414,16 @@ class VideoSniffer {
             if (_tracks.size == 1) android.util.Log.i("CastorWeb", "sous-titres proposés par la page : $name…")
         }
 
+        /**
+         * Lecture lancée dans la page par l'utilisateur (le site a reçu un vrai geste, son non coupé) : pas un aperçu
+         * muet qui démarre tout seul. Les vidéos d'une minute ou moins (pubs) ne comptent pas.
+         */
+        @JavascriptInterface
+        fun played(duration: Double) {
+            if (duration > 0.5 && duration <= 60.0) return
+            onUserPlay?.invoke()
+        }
+
         /** Nom du site (og:site_name) : retiré des titres (« Le loup (documentaire) - Maternelle Éducatif »). */
         @JavascriptInterface
         fun siteName(name: String?) {
@@ -454,7 +466,9 @@ class VideoSniffer {
     var k = (tr.kind || 'subtitles').toLowerCase(); if (k !== 'subtitles' && k !== 'captions') return;
     var s = tr.src; if (s && s.indexOf('http') === 0) CastorBridge.track(s, tr.label || '', tr.srclang || ''); }); } catch(e){} }
   function scan(){ document.querySelectorAll('video, audio, video source').forEach(report); tracks(); }
-  document.addEventListener('play', function(e){ report(e.target); tracks(); }, true);
+  document.addEventListener('play', function(e){ report(e.target); tracks();
+    try { var v = e.target, act = navigator.userActivation ? navigator.userActivation.hasBeenActive : true;
+      if (act && !v.muted && CastorBridge.played) CastorBridge.played(isFinite(v.duration) ? v.duration : 0); } catch(x){} }, true);
   document.addEventListener('loadedmetadata', function(e){ report(e.target); }, true);
   document.addEventListener('durationchange', function(e){ report(e.target); }, true);
   function image(){ try { if (window !== window.top) return;

@@ -118,6 +118,10 @@ enum class Tab { HOME, BROWSER, PLAYER }
 object Nav {
     val tab = MutableStateFlow(Tab.HOME)
     val openUrl = MutableStateFlow<String?>(null)
+    /** Épisode suivant à charger en arrière-plan (sa vidéo part sans repasser par le navigateur). */
+    val nextEpisode = MutableStateFlow<String?>(null)
+    /** Épisode suivant en cours de recherche (le bouton le montre). */
+    val nextLoading = MutableStateFlow(false)
     /** Panneau d'aide ouvert (bouton « ? », secousse, lien dans une erreur). */
     val help = MutableStateFlow(false)
     /** Demande d'ouvrir le choix de la télé (depuis l'aide). */
@@ -143,6 +147,16 @@ fun CastorApp() {
     // Ce qui défile sous la barre d'onglets, flouté derrière elle.
     val haze = remember { dev.chrisbanes.haze.HazeState() }
     // Ouvrir une page dans le navigateur depuis un autre écran (épisode à reprendre…).
+    // Vidéo lancée dans le navigateur (ou épisode suivant trouvé) : on passe à l'écran de lecture.
+    LaunchedEffect(browser) {
+        browser.onAutoCast = { Nav.nextLoading.value = false; Nav.tab.value = Tab.PLAYER }
+        browser.onAutoGiveUp = { Nav.nextLoading.value = false; Nav.tab.value = Tab.BROWSER }
+    }
+    // « Épisode suivant » depuis l'écran de lecture : chargé en arrière-plan, la vidéo part toute seule.
+    val nextRequest by Nav.nextEpisode.collectAsState()
+    LaunchedEffect(nextRequest) {
+        nextRequest?.let { Nav.nextLoading.value = true; browser.playNextInBackground(it); Nav.nextEpisode.value = null }
+    }
     val urlRequest by Nav.openUrl.collectAsState()
     LaunchedEffect(urlRequest) {
         urlRequest?.let { browser.load(it); Nav.tab.value = Tab.BROWSER; Nav.openUrl.value = null }

@@ -254,6 +254,8 @@
   "start_peertube": "Videoclipuri libere, fără reclame și urmărire",
   "start_blender": "Filme de animație libere",
   "start_commons": "Videoclipurile libere ale Wikipediei",
+  "skip_seconds": "%1$d de secunde",
+  "next_episode_loading": "Se caută episodul următor…",
   "start_tv_steps": "Copiază acest link, apoi atinge „Lipește un link” și lipește-l: apar toate canalele. Funcționează cu orice listă de canale (M3U) găsești.",
   "start_copy": "Copiază linkul",
   "start_copied": "Link copiat",

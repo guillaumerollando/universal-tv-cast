@@ -69,6 +69,11 @@ import studio.rollando.castor.cast.Castor
 import studio.rollando.castor.cast.CastState
 import studio.rollando.castor.cast.Phase
 import studio.rollando.castor.cast.PhoneEngine
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.Spacer
 
 /**
  * La vidéo du téléphone, sans commandes (les commandes sont celles de l'écran de lecture). Un seul affichage à la
@@ -117,27 +122,97 @@ private fun VideoSurface(modifier: Modifier, active: Boolean = true, onColor: ((
     }
 }
 
-/** Double-tap à gauche : −10 s ; à droite : +10 s (comme les lecteurs habituels). Simple appui : [onTap]. */
-private fun Modifier.skipGestures(onTap: () -> Unit, onSkip: (Int) -> Unit) = pointerInput(Unit) {
+/** Un saut en cours d'affichage : côté (−1 / 1), total cumulé (10, 20, 30…), point touché, numéro de l'appui. */
+private data class Skip(val side: Int, val total: Int, val at: androidx.compose.ui.geometry.Offset, val tap: Int)
+
+/** État du retour visuel des sauts, partagé entre le geste et l'affichage. */
+private class SkipState {
+    var current by mutableStateOf<Skip?>(null)
+    var lastAt = 0L
+    /** Juste après un double appui, chaque appui simple ajoute 10 s (sans redemander un double appui). */
+    val seeking: Boolean get() = current != null && android.os.SystemClock.uptimeMillis() - lastAt < 900
+}
+
+/**
+ * Double appui à gauche : −10 s ; à droite : +10 s. Puis, tant que l'animation dure, chaque appui ajoute 10 s
+ * (« 20 secondes », « 30 secondes »…), comme dans les lecteurs vidéo habituels. Simple appui sinon : [onTap].
+ */
+private fun Modifier.skipGestures(skip: SkipState, onTap: () -> Unit) = pointerInput(skip) {
+    fun skipAt(o: androidx.compose.ui.geometry.Offset) {
+        val side = if (o.x < size.width / 2) -1 else 1
+        val prev = skip.current
+        val total = if (prev != null && prev.side == side && skip.seeking) prev.total + 10 else 10
+        skip.current = Skip(side, total, o, (prev?.tap ?: 0) + 1)
+        skip.lastAt = android.os.SystemClock.uptimeMillis()
+        Castor.skip(side * 10.0)
+    }
     detectTapGestures(
-        onTap = { onTap() },
-        onDoubleTap = { o -> onSkip(if (o.x < size.width / 2) -10 else 10) },
+        onTap = { o -> if (skip.seeking) skipAt(o) else onTap() },
+        onDoubleTap = { o -> skipAt(o) },
     )
 }
 
-/** « −10 s » / « +10 s » affiché un instant du côté touché. */
+/**
+ * Retour visuel d'un saut, du côté touché : une grande vague en arc qui part du bord, une onde depuis le doigt,
+ * trois flèches qui s'allument l'une après l'autre et le total (« 10 secondes »).
+ */
 @Composable
-private fun SkipFlash(flash: Pair<Int, Long>?, modifier: Modifier) {
-    val (delta, _) = flash ?: return
-    // Au milieu de la moitié touchée, comme les lecteurs habituels.
-    Row(modifier.fillMaxSize()) {
-        for (side in listOf(-1, 1)) Box(Modifier.weight(1f).fillMaxHeight(), contentAlignment = Alignment.Center) {
-            if (side == if (delta < 0) -1 else 1) Box(
-                Modifier.size(88.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.45f)),
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(if (delta < 0) Icons.Rounded.Replay10 else Icons.Rounded.Forward10, null, Modifier.size(40.dp), tint = Color.White)
+private fun SkipOverlay(skip: SkipState, modifier: Modifier = Modifier) {
+    val s = skip.current
+    // Disparaît peu après le dernier appui.
+    LaunchedEffect(s?.tap) {
+        if (s != null) { kotlinx.coroutines.delay(850); if (skip.current?.tap == s.tap) skip.current = null }
+    }
+    var shown by remember { mutableStateOf<Skip?>(null) }
+    if (s != null) shown = s
+    val visible = s != null
+    val alpha by androidx.compose.animation.core.animateFloatAsState(if (visible) 1f else 0f,
+        androidx.compose.animation.core.tween(if (visible) 120 else 260), label = "skip")
+    val k = shown ?: return
+    if (alpha == 0f && !visible) return
+    // Onde depuis le doigt, relancée à chaque appui.
+    val ripple = remember { androidx.compose.animation.core.Animatable(0f) }
+    LaunchedEffect(k.tap) { ripple.snapTo(0f); ripple.animateTo(1f, androidx.compose.animation.core.tween(500)) }
+    // Flèches : une lumière qui passe de la première à la troisième, en boucle.
+    val sweep by androidx.compose.animation.core.rememberInfiniteTransition(label = "chevrons").animateFloat(
+        0f, 3f, androidx.compose.animation.core.infiniteRepeatable(androidx.compose.animation.core.tween(650, easing = androidx.compose.animation.core.LinearEasing)),
+        label = "sweep",
+    )
+    androidx.compose.foundation.layout.BoxWithConstraints(modifier.fillMaxSize().graphicsLayer { this.alpha = alpha }) {
+        val w = constraints.maxWidth.toFloat()
+        val h = constraints.maxHeight.toFloat()
+        val left = k.side < 0
+        androidx.compose.foundation.Canvas(Modifier.fillMaxSize()) {
+            val half = androidx.compose.ui.geometry.Rect(if (left) 0f else w / 2f, 0f, if (left) w / 2f else w, h)
+            clipRect(half.left, half.top, half.right, half.bottom) {
+                // Arc : un grand cercle dont le centre est hors de l'image, côté bord.
+                val r = h * 0.95f + w * 0.12f
+                val cx = if (left) w * 0.42f - r else w * 0.58f + r
+                drawCircle(Color.White.copy(alpha = 0.13f), radius = r, center = androidx.compose.ui.geometry.Offset(cx, h / 2f))
+                // Onde depuis le doigt.
+                drawCircle(Color.White.copy(alpha = 0.22f * (1f - ripple.value)), radius = (w * 0.32f) * ripple.value, center = k.at)
             }
+        }
+        val label = stringResource(R.string.skip_seconds, k.total)
+        Column(
+            Modifier.fillMaxHeight().fillMaxWidth(0.5f).align(if (left) Alignment.CenterStart else Alignment.CenterEnd),
+            horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center,
+        ) {
+            Row(horizontalArrangement = Arrangement.spacedBy((-6).dp)) {
+                for (i in 0 until 3) {
+                    // Dans le sens du saut : de droite à gauche pour reculer.
+                    val pos = if (left) 2 - i else i
+                    val lit = (sweep - pos).let { d -> if (d in 0f..1.2f) 1f else 0.3f }
+                    Icon(
+                        Icons.Rounded.PlayArrow, null, tint = Color.White.copy(alpha = lit),
+                        modifier = Modifier.size(22.dp).graphicsLayer { scaleX = if (left) -1f else 1f },
+                    )
+                }
+            }
+            Spacer(Modifier.height(4.dp))
+            // Ombre douce : lisible sur une image claire.
+            Text(label, color = Color.White, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
+                style = MaterialTheme.typography.labelLarge.copy(shadow = androidx.compose.ui.graphics.Shadow(Color.Black.copy(alpha = 0.6f), blurRadius = 8f)))
         }
     }
 }
@@ -149,17 +224,16 @@ private fun Activity.orientation(o: Int) { requestedOrientation = o }
 fun PhoneVideo(state: CastState, active: Boolean = true, onGlow: ((Color) -> Unit)? = null) {
     val activity = androidx.activity.compose.LocalActivity.current
     val portrait = androidx.compose.ui.platform.LocalConfiguration.current.orientation != android.content.res.Configuration.ORIENTATION_LANDSCAPE
-    var flash by remember { mutableStateOf<Pair<Int, Long>?>(null) }
-    LaunchedEffect(flash) { if (flash != null) { kotlinx.coroutines.delay(600); flash = null } }
+    val skip = remember { SkipState() }
     Box(
         Modifier.fillMaxWidth().aspectRatio(16f / 9f).clip(RoundedCornerShape(28.dp)).background(Color.Black)
-            .skipGestures(onTap = {}, onSkip = { d -> Castor.skip(d.toDouble()); flash = d to System.currentTimeMillis() }),
+            .skipGestures(skip, onTap = {}),
     ) {
         VideoSurface(Modifier.fillMaxSize(), active = portrait && active, onColor = onGlow)
         if (state.phase == Phase.SENDING || state.phase == Phase.BUFFERING || state.phase == Phase.LOADING) {
             CircularProgressIndicator(Modifier.align(Alignment.Center), color = Color.White)
         }
-        SkipFlash(flash, Modifier)
+        SkipOverlay(skip)
         IconButton(
             onClick = { activity?.orientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) },
             modifier = Modifier.align(Alignment.BottomEnd).padding(6.dp),
@@ -194,15 +268,14 @@ fun PhoneFullscreen(state: CastState) {
             activity?.window?.decorView?.postDelayed({ activity.orientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) }, 2500)
         }
     }
-    var flash by remember { mutableStateOf<Pair<Int, Long>?>(null) }
-    LaunchedEffect(flash) { if (flash != null) { kotlinx.coroutines.delay(600); flash = null } }
+    val skip = remember { SkipState() }
     val loading = state.phase == Phase.SENDING || state.phase == Phase.BUFFERING
     Box(
         Modifier.fillMaxSize().background(Color.Black)
-            .skipGestures(onTap = { controls = !controls }, onSkip = { d -> Castor.skip(d.toDouble()); flash = d to System.currentTimeMillis() }),
+            .skipGestures(skip, onTap = { controls = !controls }),
     ) {
         VideoSurface(Modifier.fillMaxSize())
-        SkipFlash(flash, Modifier)
+        SkipOverlay(skip)
         if (loading && !controls) CircularProgressIndicator(Modifier.align(Alignment.Center), color = Color.White)
         AnimatedVisibility(controls, enter = fadeIn(), exit = fadeOut(), modifier = Modifier.fillMaxSize()) {
             Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.35f))) {

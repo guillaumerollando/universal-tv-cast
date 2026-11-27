@@ -255,6 +255,8 @@
     <string name="start_peertube">自由影片，無廣告無追蹤</string>
     <string name="start_blender">開放的動畫電影</string>
     <string name="start_commons">維基百科的自由影片</string>
+    <string name="skip_seconds">%1$d 秒</string>
+    <string name="next_episode_loading">正在尋找下一集…</string>
     <string name="start_tv_steps">複製這個連結，然後點「貼上連結」並貼上：所有頻道就會加入。也適用於你找到的任何頻道清單（M3U）。</string>
     <string name="start_copy">複製連結</string>
     <string name="start_copied">已複製連結</string>

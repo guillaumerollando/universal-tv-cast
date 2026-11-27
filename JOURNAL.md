@@ -1036,3 +1036,21 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
 - Navigation interne d'un site (PeerTube, sans rechargement) : la vidéo d'avant est oubliée, la nouvelle proposée seule ✓.
 - Faux problème écarté : clavier qui revenait après le chargement = artefact des touches simulées par adb (mode non
   tactile) ; avec le clavier à l'écran, rien.
+
+## 2026-11-27 (nuit, suite) — Télé en veille, double appui, lecteur automatique, épisode suivant en arrière-plan
+- Télé éteinte proposée : la Philips en veille continue d'annoncer « urn:schemas-tpv-org:service:PhotoFrame:1 »
+  (NOTIFY ssdp:alive) sans répondre à aucune recherche (MediaRenderer, AVTransport, ssdp:all). Désormais seuls les
+  messages SSDP qui parlent de lecture (MediaRenderer, AVTransport, RenderingControl) la marquent allumée
+  (Dlna.isRendererMessage, AwakeTest). À vérifier télé allumée : elle doit répondre à la recherche.
+- Double appui ±10 s : vague en arc du côté touché, onde depuis le doigt, trois flèches qui s'allument, « 10 secondes »
+  (23 langues) ; les appuis suivants s'ajoutent (« 20 secondes »…).
+- Navigateur : une vidéo lancée par l'utilisateur dans la page (vrai geste, son non coupé, > 1 min) → l'appli passe
+  seule à son lecteur, une seule fois par page (revenu sur la page, on peut y regarder sans être renvoyé : pas de
+  boucle). Attend 1 s que la meilleure version arrive ; « -480.mp4 » (PeerTube) monte en 720p.
+- « Épisode suivant » dans le lecteur : la page est chargée en arrière-plan (lecture lancée son coupé si besoin),
+  sa vidéo part toute seule ; le bouton affiche « Recherche de l'épisode suivant… » ; 25 s sans vidéo → la page
+  s'affiche. Arte : le n° de partie est aussi dans l'identifiant (130430-001-A → 130430-002-A).
+- Plantage corrigé : « handler » dans le bloc de la WebView = View.getHandler(), nul quand la page n'est pas à
+  l'écran → champ renommé mainHandler.
+- Vérifié émulateur : Blender (lecture dans la page → lecteur, pas de boucle), Arte 1/4 → 2/4 → 3/4 sans quitter
+  la lecture, animation ±10 s / cumul 20 s.

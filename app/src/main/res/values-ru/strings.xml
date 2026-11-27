@@ -255,6 +255,8 @@
     <string name="start_peertube">Свободные видео без рекламы и слежки</string>
     <string name="start_blender">Открытые анимационные фильмы</string>
     <string name="start_commons">Свободные видео Википедии</string>
+    <string name="skip_seconds">%1$d секунд</string>
+    <string name="next_episode_loading">Ищем следующую серию…</string>
     <string name="start_tv_steps">Скопируй эту ссылку, нажми «Вставить ссылку» и вставь её: появятся все каналы. Подходит любой найденный список каналов (M3U).</string>
     <string name="start_copy">Копировать ссылку</string>
     <string name="start_copied">Ссылка скопирована</string>

@@ -1377,3 +1377,14 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   saison qui reste à voir est ouverte d'office. « Épisode suivant » passe d'une saison à l'autre (vérifié S01E03 →
   S02E01). Pluriel « épisodes » en 23 langues. Vérifié sur émulateur.
 - Pas fait : rien.
+
+## 2026-11-27 — Télé allumée vue « éteinte ? », sous-titres intégrés sur le téléphone
+- Fait :
+  - La Philips 55OLED760 (192.168.1.66) ne répond jamais à la recherche SSDP, même allumée : elle restait « Ne répond
+    pas : éteinte ? ». Désormais : une télé trouvée qui lit ou est en pause (GetTransportInfo PLAYING /
+    PAUSED_PLAYBACK) est marquée allumée ; la télé où la vidéo passe n'est jamais marquée « éteinte ? » ; ouvrir la
+    liste des télés relance la recherche (l'état n'est plus celui d'avant l'allumage).
+  - Sous-titres intégrés à la vidéo (MKV, MP4) lus sur le téléphone : la carte Sous-titres liste les pistes (langue,
+    nom) et « Aucun », au lieu de « choisissez-les sur la télé ». Vérifié sur émulateur avec un MKV fr + en.
+- Pas fait / pas vérifié : la correction « allumée » sur la vraie télé (Guillaume) ; une télé allumée mais à l'arrêt
+  (rien en lecture) reste vue par la recherche seule.

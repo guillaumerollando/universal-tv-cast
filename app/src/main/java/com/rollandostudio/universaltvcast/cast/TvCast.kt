@@ -205,6 +205,12 @@ object TvCast {
                     Library.rememberTv(r.location)
                     synchronized(found) { if (found.none { it.udn == r.udn }) found += r }
                     refresh()
+                    // Certaines télés (Philips 55OLED760) ne répondent jamais à la recherche, même allumées. Une télé
+                    // qui lit ou garde une vidéo en pause est forcément allumée : on le lui demande directement.
+                    if (r.host !in awake) scope.launch(Dispatchers.IO) {
+                        val st = runCatching { Dlna.transportState(r) }.getOrNull()
+                        if (st == "PLAYING" || st == "PAUSED_PLAYBACK") { if (awake.add(r.host)) refresh() }
+                    }
                 }
             } catch (e: Exception) {
                 Log.w("TvCast", "discovery", e)

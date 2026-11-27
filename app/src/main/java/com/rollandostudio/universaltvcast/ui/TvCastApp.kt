@@ -386,6 +386,8 @@ private fun TvChip(name: String?, searching: Boolean, casting: Boolean, onClick:
 @Composable
 private fun TvSheet(onDismiss: () -> Unit) {
     val state by TvCast.state.collectAsState()
+    // À chaque ouverture, l'état des télés est revu (une télé allumée depuis ne reste pas « éteinte ? »).
+    LaunchedEffect(Unit) { TvCast.discover() }
     ModalBottomSheet(onDismissRequest = onDismiss, modifier = Modifier.statusBarsPadding()) {
         Column(Modifier.padding(horizontal = 24.dp).padding(bottom = 24.dp)) {
             Text(stringResource(R.string.tv_sheet_title), style = MaterialTheme.typography.titleLarge)
@@ -409,12 +411,14 @@ private fun TvSheet(onDismiss: () -> Unit) {
                 LazyColumn {
                     items(state.renderers, key = { it.udn }) { r ->
                         val selected = r.udn == state.renderer?.udn
+                        // La télé où la vidéo passe en ce moment répond, par définition.
+                        val asleep = !r.awake && !(selected && state.active && !state.onPhone)
                         ListItem(
                             headlineContent = { Text(r.name) },
                             supportingContent = {
                                 Text(
                                     listOfNotNull(
-                                        if (!r.awake) stringResource(R.string.tv_asleep) else null,
+                                        if (asleep) stringResource(R.string.tv_asleep) else null,
                                         stringResource(if (r.cast) R.string.tv_type_cast else R.string.tv_type_dlna),
                                         r.model?.takeIf { it != r.name },
                                     ).joinToString(" · ")

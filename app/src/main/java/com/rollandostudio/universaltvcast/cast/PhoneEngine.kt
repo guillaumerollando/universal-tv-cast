@@ -59,7 +59,9 @@ object PhoneEngine {
     fun play(ctx: Context, m: Media, startSec: Double, subtitle: ByteArray?, hls: Boolean, liveUrl: String?) = main.post {
         val p = player ?: build(ctx).also { _player.value = it }
         wantedAudio = null
-        p.trackSelectionParameters = p.trackSelectionParameters.buildUpon().clearOverridesOfType(C.TRACK_TYPE_AUDIO).build()
+        p.trackSelectionParameters = p.trackSelectionParameters.buildUpon().clearOverridesOfType(C.TRACK_TYPE_AUDIO)
+            .clearOverridesOfType(C.TRACK_TYPE_TEXT).setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false).build()
+        textTracks.value = emptyList(); textSelected.value = -1
         ended = false
         error = false
         val ua = m.headers.entries.firstOrNull { it.key.equals("User-Agent", true) }?.value
@@ -107,7 +109,7 @@ object PhoneEngine {
             addListener(object : Player.Listener {
                 override fun onPlaybackStateChanged(state: Int) { if (state == Player.STATE_ENDED) ended = true; report() }
                 override fun onIsPlayingChanged(isPlaying: Boolean) = report()
-                override fun onTracksChanged(tracks: androidx.media3.common.Tracks) = applyAudio()
+                override fun onTracksChanged(tracks: androidx.media3.common.Tracks) { applyAudio(); readTextTracks() }
                 // Pour comprendre un « problème de son » : qui a interrompu la lecture, et le volume.
                 override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
                     if (reason == Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_FOCUS_LOSS || reason == Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_BECOMING_NOISY)
@@ -137,6 +139,47 @@ object PhoneEngine {
         val st = Status(phase, p.currentPosition / 1000.0, dur, ended, error)
         last = st
         onStatus?.invoke(st)
+    }
+
+    /** Sous-titres intégrés à la vidéo (MKV, MP4), tels que le lecteur du téléphone les voit. */
+    data class TextTrack(val label: String?, val lang: String?)
+    val textTracks = kotlinx.coroutines.flow.MutableStateFlow<List<TextTrack>>(emptyList())
+    /** Piste de sous-titres affichée sur le téléphone : son rang dans [textTracks], ou -1 (aucune). */
+    val textSelected = kotlinx.coroutines.flow.MutableStateFlow(-1)
+
+    private fun readTextTracks() {
+        val p = player ?: return
+        val groups = p.currentTracks.groups.filter { it.type == C.TRACK_TYPE_TEXT }
+        val list = mutableListOf<TextTrack>()
+        var sel = -1
+        groups.forEach { g ->
+            for (i in 0 until g.length) {
+                val f = g.getTrackFormat(i)
+                if (g.isTrackSelected(i)) sel = list.size
+                list += TextTrack(f.label, f.language)
+            }
+        }
+        textTracks.value = list
+        textSelected.value = sel
+    }
+
+    /** Choisit la piste de sous-titres intégrée [index] sur le téléphone, ou aucune (-1). */
+    fun selectText(index: Int) = main.post {
+        val p = player ?: return@post
+        val b = p.trackSelectionParameters.buildUpon()
+        if (index < 0) b.setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true)
+        else {
+            var n = 0
+            loop@ for (g in p.currentTracks.groups.filter { it.type == C.TRACK_TYPE_TEXT }) for (i in 0 until g.length) {
+                if (n++ == index) {
+                    b.setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false)
+                        .setOverrideForType(androidx.media3.common.TrackSelectionOverride(g.mediaTrackGroup, i))
+                    break@loop
+                }
+            }
+        }
+        p.trackSelectionParameters = b.build()
+        textSelected.value = index
     }
 
     /** Piste son voulue (nom ou langue) : appliquée dès que le lecteur connaît les pistes de la vidéo. */

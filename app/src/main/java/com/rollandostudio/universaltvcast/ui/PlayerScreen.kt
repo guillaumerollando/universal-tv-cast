@@ -604,11 +604,20 @@ private fun SubtitlesCard(s: CastState) {
         TvCast.addSubtitle(uri, Intake.nameOf(context, uri))
         if (!expanded) TvCast.panelClosed()
     }
-    // Sous-titres déjà dans la vidéo (MKV) : on le dit simplement, ils se choisissent sur la télé.
-    val inVideo = s.embeddedSubs.isNotEmpty()
+    // Sur le téléphone, les sous-titres intégrés à la vidéo se choisissent ici (piste ou aucune).
+    val phoneTracks by com.rollandostudio.universaltvcast.cast.PhoneEngine.textTracks.collectAsState()
+    val phoneSel by com.rollandostudio.universaltvcast.cast.PhoneEngine.textSelected.collectAsState()
+    val phoneEmbedded = s.onPhone && media.subs.isEmpty() && phoneTracks.isNotEmpty()
+    fun trackName(i: Int) = phoneTracks.getOrNull(i)?.let { t ->
+        listOfNotNull(t.lang?.let { com.rollandostudio.universaltvcast.subs.SubtitleFinder.label(it) }, t.label?.takeIf { l -> l.isNotBlank() })
+            .distinct().joinToString(" · ").ifEmpty { "#${i + 1}" }
+    }
+    // Sous-titres déjà dans la vidéo (MKV) : sur la télé, on le dit simplement, ils se choisissent sur la télé.
+    val inVideo = s.embeddedSubs.isNotEmpty() && !phoneEmbedded
     val none = stringResource(if (inVideo) R.string.subs_in_video else R.string.subs_none)
     val inVideoLangs = s.embeddedSubs.distinct().joinToString { com.rollandostudio.universaltvcast.subs.SubtitleFinder.label(it) }
-    val current = media.subs.getOrNull(s.subIndex)?.name ?: none
+    val current = if (phoneEmbedded) trackName(phoneSel) ?: stringResource(R.string.subs_none)
+        else media.subs.getOrNull(s.subIndex)?.name ?: none
     androidx.compose.runtime.LaunchedEffect(s.subIndex) { if (s.subIndex < 0 && !inVideo) expanded = false }
     // Changer les sous-titres met la vidéo en pause ; refermer le réglage la relance.
     androidx.compose.runtime.DisposableEffect(expanded) {
@@ -643,7 +652,7 @@ private fun SubtitlesCard(s: CastState) {
                         .heightIn(min = 40.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Icon(Icons.Rounded.Subtitles, null, tint = if (s.subIndex >= 0) c.primary else c.onSurfaceVariant, modifier = Modifier.size(22.dp))
+                    Icon(Icons.Rounded.Subtitles, null, tint = if (s.subIndex >= 0 || (phoneEmbedded && phoneSel >= 0)) c.primary else c.onSurfaceVariant, modifier = Modifier.size(22.dp))
                     Spacer(Modifier.width(10.dp))
                     Text(stringResource(R.string.subs_title), style = MaterialTheme.typography.titleSmall)
                     Spacer(Modifier.width(8.dp))
@@ -667,8 +676,23 @@ private fun SubtitlesCard(s: CastState) {
                         )
                     }
                 }
+                // Vidéo lue sur le téléphone avec ses propres sous-titres : on choisit la piste, ou aucune.
+                if (phoneEmbedded) DropdownMenu(expanded = list, onDismissRequest = { list = false }) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.subs_none)) },
+                        leadingIcon = { if (phoneSel < 0) Icon(Icons.Rounded.Check, null) },
+                        onClick = { list = false; com.rollandostudio.universaltvcast.cast.PhoneEngine.selectText(-1) },
+                    )
+                    phoneTracks.indices.forEach { i ->
+                        DropdownMenuItem(
+                            text = { Text(trackName(i) ?: "") },
+                            leadingIcon = { if (i == phoneSel) Icon(Icons.Rounded.Check, null) },
+                            onClick = { list = false; com.rollandostudio.universaltvcast.cast.PhoneEngine.selectText(i) },
+                        )
+                    }
+                }
                 // La liste, en un appui.
-                DropdownMenu(expanded = list, onDismissRequest = { list = false }) {
+                else DropdownMenu(expanded = list, onDismissRequest = { list = false }) {
                     DropdownMenuItem(
                         text = { Text(none) },
                         leadingIcon = { if (s.subIndex < 0) Icon(Icons.Rounded.Check, null) },

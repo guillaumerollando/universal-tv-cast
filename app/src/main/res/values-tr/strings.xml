@@ -433,7 +433,6 @@
     <string name="fav_added_title">Favorilere eklendi</string>
     <string name="fav_name">Ad</string>
     <string name="fav_icon">Simge</string>
-    <string name="fav_keep_default">Böyle kalsın</string>
     <string name="fav_icon_folder">Klasör</string>
     <string name="fav_icon_movie">Filmler</string>
     <string name="fav_icon_series">Diziler</string>

@@ -32,7 +32,6 @@ import androidx.compose.material.icons.rounded.VideoLibrary
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -109,8 +108,13 @@ internal fun FolderStyleDialog(f: LanStore.Folder, justAdded: Boolean, onDismiss
                     Text(name.ifBlank { f.title }, style = MaterialTheme.typography.titleMedium, maxLines = 2)
                 }
                 val focus = androidx.compose.ui.platform.LocalFocusManager.current
-                OutlinedTextField(name, { name = it.take(40) }, Modifier.fillMaxWidth(), singleLine = true,
+                // Champ au style des tuiles de l'appli : fond plein arrondi, sans contour.
+                androidx.compose.material3.TextField(name, { name = it.take(40) }, Modifier.fillMaxWidth(), singleLine = true,
                     label = { Text(stringResource(R.string.fav_name)) },
+                    shape = RoundedCornerShape(14.dp),
+                    colors = androidx.compose.material3.TextFieldDefaults.colors(
+                        focusedContainerColor = c.surfaceContainerHighest, unfocusedContainerColor = c.surfaceContainerHighest,
+                        focusedIndicatorColor = Color.Transparent, unfocusedIndicatorColor = Color.Transparent),
                     keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
                         capitalization = androidx.compose.ui.text.input.KeyboardCapitalization.Sentences,
                         imeAction = androidx.compose.ui.text.input.ImeAction.Done),
@@ -151,8 +155,7 @@ internal fun FolderStyleDialog(f: LanStore.Folder, justAdded: Boolean, onDismiss
                 Text(stringResource(R.string.action_save))
             }
         },
-        dismissButton = {
-            TextButton(onClick = onDismiss) { Text(stringResource(if (justAdded) R.string.fav_keep_default else R.string.action_cancel)) }
-        },
+        // À l'ajout, le favori est déjà enregistré tel quel : seul « Enregistrer » a un sens. Ensuite, on peut annuler.
+        dismissButton = if (justAdded) null else ({ TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } }),
     )
 }

@@ -124,7 +124,6 @@
     <string name="fav_added_title">Zu Favoriten hinzugefügt</string>
     <string name="fav_name">Name</string>
     <string name="fav_icon">Symbol</string>
-    <string name="fav_keep_default">So lassen</string>
     <string name="fav_icon_folder">Ordner</string>
     <string name="fav_icon_movie">Filme</string>
     <string name="fav_icon_series">Serien</string>

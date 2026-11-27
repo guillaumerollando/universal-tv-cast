@@ -433,7 +433,6 @@
     <string name="fav_added_title">Đã thêm vào yêu thích</string>
     <string name="fav_name">Tên</string>
     <string name="fav_icon">Biểu tượng</string>
-    <string name="fav_keep_default">Giữ nguyên</string>
     <string name="fav_icon_folder">Thư mục</string>
     <string name="fav_icon_movie">Phim</string>
     <string name="fav_icon_series">Phim bộ</string>

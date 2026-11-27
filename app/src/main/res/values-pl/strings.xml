@@ -433,7 +433,6 @@
     <string name="fav_added_title">Dodano do ulubionych</string>
     <string name="fav_name">Nazwa</string>
     <string name="fav_icon">Ikona</string>
-    <string name="fav_keep_default">Zostaw tak</string>
     <string name="fav_icon_folder">Folder</string>
     <string name="fav_icon_movie">Filmy</string>
     <string name="fav_icon_series">Seriale</string>

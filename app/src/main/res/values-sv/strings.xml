@@ -433,7 +433,6 @@
     <string name="fav_added_title">Tillagd i favoriter</string>
     <string name="fav_name">Namn</string>
     <string name="fav_icon">Ikon</string>
-    <string name="fav_keep_default">Behåll som det är</string>
     <string name="fav_icon_folder">Mapp</string>
     <string name="fav_icon_movie">Filmer</string>
     <string name="fav_icon_series">Serier</string>

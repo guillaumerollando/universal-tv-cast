@@ -433,7 +433,6 @@
     <string name="fav_added_title">已加入收藏</string>
     <string name="fav_name">名称</string>
     <string name="fav_icon">图标</string>
-    <string name="fav_keep_default">保持原样</string>
     <string name="fav_icon_folder">文件夹</string>
     <string name="fav_icon_movie">电影</string>
     <string name="fav_icon_series">剧集</string>

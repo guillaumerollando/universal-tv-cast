@@ -1595,3 +1595,12 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   long sur le favori de l'accueil (« Personnaliser » / « Retirer des favoris »). Enregistré avec le favori
   (`LanStore.customizeFolder`). Fenêtre défilable, clavier refermé par « OK ». Textes en 23 langues.
 - Vérifié sur émulateur : « Films » devenu « Cinema », icône clap orange sur l'accueil ; fenêtre à l'ajout.
+
+## 2026-11-28 — Accueil plus « pro » (entre Netflix et Canal+)
+- D'après les captures de Netflix et Canal+ envoyées par Guillaume : titres de rubrique en gras, plus grands
+  (20 sp), collés à leur contenu, « Tout voir » en simple lien coloré ; même titre partout (`SectionTitle`).
+- Carte « Reprendre » : image 16:9 arrondie au premier plan, sans cadre autour ni pastille, barre d'avancement
+  dans l'image, titre en gras puis l'épisode (ou « Reprendre ») en gris dessous.
+- Liens « Listes de chaînes » / « Parcourir les fichiers » resserrés (zone tactile 40 dp).
+- Favori : à l'ajout, seul « Enregistrer » (« Garder tel quel » retiré) ; champ du nom au style de l'appli (fond
+  plein arrondi, sans contour).

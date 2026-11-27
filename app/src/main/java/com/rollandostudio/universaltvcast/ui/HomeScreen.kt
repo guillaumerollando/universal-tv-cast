@@ -75,6 +75,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.rollandostudio.universaltvcast.R
 import kotlinx.coroutines.launch
 import androidx.compose.ui.draw.shadow
@@ -122,8 +123,8 @@ fun HomeScreen(
         var showLink by remember { mutableStateOf(false) }
         androidx.compose.runtime.LaunchedEffect(showLink) { if (showLink) { kotlinx.coroutines.delay(3200); showLink = false } }
         LazyColumn(
-            contentPadding = PaddingValues(top = 4.dp, bottom = 8.dp + LocalBottomInset.current),
-            verticalArrangement = Arrangement.spacedBy(18.dp),
+            contentPadding = PaddingValues(top = 6.dp, bottom = 8.dp + LocalBottomInset.current),
+            verticalArrangement = Arrangement.spacedBy(22.dp),
         ) {
             // Chaque rubrique : son titre collé à son contenu ; l'espace entre rubriques marque la hiérarchie.
             if (resume.isNotEmpty()) item {
@@ -347,7 +348,7 @@ private fun AllResume(items: List<ResumeItem>, onBrowse: (String?) -> Unit, onCl
 }
 
 @Composable
-private fun ResumeCard(r: ResumeItem, onBrowse: (String?) -> Unit, modifier: Modifier = Modifier.width(200.dp)) {
+private fun ResumeCard(r: ResumeItem, onBrowse: (String?) -> Unit, modifier: Modifier = Modifier.width(220.dp)) {
     val resuming by Nav.resuming.collectAsState()
     val badge = when {
         r.season != null && r.episode != null -> stringResource(R.string.resume_season_episode, r.season, r.episode)
@@ -565,17 +566,21 @@ private fun Tile(icon: ImageVector, title: String, sub: String, modifier: Modifi
 /** Les autres sources, en liens discrets : listes de chaînes (IPTV) et fichiers d'autres applis. */
 @Composable
 private fun MoreSources(onPickFile: () -> Unit, showLists: Boolean = true) {
-    Column(Modifier.fillMaxWidth()) {
-        if (showLists) TextButton(onClick = { Nav.iptv.value = "" }) {
+    // Deux liens discrets, serrés sous les tuiles.
+    val pad = PaddingValues(horizontal = 4.dp, vertical = 0.dp)
+    androidx.compose.runtime.CompositionLocalProvider(androidx.compose.material3.LocalMinimumInteractiveComponentSize provides 40.dp) {
+    Column(Modifier.fillMaxWidth().padding(top = 6.dp)) {
+        if (showLists) TextButton(onClick = { Nav.iptv.value = "" }, contentPadding = pad, modifier = Modifier.heightIn(min = 36.dp)) {
             Icon(Icons.Rounded.LiveTv, null, Modifier.size(18.dp))
-            Spacer(Modifier.width(6.dp))
+            Spacer(Modifier.width(8.dp))
             Text(stringResource(R.string.iptv_title))
         }
-        TextButton(onClick = onPickFile) {
+        TextButton(onClick = onPickFile, contentPadding = pad, modifier = Modifier.heightIn(min = 36.dp)) {
             Icon(Icons.Rounded.FolderOpen, null, Modifier.size(18.dp))
-            Spacer(Modifier.width(6.dp))
+            Spacer(Modifier.width(8.dp))
             Text(stringResource(R.string.home_files_other))
         }
+    }
     }
 }
 
@@ -585,13 +590,13 @@ private fun MoreSources(onPickFile: () -> Unit, showLists: Boolean = true) {
  */
 @Composable
 private fun SectionHeader(title: String, action: String?, onAction: () -> Unit) {
-    Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 4.dp, bottom = 4.dp).heightIn(min = 32.dp), verticalAlignment = Alignment.CenterVertically) {
-        Text(title, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f).semantics { heading() })
+    // Titre marqué (gras, plus grand), collé à son contenu ; « Tout voir » en simple lien coloré.
+    Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 6.dp, bottom = 8.dp).heightIn(min = 30.dp), verticalAlignment = Alignment.CenterVertically) {
+        Text(title, style = MaterialTheme.typography.titleLarge.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.Bold, fontSize = 20.sp),
+            modifier = Modifier.weight(1f).semantics { heading() })
         if (action != null) TextButton(onClick = onAction, contentPadding = PaddingValues(horizontal = 10.dp, vertical = 0.dp),
-            modifier = Modifier.heightIn(min = 32.dp)) {
-            Text(action)
-            Spacer(Modifier.width(4.dp))
-            Icon(Icons.AutoMirrored.Rounded.ArrowForward, null, Modifier.size(18.dp))
+            modifier = Modifier.heightIn(min = 30.dp)) {
+            Text(action, style = MaterialTheme.typography.labelLarge)
         }
     }
 }

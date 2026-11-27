@@ -433,7 +433,6 @@
     <string name="fav_added_title">أُضيفت إلى المفضلة</string>
     <string name="fav_name">الاسم</string>
     <string name="fav_icon">الأيقونة</string>
-    <string name="fav_keep_default">إبقاؤها كما هي</string>
     <string name="fav_icon_folder">مجلد</string>
     <string name="fav_icon_movie">أفلام</string>
     <string name="fav_icon_series">مسلسلات</string>

@@ -433,7 +433,6 @@
     <string name="fav_added_title">お気に入りに追加しました</string>
     <string name="fav_name">名前</string>
     <string name="fav_icon">アイコン</string>
-    <string name="fav_keep_default">このままにする</string>
     <string name="fav_icon_folder">フォルダ</string>
     <string name="fav_icon_movie">映画</string>
     <string name="fav_icon_series">シリーズ</string>

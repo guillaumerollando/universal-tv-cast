@@ -433,7 +433,6 @@
     <string name="fav_added_title">Přidáno do oblíbených</string>
     <string name="fav_name">Název</string>
     <string name="fav_icon">Ikona</string>
-    <string name="fav_keep_default">Ponechat</string>
     <string name="fav_icon_folder">Složka</string>
     <string name="fav_icon_movie">Filmy</string>
     <string name="fav_icon_series">Seriály</string>

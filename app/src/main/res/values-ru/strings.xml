@@ -433,7 +433,6 @@
     <string name="fav_added_title">Добавлено в избранное</string>
     <string name="fav_name">Название</string>
     <string name="fav_icon">Значок</string>
-    <string name="fav_keep_default">Оставить как есть</string>
     <string name="fav_icon_folder">Папка</string>
     <string name="fav_icon_movie">Фильмы</string>
     <string name="fav_icon_series">Сериалы</string>

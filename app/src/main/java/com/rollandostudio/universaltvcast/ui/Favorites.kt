@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -127,9 +128,10 @@ fun PosterCard(
     val c = MaterialTheme.colorScheme
     var open by remember { mutableStateOf(false) }
     val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
+    // Comme les applis de streaming : l'image au premier plan, sans cadre ; le titre et l'épisode juste dessous.
     Box {
         Column(
-            modifier.clip(RoundedCornerShape(20.dp)).background(c.surfaceContainerHigh)
+            modifier.clip(RoundedCornerShape(14.dp))
                 .combinedClickable(
                     role = Role.Button, onClick = onClick,
                     onLongClick = { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); open = true },
@@ -139,30 +141,19 @@ fun PosterCard(
                     customActions = menu.map { (label, action) -> CustomAccessibilityAction(label) { action(); true } }
                 },
         ) {
-            Box(Modifier.fillMaxWidth().height(112.dp).background(c.surfaceContainerHighest)) {
+            Box(Modifier.fillMaxWidth().aspectRatio(16f / 9f).clip(RoundedCornerShape(14.dp)).background(c.surfaceContainerHighest)) {
                 if (image != null) RemoteImage(image, Modifier.matchParentSize(), maxSide = 480)
                 else Box(Modifier.matchParentSize(), contentAlignment = Alignment.Center) {
                     if (host.isNotEmpty()) SiteIcon(host, 44) else Icon(Icons.Rounded.Movie, null, Modifier.size(40.dp), tint = c.onSurfaceVariant)
                 }
-                Box(Modifier.matchParentSize().background(androidx.compose.ui.graphics.Brush.verticalGradient(
-                    0.45f to androidx.compose.ui.graphics.Color.Transparent, 1f to androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.75f))))
                 if (loading) Box(Modifier.matchParentSize().background(androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.45f)), contentAlignment = Alignment.Center) {
                     androidx.compose.material3.CircularProgressIndicator(Modifier.size(36.dp), color = androidx.compose.ui.graphics.Color.White, strokeWidth = 3.dp)
                 }
-                // Pastille : épisode où l'on en est, ou « Reprendre » pour un film.
-                Row(
-                    Modifier.align(Alignment.BottomStart).padding(8.dp).clip(RoundedCornerShape(50)).background(c.primary)
-                        .padding(horizontal = 10.dp, vertical = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(Icons.Rounded.PlayArrow, null, tint = c.onPrimary, modifier = Modifier.size(14.dp))
-                    Spacer(Modifier.width(4.dp))
-                    Text(badge ?: stringResource(R.string.bookmark_resume), style = MaterialTheme.typography.labelMedium, color = c.onPrimary)
-                }
+                // Avancement : fine barre arrondie au bas de l'image.
                 if (progress != null) Box(
-                    Modifier.align(Alignment.BottomStart).fillMaxWidth().height(4.dp)
-                        .background(androidx.compose.ui.graphics.Color.White.copy(alpha = 0.25f)),
-                ) { Box(Modifier.fillMaxWidth(progress.coerceIn(0.02f, 1f)).height(4.dp).background(c.primary)) }
+                    Modifier.align(Alignment.BottomStart).padding(horizontal = 10.dp, vertical = 8.dp).fillMaxWidth().height(4.dp)
+                        .clip(RoundedCornerShape(2.dp)).background(androidx.compose.ui.graphics.Color.White.copy(alpha = 0.3f)),
+                ) { Box(Modifier.fillMaxWidth(progress.coerceIn(0.03f, 1f)).height(4.dp).clip(RoundedCornerShape(2.dp)).background(c.primary)) }
                 // Suivie en favori : elle reste ici même quand on ne la regarde plus depuis longtemps.
                 if (starred) Box(
                     Modifier.align(Alignment.TopEnd).padding(8.dp).size(26.dp).clip(CircleShape)
@@ -170,10 +161,12 @@ fun PosterCard(
                     contentAlignment = Alignment.Center,
                 ) { Icon(Icons.Rounded.Star, null, tint = c.primary, modifier = Modifier.size(16.dp)) }
             }
-            // Le titre seul : on voit le site en ouvrant la carte (et son logo quand il n'y a pas d'image).
-            Text(title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                maxLines = 2, overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp).height(40.dp))
+            Spacer(Modifier.height(8.dp))
+            Text(title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(horizontal = 2.dp))
+            // Dessous : l'épisode où l'on en est, sinon « Reprendre » (un film).
+            Text(badge ?: stringResource(R.string.bookmark_resume), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant,
+                maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(horizontal = 2.dp))
         }
         CardMenu(open, { open = false }, menu)
     }

@@ -124,7 +124,6 @@
     <string name="fav_added_title">Toegevoegd aan favorieten</string>
     <string name="fav_name">Naam</string>
     <string name="fav_icon">Pictogram</string>
-    <string name="fav_keep_default">Zo laten</string>
     <string name="fav_icon_folder">Map</string>
     <string name="fav_icon_movie">Films</string>
     <string name="fav_icon_series">Series</string>

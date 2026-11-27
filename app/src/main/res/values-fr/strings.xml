@@ -124,7 +124,6 @@
     <string name="fav_added_title">Ajouté aux favoris</string>
     <string name="fav_name">Nom</string>
     <string name="fav_icon">Icône</string>
-    <string name="fav_keep_default">Garder tel quel</string>
     <string name="fav_icon_folder">Dossier</string>
     <string name="fav_icon_movie">Films</string>
     <string name="fav_icon_series">Séries</string>

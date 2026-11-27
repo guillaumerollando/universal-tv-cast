@@ -198,7 +198,6 @@ S = {
 "fav_added_title": ["Added to favorites", "Ajouté aux favoris", "Añadido a favoritos", "Zu Favoriten hinzugefügt", "Aggiunto ai preferiti", "Toegevoegd aan favorieten", "Adicionado aos favoritos"],
 "fav_name": ["Name", "Nom", "Nombre", "Name", "Nome", "Naam", "Nome"],
 "fav_icon": ["Icon", "Icône", "Icono", "Symbol", "Icona", "Pictogram", "Ícone"],
-"fav_keep_default": ["Keep as is", "Garder tel quel", "Dejar así", "So lassen", "Lascia così", "Zo laten", "Manter assim"],
 "fav_icon_folder": ["Folder", "Dossier", "Carpeta", "Ordner", "Cartella", "Map", "Pasta"],
 "fav_icon_movie": ["Movies", "Films", "Películas", "Filme", "Film", "Films", "Filmes"],
 "fav_icon_series": ["Series", "Séries", "Series", "Serien", "Serie", "Series", "Séries"],

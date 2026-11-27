@@ -433,7 +433,6 @@
     <string name="fav_added_title">Adăugat la favorite</string>
     <string name="fav_name">Nume</string>
     <string name="fav_icon">Pictogramă</string>
-    <string name="fav_keep_default">Lăsați așa</string>
     <string name="fav_icon_folder">Dosar</string>
     <string name="fav_icon_movie">Filme</string>
     <string name="fav_icon_series">Seriale</string>

@@ -283,8 +283,7 @@ fun FolderTile(f: com.rollandostudio.universaltvcast.lan.LanStore.Folder, modifi
                 .padding(vertical = 6.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            // Même socle gris que l'icône d'un site : la rangée « Mes favoris » reste homogène.
-            Box(Modifier.size(52.dp).clip(RoundedCornerShape(15.dp)).background(c.surfaceContainerHighest),
+            Box(Modifier.size(52.dp).clip(RoundedCornerShape(15.dp)).background(c.primary.copy(alpha = 0.16f)),
                 contentAlignment = Alignment.Center) {
                 // L'appareil entier (NAS, ordinateur) ou un de ses dossiers.
                 val icon = when {
@@ -292,7 +291,7 @@ fun FolderTile(f: com.rollandostudio.universaltvcast.lan.LanStore.Folder, modifi
                     f.kind == com.rollandostudio.universaltvcast.lan.LanDevice.Kind.MEDIA_SERVER -> Icons.Rounded.Dns
                     else -> Icons.Rounded.Computer
                 }
-                Icon(icon, null, tint = c.onSurface.copy(alpha = 0.85f), modifier = Modifier.size(28.dp))
+                Icon(icon, null, tint = c.primary, modifier = Modifier.size(28.dp))
             }
             Spacer(Modifier.height(6.dp))
             Text(f.title, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,

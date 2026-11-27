@@ -178,7 +178,7 @@ private fun PosterArt(poster: String?, local: String?, fallback: String, icon: a
         .background(Brush.verticalGradient(listOf(c.surfaceContainerHighest, c.surfaceContainerHigh)))) {
         // En attendant l'affiche (ou sans affiche) : une jaquette sobre avec le titre.
         Column(Modifier.fillMaxSize().padding(10.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(icon, null, tint = c.onSurfaceVariant, modifier = Modifier.size(30.dp))
+            Icon(icon, null, tint = c.primary.copy(alpha = 0.8f), modifier = Modifier.size(30.dp))
             Spacer(Modifier.height(8.dp))
             Text(fallback, style = MaterialTheme.typography.labelMedium, color = c.onSurfaceVariant, textAlign = TextAlign.Center,
                 maxLines = 4, overflow = TextOverflow.Ellipsis)
@@ -257,7 +257,7 @@ private fun FolderPoster(f: LanEntry, parents: List<String>, onClick: () -> Unit
             if (art?.poster != null) Box(
                 Modifier.align(Alignment.TopStart).padding(6.dp).size(22.dp).clip(RoundedCornerShape(6.dp)).background(c.surface.copy(alpha = 0.85f)),
                 contentAlignment = Alignment.Center,
-            ) { Icon(Icons.Rounded.Folder, null, tint = c.onSurface, modifier = Modifier.size(14.dp)) }
+            ) { Icon(Icons.Rounded.Folder, null, tint = c.primary, modifier = Modifier.size(14.dp)) }
         }
         Spacer(Modifier.height(6.dp))
         Text(title, style = MaterialTheme.typography.labelLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)

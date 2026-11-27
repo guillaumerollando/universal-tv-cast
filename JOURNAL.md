@@ -1351,7 +1351,6 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   - Vidéos du réseau dans « Reprendre » (épisode suivant proposé quand le précédent est fini), « Épisode suivant »
     dans l'ordre du dossier, reprise à la bonne position. Avant de relancer : vraie demande à l'appareil ; éteint →
     « NAS … ne répond pas. Vérifie qu'il est allumé et sur le même Wi-Fi. » (23 langues).
-  - Tuiles favoris sobres (gris des sites), plus d'orange sur les jaquettes en attente.
   - Mémoire bornée : réponses de l'annuaire 600, balises 600, vidéos retenues 300, « vu » 800, jaquettes 25 Mo.
   - Vérifié sur émulateur avec de vrais noms (Dune, Matrix, Amélie, Oppenheimer, Interstellar, Breaking Bad, The Office).
 - Pas fait / pas vérifié : jaquettes intégrées et balises sur de vrais fichiers (les fichiers de test n'en ont pas) ;

@@ -322,6 +322,9 @@
     <string name="browser_miss_drm_title">วิดีโอที่มีการป้องกัน</string>
     <string name="browser_miss_drm">เว็บนี้ล็อกวิดีโอ (DRM) ดูได้เฉพาะในเครื่องเล่นหรือแอปของเว็บ ใช้แอปของเว็บหรือแอปของทีวี</string>
     <string name="report_site_intro">ไม่พบวิดีโอในหน้านี้ (เพิ่มข้อมูลที่ช่วยได้)</string>
+    <string name="start_ard">ทีวีสาธารณะเยอรมัน: ภาพยนตร์ ซีรีส์ สารคดี</string>
+    <string name="start_zdf">ทีวีสาธารณะเยอรมัน: ซีรีส์ สารคดี รายการ</string>
+    <string name="start_rtve">ทีวีสาธารณะสเปน ถ่ายทอดสดและดูย้อนหลัง</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>

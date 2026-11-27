@@ -1,20 +1,26 @@
 # Universal TV Cast
 
-Appli Android gratuite, sans pub et sans pistage, de Rollando Studio : envoie n'importe quelle vidéo
-sur une télé **DLNA / UPnP** (Philips Titan OS, Samsung, LG, Sony, Panasonic, Hisense…), y compris celles
-qui n'ont ni Chromecast ni Miracast.
+Appli Android gratuite, sans pub et sans pistage, de Rollando Studio : envoie n'importe quelle vidéo sur la
+télé — **DLNA / UPnP** (Philips Titan OS, Samsung, LG, Sony, Panasonic, Hisense…) et **Google Cast** — ou la lit
+sur le téléphone quand il n'y a pas de télé allumée.
 
 ## Ce que fait l'appli
-- **Lecteur externe** : apparaît dans « Ouvrir avec » / « Lecteur externe » / « Partager » des autres applis.
-  Reprend les en-têtes (`headers`), le titre et les sous-titres (`subs`, `subs.name`, `subs.enable`, convention
-  MX Player ; `subtitles_location`, convention VLC).
-- **Navigateur intégré** qui repère les vidéos de la page (requêtes réseau + balises `<video>`), avec blocage
-  des régies pub et des fenêtres surgissantes.
-- **Vidéos du téléphone** (sélecteur de fichiers) et **lien collé**.
-- **Télécommande** : lecture/pause, ±10 s, barre de progression, arrêt, volume de la télé (boutons de volume du
-  téléphone aussi), notification avec commandes.
-- **Sous-titres** SRT / VTT / ASS convertis en SRT UTF-8 et envoyés à la télé (`CaptionInfo.sec` + DIDL).
-- **Favoris** et **historique** gardés sur le téléphone. 7 langues (fr, en, es, de, it, nl, pt-BR).
+- **Navigateur intégré** qui repère les vidéos de la page (requêtes réseau, balises `<video>`, listes HLS chargées
+  en coulisse, service workers) et les envoie toutes seules au lecteur ; blocage des pubs. Vidéo pas repérée :
+  « Chercher encore » ou « Signaler ce site » ; vidéo protégée (DRM) : dit franchement.
+- **Reprendre** : une carte par série, épisode suivant quand on a fini, relancé sans repasser par le site.
+- **Chaînes de télé** : listes M3U / Xtream importées, chaînes gratuites, guide des programmes (« En ce moment »,
+  grille par chaîne), zapping, pause du direct.
+- **Lecteur externe** : « Ouvrir avec » / « Partager » des autres applis (en-têtes, titre et sous-titres, conventions
+  MX Player et VLC) ; un lien de page web s'ouvre dans le navigateur.
+- **Album** : photos et vidéos du téléphone, une par une ou en diaporama.
+- **Lecture sur le téléphone** (ExoPlayer) : plein écran, double appui ±10 s, mini-vidéo déplaçable.
+- **Télécommande** : lecture, ±10 s, barre, volume de la télé (boutons du téléphone), notification.
+- **Sous-titres** SRT / VTT / ASS (convertis pour la télé), langue audio, décalage.
+- **Widgets** d'écran d'accueil : reprendre + chaînes, reprendre + sites, vidéos en cours, chaînes, reprendre,
+  photos et vidéos.
+- **Sites proposés selon le pays** (télé publique du pays, puis sites libres visibles partout).
+- 23 langues ; partager l'appli, signaler un problème, signature du studio dans les réglages.
 
 ## Comment ça marche
 Le téléphone fait tourner un petit serveur HTTP (`proxy/ProxyServer.kt`) que la télé interroge :
@@ -24,12 +30,27 @@ Le téléphone fait tourner un petit serveur HTTP (`proxy/ProxyServer.kt`) que l
 - **HLS, mode direct** : réécrit les listes `.m3u8` pour que chaque segment passe par le téléphone ;
 - sert les fichiers locaux avec prise en charge des plages (`Range`).
 
-La télé est trouvée par SSDP puis commandée en SOAP UPnP AVTransport / RenderingControl (`dlna/Dlna.kt`).
+La télé est trouvée par SSDP (et Google Cast, version `play`) puis commandée en SOAP UPnP AVTransport /
+RenderingControl (`dlna/Dlna.kt`).
+
+## Où est quoi (`app/src/main/java/studio/rollando/castor/`)
+| Dossier | Rôle |
+|---|---|
+| `cast/` | Le chef d'orchestre `Castor.kt` (télé ou téléphone, envoi, commandes), lecteur du téléphone (`PhoneEngine`), album et diaporama, vérification de la source (`SourceCheck`), état (`CastState`) |
+| `browser/` | Navigateur : logique (`BrowserController`), écran (`BrowserScreen`), repérage des vidéos (`VideoSniffer`), épisodes et titres |
+| `proxy/` | Serveur relais pour la télé : HLS, enregistrement du direct, sous-titres, MKV/MP4 |
+| `data/` | Historique et favoris (`Library`), chaînes et listes (`Iptv`, `IptvStore`, `Channels`), guide (`Epg`), économie d'énergie |
+| `ui/` | Écrans Compose (accueil, lecteur, chaînes, guide, réglages), widgets (`Widgets.kt`), signalement (`Report`) |
+| `dlna/`, `net/`, `subs/` | Protocole DLNA, HTTP, recherche de sous-titres |
+
+Les textes des 23 langues viennent de `tools/strings.py` et `tools/i18n/*.json` (`python3 -I tools/strings.py`
+régénère les `strings.xml` : ne pas les modifier à la main). `tools/test-tele/` : fausse télé DLNA et site lent
+pour les essais.
 
 ## Limites connues
-- Pas de duplication d'écran (la télé Titan OS ne reçoit ni Miracast ni Google Cast).
-- Vidéos protégées par DRM (Netflix, etc.) impossibles par nature.
-- Sous-titres : dépend de la télé (beaucoup ignorent les sous-titres externes en DLNA).
+- Pas de duplication d'écran : l'appli envoie une vidéo, pas l'écran du téléphone.
+- Vidéos protégées par DRM (Netflix, Disney+…) et YouTube : impossibles, voulu par ces sites.
+- Sous-titres en DLNA : dépend de la télé (beaucoup ignorent les sous-titres externes ; Google Cast les affiche).
 
 ## Construire
 Deux versions sortent du même code, choisies au moment de construire :

@@ -37,7 +37,9 @@ import kotlin.coroutines.resumeWithException
  * Google Cast : découverte des appareils (MediaRouter) et pilotage du lecteur standard de Google.
  * Le lecteur Cast affiche nativement une piste de sous-titres WebVTT envoyée à côté de la vidéo.
  * Toutes les commandes passent par le fil principal (exigence du SDK Cast).
+ * CastContext et MediaRouter sont créés avec le contexte de l'application : rien ne retient un écran.
  */
+@android.annotation.SuppressLint("StaticFieldLeak")
 object CastControl {
     private const val TAG = "CastorCast"
     private val main = Handler(Looper.getMainLooper())

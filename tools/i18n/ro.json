@@ -320,7 +320,10 @@
   "browser_miss_report": "Semnalează site-ul",
   "browser_miss_drm_title": "Videoclip protejat",
   "browser_miss_drm": "Acest site își blochează videoclipurile (DRM): se văd doar în playerul sau aplicația lui. Folosește aplicația lui sau pe cea a televizorului.",
-  "report_site_intro": "Videoclipul de pe această pagină nu a fost găsit. (Adaugă ce poate ajuta.)"
+  "report_site_intro": "Videoclipul de pe această pagină nu a fost găsit. (Adaugă ce poate ajuta.)",
+  "start_ard": "Televiziunea publică germană: filme, seriale, documentare",
+  "start_zdf": "Televiziunea publică germană: seriale, documentare, emisiuni",
+  "start_rtve": "Televiziunea publică spaniolă, în direct și la cerere"
  },
  "plurals": {
   "browser_found": {

@@ -43,7 +43,11 @@ private val GENERIC_NAMES = setOf(
     "watch", "player", "source", "download", "telechargement", "fichier", "sans titre", "untitled", "new",
 )
 
-/** Le chef d'orchestre : choix de la télé, préparation de la vidéo, commandes de lecture. */
+/**
+ * Le chef d'orchestre : choix de la télé, préparation de la vidéo, commandes de lecture.
+ * [app] est le contexte de l'application (pas d'un écran) : le garder ici ne retient aucune activité.
+ */
+@android.annotation.SuppressLint("StaticFieldLeak")
 object Castor {
     internal lateinit var app: Context
     internal val cmd = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
@@ -639,6 +643,8 @@ object Castor {
     }
 
     /** Sous-titres choisis, avant décalage. */
+    // ------------------------------------------------------------------ sous-titres (chargement)
+
     private var rawSubtitle: ByteArray? = null
 
     private fun applySubtitle() {
@@ -688,7 +694,7 @@ object Castor {
         // Direct : « start » est le retard voulu sur le direct.
         _state.update { it.copy(phase = Phase.SENDING, notice = null, idle = false, liveBehind = if (it.live) start else it.liveBehind) }
         if (_state.value.live) liveClock.start(start)
-        verifySource(m)
+        SourceCheck.verify(m, _state.value.isHls)
         val base = proxy.baseUrl()
         var r = chosen
         // Cast ne lit pas notre flux fusionné : on passe par le DLNA de la télé si elle en a un.
@@ -1062,6 +1068,8 @@ object Castor {
         }
     }
 
+    // ------------------------------------------------------------------ déplacement dans la vidéo et direct
+
     internal var seekJob: Job? = null
     @Volatile private var holdPositionUntil = 0L
     /** Moment visé par le dernier déplacement : affiché tel quel jusqu'à ce que le lecteur y soit vraiment. */
@@ -1198,63 +1206,6 @@ object Castor {
         }
     }
 
-    /**
-     * Arrêter : la télé affiche l'écran d'attente de l'appli au lieu de quitter le lecteur (un vrai
-     * « Stop » renvoie beaucoup de télés sur leur dernière source, HDMI…). « Se déconnecter » libère la télé.
-     */
-    private class SourceGone : Exception()
-
-    private class SourceUnreachable : Exception()
-
-    /** Dernière source vérifiée (pour ne pas refaire la vérification à chaque déplacement dans la vidéo). */
-    @Volatile private var verified: Pair<String, Long>? = null
-
-    /**
-     * Avant d'envoyer quoi que ce soit à la télé : la source donne-t-elle bien la vidéo ? On demande le tout début
-     * du fichier (ou un morceau du flux). Seuls les refus nets arrêtent l'envoi : une source lente à répondre
-     * (Stremio qui prépare un torrent…) part comme avant.
-     */
-    private suspend fun verifySource(m: Media) = kotlinx.coroutines.withContext(Dispatchers.IO) {
-        if (m.isLocal) return@withContext
-        verified?.let { (u, t) -> if (u == m.url && System.currentTimeMillis() - t < 60_000) return@withContext }
-        val probe = if (_state.value.isHls) {
-            val plan = try { Hls.load(m.url, m.headers) } catch (e: HttpError) {
-                if (e.code in DEFINITE) throw e else null
-            } catch (e: java.io.IOException) { unreachable(m, e); null }
-            if (plan != null && plan.segs.isEmpty()) throw SourceUnreachable()
-            // Direct : le dernier morceau (le plus récent) ; vidéo : le premier.
-            plan?.let { if (it.endList) it.segs.first().url else it.segs.last().url }
-        } else m.url
-        if (probe != null) try {
-            val c = studio.rollando.castor.net.Http.open(probe, m.headers, range = "bytes=0-1023", connectTimeout = 5000, readTimeout = 8000)
-            try {
-                val code = c.responseCode
-                if (code in DEFINITE) throw HttpError(code)
-            } finally { c.disconnect() }
-        } catch (e: HttpError) {
-            throw e
-        } catch (e: SocketTimeoutException) {
-            // Impossible de joindre le serveur : hors ligne. Joint mais lent à répondre : on laisse la télé essayer.
-            if (e.message?.contains("connect", true) == true) unreachable(m, ConnectException(e.message))
-        } catch (e: java.io.IOException) {
-            unreachable(m, e)
-        }
-        verified = m.url to System.currentTimeMillis()
-    }
-
-    /** Refus nets : la source ne donnera pas la vidéo, inutile de l'envoyer à la télé. */
-    private val DEFINITE = setOf(401, 403, 404, 410, 451)
-
-    private fun unreachable(m: Media, e: Exception) {
-        if (e is ConnectException || e is UnknownHostException) {
-            Log.w("Castor", "source injoignable (${e.javaClass.simpleName}) : rien n'est envoyé à la télé")
-            if (m.fromPhoneApp) throw SourceGone()
-            // Pas de réseau du tout ? Le message Wi-Fi habituel ; sinon, la source elle-même est hors ligne.
-            if (Net.localIp() == null) throw NoWifi()
-            throw SourceUnreachable()
-        }
-    }
-
     /** Annule le chargement ou l'envoi en cours, et revient à l'arrêt. */
     fun cancel() {
         pendingCast = false
@@ -1266,6 +1217,10 @@ object Castor {
         stop()
     }
 
+    /**
+     * Arrêter : la télé affiche l'écran d'attente de l'appli au lieu de quitter le lecteur (un vrai
+     * « Stop » renvoie beaucoup de télés sur leur dernière source, HDMI…). « Se déconnecter » libère la télé.
+     */
     fun stop(keepRecording: Boolean = false) = exec {
         // Passage télé → téléphone : l'enregistrement du direct continue (on garde de quoi revenir en arrière).
         if (!keepRecording) proxy.stopLive()
@@ -1303,6 +1258,8 @@ object Castor {
     }
 
     /** Choisit la piste son (langue) ; la vidéo reprend au même endroit avec elle. */
+    // ------------------------------------------------------------------ langue et sous-titres (réglages)
+
     fun selectAudio(index: Int) {
         val s = _state.value
         val t = s.audioTracks.getOrNull(index) ?: return

@@ -320,7 +320,10 @@
   "browser_miss_report": "Zgłoś stronę",
   "browser_miss_drm_title": "Chroniony film",
   "browser_miss_drm": "Ta strona blokuje swoje filmy (DRM): działają tylko w jej odtwarzaczu lub aplikacji. Użyj jej aplikacji albo aplikacji telewizora.",
-  "report_site_intro": "Nie znaleziono filmu na tej stronie. (Dodaj, co może pomóc.)"
+  "report_site_intro": "Nie znaleziono filmu na tej stronie. (Dodaj, co może pomóc.)",
+  "start_ard": "Niemiecka telewizja publiczna: filmy, seriale, dokumenty",
+  "start_zdf": "Niemiecka telewizja publiczna: seriale, dokumenty, programy",
+  "start_rtve": "Hiszpańska telewizja publiczna na żywo i na życzenie"
  },
  "plurals": {
   "browser_found": {

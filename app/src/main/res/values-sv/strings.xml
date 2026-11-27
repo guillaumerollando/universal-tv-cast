@@ -322,6 +322,9 @@
     <string name="browser_miss_drm_title">Skyddad video</string>
     <string name="browser_miss_drm">Den här sidan låser sina videor (DRM): de spelas bara i sidans egen spelare eller app. Använd dess app eller tv:ns app.</string>
     <string name="report_site_intro">Videon på den här sidan hittades inte. (Lägg till det som kan hjälpa.)</string>
+    <string name="start_ard">Tysk public service-tv: filmer, serier, dokumentärer</string>
+    <string name="start_zdf">Tysk public service-tv: serier, dokumentärer, program</string>
+    <string name="start_rtve">Spansk public service-tv, direkt och på begäran</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videor</item>

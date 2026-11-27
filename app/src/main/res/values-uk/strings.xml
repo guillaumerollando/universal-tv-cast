@@ -322,6 +322,9 @@
     <string name="browser_miss_drm_title">Захищене відео</string>
     <string name="browser_miss_drm">Цей сайт захищає відео (DRM): їх можна дивитися лише в його плеєрі чи застосунку. Скористайтеся його застосунком або застосунком телевізора.</string>
     <string name="report_site_intro">Відео на цій сторінці не знайдено. (Додайте, що може допомогти.)</string>
+    <string name="start_ard">Німецьке суспільне ТБ: фільми, серіали, документальні</string>
+    <string name="start_zdf">Німецьке суспільне ТБ: серіали, документальні, шоу</string>
+    <string name="start_rtve">Іспанське суспільне ТБ, наживо й на запит</string>
     <plurals name="browser_found">
         <item quantity="one">%d відео</item>
         <item quantity="few">%d відео</item>

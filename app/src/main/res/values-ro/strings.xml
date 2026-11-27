@@ -322,6 +322,9 @@
     <string name="browser_miss_drm_title">Videoclip protejat</string>
     <string name="browser_miss_drm">Acest site își blochează videoclipurile (DRM): se văd doar în playerul sau aplicația lui. Folosește aplicația lui sau pe cea a televizorului.</string>
     <string name="report_site_intro">Videoclipul de pe această pagină nu a fost găsit. (Adaugă ce poate ajuta.)</string>
+    <string name="start_ard">Televiziunea publică germană: filme, seriale, documentare</string>
+    <string name="start_zdf">Televiziunea publică germană: seriale, documentare, emisiuni</string>
+    <string name="start_rtve">Televiziunea publică spaniolă, în direct și la cerere</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>

@@ -1247,3 +1247,21 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
 **Décision de Guillaume** : la tuile (bloc coloré) reste partout ; plus professionnelle, elle met le logo en valeur.
 Liseré et halo « font bidouille ». Code d'essai retiré (`LogoStyle`, liseré, halo, réglage caché) ; les planches
 restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour les logos sombres (`Logos.darkShare`).
+
+## 2026-11-27 — Nettoyage du code
+**Fait** (aucun changement de comportement)
+- Navigateur séparé en deux : logique `browser/BrowserController.kt` (≈ 500 lignes) et écran `browser/BrowserScreen.kt`
+  (≈ 530 lignes), au lieu d'un fichier de 1 000 lignes.
+- `cast/Castor.kt` : vérification de la source sortie dans `cast/SourceCheck.kt` ; repères de sections ajoutés
+  (sous-titres, déplacement et direct, langue) ; commentaire « Arrêter » remis au-dessus de `stop()`. Le cœur
+  (télé ou téléphone, envoi) reste groupé : trop imbriqué pour être coupé sans risque.
+- Recherche de code mort : aucune fonction inutilisée (hors tests et rappels d'Android). Analyse Android :
+  0 erreur (traductions d'ARD, ZDF, RTVE ajoutées dans 15 langues ; aperçu de widget aplati ; fuites de contexte
+  documentées : ce sont des contextes d'application).
+- README réécrit (fonctions actuelles, 23 langues, Google Cast, carte du code « Où est quoi »).
+- Planches de design sorties du dépôt : `~/Dev/Gestion de projet/Universal TV Cast/design/` (les mentions
+  `docs/design/` plus haut désignent désormais ce dossier).
+- Essai sur émulateur après coup : vidéo Archive repérée et reprise, chaîne France 5 lue.
+
+**Pas fait**
+- Suggestions de style de l'analyse (UseKtx…) et mises à jour de bibliothèques : sans effet, ou à faire à part.

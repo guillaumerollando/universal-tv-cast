@@ -322,6 +322,9 @@
     <string name="browser_miss_drm_title">Защищённое видео</string>
     <string name="browser_miss_drm">Этот сайт защищает видео (DRM): их можно смотреть только в его плеере или приложении. Используйте его приложение или приложение телевизора.</string>
     <string name="report_site_intro">Видео на этой странице не найдено. (Добавьте, что может помочь.)</string>
+    <string name="start_ard">Немецкое общественное ТВ: фильмы, сериалы, документальные</string>
+    <string name="start_zdf">Немецкое общественное ТВ: сериалы, документальные, шоу</string>
+    <string name="start_rtve">Испанское общественное ТВ, в эфире и по запросу</string>
     <plurals name="browser_found">
         <item quantity="one">%d видео</item>
         <item quantity="few">%d видео</item>

@@ -322,6 +322,9 @@
     <string name="browser_miss_drm_title">Video được bảo vệ</string>
     <string name="browser_miss_drm">Trang này khóa video (DRM): chỉ xem được trong trình phát hoặc ứng dụng của trang. Hãy dùng ứng dụng của trang hoặc của TV.</string>
     <string name="report_site_intro">Không tìm thấy video trên trang này. (Thêm thông tin có ích.)</string>
+    <string name="start_ard">Truyền hình công Đức: phim, phim bộ, phim tài liệu</string>
+    <string name="start_zdf">Truyền hình công Đức: phim bộ, phim tài liệu, chương trình</string>
+    <string name="start_rtve">Truyền hình công Tây Ban Nha, trực tiếp và theo yêu cầu</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

@@ -320,7 +320,10 @@
   "browser_miss_report": "Laporkan situs",
   "browser_miss_drm_title": "Video dilindungi",
   "browser_miss_drm": "Situs ini mengunci videonya (DRM): hanya bisa ditonton di pemutar atau aplikasinya. Gunakan aplikasinya atau aplikasi TV.",
-  "report_site_intro": "Video di halaman ini tidak ditemukan. (Tambahkan hal yang membantu.)"
+  "report_site_intro": "Video di halaman ini tidak ditemukan. (Tambahkan hal yang membantu.)",
+  "start_ard": "TV publik Jerman: film, serial, dokumenter",
+  "start_zdf": "TV publik Jerman: serial, dokumenter, acara",
+  "start_rtve": "TV publik Spanyol, siaran langsung dan sesuai permintaan"
  },
  "plurals": {
   "browser_found": {

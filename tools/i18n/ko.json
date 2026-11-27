@@ -320,7 +320,10 @@
   "browser_miss_report": "사이트 신고",
   "browser_miss_drm_title": "보호된 동영상",
   "browser_miss_drm": "이 사이트는 동영상을 잠급니다(DRM). 사이트 플레이어나 앱에서만 볼 수 있습니다. 사이트 앱이나 TV 앱을 이용하세요.",
-  "report_site_intro": "이 페이지의 동영상을 찾지 못했습니다. (도움이 될 내용을 적어 주세요.)"
+  "report_site_intro": "이 페이지의 동영상을 찾지 못했습니다. (도움이 될 내용을 적어 주세요.)",
+  "start_ard": "독일 공영 TV: 영화, 시리즈, 다큐멘터리",
+  "start_zdf": "독일 공영 TV: 시리즈, 다큐멘터리, 쇼",
+  "start_rtve": "스페인 공영 TV, 생방송과 다시 보기"
  },
  "plurals": {
   "browser_found": {

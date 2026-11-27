@@ -320,7 +320,10 @@
   "browser_miss_report": "回報此網站",
   "browser_miss_drm_title": "受保護的影片",
   "browser_miss_drm": "此網站對影片加密（DRM）：只能在它自己的播放器或應用程式中觀看。請使用它的應用程式或電視上的應用程式。",
-  "report_site_intro": "找不到此頁面的影片。（請補充有用的資訊。）"
+  "report_site_intro": "找不到此頁面的影片。（請補充有用的資訊。）",
+  "start_ard": "德國公共電視：電影、影集、紀錄片",
+  "start_zdf": "德國公共電視：影集、紀錄片、節目",
+  "start_rtve": "西班牙公共電視，直播與隨選"
  },
  "plurals": {
   "browser_found": {

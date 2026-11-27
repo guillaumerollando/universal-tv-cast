@@ -322,6 +322,9 @@
     <string name="browser_miss_drm_title">Video dilindungi</string>
     <string name="browser_miss_drm">Situs ini mengunci videonya (DRM): hanya bisa ditonton di pemutar atau aplikasinya. Gunakan aplikasinya atau aplikasi TV.</string>
     <string name="report_site_intro">Video di halaman ini tidak ditemukan. (Tambahkan hal yang membantu.)</string>
+    <string name="start_ard">TV publik Jerman: film, serial, dokumenter</string>
+    <string name="start_zdf">TV publik Jerman: serial, dokumenter, acara</string>
+    <string name="start_rtve">TV publik Spanyol, siaran langsung dan sesuai permintaan</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

@@ -320,7 +320,10 @@
   "browser_miss_report": "Siteyi bildir",
   "browser_miss_drm_title": "Korumalı video",
   "browser_miss_drm": "Bu site videolarını kilitliyor (DRM): yalnızca kendi oynatıcısında veya uygulamasında izlenebilir. Sitenin ya da TV'nin uygulamasını kullan.",
-  "report_site_intro": "Bu sayfadaki video bulunamadı. (Yardımcı olacak bilgileri ekle.)"
+  "report_site_intro": "Bu sayfadaki video bulunamadı. (Yardımcı olacak bilgileri ekle.)",
+  "start_ard": "Alman kamu televizyonu: film, dizi, belgesel",
+  "start_zdf": "Alman kamu televizyonu: dizi, belgesel, program",
+  "start_rtve": "İspanyol kamu televizyonu, canlı ve istediğin zaman"
  },
  "plurals": {
   "browser_found": {

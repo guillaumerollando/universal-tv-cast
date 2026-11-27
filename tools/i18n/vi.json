@@ -320,7 +320,10 @@
   "browser_miss_report": "Báo trang này",
   "browser_miss_drm_title": "Video được bảo vệ",
   "browser_miss_drm": "Trang này khóa video (DRM): chỉ xem được trong trình phát hoặc ứng dụng của trang. Hãy dùng ứng dụng của trang hoặc của TV.",
-  "report_site_intro": "Không tìm thấy video trên trang này. (Thêm thông tin có ích.)"
+  "report_site_intro": "Không tìm thấy video trên trang này. (Thêm thông tin có ích.)",
+  "start_ard": "Truyền hình công Đức: phim, phim bộ, phim tài liệu",
+  "start_zdf": "Truyền hình công Đức: phim bộ, phim tài liệu, chương trình",
+  "start_rtve": "Truyền hình công Tây Ban Nha, trực tiếp và theo yêu cầu"
  },
  "plurals": {
   "browser_found": {

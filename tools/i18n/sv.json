@@ -320,7 +320,10 @@
   "browser_miss_report": "Rapportera sidan",
   "browser_miss_drm_title": "Skyddad video",
   "browser_miss_drm": "Den här sidan låser sina videor (DRM): de spelas bara i sidans egen spelare eller app. Använd dess app eller tv:ns app.",
-  "report_site_intro": "Videon på den här sidan hittades inte. (Lägg till det som kan hjälpa.)"
+  "report_site_intro": "Videon på den här sidan hittades inte. (Lägg till det som kan hjälpa.)",
+  "start_ard": "Tysk public service-tv: filmer, serier, dokumentärer",
+  "start_zdf": "Tysk public service-tv: serier, dokumentärer, program",
+  "start_rtve": "Spansk public service-tv, direkt och på begäran"
  },
  "plurals": {
   "browser_found": {

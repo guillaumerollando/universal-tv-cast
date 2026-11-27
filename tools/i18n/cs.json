@@ -320,7 +320,10 @@
   "browser_miss_report": "Nahlásit web",
   "browser_miss_drm_title": "Chráněné video",
   "browser_miss_drm": "Tento web zamyká svá videa (DRM): jdou přehrát jen v jeho přehrávači nebo aplikaci. Použij jeho aplikaci nebo aplikaci televize.",
-  "report_site_intro": "Video na této stránce nebylo nalezeno. (Přidej, co pomůže.)"
+  "report_site_intro": "Video na této stránce nebylo nalezeno. (Přidej, co pomůže.)",
+  "start_ard": "Německá veřejnoprávní TV: filmy, seriály, dokumenty",
+  "start_zdf": "Německá veřejnoprávní TV: seriály, dokumenty, pořady",
+  "start_rtve": "Španělská veřejnoprávní TV, živě i ze záznamu"
  },
  "plurals": {
   "browser_found": {

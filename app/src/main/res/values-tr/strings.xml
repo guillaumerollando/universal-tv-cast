@@ -322,6 +322,9 @@
     <string name="browser_miss_drm_title">Korumalı video</string>
     <string name="browser_miss_drm">Bu site videolarını kilitliyor (DRM): yalnızca kendi oynatıcısında veya uygulamasında izlenebilir. Sitenin ya da TV\'nin uygulamasını kullan.</string>
     <string name="report_site_intro">Bu sayfadaki video bulunamadı. (Yardımcı olacak bilgileri ekle.)</string>
+    <string name="start_ard">Alman kamu televizyonu: film, dizi, belgesel</string>
+    <string name="start_zdf">Alman kamu televizyonu: dizi, belgesel, program</string>
+    <string name="start_rtve">İspanyol kamu televizyonu, canlı ve istediğin zaman</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video</item>

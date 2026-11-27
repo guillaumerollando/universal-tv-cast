@@ -322,6 +322,9 @@
     <string name="browser_miss_drm_title">受保护的视频</string>
     <string name="browser_miss_drm">此网站对视频加密（DRM）：只能在它自己的播放器或应用中观看。请使用它的应用或电视上的应用。</string>
     <string name="report_site_intro">未找到此页面的视频。（请补充有用的信息。）</string>
+    <string name="start_ard">德国公共电视：电影、剧集、纪录片</string>
+    <string name="start_zdf">德国公共电视：剧集、纪录片、节目</string>
+    <string name="start_rtve">西班牙公共电视，直播与点播</string>
     <plurals name="browser_found">
         <item quantity="other">%d 个视频</item>
     </plurals>

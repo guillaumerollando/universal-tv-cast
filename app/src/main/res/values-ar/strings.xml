@@ -322,6 +322,9 @@
     <string name="browser_miss_drm_title">فيديو محمي</string>
     <string name="browser_miss_drm">يقفل هذا الموقع فيديوهاته (DRM): لا تُشاهد إلا في مشغّله أو تطبيقه. استخدم تطبيقه أو تطبيق التلفزيون.</string>
     <string name="report_site_intro">لم يُعثر على فيديو هذه الصفحة. (أضف ما قد يساعد.)</string>
+    <string name="start_ard">التلفزيون العام الألماني: أفلام ومسلسلات ووثائقيات</string>
+    <string name="start_zdf">التلفزيون العام الألماني: مسلسلات ووثائقيات وبرامج</string>
+    <string name="start_rtve">التلفزيون العام الإسباني، مباشر وعند الطلب</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>

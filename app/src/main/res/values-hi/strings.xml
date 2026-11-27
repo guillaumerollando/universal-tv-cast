@@ -322,6 +322,9 @@
     <string name="browser_miss_drm_title">सुरक्षित वीडियो</string>
     <string name="browser_miss_drm">यह साइट अपने वीडियो लॉक करती है (DRM): वे सिर्फ़ उसके प्लेयर या ऐप में चलते हैं। उसका ऐप या टीवी का ऐप इस्तेमाल करें।</string>
     <string name="report_site_intro">इस पेज का वीडियो नहीं मिला। (जो मदद करे वह जोड़ें।)</string>
+    <string name="start_ard">जर्मन सार्वजनिक टीवी: फ़िल्में, सीरीज़, डॉक्यूमेंट्री</string>
+    <string name="start_zdf">जर्मन सार्वजनिक टीवी: सीरीज़, डॉक्यूमेंट्री, शो</string>
+    <string name="start_rtve">स्पेनिश सार्वजनिक टीवी, लाइव और ऑन-डिमांड</string>
     <plurals name="browser_found">
         <item quantity="one">%d वीडियो</item>
         <item quantity="other">%d वीडियो</item>

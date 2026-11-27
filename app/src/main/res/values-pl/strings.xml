@@ -322,6 +322,9 @@
     <string name="browser_miss_drm_title">Chroniony film</string>
     <string name="browser_miss_drm">Ta strona blokuje swoje filmy (DRM): działają tylko w jej odtwarzaczu lub aplikacji. Użyj jej aplikacji albo aplikacji telewizora.</string>
     <string name="report_site_intro">Nie znaleziono filmu na tej stronie. (Dodaj, co może pomóc.)</string>
+    <string name="start_ard">Niemiecka telewizja publiczna: filmy, seriale, dokumenty</string>
+    <string name="start_zdf">Niemiecka telewizja publiczna: seriale, dokumenty, programy</string>
+    <string name="start_rtve">Hiszpańska telewizja publiczna na żywo i na życzenie</string>
     <plurals name="browser_found">
         <item quantity="one">%d wideo</item>
         <item quantity="few">%d wideo</item>

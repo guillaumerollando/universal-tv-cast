@@ -292,6 +292,9 @@
     <string name="epg_today">اليوم</string>
     <string name="epg_tomorrow">غدًا</string>
     <string name="epg_yesterday">أمس</string>
+    <string name="settings_share">مشاركة التطبيق</string>
+    <string name="settings_share_sub">أرسله إلى صديق</string>
+    <string name="share_text">شاهد فيديوهات الويب وقنوات التلفزيون على شاشتك الكبيرة مجانًا: %1$s</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>

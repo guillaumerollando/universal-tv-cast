@@ -290,7 +290,10 @@
   "epg_none_channel": "Nu s-a găsit niciun program pentru acest canal.",
   "epg_today": "Astăzi",
   "epg_tomorrow": "Mâine",
-  "epg_yesterday": "Ieri"
+  "epg_yesterday": "Ieri",
+  "settings_share": "Distribuie aplicația",
+  "settings_share_sub": "Trimite-o unui prieten",
+  "share_text": "Vezi videoclipuri de pe web și canale TV pe ecranul mare, gratuit: %1$s"
  },
  "plurals": {
   "browser_found": {

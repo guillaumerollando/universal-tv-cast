@@ -290,7 +290,10 @@
   "epg_none_channel": "Программа для этого канала не найдена.",
   "epg_today": "Сегодня",
   "epg_tomorrow": "Завтра",
-  "epg_yesterday": "Вчера"
+  "epg_yesterday": "Вчера",
+  "settings_share": "Поделиться приложением",
+  "settings_share_sub": "Отправить другу",
+  "share_text": "Смотрите видео из интернета и ТВ-каналы на большом экране бесплатно: %1$s"
  },
  "plurals": {
   "browser_found": {

@@ -290,7 +290,10 @@
   "epg_none_channel": "Tidak ada jadwal untuk saluran ini.",
   "epg_today": "Hari ini",
   "epg_tomorrow": "Besok",
-  "epg_yesterday": "Kemarin"
+  "epg_yesterday": "Kemarin",
+  "settings_share": "Bagikan aplikasi",
+  "settings_share_sub": "Kirim ke teman",
+  "share_text": "Tonton video web dan saluran TV di layar besar, gratis: %1$s"
  },
  "plurals": {
   "browser_found": {

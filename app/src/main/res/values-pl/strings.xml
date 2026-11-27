@@ -292,6 +292,9 @@
     <string name="epg_today">Dziś</string>
     <string name="epg_tomorrow">Jutro</string>
     <string name="epg_yesterday">Wczoraj</string>
+    <string name="settings_share">Udostępnij aplikację</string>
+    <string name="settings_share_sub">Wyślij znajomemu</string>
+    <string name="share_text">Oglądaj filmy z sieci i kanały TV na dużym ekranie, za darmo: %1$s</string>
     <plurals name="browser_found">
         <item quantity="one">%d wideo</item>
         <item quantity="few">%d wideo</item>

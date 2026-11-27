@@ -292,6 +292,9 @@
     <string name="epg_today">I dag</string>
     <string name="epg_tomorrow">I morgon</string>
     <string name="epg_yesterday">I går</string>
+    <string name="settings_share">Dela appen</string>
+    <string name="settings_share_sub">Skicka till en vän</string>
+    <string name="share_text">Se webbvideor och tv-kanaler på storbilden, gratis: %1$s</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videor</item>

@@ -292,6 +292,9 @@
     <string name="epg_today">आज</string>
     <string name="epg_tomorrow">कल</string>
     <string name="epg_yesterday">कल (बीता)</string>
+    <string name="settings_share">ऐप शेयर करें</string>
+    <string name="settings_share_sub">किसी दोस्त को भेजें</string>
+    <string name="share_text">वेब वीडियो और टीवी चैनल अपनी बड़ी स्क्रीन पर मुफ़्त देखें: %1$s</string>
     <plurals name="browser_found">
         <item quantity="one">%d वीडियो</item>
         <item quantity="other">%d वीडियो</item>

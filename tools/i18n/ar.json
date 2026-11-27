@@ -290,7 +290,10 @@
   "epg_none_channel": "لم يُعثر على برامج لهذه القناة.",
   "epg_today": "اليوم",
   "epg_tomorrow": "غدًا",
-  "epg_yesterday": "أمس"
+  "epg_yesterday": "أمس",
+  "settings_share": "مشاركة التطبيق",
+  "settings_share_sub": "أرسله إلى صديق",
+  "share_text": "شاهد فيديوهات الويب وقنوات التلفزيون على شاشتك الكبيرة مجانًا: %1$s"
  },
  "plurals": {
   "browser_found": {

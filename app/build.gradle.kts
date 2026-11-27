@@ -40,10 +40,15 @@ android {
     //  - « libre » : sans aucune bibliothèque non libre (pour F-Droid) ; DLNA seul, Google Cast absent.
     flavorDimensions += "store"
     productFlavors {
-        create("play") { dimension = "store" }
+        // Lien envoyé par « Partager l'appli » : la fiche du store d'où vient cette version.
+        create("play") {
+            dimension = "store"
+            buildConfigField("String", "SHARE_URL", "\"https://play.google.com/store/apps/details?id=studio.rollando.castor\"")
+        }
         create("libre") {
             dimension = "store"
             versionNameSuffix = "-libre"
+            buildConfigField("String", "SHARE_URL", "\"https://github.com/guillaumerollando/universal-tv-cast\"")
         }
     }
     compileOptions {

@@ -292,6 +292,9 @@
     <string name="epg_today">今天</string>
     <string name="epg_tomorrow">明天</string>
     <string name="epg_yesterday">昨天</string>
+    <string name="settings_share">分享应用</string>
+    <string name="settings_share_sub">发给朋友</string>
+    <string name="share_text">在大屏幕上免费观看网络视频和电视频道：%1$s</string>
     <plurals name="browser_found">
         <item quantity="other">%d 个视频</item>
     </plurals>

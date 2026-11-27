@@ -292,6 +292,9 @@
     <string name="epg_today">Astăzi</string>
     <string name="epg_tomorrow">Mâine</string>
     <string name="epg_yesterday">Ieri</string>
+    <string name="settings_share">Distribuie aplicația</string>
+    <string name="settings_share_sub">Trimite-o unui prieten</string>
+    <string name="share_text">Vezi videoclipuri de pe web și canale TV pe ecranul mare, gratuit: %1$s</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>

@@ -290,7 +290,10 @@
   "epg_none_channel": "Програму для цього каналу не знайдено.",
   "epg_today": "Сьогодні",
   "epg_tomorrow": "Завтра",
-  "epg_yesterday": "Учора"
+  "epg_yesterday": "Учора",
+  "settings_share": "Поділитися застосунком",
+  "settings_share_sub": "Надіслати другові",
+  "share_text": "Дивіться відео з інтернету й ТБ-канали на великому екрані безкоштовно: %1$s"
  },
  "plurals": {
   "browser_found": {

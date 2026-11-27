@@ -290,7 +290,10 @@
   "epg_none_channel": "Ingen tablå hittades för den här kanalen.",
   "epg_today": "I dag",
   "epg_tomorrow": "I morgon",
-  "epg_yesterday": "I går"
+  "epg_yesterday": "I går",
+  "settings_share": "Dela appen",
+  "settings_share_sub": "Skicka till en vän",
+  "share_text": "Se webbvideor och tv-kanaler på storbilden, gratis: %1$s"
  },
  "plurals": {
   "browser_found": {

@@ -290,7 +290,10 @@
   "epg_none_channel": "未找到该频道的节目单。",
   "epg_today": "今天",
   "epg_tomorrow": "明天",
-  "epg_yesterday": "昨天"
+  "epg_yesterday": "昨天",
+  "settings_share": "分享应用",
+  "settings_share_sub": "发给朋友",
+  "share_text": "在大屏幕上免费观看网络视频和电视频道：%1$s"
  },
  "plurals": {
   "browser_found": {

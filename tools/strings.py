@@ -5,6 +5,9 @@ import os, html
 LANGS = ["en", "fr", "es", "de", "it", "nl", "pt-rBR"]
 S = {
 "app_name": ["Universal TV Cast"]*7,
+"settings_share": ["Share the app", "Partager l’appli", "Compartir la app", "App teilen", "Condividi l’app", "App delen", "Compartilhar o app"],
+"settings_share_sub": ["Send it to a friend", "L’envoyer à un proche", "Envíala a un amigo", "Schick sie an Freunde", "Inviala a un amico", "Stuur hem naar een vriend", "Envie para um amigo"],
+"share_text": ["Watch web videos and TV channels on your big screen, for free: %1$s", "Regarde les vidéos du web et les chaînes de télé sur ton grand écran, gratuitement : %1$s", "Mira vídeos de la web y canales de TV en tu pantalla grande, gratis: %1$s", "Web-Videos und TV-Sender kostenlos auf dem großen Bildschirm: %1$s", "Guarda i video del web e i canali TV sul grande schermo, gratis: %1$s", "Bekijk webvideo’s en tv-zenders gratis op je grote scherm: %1$s", "Assista a vídeos da web e canais de TV na tela grande, de graça: %1$s"],
 "intent_cast_label": ["Cast to TV", "Caster sur la télé", "Enviar a la TV", "Auf den Fernseher streamen", "Trasmetti alla TV", "Casten naar tv", "Transmitir para a TV"],
 "tab_home": ["Home", "Accueil", "Inicio", "Start", "Home", "Start", "Início"],
 "tab_browser": ["Browser", "Navigateur", "Navegador", "Browser", "Browser", "Browser", "Navegador"],

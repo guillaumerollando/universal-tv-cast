@@ -290,7 +290,10 @@
   "epg_none_channel": "ไม่พบผังรายการของช่องนี้",
   "epg_today": "วันนี้",
   "epg_tomorrow": "พรุ่งนี้",
-  "epg_yesterday": "เมื่อวาน"
+  "epg_yesterday": "เมื่อวาน",
+  "settings_share": "แชร์แอป",
+  "settings_share_sub": "ส่งให้เพื่อน",
+  "share_text": "ดูวิดีโอจากเว็บและช่องทีวีบนจอใหญ่ ฟรี: %1$s"
  },
  "plurals": {
   "browser_found": {

@@ -290,7 +290,10 @@
   "epg_none_channel": "Bu kanal için yayın akışı bulunamadı.",
   "epg_today": "Bugün",
   "epg_tomorrow": "Yarın",
-  "epg_yesterday": "Dün"
+  "epg_yesterday": "Dün",
+  "settings_share": "Uygulamayı paylaş",
+  "settings_share_sub": "Bir arkadaşına gönder",
+  "share_text": "Web videolarını ve TV kanallarını büyük ekranda ücretsiz izle: %1$s"
  },
  "plurals": {
   "browser_found": {

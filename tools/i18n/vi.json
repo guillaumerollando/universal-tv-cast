@@ -290,7 +290,10 @@
   "epg_none_channel": "Không tìm thấy lịch phát sóng cho kênh này.",
   "epg_today": "Hôm nay",
   "epg_tomorrow": "Ngày mai",
-  "epg_yesterday": "Hôm qua"
+  "epg_yesterday": "Hôm qua",
+  "settings_share": "Chia sẻ ứng dụng",
+  "settings_share_sub": "Gửi cho bạn bè",
+  "share_text": "Xem video trên web và kênh TV trên màn hình lớn, miễn phí: %1$s"
  },
  "plurals": {
   "browser_found": {

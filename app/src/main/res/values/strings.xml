@@ -2,6 +2,9 @@
 <!-- Généré par tools/strings.py : ne pas modifier à la main. -->
 <resources>
     <string name="app_name" translatable="false">Universal TV Cast</string>
+    <string name="settings_share">Share the app</string>
+    <string name="settings_share_sub">Send it to a friend</string>
+    <string name="share_text">Watch web videos and TV channels on your big screen, for free: %1$s</string>
     <string name="intent_cast_label">Cast to TV</string>
     <string name="tab_home">Home</string>
     <string name="tab_browser">Browser</string>

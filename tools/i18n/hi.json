@@ -290,7 +290,10 @@
   "epg_none_channel": "इस चैनल का कोई कार्यक्रम नहीं मिला।",
   "epg_today": "आज",
   "epg_tomorrow": "कल",
-  "epg_yesterday": "कल (बीता)"
+  "epg_yesterday": "कल (बीता)",
+  "settings_share": "ऐप शेयर करें",
+  "settings_share_sub": "किसी दोस्त को भेजें",
+  "share_text": "वेब वीडियो और टीवी चैनल अपनी बड़ी स्क्रीन पर मुफ़्त देखें: %1$s"
  },
  "plurals": {
   "browser_found": {

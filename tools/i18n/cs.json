@@ -290,7 +290,10 @@
   "epg_none_channel": "Pro tento kanál nebyl nalezen žádný program.",
   "epg_today": "Dnes",
   "epg_tomorrow": "Zítra",
-  "epg_yesterday": "Včera"
+  "epg_yesterday": "Včera",
+  "settings_share": "Sdílet aplikaci",
+  "settings_share_sub": "Pošli ji kamarádovi",
+  "share_text": "Sleduj videa z webu a TV kanály na velké obrazovce, zdarma: %1$s"
  },
  "plurals": {
   "browser_found": {

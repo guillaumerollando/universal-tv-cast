@@ -292,6 +292,9 @@
     <string name="epg_today">Сьогодні</string>
     <string name="epg_tomorrow">Завтра</string>
     <string name="epg_yesterday">Учора</string>
+    <string name="settings_share">Поділитися застосунком</string>
+    <string name="settings_share_sub">Надіслати другові</string>
+    <string name="share_text">Дивіться відео з інтернету й ТБ-канали на великому екрані безкоштовно: %1$s</string>
     <plurals name="browser_found">
         <item quantity="one">%d відео</item>
         <item quantity="few">%d відео</item>

@@ -292,6 +292,9 @@
     <string name="epg_today">Hôm nay</string>
     <string name="epg_tomorrow">Ngày mai</string>
     <string name="epg_yesterday">Hôm qua</string>
+    <string name="settings_share">Chia sẻ ứng dụng</string>
+    <string name="settings_share_sub">Gửi cho bạn bè</string>
+    <string name="share_text">Xem video trên web và kênh TV trên màn hình lớn, miễn phí: %1$s</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

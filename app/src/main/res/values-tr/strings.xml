@@ -292,6 +292,9 @@
     <string name="epg_today">Bugün</string>
     <string name="epg_tomorrow">Yarın</string>
     <string name="epg_yesterday">Dün</string>
+    <string name="settings_share">Uygulamayı paylaş</string>
+    <string name="settings_share_sub">Bir arkadaşına gönder</string>
+    <string name="share_text">Web videolarını ve TV kanallarını büyük ekranda ücretsiz izle: %1$s</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video</item>

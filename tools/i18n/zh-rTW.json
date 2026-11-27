@@ -290,7 +290,10 @@
   "epg_none_channel": "找不到這個頻道的節目表。",
   "epg_today": "今天",
   "epg_tomorrow": "明天",
-  "epg_yesterday": "昨天"
+  "epg_yesterday": "昨天",
+  "settings_share": "分享應用程式",
+  "settings_share_sub": "傳給朋友",
+  "share_text": "在大螢幕上免費觀看網路影片和電視頻道：%1$s"
  },
  "plurals": {
   "browser_found": {

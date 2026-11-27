@@ -292,6 +292,9 @@
     <string name="epg_today">오늘</string>
     <string name="epg_tomorrow">내일</string>
     <string name="epg_yesterday">어제</string>
+    <string name="settings_share">앱 공유</string>
+    <string name="settings_share_sub">친구에게 보내기</string>
+    <string name="share_text">웹 동영상과 TV 채널을 큰 화면으로 무료로: %1$s</string>
     <plurals name="browser_found">
         <item quantity="other">동영상 %d개</item>
     </plurals>

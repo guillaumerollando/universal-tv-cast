@@ -290,7 +290,10 @@
   "epg_none_channel": "이 채널의 편성 정보를 찾지 못했어요.",
   "epg_today": "오늘",
   "epg_tomorrow": "내일",
-  "epg_yesterday": "어제"
+  "epg_yesterday": "어제",
+  "settings_share": "앱 공유",
+  "settings_share_sub": "친구에게 보내기",
+  "share_text": "웹 동영상과 TV 채널을 큰 화면으로 무료로: %1$s"
  },
  "plurals": {
   "browser_found": {

@@ -44,6 +44,7 @@ import androidx.compose.material.icons.rounded.LinkOff
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.Tv
 import androidx.compose.material.icons.rounded.WifiFind
 import androidx.compose.material3.AlertDialog
@@ -549,6 +550,21 @@ private fun SettingsSheet(onDismiss: () -> Unit) {
                 }
             }
             item { HorizontalDivider(Modifier.padding(vertical = 8.dp)) }
+            item {
+                // Partager l'appli (standard des applis du studio) : la feuille de partage d'Android, avec le lien du store.
+                val text = stringResource(R.string.share_text, BuildConfig.SHARE_URL)
+                val title = stringResource(R.string.settings_share)
+                ListItem(
+                    headlineContent = { Text(title) },
+                    supportingContent = { Text(stringResource(R.string.settings_share_sub)) },
+                    leadingContent = { Icon(Icons.Rounded.Share, null) },
+                    colors = ListItemDefaults.colors(containerColor = androidx.compose.ui.graphics.Color.Transparent),
+                    modifier = Modifier.selectable(false, role = Role.Button) {
+                        val send = Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, text)
+                        runCatching { context.startActivity(Intent.createChooser(send, title).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
+                    },
+                )
+            }
             item {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {

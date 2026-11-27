@@ -1107,3 +1107,13 @@ publique) ; pas de services gratuits avec pub (Pluto, Tubi, Plex). Quelques sugg
 - Le premier cas signalé (vidéo d'un site de streaming non lancée seule après une chaîne) n'a pas été reproduit
   tel quel : site inconnu. Les deux causes probables sont corrigées ; à revoir si ça recommence (nom du site).
 - Choix d'un sous-titre réel (Arte) non refait sur émulateur après la refonte.
+
+## 2026-11-27 — Partager l'appli
+**Fait**
+- Réglages : ligne « Partager l'appli » (feuille de partage d'Android, phrase + lien), en 23 langues. Lien par
+  variante : fiche Play Store (`play`), dépôt GitHub (`libre`) via `BuildConfig.SHARE_URL`.
+- Standard commun à toutes les applis : `~/Dev/Gestion de projet/standard-partage.md`, cité dans `~/Dev/CLAUDE.md`.
+
+**Pas fait**
+- Le lien Play Store ne mène nulle part tant que l'appli n'est pas publiée.
+- Les autres applis et jeux n'ont pas encore le bouton (à faire dans chacune, par sa session).

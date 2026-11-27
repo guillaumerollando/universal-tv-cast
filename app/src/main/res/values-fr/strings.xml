@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Généré par tools/strings.py : ne pas modifier à la main. -->
 <resources>
+    <string name="settings_share">Partager l’appli</string>
+    <string name="settings_share_sub">L’envoyer à un proche</string>
+    <string name="share_text">Regarde les vidéos du web et les chaînes de télé sur ton grand écran, gratuitement : %1$s</string>
     <string name="intent_cast_label">Caster sur la télé</string>
     <string name="tab_home">Accueil</string>
     <string name="tab_browser">Navigateur</string>

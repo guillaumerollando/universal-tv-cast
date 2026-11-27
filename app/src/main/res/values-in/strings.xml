@@ -292,6 +292,9 @@
     <string name="epg_today">Hari ini</string>
     <string name="epg_tomorrow">Besok</string>
     <string name="epg_yesterday">Kemarin</string>
+    <string name="settings_share">Bagikan aplikasi</string>
+    <string name="settings_share_sub">Kirim ke teman</string>
+    <string name="share_text">Tonton video web dan saluran TV di layar besar, gratis: %1$s</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

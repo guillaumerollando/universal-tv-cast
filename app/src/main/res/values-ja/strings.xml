@@ -292,6 +292,9 @@
     <string name="epg_today">今日</string>
     <string name="epg_tomorrow">明日</string>
     <string name="epg_yesterday">昨日</string>
+    <string name="settings_share">アプリを共有</string>
+    <string name="settings_share_sub">友だちに送る</string>
+    <string name="share_text">ウェブ動画とテレビ番組を大画面で無料で: %1$s</string>
     <plurals name="browser_found">
         <item quantity="other">%d 本の動画</item>
     </plurals>

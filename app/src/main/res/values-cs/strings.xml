@@ -292,6 +292,9 @@
     <string name="epg_today">Dnes</string>
     <string name="epg_tomorrow">Zítra</string>
     <string name="epg_yesterday">Včera</string>
+    <string name="settings_share">Sdílet aplikaci</string>
+    <string name="settings_share_sub">Pošli ji kamarádovi</string>
+    <string name="share_text">Sleduj videa z webu a TV kanály na velké obrazovce, zdarma: %1$s</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="few">%d videa</item>

@@ -69,7 +69,8 @@ object SupportStore {
         c.queryPurchasesAsync(QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.INAPP).build()) { r, list ->
             if (r.responseCode != BillingClient.BillingResponseCode.OK) return@queryPurchasesAsync
             val mine = list.filter { PRODUCT in it.products }
-            if (mine.isEmpty()) setOwned(false) else handle(mine)
+            // Version d'essai : l'achat d'un clic n'existe pas chez Google, on ne le retire donc pas.
+            if (mine.isEmpty()) { if (!com.rollandostudio.universaltvcast.BuildConfig.TEST_UNLOCK) setOwned(false) } else handle(mine)
         }
     }
 
@@ -90,6 +91,8 @@ object SupportStore {
 
     /** Ouvre la fenêtre d'achat de Google. Faux si la boutique n'est pas prête (pas de réseau, produit absent). */
     fun buy(activity: Activity): Boolean {
+        // Version d'essai (construite avec -PtestUnlock) : le pack s'ouvre d'un clic, sans boutique.
+        if (com.rollandostudio.universaltvcast.BuildConfig.TEST_UNLOCK) { setOwned(true); return true }
         val d = details ?: run { connect(); return false }
         val params = BillingFlowParams.newBuilder().setProductDetailsParamsList(listOf(
             BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(d).build(),

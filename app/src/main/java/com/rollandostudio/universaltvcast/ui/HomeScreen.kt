@@ -226,6 +226,8 @@ fun HomeScreen(
                 },
                     showChannels = lists.isEmpty(), showSites = sites.size < 6, known = sites.map { it.host }.toSet())
             }
+            // L'astuce reste utile après les premiers essais : en bas de page, discrète.
+            item { OtherAppTip() }
         }
         return
     }
@@ -292,28 +294,8 @@ fun HomeScreen(
             })
         }
 
-        item { SectionTitle(stringResource(R.string.home_bookmarks), Modifier.padding(horizontal = 16.dp).semantics { heading() }) }
-        item {
-            Text(stringResource(R.string.home_bookmarks_empty), style = MaterialTheme.typography.bodyMedium,
-                color = c.onSurfaceVariant, modifier = Modifier.padding(horizontal = 16.dp))
-        }
-
-        item {
-            Card(
-                colors = CardDefaults.cardColors(containerColor = c.surfaceContainer), shape = RoundedCornerShape(20.dp),
-                modifier = Modifier.padding(horizontal = 16.dp),
-            ) {
-                Row(Modifier.padding(16.dp), verticalAlignment = Alignment.Top) {
-                    Icon(Icons.AutoMirrored.Rounded.OpenInNew, null, tint = c.secondary)
-                    Spacer(Modifier.width(12.dp))
-                    Column {
-                        Text(stringResource(R.string.home_other_title), style = MaterialTheme.typography.titleSmall)
-                        Spacer(Modifier.height(2.dp))
-                        Text(stringResource(R.string.home_other_body), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
-                    }
-                }
-            }
-        }
+        // Astuce : ouvrir une vidéo depuis une autre appli (« Partager », « Ouvrir avec »).
+        item { OtherAppTip() }
         item { Spacer(Modifier.height(16.dp)) }
     }
 }
@@ -664,4 +646,23 @@ private fun Modifier.highlightGlow(highlight: Boolean, corner: androidx.compose.
             )
         }
         .shadow((18 * glow).dp, RoundedCornerShape(corner), clip = false, ambientColor = c.primary, spotColor = c.primary)
+}
+
+/** Astuce « Depuis une autre appli » : partager ou « Ouvrir avec » une vidéo vers Universal TV Cast. */
+@Composable
+private fun OtherAppTip() {
+    val c = MaterialTheme.colorScheme
+    Row(
+        Modifier.padding(horizontal = 16.dp).fillMaxWidth().clip(RoundedCornerShape(ChannelTiles.corner + 2.dp))
+            .background(c.surfaceContainer).padding(14.dp),
+        verticalAlignment = Alignment.Top,
+    ) {
+        Icon(Icons.AutoMirrored.Rounded.OpenInNew, null, tint = c.primary)
+        Spacer(Modifier.width(12.dp))
+        Column {
+            Text(stringResource(R.string.home_other_title), style = MaterialTheme.typography.titleSmall)
+            Spacer(Modifier.height(2.dp))
+            Text(stringResource(R.string.home_other_body), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
+        }
+    }
 }

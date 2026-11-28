@@ -14,6 +14,9 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0.0"
+        // Achat d'essai du pack soutien (un clic, sans boutique) : seulement pour une version construite avec
+        // -PtestUnlock (téléphone de test de Guillaume). Jamais dans une version publiée.
+        buildConfigField("boolean", "TEST_UNLOCK", (project.findProperty("testUnlock") == "true").toString())
     }
 
     androidResources {

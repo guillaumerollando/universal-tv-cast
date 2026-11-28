@@ -1713,3 +1713,10 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - Personnalisation des favoris (dossiers, NAS) : couleurs franches (rouge, orange, jaune, vert, cyan, bleu, violet,
   framboise, bleu acier + celle de l'appli) au lieu des pastels. « Reprendre » : même écart entre cartes que les
   autres rangées. Les favoris déjà colorés gardent leur ancienne couleur jusqu'à ce qu'on la change.
+
+## 2026-11-28 (nuit) — Écran du début ; achat d'essai
+- Nouveau venu : plus de rubrique « Favoris » vide (son texte ne collait pas aux favoris actuels). L'astuce « Depuis
+  une autre appli » reste aussi en bas de l'accueil de l'habitué (elle reste utile après les premiers essais).
+- Achat d'essai du pack soutien : une version construite avec `-PtestUnlock=true` ouvre le pack d'un clic sur
+  « Soutenir », sans boutique, et ne le referme pas à la revérification Google (`BuildConfig.TEST_UNLOCK`). Les
+  versions normales (et le Play Store) n'ont pas ce chemin. Installée ainsi sur le téléphone de Guillaume.

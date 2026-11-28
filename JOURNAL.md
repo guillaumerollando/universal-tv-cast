@@ -1636,3 +1636,11 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   format exact des tuiles de chaînes (16:10, 96 dp, même rangée serrée) : une chaîne garde son logo tel quel ; un
   dossier ou un site a un fond en dégradé à sa couleur (choisie, ou tirée du nom du site), son icône et son nom en
   blanc. Quatre tuiles visibles sur la largeur.
+
+## 2026-11-28 — Ondes revenues ; accueil encore resserré
+- Plus d'ondes sur le téléphone de Guillaume : il est en économie de batterie (Android), et l'appli figeait alors ses
+  animations décoratives ; figées, les ondes étaient presque transparentes. Elles restent maintenant animées en
+  économie d'énergie (plus lentes, 4,2 s au lieu de 2,6 s) — c'est le seul signe que « ça passe » — et ne s'arrêtent
+  que si les animations sont coupées dans Android (accessibilité), où elles restent alors bien visibles.
+- Accueil : écart entre rubriques 14 dp (au lieu de 22), titre → contenu 4 dp, tuiles « Caster autre chose » 70 dp
+  de haut, favoris sans marge verticale. Favoris, chaînes et « Caster autre chose » tiennent sur un écran.

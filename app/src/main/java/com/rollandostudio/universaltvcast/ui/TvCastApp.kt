@@ -721,7 +721,7 @@ private fun SwitchRow(title: String, sub: String, checked: Boolean, onChange: (B
 internal fun SectionTitle(text: String, modifier: Modifier = Modifier) {
     // Même titre de rubrique partout (accueil, chaînes, « Pour commencer ») : gras, collé à son contenu.
     Text(text, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold, fontSize = 20.sp),
-        modifier = modifier.padding(top = 4.dp, bottom = 6.dp))
+        modifier = modifier.padding(top = 2.dp, bottom = 4.dp))
 }
 
 

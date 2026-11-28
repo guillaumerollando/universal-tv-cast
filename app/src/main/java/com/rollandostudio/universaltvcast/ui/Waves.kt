@@ -43,9 +43,15 @@ fun animationsOff(): Boolean {
  */
 @Composable
 fun CastWaves(color: Color, modifier: Modifier = Modifier, size: Dp = 170.dp, inner: Dp = 40.dp) {
-    val still = animationsOff()
+    // Seul signe que « ça passe sur la télé » : elles restent animées en économie d'énergie (plus lentes, ça coûte
+    // peu) ; immobiles seulement quand les animations sont coupées dans Android (accessibilité).
+    val ctx = LocalContext.current
+    val still = remember {
+        runCatching { Settings.Global.getFloat(ctx.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE) == 0f }.getOrDefault(false)
+    }
+    val saving by com.rollandostudio.universaltvcast.data.Power.saving.collectAsState()
     val t = rememberInfiniteTransition(label = "ondes")
-    val p by t.animateFloat(0f, 1f, infiniteRepeatable(tween(2600, easing = LinearEasing)), label = "phase")
+    val p by t.animateFloat(0f, 1f, infiniteRepeatable(tween(if (saving) 4200 else 2600, easing = LinearEasing)), label = "phase")
     Canvas(modifier.requiredSize(size)) {
         val maxR = this.size.minDimension / 2
         val minR = inner.toPx() // les ondes partent du bord de ce qu'elles entourent, jamais de l'intérieur
@@ -55,8 +61,9 @@ fun CastWaves(color: Color, modifier: Modifier = Modifier, size: Dp = 170.dp, in
             radius = minR * 1.9f,
         )
         for (i in 0 until 3) {
-            val f = if (still) (i + 1) / 3.5f else (p + i / 3f) % 1f
-            val fade = (1f - f) * (1f - f)
+            val f = if (still) (i + 1) / 4f else (p + i / 3f) % 1f
+            // Immobiles, elles restent bien visibles ; animées, elles s'effacent en s'éloignant.
+            val fade = if (still) 0.9f - i * 0.25f else (1f - f) * (1f - f)
             drawCircle(
                 color = color.copy(alpha = color.alpha * fade),
                 radius = minR + (maxR - minR) * f,

@@ -163,7 +163,7 @@ fun PosterCard(
                     contentAlignment = Alignment.Center,
                 ) { Icon(Icons.Rounded.Star, null, tint = c.primary, modifier = Modifier.size(16.dp)) }
             }
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(6.dp))
             Text(title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
                 maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(horizontal = 2.dp))
             // Dessous : l'épisode où l'on en est, sinon « Reprendre » (un film).
@@ -217,7 +217,7 @@ internal fun FavTileFrame(
 ) {
     var open by remember { mutableStateOf(false) }
     val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
-    Box(Modifier.padding(vertical = 6.dp)) {
+    Box {
         Box(
             Modifier.width(ChannelTiles.width).aspectRatio(16f / 10f).clip(RoundedCornerShape(ChannelTiles.corner))
                 .then(if (background != null) Modifier.background(background) else Modifier)

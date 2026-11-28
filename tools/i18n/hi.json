@@ -487,7 +487,21 @@
   "xtream_loading": "कैटलॉग लोड हो रहा है…",
   "xtream_error": "आपका प्रदाता जवाब नहीं दे रहा। बाद में फिर कोशिश करें।",
   "xtream_empty": "आपके प्रदाता के पास यहाँ कुछ नहीं है।",
-  "xtream_search": "शीर्षक खोजें"
+  "xtream_search": "शीर्षक खोजें",
+  "free_title": "मुक्त फ़िल्में",
+  "free_sub": "सार्वजनिक डोमेन की क्लासिक और ओपन फ़िल्में, मुफ़्त और कानूनी।",
+  "free_cat_blender": "Blender की ओपन फ़िल्में",
+  "free_cat_classic": "क्लासिक",
+  "free_cat_comedy": "कॉमेडी",
+  "free_cat_noir": "क्राइम और फ़िल्म नोयर",
+  "free_cat_horror": "हॉरर",
+  "free_cat_scifi": "साइंस फ़िक्शन",
+  "free_cat_western": "वेस्टर्न",
+  "free_cat_adventure": "एडवेंचर",
+  "free_cat_drama": "ड्रामा",
+  "free_cat_animation": "एनिमेशन",
+  "tab_search": "खोजें",
+  "vod_title": "फ़िल्में और सीरीज़"
  },
  "plurals": {
   "browser_found": {

@@ -487,7 +487,21 @@
   "xtream_loading": "Läser in katalogen…",
   "xtream_error": "Din leverantör svarar inte. Försök igen senare.",
   "xtream_empty": "Din leverantör har inget här.",
-  "xtream_search": "Sök en titel"
+  "xtream_search": "Sök en titel",
+  "free_title": "Fria filmer",
+  "free_sub": "Klassiker i allmän egendom och öppna filmer, gratis och lagligt.",
+  "free_cat_blender": "Öppna filmer från Blender",
+  "free_cat_classic": "Klassiker",
+  "free_cat_comedy": "Komedi",
+  "free_cat_noir": "Kriminal & film noir",
+  "free_cat_horror": "Skräck",
+  "free_cat_scifi": "Science fiction",
+  "free_cat_western": "Western",
+  "free_cat_adventure": "Äventyr",
+  "free_cat_drama": "Drama",
+  "free_cat_animation": "Animerat",
+  "tab_search": "Sök",
+  "vod_title": "Filmer & serier"
  },
  "plurals": {
   "browser_found": {

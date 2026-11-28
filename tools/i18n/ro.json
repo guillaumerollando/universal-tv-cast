@@ -487,7 +487,21 @@
   "xtream_loading": "Se încarcă catalogul…",
   "xtream_error": "Furnizorul tău nu răspunde. Încearcă mai târziu.",
   "xtream_empty": "Furnizorul tău nu are nimic aici.",
-  "xtream_search": "Caută un titlu"
+  "xtream_search": "Caută un titlu",
+  "free_title": "Filme libere",
+  "free_sub": "Clasice din domeniul public și filme deschise, gratuite și legale.",
+  "free_cat_blender": "Filme deschise Blender",
+  "free_cat_classic": "Clasice",
+  "free_cat_comedy": "Comedie",
+  "free_cat_noir": "Polițist și film noir",
+  "free_cat_horror": "Groază",
+  "free_cat_scifi": "SF",
+  "free_cat_western": "Western",
+  "free_cat_adventure": "Aventură",
+  "free_cat_drama": "Dramă",
+  "free_cat_animation": "Animație",
+  "tab_search": "Caută",
+  "vod_title": "Filme și seriale"
  },
  "plurals": {
   "browser_found": {

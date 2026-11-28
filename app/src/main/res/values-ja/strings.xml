@@ -489,6 +489,20 @@
     <string name="xtream_error">プロバイダーが応答しません。後でもう一度お試しください。</string>
     <string name="xtream_empty">プロバイダーにはここに何もありません。</string>
     <string name="xtream_search">タイトルを検索</string>
+    <string name="free_title">フリー映画</string>
+    <string name="free_sub">パブリックドメインの名作とオープン映画。無料・合法。</string>
+    <string name="free_cat_blender">Blenderのオープン映画</string>
+    <string name="free_cat_classic">クラシック</string>
+    <string name="free_cat_comedy">コメディ</string>
+    <string name="free_cat_noir">犯罪・フィルムノワール</string>
+    <string name="free_cat_horror">ホラー</string>
+    <string name="free_cat_scifi">SF</string>
+    <string name="free_cat_western">西部劇</string>
+    <string name="free_cat_adventure">アドベンチャー</string>
+    <string name="free_cat_drama">ドラマ</string>
+    <string name="free_cat_animation">アニメーション</string>
+    <string name="tab_search">検索</string>
+    <string name="vod_title">映画・シリーズ</string>
     <plurals name="browser_found">
         <item quantity="other">%d 本の動画</item>
     </plurals>

@@ -487,7 +487,21 @@
   "xtream_loading": "Đang tải danh mục…",
   "xtream_error": "Nhà cung cấp của bạn không phản hồi. Hãy thử lại sau.",
   "xtream_empty": "Nhà cung cấp của bạn không có gì ở đây.",
-  "xtream_search": "Tìm tên phim"
+  "xtream_search": "Tìm tên phim",
+  "free_title": "Phim tự do",
+  "free_sub": "Phim kinh điển phạm vi công cộng và phim mở, miễn phí và hợp pháp.",
+  "free_cat_blender": "Phim mở của Blender",
+  "free_cat_classic": "Kinh điển",
+  "free_cat_comedy": "Hài",
+  "free_cat_noir": "Hình sự & phim noir",
+  "free_cat_horror": "Kinh dị",
+  "free_cat_scifi": "Khoa học viễn tưởng",
+  "free_cat_western": "Viễn Tây",
+  "free_cat_adventure": "Phiêu lưu",
+  "free_cat_drama": "Chính kịch",
+  "free_cat_animation": "Hoạt hình",
+  "tab_search": "Tìm kiếm",
+  "vod_title": "Phim & loạt phim"
  },
  "plurals": {
   "browser_found": {

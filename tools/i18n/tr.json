@@ -487,7 +487,21 @@
   "xtream_loading": "Katalog yükleniyor…",
   "xtream_error": "Sağlayıcınız yanıt vermiyor. Daha sonra tekrar deneyin.",
   "xtream_empty": "Sağlayıcınızın burada bir şeyi yok.",
-  "xtream_search": "Başlık ara"
+  "xtream_search": "Başlık ara",
+  "free_title": "Özgür filmler",
+  "free_sub": "Kamu malı klasikler ve açık filmler, ücretsiz ve yasal.",
+  "free_cat_blender": "Blender açık filmleri",
+  "free_cat_classic": "Klasikler",
+  "free_cat_comedy": "Komedi",
+  "free_cat_noir": "Suç ve kara film",
+  "free_cat_horror": "Korku",
+  "free_cat_scifi": "Bilim kurgu",
+  "free_cat_western": "Western",
+  "free_cat_adventure": "Macera",
+  "free_cat_drama": "Dram",
+  "free_cat_animation": "Animasyon",
+  "tab_search": "Ara",
+  "vod_title": "Filmler ve diziler"
  },
  "plurals": {
   "browser_found": {

@@ -26,7 +26,9 @@ object Xtream {
     }
 
     data class Category(val id: String, val name: String)
-    data class Movie(val id: String, val name: String, val poster: String?, val rating: Double?, val category: String?, val ext: String, val added: Long)
+    /** [url] : adresse complète (catalogue libre) ; sinon elle se déduit du compte. */
+    data class Movie(val id: String, val name: String, val poster: String?, val rating: Double?, val category: String?, val ext: String, val added: Long,
+                     val url: String? = null, val year: Int? = null)
     data class Series(val id: String, val name: String, val cover: String?, val rating: Double?, val category: String?, val plot: String?, val year: String?)
     data class Episode(val id: String, val season: Int, val number: Int, val title: String, val ext: String, val image: String?, val plot: String?)
     data class SeriesInfo(val plot: String?, val backdrop: String?, val episodes: List<Episode>)
@@ -47,10 +49,35 @@ object Xtream {
         return Account(source.substringBefore(path.substringAfterLast('/')), user, pass)
     }
 
-    /** Les comptes Xtream parmi les listes importées (un seul par serveur et identifiant). */
-    fun accounts(lists: List<IptvStore.Playlist>): List<Account> = lists.mapNotNull { accountOf(it.source) }.distinctBy { it.key }
+    /**
+     * Catalogue « Films libres », rangé dans l'appli (`assets/free-catalog.json`, fait par `tools/free_catalog.py`) :
+     * films ouverts de la Blender Foundation et longs métrages du domaine public d'Internet Archive. Présenté comme un
+     * abonnement ; on l'ajoute d'un toucher (« Pour commencer », écran Chaînes) et on le retire comme une liste.
+     */
+    val FREE = Account("libre:", "", "")
+    private val _freeOn = kotlinx.coroutines.flow.MutableStateFlow(false)
+    val freeOn: kotlinx.coroutines.flow.StateFlow<Boolean> = _freeOn
+    fun setFree(on: Boolean) { _freeOn.value = on; prefs?.edit()?.putBoolean("free", on)?.apply() }
+    /** Genres du catalogue libre → leur nom dans la langue du téléphone. */
+    private val FREE_GENRES = linkedMapOf(
+        "blender" to com.rollandostudio.universaltvcast.R.string.free_cat_blender,
+        "classic" to com.rollandostudio.universaltvcast.R.string.free_cat_classic,
+        "comedy" to com.rollandostudio.universaltvcast.R.string.free_cat_comedy,
+        "noir" to com.rollandostudio.universaltvcast.R.string.free_cat_noir,
+        "horror" to com.rollandostudio.universaltvcast.R.string.free_cat_horror,
+        "scifi" to com.rollandostudio.universaltvcast.R.string.free_cat_scifi,
+        "western" to com.rollandostudio.universaltvcast.R.string.free_cat_western,
+        "adventure" to com.rollandostudio.universaltvcast.R.string.free_cat_adventure,
+        "drama" to com.rollandostudio.universaltvcast.R.string.free_cat_drama,
+        "animation" to com.rollandostudio.universaltvcast.R.string.free_cat_animation,
+    )
+    private var app: Context? = null
 
-    fun movieUrl(a: Account, m: Movie) = "${a.base}movie/${a.user}/${a.pass}/${m.id}.${m.ext}"
+    /** Les comptes Xtream parmi les listes importées (un seul par serveur et identifiant), plus le catalogue libre s'il est ajouté. */
+    fun accounts(lists: List<IptvStore.Playlist>, free: Boolean = _freeOn.value): List<Account> =
+        lists.mapNotNull { accountOf(it.source) }.distinctBy { it.key } + listOfNotNull(FREE.takeIf { free })
+
+    fun movieUrl(a: Account, m: Movie) = m.url ?: "${a.base}movie/${a.user}/${a.pass}/${m.id}.${m.ext}"
     fun episodeUrl(a: Account, e: Episode) = "${a.base}series/${a.user}/${a.pass}/${e.id}.${e.ext}"
 
     // ---- Cache ----
@@ -61,8 +88,10 @@ object Xtream {
     private var prefs: android.content.SharedPreferences? = null
 
     fun init(ctx: Context) {
+        app = ctx.applicationContext
         dir = File(ctx.cacheDir, "xtream").apply { mkdirs() }
         prefs = ctx.getSharedPreferences("xtream", Context.MODE_PRIVATE)
+        _freeOn.value = prefs!!.getBoolean("free", false)
         // Films et épisodes déjà ouverts : de quoi les rouvrir après un redémarrage (« Reprendre », épisode suivant).
         runCatching {
             val o = JSONObject(prefs!!.getString("known", "{}")!!)
@@ -104,6 +133,8 @@ object Xtream {
     @Suppress("UNCHECKED_CAST")
     suspend fun categories(a: Account, kind: Kind, fresh: Boolean = false): List<Category> = withContext(Dispatchers.IO) {
         val key = "${a.key}-${kind}-cat"
+        if (a == FREE) return@withContext if (kind == Kind.SERIES) emptyList()
+            else FREE_GENRES.map { (k, r) -> Category(k, app?.getString(r) ?: k) }
         if (!fresh) (memory[key] as? List<Category>)?.let { return@withContext it }
         val action = if (kind == Kind.MOVIES) "get_vod_categories" else "get_series_categories"
         val out = ArrayList<Category>()
@@ -119,6 +150,7 @@ object Xtream {
     suspend fun movies(a: Account, fresh: Boolean = false): List<Movie> = withContext(Dispatchers.IO) {
         val key = "${a.key}-movies"
         if (!fresh) (memory[key] as? List<Movie>)?.let { return@withContext it }
+        if (a == FREE) return@withContext freeMovies().also { memory[key] = it }
         val out = ArrayList<Movie>()
         readArray(cached("$key.json", a.api("get_vod_streams"), fresh)) { o ->
             val id = o["stream_id"] ?: return@readArray
@@ -133,6 +165,7 @@ object Xtream {
     @Suppress("UNCHECKED_CAST")
     suspend fun series(a: Account, fresh: Boolean = false): List<Series> = withContext(Dispatchers.IO) {
         val key = "${a.key}-series"
+        if (a == FREE) return@withContext emptyList()
         if (!fresh) (memory[key] as? List<Series>)?.let { return@withContext it }
         val out = ArrayList<Series>()
         readArray(cached("$key.json", a.api("get_series"), fresh)) { o ->
@@ -144,6 +177,18 @@ object Xtream {
         memory[key] = out
         out
     }
+
+    /** Les films du catalogue libre, dans l'ordre du fichier (Blender d'abord, puis les plus regardés). */
+    private fun freeMovies(): List<Movie> = runCatching {
+        val root = JSONObject(app!!.assets.open("free-catalog.json").bufferedReader().readText())
+        val a = root.getJSONArray("movies")
+        (0 until a.length()).map { i ->
+            val o = a.getJSONObject(i)
+            val y = o.optInt("year").takeIf { it > 0 }
+            Movie(o.getString("id"), o.getString("name") + (y?.let { " ($it)" } ?: ""), o.optString("poster").ifEmpty { null }, null,
+                o.optString("category"), o.getString("url").substringAfterLast('.'), (a.length() - i).toLong(), o.getString("url"), y)
+        }
+    }.getOrElse { android.util.Log.w("TvCastIptv", "catalogue libre illisible", it); emptyList() }
 
     /** Saisons et épisodes d'une série (petit : lu d'un bloc). */
     suspend fun seriesInfo(a: Account, s: Series): SeriesInfo = withContext(Dispatchers.IO) {

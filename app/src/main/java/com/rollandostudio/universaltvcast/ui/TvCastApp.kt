@@ -117,7 +117,7 @@ import com.rollandostudio.universaltvcast.cast.Intake
 import com.rollandostudio.universaltvcast.cast.Media
 import com.rollandostudio.universaltvcast.data.Library
 
-enum class Tab { HOME, BROWSER, PLAYER }
+enum class Tab { HOME, SEARCH, BROWSER, PLAYER }
 
 /** Onglet affiché ; les intentions venues d'autres applis basculent sur « Lecture ». */
 object Nav {
@@ -139,6 +139,8 @@ object Nav {
     val tvs = MutableStateFlow(false)
     /** Écran des listes de chaînes ouvert : id de la liste à montrer ("" : la première). */
     val iptv = MutableStateFlow<String?>(null)
+    /** Ouvrir l'écran Chaînes directement sur les films ou les séries (« MOVIES » / « SERIES ») d'une catégorie (ou null). */
+    val vodStart = MutableStateFlow<Pair<String, String?>?>(null)
     /** L'appli est réduite en petite fenêtre « image dans l'image » : seule la vidéo est montrée. */
     val pip = MutableStateFlow(false)
     /** Page « Réseau » (ordinateurs, NAS) ouverte par-dessus l'accueil. */
@@ -285,6 +287,11 @@ fun TvCastApp() {
         }
     }
     val headerDp = with(androidx.compose.ui.platform.LocalDensity.current) { (headerPx - headerHidden).toDp() }
+    // Onglet « Rechercher » : seulement avec un abonnement IPTV (films, séries) ou le catalogue libre.
+    val iptvLists by com.rollandostudio.universaltvcast.data.IptvStore.lists.collectAsState()
+    val freeFilms by com.rollandostudio.universaltvcast.data.Xtream.freeOn.collectAsState()
+    val vodAccounts = remember(iptvLists, freeFilms) { com.rollandostudio.universaltvcast.data.Xtream.accounts(iptvLists, freeFilms) }
+    LaunchedEffect(vodAccounts.isEmpty()) { if (vodAccounts.isEmpty() && Nav.tab.value == Tab.SEARCH) Nav.tab.value = Tab.HOME }
     // Part visible des barres du navigateur (adresse en haut, onglets en bas), qui suivent le doigt ensemble.
     val browserBars = browser.barShown
     Scaffold(
@@ -339,7 +346,7 @@ fun TvCastApp() {
             Box(Modifier.graphicsLayer {
                 val f = if (tab == Tab.BROWSER) browserBars else 1f
                 translationY = size.height * (1f - f); alpha = f
-            }) { PillTabBar(tab, state.active, haze) { Nav.iptv.value = null; Nav.tab.value = it } }
+            }) { PillTabBar(tab, state.active, haze, search = vodAccounts.isNotEmpty()) { Nav.iptv.value = null; Nav.tab.value = it } }
         },
     ) { padding ->
         // Les écrans défilent sous la barre d'onglets (sauf le navigateur) et finissent au-dessus d'elle.
@@ -359,6 +366,7 @@ fun TvCastApp() {
                     onPickPhotos = { pickPhotos.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)) },
                     onPasteLink = { showLink = true },
                 )
+                Tab.SEARCH -> SearchScreen(vodAccounts)
                 Tab.BROWSER -> BrowserScreen(browser)
                 Tab.PLAYER -> PlayerScreen(state, onChooseTv = { showTvs = true })
             }

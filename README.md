@@ -15,7 +15,13 @@ sur le téléphone quand il n'y a pas de télé allumée.
 - **Chaînes de télé** : listes M3U / Xtream importées, chaînes gratuites, guide des programmes (« En ce moment »,
   grille par chaîne), zapping, pause du direct. Abonnement Xtream : ses **films et séries** (API `player_api.php`) en
   mur d'affiches, catégories du fournisseur, recherche, saisons et épisodes, « Épisode suivant » (`data/Xtream.kt`,
-  `ui/XtreamCatalog.kt`) ; l'appli ne fournit aucun contenu.
+  `ui/XtreamCatalog.kt`) ; l'appli ne fournit aucun contenu. Sur l'accueil, après « Caster autre chose » : rangées
+  Films, Séries puis une par catégorie du fournisseur ; onglet **Rechercher** (seulement avec un abonnement ou le
+  catalogue libre) : recherche par titre, puces Films / Séries et catégories.
+- **Films libres** : catalogue intégré (`assets/free-catalog.json`, fait par `tools/free_catalog.py`) de 125 films :
+  films ouverts de la Blender Foundation (CC BY) et longs métrages du domaine public d'Internet Archive, rangés par
+  genre, affiches de Wikimedia Commons ou images du film ; vidéos lues chez Internet Archive. Ajouté d'un toucher
+  (« Pour commencer »), présenté comme un abonnement, retiré dans « Mes listes ».
 - **Lecteur externe** : « Ouvrir avec » / « Partager » des autres applis (en-têtes, titre et sous-titres, conventions
   MX Player et VLC) ; un lien de page web s'ouvre dans le navigateur.
 - **Album** : photos et vidéos du téléphone ; une vidéo seule se lit comme une vidéo, plusieurs éléments font un diaporama.

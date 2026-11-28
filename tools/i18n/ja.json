@@ -487,7 +487,21 @@
   "xtream_loading": "カタログを読み込み中…",
   "xtream_error": "プロバイダーが応答しません。後でもう一度お試しください。",
   "xtream_empty": "プロバイダーにはここに何もありません。",
-  "xtream_search": "タイトルを検索"
+  "xtream_search": "タイトルを検索",
+  "free_title": "フリー映画",
+  "free_sub": "パブリックドメインの名作とオープン映画。無料・合法。",
+  "free_cat_blender": "Blenderのオープン映画",
+  "free_cat_classic": "クラシック",
+  "free_cat_comedy": "コメディ",
+  "free_cat_noir": "犯罪・フィルムノワール",
+  "free_cat_horror": "ホラー",
+  "free_cat_scifi": "SF",
+  "free_cat_western": "西部劇",
+  "free_cat_adventure": "アドベンチャー",
+  "free_cat_drama": "ドラマ",
+  "free_cat_animation": "アニメーション",
+  "tab_search": "検索",
+  "vod_title": "映画・シリーズ"
  },
  "plurals": {
   "browser_found": {

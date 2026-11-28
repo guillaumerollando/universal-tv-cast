@@ -489,6 +489,20 @@
     <string name="xtream_error">Nhà cung cấp của bạn không phản hồi. Hãy thử lại sau.</string>
     <string name="xtream_empty">Nhà cung cấp của bạn không có gì ở đây.</string>
     <string name="xtream_search">Tìm tên phim</string>
+    <string name="free_title">Phim tự do</string>
+    <string name="free_sub">Phim kinh điển phạm vi công cộng và phim mở, miễn phí và hợp pháp.</string>
+    <string name="free_cat_blender">Phim mở của Blender</string>
+    <string name="free_cat_classic">Kinh điển</string>
+    <string name="free_cat_comedy">Hài</string>
+    <string name="free_cat_noir">Hình sự &amp; phim noir</string>
+    <string name="free_cat_horror">Kinh dị</string>
+    <string name="free_cat_scifi">Khoa học viễn tưởng</string>
+    <string name="free_cat_western">Viễn Tây</string>
+    <string name="free_cat_adventure">Phiêu lưu</string>
+    <string name="free_cat_drama">Chính kịch</string>
+    <string name="free_cat_animation">Hoạt hình</string>
+    <string name="tab_search">Tìm kiếm</string>
+    <string name="vod_title">Phim &amp; loạt phim</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

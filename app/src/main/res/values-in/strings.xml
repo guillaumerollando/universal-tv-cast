@@ -489,6 +489,20 @@
     <string name="xtream_error">Penyedia Anda tidak merespons. Coba lagi nanti.</string>
     <string name="xtream_empty">Penyedia Anda tidak punya apa-apa di sini.</string>
     <string name="xtream_search">Cari judul</string>
+    <string name="free_title">Film bebas</string>
+    <string name="free_sub">Film klasik domain publik dan film terbuka, gratis dan legal.</string>
+    <string name="free_cat_blender">Film terbuka Blender</string>
+    <string name="free_cat_classic">Klasik</string>
+    <string name="free_cat_comedy">Komedi</string>
+    <string name="free_cat_noir">Kriminal &amp; film noir</string>
+    <string name="free_cat_horror">Horor</string>
+    <string name="free_cat_scifi">Fiksi ilmiah</string>
+    <string name="free_cat_western">Western</string>
+    <string name="free_cat_adventure">Petualangan</string>
+    <string name="free_cat_drama">Drama</string>
+    <string name="free_cat_animation">Animasi</string>
+    <string name="tab_search">Cari</string>
+    <string name="vod_title">Film &amp; serial</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

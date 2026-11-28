@@ -489,6 +489,20 @@
     <string name="xtream_error">你的供應商沒有回應，請稍後再試。</string>
     <string name="xtream_empty">你的供應商這裡沒有內容。</string>
     <string name="xtream_search">搜尋標題</string>
+    <string name="free_title">免費電影</string>
+    <string name="free_sub">公有領域經典與開放電影，免費且合法。</string>
+    <string name="free_cat_blender">Blender 開放電影</string>
+    <string name="free_cat_classic">經典</string>
+    <string name="free_cat_comedy">喜劇</string>
+    <string name="free_cat_noir">犯罪與黑色電影</string>
+    <string name="free_cat_horror">恐怖</string>
+    <string name="free_cat_scifi">科幻</string>
+    <string name="free_cat_western">西部片</string>
+    <string name="free_cat_adventure">冒險</string>
+    <string name="free_cat_drama">劇情</string>
+    <string name="free_cat_animation">動畫</string>
+    <string name="tab_search">搜尋</string>
+    <string name="vod_title">電影與影集</string>
     <plurals name="browser_found">
         <item quantity="other">%d 部影片</item>
     </plurals>

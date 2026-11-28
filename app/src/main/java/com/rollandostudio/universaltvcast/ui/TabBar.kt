@@ -29,6 +29,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Cast
 import androidx.compose.material.icons.rounded.CastConnected
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -60,10 +61,12 @@ private data class TabSpec(val tab: Tab, val icon: ImageVector, val label: Strin
  * et un indicateur ambré qui glisse d'un onglet à l'autre (≈ 0,2 s, sans rebond). Rien ne change de taille.
  */
 @Composable
-fun PillTabBar(tab: Tab, casting: Boolean, haze: dev.chrisbanes.haze.HazeState, onSelect: (Tab) -> Unit) {
+fun PillTabBar(tab: Tab, casting: Boolean, haze: dev.chrisbanes.haze.HazeState, search: Boolean = false, onSelect: (Tab) -> Unit) {
     val c = MaterialTheme.colorScheme
-    val tabs = listOf(
+    val tabs = listOfNotNull(
         TabSpec(Tab.HOME, Icons.Rounded.Home, stringResource(R.string.tab_home)),
+        // Abonnement IPTV ou catalogue libre : chercher un film, une série (sinon le navigateur suffit).
+        if (search) TabSpec(Tab.SEARCH, Icons.Rounded.Search, stringResource(R.string.tab_search)) else null,
         TabSpec(Tab.BROWSER, Icons.Rounded.Public, stringResource(R.string.tab_browser)),
         TabSpec(Tab.PLAYER, if (casting) Icons.Rounded.CastConnected else Icons.Rounded.Cast, stringResource(R.string.tab_player), dot = casting),
     )

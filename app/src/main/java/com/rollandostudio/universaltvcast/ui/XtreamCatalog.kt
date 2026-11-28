@@ -61,7 +61,7 @@ import com.rollandostudio.universaltvcast.data.Xtream
 import java.text.Normalizer
 
 /** Un film ou une série d'un des comptes, pour la mosaïque. */
-private data class VodItem(val account: Xtream.Account, val movie: Xtream.Movie?, val series: Xtream.Series?) {
+internal data class VodItem(val account: Xtream.Account, val movie: Xtream.Movie?, val series: Xtream.Series?) {
     val name get() = movie?.name ?: series?.name.orEmpty()
     val image get() = movie?.poster ?: series?.cover
     val rating get() = movie?.rating ?: series?.rating
@@ -72,13 +72,13 @@ private data class VodItem(val account: Xtream.Account, val movie: Xtream.Movie?
 private fun fold(s: String) = Normalizer.normalize(s, Normalizer.Form.NFD).replace(Regex("\\p{M}+"), "").lowercase()
 
 /**
- * Films ou séries des abonnements IPTV (Xtream), en mur d'affiches comme la vidéothèque du réseau : catégories du
+ * Films ou séries ([kind] null : les deux) des abonnements IPTV (Xtream), en mur d'affiches comme la vidéothèque du réseau : catégories du
  * fournisseur (puces au-dessus, gérées par l'écran Chaînes), recherche, et une série ouvre ses saisons et épisodes.
  * [onCategories] : les catégories trouvées, pour les puces ; [category] : celle choisie (son nom), ou null.
  */
 @Composable
 internal fun XtreamCatalog(
-    kind: Xtream.Kind,
+    kind: Xtream.Kind?,
     accounts: List<Xtream.Account>,
     query: String,
     category: String?,
@@ -94,16 +94,23 @@ internal fun XtreamCatalog(
         value = runCatching {
             val items = ArrayList<VodItem>()
             val names = HashMap<String, String>()
-            for (a in accounts) {
-                Xtream.categories(a, kind, fresh = attempt > 0).forEach { names[a.key + "|" + it.id] = it.name }
-                if (kind == Xtream.Kind.MOVIES)
-                    Xtream.movies(a, fresh = attempt > 0).sortedByDescending { it.added }.forEach { items += VodItem(a, it, null) }
-                else Xtream.series(a, fresh = attempt > 0).forEach { items += VodItem(a, null, it) }
+            val fresh = attempt > 0
+            for (a in accounts) runCatching {
+                if (kind != Xtream.Kind.SERIES) {
+                    Xtream.categories(a, Xtream.Kind.MOVIES, fresh).forEach { names[a.key + "|m" + it.id] = it.name }
+                    Xtream.movies(a, fresh).forEach { items += VodItem(a, it, null) }
+                }
+                if (kind != Xtream.Kind.MOVIES) {
+                    Xtream.categories(a, Xtream.Kind.SERIES, fresh).forEach { names[a.key + "|s" + it.id] = it.name }
+                    Xtream.series(a, fresh).forEach { items += VodItem(a, null, it) }
+                }
             }
+            // Nouveautés d'abord (les séries n'ont pas de date d'ajout : après les films récents, dans l'ordre du fournisseur).
+            if (kind != Xtream.Kind.SERIES) items.sortByDescending { it.movie?.added ?: 0L }
             items to names
         }.getOrElse { android.util.Log.i("TvCastIptv", "catalogue Xtream illisible : $it"); emptyList<VodItem>() to emptyMap() }
     }
-    val catOf = { v: VodItem -> loaded?.second?.get(v.account.key + "|" + v.category) }
+    val catOf = { v: VodItem -> loaded?.second?.get(v.account.key + (if (v.movie != null) "|m" else "|s") + v.category) }
     // Catégories : dans l'ordre du fournisseur, sans celles restées vides.
     LaunchedEffect(loaded) {
         val l = loaded ?: return@LaunchedEffect
@@ -149,7 +156,7 @@ internal fun XtreamCatalog(
 }
 
 @Composable
-private fun VodTile(v: VodItem, onClick: () -> Unit) {
+internal fun VodTile(v: VodItem, showName: Boolean = true, onClick: () -> Unit) {
     val c = MaterialTheme.colorScheme
     Column(Modifier.clip(RoundedCornerShape(12.dp)).clickable(onClick = onClick).semantics { contentDescription = v.name }) {
         Box(Modifier.fillMaxWidth().aspectRatio(2f / 3f).clip(RoundedCornerShape(12.dp))
@@ -162,22 +169,59 @@ private fun VodTile(v: VodItem, onClick: () -> Unit) {
                     maxLines = 4, overflow = TextOverflow.Ellipsis)
             }
             RemoteImage(v.image, Modifier.fillMaxSize(), maxSide = 400)
+            // Rangées de l'accueil (sans titre dessous) : le titre en bas de l'image, sur un dégradé, pour les images
+            // tirées du film qui ne le portent pas.
+            if (!showName && v.image != null && v.movie?.url?.contains("archive.org/download") == true && v.image?.contains("wikimedia") != true)
+                Text(v.name, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = Color.White,
+                    maxLines = 2, overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.align(Alignment.BottomStart).fillMaxWidth()
+                        .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(alpha = 0.8f))))
+                        .padding(start = 8.dp, end = 8.dp, top = 18.dp, bottom = 8.dp))
             v.rating?.let { r ->
                 Text("★ %.1f".format(if (r > 10) r / 10 else r), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold,
                     color = Color.White, modifier = Modifier.align(Alignment.TopEnd).padding(6.dp)
                         .clip(RoundedCornerShape(8.dp)).background(Color.Black.copy(alpha = 0.55f)).padding(horizontal = 6.dp, vertical = 2.dp))
             }
         }
-        Spacer(Modifier.height(4.dp))
-        Text(v.name, style = MaterialTheme.typography.labelMedium, maxLines = 2, overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(horizontal = 2.dp))
+        if (showName) {
+            Spacer(Modifier.height(4.dp))
+            Text(v.name, style = MaterialTheme.typography.labelMedium, maxLines = 2, overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(horizontal = 2.dp))
+        }
     }
+}
+
+/** Une rangée de l'accueil : son titre, ce qu'elle ouvre avec « Tout voir » (sorte et catégorie), ses affiches. */
+internal data class VodRow(val title: String?, val kind: Xtream.Kind, val category: String?, val items: List<VodItem>)
+
+/**
+ * Les rangées de l'accueil pour les abonnements Xtream, comme Netflix : les films (les plus récents d'abord), les
+ * séries, puis chaque catégorie du fournisseur (au moins 4 titres), comme les rangées « pour ce soir » de Netflix. [title] null : « Films » / « Séries ».
+ */
+internal suspend fun xtreamHomeRows(accounts: List<Xtream.Account>, perRow: Int, maxCategories: Int = Int.MAX_VALUE): List<VodRow> {
+    val movies = ArrayList<VodItem>(); val series = ArrayList<VodItem>()
+    val names = HashMap<String, String>()
+    for (a in accounts) runCatching {
+        Xtream.categories(a, Xtream.Kind.MOVIES).forEach { names[a.key + "|m" + it.id] = it.name }
+        Xtream.categories(a, Xtream.Kind.SERIES).forEach { names[a.key + "|s" + it.id] = it.name }
+        Xtream.movies(a).forEach { movies += VodItem(a, it, null) }
+        Xtream.series(a).forEach { series += VodItem(a, null, it) }
+    }
+    movies.sortByDescending { it.movie?.added ?: 0L }
+    val rows = ArrayList<VodRow>()
+    if (movies.isNotEmpty()) rows += VodRow(null, Xtream.Kind.MOVIES, null, movies.take(perRow + 1))
+    if (series.isNotEmpty()) rows += VodRow(null, Xtream.Kind.SERIES, null, series.take(perRow + 1))
+    // Catégories : celles d'au moins 4 titres, films puis séries (celles qui ont les nouveautés d'abord).
+    fun cats(items: List<VodItem>, kind: Xtream.Kind, tag: String) = items.groupBy { names[it.account.key + "|" + tag + it.category] }
+        .filterKeys { it != null }.filterValues { it.size >= 4 }.map { (name, list) -> VodRow(name, kind, name, list.take(perRow + 1)) }
+    rows += (cats(movies, Xtream.Kind.MOVIES, "m") + cats(series, Xtream.Kind.SERIES, "s")).take(maxCategories)
+    return rows
 }
 
 /** Une série : son affiche, son résumé, ses saisons (puces) et leurs épisodes ; toucher un épisode le lance. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SeriesSheet(a: Xtream.Account, s: Xtream.Series, onDismiss: () -> Unit, onPlayed: () -> Unit) {
+internal fun SeriesSheet(a: Xtream.Account, s: Xtream.Series, onDismiss: () -> Unit, onPlayed: () -> Unit) {
     val c = MaterialTheme.colorScheme
     var attempt by remember { mutableIntStateOf(0) }
     val info by produceState<Result<Xtream.SeriesInfo>?>(null, s.id, attempt) { value = runCatching { Xtream.seriesInfo(a, s) } }
@@ -239,5 +283,41 @@ private fun SeriesSheet(a: Xtream.Account, s: Xtream.Series, onDismiss: () -> Un
                 }
             }
         }
+    }
+}
+
+
+/**
+ * Onglet « Rechercher » (seulement avec un abonnement IPTV ou le catalogue libre) : chercher un film ou une série par
+ * son titre, ou découvrir (sans texte : les nouveautés, par catégorie). Tout vient des listes de l'utilisateur ; même
+ * recherche en pilule et mêmes puces que l'écran Chaînes, même mur d'affiches.
+ */
+@Composable
+internal fun SearchScreen(accounts: List<Xtream.Account>) {
+    var query by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf("") }
+    var kind by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf<String?>(null) }
+    var cats by remember(kind) { mutableStateOf<List<String>>(emptyList()) }
+    var cat by androidx.compose.runtime.saveable.rememberSaveable(kind) { mutableStateOf<String?>(null) }
+    val k = kind?.let { Xtream.Kind.valueOf(it) }
+    val c = MaterialTheme.colorScheme
+    val grid = androidx.compose.foundation.lazy.grid.rememberLazyGridState()
+    Column(Modifier.fillMaxSize()) {
+        SearchPill(query, { query = it }, R.string.xtream_search)
+        LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(6.dp),
+            verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 10.dp)) {
+            item { Pill(stringResource(R.string.xtream_all), kind == null) { kind = null } }
+            item { Pill(stringResource(R.string.fav_icon_movie), kind == "MOVIES", icon = Icons.Rounded.Movie) { kind = "MOVIES" } }
+            if (accounts.any { it != Xtream.FREE })
+                item { Pill(stringResource(R.string.fav_icon_series), kind == "SERIES", icon = Icons.Rounded.VideoLibrary) { kind = "SERIES" } }
+            if (cats.size > 1) {
+                item { Box(Modifier.padding(horizontal = 4.dp).width(1.dp).height(20.dp).background(c.outlineVariant)) }
+                items(cats) { g -> Pill(g, cat == g) { cat = if (cat == g) null else g } }
+            }
+        }
+        XtreamCatalog(
+            kind = k, accounts = accounts, query = query, category = cat, onCategories = { cats = it }, state = grid,
+            contentPadding = PaddingValues(top = 0.dp, bottom = 16.dp + LocalBottomInset.current),
+            onClose = {},
+        )
     }
 }

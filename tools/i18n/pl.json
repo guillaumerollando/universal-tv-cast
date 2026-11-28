@@ -487,7 +487,21 @@
   "xtream_loading": "Wczytywanie katalogu…",
   "xtream_error": "Twój dostawca nie odpowiada. Spróbuj później.",
   "xtream_empty": "Twój dostawca nic tu nie ma.",
-  "xtream_search": "Szukaj tytułu"
+  "xtream_search": "Szukaj tytułu",
+  "free_title": "Wolne filmy",
+  "free_sub": "Klasyka z domeny publicznej i otwarte filmy, za darmo i legalnie.",
+  "free_cat_blender": "Otwarte filmy Blender",
+  "free_cat_classic": "Klasyka",
+  "free_cat_comedy": "Komedia",
+  "free_cat_noir": "Kryminał i film noir",
+  "free_cat_horror": "Horror",
+  "free_cat_scifi": "Science fiction",
+  "free_cat_western": "Western",
+  "free_cat_adventure": "Przygodowe",
+  "free_cat_drama": "Dramat",
+  "free_cat_animation": "Animacja",
+  "tab_search": "Szukaj",
+  "vod_title": "Filmy i seriale"
  },
  "plurals": {
   "browser_found": {

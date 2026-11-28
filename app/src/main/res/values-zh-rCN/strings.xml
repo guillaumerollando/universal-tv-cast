@@ -489,6 +489,20 @@
     <string name="xtream_error">你的提供商没有响应，请稍后再试。</string>
     <string name="xtream_empty">你的提供商这里没有内容。</string>
     <string name="xtream_search">搜索标题</string>
+    <string name="free_title">免费电影</string>
+    <string name="free_sub">公有领域经典与开放电影，免费且合法。</string>
+    <string name="free_cat_blender">Blender 开放电影</string>
+    <string name="free_cat_classic">经典</string>
+    <string name="free_cat_comedy">喜剧</string>
+    <string name="free_cat_noir">犯罪与黑色电影</string>
+    <string name="free_cat_horror">恐怖</string>
+    <string name="free_cat_scifi">科幻</string>
+    <string name="free_cat_western">西部片</string>
+    <string name="free_cat_adventure">冒险</string>
+    <string name="free_cat_drama">剧情</string>
+    <string name="free_cat_animation">动画</string>
+    <string name="tab_search">搜索</string>
+    <string name="vod_title">电影和剧集</string>
     <plurals name="browser_found">
         <item quantity="other">%d 个视频</item>
     </plurals>

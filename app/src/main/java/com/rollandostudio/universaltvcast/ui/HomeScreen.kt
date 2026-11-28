@@ -159,9 +159,19 @@ fun HomeScreen(
         return
     }
 
-    // Habitué (des séries en cours, des sites en favori) : ce qu'il regarde d'abord, les façons de caster en
-    // une rangée compacte. Nouveau venu : la présentation et les grandes tuiles.
-    if (resume.isNotEmpty() || sites.isNotEmpty() || channels.isNotEmpty() || folders.isNotEmpty() || favChannels.isNotEmpty()) {
+    // Abonnement IPTV « Xtream » : ses films et séries en rangées d'affiches, sous les chaînes (comme Netflix).
+    val iptvLists by com.rollandostudio.universaltvcast.data.IptvStore.lists.collectAsState()
+    val freeFilms by com.rollandostudio.universaltvcast.data.Xtream.freeOn.collectAsState()
+    val vodAccounts = remember(iptvLists, freeFilms) { com.rollandostudio.universaltvcast.data.Xtream.accounts(iptvLists, freeFilms) }
+    val vodRows by androidx.compose.runtime.produceState(emptyList<VodRow>(), vodAccounts) {
+        value = if (vodAccounts.isEmpty()) emptyList() else xtreamHomeRows(vodAccounts, ROW_MAX)
+    }
+    var vodSeries by remember { mutableStateOf<VodItem?>(null) }
+    vodSeries?.series?.let { sr -> SeriesSheet(vodSeries!!.account, sr, onDismiss = { vodSeries = null }, onPlayed = { vodSeries = null }) }
+
+    // Habitué (des séries en cours, des sites en favori, un abonnement) : ce qu'il regarde d'abord, les façons de
+    // caster en une rangée compacte. Nouveau venu : la présentation et les grandes tuiles.
+    if (resume.isNotEmpty() || sites.isNotEmpty() || channels.isNotEmpty() || folders.isNotEmpty() || favChannels.isNotEmpty() || vodAccounts.isNotEmpty()) {
         // « Coller un lien » de la carte des chaînes gratuites : l'accueil remonte jusqu'à la tuile « Lien » et la fait
         // briller, comme pour un nouveau venu (on saura où la trouver la prochaine fois).
         val guideScope = androidx.compose.runtime.rememberCoroutineScope()
@@ -216,9 +226,34 @@ fun HomeScreen(
                 CastActionsRow(onBrowse = { onBrowse(null) }, onPickPhotos = onPickPhotos, onNetwork = onNetwork,
                     onPasteLink = { showLink = false; onPasteLink() }, onPickFile = onPickFile, showLists = channels.isEmpty(), highlightLink = showLink)
             } }
+            // Films et séries de l'abonnement (ou du catalogue libre), après les façons de caster : ces rangées peuvent
+            // défiler longtemps, « Caster autre chose » reste à portée. Une rangée d'affiches par rubrique, « Tout voir » au bout.
+            items(vodRows.size, key = { "v$it" + vodRows[it].kind + vodRows[it].category }) { i ->
+                val row = vodRows[i]
+                Column {
+                    SectionHeader(row.title ?: stringResource(if (row.kind == com.rollandostudio.universaltvcast.data.Xtream.Kind.MOVIES) R.string.fav_icon_movie else R.string.fav_icon_series), null) {}
+                    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
+                        items(row.items.take(ROW_MAX), key = { it.key }) { v ->
+                            Box(Modifier.width(VOD_WIDTH)) {
+                                VodTile(v, showName = false) {
+                                    if (v.movie != null) {
+                                        TvCast.open(com.rollandostudio.universaltvcast.data.Xtream.movieMedia(v.account, v.movie)); Nav.tab.value = Tab.PLAYER
+                                    } else vodSeries = v
+                                }
+                            }
+                        }
+                        if (row.items.size > ROW_MAX) item(key = "v-all") {
+                            SeeAllTile(stringResource(R.string.home_see_all), Modifier.width(VOD_WIDTH).aspectRatio(2f / 3f), 12.dp) {
+                                Nav.vodStart.value = row.kind.name to row.category; Nav.iptv.value = ""
+                            }
+                        }
+                    }
+                }
+            }
             // La découverte continue pas à pas : ce qui n'a pas encore été essayé reste proposé (une liste de chaînes,
             // un site), et disparaît une fois fait.
-            item {
+            // Abonné à un fournisseur IPTV : plus un débutant, la découverte et l'astuce du bas n'ont plus lieu d'être.
+            if (vodAccounts.isEmpty()) item {
                 val lists by com.rollandostudio.universaltvcast.data.IptvStore.lists.collectAsState()
                 // Sites gratuits suggérés tant que l'accueil n'est pas chargé (moins de 6 sites), sauf ceux déjà connus.
                 StarterSection(onBrowse = { onBrowse(it) }, onPasteLink = {
@@ -227,7 +262,7 @@ fun HomeScreen(
                     showChannels = lists.isEmpty(), showSites = sites.size < 6, known = sites.map { it.host }.toSet())
             }
             // L'astuce reste utile après les premiers essais : en bas de page, discrète.
-            item { OtherAppTip() }
+            if (vodAccounts.isEmpty()) item { OtherAppTip() }
         }
         return
     }
@@ -514,6 +549,8 @@ private fun SectionHeader(title: String, action: String?, onAction: () -> Unit) 
 
 /** Nombre d'éléments d'une rangée de l'accueil avant la tuile « Tout voir ». */
 private const val ROW_MAX = 8
+/** Largeur d'une affiche (2:3) dans les rangées Films et Séries. */
+private val VOD_WIDTH = 112.dp
 
 /** Dernière tuile d'une rangée : « Tout voir », au format de ses voisines. */
 @Composable
@@ -560,6 +597,7 @@ internal object ActionColors {
     const val LINK = 0xFFF08A24
     const val LISTS = 0xFF7C4DFF
     const val FILES = 0xFF4E7396
+    const val MOVIES = 0xFFE0563A
 }
 
 /**

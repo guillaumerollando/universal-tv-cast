@@ -487,7 +487,21 @@
   "xtream_loading": "Завантаження каталогу…",
   "xtream_error": "Твій провайдер не відповідає. Спробуй пізніше.",
   "xtream_empty": "У твого провайдера тут нічого немає.",
-  "xtream_search": "Шукати назву"
+  "xtream_search": "Шукати назву",
+  "free_title": "Вільні фільми",
+  "free_sub": "Класика в суспільному надбанні та відкриті фільми, безкоштовно й легально.",
+  "free_cat_blender": "Відкриті фільми Blender",
+  "free_cat_classic": "Класика",
+  "free_cat_comedy": "Комедія",
+  "free_cat_noir": "Кримінал і нуар",
+  "free_cat_horror": "Жахи",
+  "free_cat_scifi": "Фантастика",
+  "free_cat_western": "Вестерн",
+  "free_cat_adventure": "Пригоди",
+  "free_cat_drama": "Драма",
+  "free_cat_animation": "Анімація",
+  "tab_search": "Пошук",
+  "vod_title": "Фільми та серіали"
  },
  "plurals": {
   "browser_found": {

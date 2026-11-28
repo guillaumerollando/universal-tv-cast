@@ -1809,3 +1809,23 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   lancée seule en 4,5 s, lecteur qui exige un vrai toucher → page montrée à 5 s puis lecture dès le toucher ; barres ;
   films, séries, épisode, épisode suivant. 68 tests, 0 échec.
 - Pas vérifié : sur Anime-sama même (Cloudflare bloque les essais automatiques) et sur un vrai abonnement Xtream.
+
+## 2026-11-28 — Films et séries sur l'accueil, onglet Rechercher, Films libres
+- Accueil (abonnement Xtream ou catalogue libre) : Reprendre, Favoris, Chaînes, **Caster autre chose**, puis les rangées
+  d'affiches (Films, Séries, puis une par catégorie du fournisseur, comme Netflix) : « Caster autre chose » reste en
+  haut, les rangées peuvent défiler sans fin. Un toucher lance le film (pas de page de détail) ; une série ouvre ses
+  saisons et épisodes. « Tout voir » ouvre le mur complet sur la bonne catégorie. Les images tirées du film (pas de
+  vraie affiche) portent leur titre en bas. Avec un abonnement, « Pour commencer » et l'astuce du bas disparaissent.
+- **Onglet Rechercher** (4ᵉ onglet, seulement pour qui a un abonnement ou le catalogue libre) : recherche par titre en
+  pilule, puces Tous / Films / Séries et catégories, mur d'affiches. Tout vient des listes de l'utilisateur.
+- **Recherche dans les dossiers du réseau** (dossier de plus de 12 éléments), même pilule.
+- **Films libres** : 125 films (5 films ouverts Blender, 120 longs métrages du domaine public d'Internet Archive,
+  sujets douteux écartés) par genre, en 23 langues ; affiches Wikimedia Commons (21) ou image déposée / tirée du film
+  (les PNG d'Internet Archive sont des spectres du son : écartés). Carte « Films libres » dans « Pour commencer ».
+  Pas de serveur Xtream libre et légal : un catalogue intégré, présenté pareil, est la bonne réponse.
+- Images : 3 téléchargements à la fois par serveur au plus (Wikimedia refusait en « trop de demandes ») et un échec
+  passager (429, 5xx, réseau) n'est plus retenu comme « image absente ».
+- Vérifié sur émulateur : carte Films libres → mur ; accueil (ordre, rangées, titres) ; Rechercher (« house » → 2
+  films) ; un film libre lu (1 h 14, Internet Archive) ; Tout voir ; NAS : recherche ; abonnement de démo + films libres
+  ensemble (catégories de même nom fusionnées, rangée Séries, fiche série depuis l'accueil). 68 tests, 0 échec.
+- Pas vérifié : sur un vrai abonnement (gros catalogue : 12 h de cache, lecture au fil de l'eau) et sur la télé.

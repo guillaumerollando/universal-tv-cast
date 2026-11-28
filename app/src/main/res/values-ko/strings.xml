@@ -489,6 +489,20 @@
     <string name="xtream_error">제공업체가 응답하지 않습니다. 나중에 다시 시도하세요.</string>
     <string name="xtream_empty">제공업체에 여기 항목이 없습니다.</string>
     <string name="xtream_search">제목 검색</string>
+    <string name="free_title">무료 영화</string>
+    <string name="free_sub">퍼블릭 도메인 고전과 오픈 영화, 무료이며 합법적입니다.</string>
+    <string name="free_cat_blender">Blender 오픈 무비</string>
+    <string name="free_cat_classic">고전</string>
+    <string name="free_cat_comedy">코미디</string>
+    <string name="free_cat_noir">범죄·필름 누아르</string>
+    <string name="free_cat_horror">공포</string>
+    <string name="free_cat_scifi">SF</string>
+    <string name="free_cat_western">서부극</string>
+    <string name="free_cat_adventure">모험</string>
+    <string name="free_cat_drama">드라마</string>
+    <string name="free_cat_animation">애니메이션</string>
+    <string name="tab_search">검색</string>
+    <string name="vod_title">영화 및 시리즈</string>
     <plurals name="browser_found">
         <item quantity="other">동영상 %d개</item>
     </plurals>

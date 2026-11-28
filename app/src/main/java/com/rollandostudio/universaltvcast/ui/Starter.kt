@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.LiveTv
 import androidx.compose.material3.Card
@@ -120,6 +121,7 @@ private fun starterSitesFor(known: Set<String>, dismissed: Set<String>, countrie
 
 /** Identifiant de la carte des chaînes gratuites dans les suggestions écartées. */
 private const val FREE_TV = "free-tv"
+private const val FREE_FILMS = "free-films"
 
 /** « Pour commencer » : de quoi essayer l'appli tout de suite, avec du contenu gratuit et légal. */
 @Composable
@@ -131,7 +133,10 @@ fun StarterSection(
     val dismissed by com.rollandostudio.universaltvcast.data.Library.dismissedStarters.collectAsState()
     val sites = run { val ctx0 = LocalContext.current; remember(known, dismissed) { starterSitesFor(known, dismissed, phoneCountries(ctx0)) } }
     val channels = showChannels && FREE_TV !in dismissed
-    if (!channels && !(showSites && sites.isNotEmpty())) return
+    // Le catalogue « Films libres » (domaine public, Blender) : proposé tant qu'il n'est pas ajouté.
+    val freeOn by com.rollandostudio.universaltvcast.data.Xtream.freeOn.collectAsState()
+    val films = !freeOn && FREE_FILMS !in dismissed
+    if (!channels && !films && !(showSites && sites.isNotEmpty())) return
     var freeTv by remember { mutableStateOf(false) }
     if (freeTv) FreeChannelsDialog(onDismiss = { freeTv = false }, onPasteLink = { freeTv = false; onPasteLink() })
     Column {
@@ -144,6 +149,15 @@ fun StarterSection(
                 StarterCard(stringResource(R.string.start_tv_title), stringResource(R.string.start_tv_sub), ActionColors.LISTS,
                     dismissMenu(FREE_TV), onClick = { freeTv = true }) {
                     Icon(Icons.Rounded.LiveTv, null, tint = androidx.compose.ui.graphics.Color.White, modifier = Modifier.size(24.dp))
+                }
+            }
+            if (films) item(key = FREE_FILMS) {
+                StarterCard(stringResource(R.string.free_title), stringResource(R.string.free_sub), ActionColors.MOVIES,
+                    dismissMenu(FREE_FILMS), onClick = {
+                        com.rollandostudio.universaltvcast.data.Xtream.setFree(true)
+                        Nav.vodStart.value = "MOVIES" to null; Nav.iptv.value = ""
+                    }) {
+                    Icon(Icons.Rounded.Movie, null, tint = androidx.compose.ui.graphics.Color.White, modifier = Modifier.size(24.dp))
                 }
             }
             if (showSites) items(sites.size, key = { sites[it].host }) { i -> StarterSiteCard(sites[i], onBrowse) }

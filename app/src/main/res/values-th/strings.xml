@@ -489,6 +489,20 @@
     <string name="xtream_error">ผู้ให้บริการของคุณไม่ตอบสนอง โปรดลองอีกครั้งภายหลัง</string>
     <string name="xtream_empty">ผู้ให้บริการของคุณไม่มีรายการที่นี่</string>
     <string name="xtream_search">ค้นหาชื่อเรื่อง</string>
+    <string name="free_title">ภาพยนตร์เสรี</string>
+    <string name="free_sub">ภาพยนตร์คลาสสิกสาธารณสมบัติและภาพยนตร์เปิด ฟรีและถูกกฎหมาย</string>
+    <string name="free_cat_blender">ภาพยนตร์เปิดของ Blender</string>
+    <string name="free_cat_classic">คลาสสิก</string>
+    <string name="free_cat_comedy">ตลก</string>
+    <string name="free_cat_noir">อาชญากรรมและฟิล์มนัวร์</string>
+    <string name="free_cat_horror">สยองขวัญ</string>
+    <string name="free_cat_scifi">ไซไฟ</string>
+    <string name="free_cat_western">คาวบอย</string>
+    <string name="free_cat_adventure">ผจญภัย</string>
+    <string name="free_cat_drama">ดราม่า</string>
+    <string name="free_cat_animation">แอนิเมชัน</string>
+    <string name="tab_search">ค้นหา</string>
+    <string name="vod_title">ภาพยนตร์และซีรีส์</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>

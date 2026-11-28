@@ -394,8 +394,20 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
                     loading -> Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
                     error != null -> Text(error!!, color = c.error, modifier = Modifier.padding(16.dp))
                     entries?.isEmpty() == true -> Text(stringResource(R.string.net_empty_folder), color = c.onSurfaceVariant, modifier = Modifier.padding(16.dp))
-                    else -> LanFolderView(
-                        entries = entries.orEmpty(),
+                    else -> Column {
+                    // Dossier bien rempli : une recherche en pilule (comme l'écran Chaînes et l'onglet Rechercher).
+                    // Les images restent (ce sont les affiches des films trouvés).
+                    var query by remember(path.size, path.lastOrNull()?.ref) { mutableStateOf("") }
+                    val all = entries.orEmpty()
+                    if (all.count { it.kind != LanEntry.Kind.PHOTO } > 12) SearchPill(query, { query = it }, R.string.xtream_search)
+                    val q = java.text.Normalizer.normalize(query.trim(), java.text.Normalizer.Form.NFD).replace(Regex("\\p{M}+"), "").lowercase()
+                    val shownEntries = remember(all, q) {
+                        if (q.isEmpty()) all else all.filter { e -> e.kind == LanEntry.Kind.PHOTO ||
+                            java.text.Normalizer.normalize(e.name, java.text.Normalizer.Form.NFD).replace(Regex("\\p{M}+"), "").lowercase()
+                                .replace(Regex("[._]+"), " ").contains(q) }
+                    }
+                    LanFolderView(
+                        entries = shownEntries,
                         parents = path.map { it.title },
                         sort = sort, sortDesc = sortDesc, hideWatched = hideWatched, showDetails = showDetails,
                         onFolder = { f -> go(Place(f.device!!, f.ref, f.name)) },
@@ -410,6 +422,7 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
                             }
                         },
                     )
+                    }
                 }
             }
         }

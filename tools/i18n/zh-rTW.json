@@ -487,7 +487,21 @@
   "xtream_loading": "正在載入目錄…",
   "xtream_error": "你的供應商沒有回應，請稍後再試。",
   "xtream_empty": "你的供應商這裡沒有內容。",
-  "xtream_search": "搜尋標題"
+  "xtream_search": "搜尋標題",
+  "free_title": "免費電影",
+  "free_sub": "公有領域經典與開放電影，免費且合法。",
+  "free_cat_blender": "Blender 開放電影",
+  "free_cat_classic": "經典",
+  "free_cat_comedy": "喜劇",
+  "free_cat_noir": "犯罪與黑色電影",
+  "free_cat_horror": "恐怖",
+  "free_cat_scifi": "科幻",
+  "free_cat_western": "西部片",
+  "free_cat_adventure": "冒險",
+  "free_cat_drama": "劇情",
+  "free_cat_animation": "動畫",
+  "tab_search": "搜尋",
+  "vod_title": "電影與影集"
  },
  "plurals": {
   "browser_found": {

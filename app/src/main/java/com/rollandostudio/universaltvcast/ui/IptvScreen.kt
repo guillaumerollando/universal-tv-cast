@@ -176,6 +176,7 @@ fun IptvScreen(onClose: () -> Unit, startWith: String? = null) {
     val errNotList = stringResource(R.string.iptv_err_not_list)
     val errLoad = stringResource(R.string.iptv_err_load)
     val all = rememberAllChannels(refreshTick)
+    val freeOn by com.rollandostudio.universaltvcast.data.Xtream.freeOn.collectAsState()
 
     fun import(source: String) {
         if (busy) return
@@ -202,9 +203,10 @@ fun IptvScreen(onClose: () -> Unit, startWith: String? = null) {
         Column(Modifier.fillMaxSize().statusBarsPadding().imePadding()) {
             Row(Modifier.fillMaxWidth().height(64.dp).padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = onClose) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.cd_back)) }
-                Text(stringResource(R.string.home_channels), style = MaterialTheme.typography.titleLarge,
+                // Catalogue libre seul (pas de liste de chaînes) : « Films et séries ».
+                Text(stringResource(if (lists.isEmpty() && freeOn) R.string.vod_title else R.string.home_channels), style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.weight(1f).semantics { heading() })
-                if (lists.isNotEmpty()) {
+                if (lists.isNotEmpty() || freeOn) {
                     IconButton(onClick = { adding = true }) { Icon(Icons.Rounded.Add, stringResource(R.string.iptv_add)) }
                     var menu by remember { mutableStateOf(false) }
                     Box {
@@ -228,7 +230,7 @@ fun IptvScreen(onClose: () -> Unit, startWith: String? = null) {
                 Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(16.dp, 4.dp))
             }
-            if (lists.isEmpty()) AddListPanel(busy, onImport = ::import, onPickFile = { pickFile.launch(arrayOf("*/*")) })
+            if (lists.isEmpty() && !freeOn) AddListPanel(busy, onImport = ::import, onPickFile = { pickFile.launch(arrayOf("*/*")) })
             else ChannelBrowser(all, onClose)
         }
     }
@@ -246,6 +248,16 @@ fun IptvScreen(onClose: () -> Unit, startWith: String? = null) {
         title = { Text(stringResource(R.string.iptv_my_lists)) },
         text = {
             LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                if (freeOn) item(key = "free") {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f)) {
+                            Text(stringResource(R.string.free_title), style = MaterialTheme.typography.titleSmall)
+                            Text(stringResource(R.string.free_sub), style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        }
+                        TextButton(onClick = { com.rollandostudio.universaltvcast.data.Xtream.setFree(false) }) { Text(stringResource(R.string.iptv_remove)) }
+                    }
+                }
                 items(lists, key = { it.id }) { p ->
                     var m by remember { mutableStateOf(false) }
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -376,11 +388,14 @@ private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
     var onNow by rememberSaveable { mutableStateOf(false) }
     // Abonnement « Xtream » : ses films et ses séries, à côté des chaînes (puces Chaînes / Films / Séries).
     val lists by IptvStore.lists.collectAsState()
-    val accounts = remember(lists) { com.rollandostudio.universaltvcast.data.Xtream.accounts(lists) }
-    var section by rememberSaveable { mutableStateOf<String?>(null) } // null : chaînes ; "MOVIES" / "SERIES"
+    val freeOn by com.rollandostudio.universaltvcast.data.Xtream.freeOn.collectAsState()
+    val accounts = remember(lists, freeOn) { com.rollandostudio.universaltvcast.data.Xtream.accounts(lists, freeOn) }
+    // Arrivé par « Tout voir » d'une rangée Films ou Séries de l'accueil : directement là, sur sa catégorie.
+    val start = remember { Nav.vodStart.value.also { Nav.vodStart.value = null } }
+    var section by rememberSaveable { mutableStateOf(start?.first ?: "MOVIES".takeIf { lists.isEmpty() }) } // null : chaînes ; "MOVIES" / "SERIES"
     val vodKind = section?.let { com.rollandostudio.universaltvcast.data.Xtream.Kind.valueOf(it) }
     var vodCats by remember(section) { mutableStateOf<List<String>>(emptyList()) }
-    var vodCat by rememberSaveable(section) { mutableStateOf<String?>(null) }
+    var vodCat by rememberSaveable(section) { mutableStateOf(start?.takeIf { it.first == section }?.second) }
     val vodState = androidx.compose.foundation.lazy.grid.rememberLazyGridState()
     val all = channels.orEmpty()
     val groups = remember(all) {
@@ -514,9 +529,12 @@ private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically) {
                 // Abonnement Xtream : chaînes, films ou séries, d'abord.
                 if (accounts.isNotEmpty()) {
-                    item { Pill(stringResource(R.string.home_channels), section == null, icon = Icons.Rounded.LiveTv) { section = null } }
+                    // Sans liste de chaînes (catalogue libre seul) : pas de puce « Chaînes » vide.
+                    if (lists.isNotEmpty()) item { Pill(stringResource(R.string.home_channels), section == null, icon = Icons.Rounded.LiveTv) { section = null } }
                     item { Pill(stringResource(R.string.fav_icon_movie), section == "MOVIES", icon = Icons.Rounded.Movie) { section = "MOVIES" } }
-                    item { Pill(stringResource(R.string.fav_icon_series), section == "SERIES", icon = Icons.Rounded.VideoLibrary) { section = "SERIES" } }
+                    // Pas de puce « Séries » quand aucun compte n'en a (catalogue libre seul).
+                    if (accounts.any { it != com.rollandostudio.universaltvcast.data.Xtream.FREE })
+                        item { Pill(stringResource(R.string.fav_icon_series), section == "SERIES", icon = Icons.Rounded.VideoLibrary) { section = "SERIES" } }
                     item { Box(Modifier.padding(horizontal = 4.dp).width(1.dp).height(20.dp).background(c.outlineVariant)) }
                 }
                 if (vodKind != null) {
@@ -556,7 +574,7 @@ private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
 
 /** Recherche en forme de pilule, comme la barre d'adresse du navigateur. */
 @Composable
-private fun SearchPill(query: String, onChange: (String) -> Unit, hint: Int = R.string.iptv_search) {
+internal fun SearchPill(query: String, onChange: (String) -> Unit, hint: Int = R.string.iptv_search) {
     val c = MaterialTheme.colorScheme
     androidx.compose.material3.TextField(
         value = query, onValueChange = onChange, singleLine = true,
@@ -575,7 +593,7 @@ private fun SearchPill(query: String, onChange: (String) -> Unit, hint: Int = R.
 
 /** Filtre rapide, aux couleurs des onglets : ambré quand il est choisi. */
 @Composable
-private fun Pill(label: String, selected: Boolean, icon: androidx.compose.ui.graphics.vector.ImageVector? = null, onClick: () -> Unit) {
+internal fun Pill(label: String, selected: Boolean, icon: androidx.compose.ui.graphics.vector.ImageVector? = null, onClick: () -> Unit) {
     val c = MaterialTheme.colorScheme
     Surface(
         onClick = onClick, shape = RoundedCornerShape(50),

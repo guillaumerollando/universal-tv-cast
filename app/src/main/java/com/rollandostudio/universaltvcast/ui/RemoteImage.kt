@@ -1,5 +1,6 @@
 package com.rollandostudio.universaltvcast.ui
 
+import kotlinx.coroutines.sync.withPermit
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.LruCache
@@ -29,6 +30,12 @@ object Images {
         override fun sizeOf(key: String, value: Bitmap) = value.byteCount
     }
     private val missing = HashSet<String>()
+    /**
+     * Pas plus de 3 téléchargements par serveur à la fois : un mur d'affiches en demande des dizaines d'un coup, et
+     * certains (Wikimedia) refusent alors en « trop de demandes ».
+     */
+    private val gates = java.util.concurrent.ConcurrentHashMap<String, kotlinx.coroutines.sync.Semaphore>()
+    private fun gate(url: String) = gates.getOrPut(runCatching { java.net.URI(url).host }.getOrNull() ?: "") { kotlinx.coroutines.sync.Semaphore(3) }
     @Volatile private var dir: java.io.File? = null
     private const val DISK_MAX = 30L * 1024 * 1024
 
@@ -63,8 +70,10 @@ object Images {
                 return@withContext b
             }
         }
+        // Erreur passagère (serveur occupé, réseau lent) : on réessaiera plus tard ; seule une vraie absence est retenue.
+        var transient = false
         val bmp = runCatching {
-            val f = Http.fetch(url, emptyMap(), connectTimeout = 8000)
+            val f = gate(url).withPermit { Http.fetch(url, emptyMap(), connectTimeout = 8000) }
             // Image supprimée chez Imgur : il renvoie une image « n'existe plus » à la place ; on la traite comme absente.
             if (f.finalUrl.contains("imgur.com/removed")) return@runCatching null
             val bytes = f.bytes
@@ -76,8 +85,11 @@ object Images {
             // Réduite à la taille utile (un logo de 2000 px n'occupe pas 16 Mo pour une tuile de 96 dp).
             val big = maxOf(raw.width, raw.height)
             if (big > maxSide) Bitmap.createScaledBitmap(raw, raw.width * maxSide / big, raw.height * maxSide / big, true) else raw
+        }.onFailure { e ->
+            // 404 & co : absente pour de bon ; 429 (trop de demandes), 5xx, coupure réseau : passager.
+            transient = e is java.io.IOException && !(e is com.rollandostudio.universaltvcast.net.HttpError && e.code in 400..499 && e.code != 429)
         }.getOrNull()
-        if (bmp == null) synchronized(missing) { missing += url } else {
+        if (bmp == null) { if (!transient) synchronized(missing) { missing += url } } else {
             cache.put(url, bmp)
             if (file != null) runCatching {
                 @Suppress("DEPRECATION")

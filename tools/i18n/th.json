@@ -487,7 +487,21 @@
   "xtream_loading": "กำลังโหลดแคตตาล็อก…",
   "xtream_error": "ผู้ให้บริการของคุณไม่ตอบสนอง โปรดลองอีกครั้งภายหลัง",
   "xtream_empty": "ผู้ให้บริการของคุณไม่มีรายการที่นี่",
-  "xtream_search": "ค้นหาชื่อเรื่อง"
+  "xtream_search": "ค้นหาชื่อเรื่อง",
+  "free_title": "ภาพยนตร์เสรี",
+  "free_sub": "ภาพยนตร์คลาสสิกสาธารณสมบัติและภาพยนตร์เปิด ฟรีและถูกกฎหมาย",
+  "free_cat_blender": "ภาพยนตร์เปิดของ Blender",
+  "free_cat_classic": "คลาสสิก",
+  "free_cat_comedy": "ตลก",
+  "free_cat_noir": "อาชญากรรมและฟิล์มนัวร์",
+  "free_cat_horror": "สยองขวัญ",
+  "free_cat_scifi": "ไซไฟ",
+  "free_cat_western": "คาวบอย",
+  "free_cat_adventure": "ผจญภัย",
+  "free_cat_drama": "ดราม่า",
+  "free_cat_animation": "แอนิเมชัน",
+  "tab_search": "ค้นหา",
+  "vod_title": "ภาพยนตร์และซีรีส์"
  },
  "plurals": {
   "browser_found": {

@@ -487,7 +487,21 @@
   "xtream_loading": "جارٍ تحميل الكتالوج…",
   "xtream_error": "مزوّدك لا يستجيب. حاول لاحقًا.",
   "xtream_empty": "لا شيء هنا لدى مزوّدك.",
-  "xtream_search": "ابحث عن عنوان"
+  "xtream_search": "ابحث عن عنوان",
+  "free_title": "أفلام حرة",
+  "free_sub": "كلاسيكيات من الملك العام وأفلام مفتوحة، مجانية وقانونية.",
+  "free_cat_blender": "أفلام Blender المفتوحة",
+  "free_cat_classic": "كلاسيكيات",
+  "free_cat_comedy": "كوميديا",
+  "free_cat_noir": "جريمة وفيلم نوار",
+  "free_cat_horror": "رعب",
+  "free_cat_scifi": "خيال علمي",
+  "free_cat_western": "ويسترن",
+  "free_cat_adventure": "مغامرة",
+  "free_cat_drama": "دراما",
+  "free_cat_animation": "رسوم متحركة",
+  "tab_search": "بحث",
+  "vod_title": "أفلام ومسلسلات"
  },
  "plurals": {
   "browser_found": {

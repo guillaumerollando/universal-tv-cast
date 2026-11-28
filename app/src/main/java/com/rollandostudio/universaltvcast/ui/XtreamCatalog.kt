@@ -480,7 +480,8 @@ internal fun SourcesSheet(onDismiss: () -> Unit) {
             }
             item {
                 SourceLink(Icons.Rounded.LiveTv, stringResource(R.string.sources_iptv), stringResource(R.string.sources_iptv_sub)) {
-                    onDismiss(); Nav.iptv.value = ""
+                    // Un abonnement s'ajoute en collant le lien du fournisseur (comme toute liste de chaînes).
+                    onDismiss(); Nav.pasteLink.value = true
                 }
             }
             item {

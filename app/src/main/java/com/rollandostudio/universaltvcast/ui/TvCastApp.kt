@@ -144,6 +144,8 @@ object Nav {
     val vodStart = MutableStateFlow<Pair<String, String?>?>(null)
     /** Écran « Sources » ouvert. */
     val sources = MutableStateFlow(false)
+    /** Ouvrir la fenêtre « Colle un lien » depuis un autre écran (abonnement IPTV de l'écran Sources). */
+    val pasteLink = MutableStateFlow(false)
     /** L'appli est réduite en petite fenêtre « image dans l'image » : seule la vidéo est montrée. */
     val pip = MutableStateFlow(false)
     /** Page « Réseau » (ordinateurs, NAS) ouverte par-dessus l'accueil. */
@@ -165,6 +167,8 @@ fun TvCastApp() {
     LaunchedEffect(tvsRequest) { if (tvsRequest) { showTvs = true; Nav.tvs.value = false } }
     var showSettings by rememberSaveable { mutableStateOf(false) }
     var showLink by rememberSaveable { mutableStateOf(false) }
+    val linkRequest by Nav.pasteLink.collectAsState()
+    LaunchedEffect(linkRequest) { if (linkRequest) { showLink = true; Nav.pasteLink.value = false } }
     val browser = remember { BrowserController(context) }
     // Ce qui défile sous la barre d'onglets, flouté derrière elle.
     val haze = remember { dev.chrisbanes.haze.HazeState() }

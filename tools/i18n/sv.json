@@ -542,7 +542,9 @@
   "amb_custom": "Annat…",
   "sources_added_title": "Källa tillagd",
   "sources_added_body": "Dess filmer och videor finns på Hem och under Sök. Lägg till eller ta bort en källa senare: Sök (ikonen uppe till höger) eller Inställningar › Källor.",
-  "sources_added_ok": "Uppfattat"
+  "sources_added_ok": "Uppfattat",
+  "amb_mood_hiphop": "Hiphop",
+  "amb_mood_electro": "Elektro"
  },
  "plurals": {
   "browser_found": {

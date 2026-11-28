@@ -180,6 +180,8 @@
     <string name="sources_added_title">Fonte aggiunta</string>
     <string name="sources_added_body">I suoi film e video sono nella Home e in Cerca. Per aggiungere o togliere una fonte in seguito: Cerca (icona in alto a destra) o Impostazioni › Fonti.</string>
     <string name="sources_added_ok">Ho capito</string>
+    <string name="amb_mood_hiphop">Hip-hop</string>
+    <string name="amb_mood_electro">Elettronica</string>
     <string name="action_dont_show">Non mostrare più</string>
     <string name="help_section">Risoluzione dei problemi</string>
     <string name="state_expanded">aperto</string>

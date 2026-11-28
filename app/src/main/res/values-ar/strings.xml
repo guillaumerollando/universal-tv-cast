@@ -544,6 +544,8 @@
     <string name="sources_added_title">تمت إضافة المصدر</string>
     <string name="sources_added_body">أفلامه وفيديوهاته في الصفحة الرئيسية وفي البحث. لإضافة مصدر أو إزالته لاحقًا: البحث (الأيقونة أعلى اليمين) أو الإعدادات › المصادر.</string>
     <string name="sources_added_ok">فهمت</string>
+    <string name="amb_mood_hiphop">هيب هوب</string>
+    <string name="amb_mood_electro">إلكترو</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>

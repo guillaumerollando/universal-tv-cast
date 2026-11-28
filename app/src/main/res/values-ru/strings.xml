@@ -544,6 +544,8 @@
     <string name="sources_added_title">Источник добавлен</string>
     <string name="sources_added_body">Его фильмы и видео — на главной и в Поиске. Чтобы потом добавить или убрать источник: Поиск (значок справа вверху) или Настройки › Источники.</string>
     <string name="sources_added_ok">Понятно</string>
+    <string name="amb_mood_hiphop">Хип-хоп</string>
+    <string name="amb_mood_electro">Электро</string>
     <plurals name="browser_found">
         <item quantity="one">%d видео</item>
         <item quantity="few">%d видео</item>

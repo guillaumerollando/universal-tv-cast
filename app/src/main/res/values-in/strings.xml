@@ -544,6 +544,8 @@
     <string name="sources_added_title">Sumber ditambahkan</string>
     <string name="sources_added_body">Film dan videonya ada di Beranda dan Cari. Untuk menambah atau menghapus sumber nanti: Cari (ikon kanan atas) atau Setelan › Sumber.</string>
     <string name="sources_added_ok">Mengerti</string>
+    <string name="amb_mood_hiphop">Hip-hop</string>
+    <string name="amb_mood_electro">Elektro</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

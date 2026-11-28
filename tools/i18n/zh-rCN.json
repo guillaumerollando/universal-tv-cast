@@ -542,7 +542,9 @@
   "amb_custom": "其他…",
   "sources_added_title": "已添加来源",
   "sources_added_body": "它的电影和视频在首页和“搜索”中。之后要添加或移除来源：搜索（右上角图标）或 设置 › 来源。",
-  "sources_added_ok": "知道了"
+  "sources_added_ok": "知道了",
+  "amb_mood_hiphop": "嘻哈",
+  "amb_mood_electro": "电子"
  },
  "plurals": {
   "browser_found": {

@@ -46,6 +46,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.rollandostudio.universaltvcast.R
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.HazeTint
@@ -131,10 +132,13 @@ fun PillTabBar(tab: Tab, casting: Boolean, haze: dev.chrisbanes.haze.HazeState, 
                                 }
                             }
                             Spacer(Modifier.height(2.dp))
+                            // Quatre onglets (Rechercher) : texte plus petit et moins de marge, pour qu'aucun nom ne soit coupé.
+                            val four = tabs.size >= 4
                             Text(
-                                t.label, color = fg, maxLines = 1, overflow = TextOverflow.Ellipsis,
-                                style = MaterialTheme.typography.labelMedium,
-                                modifier = Modifier.padding(horizontal = 6.dp),
+                                t.label, color = fg, maxLines = 1, overflow = TextOverflow.Ellipsis, softWrap = false,
+                                style = if (four) MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp, letterSpacing = 0.sp)
+                                    else MaterialTheme.typography.labelMedium,
+                                modifier = Modifier.padding(horizontal = if (four) 2.dp else 6.dp),
                             )
                         }
                     }

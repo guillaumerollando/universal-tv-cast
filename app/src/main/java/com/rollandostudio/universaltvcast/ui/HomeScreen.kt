@@ -631,13 +631,16 @@ private fun CastActionsRow(
     onBrowse: () -> Unit, onPickPhotos: () -> Unit, onNetwork: () -> Unit, onPasteLink: () -> Unit, onPickFile: () -> Unit,
     showLists: Boolean, highlightLink: Boolean,
 ) {
+    // Ambiance (pack soutien) : en deuxième pour qui a le pack (c'est son petit plaisir) ; sinon après les façons de
+    // caster du quotidien, avec un cadenas.
+    val unlocked by com.rollandostudio.universaltvcast.data.Supporter.unlocked.collectAsState()
     LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
         // Pas de « Sites web » ici : l'onglet Navigateur est là pour ça (il reste dans les grandes tuiles du nouveau venu).
         item { ActionTile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), ActionColors.ALBUM, onClick = onPickPhotos) }
+        if (unlocked) item(key = "amb") { AmbianceTile() }
         item { ActionTile(Icons.Rounded.Lan, stringResource(R.string.home_network), ActionColors.NETWORK, onClick = onNetwork) }
         item { ActionTile(Icons.Rounded.Link, stringResource(R.string.home_link_tile), ActionColors.LINK, highlight = highlightLink, onClick = onPasteLink) }
-        // Ambiance (pack soutien) après les façons de caster du quotidien ; cadenas tant que le pack n'est pas pris.
-        item { AmbianceTile() }
+        if (!unlocked) item(key = "amb") { AmbianceTile() }
         if (showLists) item { ActionTile(Icons.Rounded.LiveTv, stringResource(R.string.home_lists_tile), ActionColors.LISTS) { Nav.iptv.value = "" } }
         item { ActionTile(Icons.Rounded.FolderOpen, stringResource(R.string.home_files_tile), ActionColors.FILES, onClick = onPickFile) }
     }

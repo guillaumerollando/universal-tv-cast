@@ -542,7 +542,9 @@
   "amb_custom": "อื่นๆ…",
   "sources_added_title": "เพิ่มแหล่งแล้ว",
   "sources_added_body": "ภาพยนตร์และวิดีโออยู่ที่หน้าแรกและในค้นหา หากต้องการเพิ่มหรือลบแหล่งภายหลัง: ค้นหา (ไอคอนมุมขวาบน) หรือ การตั้งค่า › แหล่งที่มา",
-  "sources_added_ok": "เข้าใจแล้ว"
+  "sources_added_ok": "เข้าใจแล้ว",
+  "amb_mood_hiphop": "ฮิปฮอป",
+  "amb_mood_electro": "อิเล็กโทร"
  },
  "plurals": {
   "browser_found": {

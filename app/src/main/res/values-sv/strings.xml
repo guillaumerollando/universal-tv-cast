@@ -544,6 +544,8 @@
     <string name="sources_added_title">Källa tillagd</string>
     <string name="sources_added_body">Dess filmer och videor finns på Hem och under Sök. Lägg till eller ta bort en källa senare: Sök (ikonen uppe till höger) eller Inställningar › Källor.</string>
     <string name="sources_added_ok">Uppfattat</string>
+    <string name="amb_mood_hiphop">Hiphop</string>
+    <string name="amb_mood_electro">Elektro</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videor</item>

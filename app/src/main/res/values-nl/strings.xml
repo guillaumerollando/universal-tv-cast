@@ -180,6 +180,8 @@
     <string name="sources_added_title">Bron toegevoegd</string>
     <string name="sources_added_body">De films en video’s staan op Start en bij Zoeken. Later een bron toevoegen of verwijderen: Zoeken (icoon rechtsboven) of Instellingen › Bronnen.</string>
     <string name="sources_added_ok">Begrepen</string>
+    <string name="amb_mood_hiphop">Hiphop</string>
+    <string name="amb_mood_electro">Elektro</string>
     <string name="action_dont_show">Niet meer tonen</string>
     <string name="help_section">Problemen oplossen</string>
     <string name="state_expanded">uitgevouwen</string>

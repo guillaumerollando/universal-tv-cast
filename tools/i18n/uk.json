@@ -542,7 +542,9 @@
   "amb_custom": "Інше…",
   "sources_added_title": "Джерело додано",
   "sources_added_body": "Його фільми й відео — на головній і в Пошуку. Щоб потім додати чи прибрати джерело: Пошук (значок праворуч угорі) або Налаштування › Джерела.",
-  "sources_added_ok": "Зрозуміло"
+  "sources_added_ok": "Зрозуміло",
+  "amb_mood_hiphop": "Хіп-хоп",
+  "amb_mood_electro": "Електро"
  },
  "plurals": {
   "browser_found": {

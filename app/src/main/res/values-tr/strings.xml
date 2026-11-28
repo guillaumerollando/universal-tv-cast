@@ -544,6 +544,8 @@
     <string name="sources_added_title">Kaynak eklendi</string>
     <string name="sources_added_body">Filmleri ve videoları Ana sayfa\'da ve Ara\'da. Daha sonra kaynak eklemek veya kaldırmak için: Ara (sağ üstteki simge) ya da Ayarlar › Kaynaklar.</string>
     <string name="sources_added_ok">Anladım</string>
+    <string name="amb_mood_hiphop">Hip-hop</string>
+    <string name="amb_mood_electro">Elektro</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video</item>

@@ -542,7 +542,9 @@
   "amb_custom": "Другое…",
   "sources_added_title": "Источник добавлен",
   "sources_added_body": "Его фильмы и видео — на главной и в Поиске. Чтобы потом добавить или убрать источник: Поиск (значок справа вверху) или Настройки › Источники.",
-  "sources_added_ok": "Понятно"
+  "sources_added_ok": "Понятно",
+  "amb_mood_hiphop": "Хип-хоп",
+  "amb_mood_electro": "Электро"
  },
  "plurals": {
   "browser_found": {

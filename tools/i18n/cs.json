@@ -542,7 +542,9 @@
   "amb_custom": "Jiné…",
   "sources_added_title": "Zdroj přidán",
   "sources_added_body": "Jeho filmy a videa najdete na Domů a v Hledat. Zdroj později přidáte nebo odeberete v Hledat (ikona vpravo nahoře) nebo v Nastavení › Zdroje.",
-  "sources_added_ok": "Rozumím"
+  "sources_added_ok": "Rozumím",
+  "amb_mood_hiphop": "Hip-hop",
+  "amb_mood_electro": "Elektro"
  },
  "plurals": {
   "browser_found": {

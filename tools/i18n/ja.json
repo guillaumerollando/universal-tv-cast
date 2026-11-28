@@ -542,7 +542,9 @@
   "amb_custom": "その他…",
   "sources_added_title": "ソースを追加しました",
   "sources_added_body": "映画や動画はホームと検索に表示されます。あとでソースを追加・削除するには：検索（右上のアイコン）または設定 › ソース。",
-  "sources_added_ok": "OK"
+  "sources_added_ok": "OK",
+  "amb_mood_hiphop": "ヒップホップ",
+  "amb_mood_electro": "エレクトロ"
  },
  "plurals": {
   "browser_found": {

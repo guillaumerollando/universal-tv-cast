@@ -1893,3 +1893,7 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   importé, elle dit où voir le contenu (accueil, Rechercher) et où retrouver ses sources (Rechercher, Réglages ›
   Sources). Vérifié sur émulateur.
 - Prix du pack soutien décidé : 2,99 € (noté dans `store/README.md`).
+- Ambiance en 2ᵉ dans « Caster autre chose » une fois le pack pris (Album, Ambiance, Réseau, Lien, Fichiers) ; en
+  dernier avec cadenas sinon. Radios Hip-hop (hiphop, hip-hop, rap) et Électro (electronic, electro).
+- Barre à 4 onglets : texte plus petit (11 sp) et moins de marge : « Rechercher », « Przeglądarka »,
+  « Reproducción » en entier (vérifié en fr, pl, es).

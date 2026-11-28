@@ -544,6 +544,8 @@
     <string name="sources_added_title">स्रोत जोड़ा गया</string>
     <string name="sources_added_body">इसकी फ़िल्में और वीडियो होम और खोजें में हैं। बाद में स्रोत जोड़ने या हटाने के लिए: खोजें (ऊपर दाएँ आइकन) या सेटिंग्स › स्रोत।</string>
     <string name="sources_added_ok">समझ गया</string>
+    <string name="amb_mood_hiphop">हिप-हॉप</string>
+    <string name="amb_mood_electro">इलेक्ट्रो</string>
     <plurals name="browser_found">
         <item quantity="one">%d वीडियो</item>
         <item quantity="other">%d वीडियो</item>

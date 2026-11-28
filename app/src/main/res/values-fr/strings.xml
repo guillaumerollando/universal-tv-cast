@@ -180,6 +180,8 @@
     <string name="sources_added_title">Source ajoutée</string>
     <string name="sources_added_body">Ses films et vidéos sont sur l’accueil et dans Rechercher. Pour ajouter ou retirer une source plus tard : Rechercher (icône en haut à droite) ou Réglages › Sources.</string>
     <string name="sources_added_ok">Compris</string>
+    <string name="amb_mood_hiphop">Hip-hop</string>
+    <string name="amb_mood_electro">Électro</string>
     <string name="action_dont_show">Ne plus afficher</string>
     <string name="help_section">Dépannage</string>
     <string name="state_expanded">ouvert</string>

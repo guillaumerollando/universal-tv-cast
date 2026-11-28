@@ -542,7 +542,9 @@
   "amb_custom": "Inny…",
   "sources_added_title": "Dodano źródło",
   "sources_added_body": "Jego filmy i wideo są na stronie głównej i w Szukaj. Aby później dodać lub usunąć źródło: Szukaj (ikona w prawym górnym rogu) lub Ustawienia › Źródła.",
-  "sources_added_ok": "Rozumiem"
+  "sources_added_ok": "Rozumiem",
+  "amb_mood_hiphop": "Hip-hop",
+  "amb_mood_electro": "Elektro"
  },
  "plurals": {
   "browser_found": {

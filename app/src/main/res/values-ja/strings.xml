@@ -544,6 +544,8 @@
     <string name="sources_added_title">ソースを追加しました</string>
     <string name="sources_added_body">映画や動画はホームと検索に表示されます。あとでソースを追加・削除するには：検索（右上のアイコン）または設定 › ソース。</string>
     <string name="sources_added_ok">OK</string>
+    <string name="amb_mood_hiphop">ヒップホップ</string>
+    <string name="amb_mood_electro">エレクトロ</string>
     <plurals name="browser_found">
         <item quantity="other">%d 本の動画</item>
     </plurals>

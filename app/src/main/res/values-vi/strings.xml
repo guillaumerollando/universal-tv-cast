@@ -544,6 +544,8 @@
     <string name="sources_added_title">Đã thêm nguồn</string>
     <string name="sources_added_body">Phim và video của nguồn có ở Trang chủ và Tìm kiếm. Để thêm hoặc xóa nguồn sau này: Tìm kiếm (biểu tượng góc trên phải) hoặc Cài đặt › Nguồn.</string>
     <string name="sources_added_ok">Đã hiểu</string>
+    <string name="amb_mood_hiphop">Hip-hop</string>
+    <string name="amb_mood_electro">Electro</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

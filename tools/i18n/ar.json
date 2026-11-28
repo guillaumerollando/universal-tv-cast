@@ -542,7 +542,9 @@
   "amb_custom": "أخرى…",
   "sources_added_title": "تمت إضافة المصدر",
   "sources_added_body": "أفلامه وفيديوهاته في الصفحة الرئيسية وفي البحث. لإضافة مصدر أو إزالته لاحقًا: البحث (الأيقونة أعلى اليمين) أو الإعدادات › المصادر.",
-  "sources_added_ok": "فهمت"
+  "sources_added_ok": "فهمت",
+  "amb_mood_hiphop": "هيب هوب",
+  "amb_mood_electro": "إلكترو"
  },
  "plurals": {
   "browser_found": {

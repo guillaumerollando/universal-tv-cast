@@ -544,6 +544,8 @@
     <string name="sources_added_title">소스가 추가되었습니다</string>
     <string name="sources_added_body">영화와 동영상은 홈과 검색에 있습니다. 나중에 소스를 추가하거나 삭제하려면: 검색(오른쪽 위 아이콘) 또는 설정 › 소스.</string>
     <string name="sources_added_ok">확인</string>
+    <string name="amb_mood_hiphop">힙합</string>
+    <string name="amb_mood_electro">일렉트로</string>
     <plurals name="browser_found">
         <item quantity="other">동영상 %d개</item>
     </plurals>

@@ -58,6 +58,8 @@ object Ambiance {
         LOFI(listOf("lofi", "lo-fi"), R.string.amb_mood_lofi),
         AMBIENT(listOf("ambient"), R.string.amb_mood_ambient),
         PIANO(listOf("piano"), R.string.amb_mood_piano),
+        HIPHOP(listOf("hiphop", "hip-hop", "rap"), R.string.amb_mood_hiphop),
+        ELECTRO(listOf("electronic", "electro"), R.string.amb_mood_electro),
     }
 
     /** Ce qui passe en ce moment (pour l'écran de lecture). */

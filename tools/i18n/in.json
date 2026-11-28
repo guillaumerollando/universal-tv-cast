@@ -542,7 +542,9 @@
   "amb_custom": "Lainnya…",
   "sources_added_title": "Sumber ditambahkan",
   "sources_added_body": "Film dan videonya ada di Beranda dan Cari. Untuk menambah atau menghapus sumber nanti: Cari (ikon kanan atas) atau Setelan › Sumber.",
-  "sources_added_ok": "Mengerti"
+  "sources_added_ok": "Mengerti",
+  "amb_mood_hiphop": "Hip-hop",
+  "amb_mood_electro": "Elektro"
  },
  "plurals": {
   "browser_found": {

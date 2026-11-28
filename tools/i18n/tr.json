@@ -542,7 +542,9 @@
   "amb_custom": "Diğer…",
   "sources_added_title": "Kaynak eklendi",
   "sources_added_body": "Filmleri ve videoları Ana sayfa'da ve Ara'da. Daha sonra kaynak eklemek veya kaldırmak için: Ara (sağ üstteki simge) ya da Ayarlar › Kaynaklar.",
-  "sources_added_ok": "Anladım"
+  "sources_added_ok": "Anladım",
+  "amb_mood_hiphop": "Hip-hop",
+  "amb_mood_electro": "Elektro"
  },
  "plurals": {
   "browser_found": {

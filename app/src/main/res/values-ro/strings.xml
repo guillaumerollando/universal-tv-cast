@@ -544,6 +544,8 @@
     <string name="sources_added_title">Sursă adăugată</string>
     <string name="sources_added_body">Filmele și videoclipurile ei sunt pe Acasă și în Caută. Ca să adaugi sau să elimini o sursă mai târziu: Caută (pictograma din dreapta sus) sau Setări › Surse.</string>
     <string name="sources_added_ok">Am înțeles</string>
+    <string name="amb_mood_hiphop">Hip-hop</string>
+    <string name="amb_mood_electro">Electro</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>

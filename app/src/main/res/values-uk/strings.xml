@@ -544,6 +544,8 @@
     <string name="sources_added_title">Джерело додано</string>
     <string name="sources_added_body">Його фільми й відео — на головній і в Пошуку. Щоб потім додати чи прибрати джерело: Пошук (значок праворуч угорі) або Налаштування › Джерела.</string>
     <string name="sources_added_ok">Зрозуміло</string>
+    <string name="amb_mood_hiphop">Хіп-хоп</string>
+    <string name="amb_mood_electro">Електро</string>
     <plurals name="browser_found">
         <item quantity="one">%d відео</item>
         <item quantity="few">%d відео</item>

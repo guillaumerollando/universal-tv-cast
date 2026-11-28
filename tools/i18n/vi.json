@@ -542,7 +542,9 @@
   "amb_custom": "Khác…",
   "sources_added_title": "Đã thêm nguồn",
   "sources_added_body": "Phim và video của nguồn có ở Trang chủ và Tìm kiếm. Để thêm hoặc xóa nguồn sau này: Tìm kiếm (biểu tượng góc trên phải) hoặc Cài đặt › Nguồn.",
-  "sources_added_ok": "Đã hiểu"
+  "sources_added_ok": "Đã hiểu",
+  "amb_mood_hiphop": "Hip-hop",
+  "amb_mood_electro": "Electro"
  },
  "plurals": {
   "browser_found": {

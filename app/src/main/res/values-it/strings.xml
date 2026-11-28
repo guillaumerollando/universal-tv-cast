@@ -136,6 +136,7 @@
     <string name="fav_rename">Rinomina</string>
     <string name="fav_move_left">Sposta a sinistra</string>
     <string name="fav_move_right">Sposta a destra</string>
+    <string name="fav_kind_channel">Canale TV</string>
     <string name="lan_hide_watched">Nascondi visti</string>
     <string name="lan_season">Stagione %1$d</string>
     <string name="lan_watched">Visto</string>

@@ -1615,3 +1615,10 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - « Reprendre » : plus de mise en favori ni d'étoile ; l'appui long ne propose que « Retirer ».
 - Pas fait (idée de Guillaume, facultative) : proposer d'ajouter le site source en favori à la fin d'un épisode.
 - Vérifié sur émulateur : « Déplacer à gauche » sur le NAS.
+
+## 2026-11-28 — « Mes favoris » en tuiles
+- Une seule tuile pour les trois sortes de favoris (`FavTileFrame`) : rectangle arrondi (176 × 64 dp) au fond
+  des tuiles de l'accueil, image à gauche (icône du dossier à sa couleur, logo de la chaîne, icône du site), nom en
+  gras et ce que c'est dessous (appareil du dossier ou « Réseau », « Chaîne TV », adresse du site). Appui long :
+  personnaliser / renommer, déplacer, retirer. Vérifié sur émulateur avec un site (Arte, ajouté à gauche) et le NAS.
+- Pas vérifié à l'écran : une chaîne en favori (pas de liste de chaînes sur l'émulateur).

@@ -443,7 +443,8 @@
   "fav_icon_star": "Favorit",
   "fav_rename": "Redenumiți",
   "fav_move_left": "Mutați la stânga",
-  "fav_move_right": "Mutați la dreapta"
+  "fav_move_right": "Mutați la dreapta",
+  "fav_kind_channel": "Canal TV"
  },
  "plurals": {
   "browser_found": {

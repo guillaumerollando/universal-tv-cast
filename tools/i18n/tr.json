@@ -443,7 +443,8 @@
   "fav_icon_star": "Favori",
   "fav_rename": "Yeniden adlandır",
   "fav_move_left": "Sola taşı",
-  "fav_move_right": "Sağa taşı"
+  "fav_move_right": "Sağa taşı",
+  "fav_kind_channel": "TV kanalı"
  },
  "plurals": {
   "browser_found": {

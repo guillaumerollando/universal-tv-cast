@@ -136,6 +136,7 @@
     <string name="fav_rename">Umbenennen</string>
     <string name="fav_move_left">Nach links</string>
     <string name="fav_move_right">Nach rechts</string>
+    <string name="fav_kind_channel">TV-Sender</string>
     <string name="lan_hide_watched">Gesehene ausblenden</string>
     <string name="lan_season">Staffel %1$d</string>
     <string name="lan_watched">Gesehen</string>

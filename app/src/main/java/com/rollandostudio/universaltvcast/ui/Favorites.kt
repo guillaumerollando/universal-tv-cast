@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -202,10 +203,51 @@ fun siteItems(recents: List<com.rollandostudio.universaltvcast.data.Recent>, boo
     }.sortedByDescending { it.time }
 }
 
+/**
+ * Tuile de « Mes favoris », la même pour un dossier du réseau, une chaîne ou un site : l'image à gauche (icône,
+ * logo), le nom et ce que c'est dessous. Un appui ouvre ; un appui long montre [menu].
+ */
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+@Composable
+internal fun FavTileFrame(
+    title: String, subtitle: String, menu: List<Pair<String, () -> Unit>>, onClick: () -> Unit,
+    modifier: Modifier = Modifier.width(176.dp), art: @Composable () -> Unit,
+) {
+    val c = MaterialTheme.colorScheme
+    var open by remember { mutableStateOf(false) }
+    val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
+    Box(modifier) {
+        Row(
+            Modifier.fillMaxWidth().height(64.dp).clip(RoundedCornerShape(16.dp)).background(c.surfaceContainerHigh)
+                .combinedClickable(
+                    role = Role.Button, onClick = onClick,
+                    onLongClick = { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); open = true },
+                )
+                .semantics {
+                    contentDescription = "$title, $subtitle"
+                    customActions = menu.map { (label, action) -> CustomAccessibilityAction(label) { action(); true } }
+                }
+                .padding(horizontal = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(Modifier.size(44.dp).clip(RoundedCornerShape(12.dp)), contentAlignment = Alignment.Center) { art() }
+            Spacer(Modifier.width(10.dp))
+            Column(Modifier.weight(1f)) {
+                Text(title, style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                    maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(subtitle, style = MaterialTheme.typography.labelSmall, color = c.onSurfaceVariant,
+                    maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
+        }
+        CardMenu(open, { open = false }, menu)
+    }
+}
+
 /** Petite tuile de site : son logo et son nom. Appui long : favori, ne plus proposer. */
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
-fun SiteTile(s: SiteItem, modifier: Modifier = Modifier.width(80.dp), extraMenu: List<Pair<String, () -> Unit>> = emptyList(), onOpen: (String) -> Unit) {
+fun SiteTile(s: SiteItem, modifier: Modifier = Modifier.width(80.dp), extraMenu: List<Pair<String, () -> Unit>> = emptyList(),
+             tile: Boolean = false, onOpen: (String) -> Unit) {
     var open by remember { mutableStateOf(false) }
     var rename by remember { mutableStateOf(false) }
     val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
@@ -216,6 +258,10 @@ fun SiteTile(s: SiteItem, modifier: Modifier = Modifier.width(80.dp), extraMenu:
         if (s.bookmark != null) add(stringResource(R.string.cd_bookmark_remove) to { Library.removeBookmark(s.bookmark) })
     }
     if (rename && s.bookmark != null) RenameDialog(s.title, onDismiss = { rename = false }) { Library.renameBookmark(s.bookmark, it) }
+    if (tile) {
+        FavTileFrame(s.title, s.host, menu, onClick = { onOpen(s.url) }, modifier = modifier) { SiteIcon(s.host, 44) }
+        return
+    }
     Box(modifier) {
         Column(
             Modifier.fillMaxWidth().clip(RoundedCornerShape(18.dp))
@@ -242,7 +288,7 @@ fun SiteTile(s: SiteItem, modifier: Modifier = Modifier.width(80.dp), extraMenu:
 /** Dossier du réseau en favori (« Films » du NAS) : ouvert directement d'un appui ; appui long pour le retirer. */
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
-fun FolderTile(f: com.rollandostudio.universaltvcast.lan.LanStore.Folder, modifier: Modifier = Modifier.width(80.dp),
+fun FolderTile(f: com.rollandostudio.universaltvcast.lan.LanStore.Folder, modifier: Modifier = Modifier.width(176.dp),
                extraMenu: List<Pair<String, () -> Unit>> = emptyList()) {
     val c = MaterialTheme.colorScheme
     var open by remember { mutableStateOf(false) }
@@ -256,33 +302,15 @@ fun FolderTile(f: com.rollandostudio.universaltvcast.lan.LanStore.Folder, modifi
     )
     if (edit) FolderStyleDialog(f, justAdded = false) { edit = false }
     val tint = f.color?.let { androidx.compose.ui.graphics.Color(it) } ?: c.primary
-    Box(modifier) {
-        Column(
-            Modifier.fillMaxWidth().clip(RoundedCornerShape(18.dp))
-                .combinedClickable(
-                    role = Role.Button,
-                    onClick = { Nav.networkFolder.value = f; Nav.network.value = true },
-                    onLongClick = { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); open = true },
-                )
-                .semantics {
-                    contentDescription = f.name + ", " + f.deviceName
-                    customActions = menu.map { (label, action) -> CustomAccessibilityAction(label) { action(); true } }
-                }
-                .padding(vertical = 6.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Box(Modifier.size(52.dp).clip(RoundedCornerShape(15.dp)).background(tint.copy(alpha = 0.16f)),
-                contentAlignment = Alignment.Center) {
-                // L'icône choisie, sinon : l'appareil entier (NAS, ordinateur) ou un de ses dossiers.
-                Icon(FolderStyle.icon(f), null, tint = tint, modifier = Modifier.size(28.dp))
-            }
-            Spacer(Modifier.height(6.dp))
-            Text(f.name, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(horizontal = 2.dp))
+    // Sous le nom : l'appareil où est le dossier ; pour l'appareil entier, « Réseau ».
+    FavTileFrame(f.name, if (f.ref.isEmpty()) stringResource(R.string.home_network) else f.deviceName, menu, onClick = { Nav.networkFolder.value = f; Nav.network.value = true }, modifier = modifier) {
+        // L'icône choisie, sinon : l'appareil entier (NAS, ordinateur) ou un de ses dossiers.
+        Box(Modifier.fillMaxSize().background(tint.copy(alpha = 0.16f)), contentAlignment = Alignment.Center) {
+            Icon(FolderStyle.icon(f), null, tint = tint, modifier = Modifier.size(24.dp))
         }
-        CardMenu(open, { open = false }, menu)
     }
 }
+
 
 /** Tous les sites, en grille (accueil du navigateur, « Tout voir »). */
 @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)

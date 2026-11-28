@@ -445,6 +445,7 @@
     <string name="fav_rename">이름 바꾸기</string>
     <string name="fav_move_left">왼쪽으로 이동</string>
     <string name="fav_move_right">오른쪽으로 이동</string>
+    <string name="fav_kind_channel">TV 채널</string>
     <plurals name="browser_found">
         <item quantity="other">동영상 %d개</item>
     </plurals>

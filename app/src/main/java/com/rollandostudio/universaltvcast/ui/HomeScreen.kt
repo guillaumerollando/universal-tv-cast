@@ -163,12 +163,12 @@ fun HomeScreen(
                         if (i > 0) add(left to move(i, -1))
                         if (i < all.size - 1) add(right to move(i, 1))
                     }
-                    LazyRow(contentPadding = PaddingValues(horizontal = 12.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         items(all.size, key = { all[it].first }) { i ->
                             when (val x = all[i].second) {
-                                is com.rollandostudio.universaltvcast.lan.LanStore.Folder -> FolderTile(x, Modifier.width(72.dp), moves(i))
+                                is com.rollandostudio.universaltvcast.lan.LanStore.Folder -> FolderTile(x, extraMenu = moves(i))
                                 is Library.FavChannel -> FavChannelTile(x, onBrowse, moves(i))
-                                is SiteItem -> SiteTile(x, Modifier.width(72.dp), moves(i)) { onBrowse(it) }
+                                is SiteItem -> SiteTile(x, Modifier.width(176.dp), moves(i), tile = true) { onBrowse(it) }
                             }
                         }
                     }
@@ -412,34 +412,17 @@ private fun ResumeCard(r: ResumeItem, onBrowse: (String?) -> Unit, modifier: Mod
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 private fun FavChannelTile(ch: Library.FavChannel, onBrowse: (String?) -> Unit, extraMenu: List<Pair<String, () -> Unit>> = emptyList()) {
-    var menu by remember { mutableStateOf(false) }
     var rename by remember { mutableStateOf(false) }
     if (rename) RenameDialog(ch.name, onDismiss = { rename = false }) { Library.renameFavChannel(ch.url, it) }
-    val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
-    Box(Modifier.padding(horizontal = 2.dp, vertical = 6.dp)) {
-        Box(Modifier.width(ChannelTiles.width).aspectRatio(16f / 10f).clip(RoundedCornerShape(ChannelTiles.corner))
-            .combinedClickable(
-                role = Role.Button,
-                onClick = {
-                    if (ch.page != null) onBrowse(ch.page)
-                    else playChannel(com.rollandostudio.universaltvcast.data.Iptv.Channel(ch.name, ch.url, ch.logo, headers = ch.headers))
-                },
-                onLongClick = { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); menu = true },
-            )
-            .semantics { contentDescription = ch.name }) {
-            ChannelArt(name = ch.name, logo = ch.logo, streamUrl = ch.url, pad = ChannelTiles.logoPad,
-                textStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
-                modifier = Modifier.matchParentSize())
-        }
-        androidx.compose.material3.DropdownMenu(expanded = menu, onDismissRequest = { menu = false }, shape = RoundedCornerShape(16.dp)) {
-            androidx.compose.material3.DropdownMenuItem(text = { Text(stringResource(R.string.fav_rename)) },
-                onClick = { menu = false; rename = true })
-            extraMenu.forEach { (label, action) ->
-                androidx.compose.material3.DropdownMenuItem(text = { Text(label) }, onClick = { menu = false; action() })
-            }
-            androidx.compose.material3.DropdownMenuItem(text = { Text(stringResource(R.string.cd_bookmark_remove)) },
-                onClick = { menu = false; Library.toggleFavChannel(ch) })
-        }
+    val menu = listOf(stringResource(R.string.fav_rename) to { rename = true }) + extraMenu +
+        listOf(stringResource(R.string.cd_bookmark_remove) to { Library.toggleFavChannel(ch) })
+    FavTileFrame(ch.name, stringResource(R.string.fav_kind_channel), menu, onClick = {
+        if (ch.page != null) onBrowse(ch.page)
+        else playChannel(com.rollandostudio.universaltvcast.data.Iptv.Channel(ch.name, ch.url, ch.logo, headers = ch.headers))
+    }) {
+        ChannelArt(name = ch.name, logo = ch.logo, streamUrl = ch.url, pad = 5.dp,
+            textStyle = MaterialTheme.typography.labelSmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
+            modifier = Modifier.fillMaxSize())
     }
 }
 

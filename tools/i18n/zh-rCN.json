@@ -443,7 +443,8 @@
   "fav_icon_star": "收藏",
   "fav_rename": "重命名",
   "fav_move_left": "左移",
-  "fav_move_right": "右移"
+  "fav_move_right": "右移",
+  "fav_kind_channel": "电视频道"
  },
  "plurals": {
   "browser_found": {

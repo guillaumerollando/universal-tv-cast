@@ -1759,6 +1759,10 @@
   "fav_move_right": {
    "en": "Move right",
    "fr": "Déplacer à droite"
+  },
+  "fav_kind_channel": {
+   "en": "TV channel",
+   "fr": "Chaîne TV"
   }
  },
  "plurals": {

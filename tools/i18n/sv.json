@@ -443,7 +443,8 @@
   "fav_icon_star": "Favorit",
   "fav_rename": "Byt namn",
   "fav_move_left": "Flytta åt vänster",
-  "fav_move_right": "Flytta åt höger"
+  "fav_move_right": "Flytta åt höger",
+  "fav_kind_channel": "Tv-kanal"
  },
  "plurals": {
   "browser_found": {

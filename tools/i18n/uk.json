@@ -443,7 +443,8 @@
   "fav_icon_star": "Вибране",
   "fav_rename": "Перейменувати",
   "fav_move_left": "Перемістити ліворуч",
-  "fav_move_right": "Перемістити праворуч"
+  "fav_move_right": "Перемістити праворуч",
+  "fav_kind_channel": "Телеканал"
  },
  "plurals": {
   "browser_found": {

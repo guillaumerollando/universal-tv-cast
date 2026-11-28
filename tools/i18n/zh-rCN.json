@@ -239,7 +239,7 @@
   "iptv_guide_help": "如果你的服务商提供节目指南（EPG）地址，请粘贴到这里：当前节目将显示在对应频道下方。",
   "action_save": "保存",
   "notice_tv_not_starting": "电视没有开始播放。电视开着吗？待机状态的电视会接收视频，但不会显示。",
-  "start_title": "开始使用",
+  "start_title": "发现",
   "start_tv_title": "免费电视频道",
   "start_tv_sub": "你所在国家的免费频道，一个链接全部搞定。",
   "start_sites_title": "可以试试这些免费合法的网站：打开视频，然后发送到电视。",
@@ -519,7 +519,13 @@
   "sources_add": "添加来源",
   "sources_settings_sub": "免费电影、PeerTube、Internet Archive",
   "sources_card": "自由视频",
-  "sources_card_sub": "公有领域电影、PeerTube、Internet Archive：免费且合法。"
+  "sources_card_sub": "公有领域电影、PeerTube、Internet Archive：免费且合法。",
+  "search_tv": "电视上",
+  "open_blender_studio": "Blender Studio · PeerTube",
+  "open_ia_feature": "公有领域电影",
+  "open_ia_cartoons": "经典动画",
+  "open_ia_silent": "默片",
+  "open_ia_prelinger": "Prelinger 档案"
  },
  "plurals": {
   "browser_found": {

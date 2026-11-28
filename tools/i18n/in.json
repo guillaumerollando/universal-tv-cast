@@ -239,7 +239,7 @@
   "iptv_guide_help": "Jika penyedia Anda memberikan alamat panduan acara (EPG), tempel di sini: acara yang sedang tayang akan muncul di bawah salurannya.",
   "action_save": "Simpan",
   "notice_tv_not_starting": "TV tidak memulai pemutaran. Apakah TV menyala? TV dalam mode siaga menerima video tetapi tidak menampilkannya.",
-  "start_title": "Untuk memulai",
+  "start_title": "Untuk dijelajahi",
   "start_tv_title": "Saluran TV gratis",
   "start_tv_sub": "Saluran gratis di negaramu, dalam satu tautan.",
   "start_sites_title": "Situs gratis dan legal untuk dicoba: buka video, lalu kirim ke TV Anda.",
@@ -519,7 +519,13 @@
   "sources_add": "Tambah sumber",
   "sources_settings_sub": "Film bebas, PeerTube, Internet Archive",
   "sources_card": "Video bebas",
-  "sources_card_sub": "Film domain publik, PeerTube, Internet Archive: gratis dan legal."
+  "sources_card_sub": "Film domain publik, PeerTube, Internet Archive: gratis dan legal.",
+  "search_tv": "Di TV",
+  "open_blender_studio": "Blender Studio · PeerTube",
+  "open_ia_feature": "Film domain publik",
+  "open_ia_cartoons": "Kartun klasik",
+  "open_ia_silent": "Film bisu",
+  "open_ia_prelinger": "Arsip Prelinger"
  },
  "plurals": {
   "browser_found": {

@@ -240,7 +240,7 @@
     <string name="iptv_guide_help">إذا كان مزوّدك يوفر عنوان دليل برامج (EPG)، فالصقه هنا: سيظهر البرنامج الحالي أسفل قنواته.</string>
     <string name="action_save">حفظ</string>
     <string name="notice_tv_not_starting">التلفزيون لا يبدأ التشغيل. هل هو قيد التشغيل؟ التلفزيون في وضع الاستعداد يقبل الفيديو لكنه لا يعرضه.</string>
-    <string name="start_title">للبدء</string>
+    <string name="start_title">اكتشف</string>
     <string name="start_tv_title">قنوات تلفزيونية مجانية</string>
     <string name="start_tv_sub">القنوات المجانية المتاحة في بلدك، في رابط واحد.</string>
     <string name="start_sites_title">مواقع مجانية وقانونية للتجربة: افتح فيديو، ثم أرسله إلى تلفزيونك.</string>
@@ -521,6 +521,12 @@
     <string name="sources_settings_sub">أفلام حرة، PeerTube، Internet Archive</string>
     <string name="sources_card">فيديوهات حرة</string>
     <string name="sources_card_sub">أفلام من الملك العام وPeerTube وInternet Archive: مجانية وقانونية.</string>
+    <string name="search_tv">على التلفاز</string>
+    <string name="open_blender_studio">Blender Studio · PeerTube</string>
+    <string name="open_ia_feature">أفلام من الملك العام</string>
+    <string name="open_ia_cartoons">رسوم متحركة كلاسيكية</string>
+    <string name="open_ia_silent">أفلام صامتة</string>
+    <string name="open_ia_prelinger">أرشيف Prelinger</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>

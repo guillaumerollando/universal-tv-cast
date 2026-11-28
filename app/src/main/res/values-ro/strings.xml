@@ -240,7 +240,7 @@
     <string name="iptv_guide_help">Dacă furnizorul tău oferă o adresă de ghid TV (EPG), lipește-o aici: emisiunea curentă va apărea sub canalele sale.</string>
     <string name="action_save">Salvează</string>
     <string name="notice_tv_not_starting">Televizorul nu pornește redarea. Este pornit? Un TV în standby acceptă videoclipul, dar nu-l afișează.</string>
-    <string name="start_title">Pentru început</string>
+    <string name="start_title">De descoperit</string>
     <string name="start_tv_title">Canale TV gratuite</string>
     <string name="start_tv_sub">Canalele gratuite din țara ta, într-un singur link.</string>
     <string name="start_sites_title">Site-uri gratuite și legale de încercat: deschide un videoclip, apoi trimite-l pe TV.</string>
@@ -521,6 +521,12 @@
     <string name="sources_settings_sub">Filme libere, PeerTube, Internet Archive</string>
     <string name="sources_card">Videoclipuri libere</string>
     <string name="sources_card_sub">Filme din domeniul public, PeerTube, Internet Archive: gratuite și legale.</string>
+    <string name="search_tv">La TV</string>
+    <string name="open_blender_studio">Blender Studio · PeerTube</string>
+    <string name="open_ia_feature">Filme din domeniul public</string>
+    <string name="open_ia_cartoons">Desene animate clasice</string>
+    <string name="open_ia_silent">Filme mute</string>
+    <string name="open_ia_prelinger">Arhivele Prelinger</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>

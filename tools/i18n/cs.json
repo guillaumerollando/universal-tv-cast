@@ -239,7 +239,7 @@
   "iptv_guide_help": "Pokud tvůj poskytovatel nabízí adresu TV programu (EPG), vlož ji sem: pod kanály se zobrazí aktuální pořad.",
   "action_save": "Uložit",
   "notice_tv_not_starting": "Televize nespouští přehrávání. Je zapnutá? Televize v pohotovostním režimu video přijme, ale nezobrazí.",
-  "start_title": "Jak začít",
+  "start_title": "K objevení",
   "start_tv_title": "Bezplatné TV kanály",
   "start_tv_sub": "Bezplatné kanály ve tvé zemi — v jednom odkazu.",
   "start_sites_title": "Bezplatné legální weby na vyzkoušení: otevři video a pošli ho do televize.",
@@ -519,7 +519,13 @@
   "sources_add": "Přidat zdroj",
   "sources_settings_sub": "Volné filmy, PeerTube, Internet Archive",
   "sources_card": "Volná videa",
-  "sources_card_sub": "Filmy z volného díla, PeerTube, Internet Archive: zdarma a legálně."
+  "sources_card_sub": "Filmy z volného díla, PeerTube, Internet Archive: zdarma a legálně.",
+  "search_tv": "V televizi",
+  "open_blender_studio": "Blender Studio · PeerTube",
+  "open_ia_feature": "Filmy z volného díla",
+  "open_ia_cartoons": "Klasické animované filmy",
+  "open_ia_silent": "Němé filmy",
+  "open_ia_prelinger": "Archiv Prelinger"
  },
  "plurals": {
   "browser_found": {

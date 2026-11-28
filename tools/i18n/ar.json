@@ -239,7 +239,7 @@
   "iptv_guide_help": "إذا كان مزوّدك يوفر عنوان دليل برامج (EPG)، فالصقه هنا: سيظهر البرنامج الحالي أسفل قنواته.",
   "action_save": "حفظ",
   "notice_tv_not_starting": "التلفزيون لا يبدأ التشغيل. هل هو قيد التشغيل؟ التلفزيون في وضع الاستعداد يقبل الفيديو لكنه لا يعرضه.",
-  "start_title": "للبدء",
+  "start_title": "اكتشف",
   "start_tv_title": "قنوات تلفزيونية مجانية",
   "start_tv_sub": "القنوات المجانية المتاحة في بلدك، في رابط واحد.",
   "start_sites_title": "مواقع مجانية وقانونية للتجربة: افتح فيديو، ثم أرسله إلى تلفزيونك.",
@@ -519,7 +519,13 @@
   "sources_add": "أضف مصدرًا",
   "sources_settings_sub": "أفلام حرة، PeerTube، Internet Archive",
   "sources_card": "فيديوهات حرة",
-  "sources_card_sub": "أفلام من الملك العام وPeerTube وInternet Archive: مجانية وقانونية."
+  "sources_card_sub": "أفلام من الملك العام وPeerTube وInternet Archive: مجانية وقانونية.",
+  "search_tv": "على التلفاز",
+  "open_blender_studio": "Blender Studio · PeerTube",
+  "open_ia_feature": "أفلام من الملك العام",
+  "open_ia_cartoons": "رسوم متحركة كلاسيكية",
+  "open_ia_silent": "أفلام صامتة",
+  "open_ia_prelinger": "أرشيف Prelinger"
  },
  "plurals": {
   "browser_found": {

@@ -240,7 +240,7 @@
     <string name="iptv_guide_help">プロバイダが番組表（EPG）のアドレスを提供している場合は、ここに貼り付けてください。各チャンネルの下に現在の番組が表示されます。</string>
     <string name="action_save">保存</string>
     <string name="notice_tv_not_starting">テレビで再生が始まりません。テレビの電源は入っていますか？スタンバイ中のテレビは動画を受け付けますが、表示しません。</string>
-    <string name="start_title">はじめに</string>
+    <string name="start_title">おすすめ</string>
     <string name="start_tv_title">無料テレビチャンネル</string>
     <string name="start_tv_sub">あなたの国で見られる無料チャンネルを、リンク1つで。</string>
     <string name="start_sites_title">無料で合法なおすすめサイト：動画を開いて、テレビに送りましょう。</string>
@@ -521,6 +521,12 @@
     <string name="sources_settings_sub">フリー映画、PeerTube、Internet Archive</string>
     <string name="sources_card">フリー動画</string>
     <string name="sources_card_sub">パブリックドメイン映画、PeerTube、Internet Archive：無料で合法。</string>
+    <string name="search_tv">テレビで</string>
+    <string name="open_blender_studio">Blender Studio · PeerTube</string>
+    <string name="open_ia_feature">パブリックドメイン映画</string>
+    <string name="open_ia_cartoons">クラシックアニメ</string>
+    <string name="open_ia_silent">サイレント映画</string>
+    <string name="open_ia_prelinger">Prelingerアーカイブ</string>
     <plurals name="browser_found">
         <item quantity="other">%d 本の動画</item>
     </plurals>

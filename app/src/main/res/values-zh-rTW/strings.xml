@@ -240,7 +240,7 @@
     <string name="iptv_guide_help">如果你的服務供應商提供節目表（EPG）網址，請貼在這裡：目前節目會顯示在對應頻道下方。</string>
     <string name="action_save">儲存</string>
     <string name="notice_tv_not_starting">電視沒有開始播放。電視有開機嗎？待機中的電視會接收影片，但不會顯示。</string>
-    <string name="start_title">開始使用</string>
+    <string name="start_title">探索</string>
     <string name="start_tv_title">免費電視頻道</string>
     <string name="start_tv_sub">你所在國家的免費頻道，一個連結就搞定。</string>
     <string name="start_sites_title">試試這些免費又合法的網站：開啟影片，再傳送到電視。</string>
@@ -521,6 +521,12 @@
     <string name="sources_settings_sub">免費電影、PeerTube、Internet Archive</string>
     <string name="sources_card">自由影片</string>
     <string name="sources_card_sub">公有領域電影、PeerTube、Internet Archive：免費且合法。</string>
+    <string name="search_tv">電視上</string>
+    <string name="open_blender_studio">Blender Studio · PeerTube</string>
+    <string name="open_ia_feature">公有領域電影</string>
+    <string name="open_ia_cartoons">經典動畫</string>
+    <string name="open_ia_silent">默片</string>
+    <string name="open_ia_prelinger">Prelinger 檔案</string>
     <plurals name="browser_found">
         <item quantity="other">%d 部影片</item>
     </plurals>

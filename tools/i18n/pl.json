@@ -239,7 +239,7 @@
   "iptv_guide_help": "Jeśli Twój dostawca podaje adres programu TV (EPG), wklej go tutaj: pod kanałami pojawi się bieżąca audycja.",
   "action_save": "Zapisz",
   "notice_tv_not_starting": "Telewizor nie rozpoczyna odtwarzania. Czy jest włączony? Telewizor w trybie czuwania przyjmuje wideo, ale go nie pokazuje.",
-  "start_title": "Na początek",
+  "start_title": "Do odkrycia",
   "start_tv_title": "Darmowe kanały TV",
   "start_tv_sub": "Darmowe kanały w twoim kraju — w jednym linku.",
   "start_sites_title": "Darmowe, legalne strony do wypróbowania: otwórz wideo i wyślij je na telewizor.",
@@ -519,7 +519,13 @@
   "sources_add": "Dodaj źródło",
   "sources_settings_sub": "Wolne filmy, PeerTube, Internet Archive",
   "sources_card": "Wolne wideo",
-  "sources_card_sub": "Filmy z domeny publicznej, PeerTube, Internet Archive: za darmo i legalnie."
+  "sources_card_sub": "Filmy z domeny publicznej, PeerTube, Internet Archive: za darmo i legalnie.",
+  "search_tv": "W telewizji",
+  "open_blender_studio": "Blender Studio · PeerTube",
+  "open_ia_feature": "Filmy z domeny publicznej",
+  "open_ia_cartoons": "Klasyczne kreskówki",
+  "open_ia_silent": "Filmy nieme",
+  "open_ia_prelinger": "Archiwum Prelingera"
  },
  "plurals": {
   "browser_found": {

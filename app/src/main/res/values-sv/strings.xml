@@ -240,7 +240,7 @@
     <string name="iptv_guide_help">Om din leverantör erbjuder en adress till en programguide (EPG), klistra in den här: det aktuella programmet visas under kanalerna.</string>
     <string name="action_save">Spara</string>
     <string name="notice_tv_not_starting">Tv:n startar inte uppspelningen. Är den påslagen? En tv i viloläge tar emot videon men visar den inte.</string>
-    <string name="start_title">Kom igång</string>
+    <string name="start_title">Att upptäcka</string>
     <string name="start_tv_title">Gratis tv-kanaler</string>
     <string name="start_tv_sub">Gratiskanalerna i ditt land, i en enda länk.</string>
     <string name="start_sites_title">Gratis, lagliga sajter att prova: öppna en video och skicka den sedan till din tv.</string>
@@ -521,6 +521,12 @@
     <string name="sources_settings_sub">Fria filmer, PeerTube, Internet Archive</string>
     <string name="sources_card">Fria videor</string>
     <string name="sources_card_sub">Filmer i allmän egendom, PeerTube, Internet Archive: gratis och lagligt.</string>
+    <string name="search_tv">På tv</string>
+    <string name="open_blender_studio">Blender Studio · PeerTube</string>
+    <string name="open_ia_feature">Filmer i allmän egendom</string>
+    <string name="open_ia_cartoons">Klassiska tecknade filmer</string>
+    <string name="open_ia_silent">Stumfilmer</string>
+    <string name="open_ia_prelinger">Prelinger-arkivet</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videor</item>

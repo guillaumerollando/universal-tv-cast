@@ -240,7 +240,7 @@
     <string name="iptv_guide_help">अगर आपका प्रोवाइडर प्रोग्राम गाइड (EPG) का पता देता है, तो उसे यहाँ पेस्ट करें: मौजूदा प्रोग्राम उसके चैनलों के नीचे दिखेगा।</string>
     <string name="action_save">सेव करें</string>
     <string name="notice_tv_not_starting">टीवी प्लेबैक शुरू नहीं कर रहा। क्या वह चालू है? स्टैंडबाय पर टीवी वीडियो ले लेता है, लेकिन दिखाता नहीं।</string>
-    <string name="start_title">शुरू करने के लिए</string>
+    <string name="start_title">खोजें</string>
     <string name="start_tv_title">मुफ़्त टीवी चैनल</string>
     <string name="start_tv_sub">आपके देश के मुफ़्त चैनल, एक ही लिंक में।</string>
     <string name="start_sites_title">आज़माने के लिए मुफ़्त और कानूनी साइटें: कोई वीडियो खोलें, फिर उसे अपने टीवी पर भेजें।</string>
@@ -521,6 +521,12 @@
     <string name="sources_settings_sub">मुक्त फ़िल्में, PeerTube, Internet Archive</string>
     <string name="sources_card">मुक्त वीडियो</string>
     <string name="sources_card_sub">सार्वजनिक डोमेन की फ़िल्में, PeerTube, Internet Archive: मुफ़्त और कानूनी।</string>
+    <string name="search_tv">टीवी पर</string>
+    <string name="open_blender_studio">Blender Studio · PeerTube</string>
+    <string name="open_ia_feature">सार्वजनिक डोमेन की फ़िल्में</string>
+    <string name="open_ia_cartoons">क्लासिक कार्टून</string>
+    <string name="open_ia_silent">मूक फ़िल्में</string>
+    <string name="open_ia_prelinger">Prelinger अभिलेखागार</string>
     <plurals name="browser_found">
         <item quantity="one">%d वीडियो</item>
         <item quantity="other">%d वीडियो</item>

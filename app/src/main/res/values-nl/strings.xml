@@ -157,6 +157,12 @@
     <string name="sources_settings_sub">Vrije films, PeerTube, Internet Archive</string>
     <string name="sources_card">Vrije video’s</string>
     <string name="sources_card_sub">Films uit het publieke domein, PeerTube, Internet Archive: gratis en legaal.</string>
+    <string name="search_tv">Op tv</string>
+    <string name="open_blender_studio">Blender Studio · PeerTube</string>
+    <string name="open_ia_feature">Films uit het publieke domein</string>
+    <string name="open_ia_cartoons">Klassieke tekenfilms</string>
+    <string name="open_ia_silent">Stomme films</string>
+    <string name="open_ia_prelinger">Prelinger-archief</string>
     <string name="action_dont_show">Niet meer tonen</string>
     <string name="help_section">Problemen oplossen</string>
     <string name="state_expanded">uitgevouwen</string>
@@ -466,7 +472,7 @@
     <string name="iptv_guide_help">Geeft je aanbieder een adres voor een programmagids (EPG), plak het hier: het huidige programma verschijnt onder zijn zenders.</string>
     <string name="action_save">Opslaan</string>
     <string name="notice_tv_not_starting">De tv start het afspelen niet. Staat hij aan? In stand-by neemt hij de video aan maar toont hem niet.</string>
-    <string name="start_title">Om te beginnen</string>
+    <string name="start_title">Te ontdekken</string>
     <string name="start_tv_title">Gratis tv-zenders</string>
     <string name="start_tv_sub">De gratis zenders in jouw land, in één link.</string>
     <string name="start_sites_title">Gratis, legale sites om te proberen: open een video en stuur hem naar je tv.</string>

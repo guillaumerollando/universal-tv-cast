@@ -239,7 +239,7 @@
   "iptv_guide_help": "หากผู้ให้บริการของคุณมีที่อยู่ผังรายการ (EPG) ให้วางที่นี่: รายการที่กำลังออกอากาศจะแสดงใต้ช่องต่างๆ",
   "action_save": "บันทึก",
   "notice_tv_not_starting": "ทีวีไม่เริ่มเล่น ทีวีเปิดอยู่หรือเปล่า? ทีวีที่อยู่ในโหมดสแตนด์บายจะรับวิดีโอแต่ไม่แสดงผล",
-  "start_title": "เริ่มต้นใช้งาน",
+  "start_title": "น่าค้นพบ",
   "start_tv_title": "ช่องทีวีฟรี",
   "start_tv_sub": "ช่องฟรีในประเทศของคุณ ในลิงก์เดียว",
   "start_sites_title": "เว็บไซต์ฟรีและถูกกฎหมายให้ลอง: เปิดวิดีโอ แล้วส่งไปยังทีวีของคุณ",
@@ -519,7 +519,13 @@
   "sources_add": "เพิ่มแหล่งที่มา",
   "sources_settings_sub": "ภาพยนตร์เสรี, PeerTube, Internet Archive",
   "sources_card": "วิดีโอเสรี",
-  "sources_card_sub": "ภาพยนตร์สาธารณสมบัติ, PeerTube, Internet Archive: ฟรีและถูกกฎหมาย"
+  "sources_card_sub": "ภาพยนตร์สาธารณสมบัติ, PeerTube, Internet Archive: ฟรีและถูกกฎหมาย",
+  "search_tv": "ทางทีวี",
+  "open_blender_studio": "Blender Studio · PeerTube",
+  "open_ia_feature": "ภาพยนตร์สาธารณสมบัติ",
+  "open_ia_cartoons": "การ์ตูนคลาสสิก",
+  "open_ia_silent": "ภาพยนตร์เงียบ",
+  "open_ia_prelinger": "คลัง Prelinger"
  },
  "plurals": {
   "browser_found": {

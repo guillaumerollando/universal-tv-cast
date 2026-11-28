@@ -157,6 +157,12 @@
     <string name="sources_settings_sub">Freie Filme, PeerTube, Internet Archive</string>
     <string name="sources_card">Freie Videos</string>
     <string name="sources_card_sub">Gemeinfreie Filme, PeerTube, Internet Archive: kostenlos und legal.</string>
+    <string name="search_tv">Im Fernsehen</string>
+    <string name="open_blender_studio">Blender Studio · PeerTube</string>
+    <string name="open_ia_feature">Gemeinfreie Filme</string>
+    <string name="open_ia_cartoons">Klassische Zeichentrickfilme</string>
+    <string name="open_ia_silent">Stummfilme</string>
+    <string name="open_ia_prelinger">Prelinger-Archiv</string>
     <string name="action_dont_show">Nicht mehr anzeigen</string>
     <string name="help_section">Fehlerbehebung</string>
     <string name="state_expanded">aufgeklappt</string>
@@ -466,7 +472,7 @@
     <string name="iptv_guide_help">Wenn dein Anbieter eine Programmführer-Adresse (EPG) angibt, füge sie hier ein: Die laufende Sendung erscheint unter seinen Sendern.</string>
     <string name="action_save">Speichern</string>
     <string name="notice_tv_not_starting">Der Fernseher startet die Wiedergabe nicht. Ist er eingeschaltet? Im Standby nimmt er das Video an, zeigt es aber nicht.</string>
-    <string name="start_title">Zum Start</string>
+    <string name="start_title">Zum Entdecken</string>
     <string name="start_tv_title">Kostenlose TV-Sender</string>
     <string name="start_tv_sub">Die kostenlosen Sender deines Landes, in einem Link.</string>
     <string name="start_sites_title">Kostenlose, legale Seiten zum Ausprobieren: Video öffnen und an den Fernseher senden.</string>

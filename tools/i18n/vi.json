@@ -239,7 +239,7 @@
   "iptv_guide_help": "Nếu nhà cung cấp có địa chỉ lịch phát sóng (EPG), hãy dán vào đây: chương trình đang chiếu sẽ hiện bên dưới các kênh.",
   "action_save": "Lưu",
   "notice_tv_not_starting": "TV không bắt đầu phát. TV đã bật chưa? TV ở chế độ chờ vẫn nhận video nhưng không hiển thị.",
-  "start_title": "Bắt đầu",
+  "start_title": "Khám phá",
   "start_tv_title": "Kênh TV miễn phí",
   "start_tv_sub": "Các kênh miễn phí ở quốc gia của bạn, chỉ trong một liên kết.",
   "start_sites_title": "Các trang miễn phí, hợp pháp để thử: mở một video rồi gửi lên TV.",
@@ -519,7 +519,13 @@
   "sources_add": "Thêm nguồn",
   "sources_settings_sub": "Phim tự do, PeerTube, Internet Archive",
   "sources_card": "Video tự do",
-  "sources_card_sub": "Phim phạm vi công cộng, PeerTube, Internet Archive: miễn phí và hợp pháp."
+  "sources_card_sub": "Phim phạm vi công cộng, PeerTube, Internet Archive: miễn phí và hợp pháp.",
+  "search_tv": "Trên TV",
+  "open_blender_studio": "Blender Studio · PeerTube",
+  "open_ia_feature": "Phim phạm vi công cộng",
+  "open_ia_cartoons": "Hoạt hình cổ điển",
+  "open_ia_silent": "Phim câm",
+  "open_ia_prelinger": "Lưu trữ Prelinger"
  },
  "plurals": {
   "browser_found": {

@@ -239,7 +239,7 @@
   "iptv_guide_help": "プロバイダが番組表（EPG）のアドレスを提供している場合は、ここに貼り付けてください。各チャンネルの下に現在の番組が表示されます。",
   "action_save": "保存",
   "notice_tv_not_starting": "テレビで再生が始まりません。テレビの電源は入っていますか？スタンバイ中のテレビは動画を受け付けますが、表示しません。",
-  "start_title": "はじめに",
+  "start_title": "おすすめ",
   "start_tv_title": "無料テレビチャンネル",
   "start_tv_sub": "あなたの国で見られる無料チャンネルを、リンク1つで。",
   "start_sites_title": "無料で合法なおすすめサイト：動画を開いて、テレビに送りましょう。",
@@ -519,7 +519,13 @@
   "sources_add": "ソースを追加",
   "sources_settings_sub": "フリー映画、PeerTube、Internet Archive",
   "sources_card": "フリー動画",
-  "sources_card_sub": "パブリックドメイン映画、PeerTube、Internet Archive：無料で合法。"
+  "sources_card_sub": "パブリックドメイン映画、PeerTube、Internet Archive：無料で合法。",
+  "search_tv": "テレビで",
+  "open_blender_studio": "Blender Studio · PeerTube",
+  "open_ia_feature": "パブリックドメイン映画",
+  "open_ia_cartoons": "クラシックアニメ",
+  "open_ia_silent": "サイレント映画",
+  "open_ia_prelinger": "Prelingerアーカイブ"
  },
  "plurals": {
   "browser_found": {

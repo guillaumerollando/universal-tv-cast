@@ -240,7 +240,7 @@
     <string name="iptv_guide_help">Nếu nhà cung cấp có địa chỉ lịch phát sóng (EPG), hãy dán vào đây: chương trình đang chiếu sẽ hiện bên dưới các kênh.</string>
     <string name="action_save">Lưu</string>
     <string name="notice_tv_not_starting">TV không bắt đầu phát. TV đã bật chưa? TV ở chế độ chờ vẫn nhận video nhưng không hiển thị.</string>
-    <string name="start_title">Bắt đầu</string>
+    <string name="start_title">Khám phá</string>
     <string name="start_tv_title">Kênh TV miễn phí</string>
     <string name="start_tv_sub">Các kênh miễn phí ở quốc gia của bạn, chỉ trong một liên kết.</string>
     <string name="start_sites_title">Các trang miễn phí, hợp pháp để thử: mở một video rồi gửi lên TV.</string>
@@ -521,6 +521,12 @@
     <string name="sources_settings_sub">Phim tự do, PeerTube, Internet Archive</string>
     <string name="sources_card">Video tự do</string>
     <string name="sources_card_sub">Phim phạm vi công cộng, PeerTube, Internet Archive: miễn phí và hợp pháp.</string>
+    <string name="search_tv">Trên TV</string>
+    <string name="open_blender_studio">Blender Studio · PeerTube</string>
+    <string name="open_ia_feature">Phim phạm vi công cộng</string>
+    <string name="open_ia_cartoons">Hoạt hình cổ điển</string>
+    <string name="open_ia_silent">Phim câm</string>
+    <string name="open_ia_prelinger">Lưu trữ Prelinger</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

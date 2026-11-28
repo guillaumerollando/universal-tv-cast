@@ -166,39 +166,11 @@ internal fun XtreamCatalog(
 }
 
 @Composable
-internal fun VodTile(v: VodItem, showName: Boolean = true, onClick: () -> Unit) {
-    val c = MaterialTheme.colorScheme
-    Column(Modifier.clip(RoundedCornerShape(12.dp)).clickable(onClick = onClick).semantics { contentDescription = v.name }) {
-        Box(Modifier.fillMaxWidth().aspectRatio(2f / 3f).clip(RoundedCornerShape(12.dp))
-            .background(Brush.verticalGradient(listOf(c.surfaceContainerHighest, c.surfaceContainerHigh)))) {
-            // En attendant l'affiche (ou sans affiche) : le titre sur une jaquette sobre.
-            Column(Modifier.fillMaxSize().padding(10.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(if (v.movie != null) Icons.Rounded.Movie else Icons.Rounded.VideoLibrary, null, tint = c.primary.copy(alpha = 0.8f), modifier = Modifier.size(28.dp))
-                Spacer(Modifier.height(6.dp))
-                Text(v.name, style = MaterialTheme.typography.labelMedium, color = c.onSurfaceVariant, textAlign = TextAlign.Center,
-                    maxLines = 4, overflow = TextOverflow.Ellipsis)
-            }
-            RemoteImage(v.image, Modifier.fillMaxSize(), maxSide = 400)
-            // Rangées de l'accueil (sans titre dessous) : le titre en bas de l'image, sur un dégradé, pour les images
-            // tirées du film qui ne le portent pas.
-            if (!showName && v.image != null && v.movie?.url?.contains("archive.org/download") == true && v.image?.contains("wikimedia") != true)
-                Text(v.name, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = Color.White,
-                    maxLines = 2, overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.align(Alignment.BottomStart).fillMaxWidth()
-                        .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(alpha = 0.8f))))
-                        .padding(start = 8.dp, end = 8.dp, top = 18.dp, bottom = 8.dp))
-            v.rating?.let { r ->
-                Text("★ %.1f".format(if (r > 10) r / 10 else r), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold,
-                    color = Color.White, modifier = Modifier.align(Alignment.TopEnd).padding(6.dp)
-                        .clip(RoundedCornerShape(8.dp)).background(Color.Black.copy(alpha = 0.55f)).padding(horizontal = 6.dp, vertical = 2.dp))
-            }
-        }
-        if (showName) {
-            Spacer(Modifier.height(4.dp))
-            Text(v.name, style = MaterialTheme.typography.labelMedium, maxLines = 2, overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(horizontal = 2.dp))
-        }
-    }
+internal fun VodTile(v: VodItem, onClick: () -> Unit) {
+    // Image tirée du film (catalogue libre sans vraie affiche) : le titre dans l'image.
+    val frame = v.image != null && v.movie?.url?.contains("archive.org/download") == true && v.image?.contains("wikimedia") != true
+    MediaCard(v.name, v.image, caption = frame, rating = v.rating,
+        icon = if (v.movie != null) Icons.Rounded.Movie else Icons.Rounded.VideoLibrary, onClick = onClick)
 }
 
 /** Une rangée de l'accueil : son titre, ce qu'elle ouvre avec « Tout voir » (sorte et catégorie), ses affiches. */
@@ -366,10 +338,14 @@ internal fun SearchScreen(accounts: List<Xtream.Account>) {
     }
 }
 
-/** Une rangée par source pour [q] ; chaque source arrive à son rythme, une source sans résultat ne s'affiche pas. */
+/**
+ * Résultats pour [q], en une grille qui défile comme le reste de la page : un titre par source (tes films et séries,
+ * à la télé, ton réseau, PeerTube, Internet Archive), chacune arrivant à son rythme ; une source vide ne s'affiche pas.
+ */
 @Composable
 private fun MixedResults(q: String, accounts: List<Xtream.Account>, open: Set<OpenSources.Source>) {
     val vod by produceState<List<VodItem>?>(null, q, accounts) { value = if (accounts.isEmpty()) emptyList() else vodSearch(accounts, q) }
+    val tv by produceState<List<TvHit>?>(null, q) { value = runCatching { tvSearch(q) }.getOrDefault(emptyList()) }
     val lan by produceState<List<OpenSources.Hit>?>(null, q) { value = if (OpenSources.hasLan()) runCatching { OpenSources.lan(q) }.getOrDefault(emptyList()) else emptyList() }
     val pt by produceState<List<OpenSources.Hit>?>(null, q, open) {
         value = if (OpenSources.Source.PEERTUBE in open) runCatching { OpenSources.peertube(q) }.getOrDefault(emptyList()) else emptyList()
@@ -379,77 +355,71 @@ private fun MixedResults(q: String, accounts: List<Xtream.Account>, open: Set<Op
     }
     var series by remember { mutableStateOf<VodItem?>(null) }
     series?.series?.let { sr -> SeriesSheet(series!!.account, sr, onDismiss = { series = null }, onPlayed = { series = null }) }
-    val sections = listOf(vod, lan, pt, ia)
+    val sections = listOf(vod, tv, lan, pt, ia)
     val c = MaterialTheme.colorScheme
-    LazyColumn(contentPadding = PaddingValues(bottom = 16.dp + LocalBottomInset.current), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        if (!vod.isNullOrEmpty()) item {
-            HitSection(stringResource(R.string.search_yours)) {
-                items(vod!!, key = { it.key }) { v ->
-                    Box(Modifier.width(112.dp)) {
-                        VodTile(v) {
-                            if (v.movie != null) { TvCast.open(Xtream.movieMedia(v.account, v.movie)); Nav.tab.value = Tab.PLAYER } else series = v
-                        }
-                    }
-                }
+    val full: androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope.() -> androidx.compose.foundation.lazy.grid.GridItemSpan =
+        { androidx.compose.foundation.lazy.grid.GridItemSpan(maxLineSpan) }
+    // Vignette large (vidéo, chaîne) : toute la largeur sur un téléphone (pas de trou à côté), deux affiches au-delà.
+    val wide: androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope.() -> androidx.compose.foundation.lazy.grid.GridItemSpan =
+        { androidx.compose.foundation.lazy.grid.GridItemSpan(if (maxLineSpan <= 3) maxLineSpan else 2) }
+    fun androidx.compose.foundation.lazy.grid.LazyGridScope.header(title: String) = item(span = full) {
+        Text(title, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold), modifier = Modifier.padding(start = 4.dp, top = 10.dp, bottom = 2.dp))
+    }
+    fun androidx.compose.foundation.lazy.grid.LazyGridScope.hits(title: String, list: List<OpenSources.Hit>) {
+        header(title)
+        items(list, key = { it.key }, span = { if (it.wide) wide() else androidx.compose.foundation.lazy.grid.GridItemSpan(1) }) { h -> HitCard(h) }
+    }
+    val tYours = stringResource(R.string.search_yours); val tTv = stringResource(R.string.search_tv); val tLan = stringResource(R.string.search_lan)
+    val tNone = stringResource(R.string.search_none)
+    // On fait défiler les résultats : le clavier s'en va (toute la place aux résultats).
+    val gridState = androidx.compose.foundation.lazy.grid.rememberLazyGridState()
+    val keyboard = androidx.compose.ui.platform.LocalSoftwareKeyboardController.current
+    val focus = androidx.compose.ui.platform.LocalFocusManager.current
+    LaunchedEffect(gridState.isScrollInProgress) { if (gridState.isScrollInProgress) { keyboard?.hide(); focus.clearFocus() } }
+    LazyVerticalGrid(
+        state = gridState,
+        columns = GridCells.Adaptive(104.dp),
+        contentPadding = PaddingValues(start = 12.dp, end = 12.dp, bottom = 16.dp + LocalBottomInset.current),
+        horizontalArrangement = Arrangement.spacedBy(10.dp), verticalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        if (!vod.isNullOrEmpty()) {
+            header(tYours)
+            items(vod!!, key = { it.key }) { v ->
+                VodTile(v) { if (v.movie != null) { TvCast.open(Xtream.movieMedia(v.account, v.movie)); Nav.tab.value = Tab.PLAYER } else series = v }
             }
         }
-        if (!lan.isNullOrEmpty()) item { HitRow(stringResource(R.string.search_lan), lan!!) }
-        if (!pt.isNullOrEmpty()) item { HitRow("PeerTube", pt!!) }
-        if (!ia.isNullOrEmpty()) item { HitRow("Internet Archive", ia!!) }
+        if (!tv.isNullOrEmpty()) {
+            header(tTv)
+            items(tv!!, key = { "tv" + it.channel.url }) { t -> TvHitCard(t) }
+        }
+        if (!lan.isNullOrEmpty()) hits(tLan, lan!!)
+        if (!pt.isNullOrEmpty()) hits("PeerTube", pt!!)
+        if (!ia.isNullOrEmpty()) hits("Internet Archive", ia!!)
         when {
-            sections.any { it == null } -> item {
+            sections.any { it == null } -> item(span = full) {
                 Box(Modifier.fillMaxWidth().padding(16.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator(Modifier.size(28.dp)) }
             }
-            sections.all { it.isNullOrEmpty() } -> item {
-                Text(stringResource(R.string.search_none), color = c.onSurfaceVariant, textAlign = TextAlign.Center,
+            sections.all { it.isNullOrEmpty() } -> item(span = full) {
+                Text(tNone, color = c.onSurfaceVariant, textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth().padding(24.dp))
             }
         }
     }
 }
 
+/** La carte d'une vidéo de source ouverte ou du réseau : toucher cherche l'adresse de la vidéo, puis la lance. */
 @Composable
-private fun HitSection(title: String, content: androidx.compose.foundation.lazy.LazyListScope.() -> Unit) {
-    Column {
-        Text(title, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp))
-        LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp), content = content)
-    }
-}
-
-/** Une rangée de résultats d'une source ouverte ou du réseau ; toucher cherche l'adresse de la vidéo puis la lance. */
-@Composable
-private fun HitRow(title: String, hits: List<OpenSources.Hit>) {
+internal fun HitCard(h: OpenSources.Hit, modifier: Modifier = Modifier) {
     val scope = androidx.compose.runtime.rememberCoroutineScope()
     val ctx = androidx.compose.ui.platform.LocalContext.current
-    var busy by remember { mutableStateOf<String?>(null) }
-    val c = MaterialTheme.colorScheme
-    HitSection(title) {
-        items(hits, key = { it.key }) { h ->
-            val w = if (h.wide) 200.dp else 112.dp
-            Column(Modifier.width(w).clip(RoundedCornerShape(12.dp)).clickable(enabled = busy == null) {
-                busy = h.key
-                scope.launch {
-                    val m = runCatching { h.open() }.getOrNull()
-                    busy = null
-                    if (m != null) { TvCast.open(m); Nav.tab.value = Tab.PLAYER }
-                    else android.widget.Toast.makeText(ctx, R.string.search_unavailable, android.widget.Toast.LENGTH_SHORT).show()
-                }
-            }.semantics { contentDescription = h.title }) {
-                Box(Modifier.fillMaxWidth().aspectRatio(if (h.wide) 16f / 9f else 2f / 3f).clip(RoundedCornerShape(12.dp))
-                    .background(Brush.verticalGradient(listOf(c.surfaceContainerHighest, c.surfaceContainerHigh))), contentAlignment = Alignment.Center) {
-                    Icon(Icons.Rounded.Movie, null, tint = c.primary.copy(alpha = 0.7f), modifier = Modifier.size(28.dp))
-                    RemoteImage(h.image, Modifier.fillMaxSize(), maxSide = 400)
-                    if (busy == h.key) Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.5f)), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator(Modifier.size(28.dp), color = Color.White)
-                    }
-                }
-                Spacer(Modifier.height(4.dp))
-                Text(h.title, style = MaterialTheme.typography.labelMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                h.sub?.takeIf { it.isNotEmpty() }?.let {
-                    Text(it, style = MaterialTheme.typography.labelSmall, color = c.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                }
-            }
+    var busy by remember { mutableStateOf(false) }
+    MediaCard(h.title, h.image, modifier, wide = h.wide, caption = h.caption, busy = busy) {
+        busy = true
+        scope.launch {
+            val m = runCatching { h.open() }.getOrNull()
+            busy = false
+            if (m != null) { TvCast.open(m); Nav.tab.value = Tab.PLAYER }
+            else android.widget.Toast.makeText(ctx, R.string.search_unavailable, android.widget.Toast.LENGTH_SHORT).show()
         }
     }
 }
@@ -520,5 +490,51 @@ private fun SourceLink(icon: androidx.compose.ui.graphics.vector.ImageVector, ti
             Text(sub, style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
         }
         Icon(Icons.AutoMirrored.Rounded.ArrowForward, null, tint = c.onSurfaceVariant)
+    }
+}
+
+/** Une chaîne trouvée par la recherche : par son nom, ou par ce qu'elle diffuse en ce moment ([now]). */
+internal data class TvHit(val channel: com.rollandostudio.universaltvcast.data.Iptv.Channel, val now: String?)
+
+/**
+ * « À la télé » : les chaînes des listes importées dont le nom, ou le programme en cours (guide des programmes),
+ * contient [query]. Le guide est relu au plus pour 400 chaînes (les premières des listes, pays du téléphone d'abord).
+ */
+internal suspend fun tvSearch(query: String): List<TvHit> = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+    val q = fold(query.trim())
+    val all = com.rollandostudio.universaltvcast.data.IptvStore.allChannels()
+    if (all.isEmpty()) return@withContext emptyList()
+    val here = java.util.Locale.getDefault().country.lowercase()
+    val pool = all.distinctBy { fold(it.name) }.sortedByDescending { it.country == here }.take(400)
+    // Par le nom d'abord (tout de suite), puis par le programme en cours : le guide (téléchargé la première fois) a
+    // 8 secondes au plus ; ce qui n'est pas prêt est laissé de côté.
+    val byName = pool.filter { fold(it.name).contains(q) }.take(24)
+    val now = HashMap<String, String>()
+    val more = ArrayList<TvHit>()
+    kotlinx.coroutines.withTimeoutOrNull(8000) {
+        for (ch in pool) {
+            val title = runCatching { com.rollandostudio.universaltvcast.data.Epg.nowNext(ch.name, ch.country, ch.tvgId) }.getOrNull()?.first?.title ?: continue
+            now[ch.url] = title
+            if (ch !in byName && fold(title).contains(q) && more.size < 24) more += TvHit(ch, title)
+        }
+    }
+    byName.map { TvHit(it, now[it.url]) } + more
+}
+
+/** Carte d'une chaîne trouvée : son logo (format des chaînes), et ce qui passe en ce moment dessous. */
+@Composable
+private fun TvHitCard(t: TvHit) {
+    val c = MaterialTheme.colorScheme
+    Column(Modifier.clip(RoundedCornerShape(12.dp)).clickable { playChannel(t.channel); Nav.tab.value = Tab.PLAYER }) {
+        ChannelArt(
+            name = t.channel.name, logo = t.channel.logo, streamUrl = null, pad = ChannelTiles.logoPad,
+            textStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold),
+            modifier = Modifier.fillMaxWidth().aspectRatio(16f / 10f).clip(RoundedCornerShape(12.dp)),
+        )
+        t.now?.let {
+            Spacer(Modifier.height(4.dp))
+            Text(it, style = MaterialTheme.typography.labelMedium, color = c.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(horizontal = 2.dp))
+        }
     }
 }

@@ -240,7 +240,7 @@
     <string name="iptv_guide_help">Если твой провайдер даёт адрес телепрограммы (EPG), вставь его сюда: под каналами появится текущая передача.</string>
     <string name="action_save">Сохранить</string>
     <string name="notice_tv_not_starting">Телевизор не начинает воспроизведение. Он включён? Телевизор в режиме ожидания принимает видео, но не показывает его.</string>
-    <string name="start_title">С чего начать</string>
+    <string name="start_title">Стоит открыть</string>
     <string name="start_tv_title">Бесплатные ТВ-каналы</string>
     <string name="start_tv_sub">Бесплатные каналы твоей страны — по одной ссылке.</string>
     <string name="start_sites_title">Бесплатные легальные сайты: открой видео и отправь его на телевизор.</string>
@@ -521,6 +521,12 @@
     <string name="sources_settings_sub">Свободные фильмы, PeerTube, Internet Archive</string>
     <string name="sources_card">Свободное видео</string>
     <string name="sources_card_sub">Фильмы в общественном достоянии, PeerTube, Internet Archive: бесплатно и легально.</string>
+    <string name="search_tv">По ТВ</string>
+    <string name="open_blender_studio">Blender Studio · PeerTube</string>
+    <string name="open_ia_feature">Фильмы в общественном достоянии</string>
+    <string name="open_ia_cartoons">Классические мультфильмы</string>
+    <string name="open_ia_silent">Немое кино</string>
+    <string name="open_ia_prelinger">Архив Прелинджера</string>
     <plurals name="browser_found">
         <item quantity="one">%d видео</item>
         <item quantity="few">%d видео</item>

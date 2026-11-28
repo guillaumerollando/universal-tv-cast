@@ -240,7 +240,7 @@
     <string name="iptv_guide_help">Jika penyedia Anda memberikan alamat panduan acara (EPG), tempel di sini: acara yang sedang tayang akan muncul di bawah salurannya.</string>
     <string name="action_save">Simpan</string>
     <string name="notice_tv_not_starting">TV tidak memulai pemutaran. Apakah TV menyala? TV dalam mode siaga menerima video tetapi tidak menampilkannya.</string>
-    <string name="start_title">Untuk memulai</string>
+    <string name="start_title">Untuk dijelajahi</string>
     <string name="start_tv_title">Saluran TV gratis</string>
     <string name="start_tv_sub">Saluran gratis di negaramu, dalam satu tautan.</string>
     <string name="start_sites_title">Situs gratis dan legal untuk dicoba: buka video, lalu kirim ke TV Anda.</string>
@@ -521,6 +521,12 @@
     <string name="sources_settings_sub">Film bebas, PeerTube, Internet Archive</string>
     <string name="sources_card">Video bebas</string>
     <string name="sources_card_sub">Film domain publik, PeerTube, Internet Archive: gratis dan legal.</string>
+    <string name="search_tv">Di TV</string>
+    <string name="open_blender_studio">Blender Studio · PeerTube</string>
+    <string name="open_ia_feature">Film domain publik</string>
+    <string name="open_ia_cartoons">Kartun klasik</string>
+    <string name="open_ia_silent">Film bisu</string>
+    <string name="open_ia_prelinger">Arsip Prelinger</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

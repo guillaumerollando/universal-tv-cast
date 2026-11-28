@@ -239,7 +239,7 @@
   "iptv_guide_help": "Dacă furnizorul tău oferă o adresă de ghid TV (EPG), lipește-o aici: emisiunea curentă va apărea sub canalele sale.",
   "action_save": "Salvează",
   "notice_tv_not_starting": "Televizorul nu pornește redarea. Este pornit? Un TV în standby acceptă videoclipul, dar nu-l afișează.",
-  "start_title": "Pentru început",
+  "start_title": "De descoperit",
   "start_tv_title": "Canale TV gratuite",
   "start_tv_sub": "Canalele gratuite din țara ta, într-un singur link.",
   "start_sites_title": "Site-uri gratuite și legale de încercat: deschide un videoclip, apoi trimite-l pe TV.",
@@ -519,7 +519,13 @@
   "sources_add": "Adaugă o sursă",
   "sources_settings_sub": "Filme libere, PeerTube, Internet Archive",
   "sources_card": "Videoclipuri libere",
-  "sources_card_sub": "Filme din domeniul public, PeerTube, Internet Archive: gratuite și legale."
+  "sources_card_sub": "Filme din domeniul public, PeerTube, Internet Archive: gratuite și legale.",
+  "search_tv": "La TV",
+  "open_blender_studio": "Blender Studio · PeerTube",
+  "open_ia_feature": "Filme din domeniul public",
+  "open_ia_cartoons": "Desene animate clasice",
+  "open_ia_silent": "Filme mute",
+  "open_ia_prelinger": "Arhivele Prelinger"
  },
  "plurals": {
   "browser_found": {

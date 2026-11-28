@@ -239,7 +239,7 @@
   "iptv_guide_help": "Если твой провайдер даёт адрес телепрограммы (EPG), вставь его сюда: под каналами появится текущая передача.",
   "action_save": "Сохранить",
   "notice_tv_not_starting": "Телевизор не начинает воспроизведение. Он включён? Телевизор в режиме ожидания принимает видео, но не показывает его.",
-  "start_title": "С чего начать",
+  "start_title": "Стоит открыть",
   "start_tv_title": "Бесплатные ТВ-каналы",
   "start_tv_sub": "Бесплатные каналы твоей страны — по одной ссылке.",
   "start_sites_title": "Бесплатные легальные сайты: открой видео и отправь его на телевизор.",
@@ -519,7 +519,13 @@
   "sources_add": "Добавить источник",
   "sources_settings_sub": "Свободные фильмы, PeerTube, Internet Archive",
   "sources_card": "Свободное видео",
-  "sources_card_sub": "Фильмы в общественном достоянии, PeerTube, Internet Archive: бесплатно и легально."
+  "sources_card_sub": "Фильмы в общественном достоянии, PeerTube, Internet Archive: бесплатно и легально.",
+  "search_tv": "По ТВ",
+  "open_blender_studio": "Blender Studio · PeerTube",
+  "open_ia_feature": "Фильмы в общественном достоянии",
+  "open_ia_cartoons": "Классические мультфильмы",
+  "open_ia_silent": "Немое кино",
+  "open_ia_prelinger": "Архив Прелинджера"
  },
  "plurals": {
   "browser_found": {

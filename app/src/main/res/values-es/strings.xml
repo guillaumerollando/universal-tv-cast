@@ -157,6 +157,12 @@
     <string name="sources_settings_sub">Películas libres, PeerTube, Internet Archive</string>
     <string name="sources_card">Vídeos libres</string>
     <string name="sources_card_sub">Películas de dominio público, PeerTube, Internet Archive: gratis y legales.</string>
+    <string name="search_tv">En la tele</string>
+    <string name="open_blender_studio">Blender Studio · PeerTube</string>
+    <string name="open_ia_feature">Películas de dominio público</string>
+    <string name="open_ia_cartoons">Dibujos animados clásicos</string>
+    <string name="open_ia_silent">Cine mudo</string>
+    <string name="open_ia_prelinger">Archivos Prelinger</string>
     <string name="action_dont_show">No volver a mostrar</string>
     <string name="help_section">Solución de problemas</string>
     <string name="state_expanded">abierto</string>
@@ -466,7 +472,7 @@
     <string name="iptv_guide_help">Si tu proveedor da una dirección de guía de programación (EPG), pégala aquí: el programa en curso aparecerá bajo sus canales.</string>
     <string name="action_save">Guardar</string>
     <string name="notice_tv_not_starting">La TV no inicia la reproducción. ¿Está encendida? En reposo acepta el vídeo pero no lo muestra.</string>
-    <string name="start_title">Para empezar</string>
+    <string name="start_title">Por descubrir</string>
     <string name="start_tv_title">Canales de TV gratis</string>
     <string name="start_tv_sub">Los canales gratuitos disponibles en tu país, en un solo enlace.</string>
     <string name="start_sites_title">Webs gratuitas y legales para probar: abre un vídeo y envíalo a tu TV.</string>

@@ -239,7 +239,7 @@
   "iptv_guide_help": "Якщо твій провайдер дає адресу телепрограми (EPG), встав її сюди: під каналами з’явиться поточна передача.",
   "action_save": "Зберегти",
   "notice_tv_not_starting": "Телевізор не починає відтворення. Він увімкнений? Телевізор у режимі очікування приймає відео, але не показує його.",
-  "start_title": "З чого почати",
+  "start_title": "Варто відкрити",
   "start_tv_title": "Безкоштовні ТБ-канали",
   "start_tv_sub": "Безкоштовні канали твоєї країни — за одним посиланням.",
   "start_sites_title": "Безкоштовні легальні сайти: відкрий відео й надішли його на телевізор.",
@@ -519,7 +519,13 @@
   "sources_add": "Додати джерело",
   "sources_settings_sub": "Вільні фільми, PeerTube, Internet Archive",
   "sources_card": "Вільні відео",
-  "sources_card_sub": "Фільми в суспільному надбанні, PeerTube, Internet Archive: безкоштовно й легально."
+  "sources_card_sub": "Фільми в суспільному надбанні, PeerTube, Internet Archive: безкоштовно й легально.",
+  "search_tv": "На ТБ",
+  "open_blender_studio": "Blender Studio · PeerTube",
+  "open_ia_feature": "Фільми в суспільному надбанні",
+  "open_ia_cartoons": "Класичні мультфільми",
+  "open_ia_silent": "Німе кіно",
+  "open_ia_prelinger": "Архів Прелінджера"
  },
  "plurals": {
   "browser_found": {

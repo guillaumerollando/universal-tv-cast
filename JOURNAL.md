@@ -1849,3 +1849,23 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   lus. 68 tests, 0 échec.
 - Pas vérifié : index des dossiers partagés SMB (pas de serveur SMB d'essai qui répond) ; lecture de ces sources sur
   la télé.
+
+## 2026-11-28 — Cartes communes, sources ouvertes sur l'accueil, « À la télé », « À découvrir »
+- **Un seul composant de carte** (`ui/MediaCard.kt`) pour tout film, série ou vidéo (accueil, Rechercher, catalogues,
+  sources) : l'affiche seule, comme Netflix ; le titre seulement sans image (au centre) ou quand l'image n'est pas une
+  affiche (vignette de vidéo, image du film : posé dans l'image, en bas).
+- **Résultats de recherche** : une grille qui défile verticalement (plus de carrousels), un titre par source ; le
+  clavier se ferme dès qu'on fait défiler ; vignettes larges en pleine largeur sur téléphone.
+- **« À la télé »** dans la recherche : chaînes des listes dont le nom, ou le programme en cours, contient le texte
+  (par le nom tout de suite, par le guide en 8 s au plus) ; programme en cours sous la tuile.
+- **Sources ouvertes sur l'accueil** (avant, seulement en recherche : « rien ne se passe » en les activant) :
+  PeerTube → rangée « Blender Studio » (instance officielle) ; Internet Archive → films du domaine public, dessins
+  animés d'antan, films muets, archives Prelinger (6 h de cache).
+- **PeerTube plus sûr** : licence libre obligatoire (CC ou domaine public) et catégorie « Films » écartée (les tests
+  montraient « Le voyage de Chihiro », « Star Wars »… mis en ligne sans droits) ; pas de rangées par thème
+  (pseudo-science, piratage mal étiqueté) ; langue du téléphone d'abord.
+- Écran « Chaînes » appelé **« Sources »** quand il contient des films ou séries ; « Abonnement IPTV » (écran
+  Sources) ouvre « Colle un lien ».
+- **« Pour commencer » → « À découvrir »**, gardé en bas de l'accueil même avec des sources (plus de contenu).
+- Vérifié sur émulateur : rangées Archive et Blender Studio, « À découvrir » en bas, « night » / « tom » / « info »
+  (chaînes franceinfo, TV5Monde Info, Africa 24, Puissance TV par son programme) ; 68 tests, 0 échec.

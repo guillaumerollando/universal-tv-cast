@@ -240,7 +240,7 @@
     <string name="iptv_guide_help">Sağlayıcınız bir yayın akışı (EPG) adresi veriyorsa buraya yapıştırın: geçerli program kanallarının altında görünür.</string>
     <string name="action_save">Kaydet</string>
     <string name="notice_tv_not_starting">TV oynatmayı başlatmıyor. Açık mı? Bekleme modundaki bir TV videoyu kabul eder ama göstermez.</string>
-    <string name="start_title">Başlamak için</string>
+    <string name="start_title">Keşfet</string>
     <string name="start_tv_title">Ücretsiz TV kanalları</string>
     <string name="start_tv_sub">Ülkendeki ücretsiz kanallar, tek bir bağlantıda.</string>
     <string name="start_sites_title">Denemeniz için ücretsiz ve yasal siteler: bir video açın, sonra TV\'nize gönderin.</string>
@@ -521,6 +521,12 @@
     <string name="sources_settings_sub">Özgür filmler, PeerTube, Internet Archive</string>
     <string name="sources_card">Özgür videolar</string>
     <string name="sources_card_sub">Kamu malı filmler, PeerTube, Internet Archive: ücretsiz ve yasal.</string>
+    <string name="search_tv">TV\'de</string>
+    <string name="open_blender_studio">Blender Studio · PeerTube</string>
+    <string name="open_ia_feature">Kamu malı filmler</string>
+    <string name="open_ia_cartoons">Klasik çizgi filmler</string>
+    <string name="open_ia_silent">Sessiz filmler</string>
+    <string name="open_ia_prelinger">Prelinger Arşivi</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video</item>

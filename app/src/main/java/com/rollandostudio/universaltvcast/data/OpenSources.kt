@@ -44,7 +44,9 @@ object OpenSources {
     }
 
     /** Un résultat de recherche, d'où qu'il vienne : de quoi l'afficher, et de quoi le lancer (adresse trouvée au toucher). */
-    data class Hit(val key: String, val title: String, val image: String?, val sub: String?, val wide: Boolean, val open: suspend () -> Media?)
+    /** [caption] : l'image n'est pas une affiche (vignette, image du film) : la carte y écrit le titre. */
+    data class Hit(val key: String, val title: String, val image: String?, val sub: String?, val wide: Boolean,
+                   val caption: Boolean = true, val open: suspend () -> Media?)
 
     private val UNSAFE = Regex("(?i)\\b(sex|nude|nudi|naked|erotic|porn|xxx|nazi)")
     private fun enc(s: String) = URLEncoder.encode(s, "UTF-8")
@@ -52,10 +54,17 @@ object OpenSources {
 
     // ---- PeerTube ----
     suspend fun peertube(query: String): List<Hit> = withContext(Dispatchers.IO) {
-        val url = "https://sepiasearch.org/api/v1/search/videos?search=${enc(query)}&count=30&nsfw=false&isLive=false"
-        val data = json(url).optJSONArray("data") ?: JSONArray()
+        // Licence libre obligatoire (Creative Commons ou domaine public), et pas la catégorie « Films » : c'est là
+        // que se glissent les films mis en ligne sans droits (souvent sans licence, parfois avec une fausse).
+        val licences = (1..7).joinToString("") { "&licenceOneOf=$it" }
+        val base = "https://sepiasearch.org/api/v1/search/videos?search=${enc(query)}&count=40&nsfw=false&isLive=false$licences"
+        // Dans la langue du téléphone d'abord (et les vidéos sans langue indiquée) ; trop peu : toutes les langues.
+        val lang = java.util.Locale.getDefault().language
+        val local = runCatching { json("$base&languageOneOf=$lang&languageOneOf=_unknown").optJSONArray("data") }.getOrNull()
+        val data = local?.takeIf { it.length() >= 6 } ?: json(base).optJSONArray("data") ?: JSONArray()
         (0 until data.length()).mapNotNull { i ->
             val v = data.getJSONObject(i)
+            if (v.optJSONObject("category")?.optInt("id") == 2) return@mapNotNull null
             val name = v.optString("name").trim()
             val uuid = v.optString("uuid")
             val host = v.optJSONObject("account")?.optString("host")?.ifEmpty { null } ?: return@mapNotNull null
@@ -79,6 +88,21 @@ object OpenSources {
             posterUrl = thumb, backdropUrl = thumb, pageUrl = page.ifEmpty { null })
     }
 
+    /**
+     * Vidéos récentes d'une chaîne PeerTube choisie et sûre (son instance officielle) : de quoi montrer PeerTube sur
+     * l'accueil sans passer par une recherche par thème, où se mêlent vidéos douteuses et films sans droits.
+     */
+    private suspend fun peertubeChannel(host: String, path: String): List<Hit> = withContext(Dispatchers.IO) {
+        val data = json("https://$host$path").optJSONArray("data") ?: JSONArray()
+        (0 until data.length()).mapNotNull { i ->
+            val v = data.getJSONObject(i)
+            val uuid = v.optString("uuid").ifEmpty { return@mapNotNull null }
+            val name = v.optString("name").trim()
+            val thumb = v.optString("thumbnailPath").takeIf { it.startsWith("/") }?.let { "https://$host$it" }
+            Hit("pt:$uuid", name, thumb, null, wide = true) { peertubeMedia(host, uuid, name, thumb, "https://$host/w/$uuid") }
+        }
+    }
+
     // ---- Internet Archive ----
     private const val ARCHIVE_SCOPE = "mediatype:movies AND collection:(feature_films OR short_films OR prelinger OR silent_films OR " +
         "classic_cartoons OR animationandcartoons) AND (licenseurl:*publicdomain* OR licenseurl:*creativecommons*)"
@@ -94,6 +118,45 @@ object OpenSources {
             if (title.isEmpty() || UNSAFE.containsMatchIn(title)) return@mapNotNull null
             val year = d.opt("year")?.toString()?.take(4)?.takeIf { it.all(Char::isDigit) }
             Hit("ia:$id", title, "https://archive.org/services/img/$id", year, wide = false) { archiveMedia(id, title + (year?.let { " ($it)" } ?: "")) }
+        }
+    }
+
+    /** Les plus regardés d'une collection tenue par Internet Archive (domaine public ou Creative Commons). */
+    private suspend fun archiveCollection(collection: String): List<Hit> = withContext(Dispatchers.IO) {
+        val q = "collection:$collection AND mediatype:movies AND (licenseurl:*publicdomain* OR licenseurl:*creativecommons*)"
+        val url = "https://archive.org/advancedsearch.php?q=${enc(q)}&fl[]=identifier&fl[]=title&fl[]=year&sort[]=downloads+desc&rows=24&output=json"
+        val docs = json(url).optJSONObject("response")?.optJSONArray("docs") ?: JSONArray()
+        (0 until docs.length()).mapNotNull { i ->
+            val d = docs.getJSONObject(i)
+            val id = d.optString("identifier").ifEmpty { return@mapNotNull null }
+            val title = d.opt("title").let { if (it is JSONArray) it.optString(0) else it?.toString() }?.trim().orEmpty()
+            if (title.isEmpty() || UNSAFE.containsMatchIn(title)) return@mapNotNull null
+            val year = d.opt("year")?.toString()?.take(4)?.takeIf { it.all(Char::isDigit) }
+            Hit("ia:$id", title, "https://archive.org/services/img/$id", year, wide = false) { archiveMedia(id, title + (year?.let { " ($it)" } ?: "")) }
+        }
+    }
+
+    /** Une rangée de l'accueil venue d'une source ouverte : son titre (ressource), ses vidéos. */
+    data class Row(val title: Int, val hits: List<Hit>)
+    private val rowsCache = HashMap<String, Pair<Long, List<Hit>>>()
+
+    /** Rangées de l'accueil pour les sources ouvertes ajoutées (gardées 6 h ; une rangée injoignable est sautée). */
+    suspend fun homeRows(): List<Row> {
+        val on = _on.value
+        val wanted = buildList {
+            if (Source.PEERTUBE in on) add(Triple("pt-blender", com.rollandostudio.universaltvcast.R.string.open_blender_studio,
+                suspend { peertubeChannel("video.blender.org", "/api/v1/videos?sort=-publishedAt&count=24&isLocal=true") }))
+            if (Source.ARCHIVE in on) {
+                add(Triple("ia-feature", com.rollandostudio.universaltvcast.R.string.open_ia_feature, suspend { archiveCollection("feature_films") }))
+                add(Triple("ia-cartoons", com.rollandostudio.universaltvcast.R.string.open_ia_cartoons, suspend { archiveCollection("classic_cartoons") }))
+                add(Triple("ia-silent", com.rollandostudio.universaltvcast.R.string.open_ia_silent, suspend { archiveCollection("silent_films") }))
+                add(Triple("ia-prelinger", com.rollandostudio.universaltvcast.R.string.open_ia_prelinger, suspend { archiveCollection("prelinger") }))
+            }
+        }
+        return wanted.mapNotNull { (key, title, load) ->
+            val cached = synchronized(rowsCache) { rowsCache[key] }?.takeIf { System.currentTimeMillis() - it.first < 6 * 3600_000L }?.second
+            val hits = cached ?: runCatching { load() }.getOrNull()?.also { synchronized(rowsCache) { rowsCache[key] = System.currentTimeMillis() to it } }
+            hits?.takeIf { it.isNotEmpty() }?.let { Row(title, it) }
         }
     }
 
@@ -148,7 +211,7 @@ object OpenSources {
         found.distinctBy { it.ref }.take(60).map { e ->
             val info = Catalog.parse(e.name)
             val title = if (info.isEpisode) "${info.title} S%02dE%02d".format(info.season, info.episode) else info.title
-            Hit("lan:${e.ref}", title, e.thumb, e.device?.name, wide = false) {
+            Hit("lan:${e.ref}", title, e.thumb, e.device?.name, wide = false, caption = false) {
                 val d = e.device!!
                 val url = if (d.kind == LanDevice.Kind.SHARE) Smb.contentUri(d, e.ref).toString() else e.ref
                 Media(url = url, title = title, mime = e.mime, fileName = e.name, posterUrl = e.thumb,

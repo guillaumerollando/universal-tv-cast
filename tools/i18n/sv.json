@@ -239,7 +239,7 @@
   "iptv_guide_help": "Om din leverantör erbjuder en adress till en programguide (EPG), klistra in den här: det aktuella programmet visas under kanalerna.",
   "action_save": "Spara",
   "notice_tv_not_starting": "Tv:n startar inte uppspelningen. Är den påslagen? En tv i viloläge tar emot videon men visar den inte.",
-  "start_title": "Kom igång",
+  "start_title": "Att upptäcka",
   "start_tv_title": "Gratis tv-kanaler",
   "start_tv_sub": "Gratiskanalerna i ditt land, i en enda länk.",
   "start_sites_title": "Gratis, lagliga sajter att prova: öppna en video och skicka den sedan till din tv.",
@@ -519,7 +519,13 @@
   "sources_add": "Lägg till en källa",
   "sources_settings_sub": "Fria filmer, PeerTube, Internet Archive",
   "sources_card": "Fria videor",
-  "sources_card_sub": "Filmer i allmän egendom, PeerTube, Internet Archive: gratis och lagligt."
+  "sources_card_sub": "Filmer i allmän egendom, PeerTube, Internet Archive: gratis och lagligt.",
+  "search_tv": "På tv",
+  "open_blender_studio": "Blender Studio · PeerTube",
+  "open_ia_feature": "Filmer i allmän egendom",
+  "open_ia_cartoons": "Klassiska tecknade filmer",
+  "open_ia_silent": "Stumfilmer",
+  "open_ia_prelinger": "Prelinger-arkivet"
  },
  "plurals": {
   "browser_found": {

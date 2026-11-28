@@ -239,7 +239,7 @@
   "iptv_guide_help": "अगर आपका प्रोवाइडर प्रोग्राम गाइड (EPG) का पता देता है, तो उसे यहाँ पेस्ट करें: मौजूदा प्रोग्राम उसके चैनलों के नीचे दिखेगा।",
   "action_save": "सेव करें",
   "notice_tv_not_starting": "टीवी प्लेबैक शुरू नहीं कर रहा। क्या वह चालू है? स्टैंडबाय पर टीवी वीडियो ले लेता है, लेकिन दिखाता नहीं।",
-  "start_title": "शुरू करने के लिए",
+  "start_title": "खोजें",
   "start_tv_title": "मुफ़्त टीवी चैनल",
   "start_tv_sub": "आपके देश के मुफ़्त चैनल, एक ही लिंक में।",
   "start_sites_title": "आज़माने के लिए मुफ़्त और कानूनी साइटें: कोई वीडियो खोलें, फिर उसे अपने टीवी पर भेजें।",
@@ -519,7 +519,13 @@
   "sources_add": "स्रोत जोड़ें",
   "sources_settings_sub": "मुक्त फ़िल्में, PeerTube, Internet Archive",
   "sources_card": "मुक्त वीडियो",
-  "sources_card_sub": "सार्वजनिक डोमेन की फ़िल्में, PeerTube, Internet Archive: मुफ़्त और कानूनी।"
+  "sources_card_sub": "सार्वजनिक डोमेन की फ़िल्में, PeerTube, Internet Archive: मुफ़्त और कानूनी।",
+  "search_tv": "टीवी पर",
+  "open_blender_studio": "Blender Studio · PeerTube",
+  "open_ia_feature": "सार्वजनिक डोमेन की फ़िल्में",
+  "open_ia_cartoons": "क्लासिक कार्टून",
+  "open_ia_silent": "मूक फ़िल्में",
+  "open_ia_prelinger": "Prelinger अभिलेखागार"
  },
  "plurals": {
   "browser_found": {

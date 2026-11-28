@@ -240,7 +240,7 @@
     <string name="iptv_guide_help">Jeśli Twój dostawca podaje adres programu TV (EPG), wklej go tutaj: pod kanałami pojawi się bieżąca audycja.</string>
     <string name="action_save">Zapisz</string>
     <string name="notice_tv_not_starting">Telewizor nie rozpoczyna odtwarzania. Czy jest włączony? Telewizor w trybie czuwania przyjmuje wideo, ale go nie pokazuje.</string>
-    <string name="start_title">Na początek</string>
+    <string name="start_title">Do odkrycia</string>
     <string name="start_tv_title">Darmowe kanały TV</string>
     <string name="start_tv_sub">Darmowe kanały w twoim kraju — w jednym linku.</string>
     <string name="start_sites_title">Darmowe, legalne strony do wypróbowania: otwórz wideo i wyślij je na telewizor.</string>
@@ -521,6 +521,12 @@
     <string name="sources_settings_sub">Wolne filmy, PeerTube, Internet Archive</string>
     <string name="sources_card">Wolne wideo</string>
     <string name="sources_card_sub">Filmy z domeny publicznej, PeerTube, Internet Archive: za darmo i legalnie.</string>
+    <string name="search_tv">W telewizji</string>
+    <string name="open_blender_studio">Blender Studio · PeerTube</string>
+    <string name="open_ia_feature">Filmy z domeny publicznej</string>
+    <string name="open_ia_cartoons">Klasyczne kreskówki</string>
+    <string name="open_ia_silent">Filmy nieme</string>
+    <string name="open_ia_prelinger">Archiwum Prelingera</string>
     <plurals name="browser_found">
         <item quantity="one">%d wideo</item>
         <item quantity="few">%d wideo</item>

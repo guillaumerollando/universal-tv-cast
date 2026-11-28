@@ -239,7 +239,7 @@
   "iptv_guide_help": "Sağlayıcınız bir yayın akışı (EPG) adresi veriyorsa buraya yapıştırın: geçerli program kanallarının altında görünür.",
   "action_save": "Kaydet",
   "notice_tv_not_starting": "TV oynatmayı başlatmıyor. Açık mı? Bekleme modundaki bir TV videoyu kabul eder ama göstermez.",
-  "start_title": "Başlamak için",
+  "start_title": "Keşfet",
   "start_tv_title": "Ücretsiz TV kanalları",
   "start_tv_sub": "Ülkendeki ücretsiz kanallar, tek bir bağlantıda.",
   "start_sites_title": "Denemeniz için ücretsiz ve yasal siteler: bir video açın, sonra TV'nize gönderin.",
@@ -519,7 +519,13 @@
   "sources_add": "Kaynak ekle",
   "sources_settings_sub": "Özgür filmler, PeerTube, Internet Archive",
   "sources_card": "Özgür videolar",
-  "sources_card_sub": "Kamu malı filmler, PeerTube, Internet Archive: ücretsiz ve yasal."
+  "sources_card_sub": "Kamu malı filmler, PeerTube, Internet Archive: ücretsiz ve yasal.",
+  "search_tv": "TV'de",
+  "open_blender_studio": "Blender Studio · PeerTube",
+  "open_ia_feature": "Kamu malı filmler",
+  "open_ia_cartoons": "Klasik çizgi filmler",
+  "open_ia_silent": "Sessiz filmler",
+  "open_ia_prelinger": "Prelinger Arşivi"
  },
  "plurals": {
   "browser_found": {

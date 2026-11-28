@@ -204,7 +204,9 @@ fun IptvScreen(onClose: () -> Unit, startWith: String? = null) {
             Row(Modifier.fillMaxWidth().height(64.dp).padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = onClose) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.cd_back)) }
                 // Catalogue libre seul (pas de liste de chaînes) : « Films et séries ».
-                Text(stringResource(if (lists.isEmpty() && freeOn) R.string.vod_title else R.string.home_channels), style = MaterialTheme.typography.titleLarge,
+                // Des films ou des séries en plus des chaînes (abonnement, Films libres) : c'est l'écran des « Sources ».
+                val vodHere = freeOn || lists.any { com.rollandostudio.universaltvcast.data.Xtream.accountOf(it.source) != null }
+                Text(stringResource(if (vodHere) R.string.sources_title else R.string.home_channels), style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.weight(1f).semantics { heading() })
                 if (lists.isNotEmpty() || freeOn) {
                     IconButton(onClick = { adding = true }) { Icon(Icons.Rounded.Add, stringResource(R.string.iptv_add)) }

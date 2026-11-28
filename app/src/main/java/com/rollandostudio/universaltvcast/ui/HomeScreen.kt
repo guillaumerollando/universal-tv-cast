@@ -177,7 +177,8 @@ fun HomeScreen(
             if (resume.isNotEmpty()) item {
                 Column {
                     SectionHeader(stringResource(R.string.home_resume), null) {}
-                    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    // Même écart entre cartes que toutes les autres rangées.
+                    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
                         items(resume.take(ROW_MAX), key = { "r" + it.key }) { r -> ResumeCard(r, onBrowse) }
                         if (resume.size > ROW_MAX) item(key = "r-all") { SeeAllCard { showAll = 1 } }
                     }

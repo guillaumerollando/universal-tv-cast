@@ -69,7 +69,8 @@ internal object FolderStyle {
     )
 
     /** Couleurs proposées (la première, nulle, est celle de l'appli). */
-    val colors: List<Long?> = listOf(null, 0xFFFF8A80, 0xFFFFB86B, 0xFFFFE082, 0xFF7FE0B8, 0xFF7EB8FF, 0xFFC4A8FF, 0xFFFF8AC6, 0xFFB0BEC5)
+    // Couleurs franches, de la même famille que celles des actions de l'accueil (pas pastel).
+    val colors: List<Long?> = listOf(null, 0xFFE53950, 0xFFF08A24, 0xFFF2C230, 0xFF13A86F, 0xFF16A3B8, 0xFF2F7BF5, 0xFF7C4DFF, 0xFFE0457B, 0xFF4E7396)
 
     /** Icône d'origine : un dossier, ou l'appareil entier (serveur multimédia, ordinateur). */
     fun defaultIcon(f: LanStore.Folder): ImageVector = when {

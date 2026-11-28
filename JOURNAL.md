@@ -1710,3 +1710,6 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   filtre de la liste des chaînes sans verre fumé : il redessine le fond d'ambiance de l'en-tête à sa place exacte,
   donc continuité parfaite (mesurée au pixel) ; « Pour commencer » en cartes plus larges avec la description des
   sites (et des chaînes gratuites), pour donner envie à qui ne les connaît pas. Vérifié par captures sur émulateur.
+- Personnalisation des favoris (dossiers, NAS) : couleurs franches (rouge, orange, jaune, vert, cyan, bleu, violet,
+  framboise, bleu acier + celle de l'appli) au lieu des pastels. « Reprendre » : même écart entre cartes que les
+  autres rangées. Les favoris déjà colorés gardent leur ancienne couleur jusqu'à ce qu'on la change.

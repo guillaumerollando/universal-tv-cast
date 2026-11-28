@@ -141,9 +141,12 @@ fun Modifier.castArcs(color: Color): Modifier = drawBehind {
 /** Petites barres d'égaliseur qui dansent pendant la lecture (immobiles en pause ou sans animations). */
 @Composable
 fun EqualizerBars(active: Boolean, color: Color, modifier: Modifier = Modifier) {
-    val still = animationsOff() || !active
+    // Comme le halo : elles ralentissent en économie d'énergie, et ne s'arrêtent qu'en pause ou si les animations
+    // sont coupées dans Android (sinon on ne voit plus que la lecture continue).
+    val (off, saving) = castMotion()
+    val still = off || !active
     val t = rememberInfiniteTransition(label = "egaliseur")
-    val periods = listOf(520, 680, 450, 610)
+    val periods = listOf(520, 680, 450, 610).map { if (saving) it * 3 / 2 else it }
     val heights = periods.mapIndexed { i, ms ->
         t.animateFloat(0.25f, 1f, infiniteRepeatable(tween(ms, delayMillis = i * 90), androidx.compose.animation.core.RepeatMode.Reverse), label = "barre$i")
     }

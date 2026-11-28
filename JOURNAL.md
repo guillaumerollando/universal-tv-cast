@@ -1684,3 +1684,6 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   liseré qui tourne juste au bord extérieur). Le halo intérieur ne reste que derrière un logo sur fond sombre (et
   derrière la télé du cadre par défaut) ; sur un fond clair il n'en reste rien. Vérifié sur émulateur (chaîne violette,
   cadre par défaut). Pas vu : une vraie chaîne à fond blanc.
+- Barres « En lecture » figées chez Guillaume (retour) : même cause, l'économie de batterie. Elles suivent maintenant
+  la règle du halo (plus lentes en économie d'énergie, figées seulement en pause ou animations coupées dans Android).
+  Vérifié sur émulateur en économie de batterie : barres différentes entre deux captures à 0,3 s.

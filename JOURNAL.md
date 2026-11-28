@@ -1752,3 +1752,17 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   44,1 kHz stéréo, son décodé sans erreur, image avec heure et crédit ; arrêt propre (écran d'attente).
 - Pas vérifié : sur la vraie Philips et sur un appareil Cast ; la page de confidentialité devra citer Wikimedia
   Commons et Radio Browser (requêtes faites pour l'ambiance, sans donnée personnelle).
+
+## 2026-11-28 (nuit) — Nettoyage
+- Code mort retiré (restes des évolutions) : ancienne page « tous les sites », interrupteur d'animations remplacé,
+  sites masqués (les sites n'entrent plus tout seuls dans les favoris), fonctions sans appel ; 5 textes inutilisés
+  retirés des 23 langues ; avertissements du compilateur corrigés (restent 2 avertissements Android sur les widgets,
+  sans remplaçant simple).
+- Taille : l'APK passe de 7,5 à 6,3 Mo en excluant des fichiers de BouncyCastle (venu avec la bibliothèque SMB) dont
+  l'appli ne se sert pas (chiffrement post-quantique, messages de certificats). Comparé avec/sans sur émulateur : même
+  comportement SMB (le serveur SMB d'essai, réinstallé après le plantage du PC, ne répond plus aux négociations :
+  défaut connu du serveur d'essai, pas de l'appli).
+- Caches : chacun a son plafond (images 30 Mo, affiches 25 Mo, catalogue 600 titres, guide des programmes nettoyé,
+  enregistrements du direct effacés au démarrage) ; ménage au démarrage pour celui du navigateur intégré (vidé si le
+  cache dépasse 150 Mo en tout).
+- Traductions : 38 nouveaux textes (sauvegarde, ambiance) dans les 16 autres langues ; plus aucun texte manquant.

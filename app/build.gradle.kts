@@ -19,6 +19,14 @@ android {
         buildConfigField("boolean", "TEST_UNLOCK", (project.findProperty("testUnlock") == "true").toString())
     }
 
+    packaging {
+        resources {
+            // Fichiers de BouncyCastle (venu avec la bibliothèque SMB) dont l'appli ne se sert pas : chiffrement
+            // post-quantique et messages de vérification de certificats. Le code, lui, reste (R8 garde l'utile).
+            excludes += listOf("org/bouncycastle/pqc/**", "org/bouncycastle/x509/*.properties", "org/bouncycastle/i18n/**")
+        }
+    }
+
     androidResources {
         // Choix de la langue de l'appli dans les réglages d'Android (13 et plus).
         generateLocaleConfig = true

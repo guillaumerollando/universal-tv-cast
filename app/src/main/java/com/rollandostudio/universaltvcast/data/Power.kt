@@ -34,3 +34,25 @@ object Power {
     /** Le téléphone est en économie d'énergie (l'appli suit, même sans réglage). */
     val bySystem: Boolean get() = system
 }
+
+/**
+ * Ménage au démarrage : les caches de l'appli ont chacun leur plafond (images 30 Mo, affiches 25 Mo…), sauf celui du
+ * navigateur intégré (WebView). Au-delà de 150 Mo de cache en tout, on vide celui du navigateur ; Android peut aussi
+ * vider le cache de lui-même quand la place manque.
+ */
+object Housekeeping {
+    private const val CACHE_MAX = 150L * 1024 * 1024
+
+    fun run(ctx: Context) {
+        val app = ctx.applicationContext
+        Thread({
+            runCatching {
+                val cache = app.cacheDir
+                if (cache.walkTopDown().filter { it.isFile }.sumOf { it.length() } <= CACHE_MAX) return@runCatching
+                // Le cache HTTP de Chromium (WebView) : il se refait au fil de la navigation.
+                cache.listFiles()?.filter { it.isDirectory && it.name.equals("WebView", true) }?.forEach { it.deleteRecursively() }
+                android.util.Log.i("TvCast", "ménage : cache du navigateur vidé (plus de 150 Mo de cache)")
+            }
+        }, "tvcast-menage").apply { priority = Thread.MIN_PRIORITY }.start()
+    }
+}

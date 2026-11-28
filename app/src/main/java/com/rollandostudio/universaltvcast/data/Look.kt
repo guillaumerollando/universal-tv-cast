@@ -66,7 +66,6 @@ object Look {
 
     /** Ce qui s'applique vraiment (le choix enregistré, ou l'origine sans le pack). */
     fun accentNow() = if (pack()) accent.value else Accent.AMBER
-    fun oledNow() = pack() && oled.value
     fun idleNow() = if (pack()) idle.value else Idle.CLASSIC
     fun messageNow() = if (pack()) message.value.trim() else ""
     fun liveNow() = pack() && live.value && idleNow() != Idle.CLASSIC

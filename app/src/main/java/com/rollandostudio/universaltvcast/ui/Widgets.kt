@@ -82,7 +82,7 @@ internal object WidgetKit {
         Library.init(ctx)
         val recents = Library.recents.value
         val bookmarks = Library.bookmarks.value
-        return Data(resumeItems(recents, bookmarks), recents.filter { it.live }, siteItems(recents, bookmarks, Library.hiddenSites.value))
+        return Data(resumeItems(recents, bookmarks), recents.filter { it.live }, siteItems(bookmarks))
     }
 
     /** Redessine tous les widgets (regroupé : au plus une fois toutes les deux secondes, sauf [now]). */

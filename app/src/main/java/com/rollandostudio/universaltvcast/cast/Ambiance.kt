@@ -39,7 +39,7 @@ object Ambiance {
     private const val UA = "UniversalTVCast/1.0 (+https://rollandostudio.com)"
 
     /** Thème des photos : les miennes, ou une catégorie d'images de qualité de Wikimedia Commons. */
-    enum class Theme(val category: String?, @StringRes val label: Int) {
+    enum class Theme(val category: String?, @param:StringRes val label: Int) {
         MINE(null, R.string.amb_theme_mine),
         LANDSCAPES("Featured pictures of landscapes", R.string.amb_theme_landscapes),
         MOUNTAINS("Featured pictures of mountains", R.string.amb_theme_mountains),
@@ -50,7 +50,7 @@ object Ambiance {
     }
 
     /** Style de musique (étiquettes de l'annuaire de radios), ou pas de musique. */
-    enum class Mood(val tags: List<String>, @StringRes val label: Int) {
+    enum class Mood(val tags: List<String>, @param:StringRes val label: Int) {
         NONE(emptyList(), R.string.amb_mood_none),
         LOUNGE(listOf("chillout", "lounge"), R.string.amb_mood_lounge),
         JAZZ(listOf("smooth jazz", "jazz"), R.string.amb_mood_jazz),

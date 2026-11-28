@@ -368,8 +368,7 @@ fun BrowserScreen(b: BrowserController) {
 private fun StartPage(onOpen: (String) -> Unit) {
     val bookmarks by Library.bookmarks.collectAsState()
     val recents by Library.recents.collectAsState()
-    val hidden by Library.hiddenSites.collectAsState()
-    val sites = com.rollandostudio.universaltvcast.ui.siteItems(recents, bookmarks, hidden)
+    val sites = com.rollandostudio.universaltvcast.ui.siteItems(bookmarks)
     val series = bookmarks.filter { it.isSeries }
     val c = MaterialTheme.colorScheme
     LazyColumn(

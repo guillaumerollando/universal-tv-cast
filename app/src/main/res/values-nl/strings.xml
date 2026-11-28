@@ -240,10 +240,7 @@
     <string name="home_link_short">Video, livestream of zenderlijst</string>
     <string name="home_files_tile">Bestanden</string>
     <string name="home_lists_tile">Tv-lijsten</string>
-    <string name="start_tv_tile">Gratis tv</string>
-    <string name="home_files_other">Bestanden bekijken (muziek…)</string>
     <string name="home_resume">Verder kijken</string>
-    <string name="home_bookmarks_empty">Tik op ★ bij een site of een aflevering: hier ga je verder waar je was.</string>
     <string name="photos_counter">%1$d / %2$d</string>
     <string name="cd_prev_photo">Vorige foto</string>
     <string name="cd_next_photo">Volgende foto</string>
@@ -360,7 +357,6 @@
     <string name="resume_season_episode">S%1$d · Afl. %2$d</string>
     <string name="resume_remove">Verwijderen uit ‘Verder kijken’</string>
     <string name="resume_series_done">Serie uitgekeken</string>
-    <string name="resume_follow">Hier houden (bladwijzer)</string>
     <string name="home_link_tile">Link</string>
     <string name="web_err_offline">Geen internetverbinding</string>
     <string name="web_err_offline_body">Controleer je wifi en probeer het opnieuw.</string>
@@ -393,7 +389,6 @@
     <string name="action_ok">OK</string>
     <string name="live_back">Terug naar live</string>
     <string name="home_see_all">Alles bekijken</string>
-    <string name="site_hide">Niet meer voorstellen</string>
     <string name="home_favorites">Mijn favorieten</string>
     <string name="home_sites">Mijn sites</string>
     <string name="home_cast_more">Iets anders casten</string>

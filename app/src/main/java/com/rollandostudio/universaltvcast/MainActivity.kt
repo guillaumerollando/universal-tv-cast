@@ -143,8 +143,9 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         if (pipWanted()) runCatching { enterPictureInPictureMode(pipParams()) }
     }
 
-    override fun onPictureInPictureModeChanged(inPip: Boolean, newConfig: android.content.res.Configuration) {
-        super.onPictureInPictureModeChanged(inPip, newConfig)
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: android.content.res.Configuration) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+        val inPip = isInPictureInPictureMode
         com.rollandostudio.universaltvcast.ui.Nav.pip.value = inPip
         // Lecture / pause : l'icône de la petite fenêtre suit.
         if (inPip) pipWatch = lifecycleScope.launch {

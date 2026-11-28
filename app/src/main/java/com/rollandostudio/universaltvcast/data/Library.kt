@@ -147,7 +147,6 @@ object Library {
         _embedSubs.value = prefs.getBoolean("embed_subs", true)
         _smoothSlides.value = prefs.getBoolean("smooth_slides_v2", false)
         _powerSaver.value = prefs.getBoolean("power_saver", false)
-        _hiddenSites.value = prefs.getStringSet("hidden_sites", emptySet()).orEmpty().toSet()
         _favOrder.value = runCatching { JSONArray(prefs.getString("fav_order", "[]")).let { a -> (0 until a.length()).map { a.getString(it) } } }.getOrDefault(emptyList())
         _dismissedTips.value = prefs.getStringSet("tips_dismissed", emptySet()).orEmpty().toSet()
         _favChannels.value = runCatching {
@@ -313,14 +312,6 @@ object Library {
         saveRecents()
     }
 
-    private val _hiddenSites = MutableStateFlow<Set<String>>(emptySet())
-    /** Sites que l'utilisateur ne veut plus voir proposés dans « Mes sites ». */
-    val hiddenSites: StateFlow<Set<String>> = _hiddenSites
-    fun hideSite(host: String) {
-        _hiddenSites.value = _hiddenSites.value + host
-        prefs.edit().putStringSet("hidden_sites", _hiddenSites.value).apply()
-        _bookmarks.value.filter { it.isSite && it.host == host }.forEach { removeBookmark(it) }
-    }
     fun clearRecents() { _recents.value = emptyList(); saveRecents() }
 
     /** La page appartient-elle à une série (ou un site) déjà en favori ? */
@@ -394,10 +385,6 @@ object Library {
             _bookmarks.value = _bookmarks.value - existing
         } else {
             val ep = com.rollandostudio.universaltvcast.browser.Episodes.find(url)
-            hostOf(url).let { h -> if (h in _hiddenSites.value) {
-                _hiddenSites.value = _hiddenSites.value - h
-                prefs.edit().putStringSet("hidden_sites", _hiddenSites.value).apply()
-            } }
             val b = Bookmark(title.ifBlank { url }, url, ep?.number ?: com.rollandostudio.universaltvcast.browser.PageTitle.episode(title),
                 System.currentTimeMillis(), image)
             _bookmarks.value = listOf(b) + _bookmarks.value

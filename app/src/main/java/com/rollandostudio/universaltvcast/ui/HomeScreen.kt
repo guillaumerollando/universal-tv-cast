@@ -101,9 +101,8 @@ fun HomeScreen(
     val bookmarks by Library.bookmarks.collectAsState()
     val c = MaterialTheme.colorScheme
 
-    val hidden by Library.hiddenSites.collectAsState()
     val resume = resumeItems(recents, bookmarks)
-    val sites = siteItems(recents, bookmarks, hidden)
+    val sites = siteItems(bookmarks)
     val channels = recents.filter { it.live }
     val folders by com.rollandostudio.universaltvcast.lan.LanStore.folders.collectAsState()
     val favChannels by Library.favChannels.collectAsState()
@@ -350,19 +349,6 @@ internal fun resumeItems(recents: List<Recent>, bookmarks: List<Bookmark>): List
         ResumeItem(b.key, b.seriesTitle, b.image, b.host, null, b.episode ?: b.titleEpisode, b.time, null, b, b.url)
     }
     return (fromRecents + onlyBookmarked).sortedByDescending { it.time }
-}
-
-/** « Tout voir » des sites. */
-@Composable
-private fun AllSites(sites: List<SiteItem>, onBrowse: (String?) -> Unit, onClose: () -> Unit) {
-    Column(Modifier.fillMaxSize()) {
-        Row(Modifier.padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onClose) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.cd_back)) }
-            Text(stringResource(R.string.home_sites), style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.semantics { heading() })
-        }
-        SitesGrid(sites, Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) { onBrowse(it) }
-    }
 }
 
 /** « Tout voir » : toutes les séries et vidéos à reprendre, en grille. */

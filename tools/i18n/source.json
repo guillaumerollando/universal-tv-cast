@@ -252,17 +252,9 @@
    "en": "Video, live stream or channel list",
    "fr": "Vidéo, direct ou liste de chaînes"
   },
-  "home_files_other": {
-   "en": "Browse files (music…)",
-   "fr": "Parcourir les fichiers (musique…)"
-  },
   "home_resume": {
    "en": "Pick up where you left off",
    "fr": "Reprendre"
-  },
-  "home_bookmarks_empty": {
-   "en": "Tap ★ on a site or on a series episode: you’ll pick it up here, right where you left off.",
-   "fr": "Touche ★ sur un site ou sur l’épisode d’une série : tu la reprendras ici, là où tu en es."
   },
   "photos_counter": {
    "en": "%1$d / %2$d",
@@ -716,10 +708,6 @@
    "en": "Remove from “Pick up”",
    "fr": "Retirer de « Reprendre »"
   },
-  "resume_follow": {
-   "en": "Keep it here (bookmark)",
-   "fr": "Garder ici (favori)"
-  },
   "home_link_tile": {
    "en": "Link",
    "fr": "Lien"
@@ -847,10 +835,6 @@
   "home_see_all": {
    "en": "See all",
    "fr": "Tout voir"
-  },
-  "site_hide": {
-   "en": "Stop suggesting",
-   "fr": "Ne plus proposer"
   },
   "home_sites": {
    "en": "My sites",
@@ -1768,9 +1752,173 @@
    "en": "TV lists",
    "fr": "Listes TV"
   },
-  "start_tv_tile": {
-   "en": "Free TV",
-   "fr": "TV gratuite"
+  "backup_save": {
+   "en": "Back up my data",
+   "fr": "Sauvegarder mes données"
+  },
+  "backup_save_sub": {
+   "en": "In one file: history, favorites, network, channel lists, personalization. Network passwords aren’t included.",
+   "fr": "Dans un seul fichier : historique, favoris, réseau, listes de chaînes, personnalisation. Sans les mots de passe du réseau."
+  },
+  "backup_restore": {
+   "en": "Restore a backup",
+   "fr": "Restaurer une sauvegarde"
+  },
+  "backup_restore_sub": {
+   "en": "To move to a new phone, with or without Google.",
+   "fr": "Pour passer sur un nouveau téléphone, avec ou sans Google."
+  },
+  "backup_restore_title": {
+   "en": "Replace your data?",
+   "fr": "Remplacer tes données ?"
+  },
+  "backup_restore_body": {
+   "en": "Everything in the app will be replaced by the backup, then the app restarts. You’ll re-enter network passwords on first connection.",
+   "fr": "Tout ce qu’il y a dans l’appli sera remplacé par la sauvegarde, puis l’appli redémarre. Les mots de passe du réseau se ressaisissent à la première connexion."
+  },
+  "backup_restore_go": {
+   "en": "Restore",
+   "fr": "Restaurer"
+  },
+  "backup_done": {
+   "en": "Backup saved",
+   "fr": "Sauvegarde enregistrée"
+  },
+  "backup_failed": {
+   "en": "Couldn’t complete. Try another location.",
+   "fr": "Impossible d’aller au bout. Essaie un autre emplacement."
+  },
+  "backup_bad_file": {
+   "en": "This file isn’t a Universal TV Cast backup.",
+   "fr": "Ce fichier n’est pas une sauvegarde de Universal TV Cast."
+  },
+  "amb_title": {
+   "en": "Ambiance",
+   "fr": "Ambiance"
+  },
+  "amb_sub": {
+   "en": "Turn your TV into a living frame: beautiful photos that drift by, the time, and a radio if you like.",
+   "fr": "Fais de ta télé un cadre vivant : de belles photos qui défilent, l’heure, et une radio si tu veux."
+  },
+  "amb_photos": {
+   "en": "Photos",
+   "fr": "Photos"
+  },
+  "amb_music": {
+   "en": "Music",
+   "fr": "Musique"
+  },
+  "amb_theme_mine": {
+   "en": "My photos",
+   "fr": "Mes photos"
+  },
+  "amb_theme_landscapes": {
+   "en": "Landscapes",
+   "fr": "Paysages"
+  },
+  "amb_theme_mountains": {
+   "en": "Mountains",
+   "fr": "Montagnes"
+  },
+  "amb_theme_lakes": {
+   "en": "Lakes",
+   "fr": "Lacs"
+  },
+  "amb_theme_forests": {
+   "en": "Forests",
+   "fr": "Forêts"
+  },
+  "amb_theme_cities": {
+   "en": "Cities",
+   "fr": "Villes"
+  },
+  "amb_theme_space": {
+   "en": "Space",
+   "fr": "Espace"
+  },
+  "amb_mood_none": {
+   "en": "No music",
+   "fr": "Sans musique"
+  },
+  "amb_mood_lounge": {
+   "en": "Chill",
+   "fr": "Chill"
+  },
+  "amb_mood_jazz": {
+   "en": "Jazz",
+   "fr": "Jazz"
+  },
+  "amb_mood_classical": {
+   "en": "Classical",
+   "fr": "Classique"
+  },
+  "amb_mood_lofi": {
+   "en": "Lo-fi",
+   "fr": "Lo-fi"
+  },
+  "amb_mood_ambient": {
+   "en": "Ambient",
+   "fr": "Ambient"
+  },
+  "amb_mood_piano": {
+   "en": "Piano",
+   "fr": "Piano"
+  },
+  "amb_clock": {
+   "en": "Show the time",
+   "fr": "Afficher l’heure"
+  },
+  "amb_each": {
+   "en": "Each photo",
+   "fr": "Chaque photo"
+  },
+  "amb_start": {
+   "en": "Start on the TV",
+   "fr": "Lancer sur la télé"
+  },
+  "amb_next": {
+   "en": "Next photo",
+   "fr": "Photo suivante"
+  },
+  "amb_radio": {
+   "en": "Radio · %1$s",
+   "fr": "Radio · %1$s"
+  },
+  "amb_no_radio": {
+   "en": "No radio found right now",
+   "fr": "Aucune radio joignable pour l’instant"
+  },
+  "amb_failed": {
+   "en": "The ambiance couldn’t start. Check your connection and try again.",
+   "fr": "L’ambiance n’a pas pu démarrer. Vérifie ta connexion et réessaie."
+  },
+  "amb_no_photos": {
+   "en": "Choose your photos in Personalization first.",
+   "fr": "Choisis d’abord tes photos dans la Personnalisation."
+  },
+  "amb_credits_note": {
+   "en": "Photos from Wikimedia Commons, credited on screen. Radios from the Radio Browser directory.",
+   "fr": "Photos de Wikimedia Commons, créditées à l’écran. Radios de l’annuaire Radio Browser."
+  },
+  "amb_change": {
+   "en": "Change the ambiance",
+   "fr": "Changer l’ambiance"
+  },
+  "settings_power": {
+   "en": "Power saving",
+   "fr": "Économie d’énergie"
+  },
+  "settings_power_sub": {
+   "en": "Turns off the glow around the video, the blur and the animations, and checks live TV less often. Video quality stays the same. Turns on by itself when your phone saves battery.",
+   "fr": "Coupe la lueur autour de la vidéo, le flou et les animations, et suit le direct moins souvent. La qualité vidéo ne change pas. S’active tout seul quand ton téléphone économise sa batterie."
+  },
+  "tv_asleep": {
+   "en": "Not responding: switched off?",
+   "fr": "Ne répond pas : éteinte ?"
+  },
+  "audio_language": {
+   "en": "Language",
+   "fr": "Langue"
   }
  },
  "plurals": {

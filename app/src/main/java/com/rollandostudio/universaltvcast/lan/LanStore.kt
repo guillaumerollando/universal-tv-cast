@@ -223,7 +223,6 @@ object LanStore {
         }
     }.getOrDefault(emptyList())
 
-    fun isFolder(d: LanDevice, ref: String) = folders.value.any { it.kind == d.kind && it.host == d.host && it.port == d.port && it.ref == ref }
 
     @Synchronized
     fun toggleFolder(d: LanDevice, ref: String, title: String) {

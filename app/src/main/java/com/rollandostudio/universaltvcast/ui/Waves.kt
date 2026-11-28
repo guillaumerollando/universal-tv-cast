@@ -30,18 +30,6 @@ import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 
-/** Vrai si les animations décoratives doivent s'arrêter : coupées dans Android (accessibilité), ou économie d'énergie. */
-@Composable
-fun animationsOff(): Boolean {
-    val ctx = LocalContext.current
-    val system = remember {
-        runCatching { Settings.Global.getFloat(ctx.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE) == 0f }
-            .getOrDefault(false)
-    }
-    val saving by com.rollandostudio.universaltvcast.data.Power.saving.collectAsState()
-    return system || saving
-}
-
 /** Réglage des animations de diffusion : immobiles (animations coupées dans Android), lentes (économie d'énergie). */
 @Composable
 private fun castMotion(): Pair<Boolean, Boolean> {

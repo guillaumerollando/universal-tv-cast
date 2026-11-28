@@ -186,17 +186,7 @@ internal fun CardMenu(open: Boolean, onDismiss: () -> Unit, menu: List<Pair<Stri
 /** Un site de « Mes sites » : en favori (site ou page sans épisode), ou simplement déjà utilisé pour caster. */
 data class SiteItem(val id: String, val host: String, val title: String, val url: String, val bookmark: Bookmark?, val time: Long)
 
-/** Premiers mots d'adresse qui ne disent rien du site (« video.blender.org », « tube-maternelle… », « m.site.fr »). */
-private val GENERIC_SUBDOMAINS = setOf("www", "m", "video", "videos", "tv", "tube", "watch", "play", "player", "media", "stream", "live", "replay", "plus", "app", "web")
-
-/** Nom court d'un site : « video.blender.org » → « Blender », « commons.wikimedia.org » → « Commons ». */
-fun shortSiteName(host: String): String {
-    val labels = host.removePrefix("www.").split('.')
-    val name = labels.dropLast(1).firstOrNull { it !in GENERIC_SUBDOMAINS } ?: labels.first()
-    return name.replaceFirstChar { it.uppercase() }
-}
-
-fun siteItems(recents: List<com.rollandostudio.universaltvcast.data.Recent>, bookmarks: List<Bookmark>, hidden: Set<String>): List<SiteItem> {
+fun siteItems(bookmarks: List<Bookmark>): List<SiteItem> {
     // Seulement les sites mis en favori par l'utilisateur : un site d'où vient une vidéo n'y entre pas tout seul.
     return bookmarks.filter { !it.isSeries }.map {
         // Nom choisi, sinon le titre court de la page : « Otakubinge - Accueil » → « Otakubinge ».

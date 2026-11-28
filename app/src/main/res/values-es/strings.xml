@@ -240,10 +240,7 @@
     <string name="home_link_short">Vídeo, directo o lista de canales</string>
     <string name="home_files_tile">Archivos</string>
     <string name="home_lists_tile">Listas TV</string>
-    <string name="start_tv_tile">TV gratis</string>
-    <string name="home_files_other">Explorar archivos (música…)</string>
     <string name="home_resume">Continuar</string>
-    <string name="home_bookmarks_empty">Toca ★ en un sitio o en el episodio de una serie: la retomarás aquí, justo donde la dejaste.</string>
     <string name="photos_counter">%1$d / %2$d</string>
     <string name="cd_prev_photo">Foto anterior</string>
     <string name="cd_next_photo">Foto siguiente</string>
@@ -360,7 +357,6 @@
     <string name="resume_season_episode">T%1$d · Ep. %2$d</string>
     <string name="resume_remove">Quitar de «Continuar»</string>
     <string name="resume_series_done">Serie terminada</string>
-    <string name="resume_follow">Guardar aquí (favorito)</string>
     <string name="home_link_tile">Enlace</string>
     <string name="web_err_offline">Sin conexión a Internet</string>
     <string name="web_err_offline_body">Comprueba tu wifi y vuelve a intentarlo.</string>
@@ -393,7 +389,6 @@
     <string name="action_ok">Aceptar</string>
     <string name="live_back">Volver al directo</string>
     <string name="home_see_all">Ver todo</string>
-    <string name="site_hide">No volver a sugerir</string>
     <string name="home_favorites">Mis favoritos</string>
     <string name="home_sites">Mis sitios</string>
     <string name="home_cast_more">Enviar otra cosa</string>

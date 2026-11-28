@@ -54,11 +54,19 @@ class SlideStream private constructor(private val codec: MediaCodec, private val
     @Volatile private var current: Bitmap? = null
     @Volatile private var previous: Bitmap? = null
     @Volatile private var fadeStart = 0L
-    private val fadeMs = 450L
+    /** Durée du fondu entre deux photos (album : rapide ; ambiance : lent). */
+    @Volatile var fadeMs = 450L
+    /** Ambiance : photo en plein écran (recadrée) avec un zoom très lent pendant [slideMs] (effet Ken Burns). */
+    @Volatile var cover = false
+    @Volatile var slideMs = 30_000L
+    /** Dessiné par-dessus chaque image (horloge, crédit de la photo). */
+    @Volatile var overlay: ((Canvas) -> Unit)? = null
+    @Volatile private var previousStart = 0L
 
     /** Affiche cette photo (fondu depuis la précédente). */
     fun show(bmp: Bitmap) {
         previous = current
+        previousStart = fadeStart
         current = bmp
         fadeStart = System.currentTimeMillis()
     }
@@ -84,9 +92,13 @@ class SlideStream private constructor(private val codec: MediaCodec, private val
                 val canvas = runCatching { surface.lockHardwareCanvas() }.getOrElse { surface.lockCanvas(null) }
                 try {
                     canvas.drawColor(Color.BLACK)
-                    val t = ((System.currentTimeMillis() - fadeStart).toFloat() / fadeMs).coerceIn(0f, 1f)
-                    previous?.takeIf { t < 1f && !it.isRecycled }?.let { draw(canvas, it, paint, 255) }
-                    current?.takeIf { !it.isRecycled }?.let { draw(canvas, it, paint, (255 * t).toInt()) }
+                    val now = System.currentTimeMillis()
+                    val t = ((now - fadeStart).toFloat() / fadeMs).coerceIn(0f, 1f)
+                    // Fondu doux (accélère puis ralentit) : plus naturel qu'un fondu linéaire, surtout s'il est lent.
+                    val e = t * t * (3 - 2 * t)
+                    previous?.takeIf { t < 1f && !it.isRecycled }?.let { draw(canvas, it, paint, 255, now - previousStart) }
+                    current?.takeIf { !it.isRecycled }?.let { draw(canvas, it, paint, (255 * e).toInt(), now - fadeStart) }
+                    overlay?.let { o -> runCatching { o(canvas) } }
                 } finally {
                     surface.unlockCanvasAndPost(canvas)
                 }
@@ -101,9 +113,14 @@ class SlideStream private constructor(private val codec: MediaCodec, private val
         }
     }
 
-    /** Photo entière, centrée, sur fond noir. */
-    private fun draw(c: Canvas, b: Bitmap, p: Paint, alpha: Int) {
-        val k = min(W.toFloat() / b.width, H.toFloat() / b.height)
+    /**
+     * Album : photo entière, centrée, sur fond noir. Ambiance ([cover]) : plein écran, avec un zoom très lent
+     * (de 100 à 108 %) pendant la durée de la photo ; [age] : temps depuis son arrivée.
+     */
+    private fun draw(c: Canvas, b: Bitmap, p: Paint, alpha: Int, age: Long = 0L) {
+        val k0 = if (cover) kotlin.math.max(W.toFloat() / b.width, H.toFloat() / b.height) else min(W.toFloat() / b.width, H.toFloat() / b.height)
+        val zoom = if (cover) 1f + 0.08f * (age.toFloat() / (slideMs + fadeMs)).coerceIn(0f, 1f) else 1f
+        val k = k0 * zoom
         val w = b.width * k
         val h = b.height * k
         p.alpha = alpha
@@ -124,7 +141,7 @@ class SlideStream private constructor(private val codec: MediaCodec, private val
                 codec.releaseOutputBuffer(i, false)
                 if (info.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM != 0) break
                 if (info.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG != 0) { config = data; continue }
-                if (firstPts < 0) firstPts = info.presentationTimeUs
+                if (firstPts < 0) { firstPts = info.presentationTimeUs; firstPtsUs = firstPts }
                 val key = info.flags and MediaCodec.BUFFER_FLAG_KEY_FRAME != 0
                 val pts90k = (info.presentationTimeUs - firstPts) * 9 / 100 + 90_000 // départ à 1 s
                 onFrame(if (key) config + data else data, pts90k, key)
@@ -138,6 +155,28 @@ class SlideStream private constructor(private val codec: MediaCodec, private val
             runCatching { surface.release() }
             subscribers.forEach { it.offer(ByteArray(0)) }
             Log.i(TAG, "flux du diaporama arrêté")
+        }
+    }
+
+    // ------------------------------------------------------------------ son (radio de l'ambiance)
+
+    /** Horloge de la vidéo : instant (µs, base de l'encodeur) de la première image. */
+    @Volatile private var firstPtsUs = -1L
+
+    /** Horodatage vidéo (90 kHz) de l'instant présent ; -1 tant que la première image n'est pas encodée. */
+    fun ptsNow(): Long = if (firstPtsUs < 0) -1L else (System.nanoTime() / 1000 - firstPtsUs) * 9 / 100 + 90_000
+
+    /** Ajoute une piste son au flux (MP3 : 0x03, AAC ADTS : 0x0F), annoncée dès les prochaines tables. */
+    fun enableAudio(streamType: Int) { ts.audioType = streamType }
+
+    /** Une trame son (déjà encodée) à l'instant [pts] (90 kHz). */
+    fun audio(frame: ByteArray, pts: Long) {
+        if (!running || ts.audioType == 0) return
+        val packets = ts.audio(frame, pts)
+        synchronized(lock) { if (segStartPts >= 0) seg.write(packets) }
+        for (q in subscribers) {
+            if (q in waiting) continue // un nouveau client commence sur une image clé
+            if (!q.offer(packets)) { subscribers.remove(q); q.clear(); q.offer(ByteArray(0)) }
         }
     }
 
@@ -210,18 +249,62 @@ class SlideStream private constructor(private val codec: MediaCodec, private val
     val alive: Boolean get() = running
 }
 
-/** Multiplexeur MPEG-TS minimal : une piste vidéo H.264 (PID 0x100), PAT/PMT, PTS et PCR. */
+/**
+ * Multiplexeur MPEG-TS minimal : une piste vidéo H.264 (PID 0x100), et une piste son facultative (PID 0x101,
+ * MP3 ou AAC déjà encodés : la radio de l'ambiance), PAT/PMT, PTS et PCR.
+ */
 class TsMuxer {
     private val cc = IntArray(0x2000)
+    /** Type de la piste son (0 : pas de son ; 0x03 MP3 ; 0x0F AAC ADTS). */
+    @Volatile var audioType = 0
 
-    fun tables(): ByteArray = section(0, byteArrayOf(
-        0x00, 0xB0.toByte(), 0x0D, 0x00, 0x01, 0xC1.toByte(), 0x00, 0x00, // PAT, ts id 1, version 0
-        0x00, 0x01, 0xF0.toByte(), 0x00, // programme 1 → PMT PID 0x1000
-    )) + section(0x1000, byteArrayOf(
-        0x02, 0xB0.toByte(), 0x12, 0x00, 0x01, 0xC1.toByte(), 0x00, 0x00, // PMT, programme 1
-        0xE1.toByte(), 0x00, 0xF0.toByte(), 0x00, // PCR PID 0x100, pas d'info programme
-        0x1B, 0xE1.toByte(), 0x00, 0xF0.toByte(), 0x00, // H.264 sur PID 0x100
-    ))
+    fun tables(): ByteArray {
+        val a = audioType
+        val streams = byteArrayOf(0x1B, 0xE1.toByte(), 0x00, 0xF0.toByte(), 0x00) + // H.264 sur PID 0x100
+            (if (a != 0) byteArrayOf(a.toByte(), 0xE1.toByte(), 0x01, 0xF0.toByte(), 0x00) else ByteArray(0)) // son sur PID 0x101
+        val len = 9 + streams.size + 4
+        return section(0, byteArrayOf(
+            0x00, 0xB0.toByte(), 0x0D, 0x00, 0x01, 0xC1.toByte(), 0x00, 0x00, // PAT, ts id 1, version 0
+            0x00, 0x01, 0xF0.toByte(), 0x00, // programme 1 → PMT PID 0x1000
+        )) + section(0x1000, byteArrayOf(
+            0x02, 0xB0.toByte(), len.toByte(), 0x00, 0x01, (0xC1 or (if (a != 0) 2 else 0)).toByte(), 0x00, 0x00, // PMT (version 1 avec son)
+            0xE1.toByte(), 0x00, 0xF0.toByte(), 0x00, // PCR PID 0x100, pas d'info programme
+        ) + streams)
+    }
+
+    /** Une trame son → paquets TS (PES borné, PTS seul). */
+    fun audio(frame: ByteArray, pts: Long): ByteArray {
+        val pesLen = 8 + frame.size
+        val pes = byteArrayOf(
+            0, 0, 1, 0xC0.toByte(), (pesLen ushr 8).toByte(), pesLen.toByte(),
+            0x80.toByte(), 0x80.toByte(), 5,
+            (0x21 or ((pts ushr 29).toInt() and 0x0E)).toByte(), (pts ushr 22).toByte(),
+            ((pts ushr 14).toInt() or 1).toByte(), (pts ushr 7).toByte(), ((pts shl 1).toInt() or 1).toByte(),
+        ) + frame
+        val out = ByteArrayOutputStream(pes.size + 400)
+        var off = 0
+        var first = true
+        while (off < pes.size) {
+            val p = ByteArray(188)
+            p[0] = 0x47
+            p[1] = ((if (first) 0x40 else 0) or 0x01).toByte(); p[2] = 0x01
+            val left = pes.size - off
+            var af = ByteArray(0)
+            var room = 184
+            if (left < room) {
+                val stuff = room - left
+                af = if (stuff == 1) byteArrayOf(0) else byteArrayOf((stuff - 1).toByte(), 0) + ByteArray(stuff - 2) { 0xFF.toByte() }
+                room = left
+            }
+            p[3] = ((if (af.isNotEmpty()) 0x30 else 0x10) or next(0x101)).toByte()
+            System.arraycopy(af, 0, p, 4, af.size)
+            System.arraycopy(pes, off, p, 4 + af.size, room)
+            off += room
+            first = false
+            out.write(p)
+        }
+        return out.toByteArray()
+    }
 
     private fun section(pid: Int, body: ByteArray): ByteArray {
         val crc = crc32(body)

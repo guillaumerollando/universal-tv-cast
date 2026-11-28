@@ -30,6 +30,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.PhotoLibrary
@@ -100,7 +101,7 @@ fun StyleSheet(onDismiss: () -> Unit) {
     val icon by Look.icon.collectAsState()
     val photos by Look.photos.collectAsState()
     var busyPhotos by remember { mutableStateOf(false) }
-    val pick = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(12)) { uris ->
+    val pick = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(Look.MAX_PHOTOS)) { uris ->
         if (uris.isEmpty()) return@rememberLauncherForActivityResult
         busyPhotos = true
         scope.launch {
@@ -143,6 +144,21 @@ fun StyleSheet(onDismiss: () -> Unit) {
                 }
             }
 
+            // Le mode Ambiance, l'autre grande fonction du pack : on y va d'ici aussi.
+            item {
+                Row(
+                    Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(favBrush(Color(AMBIANCE_COLOR)))
+                        .clickable { Nav.ambiance.value = true }.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(Icons.Rounded.AutoAwesome, null, tint = Color.White)
+                    Spacer(Modifier.width(12.dp))
+                    Column(Modifier.weight(1f)) {
+                        Text(stringResource(R.string.amb_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color.White)
+                        Text(stringResource(R.string.amb_sub), style = MaterialTheme.typography.bodySmall, color = Color.White.copy(alpha = 0.9f))
+                    }
+                }
+            }
             // ---------------------------------------------------------------- couleur
             item { Section(stringResource(R.string.style_color), enabled) }
             item {

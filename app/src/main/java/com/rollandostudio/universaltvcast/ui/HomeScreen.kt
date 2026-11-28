@@ -48,6 +48,7 @@ import androidx.compose.material.icons.rounded.LiveTv
 import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material.icons.rounded.PhotoLibrary
 import androidx.compose.material.icons.rounded.Lan
+import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.VideoLibrary
@@ -283,6 +284,7 @@ fun HomeScreen(
         item {
             LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
                 item { ActionTile(Icons.Rounded.LiveTv, stringResource(R.string.home_lists_tile), ActionColors.LISTS) { Nav.iptv.value = "" } }
+                item { ActionTile(Icons.Rounded.AutoAwesome, stringResource(R.string.amb_title), AMBIANCE_COLOR) { Nav.ambiance.value = true } }
                 item { ActionTile(Icons.Rounded.FolderOpen, stringResource(R.string.home_files_tile), ActionColors.FILES, onClick = onPickFile) }
             }
         }
@@ -586,6 +588,7 @@ private fun CastActionsRow(
     LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
         // Pas de « Sites web » ici : l'onglet Navigateur est là pour ça (il reste dans les grandes tuiles du nouveau venu).
         item { ActionTile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), ActionColors.ALBUM, onClick = onPickPhotos) }
+        item { ActionTile(Icons.Rounded.AutoAwesome, stringResource(R.string.amb_title), AMBIANCE_COLOR) { Nav.ambiance.value = true } }
         item { ActionTile(Icons.Rounded.Lan, stringResource(R.string.home_network), ActionColors.NETWORK, onClick = onNetwork) }
         item { ActionTile(Icons.Rounded.Link, stringResource(R.string.home_link_tile), ActionColors.LINK, highlight = highlightLink, onClick = onPasteLink) }
         if (showLists) item { ActionTile(Icons.Rounded.LiveTv, stringResource(R.string.home_lists_tile), ActionColors.LISTS) { Nav.iptv.value = "" } }

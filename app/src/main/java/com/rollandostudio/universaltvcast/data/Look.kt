@@ -16,7 +16,9 @@ import java.io.File
 object Look {
     /** Couleur d'accent : (nom de clé, couleur ARGB). La première est celle d'origine, gratuite. */
     enum class Accent(val argb: Long) {
-        AMBER(0xFFFFB86B), CORAL(0xFFFF8F7A), MINT(0xFF7FE0B8), AZURE(0xFF7EB8FF), LAVENDER(0xFFC4A8FF), ROSE(0xFFFF8AC6)
+        AMBER(0xFFFFB86B), CORAL(0xFFFF8F7A), MINT(0xFF7FE0B8), AZURE(0xFF7EB8FF), LAVENDER(0xFFC4A8FF), ROSE(0xFFFF8AC6),
+        // Plus vives, toujours lisibles sur le fond sombre.
+        FLAME(0xFFFF6E4A), TURQUOISE(0xFF3FD6E0), GOLD(0xFFFFD23F)
     }
 
     enum class Idle { CLASSIC, PHOTO, CLOCK }
@@ -27,7 +29,8 @@ object Look {
     }
 
     private const val PREFS = "look"
-    private const val MAX_PHOTOS = 12
+    /** Photos de l'écran d'attente et de l'ambiance (« Mes photos »). */
+    const val MAX_PHOTOS = 30
     private lateinit var app: Context
     private val prefs get() = app.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 

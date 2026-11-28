@@ -120,6 +120,10 @@ import androidx.compose.runtime.collectAsState
 
 @Composable
 fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
+    if (state.ambiance != null) {
+        AmbiancePlayer(state)
+        return
+    }
     if (state.slides != null) {
         SlideshowScreen(state)
         return

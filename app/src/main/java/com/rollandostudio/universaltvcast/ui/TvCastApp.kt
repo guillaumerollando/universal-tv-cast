@@ -133,6 +133,8 @@ object Nav {
     val pick = MutableStateFlow<String?>(null)
     /** Panneau d'aide ouvert (bouton « ? », secousse, lien dans une erreur). */
     val help = MutableStateFlow(false)
+    /** Fenêtre du mode Ambiance ouverte (depuis l'accueil ou la Personnalisation). */
+    val ambiance = MutableStateFlow(false)
     /** Demande d'ouvrir le choix de la télé (depuis l'aide). */
     val tvs = MutableStateFlow(false)
     /** Écran des listes de chaînes ouvert : id de la liste à montrer ("" : la première). */
@@ -373,6 +375,8 @@ fun TvCastApp() {
     }
     if (showTvs) TvSheet(onDismiss = { showTvs = false })
     if (showSettings) SettingsSheet(onDismiss = { showSettings = false })
+    val ambianceOpen by Nav.ambiance.collectAsState()
+    if (ambianceOpen) AmbianceSheet(onDismiss = { Nav.ambiance.value = false })
     val showHelp by Nav.help.collectAsState()
     if (showHelp) HelpSheet(onDismiss = { Nav.help.value = false })
     if (showLink) LinkDialog(onDismiss = { showLink = false })

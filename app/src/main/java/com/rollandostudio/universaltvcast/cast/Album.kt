@@ -48,10 +48,17 @@ internal object Album {
         streamOnTv = false
     }
 
+    /** Ambiance : son flux devient celui de l'album (servi à la télé, arrêté par tout autre envoi). */
+    fun useStream(st: SlideStream) {
+        stopStream()
+        stream = st
+        TvCast.proxy.slides = st
+        streamOnTv = true
+    }
+
     /** Ouvre le flux du diaporama sur la télé (une seule fois par album). */
-    private suspend fun sendStreamToTv(chosen: Renderer, st: SlideStream): Renderer {
+    suspend fun sendStreamToTv(chosen: Renderer, st: SlideStream, title: String = TvCast.app.getString(R.string.home_photos)): Renderer {
         val base = TvCast.proxy.baseUrl()
-        val title = TvCast.app.getString(R.string.home_photos)
         if (chosen.cast) {
             kotlinx.coroutines.withContext(Dispatchers.IO) { st.awaitSegments(3, 8000) }
             try {

@@ -1731,3 +1731,24 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - Bug trouvé en route : après un changement d'icône, ouvrir un sélecteur d'Android (fichier, photos) posait la
   nouvelle icône, ce qui ferme l'appli (choix perdu). L'icône n'est plus posée qu'en quittant vraiment l'appli
   (Accueil, appli récente : `onUserLeaveHint`) ou à sa fermeture.
+
+## 2026-11-28 (nuit) — Mode Ambiance (pack soutien)
+- La télé devient un cadre vivant : photos en plein écran qui défilent sans fin (fondu lent adouci, zoom très doux
+  façon Ken Burns), heure et date en bas à gauche, crédit de la photo en bas à droite, et une radio en fond. Le tout
+  en une seule vidéo en direct (`SlideStream`, réutilisé : la télé la lit comme un film, DLNA ou Google Cast).
+- Photos : « Mes photos » (celles de la Personnalisation, jusqu'à 30) ou des thèmes d'images de qualité de
+  Wikimedia Commons, libres, créditées (auteur · licence · Wikimedia Commons) : Paysages, Montagnes, Lacs, Forêts,
+  Villes, Espace ; seulement des photos en paysage ; liste d'une catégorie gardée une semaine en cache.
+  (Unsplash écarté : clé d'accès et compte développeur obligatoires.)
+- Musique : une radio par style (Chill, Jazz, Classique, Lo-fi, Ambient, Piano) trouvée dans l'annuaire libre Radio
+  Browser (sans clé) ; son MP3 ou AAC glissé tel quel dans la vidéo (piste 0x101 du multiplexeur, sans réencodage),
+  calé sur l'horloge de l'image (≈ 3 s d'avance au plus), reconnexion après coupure (`cast/Radio.kt`).
+- Interface : tuile « Ambiance » dans « Caster autre chose » (et chez le nouveau venu), carte dans la
+  Personnalisation, fenêtre de réglage (photos, musique, heure, durée de chaque photo 15 s / 30 s / 1 min, lancer ;
+  sans le pack : invitation à soutenir), écran de lecture dédié (photo en cours, radio, crédit, Photo suivante,
+  Arrêter). Réglages sauvegardés avec le reste (`Backup`).
+- Personnalisation : trois accents plus vifs (corail vif, turquoise, or).
+- Vérifié sur émulateur (fausse télé) : ambiance Paysages + SomaFM Groove Salad ; flux capturé : H.264 1080p + MP3
+  44,1 kHz stéréo, son décodé sans erreur, image avec heure et crédit ; arrêt propre (écran d'attente).
+- Pas vérifié : sur la vraie Philips et sur un appareil Cast ; la page de confidentialité devra citer Wikimedia
+  Commons et Radio Browser (requêtes faites pour l'ambiance, sans donnée personnelle).

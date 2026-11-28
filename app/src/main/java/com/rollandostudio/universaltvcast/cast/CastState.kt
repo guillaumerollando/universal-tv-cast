@@ -48,6 +48,8 @@ data class CastState(
     /** Pistes son proposées par la vidéo (« français », « VO »…) et celle choisie. */
     val audioTracks: List<com.rollandostudio.universaltvcast.proxy.Hls.Track> = emptyList(),
     val audioIndex: Int = -1,
+    /** Mode Ambiance en cours sur la télé (photos qui défilent, radio), ou null. */
+    val ambiance: Ambiance.Now? = null,
 ) {
     val active: Boolean get() = phase in setOf(Phase.SENDING, Phase.BUFFERING, Phase.PLAYING, Phase.PAUSED)
 }

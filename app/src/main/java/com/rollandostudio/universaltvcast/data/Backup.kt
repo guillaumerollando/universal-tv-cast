@@ -20,7 +20,7 @@ import java.util.zip.ZipOutputStream
 object Backup {
     private const val FORMAT = 1
     /** Fichiers de réglages sauvegardés (les autres sont des caches ou propres à ce téléphone). */
-    private val PREFS = listOf("library", "lan", "look", "iptv", "review")
+    private val PREFS = listOf("library", "lan", "look", "iptv", "review", "ambiance")
     /** Dossiers sauvegardés, sous filesDir. */
     private val DIRS = listOf("iptv", "idle")
 

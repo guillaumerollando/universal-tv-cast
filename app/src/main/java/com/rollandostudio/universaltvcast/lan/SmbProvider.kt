@@ -29,6 +29,7 @@ class SmbProvider : ContentProvider() {
         Catalog.init(context!!)
         com.rollandostudio.universaltvcast.data.ReviewPrompt.init(context!!)
         com.rollandostudio.universaltvcast.data.Look.init(context!!)
+        com.rollandostudio.universaltvcast.cast.Ambiance.init(context!!)
         return true
     }
 

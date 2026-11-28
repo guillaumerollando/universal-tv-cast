@@ -1650,3 +1650,9 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   flèche ou le bouton retour.
 - « Déplacer à gauche / à droite » : la tuile glisse à sa nouvelle place (rangée et grille, `animateItem`). Vérifié
   par captures en plein mouvement sur émulateur. Pas vu : la grille « Tout voir » (3 favoris seulement sur l'émulateur).
+
+## 2026-11-28 — Ondes façon goutte d'eau
+- Retour de Guillaume : les ondes semblaient surgir de nulle part (chaque anneau apparaissait d'un coup, déjà grand
+  et visible). Maintenant chaque onde naît minuscule au centre (sous le logo), apparaît en fondu, s'élargit vite
+  puis ralentit (courbe cubique) et s'efface en s'éloignant ; trait plus épais au départ. Vérifié par une série de
+  captures sur émulateur (fausse télé, chaîne d'essai).

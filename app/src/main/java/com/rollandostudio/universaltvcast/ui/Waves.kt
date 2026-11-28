@@ -54,20 +54,23 @@ fun CastWaves(color: Color, modifier: Modifier = Modifier, size: Dp = 170.dp, in
     val p by t.animateFloat(0f, 1f, infiniteRepeatable(tween(if (saving) 4200 else 2600, easing = LinearEasing)), label = "phase")
     Canvas(modifier.requiredSize(size)) {
         val maxR = this.size.minDimension / 2
-        val minR = inner.toPx() // les ondes partent du bord de ce qu'elles entourent, jamais de l'intérieur
-        // Un halo doux au centre, puis trois anneaux qui s'éloignent en s'effaçant.
+        val minR = inner.toPx()
+        // Un halo doux au centre.
         drawCircle(
             Brush.radialGradient(listOf(color.copy(alpha = color.alpha * 0.35f), Color.Transparent), center, minR * 1.9f),
             radius = minR * 1.9f,
         )
+        // Comme une goutte dans l'eau : chaque onde naît minuscule et invisible au centre, apparaît en fondu, s'élargit
+        // vite puis ralentit, et s'efface en s'éloignant. Pas d'anneau qui surgit d'un coup.
         for (i in 0 until 3) {
             val f = if (still) (i + 1) / 4f else (p + i / 3f) % 1f
-            // Immobiles, elles restent bien visibles ; animées, elles s'effacent en s'éloignant.
-            val fade = if (still) 0.9f - i * 0.25f else (1f - f) * (1f - f)
+            val grow = 1f - (1f - f) * (1f - f) * (1f - f) // rapide au début, lent à la fin
+            val appear = if (still) 1f else (f / 0.18f).coerceAtMost(1f)
+            val fade = if (still) 0.9f - i * 0.25f else appear * (1f - f) * (1f - f)
             drawCircle(
                 color = color.copy(alpha = color.alpha * fade),
-                radius = minR + (maxR - minR) * f,
-                style = Stroke(width = (3.dp.toPx() * (1f - f * 0.5f))),
+                radius = maxR * 0.02f + (maxR * 0.98f) * grow,
+                style = Stroke(width = 3.5.dp.toPx() * (1f - f * 0.6f)),
             )
         }
     }

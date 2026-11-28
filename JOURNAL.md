@@ -1656,3 +1656,11 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   et visible). Maintenant chaque onde naît minuscule au centre (sous le logo), apparaît en fondu, s'élargit vite
   puis ralentit (courbe cubique) et s'efface en s'éloignant ; trait plus épais au départ. Vérifié par une série de
   captures sur émulateur (fausse télé, chaîne d'essai).
+
+## 2026-11-28 — Rangées de l'accueil : 8 éléments puis « Tout voir »
+- Idée de Guillaume (comme Netflix, Canal+) : plus de bouton « Tout voir » à droite des titres. Chaque rangée montre
+  8 éléments au plus, puis une tuile « Tout voir » à son format (carte 16:9 pour « Reprendre », tuile 16:10 pour
+  « Mes favoris » et « Chaînes ») ; « Chaînes » la garde toujours (elle mène à toutes les chaînes des listes).
+- Tous les titres de rubrique ont la même hauteur de ligne (`SECTION_TITLE_HEIGHT`), « Pour commencer » compris :
+  même écart titre → contenu partout (l'écart variait selon qu'un bouton à droite agrandissait la ligne ou non).
+- Pas encore fait : les propositions d'animation de diffusion à comparer (interrompu, à reprendre si Guillaume veut).

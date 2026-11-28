@@ -717,11 +717,16 @@ private fun SwitchRow(title: String, sub: String, checked: Boolean, onChange: (B
     )
 }
 
+/** Hauteur de la ligne d'un titre de rubrique (le lien « Tout voir » y tient sans l'agrandir). */
+internal val SECTION_TITLE_HEIGHT = 36.dp
+
 @Composable
 internal fun SectionTitle(text: String, modifier: Modifier = Modifier) {
-    // Même titre de rubrique partout (accueil, chaînes, « Pour commencer ») : gras, collé à son contenu.
-    Text(text, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold, fontSize = 20.sp),
-        modifier = modifier.padding(top = 2.dp, bottom = 4.dp))
+    // Même titre de rubrique partout (accueil, chaînes, « Pour commencer ») : gras, même hauteur de ligne, donc même
+    // écart avec son contenu, qu'il y ait un lien à droite ou non.
+    Box(modifier.height(SECTION_TITLE_HEIGHT), contentAlignment = Alignment.CenterStart) {
+        Text(text, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold, fontSize = 20.sp))
+    }
 }
 
 

@@ -171,30 +171,42 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             // Chaque rubrique : son titre collé à son contenu ; l'espace entre rubriques marque la hiérarchie.
+            // Chaque rangée : 8 éléments au plus, puis une tuile « Tout voir » à leur format (comme Netflix, Canal+).
             if (resume.isNotEmpty()) item {
                 Column {
-                    SectionHeader(stringResource(R.string.home_resume), if (resume.size > 2) stringResource(R.string.home_see_all) else null) { showAll = 1 }
+                    SectionHeader(stringResource(R.string.home_resume), null) {}
                     LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        items(resume, key = { "r" + it.key }) { r -> ResumeCard(r, onBrowse) }
+                        items(resume.take(ROW_MAX), key = { "r" + it.key }) { r -> ResumeCard(r, onBrowse) }
+                        if (resume.size > ROW_MAX) item(key = "r-all") {
+                            SeeAllTile(stringResource(R.string.home_see_all), Modifier.width(220.dp).aspectRatio(16f / 9f), 14.dp) { showAll = 1 }
+                        }
                     }
                 }
             }
             // « Mes favoris » juste sous « Reprendre » : dossiers du réseau mis en ★ (NAS, ordinateur), chaînes en ★, sites.
             if (sites.isNotEmpty() || folders.isNotEmpty() || favChannels.isNotEmpty()) item {
                 Column {
-                    SectionHeader(stringResource(if (folders.isEmpty() && favChannels.isEmpty()) R.string.home_sites else R.string.home_favorites),
-                        if (favs.size > 4) stringResource(R.string.home_see_all) else null) { showAll = 2 }
+                    SectionHeader(stringResource(if (folders.isEmpty() && favChannels.isEmpty()) R.string.home_sites else R.string.home_favorites), null) {}
                     // Même rangée que les chaînes : tuiles 16:10 serrées ; un favori déplacé glisse à sa nouvelle place.
                     LazyRow(contentPadding = PaddingValues(horizontal = ChannelTiles.edge), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
-                        items(favs.size, key = { favs[it].first }) { i -> Box(Modifier.animateItem()) { favTile(i) } }
+                        items(minOf(favs.size, ROW_MAX), key = { favs[it].first }) { i -> Box(Modifier.animateItem()) { favTile(i) } }
+                        if (favs.size > ROW_MAX) item(key = "f-all") {
+                            SeeAllTile(stringResource(R.string.home_see_all), Modifier.width(ChannelTiles.width).aspectRatio(16f / 10f), ChannelTiles.corner) { showAll = 2 }
+                        }
                     }
                 }
             }
             if (channels.isNotEmpty()) item {
                 Column {
-                    SectionHeader(stringResource(R.string.home_channels), stringResource(R.string.iptv_all_channels)) { Nav.iptv.value = "" }
+                    SectionHeader(stringResource(R.string.home_channels), null) {}
                     LazyRow(contentPadding = PaddingValues(horizontal = ChannelTiles.edge), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
-                        items(channels, key = { "c" + it.key }) { ch -> ChannelTile(ch, onBrowse) }
+                        items(channels.take(ROW_MAX), key = { "c" + it.key }) { ch -> ChannelTile(ch, onBrowse) }
+                        // Toujours au bout : toutes les chaînes des listes importées (bien plus que les récentes).
+                        item(key = "c-all") {
+                            SeeAllTile(stringResource(R.string.home_see_all), Modifier.width(ChannelTiles.width).aspectRatio(16f / 10f), ChannelTiles.corner) {
+                                Nav.iptv.value = ""
+                            }
+                        }
                     }
                 }
             }
@@ -623,13 +635,31 @@ private fun MoreSources(onPickFile: () -> Unit, showLists: Boolean = true) {
  */
 @Composable
 private fun SectionHeader(title: String, action: String?, onAction: () -> Unit) {
-    // Titre marqué (gras, plus grand), collé à son contenu ; « Tout voir » en simple lien coloré.
-    Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 6.dp, bottom = 4.dp).heightIn(min = 28.dp), verticalAlignment = Alignment.CenterVertically) {
+    // Ligne de titre de hauteur fixe (avec ou sans lien à droite) : le même écart titre → contenu partout.
+    Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 6.dp).height(SECTION_TITLE_HEIGHT), verticalAlignment = Alignment.CenterVertically) {
         Text(title, style = MaterialTheme.typography.titleLarge.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.Bold, fontSize = 20.sp),
             modifier = Modifier.weight(1f).semantics { heading() })
-        if (action != null) TextButton(onClick = onAction, contentPadding = PaddingValues(horizontal = 10.dp, vertical = 0.dp),
-            modifier = Modifier.heightIn(min = 30.dp)) {
+        if (action != null) TextButton(onClick = onAction, contentPadding = PaddingValues(horizontal = 10.dp, vertical = 0.dp)) {
             Text(action, style = MaterialTheme.typography.labelLarge)
+        }
+    }
+}
+
+/** Nombre d'éléments d'une rangée de l'accueil avant la tuile « Tout voir ». */
+private const val ROW_MAX = 8
+
+/** Dernière tuile d'une rangée : « Tout voir », au format de ses voisines. */
+@Composable
+private fun SeeAllTile(label: String, modifier: Modifier, corner: androidx.compose.ui.unit.Dp, onClick: () -> Unit) {
+    val c = MaterialTheme.colorScheme
+    Surface(onClick = onClick, shape = RoundedCornerShape(corner), color = c.surfaceContainerHigh, modifier = modifier) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+            Box(Modifier.size(30.dp).clip(CircleShape).background(c.primary.copy(alpha = 0.16f)), contentAlignment = Alignment.Center) {
+                Icon(Icons.AutoMirrored.Rounded.ArrowForward, null, tint = c.primary, modifier = Modifier.size(18.dp))
+            }
+            Spacer(Modifier.height(4.dp))
+            Text(label, style = MaterialTheme.typography.labelMedium, color = c.primary, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(horizontal = 4.dp))
         }
     }
 }

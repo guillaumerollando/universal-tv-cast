@@ -163,10 +163,13 @@ fun StarterSection(
     val sites = run { val ctx0 = LocalContext.current; remember(known, dismissed) { starterSitesFor(known, dismissed, phoneCountries(ctx0)) } }
     val channels = showChannels && FREE_TV !in dismissed
     if (!channels && !(showSites && sites.isNotEmpty())) return
-    Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+    Column(Modifier.padding(horizontal = 16.dp)) {
+        // Titre collé à son contenu, comme les autres rubriques ; l'espace est entre les cartes.
         SectionTitle(stringResource(R.string.start_title), Modifier.semantics { heading() })
-        if (channels) FreeChannelsCard(onPasteLink)
-        if (showSites && sites.isNotEmpty()) StarterSites(onBrowse, known)
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            if (channels) FreeChannelsCard(onPasteLink)
+            if (showSites && sites.isNotEmpty()) StarterSites(onBrowse, known)
+        }
     }
 }
 

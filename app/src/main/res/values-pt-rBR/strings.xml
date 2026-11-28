@@ -42,6 +42,16 @@
     <string name="style_show_tv">Ver na TV</string>
     <string name="style_icon">Ícone do app</string>
     <string name="style_icon_note">O novo ícone aparece quando você sai do app. Ele pode sumir por um instante da tela inicial.</string>
+    <string name="backup_save">Salvar meus dados</string>
+    <string name="backup_save_sub">Em um único arquivo: histórico, favoritos, rede, listas de canais, personalização. Sem as senhas da rede.</string>
+    <string name="backup_restore">Restaurar um backup</string>
+    <string name="backup_restore_sub">Para trocar de celular, com ou sem Google.</string>
+    <string name="backup_restore_title">Substituir seus dados?</string>
+    <string name="backup_restore_body">Tudo no app será substituído pelo backup e o app reinicia. As senhas da rede são digitadas de novo na primeira conexão.</string>
+    <string name="backup_restore_go">Restaurar</string>
+    <string name="backup_done">Backup salvo</string>
+    <string name="backup_failed">Não foi possível concluir. Tente outro local.</string>
+    <string name="backup_bad_file">Este arquivo não é um backup do Universal TV Cast.</string>
     <string name="settings_share">Compartilhar o app</string>
     <string name="settings_share_sub">Envie para um amigo</string>
     <string name="share_text">Assista a vídeos da web e canais de TV na tela grande, de graça: %1$s</string>

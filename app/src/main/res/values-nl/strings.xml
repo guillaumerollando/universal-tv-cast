@@ -42,6 +42,16 @@
     <string name="style_show_tv">Op de tv tonen</string>
     <string name="style_icon">App-pictogram</string>
     <string name="style_icon_note">Het nieuwe pictogram verschijnt zodra je de app verlaat. Het kan even van je startscherm verdwijnen.</string>
+    <string name="backup_save">Mijn gegevens opslaan</string>
+    <string name="backup_save_sub">In één bestand: geschiedenis, favorieten, netwerk, zenderlijsten, personalisatie. Zonder netwerkwachtwoorden.</string>
+    <string name="backup_restore">Back-up herstellen</string>
+    <string name="backup_restore_sub">Om over te stappen naar een nieuwe telefoon, met of zonder Google.</string>
+    <string name="backup_restore_title">Je gegevens vervangen?</string>
+    <string name="backup_restore_body">Alles in de app wordt vervangen door de back-up, daarna start de app opnieuw. Netwerkwachtwoorden voer je bij de eerste verbinding opnieuw in.</string>
+    <string name="backup_restore_go">Herstellen</string>
+    <string name="backup_done">Back-up opgeslagen</string>
+    <string name="backup_failed">Kon niet worden voltooid. Probeer een andere locatie.</string>
+    <string name="backup_bad_file">Dit bestand is geen back-up van Universal TV Cast.</string>
     <string name="settings_share">App delen</string>
     <string name="settings_share_sub">Stuur hem naar een vriend</string>
     <string name="share_text">Bekijk webvideo’s en tv-zenders gratis op je grote scherm: %1$s</string>

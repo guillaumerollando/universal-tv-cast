@@ -89,6 +89,7 @@ class MainActivity : ComponentActivity(), SensorEventListener {
 
     override fun onStart() {
         super.onStart()
+        leaving = false
         // Retour dans l'appli : on revérifie quelles télés sont allumées (rien ne passe : pas de risque de couper).
         val s = com.rollandostudio.universaltvcast.cast.TvCast.state.value
         // Même sans télé proposée : celle qu'on vient d'allumer doit apparaître.
@@ -101,8 +102,9 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         com.rollandostudio.universaltvcast.cast.TvCast.watchTvs(false)
         // En petite fenêtre, la vidéo continue ; fenêtre fermée (ou appli quittée sans elle) : on met en pause.
         if (!isInPictureInPictureMode) com.rollandostudio.universaltvcast.cast.TvCast.appHidden()
-        // Nouvelle icône choisie : posée seulement une fois l'appli quittée (Android ferme la tâche lancée par l'ancienne).
-        if (!isInPictureInPictureMode && !isChangingConfigurations) com.rollandostudio.universaltvcast.data.Look.applyIcon()
+        // Nouvelle icône choisie : posée seulement quand on quitte vraiment l'appli (Accueil, autre appli, fermeture),
+        // pas quand elle ouvre un sélecteur d'Android (photos, fichiers) : changer d'icône ferme la tâche en cours.
+        if ((leaving || isFinishing) && !isInPictureInPictureMode && !isChangingConfigurations) com.rollandostudio.universaltvcast.data.Look.applyIcon()
     }
 
     // ------------------------------------------------------------------ image dans l'image
@@ -132,8 +134,12 @@ class MainActivity : ComponentActivity(), SensorEventListener {
         )).apply { if (Build.VERSION.SDK_INT >= 31) setSeamlessResizeEnabled(true) }.build()
     }
 
+    /** L'utilisateur quitte l'appli (Accueil, appli récente) — et non une activité ouverte par l'appli. */
+    private var leaving = false
+
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
+        leaving = true
         if (pipWanted()) runCatching { enterPictureInPictureMode(pipParams()) }
     }
 

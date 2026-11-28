@@ -42,6 +42,16 @@
     <string name="style_show_tv">Auf dem Fernseher zeigen</string>
     <string name="style_icon">App-Symbol</string>
     <string name="style_icon_note">Das neue Symbol erscheint, sobald du die App verlässt. Es kann kurz vom Startbildschirm verschwinden.</string>
+    <string name="backup_save">Meine Daten sichern</string>
+    <string name="backup_save_sub">In einer Datei: Verlauf, Favoriten, Netzwerk, Senderlisten, Personalisierung. Ohne Netzwerkpasswörter.</string>
+    <string name="backup_restore">Sicherung wiederherstellen</string>
+    <string name="backup_restore_sub">Zum Umzug auf ein neues Handy, mit oder ohne Google.</string>
+    <string name="backup_restore_title">Deine Daten ersetzen?</string>
+    <string name="backup_restore_body">Alles in der App wird durch die Sicherung ersetzt, dann startet die App neu. Netzwerkpasswörter gibst du bei der ersten Verbindung erneut ein.</string>
+    <string name="backup_restore_go">Wiederherstellen</string>
+    <string name="backup_done">Sicherung gespeichert</string>
+    <string name="backup_failed">Konnte nicht abgeschlossen werden. Versuch einen anderen Ort.</string>
+    <string name="backup_bad_file">Diese Datei ist keine Universal-TV-Cast-Sicherung.</string>
     <string name="settings_share">App teilen</string>
     <string name="settings_share_sub">Schick sie an Freunde</string>
     <string name="share_text">Web-Videos und TV-Sender kostenlos auf dem großen Bildschirm: %1$s</string>

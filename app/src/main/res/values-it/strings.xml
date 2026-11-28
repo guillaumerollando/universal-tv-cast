@@ -42,6 +42,16 @@
     <string name="style_show_tv">Mostra sulla TV</string>
     <string name="style_icon">Icona dell’app</string>
     <string name="style_icon_note">La nuova icona appare quando esci dall’app. Può sparire un attimo dalla schermata Home.</string>
+    <string name="backup_save">Salva i miei dati</string>
+    <string name="backup_save_sub">In un solo file: cronologia, preferiti, rete, liste di canali, personalizzazione. Senza le password di rete.</string>
+    <string name="backup_restore">Ripristina un backup</string>
+    <string name="backup_restore_sub">Per passare a un nuovo telefono, con o senza Google.</string>
+    <string name="backup_restore_title">Sostituire i tuoi dati?</string>
+    <string name="backup_restore_body">Tutto nell’app verrà sostituito dal backup, poi l’app si riavvia. Le password di rete si reinseriscono alla prima connessione.</string>
+    <string name="backup_restore_go">Ripristina</string>
+    <string name="backup_done">Backup salvato</string>
+    <string name="backup_failed">Impossibile completare. Prova un’altra posizione.</string>
+    <string name="backup_bad_file">Questo file non è un backup di Universal TV Cast.</string>
     <string name="settings_share">Condividi l’app</string>
     <string name="settings_share_sub">Inviala a un amico</string>
     <string name="share_text">Guarda i video del web e i canali TV sul grande schermo, gratis: %1$s</string>

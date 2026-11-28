@@ -1720,3 +1720,14 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - Achat d'essai du pack soutien : une version construite avec `-PtestUnlock=true` ouvre le pack d'un clic sur
   « Soutenir », sans boutique, et ne le referme pas à la revérification Google (`BuildConfig.TEST_UNLOCK`). Les
   versions normales (et le Play Store) n'ont pas ce chemin. Installée ainsi sur le téléphone de Guillaume.
+
+## 2026-11-28 (nuit) — Sauvegarde et restauration par fichier
+- Réglages : « Sauvegarder mes données » (un fichier ZIP où l'on veut) et « Restaurer une sauvegarde » (confirmation,
+  puis l'appli redémarre). Contenu : historique / Reprendre, favoris et leur ordre, appareils et dossiers du réseau,
+  vu / avancement, listes de chaînes, personnalisation et photos de l'écran d'attente, réglages (`data/Backup.kt`).
+  Hors fichier : caches, achat du pack (Google le revérifie), mots de passe du réseau (chiffrés par une clé propre au
+  téléphone ; on les ressaisit). Pour les téléphones sans Google ; sans serveur.
+- Vérifié sur émulateur : sauvegarde (25 Ko), effacement complet de l'appli, restauration → tout revient.
+- Bug trouvé en route : après un changement d'icône, ouvrir un sélecteur d'Android (fichier, photos) posait la
+  nouvelle icône, ce qui ferme l'appli (choix perdu). L'icône n'est plus posée qu'en quittant vraiment l'appli
+  (Accueil, appli récente : `onUserLeaveHint`) ou à sa fermeture.

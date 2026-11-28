@@ -43,6 +43,16 @@
     <string name="style_show_tv">Show on the TV</string>
     <string name="style_icon">App icon</string>
     <string name="style_icon_note">The new icon appears once you leave the app. It may vanish from your home screen for a moment.</string>
+    <string name="backup_save">Back up my data</string>
+    <string name="backup_save_sub">In one file: history, favorites, network, channel lists, personalization. Network passwords aren’t included.</string>
+    <string name="backup_restore">Restore a backup</string>
+    <string name="backup_restore_sub">To move to a new phone, with or without Google.</string>
+    <string name="backup_restore_title">Replace your data?</string>
+    <string name="backup_restore_body">Everything in the app will be replaced by the backup, then the app restarts. You’ll re-enter network passwords on first connection.</string>
+    <string name="backup_restore_go">Restore</string>
+    <string name="backup_done">Backup saved</string>
+    <string name="backup_failed">Couldn’t complete. Try another location.</string>
+    <string name="backup_bad_file">This file isn’t a Universal TV Cast backup.</string>
     <string name="settings_share">Share the app</string>
     <string name="settings_share_sub">Send it to a friend</string>
     <string name="share_text">Watch web videos and TV channels on your big screen, for free: %1$s</string>

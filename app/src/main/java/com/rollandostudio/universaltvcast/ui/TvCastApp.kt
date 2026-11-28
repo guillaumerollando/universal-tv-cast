@@ -46,6 +46,8 @@ import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Share
+import androidx.compose.material.icons.rounded.Restore
+import androidx.compose.material.icons.rounded.Save
 import androidx.compose.material.icons.rounded.StarRate
 import androidx.compose.material.icons.rounded.Tv
 import androidx.compose.material.icons.rounded.WifiFind
@@ -634,6 +636,9 @@ private fun SettingsSheet(onDismiss: () -> Unit) {
                 }
             }
             item { HorizontalDivider(Modifier.padding(vertical = 8.dp)) }
+            // Changer de téléphone sans compte ni serveur : tout dans un fichier, qu'on rouvre sur le nouveau.
+            item { BackupRows() }
+            item { HorizontalDivider(Modifier.padding(vertical = 8.dp)) }
             item {
                 // Partager l'appli (standard des applis du studio) : la feuille de partage d'Android, avec le lien du store.
                 val text = stringResource(R.string.share_text, BuildConfig.SHARE_URL)
@@ -764,5 +769,60 @@ internal fun Ambient(backdrop: String?) {
                 )
             )
         }
+    }
+}
+
+/** « Sauvegarder mes données » / « Restaurer une sauvegarde » (fichier ZIP choisi par l'utilisateur). */
+@Composable
+private fun BackupRows() {
+    val ctx = LocalContext.current
+    val activity = androidx.activity.compose.LocalActivity.current
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    var restoreUri by remember { mutableStateOf<Uri?>(null) }
+    fun toast(id: Int) = android.widget.Toast.makeText(ctx, id, android.widget.Toast.LENGTH_LONG).show()
+    val save = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
+        uri ?: return@rememberLauncherForActivityResult
+        scope.launch {
+            val ok = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                runCatching { com.rollandostudio.universaltvcast.data.Backup.export(ctx, uri) }.isSuccess
+            }
+            toast(if (ok) R.string.backup_done else R.string.backup_failed)
+        }
+    }
+    val open = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> restoreUri = uri }
+    val date = remember { java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US).format(java.util.Date()) }
+    ListItem(
+        headlineContent = { Text(stringResource(R.string.backup_save)) },
+        supportingContent = { Text(stringResource(R.string.backup_save_sub)) },
+        leadingContent = { Icon(Icons.Rounded.Save, null) },
+        colors = ListItemDefaults.colors(containerColor = androidx.compose.ui.graphics.Color.Transparent),
+        modifier = Modifier.selectable(false, role = Role.Button) { save.launch("universal-tv-cast-$date.zip") },
+    )
+    ListItem(
+        headlineContent = { Text(stringResource(R.string.backup_restore)) },
+        supportingContent = { Text(stringResource(R.string.backup_restore_sub)) },
+        leadingContent = { Icon(Icons.Rounded.Restore, null) },
+        colors = ListItemDefaults.colors(containerColor = androidx.compose.ui.graphics.Color.Transparent),
+        modifier = Modifier.selectable(false, role = Role.Button) { open.launch(arrayOf("application/zip", "application/octet-stream")) },
+    )
+    restoreUri?.let { uri ->
+        AlertDialog(
+            onDismissRequest = { restoreUri = null },
+            title = { Text(stringResource(R.string.backup_restore_title)) },
+            text = { Text(stringResource(R.string.backup_restore_body)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    restoreUri = null
+                    scope.launch {
+                        val r = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                            runCatching { com.rollandostudio.universaltvcast.data.Backup.import(ctx, uri) }
+                        }
+                        if (r.isSuccess) activity?.let { com.rollandostudio.universaltvcast.data.Backup.restart(it) }
+                        else toast(if (r.exceptionOrNull() is com.rollandostudio.universaltvcast.data.Backup.BadFile) R.string.backup_bad_file else R.string.backup_failed)
+                    }
+                }) { Text(stringResource(R.string.backup_restore_go)) }
+            },
+            dismissButton = { TextButton(onClick = { restoreUri = null }) { Text(stringResource(R.string.action_cancel)) } },
+        )
     }
 }

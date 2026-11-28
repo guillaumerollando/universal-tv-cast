@@ -544,7 +544,19 @@
   "sources_added_body": "Jeho filmy a videa najdete na Domů a v Hledat. Zdroj později přidáte nebo odeberete v Hledat (ikona vpravo nahoře) nebo v Nastavení › Zdroje.",
   "sources_added_ok": "Rozumím",
   "amb_mood_hiphop": "Hip-hop",
-  "amb_mood_electro": "Elektro"
+  "amb_mood_electro": "Elektro",
+  "amb_preparing": "Připravuji atmosféru…",
+  "amb_mood_myradio": "Moje rádio",
+  "amb_mood_mymusic": "Moje hudba",
+  "amb_pick_radio": "Vybrat rádio",
+  "amb_no_radio_chosen": "Žádné rádio nevybráno",
+  "amb_radio_search": "Název rádia",
+  "amb_radio_url": "Nebo adresa streamu",
+  "amb_my_radios": "Moje rádia",
+  "amb_radio_forget": "Odebrat",
+  "amb_pick_music": "Přidat skladby",
+  "amb_music_clear": "Odebrat vše",
+  "amb_music_note": "Přehrává se náhodně a dokola. MP3 nebo AAC (m4a); skladby v jiném formátu se přeskočí."
  },
  "plurals": {
   "browser_found": {
@@ -570,6 +582,12 @@
    "few": "%d fotky",
    "many": "%d fotky",
    "other": "%d fotek"
+  },
+  "amb_music_count": {
+   "one": "%d skladba",
+   "few": "%d skladby",
+   "many": "%d skladby",
+   "other": "%d skladeb"
   }
  }
 }

@@ -214,6 +214,18 @@ S = {
 "sources_added_ok": ["Got it", "Compris", "Entendido", "Verstanden", "Ho capito", "Begrepen", "Entendi"],
 "amb_mood_hiphop": ["Hip-hop", "Hip-hop", "Hip-hop", "Hip-Hop", "Hip-hop", "Hiphop", "Hip-hop"],
 "amb_mood_electro": ["Electro", "Électro", "Electrónica", "Electro", "Elettronica", "Elektro", "Eletrônica"],
+"amb_preparing": ["Getting the ambiance ready…", "Préparation de l’ambiance…", "Preparando el ambiente…", "Ambiente wird vorbereitet…", "Preparazione dell’atmosfera…", "Sfeer wordt klaargezet…", "Preparando o ambiente…"],
+"amb_mood_myradio": ["My radio", "Ma radio", "Mi radio", "Mein Radio", "La mia radio", "Mijn radio", "Minha rádio"],
+"amb_mood_mymusic": ["My music", "Ma musique", "Mi música", "Meine Musik", "La mia musica", "Mijn muziek", "Minhas músicas"],
+"amb_pick_radio": ["Choose a radio", "Choisir une radio", "Elegir una radio", "Radio wählen", "Scegli una radio", "Radio kiezen", "Escolher uma rádio"],
+"amb_no_radio_chosen": ["No radio chosen", "Aucune radio choisie", "Ninguna radio elegida", "Kein Radio gewählt", "Nessuna radio scelta", "Geen radio gekozen", "Nenhuma rádio escolhida"],
+"amb_radio_search": ["Radio name", "Nom de la radio", "Nombre de la radio", "Name des Senders", "Nome della radio", "Naam van de radio", "Nome da rádio"],
+"amb_radio_url": ["Or the stream address", "Ou l’adresse du flux", "O la dirección del flujo", "Oder die Stream-Adresse", "O l’indirizzo dello stream", "Of het streamadres", "Ou o endereço do stream"],
+"amb_my_radios": ["My radios", "Mes radios", "Mis radios", "Meine Radios", "Le mie radio", "Mijn radio’s", "Minhas rádios"],
+"amb_radio_forget": ["Remove", "Retirer", "Quitar", "Entfernen", "Rimuovi", "Verwijderen", "Remover"],
+"amb_pick_music": ["Add tracks", "Ajouter des morceaux", "Añadir canciones", "Titel hinzufügen", "Aggiungi brani", "Nummers toevoegen", "Adicionar músicas"],
+"amb_music_clear": ["Remove all", "Tout retirer", "Quitar todo", "Alle entfernen", "Rimuovi tutto", "Alles verwijderen", "Remover tudo"],
+"amb_music_note": ["Played shuffled, on a loop. MP3 or AAC (m4a); tracks in another format are skipped.", "Lus dans le désordre, en boucle. MP3 ou AAC (m4a) ; les morceaux d’un autre format sont laissés de côté.", "Se reproducen en orden aleatorio y en bucle. MP3 o AAC (m4a); las canciones en otro formato se omiten.", "Zufällig und in Schleife abgespielt. MP3 oder AAC (m4a); Titel in anderem Format werden übersprungen.", "Riprodotti in ordine casuale, a ciclo. MP3 o AAC (m4a); i brani in altro formato vengono saltati.", "Willekeurig en herhaald afgespeeld. MP3 of AAC (m4a); nummers in een ander formaat worden overgeslagen.", "Tocadas em ordem aleatória, em loop. MP3 ou AAC (m4a); músicas em outro formato são ignoradas."],
 "action_dont_show": ["Don’t show again", "Ne plus afficher", "No volver a mostrar", "Nicht mehr anzeigen", "Non mostrare più", "Niet meer tonen", "Não mostrar de novo"],
 "help_section": ["Troubleshooting", "Dépannage", "Solución de problemas", "Fehlerbehebung", "Risoluzione dei problemi", "Problemen oplossen", "Solução de problemas"],
 "state_expanded": ["expanded", "ouvert", "abierto", "aufgeklappt", "aperto", "uitgevouwen", "aberto"],
@@ -726,7 +738,10 @@ S = {
 "bookmark_added": ["“%1$s” added to favorites.", "« %1$s » ajouté aux favoris.", "«%1$s» añadido a favoritos.", "„%1$s“ zu Favoriten hinzugefügt.", "«%1$s» aggiunto ai preferiti.", "‘%1$s’ toegevoegd aan favorieten.", "“%1$s” adicionado aos favoritos."],
 "bookmark_advanced": ["%1$s: bookmark moved to episode %2$d.", "%1$s : marque-page avancé à l’épisode %2$d.", "%1$s: marcador avanzado al episodio %2$d.", "%1$s: Lesezeichen auf Folge %2$d gesetzt.", "%1$s: segnalibro spostato all’episodio %2$d.", "%1$s: bladwijzer naar aflevering %2$d.", "%1$s: marcador avançou para o episódio %2$d."],
 }
-PLURALS = {"style_photos_count": [
+PLURALS = {"amb_music_count": [
+ ("%d track", "%d tracks"), ("%d morceau", "%d morceaux"), ("%d canción", "%d canciones"), ("%d Titel", "%d Titel"),
+ ("%d brano", "%d brani"), ("%d nummer", "%d nummers"), ("%d música", "%d músicas")],
+"style_photos_count": [
  ("%d photo", "%d photos"), ("%d photo", "%d photos"), ("%d foto", "%d fotos"), ("%d Foto", "%d Fotos"),
  ("%d foto", "%d foto"), ("%d foto", "%d foto’s"), ("%d foto", "%d fotos")],
 "lan_episodes": [

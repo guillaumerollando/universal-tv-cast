@@ -15,8 +15,26 @@ object Radio {
     private const val TAG = "TvCastRadio"
     private const val UA = "UniversalTVCast/1.0 (+https://rollandostudio.com)"
 
-    /** Une radio : nom, adresse du flux. */
-    data class Station(val name: String, val url: String)
+    /** Une radio : nom, adresse du flux (et, trouvée par recherche, son pays et son logo). */
+    data class Station(val name: String, val url: String, val country: String? = null, val logo: String? = null)
+
+    /**
+     * Recherche d'une radio par son nom dans l'annuaire (« Mes radios » : on choisit la sienne), les plus écoutées
+     * d'abord ; MP3 ou AAC seulement (ce que l'ambiance sait glisser dans la vidéo sans réencoder).
+     */
+    fun search(name: String): List<Station> = runCatching {
+        val c = Http.open("https://all.api.radio-browser.info/json/stations/byname/${java.net.URLEncoder.encode(name.trim(), "UTF-8")}" +
+            "?order=clickcount&reverse=true&limit=40&hidebroken=true", mapOf("User-Agent" to UA), connectTimeout = 8000, readTimeout = 10_000)
+        val a = try { JSONArray(c.inputStream.use { String(it.readBytes()) }) } finally { c.disconnect() }
+        (0 until a.length()).mapNotNull { i ->
+            val o = a.getJSONObject(i)
+            val codec = o.optString("codec").uppercase()
+            if (codec != "MP3" && codec != "AAC" && codec != "AAC+") return@mapNotNull null
+            val url = o.optString("url_resolved").ifBlank { o.optString("url") }.takeIf { it.startsWith("http") } ?: return@mapNotNull null
+            val n = o.optString("name").trim().ifBlank { return@mapNotNull null }
+            Station(n, url, o.optString("country").ifBlank { null }, o.optString("favicon").takeIf { it.startsWith("http") })
+        }.distinctBy { it.name.lowercase() }
+    }.onFailure { Log.i(TAG, "recherche « $name » : ${it.message}") }.getOrDefault(emptyList())
 
     /** Les radios les plus écoutées d'un style (MP3 ou AAC, au moins 96 kb/s), sans les flux signalés en panne. */
     fun stations(tags: List<String>): List<Station> {
@@ -46,23 +64,29 @@ object Radio {
      * Le son d'une radio, en continu vers [stream]. Démarré par [open] (qui dit si c'est du MP3 ou de l'AAC),
      * puis [run] jusqu'à l'arrêt du flux ou de la radio ; se reconnecte seul après une coupure.
      */
-    class Feed private constructor(val station: Station, private var conn: HttpURLConnection, private var input: InputStream, val streamType: Int) {
+    class Feed internal constructor(val station: Station, private var conn: HttpURLConnection?, private var input: InputStream, val streamType: Int) {
         @Volatile private var stopped = false
-        fun stop() { stopped = true; runCatching { input.close() }; runCatching { conn.disconnect() } }
+        /** Le morceau qui passe (« Artiste - Titre »), quand la radio le dit ; null sinon. */
+        @Volatile var onTitle: ((String) -> Unit)? = null
+        private val relay: (String) -> Unit = { t -> onTitle?.invoke(t) }
+        fun stop() { stopped = true; runCatching { input.close() }; runCatching { conn?.disconnect() } }
+        /** Pour une source locale (« Ma musique ») : annonce le morceau qui commence. */
+        internal fun title(t: String) = relay(t)
 
         companion object {
             /** Se connecte et reconnaît le format (MP3 : 0x03, AAC : 0x0F) ; null si la radio ne répond pas. */
             fun open(st: Station): Feed? = runCatching {
-                val c = Http.open(st.url, mapOf("User-Agent" to UA, "Icy-MetaData" to "0"), connectTimeout = 8000, readTimeout = 15_000)
+                val c = Http.open(st.url, mapOf("User-Agent" to UA, "Icy-MetaData" to "1"), connectTimeout = 8000, readTimeout = 15_000)
                 if (c.responseCode !in 200..299) { c.disconnect(); return@runCatching null }
-                val ins = java.io.BufferedInputStream(c.inputStream, 64 * 1024)
+                val titles = TitleBox()
+                val ins = java.io.BufferedInputStream(Icy.wrap(c, titles), 64 * 1024)
                 ins.mark(16 * 1024)
                 val head = ByteArray(8 * 1024)
                 var n = 0
                 while (n < head.size) { val k = ins.read(head, n, head.size - n); if (k < 0) break; n += k }
                 ins.reset()
                 val type = Frames.detect(head, n) ?: run { c.disconnect(); return@runCatching null }
-                Feed(st, c, ins, type)
+                Feed(st, c, ins, type).also { f -> titles.target = f.relay }
             }.onFailure { Log.i(TAG, "${st.name} : ${it.message}") }.getOrNull()
         }
 
@@ -97,18 +121,57 @@ object Radio {
                     failures = 0
                 } catch (e: Exception) {
                     if (stopped || !stream.alive) break
-                    if (++failures > 6) { Log.i(TAG, "${station.name} : abandon (${e.message})"); break }
+                    // Source locale finie ou cassée : rien à reconnecter.
+                    if (conn == null || ++failures > 6) { Log.i(TAG, "${station.name} : fin (${e.message})"); break }
                     Log.i(TAG, "${station.name} : coupure (${e.message}), reconnexion")
                     Thread.sleep(1500L * failures)
                     runCatching {
-                        conn.disconnect()
-                        conn = Http.open(station.url, mapOf("User-Agent" to UA, "Icy-MetaData" to "0"), connectTimeout = 8000, readTimeout = 15_000)
-                        input = java.io.BufferedInputStream(conn.inputStream, 64 * 1024)
+                        conn?.disconnect()
+                        conn = Http.open(station.url, mapOf("User-Agent" to UA, "Icy-MetaData" to "1"), connectTimeout = 8000, readTimeout = 15_000)
+                        input = java.io.BufferedInputStream(Icy.wrap(conn!!, TitleBox().also { it.target = relay }), 64 * 1024)
                         len = 0
                     }
                 }
             }
             stop()
+        }
+    }
+
+    /** Où envoyer le titre lu dans le flux (le [Feed] n'existe pas encore quand la connexion s'ouvre). */
+    internal class TitleBox { @Volatile var target: ((String) -> Unit)? = null }
+
+    /**
+     * Le titre du morceau, glissé dans le flux par la radio (protocole « ICY », que presque toutes les radios en ligne
+     * parlent) : tous les « icy-metaint » octets de son, un petit bloc « StreamTitle='Artiste - Titre'; ». On le retire
+     * du son et on le transmet ; une radio qui ne l'envoie pas est lue telle quelle.
+     */
+    internal object Icy {
+        fun wrap(c: HttpURLConnection, box: TitleBox): InputStream {
+            val every = c.getHeaderField("icy-metaint")?.trim()?.toIntOrNull()?.takeIf { it > 0 } ?: return c.inputStream
+            return Stream(c.inputStream, every, box)
+        }
+
+        private class Stream(private val src: InputStream, private val every: Int, private val box: TitleBox) : InputStream() {
+            private var left = every
+            private var last: String? = null
+            override fun read(): Int { val b = ByteArray(1); return if (read(b, 0, 1) < 0) -1 else b[0].toInt() and 0xFF }
+            override fun read(b: ByteArray, off: Int, len: Int): Int {
+                if (left == 0) { meta(); left = every }
+                val n = src.read(b, off, minOf(len, left))
+                if (n > 0) left -= n
+                return n
+            }
+            private fun meta() {
+                val size = src.read().takeIf { it >= 0 } ?: return
+                if (size == 0) return
+                val block = ByteArray(size * 16)
+                var got = 0
+                while (got < block.size) { val k = src.read(block, got, block.size - got); if (k < 0) break; got += k }
+                val text = String(block, 0, got, Charsets.UTF_8).trimEnd('\u0000')
+                val title = Regex("StreamTitle='(.*?)';").find(text)?.groupValues?.get(1)?.trim().orEmpty()
+                if (title.isNotEmpty() && title != last) { last = title; box.target?.invoke(title) }
+            }
+            override fun close() = src.close()
         }
     }
 

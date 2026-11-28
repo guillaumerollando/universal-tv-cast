@@ -544,7 +544,19 @@
   "sources_added_body": "Phim và video của nguồn có ở Trang chủ và Tìm kiếm. Để thêm hoặc xóa nguồn sau này: Tìm kiếm (biểu tượng góc trên phải) hoặc Cài đặt › Nguồn.",
   "sources_added_ok": "Đã hiểu",
   "amb_mood_hiphop": "Hip-hop",
-  "amb_mood_electro": "Electro"
+  "amb_mood_electro": "Electro",
+  "amb_preparing": "Đang chuẩn bị không gian…",
+  "amb_mood_myradio": "Radio của tôi",
+  "amb_mood_mymusic": "Nhạc của tôi",
+  "amb_pick_radio": "Chọn radio",
+  "amb_no_radio_chosen": "Chưa chọn radio",
+  "amb_radio_search": "Tên radio",
+  "amb_radio_url": "Hoặc địa chỉ luồng",
+  "amb_my_radios": "Radio của tôi",
+  "amb_radio_forget": "Xóa",
+  "amb_pick_music": "Thêm bài",
+  "amb_music_clear": "Xóa tất cả",
+  "amb_music_note": "Phát ngẫu nhiên, lặp lại. MP3 hoặc AAC (m4a); bài ở định dạng khác sẽ bị bỏ qua."
  },
  "plurals": {
   "browser_found": {
@@ -558,6 +570,9 @@
   },
   "style_photos_count": {
    "other": "%d ảnh"
+  },
+  "amb_music_count": {
+   "other": "%d bài"
   }
  }
 }

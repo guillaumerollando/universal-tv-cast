@@ -182,6 +182,18 @@
     <string name="sources_added_ok">Entendi</string>
     <string name="amb_mood_hiphop">Hip-hop</string>
     <string name="amb_mood_electro">Eletrônica</string>
+    <string name="amb_preparing">Preparando o ambiente…</string>
+    <string name="amb_mood_myradio">Minha rádio</string>
+    <string name="amb_mood_mymusic">Minhas músicas</string>
+    <string name="amb_pick_radio">Escolher uma rádio</string>
+    <string name="amb_no_radio_chosen">Nenhuma rádio escolhida</string>
+    <string name="amb_radio_search">Nome da rádio</string>
+    <string name="amb_radio_url">Ou o endereço do stream</string>
+    <string name="amb_my_radios">Minhas rádios</string>
+    <string name="amb_radio_forget">Remover</string>
+    <string name="amb_pick_music">Adicionar músicas</string>
+    <string name="amb_music_clear">Remover tudo</string>
+    <string name="amb_music_note">Tocadas em ordem aleatória, em loop. MP3 ou AAC (m4a); músicas em outro formato são ignoradas.</string>
     <string name="action_dont_show">Não mostrar de novo</string>
     <string name="help_section">Solução de problemas</string>
     <string name="state_expanded">aberto</string>
@@ -546,6 +558,11 @@
     <string name="bookmark_followed_series">“%1$s” seguida: o marcador avança sozinho a cada episódio assistido.</string>
     <string name="bookmark_added">“%1$s” adicionado aos favoritos.</string>
     <string name="bookmark_advanced">%1$s: marcador avançou para o episódio %2$d.</string>
+    <plurals name="amb_music_count">
+        <item quantity="one">%d música</item>
+        <item quantity="many">%d músicas</item>
+        <item quantity="other">%d músicas</item>
+    </plurals>
     <plurals name="style_photos_count">
         <item quantity="one">%d foto</item>
         <item quantity="many">%d fotos</item>

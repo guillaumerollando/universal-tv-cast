@@ -546,6 +546,18 @@
     <string name="sources_added_ok">समझ गया</string>
     <string name="amb_mood_hiphop">हिप-हॉप</string>
     <string name="amb_mood_electro">इलेक्ट्रो</string>
+    <string name="amb_preparing">माहौल तैयार हो रहा है…</string>
+    <string name="amb_mood_myradio">मेरा रेडियो</string>
+    <string name="amb_mood_mymusic">मेरा संगीत</string>
+    <string name="amb_pick_radio">रेडियो चुनें</string>
+    <string name="amb_no_radio_chosen">कोई रेडियो नहीं चुना</string>
+    <string name="amb_radio_search">रेडियो का नाम</string>
+    <string name="amb_radio_url">या स्ट्रीम का पता</string>
+    <string name="amb_my_radios">मेरे रेडियो</string>
+    <string name="amb_radio_forget">हटाएँ</string>
+    <string name="amb_pick_music">गाने जोड़ें</string>
+    <string name="amb_music_clear">सब हटाएँ</string>
+    <string name="amb_music_note">यादृच्छिक क्रम में, लगातार चलते हैं। MP3 या AAC (m4a); अन्य फ़ॉर्मैट के गाने छोड़ दिए जाते हैं।</string>
     <plurals name="browser_found">
         <item quantity="one">%d वीडियो</item>
         <item quantity="other">%d वीडियो</item>
@@ -561,5 +573,9 @@
     <plurals name="style_photos_count">
         <item quantity="one">%d फ़ोटो</item>
         <item quantity="other">%d फ़ोटो</item>
+    </plurals>
+    <plurals name="amb_music_count">
+        <item quantity="one">%d गाना</item>
+        <item quantity="other">%d गाने</item>
     </plurals>
 </resources>

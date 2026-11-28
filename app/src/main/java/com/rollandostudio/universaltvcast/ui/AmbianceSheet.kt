@@ -26,6 +26,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AutoAwesome
+import androidx.compose.foundation.clickable
+import com.rollandostudio.universaltvcast.cast.MyMusic
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.LibraryMusic
+import androidx.compose.material.icons.rounded.Radio
+import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.PhotoLibrary
 import androidx.compose.material.icons.rounded.SkipNext
@@ -95,6 +102,11 @@ fun AmbianceSheet(onDismiss: () -> Unit) {
     val photos by Look.photos.collectAsState()
     val tv by TvCast.state.collectAsState()
     var busy by remember { mutableStateOf(false) }
+    var radioPicker by remember { mutableStateOf(false) }
+    if (radioPicker) RadioPickerDialog(onDismiss = { radioPicker = false })
+    val pickMusic = androidx.activity.compose.rememberLauncherForActivityResult(androidx.activity.result.contract.ActivityResultContracts.OpenMultipleDocuments()) { uris ->
+        if (uris.isNotEmpty()) scope.launch(kotlinx.coroutines.Dispatchers.IO) { MyMusic.add(ctx, uris); Ambiance.setMood(Ambiance.Mood.MY_MUSIC) }
+    }
     val pick = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(Look.MAX_PHOTOS)) { uris ->
         if (uris.isEmpty()) return@rememberLauncherForActivityResult
         busy = true
@@ -144,8 +156,39 @@ fun AmbianceSheet(onDismiss: () -> Unit) {
             item {
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Ambiance.Mood.entries.forEach { m ->
-                        FilterChip(selected = mood == m, onClick = { Ambiance.setMood(m) }, label = { Text(stringResource(m.label)) })
+                        FilterChip(selected = mood == m, onClick = {
+                            Ambiance.setMood(m)
+                            // Rien encore de choisi : on ouvre tout de suite de quoi choisir.
+                            if (m == Ambiance.Mood.MY_RADIO && Ambiance.myRadio.value == null) radioPicker = true
+                            if (m == Ambiance.Mood.MY_MUSIC && MyMusic.tracks.value.isEmpty()) pickMusic.launch(arrayOf("audio/*"))
+                        }, label = { Text(stringResource(m.label)) })
                     }
+                }
+            }
+            // « Ma radio » : celle choisie, et de quoi en changer.
+            if (mood == Ambiance.Mood.MY_RADIO) item {
+                val my by Ambiance.myRadio.collectAsState()
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Rounded.Radio, null, tint = c.primary, modifier = Modifier.size(22.dp))
+                    Spacer(Modifier.width(10.dp))
+                    Text(my?.name ?: stringResource(R.string.amb_no_radio_chosen), style = MaterialTheme.typography.bodyLarge,
+                        maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+                    androidx.compose.material3.TextButton(onClick = { radioPicker = true }) { Text(stringResource(R.string.amb_pick_radio)) }
+                }
+            }
+            // « Ma musique » : les morceaux choisis, en ajouter, tout retirer.
+            if (mood == Ambiance.Mood.MY_MUSIC) item {
+                val tracks by MyMusic.tracks.collectAsState()
+                Column {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Rounded.LibraryMusic, null, tint = c.primary, modifier = Modifier.size(22.dp))
+                        Spacer(Modifier.width(10.dp))
+                        Text(androidx.compose.ui.res.pluralStringResource(R.plurals.amb_music_count, tracks.size, tracks.size),
+                            style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+                        if (tracks.isNotEmpty()) androidx.compose.material3.TextButton(onClick = { MyMusic.clear() }) { Text(stringResource(R.string.amb_music_clear)) }
+                        androidx.compose.material3.TextButton(onClick = { pickMusic.launch(arrayOf("audio/*")) }) { Text(stringResource(R.string.amb_pick_music)) }
+                    }
+                    Text(stringResource(R.string.amb_music_note), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
                 }
             }
             item {
@@ -176,7 +219,11 @@ fun AmbianceSheet(onDismiss: () -> Unit) {
             item {
                 if (unlocked) {
                     Button(
-                        onClick = { Ambiance.start(); Nav.tab.value = Tab.PLAYER; onDismiss() },
+                        onClick = {
+                            // Pas encore de télé choisie : on la choisit d'abord (sinon l'écran de lecture serait vide).
+                            if (TvCast.state.value.renderer == null) { onDismiss(); Nav.tvs.value = true }
+                            else { Ambiance.start(); Nav.tab.value = Tab.PLAYER; onDismiss() }
+                        },
                         enabled = !busy, modifier = Modifier.fillMaxWidth().height(52.dp),
                     ) {
                         Icon(Icons.Rounded.Tv, null)
@@ -225,6 +272,8 @@ fun AmbiancePlayer(state: CastState) {
             val bmp = preview
             if (bmp != null) Image(bmp.asImageBitmap(), null, Modifier.fillMaxWidth().aspectRatio(16f / 9f), contentScale = ContentScale.Crop)
             else Box(Modifier.size(88.dp).clip(CircleShape).background(Color.White.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
+                // En préparation : un indicateur qui tourne autour de l'icône.
+                if (state.phase == Phase.SENDING) androidx.compose.material3.CircularProgressIndicator(Modifier.size(88.dp), color = Color.White, strokeWidth = 3.dp)
                 Icon(Icons.Rounded.AutoAwesome, null, tint = Color.White, modifier = Modifier.size(40.dp))
             }
             Box(Modifier.fillMaxWidth().aspectRatio(16f / 9f).background(Brush.verticalGradient(0.55f to Color.Transparent, 1f to Color.Black.copy(alpha = 0.7f))))
@@ -236,7 +285,9 @@ fun AmbiancePlayer(state: CastState) {
                     EqualizerBars(active = state.phase == Phase.PLAYING, color = c.primary)
                     Spacer(Modifier.width(8.dp))
                     Text(
-                        (now.station?.let { stringResource(R.string.amb_radio, it) }
+                        // En préparation : on le dit (et pas « pas de radio » alors qu'on la cherche encore).
+                        if (state.phase == Phase.SENDING) stringResource(R.string.amb_preparing)
+                        else (now.station?.let { stringResource(R.string.amb_radio, it) }
                             ?: if (now.mood == Ambiance.Mood.NONE) stringResource(R.string.amb_mood_none) else stringResource(R.string.amb_no_radio)) +
                             (state.renderer?.let { " · " + it.name } ?: ""),
                         style = MaterialTheme.typography.labelLarge, color = Color.White.copy(alpha = 0.92f), maxLines = 1, overflow = TextOverflow.Ellipsis,
@@ -244,6 +295,14 @@ fun AmbiancePlayer(state: CastState) {
                 }
             }
             if (state.phase == Phase.SENDING) androidx.compose.material3.LinearProgressIndicator(Modifier.fillMaxWidth().align(Alignment.BottomCenter))
+        }
+        // Le morceau qui passe (quand la radio le dit).
+        now.track?.let {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Rounded.MusicNote, null, tint = c.primary, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(8.dp))
+                Text(it, style = MaterialTheme.typography.bodyLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            }
         }
         now.credit?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis) }
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -289,6 +348,67 @@ private fun DurationDialog(current: Int, onDismiss: () -> Unit, onPick: (Int) ->
             }
         },
         confirmButton = { androidx.compose.material3.TextButton(onClick = { onPick(steps[i]) }) { Text(stringResource(R.string.action_save)) } },
+        dismissButton = { androidx.compose.material3.TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
+    )
+}
+
+
+/**
+ * « Choisir une radio » : chercher par son nom dans l'annuaire libre Radio Browser, ou coller l'adresse d'un flux.
+ * Sans recherche : « Mes radios », les dernières choisies.
+ */
+@Composable
+private fun RadioPickerDialog(onDismiss: () -> Unit) {
+    val c = MaterialTheme.colorScheme
+    var query by remember { mutableStateOf("") }
+    var url by remember { mutableStateOf("") }
+    val mine by Ambiance.myRadios.collectAsState()
+    val found by androidx.compose.runtime.produceState<List<com.rollandostudio.universaltvcast.cast.Radio.Station>?>(emptyList(), query) {
+        if (query.trim().length < 2) { value = emptyList(); return@produceState }
+        value = null
+        kotlinx.coroutines.delay(450)
+        value = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { com.rollandostudio.universaltvcast.cast.Radio.search(query) }
+    }
+    fun pick(st: com.rollandostudio.universaltvcast.cast.Radio.Station) { Ambiance.pickRadio(st); onDismiss() }
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.amb_pick_radio)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                androidx.compose.material3.OutlinedTextField(query, { query = it }, singleLine = true, modifier = Modifier.fillMaxWidth(),
+                    leadingIcon = { Icon(Icons.Rounded.Search, null) }, label = { Text(stringResource(R.string.amb_radio_search)) })
+                val list = if (query.trim().length < 2) mine else found.orEmpty()
+                if (query.trim().length < 2 && mine.isNotEmpty())
+                    Text(stringResource(R.string.amb_my_radios), style = MaterialTheme.typography.titleSmall, color = c.primary)
+                androidx.compose.foundation.lazy.LazyColumn(Modifier.fillMaxWidth().height(260.dp)) {
+                    if (found == null) item { Box(Modifier.fillMaxWidth().padding(16.dp), contentAlignment = Alignment.Center) { androidx.compose.material3.CircularProgressIndicator(Modifier.size(24.dp)) } }
+                    items(list.size) { i ->
+                        val st = list[i]
+                        Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).clickable { pick(st) }.padding(horizontal = 8.dp, vertical = 10.dp),
+                            verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Rounded.Radio, null, tint = c.onSurfaceVariant, modifier = Modifier.size(20.dp))
+                            Spacer(Modifier.width(10.dp))
+                            Column(Modifier.weight(1f)) {
+                                Text(st.name, style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                                st.country?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant) }
+                            }
+                            if (query.trim().length < 2) androidx.compose.material3.IconButton(onClick = { Ambiance.forgetRadio(st) }) {
+                                Icon(Icons.Rounded.Close, stringResource(R.string.amb_radio_forget), Modifier.size(18.dp))
+                            }
+                        }
+                    }
+                }
+                // Ou l'adresse d'un flux (MP3 ou AAC), pour une radio absente de l'annuaire.
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    androidx.compose.material3.OutlinedTextField(url, { url = it.trim() }, singleLine = true, modifier = Modifier.weight(1f),
+                        label = { Text(stringResource(R.string.amb_radio_url)) }, placeholder = { Text("https://…") })
+                    androidx.compose.material3.TextButton(enabled = url.startsWith("http"), onClick = {
+                        pick(com.rollandostudio.universaltvcast.cast.Radio.Station(android.net.Uri.parse(url).host?.removePrefix("www.") ?: url, url))
+                    }) { Text(stringResource(R.string.action_add)) }
+                }
+            }
+        },
+        confirmButton = {},
         dismissButton = { androidx.compose.material3.TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
     )
 }

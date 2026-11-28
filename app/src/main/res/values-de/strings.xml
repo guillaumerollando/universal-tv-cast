@@ -182,6 +182,18 @@
     <string name="sources_added_ok">Verstanden</string>
     <string name="amb_mood_hiphop">Hip-Hop</string>
     <string name="amb_mood_electro">Electro</string>
+    <string name="amb_preparing">Ambiente wird vorbereitet…</string>
+    <string name="amb_mood_myradio">Mein Radio</string>
+    <string name="amb_mood_mymusic">Meine Musik</string>
+    <string name="amb_pick_radio">Radio wählen</string>
+    <string name="amb_no_radio_chosen">Kein Radio gewählt</string>
+    <string name="amb_radio_search">Name des Senders</string>
+    <string name="amb_radio_url">Oder die Stream-Adresse</string>
+    <string name="amb_my_radios">Meine Radios</string>
+    <string name="amb_radio_forget">Entfernen</string>
+    <string name="amb_pick_music">Titel hinzufügen</string>
+    <string name="amb_music_clear">Alle entfernen</string>
+    <string name="amb_music_note">Zufällig und in Schleife abgespielt. MP3 oder AAC (m4a); Titel in anderem Format werden übersprungen.</string>
     <string name="action_dont_show">Nicht mehr anzeigen</string>
     <string name="help_section">Fehlerbehebung</string>
     <string name="state_expanded">aufgeklappt</string>
@@ -546,6 +558,10 @@
     <string name="bookmark_followed_series">„%1$s“ wird verfolgt: Das Lesezeichen rückt mit jeder Folge mit.</string>
     <string name="bookmark_added">„%1$s“ zu Favoriten hinzugefügt.</string>
     <string name="bookmark_advanced">%1$s: Lesezeichen auf Folge %2$d gesetzt.</string>
+    <plurals name="amb_music_count">
+        <item quantity="one">%d Titel</item>
+        <item quantity="other">%d Titel</item>
+    </plurals>
     <plurals name="style_photos_count">
         <item quantity="one">%d Foto</item>
         <item quantity="other">%d Fotos</item>

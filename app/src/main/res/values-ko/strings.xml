@@ -546,6 +546,18 @@
     <string name="sources_added_ok">확인</string>
     <string name="amb_mood_hiphop">힙합</string>
     <string name="amb_mood_electro">일렉트로</string>
+    <string name="amb_preparing">분위기를 준비하는 중…</string>
+    <string name="amb_mood_myradio">내 라디오</string>
+    <string name="amb_mood_mymusic">내 음악</string>
+    <string name="amb_pick_radio">라디오 선택</string>
+    <string name="amb_no_radio_chosen">선택된 라디오 없음</string>
+    <string name="amb_radio_search">라디오 이름</string>
+    <string name="amb_radio_url">또는 스트림 주소</string>
+    <string name="amb_my_radios">내 라디오 목록</string>
+    <string name="amb_radio_forget">삭제</string>
+    <string name="amb_pick_music">곡 추가</string>
+    <string name="amb_music_clear">모두 삭제</string>
+    <string name="amb_music_note">무작위로 반복 재생됩니다. MP3 또는 AAC(m4a). 다른 형식의 곡은 건너뜁니다.</string>
     <plurals name="browser_found">
         <item quantity="other">동영상 %d개</item>
     </plurals>
@@ -557,5 +569,8 @@
     </plurals>
     <plurals name="style_photos_count">
         <item quantity="other">%d장</item>
+    </plurals>
+    <plurals name="amb_music_count">
+        <item quantity="other">%d곡</item>
     </plurals>
 </resources>

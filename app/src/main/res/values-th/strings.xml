@@ -546,6 +546,18 @@
     <string name="sources_added_ok">เข้าใจแล้ว</string>
     <string name="amb_mood_hiphop">ฮิปฮอป</string>
     <string name="amb_mood_electro">อิเล็กโทร</string>
+    <string name="amb_preparing">กำลังเตรียมบรรยากาศ…</string>
+    <string name="amb_mood_myradio">วิทยุของฉัน</string>
+    <string name="amb_mood_mymusic">เพลงของฉัน</string>
+    <string name="amb_pick_radio">เลือกวิทยุ</string>
+    <string name="amb_no_radio_chosen">ยังไม่ได้เลือกวิทยุ</string>
+    <string name="amb_radio_search">ชื่อวิทยุ</string>
+    <string name="amb_radio_url">หรือที่อยู่สตรีม</string>
+    <string name="amb_my_radios">วิทยุของฉัน</string>
+    <string name="amb_radio_forget">นำออก</string>
+    <string name="amb_pick_music">เพิ่มเพลง</string>
+    <string name="amb_music_clear">นำออกทั้งหมด</string>
+    <string name="amb_music_note">เล่นแบบสุ่มวนซ้ำ MP3 หรือ AAC (m4a) เพลงรูปแบบอื่นจะถูกข้าม</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>
@@ -557,5 +569,8 @@
     </plurals>
     <plurals name="style_photos_count">
         <item quantity="other">%d รูป</item>
+    </plurals>
+    <plurals name="amb_music_count">
+        <item quantity="other">%d เพลง</item>
     </plurals>
 </resources>

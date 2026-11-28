@@ -544,7 +544,19 @@
   "sources_added_body": "Film dan videonya ada di Beranda dan Cari. Untuk menambah atau menghapus sumber nanti: Cari (ikon kanan atas) atau Setelan › Sumber.",
   "sources_added_ok": "Mengerti",
   "amb_mood_hiphop": "Hip-hop",
-  "amb_mood_electro": "Elektro"
+  "amb_mood_electro": "Elektro",
+  "amb_preparing": "Menyiapkan suasana…",
+  "amb_mood_myradio": "Radio saya",
+  "amb_mood_mymusic": "Musik saya",
+  "amb_pick_radio": "Pilih radio",
+  "amb_no_radio_chosen": "Belum ada radio",
+  "amb_radio_search": "Nama radio",
+  "amb_radio_url": "Atau alamat stream",
+  "amb_my_radios": "Radio saya",
+  "amb_radio_forget": "Hapus",
+  "amb_pick_music": "Tambah lagu",
+  "amb_music_clear": "Hapus semua",
+  "amb_music_note": "Diputar acak dan berulang. MP3 atau AAC (m4a); lagu format lain dilewati."
  },
  "plurals": {
   "browser_found": {
@@ -558,6 +570,9 @@
   },
   "style_photos_count": {
    "other": "%d foto"
+  },
+  "amb_music_count": {
+   "other": "%d lagu"
   }
  }
 }

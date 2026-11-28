@@ -544,7 +544,19 @@
   "sources_added_body": "Filmleri ve videoları Ana sayfa'da ve Ara'da. Daha sonra kaynak eklemek veya kaldırmak için: Ara (sağ üstteki simge) ya da Ayarlar › Kaynaklar.",
   "sources_added_ok": "Anladım",
   "amb_mood_hiphop": "Hip-hop",
-  "amb_mood_electro": "Elektro"
+  "amb_mood_electro": "Elektro",
+  "amb_preparing": "Ortam hazırlanıyor…",
+  "amb_mood_myradio": "Radyom",
+  "amb_mood_mymusic": "Müziğim",
+  "amb_pick_radio": "Radyo seç",
+  "amb_no_radio_chosen": "Radyo seçilmedi",
+  "amb_radio_search": "Radyo adı",
+  "amb_radio_url": "Ya da yayın adresi",
+  "amb_my_radios": "Radyolarım",
+  "amb_radio_forget": "Kaldır",
+  "amb_pick_music": "Şarkı ekle",
+  "amb_music_clear": "Tümünü kaldır",
+  "amb_music_note": "Karışık sırayla, döngüde çalınır. MP3 veya AAC (m4a); başka biçimdeki şarkılar atlanır."
  },
  "plurals": {
   "browser_found": {
@@ -562,6 +574,10 @@
   "style_photos_count": {
    "one": "%d fotoğraf",
    "other": "%d fotoğraf"
+  },
+  "amb_music_count": {
+   "one": "%d şarkı",
+   "other": "%d şarkı"
   }
  }
 }

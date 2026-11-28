@@ -546,6 +546,18 @@
     <string name="sources_added_ok">Понятно</string>
     <string name="amb_mood_hiphop">Хип-хоп</string>
     <string name="amb_mood_electro">Электро</string>
+    <string name="amb_preparing">Готовим атмосферу…</string>
+    <string name="amb_mood_myradio">Моё радио</string>
+    <string name="amb_mood_mymusic">Моя музыка</string>
+    <string name="amb_pick_radio">Выбрать радио</string>
+    <string name="amb_no_radio_chosen">Радио не выбрано</string>
+    <string name="amb_radio_search">Название радио</string>
+    <string name="amb_radio_url">Или адрес потока</string>
+    <string name="amb_my_radios">Мои радио</string>
+    <string name="amb_radio_forget">Убрать</string>
+    <string name="amb_pick_music">Добавить треки</string>
+    <string name="amb_music_clear">Убрать всё</string>
+    <string name="amb_music_note">Играют вперемешку и по кругу. MP3 или AAC (m4a); треки в другом формате пропускаются.</string>
     <plurals name="browser_found">
         <item quantity="one">%d видео</item>
         <item quantity="few">%d видео</item>
@@ -569,5 +581,11 @@
         <item quantity="few">%d фото</item>
         <item quantity="many">%d фото</item>
         <item quantity="other">%d фото</item>
+    </plurals>
+    <plurals name="amb_music_count">
+        <item quantity="one">%d трек</item>
+        <item quantity="few">%d трека</item>
+        <item quantity="many">%d треков</item>
+        <item quantity="other">%d трека</item>
     </plurals>
 </resources>

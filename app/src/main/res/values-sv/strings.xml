@@ -546,6 +546,18 @@
     <string name="sources_added_ok">Uppfattat</string>
     <string name="amb_mood_hiphop">Hiphop</string>
     <string name="amb_mood_electro">Elektro</string>
+    <string name="amb_preparing">Förbereder stämningen…</string>
+    <string name="amb_mood_myradio">Min radio</string>
+    <string name="amb_mood_mymusic">Min musik</string>
+    <string name="amb_pick_radio">Välj en radio</string>
+    <string name="amb_no_radio_chosen">Ingen radio vald</string>
+    <string name="amb_radio_search">Radions namn</string>
+    <string name="amb_radio_url">Eller streamens adress</string>
+    <string name="amb_my_radios">Mina radiokanaler</string>
+    <string name="amb_radio_forget">Ta bort</string>
+    <string name="amb_pick_music">Lägg till låtar</string>
+    <string name="amb_music_clear">Ta bort alla</string>
+    <string name="amb_music_note">Spelas i slumpvis ordning, i loop. MP3 eller AAC (m4a); låtar i annat format hoppas över.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videor</item>
@@ -561,5 +573,9 @@
     <plurals name="style_photos_count">
         <item quantity="one">%d foto</item>
         <item quantity="other">%d foton</item>
+    </plurals>
+    <plurals name="amb_music_count">
+        <item quantity="one">%d låt</item>
+        <item quantity="other">%d låtar</item>
     </plurals>
 </resources>

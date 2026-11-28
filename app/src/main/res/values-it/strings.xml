@@ -182,6 +182,18 @@
     <string name="sources_added_ok">Ho capito</string>
     <string name="amb_mood_hiphop">Hip-hop</string>
     <string name="amb_mood_electro">Elettronica</string>
+    <string name="amb_preparing">Preparazione dell’atmosfera…</string>
+    <string name="amb_mood_myradio">La mia radio</string>
+    <string name="amb_mood_mymusic">La mia musica</string>
+    <string name="amb_pick_radio">Scegli una radio</string>
+    <string name="amb_no_radio_chosen">Nessuna radio scelta</string>
+    <string name="amb_radio_search">Nome della radio</string>
+    <string name="amb_radio_url">O l’indirizzo dello stream</string>
+    <string name="amb_my_radios">Le mie radio</string>
+    <string name="amb_radio_forget">Rimuovi</string>
+    <string name="amb_pick_music">Aggiungi brani</string>
+    <string name="amb_music_clear">Rimuovi tutto</string>
+    <string name="amb_music_note">Riprodotti in ordine casuale, a ciclo. MP3 o AAC (m4a); i brani in altro formato vengono saltati.</string>
     <string name="action_dont_show">Non mostrare più</string>
     <string name="help_section">Risoluzione dei problemi</string>
     <string name="state_expanded">aperto</string>
@@ -546,6 +558,11 @@
     <string name="bookmark_followed_series">«%1$s» seguita: il segnalibro avanzerà da solo a ogni episodio.</string>
     <string name="bookmark_added">«%1$s» aggiunto ai preferiti.</string>
     <string name="bookmark_advanced">%1$s: segnalibro spostato all’episodio %2$d.</string>
+    <plurals name="amb_music_count">
+        <item quantity="one">%d brano</item>
+        <item quantity="many">%d brani</item>
+        <item quantity="other">%d brani</item>
+    </plurals>
     <plurals name="style_photos_count">
         <item quantity="one">%d foto</item>
         <item quantity="many">%d foto</item>

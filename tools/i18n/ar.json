@@ -544,7 +544,19 @@
   "sources_added_body": "أفلامه وفيديوهاته في الصفحة الرئيسية وفي البحث. لإضافة مصدر أو إزالته لاحقًا: البحث (الأيقونة أعلى اليمين) أو الإعدادات › المصادر.",
   "sources_added_ok": "فهمت",
   "amb_mood_hiphop": "هيب هوب",
-  "amb_mood_electro": "إلكترو"
+  "amb_mood_electro": "إلكترو",
+  "amb_preparing": "جارٍ تجهيز الأجواء…",
+  "amb_mood_myradio": "راديوي",
+  "amb_mood_mymusic": "موسيقاي",
+  "amb_pick_radio": "اختر راديو",
+  "amb_no_radio_chosen": "لم يتم اختيار راديو",
+  "amb_radio_search": "اسم الراديو",
+  "amb_radio_url": "أو عنوان البث",
+  "amb_my_radios": "أجهزة الراديو الخاصة بي",
+  "amb_radio_forget": "إزالة",
+  "amb_pick_music": "أضف مقاطع",
+  "amb_music_clear": "إزالة الكل",
+  "amb_music_note": "تُشغَّل بترتيب عشوائي وبشكل متكرر. MP3 أو AAC (m4a)؛ تُتجاوز المقاطع بصيغ أخرى."
  },
  "plurals": {
   "browser_found": {
@@ -578,6 +590,14 @@
    "few": "%d صور",
    "many": "%d صورة",
    "other": "%d صورة"
+  },
+  "amb_music_count": {
+   "zero": "%d مقطع",
+   "one": "مقطع واحد",
+   "two": "مقطعان",
+   "few": "%d مقاطع",
+   "many": "%d مقطعًا",
+   "other": "%d مقطع"
   }
  }
 }

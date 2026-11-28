@@ -544,7 +544,19 @@
   "sources_added_body": "Его фильмы и видео — на главной и в Поиске. Чтобы потом добавить или убрать источник: Поиск (значок справа вверху) или Настройки › Источники.",
   "sources_added_ok": "Понятно",
   "amb_mood_hiphop": "Хип-хоп",
-  "amb_mood_electro": "Электро"
+  "amb_mood_electro": "Электро",
+  "amb_preparing": "Готовим атмосферу…",
+  "amb_mood_myradio": "Моё радио",
+  "amb_mood_mymusic": "Моя музыка",
+  "amb_pick_radio": "Выбрать радио",
+  "amb_no_radio_chosen": "Радио не выбрано",
+  "amb_radio_search": "Название радио",
+  "amb_radio_url": "Или адрес потока",
+  "amb_my_radios": "Мои радио",
+  "amb_radio_forget": "Убрать",
+  "amb_pick_music": "Добавить треки",
+  "amb_music_clear": "Убрать всё",
+  "amb_music_note": "Играют вперемешку и по кругу. MP3 или AAC (m4a); треки в другом формате пропускаются."
  },
  "plurals": {
   "browser_found": {
@@ -570,6 +582,12 @@
    "few": "%d фото",
    "many": "%d фото",
    "other": "%d фото"
+  },
+  "amb_music_count": {
+   "one": "%d трек",
+   "few": "%d трека",
+   "many": "%d треков",
+   "other": "%d трека"
   }
  }
 }

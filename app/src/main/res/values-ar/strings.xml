@@ -546,6 +546,18 @@
     <string name="sources_added_ok">فهمت</string>
     <string name="amb_mood_hiphop">هيب هوب</string>
     <string name="amb_mood_electro">إلكترو</string>
+    <string name="amb_preparing">جارٍ تجهيز الأجواء…</string>
+    <string name="amb_mood_myradio">راديوي</string>
+    <string name="amb_mood_mymusic">موسيقاي</string>
+    <string name="amb_pick_radio">اختر راديو</string>
+    <string name="amb_no_radio_chosen">لم يتم اختيار راديو</string>
+    <string name="amb_radio_search">اسم الراديو</string>
+    <string name="amb_radio_url">أو عنوان البث</string>
+    <string name="amb_my_radios">أجهزة الراديو الخاصة بي</string>
+    <string name="amb_radio_forget">إزالة</string>
+    <string name="amb_pick_music">أضف مقاطع</string>
+    <string name="amb_music_clear">إزالة الكل</string>
+    <string name="amb_music_note">تُشغَّل بترتيب عشوائي وبشكل متكرر. MP3 أو AAC (m4a)؛ تُتجاوز المقاطع بصيغ أخرى.</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>
@@ -577,5 +589,13 @@
         <item quantity="few">%d صور</item>
         <item quantity="many">%d صورة</item>
         <item quantity="other">%d صورة</item>
+    </plurals>
+    <plurals name="amb_music_count">
+        <item quantity="zero">%d مقطع</item>
+        <item quantity="one">مقطع واحد</item>
+        <item quantity="two">مقطعان</item>
+        <item quantity="few">%d مقاطع</item>
+        <item quantity="many">%d مقطعًا</item>
+        <item quantity="other">%d مقطع</item>
     </plurals>
 </resources>

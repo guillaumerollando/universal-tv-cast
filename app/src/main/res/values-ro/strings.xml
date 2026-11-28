@@ -546,6 +546,18 @@
     <string name="sources_added_ok">Am înțeles</string>
     <string name="amb_mood_hiphop">Hip-hop</string>
     <string name="amb_mood_electro">Electro</string>
+    <string name="amb_preparing">Se pregătește atmosfera…</string>
+    <string name="amb_mood_myradio">Radioul meu</string>
+    <string name="amb_mood_mymusic">Muzica mea</string>
+    <string name="amb_pick_radio">Alege un radio</string>
+    <string name="amb_no_radio_chosen">Niciun radio ales</string>
+    <string name="amb_radio_search">Numele radioului</string>
+    <string name="amb_radio_url">Sau adresa fluxului</string>
+    <string name="amb_my_radios">Radiourile mele</string>
+    <string name="amb_radio_forget">Elimină</string>
+    <string name="amb_pick_music">Adaugă piese</string>
+    <string name="amb_music_clear">Elimină tot</string>
+    <string name="amb_music_note">Redate aleatoriu, în buclă. MP3 sau AAC (m4a); piesele în alt format sunt sărite.</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>
@@ -565,5 +577,10 @@
         <item quantity="one">%d fotografie</item>
         <item quantity="few">%d fotografii</item>
         <item quantity="other">%d de fotografii</item>
+    </plurals>
+    <plurals name="amb_music_count">
+        <item quantity="one">%d piesă</item>
+        <item quantity="few">%d piese</item>
+        <item quantity="other">%d de piese</item>
     </plurals>
 </resources>

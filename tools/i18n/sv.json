@@ -544,7 +544,19 @@
   "sources_added_body": "Dess filmer och videor finns på Hem och under Sök. Lägg till eller ta bort en källa senare: Sök (ikonen uppe till höger) eller Inställningar › Källor.",
   "sources_added_ok": "Uppfattat",
   "amb_mood_hiphop": "Hiphop",
-  "amb_mood_electro": "Elektro"
+  "amb_mood_electro": "Elektro",
+  "amb_preparing": "Förbereder stämningen…",
+  "amb_mood_myradio": "Min radio",
+  "amb_mood_mymusic": "Min musik",
+  "amb_pick_radio": "Välj en radio",
+  "amb_no_radio_chosen": "Ingen radio vald",
+  "amb_radio_search": "Radions namn",
+  "amb_radio_url": "Eller streamens adress",
+  "amb_my_radios": "Mina radiokanaler",
+  "amb_radio_forget": "Ta bort",
+  "amb_pick_music": "Lägg till låtar",
+  "amb_music_clear": "Ta bort alla",
+  "amb_music_note": "Spelas i slumpvis ordning, i loop. MP3 eller AAC (m4a); låtar i annat format hoppas över."
  },
  "plurals": {
   "browser_found": {
@@ -562,6 +574,10 @@
   "style_photos_count": {
    "one": "%d foto",
    "other": "%d foton"
+  },
+  "amb_music_count": {
+   "one": "%d låt",
+   "other": "%d låtar"
   }
  }
 }

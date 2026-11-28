@@ -544,7 +544,19 @@
   "sources_added_body": "映画や動画はホームと検索に表示されます。あとでソースを追加・削除するには：検索（右上のアイコン）または設定 › ソース。",
   "sources_added_ok": "OK",
   "amb_mood_hiphop": "ヒップホップ",
-  "amb_mood_electro": "エレクトロ"
+  "amb_mood_electro": "エレクトロ",
+  "amb_preparing": "アンビエンスを準備中…",
+  "amb_mood_myradio": "マイラジオ",
+  "amb_mood_mymusic": "マイミュージック",
+  "amb_pick_radio": "ラジオを選ぶ",
+  "amb_no_radio_chosen": "ラジオが選ばれていません",
+  "amb_radio_search": "ラジオ名",
+  "amb_radio_url": "またはストリームのアドレス",
+  "amb_my_radios": "マイラジオ一覧",
+  "amb_radio_forget": "削除",
+  "amb_pick_music": "曲を追加",
+  "amb_music_clear": "すべて削除",
+  "amb_music_note": "シャッフルでくり返し再生。MP3またはAAC（m4a）。ほかの形式の曲はスキップされます。"
  },
  "plurals": {
   "browser_found": {
@@ -558,6 +570,9 @@
   },
   "style_photos_count": {
    "other": "%d枚"
+  },
+  "amb_music_count": {
+   "other": "%d曲"
   }
  }
 }

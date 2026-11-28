@@ -183,6 +183,18 @@
     <string name="sources_added_ok">Got it</string>
     <string name="amb_mood_hiphop">Hip-hop</string>
     <string name="amb_mood_electro">Electro</string>
+    <string name="amb_preparing">Getting the ambiance ready…</string>
+    <string name="amb_mood_myradio">My radio</string>
+    <string name="amb_mood_mymusic">My music</string>
+    <string name="amb_pick_radio">Choose a radio</string>
+    <string name="amb_no_radio_chosen">No radio chosen</string>
+    <string name="amb_radio_search">Radio name</string>
+    <string name="amb_radio_url">Or the stream address</string>
+    <string name="amb_my_radios">My radios</string>
+    <string name="amb_radio_forget">Remove</string>
+    <string name="amb_pick_music">Add tracks</string>
+    <string name="amb_music_clear">Remove all</string>
+    <string name="amb_music_note">Played shuffled, on a loop. MP3 or AAC (m4a); tracks in another format are skipped.</string>
     <string name="action_dont_show">Don’t show again</string>
     <string name="help_section">Troubleshooting</string>
     <string name="state_expanded">expanded</string>
@@ -547,6 +559,10 @@
     <string name="bookmark_followed_series">“%1$s” followed: the bookmark will move to each episode you watch.</string>
     <string name="bookmark_added">“%1$s” added to favorites.</string>
     <string name="bookmark_advanced">%1$s: bookmark moved to episode %2$d.</string>
+    <plurals name="amb_music_count">
+        <item quantity="one">%d track</item>
+        <item quantity="other">%d tracks</item>
+    </plurals>
     <plurals name="style_photos_count">
         <item quantity="one">%d photo</item>
         <item quantity="other">%d photos</item>

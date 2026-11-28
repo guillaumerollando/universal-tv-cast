@@ -546,6 +546,18 @@
     <string name="sources_added_ok">Rozumiem</string>
     <string name="amb_mood_hiphop">Hip-hop</string>
     <string name="amb_mood_electro">Elektro</string>
+    <string name="amb_preparing">Przygotowuję klimat…</string>
+    <string name="amb_mood_myradio">Moje radio</string>
+    <string name="amb_mood_mymusic">Moja muzyka</string>
+    <string name="amb_pick_radio">Wybierz radio</string>
+    <string name="amb_no_radio_chosen">Nie wybrano radia</string>
+    <string name="amb_radio_search">Nazwa radia</string>
+    <string name="amb_radio_url">Albo adres strumienia</string>
+    <string name="amb_my_radios">Moje radia</string>
+    <string name="amb_radio_forget">Usuń</string>
+    <string name="amb_pick_music">Dodaj utwory</string>
+    <string name="amb_music_clear">Usuń wszystko</string>
+    <string name="amb_music_note">Odtwarzane losowo, w pętli. MP3 lub AAC (m4a); utwory w innym formacie są pomijane.</string>
     <plurals name="browser_found">
         <item quantity="one">%d wideo</item>
         <item quantity="few">%d wideo</item>
@@ -569,5 +581,11 @@
         <item quantity="few">%d zdjęcia</item>
         <item quantity="many">%d zdjęć</item>
         <item quantity="other">%d zdjęcia</item>
+    </plurals>
+    <plurals name="amb_music_count">
+        <item quantity="one">%d utwór</item>
+        <item quantity="few">%d utwory</item>
+        <item quantity="many">%d utworów</item>
+        <item quantity="other">%d utworu</item>
     </plurals>
 </resources>

@@ -544,7 +544,19 @@
   "sources_added_body": "它的电影和视频在首页和“搜索”中。之后要添加或移除来源：搜索（右上角图标）或 设置 › 来源。",
   "sources_added_ok": "知道了",
   "amb_mood_hiphop": "嘻哈",
-  "amb_mood_electro": "电子"
+  "amb_mood_electro": "电子",
+  "amb_preparing": "正在准备氛围…",
+  "amb_mood_myradio": "我的电台",
+  "amb_mood_mymusic": "我的音乐",
+  "amb_pick_radio": "选择电台",
+  "amb_no_radio_chosen": "未选择电台",
+  "amb_radio_search": "电台名称",
+  "amb_radio_url": "或流地址",
+  "amb_my_radios": "我的电台列表",
+  "amb_radio_forget": "移除",
+  "amb_pick_music": "添加歌曲",
+  "amb_music_clear": "全部移除",
+  "amb_music_note": "随机循环播放。MP3 或 AAC（m4a）；其他格式的歌曲会被跳过。"
  },
  "plurals": {
   "browser_found": {
@@ -558,6 +570,9 @@
   },
   "style_photos_count": {
    "other": "%d 张"
+  },
+  "amb_music_count": {
+   "other": "%d 首"
   }
  }
 }

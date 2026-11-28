@@ -544,7 +544,19 @@
   "sources_added_body": "Jego filmy i wideo są na stronie głównej i w Szukaj. Aby później dodać lub usunąć źródło: Szukaj (ikona w prawym górnym rogu) lub Ustawienia › Źródła.",
   "sources_added_ok": "Rozumiem",
   "amb_mood_hiphop": "Hip-hop",
-  "amb_mood_electro": "Elektro"
+  "amb_mood_electro": "Elektro",
+  "amb_preparing": "Przygotowuję klimat…",
+  "amb_mood_myradio": "Moje radio",
+  "amb_mood_mymusic": "Moja muzyka",
+  "amb_pick_radio": "Wybierz radio",
+  "amb_no_radio_chosen": "Nie wybrano radia",
+  "amb_radio_search": "Nazwa radia",
+  "amb_radio_url": "Albo adres strumienia",
+  "amb_my_radios": "Moje radia",
+  "amb_radio_forget": "Usuń",
+  "amb_pick_music": "Dodaj utwory",
+  "amb_music_clear": "Usuń wszystko",
+  "amb_music_note": "Odtwarzane losowo, w pętli. MP3 lub AAC (m4a); utwory w innym formacie są pomijane."
  },
  "plurals": {
   "browser_found": {
@@ -570,6 +582,12 @@
    "few": "%d zdjęcia",
    "many": "%d zdjęć",
    "other": "%d zdjęcia"
+  },
+  "amb_music_count": {
+   "one": "%d utwór",
+   "few": "%d utwory",
+   "many": "%d utworów",
+   "other": "%d utworu"
   }
  }
 }

@@ -544,7 +544,19 @@
   "sources_added_body": "영화와 동영상은 홈과 검색에 있습니다. 나중에 소스를 추가하거나 삭제하려면: 검색(오른쪽 위 아이콘) 또는 설정 › 소스.",
   "sources_added_ok": "확인",
   "amb_mood_hiphop": "힙합",
-  "amb_mood_electro": "일렉트로"
+  "amb_mood_electro": "일렉트로",
+  "amb_preparing": "분위기를 준비하는 중…",
+  "amb_mood_myradio": "내 라디오",
+  "amb_mood_mymusic": "내 음악",
+  "amb_pick_radio": "라디오 선택",
+  "amb_no_radio_chosen": "선택된 라디오 없음",
+  "amb_radio_search": "라디오 이름",
+  "amb_radio_url": "또는 스트림 주소",
+  "amb_my_radios": "내 라디오 목록",
+  "amb_radio_forget": "삭제",
+  "amb_pick_music": "곡 추가",
+  "amb_music_clear": "모두 삭제",
+  "amb_music_note": "무작위로 반복 재생됩니다. MP3 또는 AAC(m4a). 다른 형식의 곡은 건너뜁니다."
  },
  "plurals": {
   "browser_found": {
@@ -558,6 +570,9 @@
   },
   "style_photos_count": {
    "other": "%d장"
+  },
+  "amb_music_count": {
+   "other": "%d곡"
   }
  }
 }

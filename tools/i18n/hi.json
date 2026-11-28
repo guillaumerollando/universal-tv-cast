@@ -544,7 +544,19 @@
   "sources_added_body": "इसकी फ़िल्में और वीडियो होम और खोजें में हैं। बाद में स्रोत जोड़ने या हटाने के लिए: खोजें (ऊपर दाएँ आइकन) या सेटिंग्स › स्रोत।",
   "sources_added_ok": "समझ गया",
   "amb_mood_hiphop": "हिप-हॉप",
-  "amb_mood_electro": "इलेक्ट्रो"
+  "amb_mood_electro": "इलेक्ट्रो",
+  "amb_preparing": "माहौल तैयार हो रहा है…",
+  "amb_mood_myradio": "मेरा रेडियो",
+  "amb_mood_mymusic": "मेरा संगीत",
+  "amb_pick_radio": "रेडियो चुनें",
+  "amb_no_radio_chosen": "कोई रेडियो नहीं चुना",
+  "amb_radio_search": "रेडियो का नाम",
+  "amb_radio_url": "या स्ट्रीम का पता",
+  "amb_my_radios": "मेरे रेडियो",
+  "amb_radio_forget": "हटाएँ",
+  "amb_pick_music": "गाने जोड़ें",
+  "amb_music_clear": "सब हटाएँ",
+  "amb_music_note": "यादृच्छिक क्रम में, लगातार चलते हैं। MP3 या AAC (m4a); अन्य फ़ॉर्मैट के गाने छोड़ दिए जाते हैं।"
  },
  "plurals": {
   "browser_found": {
@@ -562,6 +574,10 @@
   "style_photos_count": {
    "one": "%d फ़ोटो",
    "other": "%d फ़ोटो"
+  },
+  "amb_music_count": {
+   "one": "%d गाना",
+   "other": "%d गाने"
   }
  }
 }

@@ -1897,3 +1897,22 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   dernier avec cadenas sinon. Radios Hip-hop (hiphop, hip-hop, rap) et Électro (electronic, electro).
 - Barre à 4 onglets : texte plus petit (11 sp) et moins de marge : « Rechercher », « Przeglądarka »,
   « Reproducción » en entier (vérifié en fr, pl, es).
+
+## 2026-11-28 — Ambiance : morceau en cours, Ma radio, Ma musique, préparation claire
+- **Morceau en cours** : lu dans le flux de la radio (protocole ICY, « StreamTitle », que presque toutes les radios
+  en ligne envoient ; retiré du son au passage). Sur le téléphone : ♪ Artiste - Titre sous l'image. Sur la télé :
+  en bas à droite, titre en blanc, artiste plus pâle, petite note à la couleur de l'appli ; rien si la radio ne le
+  dit pas (FIP) ou si c'est juste le nom de la radio.
+- **Ma radio** : chercher une radio par son nom dans l'annuaire Radio Browser (ex. « FIP » → FIP, FIP Jazz, FIP
+  Reggae…), ou coller l'adresse d'un flux ; « Mes radios » garde les 12 dernières choisies (retirables).
+- **Ma musique** : choisir des morceaux du téléphone (sélecteur Android), lus dans le désordre et en boucle, glissés
+  tels quels dans la vidéo (MP3, ou AAC des .m4a avec en-tête ADTS) ; titre et artiste lus dans les balises ; les
+  morceaux d'un autre format que la majorité sont laissés de côté (la vidéo n'a qu'une piste son).
+- **Préparation claire** : dès « Lancer sur la télé », l'écran de lecture montre « Préparation de l'ambiance… » avec
+  un indicateur (avant : « Rien en cours » pendant quelques secondes) ; sans télé choisie, le bouton ouvre le choix
+  de la télé.
+- Vérifié sur émulateur (fausse télé) : SomaFM → « Saru - Sweet Dreams (Remix) » sur le téléphone et sur l'image
+  de la télé ; recherche « FIP » et lecture de FIP Jazz ; Ma musique (2 MP3) : titre affiché, son MP3 44,1 kHz
+  stéréo dans le flux, décodé sans erreur ; préparation affichée tout de suite. 68 tests, 0 échec.
+- Pas vérifié : le sélecteur de morceaux de bout en bout (test fait en posant les morceaux directement) ; des .m4a ;
+  sur la vraie télé.

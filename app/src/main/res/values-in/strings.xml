@@ -558,6 +558,15 @@
     <string name="amb_pick_music">Tambah lagu</string>
     <string name="amb_music_clear">Hapus semua</string>
     <string name="amb_music_note">Diputar acak dan berulang. MP3 atau AAC (m4a); lagu format lain dilewati.</string>
+    <string name="amb_add_radio">Tambah</string>
+    <string name="amb_add_radio_first">Tambah radio saya</string>
+    <string name="amb_styles">Gaya</string>
+    <string name="amb_manage">Kelola</string>
+    <string name="amb_presets">Suasana saya</string>
+    <string name="amb_save_preset">Simpan suasana ini</string>
+    <string name="amb_save_preset_sub">Foto, musik, jam, dan durasi foto seperti sekarang, untuk dijalankan lagi dengan satu ketukan.</string>
+    <string name="amb_preset_name">Nama</string>
+    <string name="amb_presets_hint">Atur suasana di bawah, lalu simpan untuk menjalankannya dengan satu ketukan.</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

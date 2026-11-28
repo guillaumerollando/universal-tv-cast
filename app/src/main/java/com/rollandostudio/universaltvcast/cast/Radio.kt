@@ -22,9 +22,25 @@ object Radio {
      * Recherche d'une radio par son nom dans l'annuaire (« Mes radios » : on choisit la sienne), les plus écoutées
      * d'abord ; MP3 ou AAC seulement (ce que l'ambiance sait glisser dans la vidéo sans réencoder).
      */
-    fun search(name: String): List<Station> = runCatching {
-        val c = Http.open("https://all.api.radio-browser.info/json/stations/byname/${java.net.URLEncoder.encode(name.trim(), "UTF-8")}" +
-            "?order=clickcount&reverse=true&limit=40&hidebroken=true", mapOf("User-Agent" to UA), connectTimeout = 8000, readTimeout = 10_000)
+    fun search(name: String): List<Station> {
+        val q = name.trim()
+        val cc = java.util.Locale.getDefault().country.uppercase()
+        val enc = java.net.URLEncoder.encode(q, "UTF-8")
+        // Les radios du pays du téléphone d'abord, puis le monde ; seulement celles dont le nom contient vraiment ce
+        // qu'on cherche (l'annuaire remonte des « TOP 100 DJ CHARTS » qui glissent tous les mots dans leur nom).
+        val local = if (cc.length == 2) query("stations/search?name=$enc&countrycode=$cc&order=clickcount&reverse=true&limit=30&hidebroken=true") else emptyList()
+        val world = query("stations/search?name=$enc&order=clickcount&reverse=true&limit=60&hidebroken=true")
+        val words = fold(q).split(' ').filter { it.isNotBlank() }
+        return (local + world)
+            .filter { st -> val n = fold(st.name); words.all { n.contains(it) } && !Regex("^[#_\\-\\s*]").containsMatchIn(st.name) }
+            .distinctBy { fold(it.name) }.take(40)
+    }
+
+    private fun fold(s: String) = java.text.Normalizer.normalize(s, java.text.Normalizer.Form.NFD)
+        .replace(Regex("\\p{M}+"), "").lowercase()
+
+    private fun query(path: String): List<Station> = runCatching {
+        val c = Http.open("https://all.api.radio-browser.info/json/$path", mapOf("User-Agent" to UA), connectTimeout = 8000, readTimeout = 10_000)
         val a = try { JSONArray(c.inputStream.use { String(it.readBytes()) }) } finally { c.disconnect() }
         (0 until a.length()).mapNotNull { i ->
             val o = a.getJSONObject(i)
@@ -33,8 +49,8 @@ object Radio {
             val url = o.optString("url_resolved").ifBlank { o.optString("url") }.takeIf { it.startsWith("http") } ?: return@mapNotNull null
             val n = o.optString("name").trim().ifBlank { return@mapNotNull null }
             Station(n, url, o.optString("country").ifBlank { null }, o.optString("favicon").takeIf { it.startsWith("http") })
-        }.distinctBy { it.name.lowercase() }
-    }.onFailure { Log.i(TAG, "recherche « $name » : ${it.message}") }.getOrDefault(emptyList())
+        }
+    }.onFailure { Log.i(TAG, "annuaire : ${it.message}") }.getOrDefault(emptyList())
 
     /** Les radios les plus écoutées d'un style (MP3 ou AAC, au moins 96 kb/s), sans les flux signalés en panne. */
     fun stations(tags: List<String>): List<Station> {

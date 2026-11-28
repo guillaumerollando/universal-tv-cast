@@ -26,6 +26,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AutoAwesome
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.material.icons.rounded.StarBorder
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material.icons.rounded.Tune
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.foundation.clickable
 import com.rollandostudio.universaltvcast.cast.MyMusic
 import androidx.compose.material.icons.rounded.Close
@@ -103,6 +109,10 @@ fun AmbianceSheet(onDismiss: () -> Unit) {
     val tv by TvCast.state.collectAsState()
     var busy by remember { mutableStateOf(false) }
     var radioPicker by remember { mutableStateOf(false) }
+    var manage by remember { mutableStateOf(false) }
+    var saving by remember { mutableStateOf(false) }
+    if (saving) SavePresetDialog(onDismiss = { saving = false })
+    if (manage) ManageMusicDialog(onDismiss = { manage = false }, onAddRadio = { manage = false; radioPicker = true })
     if (radioPicker) RadioPickerDialog(onDismiss = { radioPicker = false })
     val pickMusic = androidx.activity.compose.rememberLauncherForActivityResult(androidx.activity.result.contract.ActivityResultContracts.OpenMultipleDocuments()) { uris ->
         if (uris.isNotEmpty()) scope.launch(kotlinx.coroutines.Dispatchers.IO) { MyMusic.add(ctx, uris); Ambiance.setMood(Ambiance.Mood.MY_MUSIC) }
@@ -129,6 +139,23 @@ fun AmbianceSheet(onDismiss: () -> Unit) {
                     Text(stringResource(R.string.amb_sub), style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = 0.9f))
                 }
             }
+            // Mes ambiances : une ambiance gardée se relance d'un toucher (appui long : la retirer).
+            item {
+                val presets by Ambiance.presets.collectAsState()
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    SectionTitle(stringResource(R.string.amb_presets))
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        presets.forEach { p -> PresetChip(p, enabled = unlocked) {
+                            if (TvCast.state.value.renderer == null) { Ambiance.applyPreset(p, start = false); onDismiss(); Nav.tvs.value = true }
+                            else { Ambiance.applyPreset(p, start = true); Nav.tab.value = Tab.PLAYER; onDismiss() }
+                        } }
+                        androidx.compose.material3.AssistChip(onClick = { saving = true }, enabled = unlocked,
+                            leadingIcon = { Icon(Icons.Rounded.StarBorder, null, Modifier.size(16.dp)) },
+                            label = { Text(stringResource(R.string.amb_save_preset)) })
+                    }
+                    if (presets.isEmpty()) Text(stringResource(R.string.amb_presets_hint), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
+                }
+            }
             item { SectionTitle(stringResource(R.string.amb_photos)) }
             item {
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -153,27 +180,36 @@ fun AmbianceSheet(onDismiss: () -> Unit) {
                 }
             }
             item { SectionTitle(stringResource(R.string.amb_music)) }
+            // Mes radios : chacune d'un toucher ; « + » pour en ajouter. Puis les styles gardés, « Ma musique » et « Gérer ».
             item {
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Ambiance.Mood.entries.forEach { m ->
-                        FilterChip(selected = mood == m, onClick = {
-                            Ambiance.setMood(m)
-                            // Rien encore de choisi : on ouvre tout de suite de quoi choisir.
-                            if (m == Ambiance.Mood.MY_RADIO && Ambiance.myRadio.value == null) radioPicker = true
-                            if (m == Ambiance.Mood.MY_MUSIC && MyMusic.tracks.value.isEmpty()) pickMusic.launch(arrayOf("audio/*"))
-                        }, label = { Text(stringResource(m.label)) })
+                val mine by Ambiance.myRadios.collectAsState()
+                val current by Ambiance.myRadio.collectAsState()
+                val hidden by Ambiance.hiddenMoods.collectAsState()
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(stringResource(R.string.amb_my_radios), style = MaterialTheme.typography.labelLarge, color = c.onSurfaceVariant)
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        mine.forEach { st ->
+                            FilterChip(selected = mood == Ambiance.Mood.MY_RADIO && current?.url == st.url, onClick = { Ambiance.useRadio(st) },
+                                leadingIcon = { Icon(Icons.Rounded.Radio, null, Modifier.size(16.dp)) },
+                                label = { Text(st.name, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.widthIn(max = 180.dp)) })
+                        }
+                        androidx.compose.material3.AssistChip(onClick = { radioPicker = true },
+                            leadingIcon = { Icon(Icons.Rounded.Add, null, Modifier.size(16.dp)) },
+                            label = { Text(stringResource(if (mine.isEmpty()) R.string.amb_add_radio_first else R.string.amb_add_radio)) })
                     }
-                }
-            }
-            // « Ma radio » : celle choisie, et de quoi en changer.
-            if (mood == Ambiance.Mood.MY_RADIO) item {
-                val my by Ambiance.myRadio.collectAsState()
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Rounded.Radio, null, tint = c.primary, modifier = Modifier.size(22.dp))
-                    Spacer(Modifier.width(10.dp))
-                    Text(my?.name ?: stringResource(R.string.amb_no_radio_chosen), style = MaterialTheme.typography.bodyLarge,
-                        maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
-                    androidx.compose.material3.TextButton(onClick = { radioPicker = true }) { Text(stringResource(R.string.amb_pick_radio)) }
+                    Text(stringResource(R.string.amb_styles), style = MaterialTheme.typography.labelLarge, color = c.onSurfaceVariant,
+                        modifier = Modifier.padding(top = 6.dp))
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Ambiance.Mood.entries.filter { it != Ambiance.Mood.MY_RADIO && it !in hidden }.forEach { m ->
+                            FilterChip(selected = mood == m, onClick = {
+                                Ambiance.setMood(m)
+                                if (m == Ambiance.Mood.MY_MUSIC && MyMusic.tracks.value.isEmpty()) pickMusic.launch(arrayOf("audio/*"))
+                            }, label = { Text(stringResource(m.label)) })
+                        }
+                        androidx.compose.material3.AssistChip(onClick = { manage = true },
+                            leadingIcon = { Icon(Icons.Rounded.Tune, null, Modifier.size(16.dp)) },
+                            label = { Text(stringResource(R.string.amb_manage)) })
+                    }
                 }
             }
             // « Ma musique » : les morceaux choisis, en ajouter, tout retirer.
@@ -184,9 +220,11 @@ fun AmbianceSheet(onDismiss: () -> Unit) {
                         Icon(Icons.Rounded.LibraryMusic, null, tint = c.primary, modifier = Modifier.size(22.dp))
                         Spacer(Modifier.width(10.dp))
                         Text(androidx.compose.ui.res.pluralStringResource(R.plurals.amb_music_count, tracks.size, tracks.size),
-                            style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
-                        if (tracks.isNotEmpty()) androidx.compose.material3.TextButton(onClick = { MyMusic.clear() }) { Text(stringResource(R.string.amb_music_clear)) }
+                            style = MaterialTheme.typography.bodyLarge)
+                    }
+                    Row {
                         androidx.compose.material3.TextButton(onClick = { pickMusic.launch(arrayOf("audio/*")) }) { Text(stringResource(R.string.amb_pick_music)) }
+                        if (tracks.isNotEmpty()) androidx.compose.material3.TextButton(onClick = { MyMusic.clear() }) { Text(stringResource(R.string.amb_music_clear)) }
                     }
                     Text(stringResource(R.string.amb_music_note), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
                 }
@@ -409,6 +447,89 @@ private fun RadioPickerDialog(onDismiss: () -> Unit) {
             }
         },
         confirmButton = {},
+        dismissButton = { androidx.compose.material3.TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
+    )
+}
+
+
+/** « Gérer » : les styles à garder (cases à cocher) et « Mes radios » (retirer). */
+@Composable
+private fun ManageMusicDialog(onDismiss: () -> Unit, onAddRadio: () -> Unit) {
+    val c = MaterialTheme.colorScheme
+    val hidden by Ambiance.hiddenMoods.collectAsState()
+    val mine by Ambiance.myRadios.collectAsState()
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.amb_manage)) },
+        text = {
+            androidx.compose.foundation.lazy.LazyColumn(Modifier.heightIn(max = 460.dp)) {
+                item { Text(stringResource(R.string.amb_my_radios), style = MaterialTheme.typography.titleSmall, color = c.primary, modifier = Modifier.padding(vertical = 4.dp)) }
+                if (mine.isEmpty()) item { Text(stringResource(R.string.amb_no_radio_chosen), color = c.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium) }
+                items(mine.size) { i ->
+                    val st = mine[i]
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Rounded.Radio, null, tint = c.onSurfaceVariant, modifier = Modifier.size(20.dp))
+                        Spacer(Modifier.width(10.dp))
+                        Text(st.name, Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        androidx.compose.material3.IconButton(onClick = { Ambiance.forgetRadio(st) }) {
+                            Icon(Icons.Rounded.Close, stringResource(R.string.amb_radio_forget), Modifier.size(18.dp))
+                        }
+                    }
+                }
+                item { androidx.compose.material3.TextButton(onClick = onAddRadio) { Text(stringResource(R.string.amb_add_radio)) } }
+                item { Text(stringResource(R.string.amb_styles), style = MaterialTheme.typography.titleSmall, color = c.primary, modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)) }
+                val styles = Ambiance.Mood.entries.filter { it != Ambiance.Mood.MY_RADIO && it != Ambiance.Mood.NONE }
+                items(styles.size) { i ->
+                    val m = styles[i]
+                    Row(Modifier.fillMaxWidth().clickable { Ambiance.setHidden(m, m !in hidden) }, verticalAlignment = Alignment.CenterVertically) {
+                        androidx.compose.material3.Checkbox(m !in hidden, { Ambiance.setHidden(m, !it) })
+                        Text(stringResource(m.label))
+                    }
+                }
+            }
+        },
+        confirmButton = { androidx.compose.material3.TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_close)) } },
+    )
+}
+
+
+/** Une ambiance favorite : toucher la lance ; appui long propose de la retirer. */
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+@Composable
+private fun PresetChip(p: Ambiance.Preset, enabled: Boolean, onClick: () -> Unit) {
+    val c = MaterialTheme.colorScheme
+    var menu by remember { mutableStateOf(false) }
+    Box {
+        Row(Modifier.clip(RoundedCornerShape(50)).background(favBrush(Color(AMBIANCE_COLOR)))
+            .combinedClickable(enabled = enabled, onClick = onClick, onLongClick = { menu = true })
+            .padding(horizontal = 14.dp, vertical = 9.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.Rounded.AutoAwesome, null, tint = Color.White, modifier = Modifier.size(16.dp))
+            Spacer(Modifier.width(6.dp))
+            Text(p.name, color = Color.White, style = MaterialTheme.typography.labelLarge, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.widthIn(max = 220.dp))
+        }
+        androidx.compose.material3.DropdownMenu(menu, onDismissRequest = { menu = false }) {
+            androidx.compose.material3.DropdownMenuItem(text = { Text(stringResource(R.string.amb_radio_forget)) },
+                leadingIcon = { Icon(Icons.Rounded.Close, null) }, onClick = { menu = false; Ambiance.deletePreset(p) })
+        }
+    }
+}
+
+/** « Garder cette ambiance » : son nom (proposé d'après les réglages). */
+@Composable
+private fun SavePresetDialog(onDismiss: () -> Unit) {
+    var name by remember { mutableStateOf(Ambiance.suggestedName()) }
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.amb_save_preset)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.amb_save_preset_sub), style = MaterialTheme.typography.bodyMedium)
+                androidx.compose.material3.OutlinedTextField(name, { name = it.take(40) }, singleLine = true, modifier = Modifier.fillMaxWidth(),
+                    label = { Text(stringResource(R.string.amb_preset_name)) })
+            }
+        },
+        confirmButton = { androidx.compose.material3.TextButton(onClick = { Ambiance.savePreset(name); onDismiss() }) { Text(stringResource(R.string.action_save)) } },
         dismissButton = { androidx.compose.material3.TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
     )
 }

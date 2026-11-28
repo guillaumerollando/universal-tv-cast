@@ -556,7 +556,16 @@
   "amb_radio_forget": "إزالة",
   "amb_pick_music": "أضف مقاطع",
   "amb_music_clear": "إزالة الكل",
-  "amb_music_note": "تُشغَّل بترتيب عشوائي وبشكل متكرر. MP3 أو AAC (m4a)؛ تُتجاوز المقاطع بصيغ أخرى."
+  "amb_music_note": "تُشغَّل بترتيب عشوائي وبشكل متكرر. MP3 أو AAC (m4a)؛ تُتجاوز المقاطع بصيغ أخرى.",
+  "amb_add_radio": "إضافة",
+  "amb_add_radio_first": "أضف راديوي",
+  "amb_styles": "أنماط",
+  "amb_manage": "إدارة",
+  "amb_presets": "أجوائي",
+  "amb_save_preset": "احتفظ بهذه الأجواء",
+  "amb_save_preset_sub": "الصور والموسيقى والساعة ومدة الصور كما هي الآن، لإعادة التشغيل بلمسة.",
+  "amb_preset_name": "الاسم",
+  "amb_presets_hint": "اضبط أجواء أدناه ثم احتفظ بها لتشغيلها بلمسة."
  },
  "plurals": {
   "browser_found": {

@@ -556,7 +556,16 @@
   "amb_radio_forget": "हटाएँ",
   "amb_pick_music": "गाने जोड़ें",
   "amb_music_clear": "सब हटाएँ",
-  "amb_music_note": "यादृच्छिक क्रम में, लगातार चलते हैं। MP3 या AAC (m4a); अन्य फ़ॉर्मैट के गाने छोड़ दिए जाते हैं।"
+  "amb_music_note": "यादृच्छिक क्रम में, लगातार चलते हैं। MP3 या AAC (m4a); अन्य फ़ॉर्मैट के गाने छोड़ दिए जाते हैं।",
+  "amb_add_radio": "जोड़ें",
+  "amb_add_radio_first": "मेरा रेडियो जोड़ें",
+  "amb_styles": "शैलियाँ",
+  "amb_manage": "प्रबंधित करें",
+  "amb_presets": "मेरे माहौल",
+  "amb_save_preset": "यह माहौल रखें",
+  "amb_save_preset_sub": "फ़ोटो, संगीत, समय और फ़ोटो की अवधि जैसी अभी हैं, एक टैप में फिर चलाने के लिए।",
+  "amb_preset_name": "नाम",
+  "amb_presets_hint": "नीचे माहौल सेट करें, फिर एक टैप में चलाने के लिए रखें।"
  },
  "plurals": {
   "browser_found": {

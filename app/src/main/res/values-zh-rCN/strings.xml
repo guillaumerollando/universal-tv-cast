@@ -558,6 +558,15 @@
     <string name="amb_pick_music">添加歌曲</string>
     <string name="amb_music_clear">全部移除</string>
     <string name="amb_music_note">随机循环播放。MP3 或 AAC（m4a）；其他格式的歌曲会被跳过。</string>
+    <string name="amb_add_radio">添加</string>
+    <string name="amb_add_radio_first">添加我的电台</string>
+    <string name="amb_styles">风格</string>
+    <string name="amb_manage">管理</string>
+    <string name="amb_presets">我的氛围</string>
+    <string name="amb_save_preset">保留此氛围</string>
+    <string name="amb_save_preset_sub">按当前的照片、音乐、时钟和照片时长保存，一键再次开启。</string>
+    <string name="amb_preset_name">名称</string>
+    <string name="amb_presets_hint">在下方设置氛围，保存后即可一键开启。</string>
     <plurals name="browser_found">
         <item quantity="other">%d 个视频</item>
     </plurals>

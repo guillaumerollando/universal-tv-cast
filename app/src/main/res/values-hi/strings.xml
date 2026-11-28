@@ -558,6 +558,15 @@
     <string name="amb_pick_music">गाने जोड़ें</string>
     <string name="amb_music_clear">सब हटाएँ</string>
     <string name="amb_music_note">यादृच्छिक क्रम में, लगातार चलते हैं। MP3 या AAC (m4a); अन्य फ़ॉर्मैट के गाने छोड़ दिए जाते हैं।</string>
+    <string name="amb_add_radio">जोड़ें</string>
+    <string name="amb_add_radio_first">मेरा रेडियो जोड़ें</string>
+    <string name="amb_styles">शैलियाँ</string>
+    <string name="amb_manage">प्रबंधित करें</string>
+    <string name="amb_presets">मेरे माहौल</string>
+    <string name="amb_save_preset">यह माहौल रखें</string>
+    <string name="amb_save_preset_sub">फ़ोटो, संगीत, समय और फ़ोटो की अवधि जैसी अभी हैं, एक टैप में फिर चलाने के लिए।</string>
+    <string name="amb_preset_name">नाम</string>
+    <string name="amb_presets_hint">नीचे माहौल सेट करें, फिर एक टैप में चलाने के लिए रखें।</string>
     <plurals name="browser_found">
         <item quantity="one">%d वीडियो</item>
         <item quantity="other">%d वीडियो</item>

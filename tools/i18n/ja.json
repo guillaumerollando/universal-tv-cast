@@ -556,7 +556,16 @@
   "amb_radio_forget": "削除",
   "amb_pick_music": "曲を追加",
   "amb_music_clear": "すべて削除",
-  "amb_music_note": "シャッフルでくり返し再生。MP3またはAAC（m4a）。ほかの形式の曲はスキップされます。"
+  "amb_music_note": "シャッフルでくり返し再生。MP3またはAAC（m4a）。ほかの形式の曲はスキップされます。",
+  "amb_add_radio": "追加",
+  "amb_add_radio_first": "マイラジオを追加",
+  "amb_styles": "スタイル",
+  "amb_manage": "管理",
+  "amb_presets": "マイアンビエンス",
+  "amb_save_preset": "このアンビエンスを保存",
+  "amb_save_preset_sub": "いまの写真・音楽・時計・写真の長さを、タップひとつで再開できます。",
+  "amb_preset_name": "名前",
+  "amb_presets_hint": "下でアンビエンスを設定し、保存するとタップひとつで開始できます。"
  },
  "plurals": {
   "browser_found": {

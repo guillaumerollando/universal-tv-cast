@@ -558,6 +558,15 @@
     <string name="amb_pick_music">Adaugă piese</string>
     <string name="amb_music_clear">Elimină tot</string>
     <string name="amb_music_note">Redate aleatoriu, în buclă. MP3 sau AAC (m4a); piesele în alt format sunt sărite.</string>
+    <string name="amb_add_radio">Adaugă</string>
+    <string name="amb_add_radio_first">Adaugă radioul meu</string>
+    <string name="amb_styles">Stiluri</string>
+    <string name="amb_manage">Gestionează</string>
+    <string name="amb_presets">Atmosferele mele</string>
+    <string name="amb_save_preset">Păstrează această atmosferă</string>
+    <string name="amb_save_preset_sub">Fotografii, muzică, ceas și durata fotografiilor așa cum sunt, de repornit dintr-o atingere.</string>
+    <string name="amb_preset_name">Nume</string>
+    <string name="amb_presets_hint">Setează o atmosferă mai jos, apoi păstreaz-o ca s-o pornești dintr-o atingere.</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>

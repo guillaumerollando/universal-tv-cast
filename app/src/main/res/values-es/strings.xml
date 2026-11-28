@@ -194,6 +194,15 @@
     <string name="amb_pick_music">Añadir canciones</string>
     <string name="amb_music_clear">Quitar todo</string>
     <string name="amb_music_note">Se reproducen en orden aleatorio y en bucle. MP3 o AAC (m4a); las canciones en otro formato se omiten.</string>
+    <string name="amb_add_radio">Añadir</string>
+    <string name="amb_add_radio_first">Añadir mi radio</string>
+    <string name="amb_styles">Estilos</string>
+    <string name="amb_manage">Gestionar</string>
+    <string name="amb_presets">Mis ambientes</string>
+    <string name="amb_save_preset">Guardar este ambiente</string>
+    <string name="amb_save_preset_sub">Fotos, música, hora y duración de las fotos tal como están, para relanzarlo con un toque.</string>
+    <string name="amb_preset_name">Nombre</string>
+    <string name="amb_presets_hint">Configura un ambiente abajo y guárdalo para relanzarlo con un toque.</string>
     <string name="action_dont_show">No volver a mostrar</string>
     <string name="help_section">Solución de problemas</string>
     <string name="state_expanded">abierto</string>

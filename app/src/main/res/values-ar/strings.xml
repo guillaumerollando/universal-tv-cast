@@ -558,6 +558,15 @@
     <string name="amb_pick_music">أضف مقاطع</string>
     <string name="amb_music_clear">إزالة الكل</string>
     <string name="amb_music_note">تُشغَّل بترتيب عشوائي وبشكل متكرر. MP3 أو AAC (m4a)؛ تُتجاوز المقاطع بصيغ أخرى.</string>
+    <string name="amb_add_radio">إضافة</string>
+    <string name="amb_add_radio_first">أضف راديوي</string>
+    <string name="amb_styles">أنماط</string>
+    <string name="amb_manage">إدارة</string>
+    <string name="amb_presets">أجوائي</string>
+    <string name="amb_save_preset">احتفظ بهذه الأجواء</string>
+    <string name="amb_save_preset_sub">الصور والموسيقى والساعة ومدة الصور كما هي الآن، لإعادة التشغيل بلمسة.</string>
+    <string name="amb_preset_name">الاسم</string>
+    <string name="amb_presets_hint">اضبط أجواء أدناه ثم احتفظ بها لتشغيلها بلمسة.</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>

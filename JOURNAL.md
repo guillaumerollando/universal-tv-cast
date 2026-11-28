@@ -1916,3 +1916,10 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   stéréo dans le flux, décodé sans erreur ; préparation affichée tout de suite. 68 tests, 0 échec.
 - Pas vérifié : le sélecteur de morceaux de bout en bout (test fait en posant les morceaux directement) ; des .m4a ;
   sur la vraie télé.
+- **Mes radios** en un toucher dans l'Ambiance : chaque radio gardée est une puce (20 au plus), « + Ajouter ma
+  radio » ; **Gérer** : retirer des radios, masquer les styles qu'on n'écoute pas (cases à cocher).
+- Recherche de radios : celles du pays du téléphone d'abord, et seulement celles dont le nom contient vraiment le texte
+  (« reggae » : La Grosse Radio Reggae, FIP Reggae, OUI FM Reggae… au lieu de « TOP 100 DJ CHARTS » allemands).
+- **Mes ambiances** : « Garder cette ambiance » (photos, musique et radio, heure, durée) sous un nom proposé
+  (« Paysages · FIP Reggae ») ; toucher la lance sur la télé, appui long pour la retirer (12 au plus).
+- Vérifié sur émulateur : recherche « reggae », enregistrement d'une ambiance ; 68 tests, 0 échec.

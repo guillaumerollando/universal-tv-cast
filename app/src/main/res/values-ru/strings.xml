@@ -558,6 +558,15 @@
     <string name="amb_pick_music">Добавить треки</string>
     <string name="amb_music_clear">Убрать всё</string>
     <string name="amb_music_note">Играют вперемешку и по кругу. MP3 или AAC (m4a); треки в другом формате пропускаются.</string>
+    <string name="amb_add_radio">Добавить</string>
+    <string name="amb_add_radio_first">Добавить моё радио</string>
+    <string name="amb_styles">Стили</string>
+    <string name="amb_manage">Управлять</string>
+    <string name="amb_presets">Мои атмосферы</string>
+    <string name="amb_save_preset">Сохранить эту атмосферу</string>
+    <string name="amb_save_preset_sub">Фото, музыка, часы и длительность фото как сейчас — запуск одним касанием.</string>
+    <string name="amb_preset_name">Название</string>
+    <string name="amb_presets_hint">Настрой атмосферу ниже и сохрани её, чтобы запускать одним касанием.</string>
     <plurals name="browser_found">
         <item quantity="one">%d видео</item>
         <item quantity="few">%d видео</item>

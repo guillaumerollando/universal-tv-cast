@@ -558,6 +558,15 @@
     <string name="amb_pick_music">Přidat skladby</string>
     <string name="amb_music_clear">Odebrat vše</string>
     <string name="amb_music_note">Přehrává se náhodně a dokola. MP3 nebo AAC (m4a); skladby v jiném formátu se přeskočí.</string>
+    <string name="amb_add_radio">Přidat</string>
+    <string name="amb_add_radio_first">Přidat moje rádio</string>
+    <string name="amb_styles">Styly</string>
+    <string name="amb_manage">Spravovat</string>
+    <string name="amb_presets">Moje atmosféry</string>
+    <string name="amb_save_preset">Uložit tuto atmosféru</string>
+    <string name="amb_save_preset_sub">Fotky, hudba, čas a délka fotek tak, jak jsou nastavené, ke spuštění jedním klepnutím.</string>
+    <string name="amb_preset_name">Název</string>
+    <string name="amb_presets_hint">Nastavte atmosféru níže a uložte ji pro spuštění jedním klepnutím.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="few">%d videa</item>

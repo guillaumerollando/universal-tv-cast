@@ -556,7 +556,16 @@
   "amb_radio_forget": "Elimină",
   "amb_pick_music": "Adaugă piese",
   "amb_music_clear": "Elimină tot",
-  "amb_music_note": "Redate aleatoriu, în buclă. MP3 sau AAC (m4a); piesele în alt format sunt sărite."
+  "amb_music_note": "Redate aleatoriu, în buclă. MP3 sau AAC (m4a); piesele în alt format sunt sărite.",
+  "amb_add_radio": "Adaugă",
+  "amb_add_radio_first": "Adaugă radioul meu",
+  "amb_styles": "Stiluri",
+  "amb_manage": "Gestionează",
+  "amb_presets": "Atmosferele mele",
+  "amb_save_preset": "Păstrează această atmosferă",
+  "amb_save_preset_sub": "Fotografii, muzică, ceas și durata fotografiilor așa cum sunt, de repornit dintr-o atingere.",
+  "amb_preset_name": "Nume",
+  "amb_presets_hint": "Setează o atmosferă mai jos, apoi păstreaz-o ca s-o pornești dintr-o atingere."
  },
  "plurals": {
   "browser_found": {

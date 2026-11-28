@@ -558,6 +558,15 @@
     <string name="amb_pick_music">Lägg till låtar</string>
     <string name="amb_music_clear">Ta bort alla</string>
     <string name="amb_music_note">Spelas i slumpvis ordning, i loop. MP3 eller AAC (m4a); låtar i annat format hoppas över.</string>
+    <string name="amb_add_radio">Lägg till</string>
+    <string name="amb_add_radio_first">Lägg till min radio</string>
+    <string name="amb_styles">Stilar</string>
+    <string name="amb_manage">Hantera</string>
+    <string name="amb_presets">Mina stämningar</string>
+    <string name="amb_save_preset">Spara den här stämningen</string>
+    <string name="amb_save_preset_sub">Foton, musik, klocka och fototid som nu, att starta igen med ett tryck.</string>
+    <string name="amb_preset_name">Namn</string>
+    <string name="amb_presets_hint">Ställ in en stämning nedan och spara den för att starta med ett tryck.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videor</item>

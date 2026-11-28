@@ -556,7 +556,16 @@
   "amb_radio_forget": "Ta bort",
   "amb_pick_music": "Lägg till låtar",
   "amb_music_clear": "Ta bort alla",
-  "amb_music_note": "Spelas i slumpvis ordning, i loop. MP3 eller AAC (m4a); låtar i annat format hoppas över."
+  "amb_music_note": "Spelas i slumpvis ordning, i loop. MP3 eller AAC (m4a); låtar i annat format hoppas över.",
+  "amb_add_radio": "Lägg till",
+  "amb_add_radio_first": "Lägg till min radio",
+  "amb_styles": "Stilar",
+  "amb_manage": "Hantera",
+  "amb_presets": "Mina stämningar",
+  "amb_save_preset": "Spara den här stämningen",
+  "amb_save_preset_sub": "Foton, musik, klocka och fototid som nu, att starta igen med ett tryck.",
+  "amb_preset_name": "Namn",
+  "amb_presets_hint": "Ställ in en stämning nedan och spara den för att starta med ett tryck."
  },
  "plurals": {
   "browser_found": {

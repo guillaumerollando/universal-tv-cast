@@ -194,6 +194,15 @@
     <string name="amb_pick_music">Aggiungi brani</string>
     <string name="amb_music_clear">Rimuovi tutto</string>
     <string name="amb_music_note">Riprodotti in ordine casuale, a ciclo. MP3 o AAC (m4a); i brani in altro formato vengono saltati.</string>
+    <string name="amb_add_radio">Aggiungi</string>
+    <string name="amb_add_radio_first">Aggiungi la mia radio</string>
+    <string name="amb_styles">Stili</string>
+    <string name="amb_manage">Gestisci</string>
+    <string name="amb_presets">Le mie atmosfere</string>
+    <string name="amb_save_preset">Salva questa atmosfera</string>
+    <string name="amb_save_preset_sub">Foto, musica, ora e durata delle foto come impostate, da riavviare con un tocco.</string>
+    <string name="amb_preset_name">Nome</string>
+    <string name="amb_presets_hint">Imposta un’atmosfera qui sotto, poi salvala per riavviarla con un tocco.</string>
     <string name="action_dont_show">Non mostrare più</string>
     <string name="help_section">Risoluzione dei problemi</string>
     <string name="state_expanded">aperto</string>

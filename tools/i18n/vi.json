@@ -556,7 +556,16 @@
   "amb_radio_forget": "Xóa",
   "amb_pick_music": "Thêm bài",
   "amb_music_clear": "Xóa tất cả",
-  "amb_music_note": "Phát ngẫu nhiên, lặp lại. MP3 hoặc AAC (m4a); bài ở định dạng khác sẽ bị bỏ qua."
+  "amb_music_note": "Phát ngẫu nhiên, lặp lại. MP3 hoặc AAC (m4a); bài ở định dạng khác sẽ bị bỏ qua.",
+  "amb_add_radio": "Thêm",
+  "amb_add_radio_first": "Thêm radio của tôi",
+  "amb_styles": "Phong cách",
+  "amb_manage": "Quản lý",
+  "amb_presets": "Không gian của tôi",
+  "amb_save_preset": "Giữ không gian này",
+  "amb_save_preset_sub": "Ảnh, nhạc, đồng hồ và thời lượng ảnh như hiện tại, mở lại chỉ với một chạm.",
+  "amb_preset_name": "Tên",
+  "amb_presets_hint": "Thiết lập không gian bên dưới rồi lưu lại để mở bằng một chạm."
  },
  "plurals": {
   "browser_found": {

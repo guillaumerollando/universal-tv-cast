@@ -558,6 +558,15 @@
     <string name="amb_pick_music">เพิ่มเพลง</string>
     <string name="amb_music_clear">นำออกทั้งหมด</string>
     <string name="amb_music_note">เล่นแบบสุ่มวนซ้ำ MP3 หรือ AAC (m4a) เพลงรูปแบบอื่นจะถูกข้าม</string>
+    <string name="amb_add_radio">เพิ่ม</string>
+    <string name="amb_add_radio_first">เพิ่มวิทยุของฉัน</string>
+    <string name="amb_styles">สไตล์</string>
+    <string name="amb_manage">จัดการ</string>
+    <string name="amb_presets">บรรยากาศของฉัน</string>
+    <string name="amb_save_preset">เก็บบรรยากาศนี้</string>
+    <string name="amb_save_preset_sub">รูปภาพ เพลง นาฬิกา และระยะเวลารูปตามที่ตั้งไว้ เริ่มใหม่ได้ในแตะเดียว</string>
+    <string name="amb_preset_name">ชื่อ</string>
+    <string name="amb_presets_hint">ตั้งค่าบรรยากาศด้านล่าง แล้วเก็บไว้เพื่อเริ่มในแตะเดียว</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>

@@ -558,6 +558,15 @@
     <string name="amb_pick_music">Dodaj utwory</string>
     <string name="amb_music_clear">Usuń wszystko</string>
     <string name="amb_music_note">Odtwarzane losowo, w pętli. MP3 lub AAC (m4a); utwory w innym formacie są pomijane.</string>
+    <string name="amb_add_radio">Dodaj</string>
+    <string name="amb_add_radio_first">Dodaj moje radio</string>
+    <string name="amb_styles">Style</string>
+    <string name="amb_manage">Zarządzaj</string>
+    <string name="amb_presets">Moje klimaty</string>
+    <string name="amb_save_preset">Zachowaj ten klimat</string>
+    <string name="amb_save_preset_sub">Zdjęcia, muzyka, zegar i czas zdjęć jak teraz, do uruchomienia jednym dotknięciem.</string>
+    <string name="amb_preset_name">Nazwa</string>
+    <string name="amb_presets_hint">Ustaw klimat poniżej i zachowaj go, by uruchamiać jednym dotknięciem.</string>
     <plurals name="browser_found">
         <item quantity="one">%d wideo</item>
         <item quantity="few">%d wideo</item>

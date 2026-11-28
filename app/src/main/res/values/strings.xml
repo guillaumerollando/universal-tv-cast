@@ -195,6 +195,15 @@
     <string name="amb_pick_music">Add tracks</string>
     <string name="amb_music_clear">Remove all</string>
     <string name="amb_music_note">Played shuffled, on a loop. MP3 or AAC (m4a); tracks in another format are skipped.</string>
+    <string name="amb_add_radio">Add</string>
+    <string name="amb_add_radio_first">Add my radio</string>
+    <string name="amb_styles">Styles</string>
+    <string name="amb_manage">Manage</string>
+    <string name="amb_presets">My ambiances</string>
+    <string name="amb_save_preset">Keep this ambiance</string>
+    <string name="amb_save_preset_sub">Photos, music, clock and photo duration as set now, to start again in one tap.</string>
+    <string name="amb_preset_name">Name</string>
+    <string name="amb_presets_hint">Set an ambiance below, then keep it to start it in one tap.</string>
     <string name="action_dont_show">Don’t show again</string>
     <string name="help_section">Troubleshooting</string>
     <string name="state_expanded">expanded</string>

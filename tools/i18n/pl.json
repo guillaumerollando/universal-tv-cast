@@ -556,7 +556,16 @@
   "amb_radio_forget": "Usuń",
   "amb_pick_music": "Dodaj utwory",
   "amb_music_clear": "Usuń wszystko",
-  "amb_music_note": "Odtwarzane losowo, w pętli. MP3 lub AAC (m4a); utwory w innym formacie są pomijane."
+  "amb_music_note": "Odtwarzane losowo, w pętli. MP3 lub AAC (m4a); utwory w innym formacie są pomijane.",
+  "amb_add_radio": "Dodaj",
+  "amb_add_radio_first": "Dodaj moje radio",
+  "amb_styles": "Style",
+  "amb_manage": "Zarządzaj",
+  "amb_presets": "Moje klimaty",
+  "amb_save_preset": "Zachowaj ten klimat",
+  "amb_save_preset_sub": "Zdjęcia, muzyka, zegar i czas zdjęć jak teraz, do uruchomienia jednym dotknięciem.",
+  "amb_preset_name": "Nazwa",
+  "amb_presets_hint": "Ustaw klimat poniżej i zachowaj go, by uruchamiać jednym dotknięciem."
  },
  "plurals": {
   "browser_found": {

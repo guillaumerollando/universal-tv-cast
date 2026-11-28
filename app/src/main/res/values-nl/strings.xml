@@ -194,6 +194,15 @@
     <string name="amb_pick_music">Nummers toevoegen</string>
     <string name="amb_music_clear">Alles verwijderen</string>
     <string name="amb_music_note">Willekeurig en herhaald afgespeeld. MP3 of AAC (m4a); nummers in een ander formaat worden overgeslagen.</string>
+    <string name="amb_add_radio">Toevoegen</string>
+    <string name="amb_add_radio_first">Mijn radio toevoegen</string>
+    <string name="amb_styles">Stijlen</string>
+    <string name="amb_manage">Beheren</string>
+    <string name="amb_presets">Mijn sferen</string>
+    <string name="amb_save_preset">Deze sfeer bewaren</string>
+    <string name="amb_save_preset_sub">Foto’s, muziek, klok en fotoduur zoals ingesteld, met één tik opnieuw starten.</string>
+    <string name="amb_preset_name">Naam</string>
+    <string name="amb_presets_hint">Stel hieronder een sfeer in en bewaar die om met één tik te starten.</string>
     <string name="action_dont_show">Niet meer tonen</string>
     <string name="help_section">Problemen oplossen</string>
     <string name="state_expanded">uitgevouwen</string>

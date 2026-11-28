@@ -91,10 +91,59 @@ object Ambiance {
     private val _myRadios = MutableStateFlow<List<Radio.Station>>(emptyList())
     val myRadios: StateFlow<List<Radio.Station>> = _myRadios
 
-    /** Choisit une radio (gardée en tête de « Mes radios », 12 au plus). */
+    /** Une ambiance gardée en favori : photos, musique (et la radio), heure, durée des photos, sous un nom. */
+    data class Preset(val name: String, val theme: Theme, val mood: Mood, val radio: Radio.Station?, val clock: Boolean, val seconds: Int)
+    private val _presets = MutableStateFlow<List<Preset>>(emptyList())
+    val presets: StateFlow<List<Preset>> = _presets
+
+    /** Le nom proposé pour l'ambiance réglée : « Paysages · FIP Reggae ». */
+    fun suggestedName(): String = app.getString(theme.value.label) + " · " +
+        (if (mood.value == Mood.MY_RADIO) myRadio.value?.name ?: app.getString(mood.value.label) else app.getString(mood.value.label))
+
+    fun savePreset(name: String) {
+        val p = Preset(name.trim().ifEmpty { suggestedName() }.take(40), theme.value, mood.value, myRadio.value.takeIf { mood.value == Mood.MY_RADIO },
+            clock.value, seconds.value)
+        _presets.value = (_presets.value.filter { it.name != p.name } + p).take(12)
+        writePresets()
+    }
+
+    fun deletePreset(p: Preset) { _presets.value = _presets.value - p; writePresets() }
+
+    /** Remet les réglages de [p] (et lance l'ambiance si [start]). */
+    fun applyPreset(p: Preset, start: Boolean) {
+        setTheme(p.theme); setClock(p.clock); setSeconds(p.seconds)
+        if (p.mood == Mood.MY_RADIO && p.radio != null) useRadio(p.radio) else setMood(p.mood)
+        if (start) start()
+    }
+
+    private fun writePresets() {
+        val a = org.json.JSONArray()
+        _presets.value.forEach { p ->
+            a.put(org.json.JSONObject().put("n", p.name).put("t", p.theme.name).put("m", p.mood.name).put("c", p.clock).put("s", p.seconds)
+                .put("rn", p.radio?.name ?: "").put("ru", p.radio?.url ?: ""))
+        }
+        prefs.edit().putString("presets", a.toString()).apply()
+    }
+
+    /** Styles de musique masqués (« Gérer » : on ne garde que ceux qu'on écoute). */
+    private val _hiddenMoods = MutableStateFlow<Set<Mood>>(emptySet())
+    val hiddenMoods: StateFlow<Set<Mood>> = _hiddenMoods
+    fun setHidden(m: Mood, hidden: Boolean) {
+        _hiddenMoods.value = if (hidden) _hiddenMoods.value + m else _hiddenMoods.value - m
+        prefs.edit().putStringSet("hidden_moods", _hiddenMoods.value.map { it.name }.toSet()).apply()
+    }
+
+    /** Écoute une radio de « Mes radios » d'un toucher (sans la remonter en tête : l'ordre reste celui choisi). */
+    fun useRadio(st: Radio.Station) {
+        _myRadio.value = st
+        prefs.edit().putString("my_radio", st.url).apply()
+        setMood(Mood.MY_RADIO)
+    }
+
+    /** Ajoute une radio à « Mes radios » (en tête, 20 au plus) et la choisit. */
     fun pickRadio(st: Radio.Station) {
         _myRadio.value = st
-        _myRadios.value = (listOf(st) + _myRadios.value.filter { it.url != st.url }).take(12)
+        _myRadios.value = (listOf(st) + _myRadios.value.filter { it.url != st.url }).take(20)
         val a = org.json.JSONArray(); _myRadios.value.forEach { a.put(org.json.JSONObject().put("n", it.name).put("u", it.url).put("l", it.logo ?: "")) }
         prefs.edit().putString("my_radios", a.toString()).putString("my_radio", st.url).apply()
         setMood(Mood.MY_RADIO)
@@ -111,6 +160,17 @@ object Ambiance {
         app = ctx.applicationContext
         val p = prefs
         MyMusic.init(app)
+        runCatching {
+            val a = org.json.JSONArray(p.getString("presets", "[]"))
+            _presets.value = (0 until a.length()).mapNotNull { i ->
+                val o = a.getJSONObject(i)
+                runCatching {
+                    Preset(o.getString("n"), Theme.valueOf(o.getString("t")), Mood.valueOf(o.getString("m")),
+                        o.optString("ru").takeIf { it.isNotEmpty() }?.let { Radio.Station(o.optString("rn"), it) }, o.optBoolean("c", true), o.optInt("s", 60))
+                }.getOrNull()
+            }
+        }
+        _hiddenMoods.value = p.getStringSet("hidden_moods", emptySet()).orEmpty().mapNotNull { runCatching { Mood.valueOf(it) }.getOrNull() }.toSet()
         runCatching {
             val a = org.json.JSONArray(p.getString("my_radios", "[]"))
             _myRadios.value = (0 until a.length()).map { a.getJSONObject(it).let { o -> Radio.Station(o.getString("n"), o.getString("u"), logo = o.optString("l").ifEmpty { null }) } }

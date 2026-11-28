@@ -556,7 +556,16 @@
   "amb_radio_forget": "移除",
   "amb_pick_music": "新增歌曲",
   "amb_music_clear": "全部移除",
-  "amb_music_note": "隨機循環播放。MP3 或 AAC（m4a）；其他格式的歌曲會略過。"
+  "amb_music_note": "隨機循環播放。MP3 或 AAC（m4a）；其他格式的歌曲會略過。",
+  "amb_add_radio": "新增",
+  "amb_add_radio_first": "新增我的電台",
+  "amb_styles": "風格",
+  "amb_manage": "管理",
+  "amb_presets": "我的氛圍",
+  "amb_save_preset": "保留此氛圍",
+  "amb_save_preset_sub": "依目前的照片、音樂、時鐘和照片時長儲存，一鍵再次開啟。",
+  "amb_preset_name": "名稱",
+  "amb_presets_hint": "在下方設定氛圍，儲存後即可一鍵開啟。"
  },
  "plurals": {
   "browser_found": {

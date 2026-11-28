@@ -556,7 +556,16 @@
   "amb_radio_forget": "Odebrat",
   "amb_pick_music": "Přidat skladby",
   "amb_music_clear": "Odebrat vše",
-  "amb_music_note": "Přehrává se náhodně a dokola. MP3 nebo AAC (m4a); skladby v jiném formátu se přeskočí."
+  "amb_music_note": "Přehrává se náhodně a dokola. MP3 nebo AAC (m4a); skladby v jiném formátu se přeskočí.",
+  "amb_add_radio": "Přidat",
+  "amb_add_radio_first": "Přidat moje rádio",
+  "amb_styles": "Styly",
+  "amb_manage": "Spravovat",
+  "amb_presets": "Moje atmosféry",
+  "amb_save_preset": "Uložit tuto atmosféru",
+  "amb_save_preset_sub": "Fotky, hudba, čas a délka fotek tak, jak jsou nastavené, ke spuštění jedním klepnutím.",
+  "amb_preset_name": "Název",
+  "amb_presets_hint": "Nastavte atmosféru níže a uložte ji pro spuštění jedním klepnutím."
  },
  "plurals": {
   "browser_found": {

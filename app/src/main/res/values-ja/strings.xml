@@ -558,6 +558,15 @@
     <string name="amb_pick_music">曲を追加</string>
     <string name="amb_music_clear">すべて削除</string>
     <string name="amb_music_note">シャッフルでくり返し再生。MP3またはAAC（m4a）。ほかの形式の曲はスキップされます。</string>
+    <string name="amb_add_radio">追加</string>
+    <string name="amb_add_radio_first">マイラジオを追加</string>
+    <string name="amb_styles">スタイル</string>
+    <string name="amb_manage">管理</string>
+    <string name="amb_presets">マイアンビエンス</string>
+    <string name="amb_save_preset">このアンビエンスを保存</string>
+    <string name="amb_save_preset_sub">いまの写真・音楽・時計・写真の長さを、タップひとつで再開できます。</string>
+    <string name="amb_preset_name">名前</string>
+    <string name="amb_presets_hint">下でアンビエンスを設定し、保存するとタップひとつで開始できます。</string>
     <plurals name="browser_found">
         <item quantity="other">%d 本の動画</item>
     </plurals>

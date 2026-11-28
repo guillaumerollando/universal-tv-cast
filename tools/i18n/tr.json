@@ -556,7 +556,16 @@
   "amb_radio_forget": "Kaldır",
   "amb_pick_music": "Şarkı ekle",
   "amb_music_clear": "Tümünü kaldır",
-  "amb_music_note": "Karışık sırayla, döngüde çalınır. MP3 veya AAC (m4a); başka biçimdeki şarkılar atlanır."
+  "amb_music_note": "Karışık sırayla, döngüde çalınır. MP3 veya AAC (m4a); başka biçimdeki şarkılar atlanır.",
+  "amb_add_radio": "Ekle",
+  "amb_add_radio_first": "Radyomu ekle",
+  "amb_styles": "Tarzlar",
+  "amb_manage": "Yönet",
+  "amb_presets": "Ortamlarım",
+  "amb_save_preset": "Bu ortamı sakla",
+  "amb_save_preset_sub": "Fotoğraflar, müzik, saat ve fotoğraf süresi şu anki gibi; tek dokunuşla yeniden başlat.",
+  "amb_preset_name": "Ad",
+  "amb_presets_hint": "Aşağıda bir ortam ayarla, sonra tek dokunuşla başlatmak için sakla."
  },
  "plurals": {
   "browser_found": {

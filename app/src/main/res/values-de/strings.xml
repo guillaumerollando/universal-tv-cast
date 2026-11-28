@@ -194,6 +194,15 @@
     <string name="amb_pick_music">Titel hinzufügen</string>
     <string name="amb_music_clear">Alle entfernen</string>
     <string name="amb_music_note">Zufällig und in Schleife abgespielt. MP3 oder AAC (m4a); Titel in anderem Format werden übersprungen.</string>
+    <string name="amb_add_radio">Hinzufügen</string>
+    <string name="amb_add_radio_first">Mein Radio hinzufügen</string>
+    <string name="amb_styles">Stile</string>
+    <string name="amb_manage">Verwalten</string>
+    <string name="amb_presets">Meine Ambiente</string>
+    <string name="amb_save_preset">Dieses Ambiente behalten</string>
+    <string name="amb_save_preset_sub">Fotos, Musik, Uhrzeit und Fotodauer wie eingestellt, mit einem Tippen wieder starten.</string>
+    <string name="amb_preset_name">Name</string>
+    <string name="amb_presets_hint">Stell unten ein Ambiente ein und behalte es, um es mit einem Tippen zu starten.</string>
     <string name="action_dont_show">Nicht mehr anzeigen</string>
     <string name="help_section">Fehlerbehebung</string>
     <string name="state_expanded">aufgeklappt</string>

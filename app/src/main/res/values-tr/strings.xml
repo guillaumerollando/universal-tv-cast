@@ -558,6 +558,15 @@
     <string name="amb_pick_music">Şarkı ekle</string>
     <string name="amb_music_clear">Tümünü kaldır</string>
     <string name="amb_music_note">Karışık sırayla, döngüde çalınır. MP3 veya AAC (m4a); başka biçimdeki şarkılar atlanır.</string>
+    <string name="amb_add_radio">Ekle</string>
+    <string name="amb_add_radio_first">Radyomu ekle</string>
+    <string name="amb_styles">Tarzlar</string>
+    <string name="amb_manage">Yönet</string>
+    <string name="amb_presets">Ortamlarım</string>
+    <string name="amb_save_preset">Bu ortamı sakla</string>
+    <string name="amb_save_preset_sub">Fotoğraflar, müzik, saat ve fotoğraf süresi şu anki gibi; tek dokunuşla yeniden başlat.</string>
+    <string name="amb_preset_name">Ad</string>
+    <string name="amb_presets_hint">Aşağıda bir ortam ayarla, sonra tek dokunuşla başlatmak için sakla.</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video</item>

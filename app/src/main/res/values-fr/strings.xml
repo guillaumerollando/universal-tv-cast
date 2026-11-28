@@ -194,6 +194,15 @@
     <string name="amb_pick_music">Ajouter des morceaux</string>
     <string name="amb_music_clear">Tout retirer</string>
     <string name="amb_music_note">Lus dans le désordre, en boucle. MP3 ou AAC (m4a) ; les morceaux d’un autre format sont laissés de côté.</string>
+    <string name="amb_add_radio">Ajouter</string>
+    <string name="amb_add_radio_first">Ajouter ma radio</string>
+    <string name="amb_styles">Styles</string>
+    <string name="amb_manage">Gérer</string>
+    <string name="amb_presets">Mes ambiances</string>
+    <string name="amb_save_preset">Garder cette ambiance</string>
+    <string name="amb_save_preset_sub">Photos, musique, heure et durée des photos telles que réglées, à relancer d’un toucher.</string>
+    <string name="amb_preset_name">Nom</string>
+    <string name="amb_presets_hint">Règle une ambiance ci-dessous, puis garde-la pour la relancer d’un toucher.</string>
     <string name="action_dont_show">Ne plus afficher</string>
     <string name="help_section">Dépannage</string>
     <string name="state_expanded">ouvert</string>

@@ -556,7 +556,16 @@
   "amb_radio_forget": "Hapus",
   "amb_pick_music": "Tambah lagu",
   "amb_music_clear": "Hapus semua",
-  "amb_music_note": "Diputar acak dan berulang. MP3 atau AAC (m4a); lagu format lain dilewati."
+  "amb_music_note": "Diputar acak dan berulang. MP3 atau AAC (m4a); lagu format lain dilewati.",
+  "amb_add_radio": "Tambah",
+  "amb_add_radio_first": "Tambah radio saya",
+  "amb_styles": "Gaya",
+  "amb_manage": "Kelola",
+  "amb_presets": "Suasana saya",
+  "amb_save_preset": "Simpan suasana ini",
+  "amb_save_preset_sub": "Foto, musik, jam, dan durasi foto seperti sekarang, untuk dijalankan lagi dengan satu ketukan.",
+  "amb_preset_name": "Nama",
+  "amb_presets_hint": "Atur suasana di bawah, lalu simpan untuk menjalankannya dengan satu ketukan."
  },
  "plurals": {
   "browser_found": {

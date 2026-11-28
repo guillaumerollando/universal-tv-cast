@@ -558,6 +558,15 @@
     <string name="amb_pick_music">Thêm bài</string>
     <string name="amb_music_clear">Xóa tất cả</string>
     <string name="amb_music_note">Phát ngẫu nhiên, lặp lại. MP3 hoặc AAC (m4a); bài ở định dạng khác sẽ bị bỏ qua.</string>
+    <string name="amb_add_radio">Thêm</string>
+    <string name="amb_add_radio_first">Thêm radio của tôi</string>
+    <string name="amb_styles">Phong cách</string>
+    <string name="amb_manage">Quản lý</string>
+    <string name="amb_presets">Không gian của tôi</string>
+    <string name="amb_save_preset">Giữ không gian này</string>
+    <string name="amb_save_preset_sub">Ảnh, nhạc, đồng hồ và thời lượng ảnh như hiện tại, mở lại chỉ với một chạm.</string>
+    <string name="amb_preset_name">Tên</string>
+    <string name="amb_presets_hint">Thiết lập không gian bên dưới rồi lưu lại để mở bằng một chạm.</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

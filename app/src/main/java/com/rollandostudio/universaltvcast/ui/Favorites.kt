@@ -175,7 +175,7 @@ fun PosterCard(
 }
 
 @Composable
-private fun CardMenu(open: Boolean, onDismiss: () -> Unit, menu: List<Pair<String, () -> Unit>>) {
+internal fun CardMenu(open: Boolean, onDismiss: () -> Unit, menu: List<Pair<String, () -> Unit>>) {
     DropdownMenu(expanded = open, onDismissRequest = onDismiss, shape = RoundedCornerShape(16.dp)) {
         menu.forEach { (label, action) ->
             DropdownMenuItem(text = { Text(label) }, onClick = { onDismiss(); action() })

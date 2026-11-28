@@ -32,6 +32,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.foundation.background
 import androidx.compose.animation.animateContentSize
 import androidx.compose.material.icons.rounded.ExpandLess
 import androidx.compose.material.icons.rounded.ExpandMore
@@ -134,17 +136,17 @@ fun StarterSection(
     if (freeTv) FreeChannelsDialog(onDismiss = { freeTv = false }, onPasteLink = { freeTv = false; onPasteLink() })
     Column {
         SectionTitle(stringResource(R.string.start_title), Modifier.padding(horizontal = 16.dp).semantics { heading() })
-        // Une rangée de tuiles, au format des favoris : les chaînes gratuites, puis des sites gratuits et légaux.
+        // Une rangée de cartes (plus larges que les tuiles : on présente ce qu'on ne connaît pas encore) : les chaînes
+        // gratuites, puis des sites gratuits et légaux.
         androidx.compose.foundation.lazy.LazyRow(contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
             if (channels) item(key = FREE_TV) {
-                FavTileFrame(stringResource(R.string.start_tv_tile), dismissMenu(FREE_TV), onClick = { freeTv = true },
-                    background = favBrush(androidx.compose.ui.graphics.Color(ActionColors.LISTS))) {
-                    Icon(Icons.Rounded.LiveTv, null, tint = androidx.compose.ui.graphics.Color.White,
-                        modifier = Modifier.align(Alignment.Center).padding(bottom = 14.dp).size(24.dp))
+                StarterCard(stringResource(R.string.start_tv_title), stringResource(R.string.start_tv_sub), ActionColors.LISTS,
+                    dismissMenu(FREE_TV), onClick = { freeTv = true }) {
+                    Icon(Icons.Rounded.LiveTv, null, tint = androidx.compose.ui.graphics.Color.White, modifier = Modifier.size(24.dp))
                 }
             }
-            if (showSites) items(sites.size, key = { sites[it].host }) { i -> StarterSiteTile(sites[i], onBrowse) }
+            if (showSites) items(sites.size, key = { sites[it].host }) { i -> StarterSiteCard(sites[i], onBrowse) }
         }
     }
 }
@@ -154,14 +156,54 @@ fun StarterSection(
 private fun dismissMenu(id: String): List<Pair<String, () -> Unit>> =
     listOf(stringResource(R.string.start_dismiss) to { com.rollandostudio.universaltvcast.data.Library.dismissStarter(id) })
 
-/** Un site suggéré, en tuile comme un site en favori : son icône sur sa couleur, son nom. */
+/**
+ * Une suggestion de « Pour commencer » : plus large qu'une tuile, pour présenter ce qu'on ne connaît pas encore
+ * (son icône, son nom, deux lignes qui donnent envie). Mêmes couleurs que les tuiles. Appui long : « Ne plus proposer ».
+ */
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
-private fun StarterSiteTile(s: StarterSite, onBrowse: (String) -> Unit) {
-    FavTileFrame(s.name, dismissMenu(s.host), onClick = { onBrowse(s.url) },
-        background = favBrush(androidx.compose.ui.graphics.Color(com.rollandostudio.universaltvcast.data.Channels.colorFor(s.host)))) {
-        androidx.compose.foundation.layout.Box(Modifier.align(Alignment.Center).padding(bottom = 14.dp).size(26.dp)) {
-            SiteIcon(s.host, size = 26)
-            RemoteImage(s.icon, Modifier.size(26.dp).clip(RoundedCornerShape(7.dp)), contentScale = androidx.compose.ui.layout.ContentScale.Crop, maxSide = 128)
+private fun StarterCard(
+    title: String, desc: String, color: Long, menu: List<Pair<String, () -> Unit>>, onClick: () -> Unit,
+    icon: @Composable () -> Unit,
+) {
+    var open by remember { mutableStateOf(false) }
+    val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
+    androidx.compose.foundation.layout.Box {
+        Column(
+            Modifier.width(206.dp).height(112.dp).clip(RoundedCornerShape(ChannelTiles.corner + 2.dp))
+                .background(favBrush(androidx.compose.ui.graphics.Color(color)))
+                .combinedClickable(
+                    role = androidx.compose.ui.semantics.Role.Button, onClick = onClick,
+                    onLongClick = { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); open = true },
+                )
+                .semantics {
+                    contentDescription = "$title, $desc"
+                    customActions = menu.map { (l, a) -> androidx.compose.ui.semantics.CustomAccessibilityAction(l) { a(); true } }
+                }
+                .padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                icon()
+                Spacer(Modifier.width(8.dp))
+                Text(title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.Bold),
+                    color = androidx.compose.ui.graphics.Color.White, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
+            Text(desc, style = MaterialTheme.typography.bodySmall, color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.85f),
+                maxLines = 3, overflow = TextOverflow.Ellipsis)
+        }
+        CardMenu(open, { open = false }, menu)
+    }
+}
+
+/** Un site suggéré : sa carte, à sa couleur, avec sa description. */
+@Composable
+private fun StarterSiteCard(s: StarterSite, onBrowse: (String) -> Unit) {
+    StarterCard(s.name, stringResource(s.desc), com.rollandostudio.universaltvcast.data.Channels.colorFor(s.host), dismissMenu(s.host),
+        onClick = { onBrowse(s.url) }) {
+        androidx.compose.foundation.layout.Box(Modifier.size(24.dp)) {
+            SiteIcon(s.host, size = 24)
+            RemoteImage(s.icon, Modifier.size(24.dp).clip(RoundedCornerShape(6.dp)), contentScale = androidx.compose.ui.layout.ContentScale.Crop, maxSide = 128)
         }
     }
 }
@@ -215,7 +257,7 @@ fun StarterSites(onBrowse: (String) -> Unit, known: Set<String> = emptySet()) {
     Text(stringResource(R.string.start_sites_title), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
     // Mêmes tuiles que sur l'accueil.
     androidx.compose.foundation.lazy.LazyRow(horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
-        items(list.size, key = { list[it].host }) { i -> StarterSiteTile(list[i], onBrowse) }
+        items(list.size, key = { list[it].host }) { i -> StarterSiteCard(list[i], onBrowse) }
     }
 }
 

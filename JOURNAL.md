@@ -1705,3 +1705,8 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - Tour des autres écrans : le navigateur (« Mes sites » en tuiles des favoris, titres de rubrique de l'accueil) et
   l'écran Réseau (« Sur ton réseau » au même titre) sont alignés. Laissés tels quels, volontairement : les réglages
   (liste classique, attendue pour des réglages) et la vidéothèque (déjà au style affiches).
+- Retours de Guillaume : couleurs des actions plus franches (moins pastel) ; « Sites web » retiré de « Caster autre
+  chose » chez l'habitué (l'onglet Navigateur fait la même chose ; gardé dans les grandes tuiles du nouveau venu) ;
+  filtre de la liste des chaînes sans verre fumé : il redessine le fond d'ambiance de l'en-tête à sa place exacte,
+  donc continuité parfaite (mesurée au pixel) ; « Pour commencer » en cartes plus larges avec la description des
+  sites (et des chaînes gratuites), pour donner envie à qui ne les connaît pas. Vérifié par captures sur émulateur.

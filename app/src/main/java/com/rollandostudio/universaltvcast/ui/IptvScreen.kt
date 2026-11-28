@@ -77,6 +77,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -461,18 +467,27 @@ private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
             }
         }
         }
-        // En-tête en verre fumé, comme la barre d'onglets.
+        // Recherche et filtres, dans la continuité de l'en-tête : au-dessus des chaînes, le même fond d'ambiance que le
+        // titre (dégradé vert sombre de l'appli), redessiné à sa place exacte sur l'écran ; pas de verre fumé.
+        var topInRoot by remember { mutableStateOf(0f) }
         Column(
             Modifier.fillMaxWidth()
                 .onSizeChanged { headerPx = it.height }
                 .offset { androidx.compose.ui.unit.IntOffset(0, shift.toInt()) }
-                .then(if (overContent && saving) Modifier.background(c.surfaceContainer.copy(alpha = 0.97f))
-                else if (overContent) Modifier.hazeEffect(glass, HazeStyle(
-                    backgroundColor = c.background,
-                    tint = HazeTint(Color(0xFF12241F).copy(alpha = 0.78f)),
-                    blurRadius = 28.dp, noiseFactor = 0.04f,
-                    fallbackTint = HazeTint(Color(0xFF12241F).copy(alpha = 0.96f)),
-                )) else Modifier)
+                .onGloballyPositioned { topInRoot = it.positionInRoot().y }
+                .then(if (overContent) Modifier.drawBehind {
+                    clipRect {
+                        drawRect(c.background)
+                        translate(top = -topInRoot) {
+                            val h = 460.dp.toPx()
+                            drawRect(Brush.radialGradient(listOf(c.secondaryContainer.copy(alpha = 0.85f), Color.Transparent),
+                                center = androidx.compose.ui.geometry.Offset(160f, -80f), radius = 1300f),
+                                size = androidx.compose.ui.geometry.Size(size.width, h))
+                            drawRect(Brush.verticalGradient(0f to c.background.copy(alpha = 0.15f), 0.55f to c.background.copy(alpha = 0.6f),
+                                1f to c.background, startY = 0f, endY = h), size = androidx.compose.ui.geometry.Size(size.width, h))
+                        }
+                    }
+                } else Modifier)
                 .padding(bottom = 10.dp),
         ) {
             SearchPill(query, { query = it })

@@ -582,12 +582,13 @@ private fun SeeAllCard(onClick: () -> Unit) {
 
 /** Couleur de chaque façon de caster : la même partout (tuiles de l'accueil, grandes tuiles du nouveau venu). */
 internal object ActionColors {
-    const val WEB = 0xFF7EB8FF
-    const val ALBUM = 0xFFFF8AC6
-    const val NETWORK = 0xFF7FE0B8
-    const val LINK = 0xFFFFB86B
-    const val LISTS = 0xFFC4A8FF
-    const val FILES = 0xFF9FB4C4
+    // Couleurs franches (pas pastel) : elles gardent du caractère une fois fondues dans le fond sombre des tuiles.
+    const val WEB = 0xFF2F7BF5
+    const val ALBUM = 0xFFE0457B
+    const val NETWORK = 0xFF13A86F
+    const val LINK = 0xFFF08A24
+    const val LISTS = 0xFF7C4DFF
+    const val FILES = 0xFF4E7396
 }
 
 /**
@@ -600,7 +601,7 @@ private fun CastActionsRow(
     showLists: Boolean, highlightLink: Boolean,
 ) {
     LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
-        item { ActionTile(Icons.Rounded.Public, stringResource(R.string.home_browse_tile), ActionColors.WEB, onClick = onBrowse) }
+        // Pas de « Sites web » ici : l'onglet Navigateur est là pour ça (il reste dans les grandes tuiles du nouveau venu).
         item { ActionTile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), ActionColors.ALBUM, onClick = onPickPhotos) }
         item { ActionTile(Icons.Rounded.Lan, stringResource(R.string.home_network), ActionColors.NETWORK, onClick = onNetwork) }
         item { ActionTile(Icons.Rounded.Link, stringResource(R.string.home_link_tile), ActionColors.LINK, highlight = highlightLink, onClick = onPasteLink) }

@@ -503,6 +503,24 @@
     <string name="free_cat_animation">애니메이션</string>
     <string name="tab_search">검색</string>
     <string name="vod_title">영화 및 시리즈</string>
+    <string name="search_hint">영화, 시리즈, 동영상…</string>
+    <string name="search_empty">네트워크의 동영상과 추가한 소스에서 검색합니다.</string>
+    <string name="search_yours">내 영화 및 시리즈</string>
+    <string name="search_lan">내 네트워크</string>
+    <string name="search_none">찾은 항목이 없습니다.</string>
+    <string name="search_unavailable">지금은 이 동영상을 볼 수 없습니다.</string>
+    <string name="sources_title">소스</string>
+    <string name="sources_sub">계정 없이 둘러보고 검색할 수 있는 무료 합법 카탈로그.</string>
+    <string name="sources_peertube">PeerTube 네트워크의 자유 동영상: 다큐멘터리, 강연, 강의, 크리에이터.</string>
+    <string name="sources_archive">퍼블릭 도메인 및 크리에이티브 커먼즈 영화, 단편, 만화.</string>
+    <string name="sources_yours">내 소스</string>
+    <string name="sources_iptv">IPTV 구독</string>
+    <string name="sources_iptv_sub">제공업체 링크: 채널, 영화, 시리즈.</string>
+    <string name="sources_lan_sub">NAS와 컴퓨터도 함께 검색합니다.</string>
+    <string name="sources_add">소스 추가</string>
+    <string name="sources_settings_sub">무료 영화, PeerTube, Internet Archive</string>
+    <string name="sources_card">자유 동영상</string>
+    <string name="sources_card_sub">퍼블릭 도메인 영화, PeerTube, Internet Archive: 무료이며 합법적.</string>
     <plurals name="browser_found">
         <item quantity="other">동영상 %d개</item>
     </plurals>

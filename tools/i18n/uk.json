@@ -501,7 +501,25 @@
   "free_cat_drama": "Драма",
   "free_cat_animation": "Анімація",
   "tab_search": "Пошук",
-  "vod_title": "Фільми та серіали"
+  "vod_title": "Фільми та серіали",
+  "search_hint": "Фільм, серіал, відео…",
+  "search_empty": "Пошук у відео твоєї мережі та в доданих джерелах.",
+  "search_yours": "Твої фільми та серіали",
+  "search_lan": "У твоїй мережі",
+  "search_none": "Нічого не знайдено.",
+  "search_unavailable": "Це відео зараз недоступне.",
+  "sources_title": "Джерела",
+  "sources_sub": "Безкоштовні легальні каталоги для перегляду й пошуку, без облікового запису.",
+  "sources_peertube": "Вільні відео мережі PeerTube: документальні фільми, лекції, курси, автори.",
+  "sources_archive": "Фільми, короткометражки й мультфільми в суспільному надбанні та під Creative Commons.",
+  "sources_yours": "Твої",
+  "sources_iptv": "Підписка IPTV",
+  "sources_iptv_sub": "Посилання від провайдера: канали, фільми та серіали.",
+  "sources_lan_sub": "Твій NAS і комп'ютери: пошук і в них.",
+  "sources_add": "Додати джерело",
+  "sources_settings_sub": "Вільні фільми, PeerTube, Internet Archive",
+  "sources_card": "Вільні відео",
+  "sources_card_sub": "Фільми в суспільному надбанні, PeerTube, Internet Archive: безкоштовно й легально."
  },
  "plurals": {
   "browser_found": {

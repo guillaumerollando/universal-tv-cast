@@ -1829,3 +1829,23 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   films) ; un film libre lu (1 h 14, Internet Archive) ; Tout voir ; NAS : recherche ; abonnement de démo + films libres
   ensemble (catégories de même nom fusionnées, rangée Séries, fiche série depuis l'accueil). 68 tests, 0 échec.
 - Pas vérifié : sur un vrai abonnement (gros catalogue : 12 h de cache, lecture au fil de l'eau) et sur la télé.
+
+## 2026-11-28 — Sources ouvertes et recherche mêlée
+- Écran **Sources** : Films libres, PeerTube, Internet Archive d'un interrupteur (rien d'activé au départ) ; rappel des
+  abonnements IPTV (→ Chaînes) et du réseau (→ Réseau). Ouvert depuis l'onglet Rechercher (icône réglages), les
+  Réglages et la carte « Vidéos libres » de « Pour commencer » (qui remplace « Films libres »).
+- **PeerTube** : recherche par Sepia Search (Framasoft, instances modérées ; nsfw exclu), lecture par l'API de
+  l'instance (liste HLS, sinon meilleur fichier). **Internet Archive** : seulement feature_films, short_films,
+  prelinger, silent_films, classic_cartoons, animationandcartoons, sous licence domaine public ou Creative Commons
+  (« opensource_movies », dépôts libres non vérifiés, écarté) ; MP4 h.264 léger. Titres douteux écartés. Aucune clé,
+  aucun compte, aucune donnée personnelle envoyée (seulement le texte cherché).
+- **Recherche mêlée** : une rangée par source, chacune à son rythme (attente de 450 ms après la frappe) ; « Sur ton
+  réseau » = recherche UPnP « Search » des serveurs multimédias (+ affiche voisine du même nom) et index des dossiers
+  partagés suivis (★), jusqu'à 4 niveaux, refait toutes les 30 min. L'onglet Rechercher apparaît aussi pour qui n'a
+  qu'un NAS ; sans catalogue, il dit où il cherche et propose « Ajouter une source ».
+- Arte et les sites commerciaux : volontairement pas intégrés (pas de catalogue ouvert, risque Play Store).
+- Vérifié sur émulateur : NAS seul → onglet Rechercher, « sintel » trouvé sur le NAS ; Sources activées → « night » :
+  rangées Films libres, PeerTube, Internet Archive ; un dessin animé Archive (8 min) et une vidéo PeerTube HLS (2 h 12)
+  lus. 68 tests, 0 échec.
+- Pas vérifié : index des dossiers partagés SMB (pas de serveur SMB d'essai qui répond) ; lecture de ces sources sur
+  la télé.

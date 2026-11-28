@@ -501,7 +501,25 @@
   "free_cat_drama": "Chính kịch",
   "free_cat_animation": "Hoạt hình",
   "tab_search": "Tìm kiếm",
-  "vod_title": "Phim & loạt phim"
+  "vod_title": "Phim & loạt phim",
+  "search_hint": "Phim, loạt phim, video…",
+  "search_empty": "Tìm trong video trên mạng của bạn và trong các nguồn bạn thêm.",
+  "search_yours": "Phim và loạt phim của bạn",
+  "search_lan": "Trên mạng của bạn",
+  "search_none": "Không tìm thấy gì.",
+  "search_unavailable": "Video này hiện không khả dụng.",
+  "sources_title": "Nguồn",
+  "sources_sub": "Danh mục miễn phí, hợp pháp để duyệt và tìm, không cần tài khoản.",
+  "sources_peertube": "Video tự do từ mạng PeerTube: phim tài liệu, bài nói, khóa học, nhà sáng tạo.",
+  "sources_archive": "Phim, phim ngắn và hoạt hình thuộc phạm vi công cộng và Creative Commons.",
+  "sources_yours": "Của bạn",
+  "sources_iptv": "Gói IPTV",
+  "sources_iptv_sub": "Liên kết của nhà cung cấp: kênh, phim và loạt phim.",
+  "sources_lan_sub": "NAS và máy tính của bạn: cũng được tìm.",
+  "sources_add": "Thêm nguồn",
+  "sources_settings_sub": "Phim tự do, PeerTube, Internet Archive",
+  "sources_card": "Video tự do",
+  "sources_card_sub": "Phim phạm vi công cộng, PeerTube, Internet Archive: miễn phí và hợp pháp."
  },
  "plurals": {
   "browser_found": {

@@ -135,7 +135,8 @@ fun StarterSection(
     val channels = showChannels && FREE_TV !in dismissed
     // Le catalogue « Films libres » (domaine public, Blender) : proposé tant qu'il n'est pas ajouté.
     val freeOn by com.rollandostudio.universaltvcast.data.Xtream.freeOn.collectAsState()
-    val films = !freeOn && FREE_FILMS !in dismissed
+    val openOn by com.rollandostudio.universaltvcast.data.OpenSources.on.collectAsState()
+    val films = !freeOn && openOn.isEmpty() && FREE_FILMS !in dismissed
     if (!channels && !films && !(showSites && sites.isNotEmpty())) return
     var freeTv by remember { mutableStateOf(false) }
     if (freeTv) FreeChannelsDialog(onDismiss = { freeTv = false }, onPasteLink = { freeTv = false; onPasteLink() })
@@ -152,11 +153,9 @@ fun StarterSection(
                 }
             }
             if (films) item(key = FREE_FILMS) {
-                StarterCard(stringResource(R.string.free_title), stringResource(R.string.free_sub), ActionColors.MOVIES,
-                    dismissMenu(FREE_FILMS), onClick = {
-                        com.rollandostudio.universaltvcast.data.Xtream.setFree(true)
-                        Nav.vodStart.value = "MOVIES" to null; Nav.iptv.value = ""
-                    }) {
+                // Les sources ouvertes (Films libres, PeerTube, Internet Archive) : on choisit lesquelles ajouter.
+                StarterCard(stringResource(R.string.sources_card), stringResource(R.string.sources_card_sub), ActionColors.MOVIES,
+                    dismissMenu(FREE_FILMS), onClick = { Nav.sources.value = true }) {
                     Icon(Icons.Rounded.Movie, null, tint = androidx.compose.ui.graphics.Color.White, modifier = Modifier.size(24.dp))
                 }
             }

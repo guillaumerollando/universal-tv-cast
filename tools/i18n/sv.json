@@ -501,7 +501,25 @@
   "free_cat_drama": "Drama",
   "free_cat_animation": "Animerat",
   "tab_search": "Sök",
-  "vod_title": "Filmer & serier"
+  "vod_title": "Filmer & serier",
+  "search_hint": "Film, serie, video…",
+  "search_empty": "Sök bland videor i ditt nätverk och i källorna du lägger till.",
+  "search_yours": "Dina filmer och serier",
+  "search_lan": "I ditt nätverk",
+  "search_none": "Inget hittades.",
+  "search_unavailable": "Den här videon är inte tillgänglig just nu.",
+  "sources_title": "Källor",
+  "sources_sub": "Gratis och lagliga kataloger att utforska och söka i, utan konto.",
+  "sources_peertube": "Fria videor från PeerTube-nätverket: dokumentärer, föredrag, kurser, kreatörer.",
+  "sources_archive": "Filmer, kortfilmer och tecknat i allmän egendom och under Creative Commons.",
+  "sources_yours": "Dina",
+  "sources_iptv": "IPTV-abonnemang",
+  "sources_iptv_sub": "Din leverantörs länk: kanaler, filmer och serier.",
+  "sources_lan_sub": "Din NAS och dina datorer: genomsöks också.",
+  "sources_add": "Lägg till en källa",
+  "sources_settings_sub": "Fria filmer, PeerTube, Internet Archive",
+  "sources_card": "Fria videor",
+  "sources_card_sub": "Filmer i allmän egendom, PeerTube, Internet Archive: gratis och lagligt."
  },
  "plurals": {
   "browser_found": {

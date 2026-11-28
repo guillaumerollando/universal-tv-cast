@@ -501,7 +501,25 @@
   "free_cat_drama": "ドラマ",
   "free_cat_animation": "アニメーション",
   "tab_search": "検索",
-  "vod_title": "映画・シリーズ"
+  "vod_title": "映画・シリーズ",
+  "search_hint": "映画・シリーズ・動画…",
+  "search_empty": "ネットワーク内の動画と追加したソースを検索します。",
+  "search_yours": "あなたの映画・シリーズ",
+  "search_lan": "ネットワーク上",
+  "search_none": "見つかりませんでした。",
+  "search_unavailable": "この動画は現在再生できません。",
+  "sources_title": "ソース",
+  "sources_sub": "アカウント不要で閲覧・検索できる無料で合法なカタログ。",
+  "sources_peertube": "PeerTubeネットワークの自由な動画：ドキュメンタリー、講演、講座、クリエイター。",
+  "sources_archive": "パブリックドメインとクリエイティブ・コモンズの映画、短編、アニメ。",
+  "sources_yours": "あなたのもの",
+  "sources_iptv": "IPTVの契約",
+  "sources_iptv_sub": "プロバイダーのリンク：チャンネル、映画、シリーズ。",
+  "sources_lan_sub": "NASやパソコンも検索します。",
+  "sources_add": "ソースを追加",
+  "sources_settings_sub": "フリー映画、PeerTube、Internet Archive",
+  "sources_card": "フリー動画",
+  "sources_card_sub": "パブリックドメイン映画、PeerTube、Internet Archive：無料で合法。"
  },
  "plurals": {
   "browser_found": {

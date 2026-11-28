@@ -503,6 +503,24 @@
     <string name="free_cat_animation">アニメーション</string>
     <string name="tab_search">検索</string>
     <string name="vod_title">映画・シリーズ</string>
+    <string name="search_hint">映画・シリーズ・動画…</string>
+    <string name="search_empty">ネットワーク内の動画と追加したソースを検索します。</string>
+    <string name="search_yours">あなたの映画・シリーズ</string>
+    <string name="search_lan">ネットワーク上</string>
+    <string name="search_none">見つかりませんでした。</string>
+    <string name="search_unavailable">この動画は現在再生できません。</string>
+    <string name="sources_title">ソース</string>
+    <string name="sources_sub">アカウント不要で閲覧・検索できる無料で合法なカタログ。</string>
+    <string name="sources_peertube">PeerTubeネットワークの自由な動画：ドキュメンタリー、講演、講座、クリエイター。</string>
+    <string name="sources_archive">パブリックドメインとクリエイティブ・コモンズの映画、短編、アニメ。</string>
+    <string name="sources_yours">あなたのもの</string>
+    <string name="sources_iptv">IPTVの契約</string>
+    <string name="sources_iptv_sub">プロバイダーのリンク：チャンネル、映画、シリーズ。</string>
+    <string name="sources_lan_sub">NASやパソコンも検索します。</string>
+    <string name="sources_add">ソースを追加</string>
+    <string name="sources_settings_sub">フリー映画、PeerTube、Internet Archive</string>
+    <string name="sources_card">フリー動画</string>
+    <string name="sources_card_sub">パブリックドメイン映画、PeerTube、Internet Archive：無料で合法。</string>
     <plurals name="browser_found">
         <item quantity="other">%d 本の動画</item>
     </plurals>

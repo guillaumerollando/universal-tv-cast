@@ -42,6 +42,7 @@ import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.LinkOff
 import androidx.compose.material.icons.rounded.Palette
+import androidx.compose.material.icons.rounded.VideoLibrary
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Settings
@@ -141,6 +142,8 @@ object Nav {
     val iptv = MutableStateFlow<String?>(null)
     /** Ouvrir l'écran Chaînes directement sur les films ou les séries (« MOVIES » / « SERIES ») d'une catégorie (ou null). */
     val vodStart = MutableStateFlow<Pair<String, String?>?>(null)
+    /** Écran « Sources » ouvert. */
+    val sources = MutableStateFlow(false)
     /** L'appli est réduite en petite fenêtre « image dans l'image » : seule la vidéo est montrée. */
     val pip = MutableStateFlow(false)
     /** Page « Réseau » (ordinateurs, NAS) ouverte par-dessus l'accueil. */
@@ -291,7 +294,12 @@ fun TvCastApp() {
     val iptvLists by com.rollandostudio.universaltvcast.data.IptvStore.lists.collectAsState()
     val freeFilms by com.rollandostudio.universaltvcast.data.Xtream.freeOn.collectAsState()
     val vodAccounts = remember(iptvLists, freeFilms) { com.rollandostudio.universaltvcast.data.Xtream.accounts(iptvLists, freeFilms) }
-    LaunchedEffect(vodAccounts.isEmpty()) { if (vodAccounts.isEmpty() && Nav.tab.value == Tab.SEARCH) Nav.tab.value = Tab.HOME }
+    // … ou une source ouverte (PeerTube, Internet Archive), ou un appareil du réseau (chercher dans son NAS).
+    val openSources by com.rollandostudio.universaltvcast.data.OpenSources.on.collectAsState()
+    val lanFolders by com.rollandostudio.universaltvcast.lan.LanStore.folders.collectAsState()
+    val hasLan = remember(tab, lanFolders) { com.rollandostudio.universaltvcast.data.OpenSources.hasLan() }
+    val showSearch = vodAccounts.isNotEmpty() || openSources.isNotEmpty() || hasLan
+    LaunchedEffect(showSearch) { if (!showSearch && Nav.tab.value == Tab.SEARCH) Nav.tab.value = Tab.HOME }
     // Part visible des barres du navigateur (adresse en haut, onglets en bas), qui suivent le doigt ensemble.
     val browserBars = browser.barShown
     Scaffold(
@@ -346,7 +354,7 @@ fun TvCastApp() {
             Box(Modifier.graphicsLayer {
                 val f = if (tab == Tab.BROWSER) browserBars else 1f
                 translationY = size.height * (1f - f); alpha = f
-            }) { PillTabBar(tab, state.active, haze, search = vodAccounts.isNotEmpty()) { Nav.iptv.value = null; Nav.tab.value = it } }
+            }) { PillTabBar(tab, state.active, haze, search = showSearch) { Nav.iptv.value = null; Nav.tab.value = it } }
         },
     ) { padding ->
         // Les écrans défilent sous la barre d'onglets (sauf le navigateur) et finissent au-dessus d'elle.
@@ -400,6 +408,8 @@ fun TvCastApp() {
     if (showSettings) SettingsSheet(onDismiss = { showSettings = false })
     val ambianceOpen by Nav.ambiance.collectAsState()
     if (ambianceOpen) AmbianceSheet(onDismiss = { Nav.ambiance.value = false })
+    val sourcesOpen by Nav.sources.collectAsState()
+    if (sourcesOpen) SourcesSheet(onDismiss = { Nav.sources.value = false })
     val showHelp by Nav.help.collectAsState()
     if (showHelp) HelpSheet(onDismiss = { Nav.help.value = false })
     if (showLink) LinkDialog(onDismiss = { showLink = false })
@@ -610,6 +620,16 @@ private fun SettingsSheet(onDismiss: () -> Unit) {
                     leadingContent = { Icon(Icons.Rounded.Palette, null, tint = MaterialTheme.colorScheme.primary) },
                     colors = ListItemDefaults.colors(containerColor = androidx.compose.ui.graphics.Color.Transparent),
                     modifier = Modifier.selectable(false, role = Role.Button) { showStyle = true },
+                )
+            }
+            item {
+                // Sources : ce que l'appli parcourt et cherche (sources ouvertes, abonnements, réseau).
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.sources_title)) },
+                    supportingContent = { Text(stringResource(R.string.sources_settings_sub)) },
+                    leadingContent = { Icon(Icons.Rounded.VideoLibrary, null, tint = MaterialTheme.colorScheme.primary) },
+                    colors = ListItemDefaults.colors(containerColor = androidx.compose.ui.graphics.Color.Transparent),
+                    modifier = Modifier.selectable(false, role = Role.Button) { onDismiss(); Nav.sources.value = true },
                 )
             }
             item {

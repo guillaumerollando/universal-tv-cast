@@ -501,7 +501,25 @@
   "free_cat_drama": "ดราม่า",
   "free_cat_animation": "แอนิเมชัน",
   "tab_search": "ค้นหา",
-  "vod_title": "ภาพยนตร์และซีรีส์"
+  "vod_title": "ภาพยนตร์และซีรีส์",
+  "search_hint": "ภาพยนตร์ ซีรีส์ วิดีโอ…",
+  "search_empty": "ค้นหาในวิดีโอบนเครือข่ายของคุณและแหล่งที่คุณเพิ่ม",
+  "search_yours": "ภาพยนตร์และซีรีส์ของคุณ",
+  "search_lan": "บนเครือข่ายของคุณ",
+  "search_none": "ไม่พบสิ่งใด",
+  "search_unavailable": "วิดีโอนี้ไม่พร้อมใช้งานในขณะนี้",
+  "sources_title": "แหล่งที่มา",
+  "sources_sub": "แคตตาล็อกฟรีและถูกกฎหมายให้เลือกดูและค้นหา ไม่ต้องมีบัญชี",
+  "sources_peertube": "วิดีโอเสรีจากเครือข่าย PeerTube: สารคดี บรรยาย คอร์ส ครีเอเตอร์",
+  "sources_archive": "ภาพยนตร์ หนังสั้น และการ์ตูนสาธารณสมบัติและ Creative Commons",
+  "sources_yours": "ของคุณ",
+  "sources_iptv": "การสมัคร IPTV",
+  "sources_iptv_sub": "ลิงก์จากผู้ให้บริการ: ช่อง ภาพยนตร์ และซีรีส์",
+  "sources_lan_sub": "NAS และคอมพิวเตอร์ของคุณ: ค้นหาด้วย",
+  "sources_add": "เพิ่มแหล่งที่มา",
+  "sources_settings_sub": "ภาพยนตร์เสรี, PeerTube, Internet Archive",
+  "sources_card": "วิดีโอเสรี",
+  "sources_card_sub": "ภาพยนตร์สาธารณสมบัติ, PeerTube, Internet Archive: ฟรีและถูกกฎหมาย"
  },
  "plurals": {
   "browser_found": {

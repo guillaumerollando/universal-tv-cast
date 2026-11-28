@@ -501,7 +501,25 @@
   "free_cat_drama": "Drama",
   "free_cat_animation": "Animované",
   "tab_search": "Hledat",
-  "vod_title": "Filmy a seriály"
+  "vod_title": "Filmy a seriály",
+  "search_hint": "Film, seriál, video…",
+  "search_empty": "Hledejte ve videích ve své síti a ve zdrojích, které přidáte.",
+  "search_yours": "Vaše filmy a seriály",
+  "search_lan": "Ve vaší síti",
+  "search_none": "Nic nenalezeno.",
+  "search_unavailable": "Toto video teď není dostupné.",
+  "sources_title": "Zdroje",
+  "sources_sub": "Bezplatné a legální katalogy k procházení a hledání, bez účtu.",
+  "sources_peertube": "Volná videa ze sítě PeerTube: dokumenty, přednášky, kurzy, tvůrci.",
+  "sources_archive": "Filmy, krátké filmy a animované filmy z volného díla a pod Creative Commons.",
+  "sources_yours": "Vaše",
+  "sources_iptv": "Předplatné IPTV",
+  "sources_iptv_sub": "Odkaz od poskytovatele: kanály, filmy a seriály.",
+  "sources_lan_sub": "Váš NAS a počítače: prohledávají se také.",
+  "sources_add": "Přidat zdroj",
+  "sources_settings_sub": "Volné filmy, PeerTube, Internet Archive",
+  "sources_card": "Volná videa",
+  "sources_card_sub": "Filmy z volného díla, PeerTube, Internet Archive: zdarma a legálně."
  },
  "plurals": {
   "browser_found": {

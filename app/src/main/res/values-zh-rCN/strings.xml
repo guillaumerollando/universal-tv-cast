@@ -503,6 +503,24 @@
     <string name="free_cat_animation">动画</string>
     <string name="tab_search">搜索</string>
     <string name="vod_title">电影和剧集</string>
+    <string name="search_hint">电影、剧集、视频…</string>
+    <string name="search_empty">在你网络中的视频和你添加的来源里搜索。</string>
+    <string name="search_yours">你的电影和剧集</string>
+    <string name="search_lan">在你的网络上</string>
+    <string name="search_none">没有找到任何内容。</string>
+    <string name="search_unavailable">此视频暂时无法播放。</string>
+    <string name="sources_title">来源</string>
+    <string name="sources_sub">免费合法的目录，无需账号即可浏览和搜索。</string>
+    <string name="sources_peertube">PeerTube 网络中的自由视频：纪录片、讲座、课程、创作者。</string>
+    <string name="sources_archive">公有领域和知识共享许可的电影、短片和动画。</string>
+    <string name="sources_yours">你的</string>
+    <string name="sources_iptv">IPTV 订阅</string>
+    <string name="sources_iptv_sub">你的提供商链接：频道、电影和剧集。</string>
+    <string name="sources_lan_sub">你的 NAS 和电脑：也会被搜索。</string>
+    <string name="sources_add">添加来源</string>
+    <string name="sources_settings_sub">免费电影、PeerTube、Internet Archive</string>
+    <string name="sources_card">自由视频</string>
+    <string name="sources_card_sub">公有领域电影、PeerTube、Internet Archive：免费且合法。</string>
     <plurals name="browser_found">
         <item quantity="other">%d 个视频</item>
     </plurals>

@@ -503,6 +503,24 @@
     <string name="free_cat_animation">แอนิเมชัน</string>
     <string name="tab_search">ค้นหา</string>
     <string name="vod_title">ภาพยนตร์และซีรีส์</string>
+    <string name="search_hint">ภาพยนตร์ ซีรีส์ วิดีโอ…</string>
+    <string name="search_empty">ค้นหาในวิดีโอบนเครือข่ายของคุณและแหล่งที่คุณเพิ่ม</string>
+    <string name="search_yours">ภาพยนตร์และซีรีส์ของคุณ</string>
+    <string name="search_lan">บนเครือข่ายของคุณ</string>
+    <string name="search_none">ไม่พบสิ่งใด</string>
+    <string name="search_unavailable">วิดีโอนี้ไม่พร้อมใช้งานในขณะนี้</string>
+    <string name="sources_title">แหล่งที่มา</string>
+    <string name="sources_sub">แคตตาล็อกฟรีและถูกกฎหมายให้เลือกดูและค้นหา ไม่ต้องมีบัญชี</string>
+    <string name="sources_peertube">วิดีโอเสรีจากเครือข่าย PeerTube: สารคดี บรรยาย คอร์ส ครีเอเตอร์</string>
+    <string name="sources_archive">ภาพยนตร์ หนังสั้น และการ์ตูนสาธารณสมบัติและ Creative Commons</string>
+    <string name="sources_yours">ของคุณ</string>
+    <string name="sources_iptv">การสมัคร IPTV</string>
+    <string name="sources_iptv_sub">ลิงก์จากผู้ให้บริการ: ช่อง ภาพยนตร์ และซีรีส์</string>
+    <string name="sources_lan_sub">NAS และคอมพิวเตอร์ของคุณ: ค้นหาด้วย</string>
+    <string name="sources_add">เพิ่มแหล่งที่มา</string>
+    <string name="sources_settings_sub">ภาพยนตร์เสรี, PeerTube, Internet Archive</string>
+    <string name="sources_card">วิดีโอเสรี</string>
+    <string name="sources_card_sub">ภาพยนตร์สาธารณสมบัติ, PeerTube, Internet Archive: ฟรีและถูกกฎหมาย</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>

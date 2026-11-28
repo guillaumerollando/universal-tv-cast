@@ -501,7 +501,25 @@
   "free_cat_drama": "Dramat",
   "free_cat_animation": "Animacja",
   "tab_search": "Szukaj",
-  "vod_title": "Filmy i seriale"
+  "vod_title": "Filmy i seriale",
+  "search_hint": "Film, serial, wideo…",
+  "search_empty": "Szukaj w filmach ze swojej sieci i w dodanych źródłach.",
+  "search_yours": "Twoje filmy i seriale",
+  "search_lan": "W Twojej sieci",
+  "search_none": "Nic nie znaleziono.",
+  "search_unavailable": "Ten film nie jest teraz dostępny.",
+  "sources_title": "Źródła",
+  "sources_sub": "Darmowe i legalne katalogi do przeglądania i wyszukiwania, bez konta.",
+  "sources_peertube": "Wolne filmy z sieci PeerTube: dokumenty, wykłady, kursy, twórcy.",
+  "sources_archive": "Filmy, krótkie metraże i kreskówki z domeny publicznej i na licencji Creative Commons.",
+  "sources_yours": "Twoje",
+  "sources_iptv": "Abonament IPTV",
+  "sources_iptv_sub": "Link od dostawcy: kanały, filmy i seriale.",
+  "sources_lan_sub": "Twój NAS i komputery: też przeszukiwane.",
+  "sources_add": "Dodaj źródło",
+  "sources_settings_sub": "Wolne filmy, PeerTube, Internet Archive",
+  "sources_card": "Wolne wideo",
+  "sources_card_sub": "Filmy z domeny publicznej, PeerTube, Internet Archive: za darmo i legalnie."
  },
  "plurals": {
   "browser_found": {

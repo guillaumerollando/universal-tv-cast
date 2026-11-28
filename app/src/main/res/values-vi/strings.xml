@@ -503,6 +503,24 @@
     <string name="free_cat_animation">Hoạt hình</string>
     <string name="tab_search">Tìm kiếm</string>
     <string name="vod_title">Phim &amp; loạt phim</string>
+    <string name="search_hint">Phim, loạt phim, video…</string>
+    <string name="search_empty">Tìm trong video trên mạng của bạn và trong các nguồn bạn thêm.</string>
+    <string name="search_yours">Phim và loạt phim của bạn</string>
+    <string name="search_lan">Trên mạng của bạn</string>
+    <string name="search_none">Không tìm thấy gì.</string>
+    <string name="search_unavailable">Video này hiện không khả dụng.</string>
+    <string name="sources_title">Nguồn</string>
+    <string name="sources_sub">Danh mục miễn phí, hợp pháp để duyệt và tìm, không cần tài khoản.</string>
+    <string name="sources_peertube">Video tự do từ mạng PeerTube: phim tài liệu, bài nói, khóa học, nhà sáng tạo.</string>
+    <string name="sources_archive">Phim, phim ngắn và hoạt hình thuộc phạm vi công cộng và Creative Commons.</string>
+    <string name="sources_yours">Của bạn</string>
+    <string name="sources_iptv">Gói IPTV</string>
+    <string name="sources_iptv_sub">Liên kết của nhà cung cấp: kênh, phim và loạt phim.</string>
+    <string name="sources_lan_sub">NAS và máy tính của bạn: cũng được tìm.</string>
+    <string name="sources_add">Thêm nguồn</string>
+    <string name="sources_settings_sub">Phim tự do, PeerTube, Internet Archive</string>
+    <string name="sources_card">Video tự do</string>
+    <string name="sources_card_sub">Phim phạm vi công cộng, PeerTube, Internet Archive: miễn phí và hợp pháp.</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

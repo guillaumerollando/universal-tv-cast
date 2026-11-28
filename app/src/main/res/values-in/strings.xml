@@ -503,6 +503,24 @@
     <string name="free_cat_animation">Animasi</string>
     <string name="tab_search">Cari</string>
     <string name="vod_title">Film &amp; serial</string>
+    <string name="search_hint">Film, serial, video…</string>
+    <string name="search_empty">Cari di video jaringan Anda dan di sumber yang Anda tambahkan.</string>
+    <string name="search_yours">Film dan serial Anda</string>
+    <string name="search_lan">Di jaringan Anda</string>
+    <string name="search_none">Tidak ditemukan apa pun.</string>
+    <string name="search_unavailable">Video ini tidak tersedia saat ini.</string>
+    <string name="sources_title">Sumber</string>
+    <string name="sources_sub">Katalog gratis dan legal untuk dijelajahi dan dicari, tanpa akun.</string>
+    <string name="sources_peertube">Video bebas dari jaringan PeerTube: dokumenter, ceramah, kursus, kreator.</string>
+    <string name="sources_archive">Film, film pendek, dan kartun domain publik dan Creative Commons.</string>
+    <string name="sources_yours">Milik Anda</string>
+    <string name="sources_iptv">Langganan IPTV</string>
+    <string name="sources_iptv_sub">Tautan penyedia Anda: saluran, film, dan serial.</string>
+    <string name="sources_lan_sub">NAS dan komputer Anda: ikut dicari.</string>
+    <string name="sources_add">Tambah sumber</string>
+    <string name="sources_settings_sub">Film bebas, PeerTube, Internet Archive</string>
+    <string name="sources_card">Video bebas</string>
+    <string name="sources_card_sub">Film domain publik, PeerTube, Internet Archive: gratis dan legal.</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

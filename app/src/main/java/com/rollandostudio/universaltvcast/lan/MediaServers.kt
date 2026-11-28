@@ -133,6 +133,32 @@ object MediaServers {
         return out.sortedWith(Lan.ORDER)
     }
 
+    /**
+     * Recherche par titre chez le serveur (action « Search » de l'UPnP, que minidlna, Rygel, Jellyfin ou Plex savent
+     * faire) : les vidéos dont le titre contient [query]. Null si le serveur ne sait pas chercher.
+     */
+    fun search(d: LanDevice, query: String): List<LanEntry>? = runCatching {
+        val q = query.replace("\\", "").replace("\"", "")
+        val resp = soap(d.controlUrl!!, d.controlType!!, "Search", listOf(
+            "ContainerID" to "0",
+            "SearchCriteria" to "upnp:class derivedfrom \"object.item.videoItem\" and dc:title contains \"$q\"",
+            "Filter" to "*", "StartingIndex" to "0", "RequestedCount" to "60", "SortCriteria" to "",
+        ))
+        val result = Regex("<Result[^>]*>(.*?)</Result>", RegexOption.DOT_MATCHES_ALL).find(resp)?.groupValues?.get(1) ?: return@runCatching null
+        val videos = parseDidl(unescape(result), d).filter { it.kind == LanEntry.Kind.VIDEO }
+        // Affiches posées à côté (« Film.jpg ») : une seconde recherche, parmi les images, au même nom.
+        val images = runCatching {
+            val r2 = soap(d.controlUrl!!, d.controlType!!, "Search", listOf(
+                "ContainerID" to "0",
+                "SearchCriteria" to "upnp:class derivedfrom \"object.item.imageItem\" and dc:title contains \"$q\"",
+                "Filter" to "*", "StartingIndex" to "0", "RequestedCount" to "60", "SortCriteria" to "",
+            ))
+            Regex("<Result[^>]*>(.*?)</Result>", RegexOption.DOT_MATCHES_ALL).find(r2)?.groupValues?.get(1)
+                ?.let { parseDidl(unescape(it), d) }.orEmpty().associateBy { it.name.substringBeforeLast('.').lowercase() }
+        }.getOrDefault(emptyMap())
+        videos.map { v -> if (v.thumb != null) v else v.copy(thumb = images[v.name.substringBeforeLast('.').lowercase()]?.ref) }
+    }.getOrNull()
+
     internal fun parseDidl(didl: String, d: LanDevice): List<LanEntry> {
         val doc = runCatching { xml(didl.toByteArray()) }.getOrNull() ?: return emptyList()
         val out = mutableListOf<LanEntry>()

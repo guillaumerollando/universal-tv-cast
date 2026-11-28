@@ -22,6 +22,12 @@ sur le téléphone quand il n'y a pas de télé allumée.
   films ouverts de la Blender Foundation (CC BY) et longs métrages du domaine public d'Internet Archive, rangés par
   genre, affiches de Wikimedia Commons ou images du film ; vidéos lues chez Internet Archive. Ajouté d'un toucher
   (« Pour commencer »), présenté comme un abonnement, retiré dans « Mes listes ».
+- **Sources** (écran ouvert depuis Rechercher, les réglages ou « Pour commencer ») : Films libres, **PeerTube** (Sepia
+  Search, instances modérées par Framasoft) et **Internet Archive** (seulement ses collections tenues, domaine public
+  ou Creative Commons) d'un interrupteur ; abonnements IPTV et réseau rappelés (`data/OpenSources.kt`).
+- **Recherche mêlée** (onglet Rechercher, montré dès qu'il y a une source ou un appareil du réseau) : une rangée par
+  source — tes films et séries, « Sur ton réseau » (recherche UPnP des serveurs multimédias, avec l'affiche voisine ;
+  index des dossiers partagés suivis ★, 30 min), PeerTube, Internet Archive.
 - **Lecteur externe** : « Ouvrir avec » / « Partager » des autres applis (en-têtes, titre et sous-titres, conventions
   MX Player et VLC) ; un lien de page web s'ouvre dans le navigateur.
 - **Album** : photos et vidéos du téléphone ; une vidéo seule se lit comme une vidéo, plusieurs éléments font un diaporama.

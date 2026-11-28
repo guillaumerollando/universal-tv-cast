@@ -501,7 +501,25 @@
   "free_cat_drama": "ड्रामा",
   "free_cat_animation": "एनिमेशन",
   "tab_search": "खोजें",
-  "vod_title": "फ़िल्में और सीरीज़"
+  "vod_title": "फ़िल्में और सीरीज़",
+  "search_hint": "फ़िल्म, सीरीज़, वीडियो…",
+  "search_empty": "अपने नेटवर्क के वीडियो और जोड़े गए स्रोतों में खोजें।",
+  "search_yours": "आपकी फ़िल्में और सीरीज़",
+  "search_lan": "आपके नेटवर्क पर",
+  "search_none": "कुछ नहीं मिला।",
+  "search_unavailable": "यह वीडियो अभी उपलब्ध नहीं है।",
+  "sources_title": "स्रोत",
+  "sources_sub": "ब्राउज़ करने और खोजने के लिए मुफ़्त और कानूनी कैटलॉग, बिना अकाउंट।",
+  "sources_peertube": "PeerTube नेटवर्क के मुक्त वीडियो: डॉक्यूमेंट्री, व्याख्यान, कोर्स, क्रिएटर।",
+  "sources_archive": "सार्वजनिक डोमेन और Creative Commons की फ़िल्में, शॉर्ट फ़िल्में और कार्टून।",
+  "sources_yours": "आपके",
+  "sources_iptv": "IPTV सदस्यता",
+  "sources_iptv_sub": "आपके प्रदाता का लिंक: चैनल, फ़िल्में और सीरीज़।",
+  "sources_lan_sub": "आपका NAS और कंप्यूटर: इनमें भी खोज होती है।",
+  "sources_add": "स्रोत जोड़ें",
+  "sources_settings_sub": "मुक्त फ़िल्में, PeerTube, Internet Archive",
+  "sources_card": "मुक्त वीडियो",
+  "sources_card_sub": "सार्वजनिक डोमेन की फ़िल्में, PeerTube, Internet Archive: मुफ़्त और कानूनी।"
  },
  "plurals": {
   "browser_found": {

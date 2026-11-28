@@ -501,7 +501,25 @@
   "free_cat_drama": "دراما",
   "free_cat_animation": "رسوم متحركة",
   "tab_search": "بحث",
-  "vod_title": "أفلام ومسلسلات"
+  "vod_title": "أفلام ومسلسلات",
+  "search_hint": "فيلم، مسلسل، فيديو…",
+  "search_empty": "ابحث في فيديوهات شبكتك وفي المصادر التي تضيفها.",
+  "search_yours": "أفلامك ومسلسلاتك",
+  "search_lan": "على شبكتك",
+  "search_none": "لم يُعثر على شيء.",
+  "search_unavailable": "هذا الفيديو غير متاح حاليًا.",
+  "sources_title": "المصادر",
+  "sources_sub": "كتالوجات مجانية وقانونية للتصفح والبحث، بلا حساب.",
+  "sources_peertube": "فيديوهات حرة من شبكة PeerTube: وثائقيات ومحاضرات ودروس وصنّاع محتوى.",
+  "sources_archive": "أفلام وأفلام قصيرة ورسوم متحركة من الملك العام وبرخصة المشاع الإبداعي.",
+  "sources_yours": "مصادرك",
+  "sources_iptv": "اشتراك IPTV",
+  "sources_iptv_sub": "رابط مزوّدك: قنوات وأفلام ومسلسلات.",
+  "sources_lan_sub": "جهاز NAS وحواسيبك: يُبحث فيها أيضًا.",
+  "sources_add": "أضف مصدرًا",
+  "sources_settings_sub": "أفلام حرة، PeerTube، Internet Archive",
+  "sources_card": "فيديوهات حرة",
+  "sources_card_sub": "أفلام من الملك العام وPeerTube وInternet Archive: مجانية وقانونية."
  },
  "plurals": {
   "browser_found": {

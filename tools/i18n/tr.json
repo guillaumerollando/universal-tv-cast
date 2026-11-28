@@ -501,7 +501,25 @@
   "free_cat_drama": "Dram",
   "free_cat_animation": "Animasyon",
   "tab_search": "Ara",
-  "vod_title": "Filmler ve diziler"
+  "vod_title": "Filmler ve diziler",
+  "search_hint": "Film, dizi, video…",
+  "search_empty": "Ağındaki videolarda ve eklediğin kaynaklarda ara.",
+  "search_yours": "Filmleriniz ve dizileriniz",
+  "search_lan": "Ağınızda",
+  "search_none": "Hiçbir şey bulunamadı.",
+  "search_unavailable": "Bu video şu anda kullanılamıyor.",
+  "sources_title": "Kaynaklar",
+  "sources_sub": "Hesap gerekmeden göz atılacak ve aranacak ücretsiz, yasal kataloglar.",
+  "sources_peertube": "PeerTube ağından özgür videolar: belgeseller, konuşmalar, dersler, içerik üreticileri.",
+  "sources_archive": "Kamu malı ve Creative Commons filmler, kısa filmler ve çizgi filmler.",
+  "sources_yours": "Sizinkiler",
+  "sources_iptv": "IPTV aboneliği",
+  "sources_iptv_sub": "Sağlayıcınızın bağlantısı: kanallar, filmler ve diziler.",
+  "sources_lan_sub": "NAS'ınız ve bilgisayarlarınız da aranır.",
+  "sources_add": "Kaynak ekle",
+  "sources_settings_sub": "Özgür filmler, PeerTube, Internet Archive",
+  "sources_card": "Özgür videolar",
+  "sources_card_sub": "Kamu malı filmler, PeerTube, Internet Archive: ücretsiz ve yasal."
  },
  "plurals": {
   "browser_found": {

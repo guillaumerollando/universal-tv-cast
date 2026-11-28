@@ -85,6 +85,7 @@ object TvCast {
         Library.init(app)
         com.rollandostudio.universaltvcast.data.IptvStore.init(app)
         com.rollandostudio.universaltvcast.data.Xtream.init(app)
+        com.rollandostudio.universaltvcast.data.OpenSources.init(app)
         com.rollandostudio.universaltvcast.data.Epg.init(app)
         com.rollandostudio.universaltvcast.data.Power.init(app)
         com.rollandostudio.universaltvcast.data.Housekeeping.run(app)

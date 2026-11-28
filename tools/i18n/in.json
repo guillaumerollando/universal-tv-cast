@@ -501,7 +501,25 @@
   "free_cat_drama": "Drama",
   "free_cat_animation": "Animasi",
   "tab_search": "Cari",
-  "vod_title": "Film & serial"
+  "vod_title": "Film & serial",
+  "search_hint": "Film, serial, video…",
+  "search_empty": "Cari di video jaringan Anda dan di sumber yang Anda tambahkan.",
+  "search_yours": "Film dan serial Anda",
+  "search_lan": "Di jaringan Anda",
+  "search_none": "Tidak ditemukan apa pun.",
+  "search_unavailable": "Video ini tidak tersedia saat ini.",
+  "sources_title": "Sumber",
+  "sources_sub": "Katalog gratis dan legal untuk dijelajahi dan dicari, tanpa akun.",
+  "sources_peertube": "Video bebas dari jaringan PeerTube: dokumenter, ceramah, kursus, kreator.",
+  "sources_archive": "Film, film pendek, dan kartun domain publik dan Creative Commons.",
+  "sources_yours": "Milik Anda",
+  "sources_iptv": "Langganan IPTV",
+  "sources_iptv_sub": "Tautan penyedia Anda: saluran, film, dan serial.",
+  "sources_lan_sub": "NAS dan komputer Anda: ikut dicari.",
+  "sources_add": "Tambah sumber",
+  "sources_settings_sub": "Film bebas, PeerTube, Internet Archive",
+  "sources_card": "Video bebas",
+  "sources_card_sub": "Film domain publik, PeerTube, Internet Archive: gratis dan legal."
  },
  "plurals": {
   "browser_found": {

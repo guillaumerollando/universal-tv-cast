@@ -501,7 +501,25 @@
   "free_cat_drama": "Dramă",
   "free_cat_animation": "Animație",
   "tab_search": "Caută",
-  "vod_title": "Filme și seriale"
+  "vod_title": "Filme și seriale",
+  "search_hint": "Film, serial, video…",
+  "search_empty": "Caută în videoclipurile din rețeaua ta și în sursele pe care le adaugi.",
+  "search_yours": "Filmele și serialele tale",
+  "search_lan": "În rețeaua ta",
+  "search_none": "Nu s-a găsit nimic.",
+  "search_unavailable": "Acest video nu este disponibil acum.",
+  "sources_title": "Surse",
+  "sources_sub": "Cataloage gratuite și legale de explorat și căutat, fără cont.",
+  "sources_peertube": "Videoclipuri libere din rețeaua PeerTube: documentare, conferințe, cursuri, creatori.",
+  "sources_archive": "Filme, scurtmetraje și desene animate din domeniul public și Creative Commons.",
+  "sources_yours": "Ale tale",
+  "sources_iptv": "Abonament IPTV",
+  "sources_iptv_sub": "Linkul furnizorului tău: canale, filme și seriale.",
+  "sources_lan_sub": "NAS-ul și computerele tale: căutate și ele.",
+  "sources_add": "Adaugă o sursă",
+  "sources_settings_sub": "Filme libere, PeerTube, Internet Archive",
+  "sources_card": "Videoclipuri libere",
+  "sources_card_sub": "Filme din domeniul public, PeerTube, Internet Archive: gratuite și legale."
  },
  "plurals": {
   "browser_found": {

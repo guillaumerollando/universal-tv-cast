@@ -24,6 +24,15 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.collectAsState
+import androidx.compose.material.icons.automirrored.rounded.ArrowForward
+import androidx.compose.material.icons.rounded.Lan
+import androidx.compose.material.icons.rounded.LiveTv
+import androidx.compose.material.icons.rounded.AccountBalance
+import androidx.compose.material.icons.rounded.PlayCircle
+import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.VideoLibrary
@@ -58,6 +67,7 @@ import androidx.compose.ui.unit.dp
 import com.rollandostudio.universaltvcast.R
 import com.rollandostudio.universaltvcast.cast.TvCast
 import com.rollandostudio.universaltvcast.data.Xtream
+import com.rollandostudio.universaltvcast.data.OpenSources
 import java.text.Normalizer
 
 /** Un film ou une série d'un des comptes, pour la mosaïque. */
@@ -287,10 +297,22 @@ internal fun SeriesSheet(a: Xtream.Account, s: Xtream.Series, onDismiss: () -> U
 }
 
 
+/** Les films et séries des comptes dont le titre contient [query] (catalogues déjà en cache : instantané). */
+internal suspend fun vodSearch(accounts: List<Xtream.Account>, query: String): List<VodItem> {
+    val q = fold(query.trim())
+    val out = ArrayList<VodItem>()
+    for (a in accounts) runCatching {
+        Xtream.movies(a).filter { fold(it.name).contains(q) }.forEach { out += VodItem(a, it, null) }
+        Xtream.series(a).filter { fold(it.name).contains(q) }.forEach { out += VodItem(a, null, it) }
+    }
+    return out.take(80)
+}
+
 /**
- * Onglet « Rechercher » (seulement avec un abonnement IPTV ou le catalogue libre) : chercher un film ou une série par
- * son titre, ou découvrir (sans texte : les nouveautés, par catégorie). Tout vient des listes de l'utilisateur ; même
- * recherche en pilule et mêmes puces que l'écran Chaînes, même mur d'affiches.
+ * Onglet « Rechercher » : pour qui a une source (abonnement IPTV, Films libres, PeerTube, Internet Archive) ou un
+ * appareil du réseau. Sans texte : découvrir le catalogue (abonnements, Films libres). Avec un texte : une rangée par
+ * source (tes films et séries, ton réseau, PeerTube, Internet Archive), chacune arrivant à son rythme. Tout vient des
+ * sources que l'utilisateur a ajoutées.
  */
 @Composable
 internal fun SearchScreen(accounts: List<Xtream.Account>) {
@@ -298,26 +320,204 @@ internal fun SearchScreen(accounts: List<Xtream.Account>) {
     var kind by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf<String?>(null) }
     var cats by remember(kind) { mutableStateOf<List<String>>(emptyList()) }
     var cat by androidx.compose.runtime.saveable.rememberSaveable(kind) { mutableStateOf<String?>(null) }
+    val open by OpenSources.on.collectAsState()
     val k = kind?.let { Xtream.Kind.valueOf(it) }
     val c = MaterialTheme.colorScheme
     val grid = androidx.compose.foundation.lazy.grid.rememberLazyGridState()
+    // Petite pause après la frappe avant d'interroger les sources en ligne.
+    var settled by remember { mutableStateOf("") }
+    LaunchedEffect(query) { kotlinx.coroutines.delay(if (query.isBlank()) 0 else 450); settled = query.trim() }
     Column(Modifier.fillMaxSize()) {
-        SearchPill(query, { query = it }, R.string.xtream_search)
-        LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(6.dp),
-            verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 10.dp)) {
-            item { Pill(stringResource(R.string.xtream_all), kind == null) { kind = null } }
-            item { Pill(stringResource(R.string.fav_icon_movie), kind == "MOVIES", icon = Icons.Rounded.Movie) { kind = "MOVIES" } }
-            if (accounts.any { it != Xtream.FREE })
-                item { Pill(stringResource(R.string.fav_icon_series), kind == "SERIES", icon = Icons.Rounded.VideoLibrary) { kind = "SERIES" } }
-            if (cats.size > 1) {
-                item { Box(Modifier.padding(horizontal = 4.dp).width(1.dp).height(20.dp).background(c.outlineVariant)) }
-                items(cats) { g -> Pill(g, cat == g) { cat = if (cat == g) null else g } }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(Modifier.weight(1f)) { SearchPill(query, { query = it }, R.string.search_hint) }
+            androidx.compose.material3.IconButton(onClick = { Nav.sources.value = true }, modifier = Modifier.padding(end = 8.dp)) {
+                Icon(Icons.Rounded.Tune, stringResource(R.string.sources_title))
             }
         }
-        XtreamCatalog(
-            kind = k, accounts = accounts, query = query, category = cat, onCategories = { cats = it }, state = grid,
-            contentPadding = PaddingValues(top = 0.dp, bottom = 16.dp + LocalBottomInset.current),
-            onClose = {},
-        )
+        if (settled.length >= 2) {
+            MixedResults(settled, accounts, open)
+        } else if (accounts.isNotEmpty()) {
+            LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 10.dp)) {
+                item { Pill(stringResource(R.string.xtream_all), kind == null) { kind = null } }
+                item { Pill(stringResource(R.string.fav_icon_movie), kind == "MOVIES", icon = Icons.Rounded.Movie) { kind = "MOVIES" } }
+                if (accounts.any { it != Xtream.FREE })
+                    item { Pill(stringResource(R.string.fav_icon_series), kind == "SERIES", icon = Icons.Rounded.VideoLibrary) { kind = "SERIES" } }
+                if (cats.size > 1) {
+                    item { Box(Modifier.padding(horizontal = 4.dp).width(1.dp).height(20.dp).background(c.outlineVariant)) }
+                    items(cats) { g -> Pill(g, cat == g) { cat = if (cat == g) null else g } }
+                }
+            }
+            XtreamCatalog(
+                kind = k, accounts = accounts, query = "", category = cat, onCategories = { cats = it }, state = grid,
+                contentPadding = PaddingValues(top = 0.dp, bottom = 16.dp + LocalBottomInset.current),
+                onClose = {},
+            )
+        } else {
+            // Rien à découvrir sans catalogue : on dit où l'on cherche, et comment ajouter une source.
+            Column(Modifier.fillMaxWidth().padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(Icons.Rounded.Search, null, tint = c.primary, modifier = Modifier.size(40.dp))
+                Spacer(Modifier.height(12.dp))
+                Text(stringResource(R.string.search_empty), textAlign = TextAlign.Center, color = c.onSurfaceVariant)
+                Spacer(Modifier.height(12.dp))
+                androidx.compose.material3.FilledTonalButton(onClick = { Nav.sources.value = true }) { Text(stringResource(R.string.sources_add)) }
+            }
+        }
+    }
+}
+
+/** Une rangée par source pour [q] ; chaque source arrive à son rythme, une source sans résultat ne s'affiche pas. */
+@Composable
+private fun MixedResults(q: String, accounts: List<Xtream.Account>, open: Set<OpenSources.Source>) {
+    val vod by produceState<List<VodItem>?>(null, q, accounts) { value = if (accounts.isEmpty()) emptyList() else vodSearch(accounts, q) }
+    val lan by produceState<List<OpenSources.Hit>?>(null, q) { value = if (OpenSources.hasLan()) runCatching { OpenSources.lan(q) }.getOrDefault(emptyList()) else emptyList() }
+    val pt by produceState<List<OpenSources.Hit>?>(null, q, open) {
+        value = if (OpenSources.Source.PEERTUBE in open) runCatching { OpenSources.peertube(q) }.getOrDefault(emptyList()) else emptyList()
+    }
+    val ia by produceState<List<OpenSources.Hit>?>(null, q, open) {
+        value = if (OpenSources.Source.ARCHIVE in open) runCatching { OpenSources.archive(q) }.getOrDefault(emptyList()) else emptyList()
+    }
+    var series by remember { mutableStateOf<VodItem?>(null) }
+    series?.series?.let { sr -> SeriesSheet(series!!.account, sr, onDismiss = { series = null }, onPlayed = { series = null }) }
+    val sections = listOf(vod, lan, pt, ia)
+    val c = MaterialTheme.colorScheme
+    LazyColumn(contentPadding = PaddingValues(bottom = 16.dp + LocalBottomInset.current), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        if (!vod.isNullOrEmpty()) item {
+            HitSection(stringResource(R.string.search_yours)) {
+                items(vod!!, key = { it.key }) { v ->
+                    Box(Modifier.width(112.dp)) {
+                        VodTile(v) {
+                            if (v.movie != null) { TvCast.open(Xtream.movieMedia(v.account, v.movie)); Nav.tab.value = Tab.PLAYER } else series = v
+                        }
+                    }
+                }
+            }
+        }
+        if (!lan.isNullOrEmpty()) item { HitRow(stringResource(R.string.search_lan), lan!!) }
+        if (!pt.isNullOrEmpty()) item { HitRow("PeerTube", pt!!) }
+        if (!ia.isNullOrEmpty()) item { HitRow("Internet Archive", ia!!) }
+        when {
+            sections.any { it == null } -> item {
+                Box(Modifier.fillMaxWidth().padding(16.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator(Modifier.size(28.dp)) }
+            }
+            sections.all { it.isNullOrEmpty() } -> item {
+                Text(stringResource(R.string.search_none), color = c.onSurfaceVariant, textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth().padding(24.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun HitSection(title: String, content: androidx.compose.foundation.lazy.LazyListScope.() -> Unit) {
+    Column {
+        Text(title, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp))
+        LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp), content = content)
+    }
+}
+
+/** Une rangée de résultats d'une source ouverte ou du réseau ; toucher cherche l'adresse de la vidéo puis la lance. */
+@Composable
+private fun HitRow(title: String, hits: List<OpenSources.Hit>) {
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    var busy by remember { mutableStateOf<String?>(null) }
+    val c = MaterialTheme.colorScheme
+    HitSection(title) {
+        items(hits, key = { it.key }) { h ->
+            val w = if (h.wide) 200.dp else 112.dp
+            Column(Modifier.width(w).clip(RoundedCornerShape(12.dp)).clickable(enabled = busy == null) {
+                busy = h.key
+                scope.launch {
+                    val m = runCatching { h.open() }.getOrNull()
+                    busy = null
+                    if (m != null) { TvCast.open(m); Nav.tab.value = Tab.PLAYER }
+                    else android.widget.Toast.makeText(ctx, R.string.search_unavailable, android.widget.Toast.LENGTH_SHORT).show()
+                }
+            }.semantics { contentDescription = h.title }) {
+                Box(Modifier.fillMaxWidth().aspectRatio(if (h.wide) 16f / 9f else 2f / 3f).clip(RoundedCornerShape(12.dp))
+                    .background(Brush.verticalGradient(listOf(c.surfaceContainerHighest, c.surfaceContainerHigh))), contentAlignment = Alignment.Center) {
+                    Icon(Icons.Rounded.Movie, null, tint = c.primary.copy(alpha = 0.7f), modifier = Modifier.size(28.dp))
+                    RemoteImage(h.image, Modifier.fillMaxSize(), maxSide = 400)
+                    if (busy == h.key) Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.5f)), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(Modifier.size(28.dp), color = Color.White)
+                    }
+                }
+                Spacer(Modifier.height(4.dp))
+                Text(h.title, style = MaterialTheme.typography.labelMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                h.sub?.takeIf { it.isNotEmpty() }?.let {
+                    Text(it, style = MaterialTheme.typography.labelSmall, color = c.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
+            }
+        }
+    }
+}
+
+/**
+ * « Sources » : ce que l'appli peut parcourir et chercher. Sources ouvertes (gratuites et légales) d'un interrupteur ;
+ * abonnements IPTV et appareils du réseau rappelés, avec leur écran pour les ajouter.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun SourcesSheet(onDismiss: () -> Unit) {
+    val open by OpenSources.on.collectAsState()
+    val free by Xtream.freeOn.collectAsState()
+    val c = MaterialTheme.colorScheme
+    ModalBottomSheet(onDismissRequest = onDismiss) {
+        LazyColumn(contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 32.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            item {
+                Text(stringResource(R.string.sources_title), style = MaterialTheme.typography.titleLarge)
+                Text(stringResource(R.string.sources_sub), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
+                Spacer(Modifier.height(6.dp))
+            }
+            item { SourceRow(Icons.Rounded.Movie, stringResource(R.string.free_title), stringResource(R.string.free_sub), free) { Xtream.setFree(it) } }
+            item { SourceRow(Icons.Rounded.PlayCircle, "PeerTube", stringResource(R.string.sources_peertube), OpenSources.Source.PEERTUBE in open) { OpenSources.set(OpenSources.Source.PEERTUBE, it) } }
+            item { SourceRow(Icons.Rounded.AccountBalance, "Internet Archive", stringResource(R.string.sources_archive), OpenSources.Source.ARCHIVE in open) { OpenSources.set(OpenSources.Source.ARCHIVE, it) } }
+            item {
+                Spacer(Modifier.height(6.dp))
+                Text(stringResource(R.string.sources_yours), style = MaterialTheme.typography.titleSmall, color = c.primary)
+            }
+            item {
+                SourceLink(Icons.Rounded.LiveTv, stringResource(R.string.sources_iptv), stringResource(R.string.sources_iptv_sub)) {
+                    onDismiss(); Nav.iptv.value = ""
+                }
+            }
+            item {
+                SourceLink(Icons.Rounded.Lan, stringResource(R.string.home_network), stringResource(R.string.sources_lan_sub)) {
+                    onDismiss(); Nav.network.value = true
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun SourceRow(icon: androidx.compose.ui.graphics.vector.ImageVector, title: String, sub: String, on: Boolean, onChange: (Boolean) -> Unit) {
+    val c = MaterialTheme.colorScheme
+    Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(c.surfaceContainerLow).clickable { onChange(!on) }.padding(14.dp),
+        verticalAlignment = Alignment.CenterVertically) {
+        Icon(icon, null, tint = c.primary, modifier = Modifier.size(26.dp))
+        Spacer(Modifier.width(14.dp))
+        Column(Modifier.weight(1f)) {
+            Text(title, style = MaterialTheme.typography.titleMedium)
+            Text(sub, style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
+        }
+        Spacer(Modifier.width(8.dp))
+        androidx.compose.material3.Switch(on, onCheckedChange = onChange)
+    }
+}
+
+@Composable
+private fun SourceLink(icon: androidx.compose.ui.graphics.vector.ImageVector, title: String, sub: String, onClick: () -> Unit) {
+    val c = MaterialTheme.colorScheme
+    Row(Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).clickable(onClick = onClick).padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
+        Icon(icon, null, tint = c.onSurfaceVariant, modifier = Modifier.size(26.dp))
+        Spacer(Modifier.width(14.dp))
+        Column(Modifier.weight(1f)) {
+            Text(title, style = MaterialTheme.typography.titleMedium)
+            Text(sub, style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
+        }
+        Icon(Icons.AutoMirrored.Rounded.ArrowForward, null, tint = c.onSurfaceVariant)
     }
 }

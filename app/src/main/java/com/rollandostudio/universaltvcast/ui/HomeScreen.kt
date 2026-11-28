@@ -177,9 +177,7 @@ fun HomeScreen(
                     SectionHeader(stringResource(R.string.home_resume), null) {}
                     LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         items(resume.take(ROW_MAX), key = { "r" + it.key }) { r -> ResumeCard(r, onBrowse) }
-                        if (resume.size > ROW_MAX) item(key = "r-all") {
-                            SeeAllTile(stringResource(R.string.home_see_all), Modifier.width(220.dp).aspectRatio(16f / 9f), 14.dp) { showAll = 1 }
-                        }
+                        if (resume.size > ROW_MAX) item(key = "r-all") { SeeAllCard { showAll = 1 } }
                     }
                 }
             }
@@ -661,5 +659,25 @@ private fun SeeAllTile(label: String, modifier: Modifier, corner: androidx.compo
             Text(label, style = MaterialTheme.typography.labelMedium, color = c.primary, maxLines = 1, overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(horizontal = 4.dp))
         }
+    }
+}
+
+/**
+ * « Tout voir » de « Reprendre » : exactement une carte comme ses voisines (même largeur, image 16:9 aux mêmes coins,
+ * titre dessous à la même place), avec la flèche à la place de l'image.
+ */
+@Composable
+private fun SeeAllCard(onClick: () -> Unit) {
+    val c = MaterialTheme.colorScheme
+    Column(Modifier.width(220.dp).clip(RoundedCornerShape(14.dp)).clickable(role = androidx.compose.ui.semantics.Role.Button, onClick = onClick)) {
+        Box(Modifier.fillMaxWidth().aspectRatio(16f / 9f).clip(RoundedCornerShape(14.dp)).background(c.surfaceContainerHigh),
+            contentAlignment = Alignment.Center) {
+            Box(Modifier.size(40.dp).clip(CircleShape).background(c.primary.copy(alpha = 0.16f)), contentAlignment = Alignment.Center) {
+                Icon(Icons.AutoMirrored.Rounded.ArrowForward, null, tint = c.primary, modifier = Modifier.size(22.dp))
+            }
+        }
+        Spacer(Modifier.height(6.dp))
+        Text(stringResource(R.string.home_see_all), style = MaterialTheme.typography.titleSmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold),
+            color = c.primary, maxLines = 1, modifier = Modifier.padding(horizontal = 2.dp))
     }
 }

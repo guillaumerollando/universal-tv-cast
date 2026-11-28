@@ -79,50 +79,6 @@ fun CastHalo(color: Color, modifier: Modifier = Modifier, size: Dp = 260.dp) {
     }
 }
 
-/**
- * Pendant la lecture sur la télé, le cadre rayonne autour de lui, sur le fond de l'appli (comme l'Ambilight d'une
- * télé) : une lueur qui respire, et un liseré de lumière qui tourne juste au bord extérieur. Rien ne se dessine sur
- * le contenu : ça se voit quel que soit le logo ou l'image. À poser avant le `clip` du cadre ([corner] : ses coins).
- */
-fun Modifier.castAura(color: Color, corner: Dp, active: Boolean): Modifier = composed {
-    if (!active) return@composed this
-    val (still, saving) = castMotion()
-    val t = rememberInfiniteTransition(label = "aura")
-    val k by t.animateFloat(0f, 1f, infiniteRepeatable(tween(if (saving) 2600 else 1800, easing = androidx.compose.animation.core.FastOutSlowInEasing),
-        androidx.compose.animation.core.RepeatMode.Reverse), label = "souffle")
-    val turn by t.animateFloat(0f, 360f, infiniteRepeatable(tween(if (saving) 8500 else 5500, easing = LinearEasing)), label = "tour")
-    drawBehind {
-        val w = size.width; val h = size.height
-        val r = corner.toPx()
-        val b = if (still) 0.6f else k
-        // Lueur : des contours arrondis de plus en plus larges et transparents (dessinés sous le cadre).
-        val steps = 7
-        val reach = 11.dp.toPx() * (0.75f + 0.3f * b)
-        for (i in steps downTo 1) {
-            val g = reach * i / steps
-            drawRoundRect(
-                color.copy(alpha = color.alpha * 0.09f * (1f - (i - 1f) / steps) * (0.55f + 0.45f * b)),
-                topLeft = Offset(-g, -g), size = Size(w + 2 * g, h + 2 * g), cornerRadius = CornerRadius(r + g),
-            )
-        }
-        // Liseré : un anneau juste à l'extérieur du cadre, dont un segment lumineux fait le tour.
-        val gap = 2.dp.toPx(); val sw = 2.dp.toPx()
-        val ring = androidx.compose.ui.graphics.Path().apply {
-            addRoundRect(RoundRect(-gap - sw, -gap - sw, w + gap + sw, h + gap + sw, CornerRadius(r + gap + sw)))
-            addRoundRect(RoundRect(-gap, -gap, w + gap, h + gap, CornerRadius(r + gap)))
-            fillType = androidx.compose.ui.graphics.PathFillType.EvenOdd
-        }
-        clipPath(ring) {
-            rotate(if (still) 300f else turn) {
-                drawCircle(
-                    Brush.sweepGradient(0f to Color.Transparent, 0.62f to Color.Transparent, 0.88f to color, 1f to Color.Transparent, center = center),
-                    radius = kotlin.math.hypot(w, h), center = center,
-                )
-            }
-        }
-    }
-}
-
 /** Arcs de diffusion décoratifs, dans un coin de la carte d'accueil. */
 fun Modifier.castArcs(color: Color): Modifier = drawBehind {
     val origin = Offset(size.width * 0.98f, size.height * 1.02f)

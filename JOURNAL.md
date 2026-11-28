@@ -1687,3 +1687,6 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - Barres « En lecture » figées chez Guillaume (retour) : même cause, l'économie de batterie. Elles suivent maintenant
   la règle du halo (plus lentes en économie d'énergie, figées seulement en pause ou animations coupées dans Android).
   Vérifié sur émulateur en économie de batterie : barres différentes entre deux captures à 0,3 s.
+- Finalement (retour de Guillaume, « un peu too much ») : la lueur et le liseré autour du cadre sont retirés. Restent
+  le halo qui respire (derrière un logo sur fond sombre, et derrière la télé du cadre par défaut) et les barres de
+  « En lecture », qui suffisent aussi sur un logo à fond blanc.

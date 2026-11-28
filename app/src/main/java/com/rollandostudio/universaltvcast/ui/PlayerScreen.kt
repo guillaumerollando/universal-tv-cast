@@ -156,7 +156,6 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
             Modifier
                 .fillMaxWidth()
                 .aspectRatio(16f / 9f)
-                .castAura(c.primary, 28.dp, state.phase == Phase.PLAYING)
                 .clip(RoundedCornerShape(28.dp))
                 .background(Brush.linearGradient(listOf(c.primaryContainer, c.surfaceContainerHighest, c.secondaryContainer))),
             contentAlignment = Alignment.Center,
@@ -334,7 +333,6 @@ private fun FilmHeader(state: CastState) {
         Modifier
             .fillMaxWidth()
             .aspectRatio(16f / 9f)
-            .castAura(MaterialTheme.colorScheme.primary, 28.dp, state.phase == Phase.PLAYING && state.active && !state.onPhone)
             .clip(RoundedCornerShape(28.dp))
             .background(MaterialTheme.colorScheme.surfaceContainerHighest)
             .semantics(mergeDescendants = true) { contentDescription = desc; liveRegion = LiveRegionMode.Polite },
@@ -442,12 +440,12 @@ private fun ChannelHeader(s: CastState) {
     val m = s.media ?: return
     val playing = s.phase == Phase.PLAYING && !s.onPhone
     Box(
-        Modifier.fillMaxWidth().aspectRatio(16f / 9f).castAura(MaterialTheme.colorScheme.primary, 28.dp, playing).clip(RoundedCornerShape(28.dp))
+        Modifier.fillMaxWidth().aspectRatio(16f / 9f).clip(RoundedCornerShape(28.dp))
             .semantics(mergeDescendants = true) { liveRegion = LiveRegionMode.Polite },
     ) {
         // Le logo de la chaîne (ou son nom) sur un fond assorti, comme sur l'accueil.
-        // En lecture sur la télé : le cadre rayonne autour (castAura) ; sur un fond sombre, un halo respire aussi
-        // derrière le logo (sur un fond clair, il ne ferait qu'une ombre grise).
+        // En lecture sur la télé : sur un fond sombre, un halo respire derrière le logo (sur un fond clair, il ne ferait
+        // qu'une ombre grise : les barres de « En lecture » suffisent).
         ChannelArt(
             name = m.channel ?: m.title, logo = m.posterUrl, streamUrl = m.url, pad = 56.dp,
             textStyle = MaterialTheme.typography.displaySmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),

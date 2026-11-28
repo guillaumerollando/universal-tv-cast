@@ -210,7 +210,6 @@ S = {
 "fav_rename": ["Rename", "Renommer", "Cambiar nombre", "Umbenennen", "Rinomina", "Naam wijzigen", "Renomear"],
 "fav_move_left": ["Move left", "Déplacer à gauche", "Mover a la izquierda", "Nach links", "Sposta a sinistra", "Naar links", "Mover para a esquerda"],
 "fav_move_right": ["Move right", "Déplacer à droite", "Mover a la derecha", "Nach rechts", "Sposta a destra", "Naar rechts", "Mover para a direita"],
-"fav_kind_channel": ["TV channel", "Chaîne TV", "Canal de TV", "TV-Sender", "Canale TV", "Tv-zender", "Canal de TV"],
 "lan_hide_watched": ["Hide watched", "Masquer les vus", "Ocultar vistos", "Gesehene ausblenden", "Nascondi visti", "Bekeken verbergen", "Ocultar assistidos"],
 "lan_season": ["Season %1$d", "Saison %1$d", "Temporada %1$d", "Staffel %1$d", "Stagione %1$d", "Seizoen %1$d", "Temporada %1$d"],
 "lan_watched": ["Watched", "Vu", "Visto", "Gesehen", "Visto", "Bekeken", "Assistido"],

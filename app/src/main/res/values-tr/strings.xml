@@ -445,7 +445,6 @@
     <string name="fav_rename">Yeniden adlandır</string>
     <string name="fav_move_left">Sola taşı</string>
     <string name="fav_move_right">Sağa taşı</string>
-    <string name="fav_kind_channel">TV kanalı</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video</item>

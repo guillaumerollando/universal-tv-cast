@@ -1632,3 +1632,7 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - Zapper : la rangée de chaînes déborde de la marge de l'écran et défile bord à bord (plus de coupure nette).
 - Vérifié sur émulateur avec la fausse télé : cadre par défaut et en-tête de chaîne (sans logo). Pas vu : un vrai
   logo détouré dessus, le zapper rempli (pas de liste de chaînes sur l'émulateur).
+- Corrigé dans la foulée (retour de Guillaume : tuiles trop larges, 2 favoris visibles) : les favoris prennent le
+  format exact des tuiles de chaînes (16:10, 96 dp, même rangée serrée) : une chaîne garde son logo tel quel ; un
+  dossier ou un site a un fond en dégradé à sa couleur (choisie, ou tirée du nom du site), son icône et son nom en
+  blanc. Quatre tuiles visibles sur la largeur.

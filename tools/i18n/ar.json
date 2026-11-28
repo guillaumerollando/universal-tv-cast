@@ -443,8 +443,7 @@
   "fav_icon_star": "مفضلة",
   "fav_rename": "إعادة التسمية",
   "fav_move_left": "نقل إلى اليسار",
-  "fav_move_right": "نقل إلى اليمين",
-  "fav_kind_channel": "قناة تلفزيونية"
+  "fav_move_right": "نقل إلى اليمين"
  },
  "plurals": {
   "browser_found": {

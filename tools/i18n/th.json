@@ -443,8 +443,7 @@
   "fav_icon_star": "รายการโปรด",
   "fav_rename": "เปลี่ยนชื่อ",
   "fav_move_left": "ย้ายไปทางซ้าย",
-  "fav_move_right": "ย้ายไปทางขวา",
-  "fav_kind_channel": "ช่องทีวี"
+  "fav_move_right": "ย้ายไปทางขวา"
  },
  "plurals": {
   "browser_found": {

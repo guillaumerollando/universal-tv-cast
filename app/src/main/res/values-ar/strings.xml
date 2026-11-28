@@ -445,7 +445,6 @@
     <string name="fav_rename">إعادة التسمية</string>
     <string name="fav_move_left">نقل إلى اليسار</string>
     <string name="fav_move_right">نقل إلى اليمين</string>
-    <string name="fav_kind_channel">قناة تلفزيونية</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>

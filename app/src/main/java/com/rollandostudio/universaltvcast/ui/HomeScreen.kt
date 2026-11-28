@@ -163,12 +163,13 @@ fun HomeScreen(
                         if (i > 0) add(left to move(i, -1))
                         if (i < all.size - 1) add(right to move(i, 1))
                     }
-                    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    // Même rangée que les chaînes : tuiles 16:10 serrées, plus de trois à l'écran.
+                    LazyRow(contentPadding = PaddingValues(horizontal = ChannelTiles.edge), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
                         items(all.size, key = { all[it].first }) { i ->
                             when (val x = all[i].second) {
                                 is com.rollandostudio.universaltvcast.lan.LanStore.Folder -> FolderTile(x, extraMenu = moves(i))
                                 is Library.FavChannel -> FavChannelTile(x, onBrowse, moves(i))
-                                is SiteItem -> SiteTile(x, Modifier.width(176.dp), moves(i), tile = true) { onBrowse(it) }
+                                is SiteItem -> SiteTile(x, extraMenu = moves(i), tile = true) { onBrowse(it) }
                             }
                         }
                     }
@@ -416,13 +417,14 @@ private fun FavChannelTile(ch: Library.FavChannel, onBrowse: (String?) -> Unit, 
     if (rename) RenameDialog(ch.name, onDismiss = { rename = false }) { Library.renameFavChannel(ch.url, it) }
     val menu = listOf(stringResource(R.string.fav_rename) to { rename = true }) + extraMenu +
         listOf(stringResource(R.string.cd_bookmark_remove) to { Library.toggleFavChannel(ch) })
-    FavTileFrame(ch.name, stringResource(R.string.fav_kind_channel), menu, onClick = {
+    // La chaîne telle quelle : son logo sur son fond, comme dans « Chaînes ».
+    FavTileFrame(ch.name, menu, showLabel = false, onClick = {
         if (ch.page != null) onBrowse(ch.page)
         else playChannel(com.rollandostudio.universaltvcast.data.Iptv.Channel(ch.name, ch.url, ch.logo, headers = ch.headers))
     }) {
-        ChannelArt(name = ch.name, logo = ch.logo, streamUrl = ch.url, pad = 5.dp,
-            textStyle = MaterialTheme.typography.labelSmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
-            modifier = Modifier.fillMaxSize())
+        ChannelArt(name = ch.name, logo = ch.logo, streamUrl = ch.url, pad = ChannelTiles.logoPad,
+            textStyle = MaterialTheme.typography.titleSmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
+            modifier = Modifier.matchParentSize())
     }
 }
 

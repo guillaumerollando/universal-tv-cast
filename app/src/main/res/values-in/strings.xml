@@ -445,7 +445,6 @@
     <string name="fav_rename">Ganti nama</string>
     <string name="fav_move_left">Pindah ke kiri</string>
     <string name="fav_move_right">Pindah ke kanan</string>
-    <string name="fav_kind_channel">Saluran TV</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

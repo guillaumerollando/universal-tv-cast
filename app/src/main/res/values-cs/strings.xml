@@ -445,7 +445,6 @@
     <string name="fav_rename">Přejmenovat</string>
     <string name="fav_move_left">Posunout doleva</string>
     <string name="fav_move_right">Posunout doprava</string>
-    <string name="fav_kind_channel">TV kanál</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="few">%d videa</item>

@@ -136,7 +136,6 @@
     <string name="fav_rename">Naam wijzigen</string>
     <string name="fav_move_left">Naar links</string>
     <string name="fav_move_right">Naar rechts</string>
-    <string name="fav_kind_channel">Tv-zender</string>
     <string name="lan_hide_watched">Bekeken verbergen</string>
     <string name="lan_season">Seizoen %1$d</string>
     <string name="lan_watched">Bekeken</string>

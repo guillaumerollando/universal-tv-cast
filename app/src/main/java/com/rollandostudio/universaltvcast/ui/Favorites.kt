@@ -44,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -204,43 +205,47 @@ fun siteItems(recents: List<com.rollandostudio.universaltvcast.data.Recent>, boo
 }
 
 /**
- * Tuile de « Mes favoris », la même pour un dossier du réseau, une chaîne ou un site : l'image à gauche (icône,
- * logo), le nom et ce que c'est dessous. Un appui ouvre ; un appui long montre [menu].
+ * Tuile de « Mes favoris » au format des chaînes (16:10, même largeur) : une chaîne y garde son logo tel quel ;
+ * un dossier ou un site y prend un fond à sa couleur, son icône et son nom. Un appui ouvre ; un appui long montre [menu].
  */
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 internal fun FavTileFrame(
-    title: String, subtitle: String, menu: List<Pair<String, () -> Unit>>, onClick: () -> Unit,
-    modifier: Modifier = Modifier.width(176.dp), art: @Composable () -> Unit,
+    label: String, menu: List<Pair<String, () -> Unit>>, onClick: () -> Unit,
+    background: androidx.compose.ui.graphics.Brush? = null, showLabel: Boolean = true,
+    art: @Composable androidx.compose.foundation.layout.BoxScope.() -> Unit,
 ) {
-    val c = MaterialTheme.colorScheme
     var open by remember { mutableStateOf(false) }
     val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
-    Box(modifier) {
-        Row(
-            Modifier.fillMaxWidth().height(64.dp).clip(RoundedCornerShape(16.dp)).background(c.surfaceContainerHigh)
+    Box(Modifier.padding(vertical = 6.dp)) {
+        Box(
+            Modifier.width(ChannelTiles.width).aspectRatio(16f / 10f).clip(RoundedCornerShape(ChannelTiles.corner))
+                .then(if (background != null) Modifier.background(background) else Modifier)
                 .combinedClickable(
                     role = Role.Button, onClick = onClick,
                     onLongClick = { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); open = true },
                 )
                 .semantics {
-                    contentDescription = "$title, $subtitle"
-                    customActions = menu.map { (label, action) -> CustomAccessibilityAction(label) { action(); true } }
-                }
-                .padding(horizontal = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
+                    contentDescription = label
+                    customActions = menu.map { (l, action) -> CustomAccessibilityAction(l) { action(); true } }
+                },
         ) {
-            Box(Modifier.size(44.dp).clip(RoundedCornerShape(12.dp)), contentAlignment = Alignment.Center) { art() }
-            Spacer(Modifier.width(10.dp))
-            Column(Modifier.weight(1f)) {
-                Text(title, style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-                    maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(subtitle, style = MaterialTheme.typography.labelSmall, color = c.onSurfaceVariant,
-                    maxLines = 1, overflow = TextOverflow.Ellipsis)
-            }
+            art()
+            if (showLabel) Text(
+                label, style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                color = androidx.compose.ui.graphics.Color.White, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.align(Alignment.BottomCenter).padding(start = 6.dp, end = 6.dp, bottom = 5.dp),
+            )
         }
         CardMenu(open, { open = false }, menu)
     }
+}
+
+/** Fond d'une tuile de favori : la couleur, en dégradé vers le fond sombre des tuiles de chaînes. */
+internal fun favBrush(color: androidx.compose.ui.graphics.Color): androidx.compose.ui.graphics.Brush {
+    val dark = androidx.compose.ui.graphics.Color(0xFF1B1D22)
+    return androidx.compose.ui.graphics.Brush.linearGradient(listOf(
+        color.copy(alpha = 0.85f).compositeOver(dark), color.copy(alpha = 0.35f).compositeOver(dark)))
 }
 
 /** Petite tuile de site : son logo et son nom. Appui long : favori, ne plus proposer. */
@@ -259,7 +264,10 @@ fun SiteTile(s: SiteItem, modifier: Modifier = Modifier.width(80.dp), extraMenu:
     }
     if (rename && s.bookmark != null) RenameDialog(s.title, onDismiss = { rename = false }) { Library.renameBookmark(s.bookmark, it) }
     if (tile) {
-        FavTileFrame(s.title, s.host, menu, onClick = { onOpen(s.url) }, modifier = modifier) { SiteIcon(s.host, 44) }
+        val col = androidx.compose.ui.graphics.Color(com.rollandostudio.universaltvcast.data.Channels.colorFor(s.host))
+        FavTileFrame(s.title, menu, onClick = { onOpen(s.url) }, background = favBrush(col)) {
+            Box(Modifier.align(Alignment.Center).padding(bottom = 14.dp)) { SiteIcon(s.host, 26) }
+        }
         return
     }
     Box(modifier) {
@@ -288,7 +296,7 @@ fun SiteTile(s: SiteItem, modifier: Modifier = Modifier.width(80.dp), extraMenu:
 /** Dossier du réseau en favori (« Films » du NAS) : ouvert directement d'un appui ; appui long pour le retirer. */
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
-fun FolderTile(f: com.rollandostudio.universaltvcast.lan.LanStore.Folder, modifier: Modifier = Modifier.width(176.dp),
+fun FolderTile(f: com.rollandostudio.universaltvcast.lan.LanStore.Folder, modifier: Modifier = Modifier,
                extraMenu: List<Pair<String, () -> Unit>> = emptyList()) {
     val c = MaterialTheme.colorScheme
     var open by remember { mutableStateOf(false) }
@@ -302,12 +310,10 @@ fun FolderTile(f: com.rollandostudio.universaltvcast.lan.LanStore.Folder, modifi
     )
     if (edit) FolderStyleDialog(f, justAdded = false) { edit = false }
     val tint = f.color?.let { androidx.compose.ui.graphics.Color(it) } ?: c.primary
-    // Sous le nom : l'appareil où est le dossier ; pour l'appareil entier, « Réseau ».
-    FavTileFrame(f.name, if (f.ref.isEmpty()) stringResource(R.string.home_network) else f.deviceName, menu, onClick = { Nav.networkFolder.value = f; Nav.network.value = true }, modifier = modifier) {
+    FavTileFrame(f.name, menu, onClick = { Nav.networkFolder.value = f; Nav.network.value = true }, background = favBrush(tint)) {
         // L'icône choisie, sinon : l'appareil entier (NAS, ordinateur) ou un de ses dossiers.
-        Box(Modifier.fillMaxSize().background(tint.copy(alpha = 0.16f)), contentAlignment = Alignment.Center) {
-            Icon(FolderStyle.icon(f), null, tint = tint, modifier = Modifier.size(24.dp))
-        }
+        Icon(FolderStyle.icon(f), null, tint = androidx.compose.ui.graphics.Color.White,
+            modifier = Modifier.align(Alignment.Center).padding(bottom = 14.dp).size(24.dp))
     }
 }
 

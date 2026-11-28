@@ -445,7 +445,6 @@
     <string name="fav_rename">重命名</string>
     <string name="fav_move_left">左移</string>
     <string name="fav_move_right">右移</string>
-    <string name="fav_kind_channel">电视频道</string>
     <plurals name="browser_found">
         <item quantity="other">%d 个视频</item>
     </plurals>

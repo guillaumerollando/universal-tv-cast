@@ -136,7 +136,6 @@
     <string name="fav_rename">Renomear</string>
     <string name="fav_move_left">Mover para a esquerda</string>
     <string name="fav_move_right">Mover para a direita</string>
-    <string name="fav_kind_channel">Canal de TV</string>
     <string name="lan_hide_watched">Ocultar assistidos</string>
     <string name="lan_season">Temporada %1$d</string>
     <string name="lan_watched">Assistido</string>

@@ -445,7 +445,6 @@
     <string name="fav_rename">เปลี่ยนชื่อ</string>
     <string name="fav_move_left">ย้ายไปทางซ้าย</string>
     <string name="fav_move_right">ย้ายไปทางขวา</string>
-    <string name="fav_kind_channel">ช่องทีวี</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>

@@ -1644,3 +1644,9 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   que si les animations sont coupées dans Android (accessibilité), où elles restent alors bien visibles.
 - Accueil : écart entre rubriques 14 dp (au lieu de 22), titre → contenu 4 dp, tuiles « Caster autre chose » 70 dp
   de haut, favoris sans marge verticale. Favoris, chaînes et « Caster autre chose » tiennent sur un écran.
+
+## 2026-11-28 — Favoris : « Tout voir » et déplacements animés
+- Plus de 4 favoris : « Tout voir » ouvre tous les favoris en grille (mêmes tuiles, mêmes menus), retour par la
+  flèche ou le bouton retour.
+- « Déplacer à gauche / à droite » : la tuile glisse à sa nouvelle place (rangée et grille, `animateItem`). Vérifié
+  par captures en plein mouvement sur émulateur. Pas vu : la grille « Tout voir » (3 favoris seulement sur l'émulateur).

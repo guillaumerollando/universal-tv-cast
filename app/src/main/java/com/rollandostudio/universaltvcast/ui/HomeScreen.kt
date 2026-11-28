@@ -104,12 +104,56 @@ fun HomeScreen(
     val channels = recents.filter { it.live }
     val folders by com.rollandostudio.universaltvcast.lan.LanStore.folders.collectAsState()
     val favChannels by Library.favChannels.collectAsState()
-    // « Tout voir » : 1 = tout « Reprendre », 2 = tous les sites.
+    // « Mes favoris » : un seul ordre pour dossiers du réseau, chaînes et sites ; le dernier ajouté à gauche.
+    val order by Library.favOrder.collectAsState()
+    val favs = remember(folders, favChannels, sites, order) {
+        val raw = folders.map { "f:" + it.key to (it as Any) } + favChannels.map { "c:" + it.url to (it as Any) } +
+            sites.map { "s:" + it.id to (it as Any) }
+        if (order.isEmpty()) raw // premier affichage : l'ordre d'avant, enregistré juste après
+        else raw.filter { it.first !in order }.reversed() + raw.filter { it.first in order }.sortedBy { order.indexOf(it.first) }
+    }
+    androidx.compose.runtime.LaunchedEffect(favs) {
+        val keys = favs.map { it.first }
+        if (keys != order.filter { k -> keys.contains(k) } || order.isEmpty()) Library.setFavOrder(keys)
+    }
+    val leftLabel = stringResource(R.string.fav_move_left)
+    val rightLabel = stringResource(R.string.fav_move_right)
+    val favTile: @Composable (Int) -> Unit = { i ->
+        fun move(d: Int): () -> Unit = {
+            val keys = favs.map { it.first }.toMutableList()
+            java.util.Collections.swap(keys, i, i + d)
+            Library.setFavOrder(keys)
+        }
+        val moves = buildList {
+            if (i > 0) add(leftLabel to move(-1))
+            if (i < favs.size - 1) add(rightLabel to move(1))
+        }
+        when (val x = favs[i].second) {
+            is com.rollandostudio.universaltvcast.lan.LanStore.Folder -> FolderTile(x, extraMenu = moves)
+            is Library.FavChannel -> FavChannelTile(x, onBrowse, moves)
+            is SiteItem -> SiteTile(x, extraMenu = moves, tile = true) { onBrowse(it) }
+        }
+    }
+    // « Tout voir » : 1 = tout « Reprendre », 2 = tous les favoris.
     var showAll by rememberSaveable { androidx.compose.runtime.mutableIntStateOf(0) }
-    if (showAll == 1 && resume.isNotEmpty() || showAll == 2 && sites.isNotEmpty()) {
+    if (showAll == 1 && resume.isNotEmpty() || showAll == 2 && favs.isNotEmpty()) {
         BackHandler { showAll = 0 }
         if (showAll == 1) AllResume(resume, onBrowse) { showAll = 0 }
-        else AllSites(sites, onBrowse) { showAll = 0 }
+        else Column(Modifier.fillMaxSize()) {
+            Row(Modifier.padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                IconButton(onClick = { showAll = 0 }) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.cd_back)) }
+                Text(stringResource(R.string.home_favorites), style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
+            }
+            // Tous les favoris en grille, mêmes tuiles ; les déplacements s'y animent aussi.
+            androidx.compose.foundation.lazy.grid.LazyVerticalGrid(
+                columns = androidx.compose.foundation.lazy.grid.GridCells.Adaptive(ChannelTiles.width),
+                contentPadding = PaddingValues(start = 12.dp, end = 12.dp, top = 4.dp, bottom = 16.dp + LocalBottomInset.current),
+                horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap, Alignment.CenterHorizontally),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                items(favs.size, key = { favs[it].first }) { i -> Box(Modifier.animateItem()) { favTile(i) } }
+            }
+        }
         return
     }
 
@@ -139,39 +183,10 @@ fun HomeScreen(
             if (sites.isNotEmpty() || folders.isNotEmpty() || favChannels.isNotEmpty()) item {
                 Column {
                     SectionHeader(stringResource(if (folders.isEmpty() && favChannels.isEmpty()) R.string.home_sites else R.string.home_favorites),
-                        if (sites.size > 4) stringResource(R.string.home_see_all) else null) { showAll = 2 }
-                    // Un seul rang, dans l'ordre choisi : le dernier ajouté à gauche, puis « Déplacer » à l'appui long.
-                    val order by Library.favOrder.collectAsState()
-                    val all = remember(folders, favChannels, sites, order) {
-                        val raw = folders.map { "f:" + it.key to (it as Any) } + favChannels.map { "c:" + it.url to (it as Any) } +
-                            sites.map { "s:" + it.id to (it as Any) }
-                        if (order.isEmpty()) raw // premier affichage : l'ordre d'avant, enregistré juste après
-                        else raw.filter { it.first !in order }.reversed() + raw.filter { it.first in order }.sortedBy { order.indexOf(it.first) }
-                    }
-                    androidx.compose.runtime.LaunchedEffect(all) {
-                        val keys = all.map { it.first }
-                        if (keys != order.filter { k -> keys.contains(k) } || order.isEmpty()) Library.setFavOrder(keys)
-                    }
-                    val left = stringResource(R.string.fav_move_left)
-                    val right = stringResource(R.string.fav_move_right)
-                    fun move(i: Int, d: Int): () -> Unit = {
-                        val keys = all.map { it.first }.toMutableList()
-                        java.util.Collections.swap(keys, i, i + d)
-                        Library.setFavOrder(keys)
-                    }
-                    fun moves(i: Int) = buildList {
-                        if (i > 0) add(left to move(i, -1))
-                        if (i < all.size - 1) add(right to move(i, 1))
-                    }
-                    // Même rangée que les chaînes : tuiles 16:10 serrées, plus de trois à l'écran.
+                        if (favs.size > 4) stringResource(R.string.home_see_all) else null) { showAll = 2 }
+                    // Même rangée que les chaînes : tuiles 16:10 serrées ; un favori déplacé glisse à sa nouvelle place.
                     LazyRow(contentPadding = PaddingValues(horizontal = ChannelTiles.edge), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
-                        items(all.size, key = { all[it].first }) { i ->
-                            when (val x = all[i].second) {
-                                is com.rollandostudio.universaltvcast.lan.LanStore.Folder -> FolderTile(x, extraMenu = moves(i))
-                                is Library.FavChannel -> FavChannelTile(x, onBrowse, moves(i))
-                                is SiteItem -> SiteTile(x, extraMenu = moves(i), tile = true) { onBrowse(it) }
-                            }
-                        }
+                        items(favs.size, key = { favs[it].first }) { i -> Box(Modifier.animateItem()) { favTile(i) } }
                     }
                 }
             }

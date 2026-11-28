@@ -440,7 +440,10 @@
   "fav_icon_music": "موسيقى",
   "fav_icon_photo": "صور",
   "fav_icon_sport": "رياضة",
-  "fav_icon_star": "مفضلة"
+  "fav_icon_star": "مفضلة",
+  "fav_rename": "إعادة التسمية",
+  "fav_move_left": "نقل إلى اليسار",
+  "fav_move_right": "نقل إلى اليمين"
  },
  "plurals": {
   "browser_found": {

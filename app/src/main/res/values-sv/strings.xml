@@ -442,6 +442,9 @@
     <string name="fav_icon_photo">Foton</string>
     <string name="fav_icon_sport">Sport</string>
     <string name="fav_icon_star">Favorit</string>
+    <string name="fav_rename">Byt namn</string>
+    <string name="fav_move_left">Flytta åt vänster</string>
+    <string name="fav_move_right">Flytta åt höger</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videor</item>

@@ -440,7 +440,10 @@
   "fav_icon_music": "Âm nhạc",
   "fav_icon_photo": "Ảnh",
   "fav_icon_sport": "Thể thao",
-  "fav_icon_star": "Yêu thích"
+  "fav_icon_star": "Yêu thích",
+  "fav_rename": "Đổi tên",
+  "fav_move_left": "Chuyển sang trái",
+  "fav_move_right": "Chuyển sang phải"
  },
  "plurals": {
   "browser_found": {

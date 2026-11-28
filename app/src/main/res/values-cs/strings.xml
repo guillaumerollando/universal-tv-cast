@@ -442,6 +442,9 @@
     <string name="fav_icon_photo">Fotky</string>
     <string name="fav_icon_sport">Sport</string>
     <string name="fav_icon_star">Oblíbené</string>
+    <string name="fav_rename">Přejmenovat</string>
+    <string name="fav_move_left">Posunout doleva</string>
+    <string name="fav_move_right">Posunout doprava</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="few">%d videa</item>

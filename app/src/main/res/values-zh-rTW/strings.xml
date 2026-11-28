@@ -442,6 +442,9 @@
     <string name="fav_icon_photo">相片</string>
     <string name="fav_icon_sport">運動</string>
     <string name="fav_icon_star">收藏</string>
+    <string name="fav_rename">重新命名</string>
+    <string name="fav_move_left">左移</string>
+    <string name="fav_move_right">右移</string>
     <plurals name="browser_found">
         <item quantity="other">%d 部影片</item>
     </plurals>

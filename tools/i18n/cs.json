@@ -440,7 +440,10 @@
   "fav_icon_music": "Hudba",
   "fav_icon_photo": "Fotky",
   "fav_icon_sport": "Sport",
-  "fav_icon_star": "Oblíbené"
+  "fav_icon_star": "Oblíbené",
+  "fav_rename": "Přejmenovat",
+  "fav_move_left": "Posunout doleva",
+  "fav_move_right": "Posunout doprava"
  },
  "plurals": {
   "browser_found": {

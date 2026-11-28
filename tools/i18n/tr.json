@@ -440,7 +440,10 @@
   "fav_icon_music": "Müzik",
   "fav_icon_photo": "Fotoğraflar",
   "fav_icon_sport": "Spor",
-  "fav_icon_star": "Favori"
+  "fav_icon_star": "Favori",
+  "fav_rename": "Yeniden adlandır",
+  "fav_move_left": "Sola taşı",
+  "fav_move_right": "Sağa taşı"
  },
  "plurals": {
   "browser_found": {

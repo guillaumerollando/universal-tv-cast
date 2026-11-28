@@ -442,6 +442,9 @@
     <string name="fav_icon_photo">사진</string>
     <string name="fav_icon_sport">스포츠</string>
     <string name="fav_icon_star">즐겨찾기</string>
+    <string name="fav_rename">이름 바꾸기</string>
+    <string name="fav_move_left">왼쪽으로 이동</string>
+    <string name="fav_move_right">오른쪽으로 이동</string>
     <plurals name="browser_found">
         <item quantity="other">동영상 %d개</item>
     </plurals>

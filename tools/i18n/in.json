@@ -440,7 +440,10 @@
   "fav_icon_music": "Musik",
   "fav_icon_photo": "Foto",
   "fav_icon_sport": "Olahraga",
-  "fav_icon_star": "Favorit"
+  "fav_icon_star": "Favorit",
+  "fav_rename": "Ganti nama",
+  "fav_move_left": "Pindah ke kiri",
+  "fav_move_right": "Pindah ke kanan"
  },
  "plurals": {
   "browser_found": {

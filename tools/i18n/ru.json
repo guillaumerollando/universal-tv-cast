@@ -440,7 +440,10 @@
   "fav_icon_music": "Музыка",
   "fav_icon_photo": "Фото",
   "fav_icon_sport": "Спорт",
-  "fav_icon_star": "Избранное"
+  "fav_icon_star": "Избранное",
+  "fav_rename": "Переименовать",
+  "fav_move_left": "Переместить влево",
+  "fav_move_right": "Переместить вправо"
  },
  "plurals": {
   "browser_found": {

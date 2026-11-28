@@ -85,6 +85,8 @@ data class Bookmark(
     val title: String, val url: String, val episode: Int? = null, val time: Long = 0,
     /** Image de la page (affiche, vignette d'épisode), pour une carte plus parlante. */
     val image: String? = null,
+    /** Nom choisi par l'utilisateur (« Renommer »), à la place du titre de la page. */
+    val name: String? = null,
 ) {
     val host: String get() = runCatching { android.net.Uri.parse(url).host?.removePrefix("www.") }.getOrNull().orEmpty()
     val key: String get() = com.rollandostudio.universaltvcast.browser.Episodes.seriesKey(url)
@@ -146,6 +148,7 @@ object Library {
         _smoothSlides.value = prefs.getBoolean("smooth_slides_v2", false)
         _powerSaver.value = prefs.getBoolean("power_saver", false)
         _hiddenSites.value = prefs.getStringSet("hidden_sites", emptySet()).orEmpty().toSet()
+        _favOrder.value = runCatching { JSONArray(prefs.getString("fav_order", "[]")).let { a -> (0 until a.length()).map { a.getString(it) } } }.getOrDefault(emptyList())
         _dismissedTips.value = prefs.getStringSet("tips_dismissed", emptySet()).orEmpty().toSet()
         _favChannels.value = runCatching {
             val a = JSONArray(prefs.getString("fav_channels", "[]"))
@@ -164,6 +167,29 @@ object Library {
     fun isFavChannel(url: String) = _favChannels.value.any { it.url == url }
     fun toggleFavChannel(f: FavChannel) {
         _favChannels.value = if (isFavChannel(f.url)) _favChannels.value.filter { it.url != f.url } else (_favChannels.value + f).takeLast(40)
+        saveFavChannels()
+    }
+
+    fun renameFavChannel(url: String, name: String) {
+        if (name.isBlank()) return
+        _favChannels.value = _favChannels.value.map { if (it.url == url) it.copy(name = name.trim()) else it }
+        saveFavChannels()
+    }
+
+    fun renameBookmark(b: Bookmark, name: String) {
+        _bookmarks.value = _bookmarks.value.map { if (it.url == b.url) it.copy(name = name.trim().takeIf { n -> n.isNotEmpty() }) else it }
+        saveBookmarks()
+    }
+
+    /**
+     * Ordre de « Mes favoris » (dossiers du réseau, chaînes, sites mêlés), choisi par l'utilisateur. Les clés absentes
+     * sont des favoris tout juste ajoutés : ils vont en tête (à gauche).
+     */
+    private val _favOrder = MutableStateFlow<List<String>>(emptyList())
+    val favOrder: StateFlow<List<String>> = _favOrder
+    fun setFavOrder(keys: List<String>) { _favOrder.value = keys; prefs.edit().putString("fav_order", JSONArray(keys).toString()).apply() }
+
+    private fun saveFavChannels() {
         val a = JSONArray()
         _favChannels.value.forEach { c ->
             a.put(org.json.JSONObject().put("url", c.url).put("name", c.name).put("logo", c.logo ?: "")
@@ -351,7 +377,8 @@ object Library {
         onChanged?.invoke()
         prefs.edit().putString("bookmarks", JSONArray().apply {
             _bookmarks.value.forEach {
-                put(JSONObject().put("title", it.title).put("url", it.url).put("ep", it.episode ?: -1).put("time", it.time).put("img", it.image ?: ""))
+                put(JSONObject().put("title", it.title).put("url", it.url).put("ep", it.episode ?: -1).put("time", it.time).put("img", it.image ?: "")
+                    .put("name", it.name ?: ""))
             }
         }.toString()).apply()
     }
@@ -418,6 +445,6 @@ object Library {
     private fun readBookmarks(a: JSONArray) = (0 until a.length()).map { i ->
         val o = a.getJSONObject(i)
         Bookmark(o.getString("title"), o.getString("url"), o.optInt("ep", -1).takeIf { it >= 0 }, o.optLong("time"),
-            o.optString("img").ifEmpty { null })
+            o.optString("img").ifEmpty { null }, o.optString("name").ifEmpty { null })
     }
 }

@@ -133,6 +133,9 @@
     <string name="fav_icon_photo">Fotos</string>
     <string name="fav_icon_sport">Sport</string>
     <string name="fav_icon_star">Favorit</string>
+    <string name="fav_rename">Umbenennen</string>
+    <string name="fav_move_left">Nach links</string>
+    <string name="fav_move_right">Nach rechts</string>
     <string name="lan_hide_watched">Gesehene ausblenden</string>
     <string name="lan_season">Staffel %1$d</string>
     <string name="lan_watched">Gesehen</string>

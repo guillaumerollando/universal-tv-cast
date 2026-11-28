@@ -442,6 +442,9 @@
     <string name="fav_icon_photo">Ảnh</string>
     <string name="fav_icon_sport">Thể thao</string>
     <string name="fav_icon_star">Yêu thích</string>
+    <string name="fav_rename">Đổi tên</string>
+    <string name="fav_move_left">Chuyển sang trái</string>
+    <string name="fav_move_right">Chuyển sang phải</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

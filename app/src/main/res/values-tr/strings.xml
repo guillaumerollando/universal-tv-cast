@@ -442,6 +442,9 @@
     <string name="fav_icon_photo">Fotoğraflar</string>
     <string name="fav_icon_sport">Spor</string>
     <string name="fav_icon_star">Favori</string>
+    <string name="fav_rename">Yeniden adlandır</string>
+    <string name="fav_move_left">Sola taşı</string>
+    <string name="fav_move_right">Sağa taşı</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video</item>

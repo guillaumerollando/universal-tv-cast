@@ -159,3 +159,29 @@ internal fun FolderStyleDialog(f: LanStore.Folder, justAdded: Boolean, onDismiss
         dismissButton = if (justAdded) null else ({ TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } }),
     )
 }
+
+/** Renommer un favori (site, chaîne) : le nom en cours, modifiable ; vide = celui d'origine. */
+@Composable
+internal fun RenameDialog(current: String, onDismiss: () -> Unit, onSave: (String) -> Unit) {
+    val c = MaterialTheme.colorScheme
+    var name by remember { mutableStateOf(current) }
+    val focus = androidx.compose.ui.platform.LocalFocusManager.current
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.fav_rename)) },
+        text = {
+            androidx.compose.material3.TextField(name, { name = it.take(40) }, Modifier.fillMaxWidth(), singleLine = true,
+                label = { Text(stringResource(R.string.fav_name)) },
+                shape = RoundedCornerShape(14.dp),
+                colors = androidx.compose.material3.TextFieldDefaults.colors(
+                    focusedContainerColor = c.surfaceContainerHighest, unfocusedContainerColor = c.surfaceContainerHighest,
+                    focusedIndicatorColor = Color.Transparent, unfocusedIndicatorColor = Color.Transparent),
+                keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
+                    capitalization = androidx.compose.ui.text.input.KeyboardCapitalization.Sentences,
+                    imeAction = androidx.compose.ui.text.input.ImeAction.Done),
+                keyboardActions = androidx.compose.foundation.text.KeyboardActions(onDone = { focus.clearFocus() }))
+        },
+        confirmButton = { TextButton(onClick = { onSave(name); onDismiss() }) { Text(stringResource(R.string.action_save)) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
+    )
+}

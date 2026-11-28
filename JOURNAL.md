@@ -1604,3 +1604,14 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - Liens « Listes de chaînes » / « Parcourir les fichiers » resserrés (zone tactile 40 dp).
 - Favori : à l'ajout, seul « Enregistrer » (« Garder tel quel » retiré) ; champ du nom au style de l'appli (fond
   plein arrondi, sans contour).
+
+## 2026-11-28 — « Mes favoris » : seulement ce que l'utilisateur y met, dans son ordre
+- Un site d'où vient une vidéo (Blender…) n'entre plus tout seul dans les favoris (accueil, navigateur, widget) :
+  seuls les sites mis en favori par l'utilisateur. Plus d'étoile sur les tuiles de site.
+- Ordre commun aux dossiers du réseau, chaînes et sites (`Library.favOrder`) : le dernier ajouté à gauche ;
+  « Déplacer à gauche / à droite » à l'appui long. Premier affichage : l'ordre d'avant, enregistré.
+- « Renommer » un site ou une chaîne en favori (nom gardé à part du titre de la page) ; les dossiers ont déjà
+  « Personnaliser ».
+- « Reprendre » : plus de mise en favori ni d'étoile ; l'appui long ne propose que « Retirer ».
+- Pas fait (idée de Guillaume, facultative) : proposer d'ajouter le site source en favori à la fin d'un épisode.
+- Vérifié sur émulateur : « Déplacer à gauche » sur le NAS.

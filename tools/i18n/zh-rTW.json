@@ -440,7 +440,10 @@
   "fav_icon_music": "音樂",
   "fav_icon_photo": "相片",
   "fav_icon_sport": "運動",
-  "fav_icon_star": "收藏"
+  "fav_icon_star": "收藏",
+  "fav_rename": "重新命名",
+  "fav_move_left": "左移",
+  "fav_move_right": "右移"
  },
  "plurals": {
   "browser_found": {

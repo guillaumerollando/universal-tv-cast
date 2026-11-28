@@ -442,6 +442,9 @@
     <string name="fav_icon_photo">Foto</string>
     <string name="fav_icon_sport">Olahraga</string>
     <string name="fav_icon_star">Favorit</string>
+    <string name="fav_rename">Ganti nama</string>
+    <string name="fav_move_left">Pindah ke kiri</string>
+    <string name="fav_move_right">Pindah ke kanan</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

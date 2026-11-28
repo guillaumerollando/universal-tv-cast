@@ -440,7 +440,10 @@
   "fav_icon_music": "Musik",
   "fav_icon_photo": "Foton",
   "fav_icon_sport": "Sport",
-  "fav_icon_star": "Favorit"
+  "fav_icon_star": "Favorit",
+  "fav_rename": "Byt namn",
+  "fav_move_left": "Flytta åt vänster",
+  "fav_move_right": "Flytta åt höger"
  },
  "plurals": {
   "browser_found": {

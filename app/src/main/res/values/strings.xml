@@ -134,6 +134,9 @@
     <string name="fav_icon_photo">Photos</string>
     <string name="fav_icon_sport">Sports</string>
     <string name="fav_icon_star">Favorite</string>
+    <string name="fav_rename">Rename</string>
+    <string name="fav_move_left">Move left</string>
+    <string name="fav_move_right">Move right</string>
     <string name="lan_hide_watched">Hide watched</string>
     <string name="lan_season">Season %1$d</string>
     <string name="lan_watched">Watched</string>

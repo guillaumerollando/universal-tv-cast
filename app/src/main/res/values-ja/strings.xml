@@ -442,6 +442,9 @@
     <string name="fav_icon_photo">写真</string>
     <string name="fav_icon_sport">スポーツ</string>
     <string name="fav_icon_star">お気に入り</string>
+    <string name="fav_rename">名前を変更</string>
+    <string name="fav_move_left">左へ移動</string>
+    <string name="fav_move_right">右へ移動</string>
     <plurals name="browser_found">
         <item quantity="other">%d 本の動画</item>
     </plurals>

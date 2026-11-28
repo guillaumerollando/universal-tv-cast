@@ -442,6 +442,9 @@
     <string name="fav_icon_photo">รูปภาพ</string>
     <string name="fav_icon_sport">กีฬา</string>
     <string name="fav_icon_star">รายการโปรด</string>
+    <string name="fav_rename">เปลี่ยนชื่อ</string>
+    <string name="fav_move_left">ย้ายไปทางซ้าย</string>
+    <string name="fav_move_right">ย้ายไปทางขวา</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>

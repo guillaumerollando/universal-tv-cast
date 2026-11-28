@@ -1747,6 +1747,18 @@
   "fav_icon_star": {
    "en": "Favorite",
    "fr": "Favori"
+  },
+  "fav_rename": {
+   "en": "Rename",
+   "fr": "Renommer"
+  },
+  "fav_move_left": {
+   "en": "Move left",
+   "fr": "Déplacer à gauche"
+  },
+  "fav_move_right": {
+   "en": "Move right",
+   "fr": "Déplacer à droite"
   }
  },
  "plurals": {

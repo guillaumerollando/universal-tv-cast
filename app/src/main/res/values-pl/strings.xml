@@ -442,6 +442,9 @@
     <string name="fav_icon_photo">Zdjęcia</string>
     <string name="fav_icon_sport">Sport</string>
     <string name="fav_icon_star">Ulubione</string>
+    <string name="fav_rename">Zmień nazwę</string>
+    <string name="fav_move_left">Przesuń w lewo</string>
+    <string name="fav_move_right">Przesuń w prawo</string>
     <plurals name="browser_found">
         <item quantity="one">%d wideo</item>
         <item quantity="few">%d wideo</item>

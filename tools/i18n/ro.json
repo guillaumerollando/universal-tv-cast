@@ -440,7 +440,10 @@
   "fav_icon_music": "Muzică",
   "fav_icon_photo": "Fotografii",
   "fav_icon_sport": "Sport",
-  "fav_icon_star": "Favorit"
+  "fav_icon_star": "Favorit",
+  "fav_rename": "Redenumiți",
+  "fav_move_left": "Mutați la stânga",
+  "fav_move_right": "Mutați la dreapta"
  },
  "plurals": {
   "browser_found": {

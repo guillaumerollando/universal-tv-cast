@@ -442,6 +442,9 @@
     <string name="fav_icon_photo">Fotografii</string>
     <string name="fav_icon_sport">Sport</string>
     <string name="fav_icon_star">Favorit</string>
+    <string name="fav_rename">Redenumiți</string>
+    <string name="fav_move_left">Mutați la stânga</string>
+    <string name="fav_move_right">Mutați la dreapta</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>

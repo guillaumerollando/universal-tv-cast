@@ -440,7 +440,10 @@
   "fav_icon_music": "音楽",
   "fav_icon_photo": "写真",
   "fav_icon_sport": "スポーツ",
-  "fav_icon_star": "お気に入り"
+  "fav_icon_star": "お気に入り",
+  "fav_rename": "名前を変更",
+  "fav_move_left": "左へ移動",
+  "fav_move_right": "右へ移動"
  },
  "plurals": {
   "browser_found": {

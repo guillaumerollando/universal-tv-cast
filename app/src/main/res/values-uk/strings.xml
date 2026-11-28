@@ -442,6 +442,9 @@
     <string name="fav_icon_photo">Фото</string>
     <string name="fav_icon_sport">Спорт</string>
     <string name="fav_icon_star">Вибране</string>
+    <string name="fav_rename">Перейменувати</string>
+    <string name="fav_move_left">Перемістити ліворуч</string>
+    <string name="fav_move_right">Перемістити праворуч</string>
     <plurals name="browser_found">
         <item quantity="one">%d відео</item>
         <item quantity="few">%d відео</item>

@@ -140,10 +140,37 @@ fun HomeScreen(
                 Column {
                     SectionHeader(stringResource(if (folders.isEmpty() && favChannels.isEmpty()) R.string.home_sites else R.string.home_favorites),
                         if (sites.size > 4) stringResource(R.string.home_see_all) else null) { showAll = 2 }
+                    // Un seul rang, dans l'ordre choisi : le dernier ajouté à gauche, puis « Déplacer » à l'appui long.
+                    val order by Library.favOrder.collectAsState()
+                    val all = remember(folders, favChannels, sites, order) {
+                        val raw = folders.map { "f:" + it.key to (it as Any) } + favChannels.map { "c:" + it.url to (it as Any) } +
+                            sites.map { "s:" + it.id to (it as Any) }
+                        if (order.isEmpty()) raw // premier affichage : l'ordre d'avant, enregistré juste après
+                        else raw.filter { it.first !in order }.reversed() + raw.filter { it.first in order }.sortedBy { order.indexOf(it.first) }
+                    }
+                    androidx.compose.runtime.LaunchedEffect(all) {
+                        val keys = all.map { it.first }
+                        if (keys != order.filter { k -> keys.contains(k) } || order.isEmpty()) Library.setFavOrder(keys)
+                    }
+                    val left = stringResource(R.string.fav_move_left)
+                    val right = stringResource(R.string.fav_move_right)
+                    fun move(i: Int, d: Int): () -> Unit = {
+                        val keys = all.map { it.first }.toMutableList()
+                        java.util.Collections.swap(keys, i, i + d)
+                        Library.setFavOrder(keys)
+                    }
+                    fun moves(i: Int) = buildList {
+                        if (i > 0) add(left to move(i, -1))
+                        if (i < all.size - 1) add(right to move(i, 1))
+                    }
                     LazyRow(contentPadding = PaddingValues(horizontal = 12.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                        items(folders, key = { "f" + it.key }) { f -> FolderTile(f, Modifier.width(72.dp)) }
-                        items(favChannels, key = { "c" + it.url }) { ch -> FavChannelTile(ch, onBrowse) }
-                        items(sites, key = { "s" + it.id }) { s -> SiteTile(s, Modifier.width(72.dp)) { onBrowse(it) } }
+                        items(all.size, key = { all[it].first }) { i ->
+                            when (val x = all[i].second) {
+                                is com.rollandostudio.universaltvcast.lan.LanStore.Folder -> FolderTile(x, Modifier.width(72.dp), moves(i))
+                                is Library.FavChannel -> FavChannelTile(x, onBrowse, moves(i))
+                                is SiteItem -> SiteTile(x, Modifier.width(72.dp), moves(i)) { onBrowse(it) }
+                            }
+                        }
                     }
                 }
             }
@@ -355,14 +382,13 @@ private fun ResumeCard(r: ResumeItem, onBrowse: (String?) -> Unit, modifier: Mod
         r.episode != null -> stringResource(R.string.bookmark_episode, r.episode)
         else -> null
     }
-    val menu = buildList {
-        val page = r.openUrl
-        if (r.bookmark != null) add(stringResource(R.string.cd_bookmark_remove) to { Library.removeBookmark(r.bookmark) })
-        else if (page != null) add(stringResource(R.string.resume_follow) to { Library.toggleBookmark(r.title, page, r.image) })
-        if (r.recent != null) add(stringResource(if (r.episode != null) R.string.resume_series_done else R.string.resume_remove) to { Library.removeRecent(r.key) })
-    }
+    // « Reprendre » n'est pas un lieu de favoris : seulement « Retirer » (série finie, film vu…).
+    val menu = listOf(stringResource(if (r.episode != null) R.string.resume_series_done else R.string.resume_remove) to {
+        if (r.recent != null) Library.removeRecent(r.key)
+        if (r.bookmark != null) Library.removeBookmark(r.bookmark)
+    })
     PosterCard(
-        title = r.title, image = r.image, host = r.host, badge = badge, starred = r.bookmark != null,
+        title = r.title, image = r.image, host = r.host, badge = badge, starred = false,
         onClick = {
             val page = r.openUrl
             // Vidéo trouvée sur un site : son lien a souvent expiré. La page de l'épisode est rouverte en
@@ -385,8 +411,10 @@ private fun ResumeCard(r: ResumeItem, onBrowse: (String?) -> Unit, modifier: Mod
 /** Chaîne en favori : son logo, ouverte d'un appui (sur son site si elle en vient), retirée par appui long. */
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
-private fun FavChannelTile(ch: Library.FavChannel, onBrowse: (String?) -> Unit) {
+private fun FavChannelTile(ch: Library.FavChannel, onBrowse: (String?) -> Unit, extraMenu: List<Pair<String, () -> Unit>> = emptyList()) {
     var menu by remember { mutableStateOf(false) }
+    var rename by remember { mutableStateOf(false) }
+    if (rename) RenameDialog(ch.name, onDismiss = { rename = false }) { Library.renameFavChannel(ch.url, it) }
     val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
     Box(Modifier.padding(horizontal = 2.dp, vertical = 6.dp)) {
         Box(Modifier.width(ChannelTiles.width).aspectRatio(16f / 10f).clip(RoundedCornerShape(ChannelTiles.corner))
@@ -404,6 +432,11 @@ private fun FavChannelTile(ch: Library.FavChannel, onBrowse: (String?) -> Unit) 
                 modifier = Modifier.matchParentSize())
         }
         androidx.compose.material3.DropdownMenu(expanded = menu, onDismissRequest = { menu = false }, shape = RoundedCornerShape(16.dp)) {
+            androidx.compose.material3.DropdownMenuItem(text = { Text(stringResource(R.string.fav_rename)) },
+                onClick = { menu = false; rename = true })
+            extraMenu.forEach { (label, action) ->
+                androidx.compose.material3.DropdownMenuItem(text = { Text(label) }, onClick = { menu = false; action() })
+            }
             androidx.compose.material3.DropdownMenuItem(text = { Text(stringResource(R.string.cd_bookmark_remove)) },
                 onClick = { menu = false; Library.toggleFavChannel(ch) })
         }

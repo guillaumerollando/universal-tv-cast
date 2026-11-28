@@ -442,6 +442,9 @@
     <string name="fav_icon_photo">صور</string>
     <string name="fav_icon_sport">رياضة</string>
     <string name="fav_icon_star">مفضلة</string>
+    <string name="fav_rename">إعادة التسمية</string>
+    <string name="fav_move_left">نقل إلى اليسار</string>
+    <string name="fav_move_right">نقل إلى اليمين</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>

@@ -195,33 +195,27 @@ fun shortSiteName(host: String): String {
 }
 
 fun siteItems(recents: List<com.rollandostudio.universaltvcast.data.Recent>, bookmarks: List<Bookmark>, hidden: Set<String>): List<SiteItem> {
-    val fav = bookmarks.filter { !it.isSeries && it.host !in hidden }.map {
-        // Nom court sur la tuile : « Otakubinge - Accueil » → « Otakubinge ».
-        SiteItem(it.key, it.host, it.title.split(Regex("\\s+[-|·•–—:]\\s+")).first().trim().ifBlank { it.host }, it.url, it, it.time)
-    }
-    // Sites où l'on a casté, ou suivi une série, sans les avoir mis en favori.
-    val pages = recents.filter { it.isWeb }.map { it.pageUrl!! to it.time } + bookmarks.filter { it.isSeries }.map { it.url to it.time }
-    val used = pages.groupBy { Library.hostOf(it.first) }
-        .filter { (h, _) -> h.isNotEmpty() && h !in hidden && fav.none { f -> f.host == h } }
-        .map { (h, l) ->
-            val p = android.net.Uri.parse(l.first().first)
-            SiteItem(h, h, shortSiteName(h), "${p.scheme}://${p.authority}/", null, l.maxOf { it.second })
-        }
-    return fav.sortedByDescending { it.time } + used.sortedByDescending { it.time }
+    // Seulement les sites mis en favori par l'utilisateur : un site d'où vient une vidéo n'y entre pas tout seul.
+    return bookmarks.filter { !it.isSeries }.map {
+        // Nom choisi, sinon le titre court de la page : « Otakubinge - Accueil » → « Otakubinge ».
+        SiteItem(it.key, it.host, it.name ?: it.title.split(Regex("\\s+[-|·•–—:]\\s+")).first().trim().ifBlank { it.host }, it.url, it, it.time)
+    }.sortedByDescending { it.time }
 }
 
 /** Petite tuile de site : son logo et son nom. Appui long : favori, ne plus proposer. */
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
-fun SiteTile(s: SiteItem, modifier: Modifier = Modifier.width(80.dp), onOpen: (String) -> Unit) {
-    val c = MaterialTheme.colorScheme
+fun SiteTile(s: SiteItem, modifier: Modifier = Modifier.width(80.dp), extraMenu: List<Pair<String, () -> Unit>> = emptyList(), onOpen: (String) -> Unit) {
     var open by remember { mutableStateOf(false) }
+    var rename by remember { mutableStateOf(false) }
     val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
+    // Appui long : renommer, déplacer, retirer.
     val menu = buildList {
+        if (s.bookmark != null) add(stringResource(R.string.fav_rename) to { rename = true })
+        addAll(extraMenu)
         if (s.bookmark != null) add(stringResource(R.string.cd_bookmark_remove) to { Library.removeBookmark(s.bookmark) })
-        else add(stringResource(R.string.resume_follow) to { Library.toggleBookmark(s.title, s.url) })
-        add(stringResource(R.string.site_hide) to { Library.hideSite(s.host) })
     }
+    if (rename && s.bookmark != null) RenameDialog(s.title, onDismiss = { rename = false }) { Library.renameBookmark(s.bookmark, it) }
     Box(modifier) {
         Column(
             Modifier.fillMaxWidth().clip(RoundedCornerShape(18.dp))
@@ -236,13 +230,7 @@ fun SiteTile(s: SiteItem, modifier: Modifier = Modifier.width(80.dp), onOpen: (S
                 .padding(vertical = 6.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Box {
-                SiteIcon(s.host, 52)
-                if (s.bookmark != null) Box(
-                    Modifier.align(Alignment.TopEnd).offset(x = 6.dp, y = (-6).dp).size(20.dp).clip(CircleShape).background(c.surface),
-                    contentAlignment = Alignment.Center,
-                ) { Icon(Icons.Rounded.Star, null, tint = c.primary, modifier = Modifier.size(14.dp)) }
-            }
+            SiteIcon(s.host, 52)
             Spacer(Modifier.height(6.dp))
             Text(s.title, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(horizontal = 2.dp))
@@ -254,7 +242,8 @@ fun SiteTile(s: SiteItem, modifier: Modifier = Modifier.width(80.dp), onOpen: (S
 /** Dossier du réseau en favori (« Films » du NAS) : ouvert directement d'un appui ; appui long pour le retirer. */
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
-fun FolderTile(f: com.rollandostudio.universaltvcast.lan.LanStore.Folder, modifier: Modifier = Modifier.width(80.dp)) {
+fun FolderTile(f: com.rollandostudio.universaltvcast.lan.LanStore.Folder, modifier: Modifier = Modifier.width(80.dp),
+               extraMenu: List<Pair<String, () -> Unit>> = emptyList()) {
     val c = MaterialTheme.colorScheme
     var open by remember { mutableStateOf(false) }
     var edit by remember { mutableStateOf(false) }
@@ -262,6 +251,7 @@ fun FolderTile(f: com.rollandostudio.universaltvcast.lan.LanStore.Folder, modifi
     // Appui long : personnaliser (nom, icône, couleur) ou retirer.
     val menu = listOf(
         stringResource(R.string.fav_customize) to { edit = true },
+    ) + extraMenu + listOf(
         stringResource(R.string.cd_bookmark_remove) to { com.rollandostudio.universaltvcast.lan.LanStore.toggleFolder(f.device(), f.ref, f.title) },
     )
     if (edit) FolderStyleDialog(f, justAdded = false) { edit = false }

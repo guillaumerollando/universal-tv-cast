@@ -442,6 +442,9 @@
     <string name="fav_icon_photo">फ़ोटो</string>
     <string name="fav_icon_sport">खेल</string>
     <string name="fav_icon_star">पसंदीदा</string>
+    <string name="fav_rename">नाम बदलें</string>
+    <string name="fav_move_left">बाईं ओर ले जाएँ</string>
+    <string name="fav_move_right">दाईं ओर ले जाएँ</string>
     <plurals name="browser_found">
         <item quantity="one">%d वीडियो</item>
         <item quantity="other">%d वीडियो</item>

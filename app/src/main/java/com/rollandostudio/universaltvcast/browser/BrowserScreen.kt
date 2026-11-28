@@ -381,8 +381,7 @@ private fun StartPage(onOpen: (String) -> Unit) {
         // Mes sites d'abord (c'est l'accueil du navigateur), puis les séries suivies.
         if (sites.isNotEmpty()) {
             item {
-                Text(stringResource(R.string.home_sites), style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp))
+                com.rollandostudio.universaltvcast.ui.SectionTitle(stringResource(R.string.home_sites), Modifier.fillMaxWidth().padding(horizontal = 16.dp))
             }
             item {
                 com.rollandostudio.universaltvcast.ui.SitesGrid(sites, Modifier.padding(horizontal = 16.dp), onOpen)
@@ -398,8 +397,7 @@ private fun StartPage(onOpen: (String) -> Unit) {
         }
         if (series.isNotEmpty()) {
             item {
-                Text(stringResource(R.string.home_bookmarks), style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp))
+                com.rollandostudio.universaltvcast.ui.SectionTitle(stringResource(R.string.home_bookmarks), Modifier.fillMaxWidth().padding(horizontal = 16.dp))
             }
             item {
                 com.rollandostudio.universaltvcast.ui.FavoritesRow(series, onOpen)

@@ -329,8 +329,9 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
                 LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(16.dp, 4.dp, 16.dp, 24.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     item {
-                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(vertical = 4.dp)) {
-                            Text(stringResource(R.string.net_found), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            // Même titre de rubrique que l'accueil.
+                            SectionTitle(stringResource(R.string.net_found), Modifier.weight(1f))
                             if (scanning) {
                                 CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp)
                                 Spacer(Modifier.width(8.dp))

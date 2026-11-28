@@ -325,9 +325,10 @@ fun FolderTile(f: com.rollandostudio.universaltvcast.lan.LanStore.Folder, modifi
 fun SitesGrid(sites: List<SiteItem>, modifier: Modifier = Modifier, onOpen: (String) -> Unit) {
     androidx.compose.foundation.layout.FlowRow(
         modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        sites.forEach { s -> SiteTile(s, onOpen = onOpen) }
+        // Mêmes tuiles que « Mes favoris » sur l'accueil.
+        sites.forEach { s -> SiteTile(s, tile = true, onOpen = onOpen) }
     }
 }

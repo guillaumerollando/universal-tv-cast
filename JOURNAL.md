@@ -1702,3 +1702,6 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - Nouveau venu : les quatre grandes tuiles prennent les couleurs des actions (dégradé, texte blanc) au lieu du gris
   Android ; listes TV et fichiers en petites tuiles dessous.
 - Vérifié par captures sur émulateur (habitué et nouveau venu, données d'essai sauvegardées puis remises).
+- Tour des autres écrans : le navigateur (« Mes sites » en tuiles des favoris, titres de rubrique de l'accueil) et
+  l'écran Réseau (« Sur ton réseau » au même titre) sont alignés. Laissés tels quels, volontairement : les réglages
+  (liste classique, attendue pour des réglages) et la vidéothèque (déjà au style affiches).

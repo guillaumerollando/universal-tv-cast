@@ -19,6 +19,8 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.foundation.layout.requiredSize
@@ -37,41 +39,68 @@ fun animationsOff(): Boolean {
     return system || saving
 }
 
-/**
- * Ondes qui partent de la télé pendant la lecture : le signal envoyé par le téléphone. Elles débordent librement
- * de leur place (taille imposée, quel que soit le cadre) : c'est le cadre autour qui les coupe à ses bords.
- */
+/** Réglage des animations de diffusion : immobiles (animations coupées dans Android), lentes (économie d'énergie). */
 @Composable
-fun CastWaves(color: Color, modifier: Modifier = Modifier, size: Dp = 170.dp, inner: Dp = 40.dp) {
-    // Seul signe que « ça passe sur la télé » : elles restent animées en économie d'énergie (plus lentes, ça coûte
-    // peu) ; immobiles seulement quand les animations sont coupées dans Android (accessibilité).
+private fun castMotion(): Pair<Boolean, Boolean> {
     val ctx = LocalContext.current
     val still = remember {
         runCatching { Settings.Global.getFloat(ctx.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE) == 0f }.getOrDefault(false)
     }
     val saving by com.rollandostudio.universaltvcast.data.Power.saving.collectAsState()
-    val t = rememberInfiniteTransition(label = "ondes")
-    val p by t.animateFloat(0f, 1f, infiniteRepeatable(tween(if (saving) 4200 else 2600, easing = LinearEasing)), label = "phase")
+    return still to saving
+}
+
+/**
+ * Halo qui respire, derrière le logo d'une chaîne ou la télé du cadre par défaut, pendant la lecture sur la télé :
+ * une lueur douce qui s'élargit et se resserre lentement. Taille imposée ; le cadre autour la coupe à ses bords.
+ */
+@Composable
+fun CastHalo(color: Color, modifier: Modifier = Modifier, size: Dp = 260.dp) {
+    val (still, saving) = castMotion()
+    val t = rememberInfiniteTransition(label = "halo")
+    val k by t.animateFloat(0f, 1f, infiniteRepeatable(tween(if (saving) 2600 else 1800, easing = androidx.compose.animation.core.FastOutSlowInEasing),
+        androidx.compose.animation.core.RepeatMode.Reverse), label = "souffle")
     Canvas(modifier.requiredSize(size)) {
-        val maxR = this.size.minDimension / 2
-        val minR = inner.toPx()
-        // Un halo doux au centre.
+        val b = if (still) 0.6f else k
+        val r = this.size.minDimension / 2 * (0.82f + 0.26f * b)
+        val a = 0.55f + 0.45f * b
         drawCircle(
-            Brush.radialGradient(listOf(color.copy(alpha = color.alpha * 0.35f), Color.Transparent), center, minR * 1.9f),
-            radius = minR * 1.9f,
+            Brush.radialGradient(
+                0f to color.copy(alpha = color.alpha * 0.30f * a),
+                0.45f to color.copy(alpha = color.alpha * 0.10f * a),
+                0.72f to Color.Transparent,
+                center = center, radius = r,
+            ),
+            radius = r,
         )
-        // Comme une goutte dans l'eau : chaque onde naît minuscule et invisible au centre, apparaît en fondu, s'élargit
-        // vite puis ralentit, et s'efface en s'éloignant. Pas d'anneau qui surgit d'un coup.
-        for (i in 0 until 3) {
-            val f = if (still) (i + 1) / 4f else (p + i / 3f) % 1f
-            val grow = 1f - (1f - f) * (1f - f) * (1f - f) // rapide au début, lent à la fin
-            val appear = if (still) 1f else (f / 0.18f).coerceAtMost(1f)
-            val fade = if (still) 0.9f - i * 0.25f else appear * (1f - f) * (1f - f)
-            drawCircle(
-                color = color.copy(alpha = color.alpha * fade),
-                radius = maxR * 0.02f + (maxR * 0.98f) * grow,
-                style = Stroke(width = 3.5.dp.toPx() * (1f - f * 0.6f)),
-            )
+    }
+}
+
+/**
+ * Liseré de lumière qui fait le tour du cadre pendant la lecture sur la télé (chaîne, film, vidéo) : un trait fin
+ * dont un segment s'allume et tourne lentement. À poser par-dessus le cadre, à sa taille ([corner] : ses coins).
+ */
+@Composable
+fun CastRim(color: Color, corner: Dp, modifier: Modifier = Modifier) {
+    val (still, saving) = castMotion()
+    val t = rememberInfiniteTransition(label = "liseré")
+    val turn by t.animateFloat(0f, 360f, infiniteRepeatable(tween(if (saving) 8500 else 5500, easing = LinearEasing)), label = "tour")
+    Canvas(modifier) {
+        val w = size.width; val h = size.height
+        val sw = 1.5.dp.toPx()
+        val r = corner.toPx()
+        val ring = androidx.compose.ui.graphics.Path().apply {
+            addRoundRect(androidx.compose.ui.geometry.RoundRect(0f, 0f, w, h, androidx.compose.ui.geometry.CornerRadius(r)))
+            addRoundRect(androidx.compose.ui.geometry.RoundRect(sw, sw, w - sw, h - sw, androidx.compose.ui.geometry.CornerRadius((r - sw).coerceAtLeast(0f))))
+            fillType = androidx.compose.ui.graphics.PathFillType.EvenOdd
+        }
+        clipPath(ring) {
+            rotate(if (still) 300f else turn) {
+                drawCircle(
+                    Brush.sweepGradient(0f to Color.Transparent, 0.69f to Color.Transparent, 0.89f to color, 1f to Color.Transparent, center = center),
+                    radius = kotlin.math.hypot(w, h), center = center,
+                )
+            }
         }
     }
 }

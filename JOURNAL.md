@@ -1664,3 +1664,14 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - Tous les titres de rubrique ont la même hauteur de ligne (`SECTION_TITLE_HEIGHT`), « Pour commencer » compris :
   même écart titre → contenu partout (l'écart variait selon qu'un bouton à droite agrandissait la ligne ou non).
 - Pas encore fait : les propositions d'animation de diffusion à comparer (interrompu, à reprendre si Guillaume veut).
+
+## 2026-11-28 — Animation de diffusion « A » partout (halo qui respire + liseré)
+- Trois propositions montrées à Guillaume sur une page (halo qui respire, onde unique, aurore) ; il a choisi la A.
+- Fait (`ui/Waves.kt` : `CastHalo`, `CastRim` ; les anciennes ondes sont retirées), pendant la lecture sur la télé :
+  - chaîne : halo qui respire derrière le logo (sur son fond, clair ou sombre selon le fond) + liseré blanc qui fait
+    le tour du cadre ;
+  - vidéo sans vignette : halo à la couleur d'accent derrière la télé + liseré à la couleur d'accent ;
+  - film, série, vidéo d'un site (image) : le liseré seul, à la couleur d'accent.
+  Halo : 1,8 s par souffle ; liseré : un tour en 5,5 s ; plus lents en économie d'énergie, immobiles (bien visibles)
+  si les animations sont coupées dans Android.
+- Vérifié sur émulateur (fausse télé) : chaîne et cadre par défaut, par captures. Pas vu : un film avec image.

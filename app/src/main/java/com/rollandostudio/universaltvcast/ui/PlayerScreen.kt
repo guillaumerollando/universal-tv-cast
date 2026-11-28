@@ -161,9 +161,9 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
             contentAlignment = Alignment.Center,
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                // La télé dans un disque, les ondes qui en partent sur tout le cadre pendant la lecture.
+                // La télé dans un disque ; pendant la lecture, un halo qui respire derrière (comme le logo d'une chaîne).
                 Box(contentAlignment = Alignment.Center, modifier = Modifier.size(88.dp)) {
-                    if (state.phase == Phase.PLAYING) CastWaves(c.onPrimaryContainer.copy(alpha = 0.5f), size = 420.dp, inner = 44.dp)
+                    if (state.phase == Phase.PLAYING) CastHalo(c.primary, size = 300.dp)
                     Box(Modifier.size(88.dp).clip(CircleShape).background(c.onPrimaryContainer.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
                         Icon(if (state.active) Icons.Rounded.Tv else Icons.Rounded.Movie, null, Modifier.size(44.dp), tint = c.onPrimaryContainer)
                     }
@@ -178,6 +178,8 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
                         color = c.onPrimaryContainer.copy(alpha = 0.8f))
                 }
             }
+            // Le liseré qui fait le tour du cadre : le même pour une chaîne, un film, une vidéo.
+            if (state.phase == Phase.PLAYING) CastRim(c.primary, 28.dp, Modifier.matchParentSize())
             if (state.phase == Phase.LOADING || state.phase == Phase.SENDING || state.phase == Phase.BUFFERING) {
                 LinearProgressIndicator(Modifier.fillMaxWidth().align(Alignment.BottomCenter))
             }
@@ -376,6 +378,8 @@ private fun FilmHeader(state: CastState) {
                 )
             }
         }
+        // Film, série, vidéo d'un site : pas de halo sur l'image, seulement le liseré qui fait le tour (comme partout).
+        if (state.phase == Phase.PLAYING && state.active && !state.onPhone) CastRim(MaterialTheme.colorScheme.primary, 28.dp, Modifier.matchParentSize())
         if (state.phase == Phase.LOADING || state.phase == Phase.SENDING || state.phase == Phase.BUFFERING) {
             LinearProgressIndicator(Modifier.fillMaxWidth().align(Alignment.BottomCenter))
         }
@@ -442,14 +446,15 @@ private fun ChannelHeader(s: CastState) {
             .semantics(mergeDescendants = true) { liveRegion = LiveRegionMode.Polite },
     ) {
         // Le logo de la chaîne (ou son nom) sur un fond assorti, comme sur l'accueil.
-        // En lecture sur la télé : les ondes de diffusion passent derrière le logo, sur le fond (« ça passe »).
+        // En lecture sur la télé : un halo qui respire derrière le logo, sur le fond, et le liseré qui fait le tour.
         val playing = s.phase == Phase.PLAYING && !s.onPhone
         ChannelArt(
             name = m.channel ?: m.title, logo = m.posterUrl, streamUrl = m.url, pad = 56.dp,
             textStyle = MaterialTheme.typography.displaySmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
             modifier = Modifier.matchParentSize(),
-            underlay = if (playing) ({ ink -> CastWaves(ink.copy(alpha = 0.28f), size = 520.dp, inner = 70.dp) }) else null,
+            underlay = if (playing) ({ ink -> CastHalo(ink, size = 360.dp) }) else null,
         )
+        if (playing) CastRim(Color.White.copy(alpha = 0.8f), 28.dp, Modifier.matchParentSize())
         // Voile sombre en bas : l'état de la lecture reste lisible sur n'importe quel fond.
         Box(Modifier.align(Alignment.BottomCenter).fillMaxWidth().height(64.dp)
             .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(alpha = 0.55f)))))

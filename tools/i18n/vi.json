@@ -479,7 +479,15 @@
   "amb_failed": "Không thể bắt đầu. Hãy kiểm tra kết nối và thử lại.",
   "amb_no_photos": "Hãy chọn ảnh của bạn trong Cá nhân hóa trước.",
   "amb_credits_note": "Ảnh từ Wikimedia Commons, ghi nguồn trên màn hình. Đài radio từ danh bạ Radio Browser.",
-  "amb_change": "Đổi không khí"
+  "amb_change": "Đổi không khí",
+  "browser_tap_to_play": "Chạm vào video để phát",
+  "browser_popup_blocked": "Đã chặn cửa sổ quảng cáo",
+  "browser_popup_open": "Vẫn mở",
+  "xtream_all": "Tất cả",
+  "xtream_loading": "Đang tải danh mục…",
+  "xtream_error": "Nhà cung cấp của bạn không phản hồi. Hãy thử lại sau.",
+  "xtream_empty": "Nhà cung cấp của bạn không có gì ở đây.",
+  "xtream_search": "Tìm tên phim"
  },
  "plurals": {
   "browser_found": {

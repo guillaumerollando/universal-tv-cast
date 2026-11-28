@@ -491,6 +491,21 @@ class VideoSniffer {
 (function(){
   if (window.__tvcast) return; window.__tvcast = true;
   if (typeof TvCastBridge === 'undefined') return;
+  // Coup de pouce de l'appli (reprise d'un épisode) : lancer la lecture ici, son coupé, puis dans chaque cadre en
+  // dessous. Un message passe aussi dans les lecteurs venant d'un autre site, où la page ne peut pas entrer.
+  var PLAY_BTN = '.vjs-big-play-button,.jw-display-icon-container,.jw-icon-display,.plyr__control--overlaid,[data-plyr="play"],' +
+    '.fp-play,.fp-ui,.dplayer-mobile-play,.art-control-play,.art-state-play,.mejs__overlay-button,.mejs-overlay-button,.vjs-poster,' +
+    'button[aria-label*="play" i],button[aria-label*="lecture" i],button[title*="play" i],button[title*="lecture" i],.play-button,.playButton,.btn-play,#play';
+  function nudge(){ try {
+    var vs = document.querySelectorAll('video'), any = false;
+    vs.forEach(function(v){ try { if (!v.paused) { any = true; return; } v.muted = true; var p = v.play(); if (p && p.catch) p.catch(function(){}); } catch(e){} });
+    // Jamais un vrai lien (il emmènerait ailleurs) : seulement un bouton du lecteur.
+    if (!any) { var b = document.querySelector(PLAY_BTN), h = b && b.closest && b.closest('a[href]');
+      if (b && !(h && (h.getAttribute('href') || '#').charAt(0) !== '#')) b.click(); }
+    for (var i = 0; i < window.frames.length; i++) try { window.frames[i].postMessage('__tvcast_nudge', '*'); } catch(e){}
+  } catch(e){} }
+  window.__tvcastNudge = nudge;
+  window.addEventListener('message', function(e){ if (e.data === '__tvcast_nudge') nudge(); });
   function report(v){ try { var s = v.currentSrc || v.src; if (s && s.indexOf('http') === 0) TvCastBridge.found(s, isFinite(v.duration) ? v.duration : 0); } catch(e){} }
   function tracks(){ try { if (!TvCastBridge.track) return; document.querySelectorAll('track').forEach(function(tr){
     var k = (tr.kind || 'subtitles').toLowerCase(); if (k !== 'subtitles' && k !== 'captions') return;
@@ -560,8 +575,51 @@ class VideoSniffer {
     }
 }
 
-/** Liste courte de régies publicitaires et de fenêtres surgissantes connues. */
+/**
+ * Bloqueur de pubs : une liste courte de régies écrite ici, plus les domaines publicitaires d'EasyList et de la Liste FR
+ * (listes de Brave, uBlock, Adblock Plus ; licence GPL-3.0 comme l'appli), ramenés à de simples domaines par
+ * `tools/adblock.py` et rangés dans `assets/adblock-hosts.txt.gz` (~54 000 domaines). Chargée une fois, en arrière-plan.
+ */
 object AdBlock {
+    @Volatile private var listed: Set<String> = emptySet()
+    @Volatile private var loading = false
+
+    /** Charge la grande liste (une seule fois, hors du fil principal). */
+    fun load(ctx: android.content.Context) {
+        if (loading) return
+        loading = true
+        val app = ctx.applicationContext
+        Thread {
+            runCatching {
+                val set = HashSet<String>(60_000)
+                java.util.zip.GZIPInputStream(app.assets.open("adblock-hosts.txt.gz")).bufferedReader().useLines { lines ->
+                    lines.forEach { if (it.isNotBlank()) set.add(it.trim()) }
+                }
+                listed = set
+                android.util.Log.i("TvCastWeb", "liste de pubs chargée : ${set.size} domaines")
+            }.onFailure { android.util.Log.w("TvCastWeb", "liste de pubs illisible", it) }
+        }.apply { isDaemon = true; priority = Thread.MIN_PRIORITY }.start()
+    }
+
+    /**
+     * Le « site » d'une adresse (domaine enregistrable, à peu près) : « video.example.co.uk » → « example.co.uk ».
+     * Sert à reconnaître ce qui vient du site visité lui-même (jamais bloqué) et les sauts vers un autre site.
+     */
+    fun site(host: String?): String? {
+        val h = host?.lowercase()?.removePrefix("www.") ?: return null
+        if (h.all { it.isDigit() || it == '.' } || h.contains(':')) return h // adresse IP : elle-même
+        val p = h.split('.')
+        if (p.size <= 2) return h
+        val two = p.takeLast(2).joinToString(".")
+        val second = p[p.size - 2]
+        return if (second.length <= 3 && second in SECOND_LEVEL) p.takeLast(3).joinToString(".") else two
+    }
+    private val SECOND_LEVEL = setOf("co", "com", "net", "org", "gov", "edu", "ac", "or", "ne", "go", "gob", "nic")
+
+    /** Même chose que [isAd], sauf pour ce qui vient du site visité lui-même (son lecteur, ses images…). */
+    fun isAd(url: Uri, pageSite: String?): Boolean =
+        (pageSite == null || site(url.host) != pageSite) && isAd(url)
+
     private val hosts = setOf(
         "doubleclick.net", "googlesyndication.com", "googleadservices.com", "adservice.google.com",
         "google-analytics.com", "googletagmanager.com", "adnxs.com", "adsrvr.org", "amazon-adsystem.com",
@@ -595,8 +653,9 @@ object AdBlock {
 
     fun blocked(url: Uri): Boolean {
         var h = url.host?.lowercase() ?: return false
+        val list = listed
         while (true) {
-            if (h in hosts) return true
+            if (h in hosts || h in list) return true
             val i = h.indexOf('.')
             if (i < 0 || h.indexOf('.', i + 1) < 0) return false
             h = h.substring(i + 1)

@@ -481,6 +481,14 @@
     <string name="amb_no_photos">Nejdřív si v Přizpůsobení vyberte fotky.</string>
     <string name="amb_credits_note">Fotky z Wikimedia Commons, s uvedením autorů na obrazovce. Rádia z adresáře Radio Browser.</string>
     <string name="amb_change">Změnit atmosféru</string>
+    <string name="browser_tap_to_play">Klepněte na video pro spuštění</string>
+    <string name="browser_popup_blocked">Reklamní okno zablokováno</string>
+    <string name="browser_popup_open">Přesto otevřít</string>
+    <string name="xtream_all">Vše</string>
+    <string name="xtream_loading">Načítání katalogu…</string>
+    <string name="xtream_error">Váš poskytovatel neodpovídá. Zkuste to později.</string>
+    <string name="xtream_empty">Váš poskytovatel tu nic nemá.</string>
+    <string name="xtream_search">Hledat titul</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="few">%d videa</item>

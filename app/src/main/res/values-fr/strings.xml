@@ -117,6 +117,14 @@
     <string name="tip_notif_body">Pendant la lecture, Universal TV Cast affiche ses commandes (pause, ±10 s, arrêt) dans tes notifications et sur l’écran verrouillé, pour piloter la télé sans rouvrir l’appli. Rien d’autre : jamais de pub, jamais de message.</string>
     <string name="action_notif_allow">Afficher la télécommande</string>
     <string name="action_no_thanks">Non merci</string>
+    <string name="browser_tap_to_play">Touche la vidéo pour la lancer</string>
+    <string name="browser_popup_blocked">Fenêtre de pub bloquée</string>
+    <string name="browser_popup_open">Ouvrir quand même</string>
+    <string name="xtream_all">Tous</string>
+    <string name="xtream_loading">Chargement du catalogue…</string>
+    <string name="xtream_error">Ton fournisseur ne répond pas. Réessaie plus tard.</string>
+    <string name="xtream_empty">Rien ici chez ton fournisseur.</string>
+    <string name="xtream_search">Chercher un titre</string>
     <string name="action_dont_show">Ne plus afficher</string>
     <string name="help_section">Dépannage</string>
     <string name="state_expanded">ouvert</string>

@@ -481,6 +481,14 @@
     <string name="amb_no_photos">เลือกรูปของคุณในการปรับแต่งก่อน</string>
     <string name="amb_credits_note">ภาพจาก Wikimedia Commons แสดงเครดิตบนหน้าจอ วิทยุจากไดเรกทอรี Radio Browser</string>
     <string name="amb_change">เปลี่ยนบรรยากาศ</string>
+    <string name="browser_tap_to_play">แตะวิดีโอเพื่อเริ่มเล่น</string>
+    <string name="browser_popup_blocked">บล็อกหน้าต่างโฆษณาแล้ว</string>
+    <string name="browser_popup_open">เปิดต่อไป</string>
+    <string name="xtream_all">ทั้งหมด</string>
+    <string name="xtream_loading">กำลังโหลดแคตตาล็อก…</string>
+    <string name="xtream_error">ผู้ให้บริการของคุณไม่ตอบสนอง โปรดลองอีกครั้งภายหลัง</string>
+    <string name="xtream_empty">ผู้ให้บริการของคุณไม่มีรายการที่นี่</string>
+    <string name="xtream_search">ค้นหาชื่อเรื่อง</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>

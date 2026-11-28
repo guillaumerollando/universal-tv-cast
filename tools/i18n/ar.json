@@ -479,7 +479,15 @@
   "amb_failed": "تعذر بدء الأجواء. تحقق من اتصالك وأعد المحاولة.",
   "amb_no_photos": "اختر صورك أولًا من التخصيص.",
   "amb_credits_note": "الصور من Wikimedia Commons مع ذكر أصحابها على الشاشة. محطات الراديو من دليل Radio Browser.",
-  "amb_change": "تغيير الأجواء"
+  "amb_change": "تغيير الأجواء",
+  "browser_tap_to_play": "المس الفيديو لتشغيله",
+  "browser_popup_blocked": "تم حظر نافذة إعلانية",
+  "browser_popup_open": "افتح على أي حال",
+  "xtream_all": "الكل",
+  "xtream_loading": "جارٍ تحميل الكتالوج…",
+  "xtream_error": "مزوّدك لا يستجيب. حاول لاحقًا.",
+  "xtream_empty": "لا شيء هنا لدى مزوّدك.",
+  "xtream_search": "ابحث عن عنوان"
  },
  "plurals": {
   "browser_found": {

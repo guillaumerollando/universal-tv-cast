@@ -117,6 +117,14 @@
     <string name="tip_notif_body">Durante a reprodução, o Universal TV Cast mostra os controles (pausa, ±10 s, parar) nas notificações e na tela de bloqueio, para controlar a TV sem abrir o app. Nada mais: nunca anúncios, nunca mensagens.</string>
     <string name="action_notif_allow">Mostrar o controle</string>
     <string name="action_no_thanks">Não, obrigado</string>
+    <string name="browser_tap_to_play">Toque no vídeo para iniciar</string>
+    <string name="browser_popup_blocked">Janela de anúncio bloqueada</string>
+    <string name="browser_popup_open">Abrir mesmo assim</string>
+    <string name="xtream_all">Todos</string>
+    <string name="xtream_loading">Carregando o catálogo…</string>
+    <string name="xtream_error">Seu provedor não está respondendo. Tente mais tarde.</string>
+    <string name="xtream_empty">Seu provedor não tem nada aqui.</string>
+    <string name="xtream_search">Buscar um título</string>
     <string name="action_dont_show">Não mostrar de novo</string>
     <string name="help_section">Solução de problemas</string>
     <string name="state_expanded">aberto</string>

@@ -117,6 +117,14 @@
     <string name="tip_notif_body">Tijdens het afspelen toont Universal TV Cast de knoppen (pauze, ±10 s, stop) in je meldingen en op het vergrendelscherm, zodat je de tv bedient zonder de app te openen. Verder niets: nooit reclame, nooit berichten.</string>
     <string name="action_notif_allow">Afstandsbediening tonen</string>
     <string name="action_no_thanks">Nee, bedankt</string>
+    <string name="browser_tap_to_play">Tik op de video om te starten</string>
+    <string name="browser_popup_blocked">Advertentievenster geblokkeerd</string>
+    <string name="browser_popup_open">Toch openen</string>
+    <string name="xtream_all">Alle</string>
+    <string name="xtream_loading">Catalogus laden…</string>
+    <string name="xtream_error">Je aanbieder reageert niet. Probeer het later opnieuw.</string>
+    <string name="xtream_empty">Je aanbieder heeft hier niets.</string>
+    <string name="xtream_search">Titel zoeken</string>
     <string name="action_dont_show">Niet meer tonen</string>
     <string name="help_section">Problemen oplossen</string>
     <string name="state_expanded">uitgevouwen</string>

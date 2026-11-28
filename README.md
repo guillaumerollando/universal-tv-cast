@@ -7,10 +7,15 @@ sur le téléphone quand il n'y a pas de télé allumée.
 ## Ce que fait l'appli
 - **Navigateur intégré** qui repère les vidéos de la page (requêtes réseau, balises `<video>`, listes HLS chargées
   en coulisse, service workers) et les envoie toutes seules au lecteur ; blocage des pubs. Vidéo pas repérée :
-  « Chercher encore » ou « Signaler ce site » ; vidéo protégée (DRM) : dit franchement.
+  « Chercher encore » ou « Signaler ce site » ; vidéo protégée (DRM) : dit franchement. Bloqueur : domaines d'EasyList
+  et de la Liste FR (`tools/adblock.py` → `assets/adblock-hosts.txt.gz`, ~54 000 domaines) et règle « anti pop-under » :
+  une fenêtre ou une redirection vers un autre site n'est acceptée que si l'on a touché un lien vers lui (sinon bandeau
+  « Fenêtre de pub bloquée · Ouvrir quand même »). Barres d'adresse et d'onglets qui suivent le doigt ensemble.
 - **Reprendre** : une carte par série, épisode suivant quand on a fini, relancé sans repasser par le site.
 - **Chaînes de télé** : listes M3U / Xtream importées, chaînes gratuites, guide des programmes (« En ce moment »,
-  grille par chaîne), zapping, pause du direct.
+  grille par chaîne), zapping, pause du direct. Abonnement Xtream : ses **films et séries** (API `player_api.php`) en
+  mur d'affiches, catégories du fournisseur, recherche, saisons et épisodes, « Épisode suivant » (`data/Xtream.kt`,
+  `ui/XtreamCatalog.kt`) ; l'appli ne fournit aucun contenu.
 - **Lecteur externe** : « Ouvrir avec » / « Partager » des autres applis (en-têtes, titre et sous-titres, conventions
   MX Player et VLC) ; un lien de page web s'ouvre dans le navigateur.
 - **Album** : photos et vidéos du téléphone ; une vidéo seule se lit comme une vidéo, plusieurs éléments font un diaporama.

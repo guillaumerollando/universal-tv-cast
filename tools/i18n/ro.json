@@ -479,7 +479,15 @@
   "amb_failed": "Atmosfera nu a putut porni. Verificați conexiunea și încercați din nou.",
   "amb_no_photos": "Alegeți mai întâi fotografiile în Personalizare.",
   "amb_credits_note": "Fotografii de pe Wikimedia Commons, cu credit pe ecran. Posturi de radio din directorul Radio Browser.",
-  "amb_change": "Schimbă atmosfera"
+  "amb_change": "Schimbă atmosfera",
+  "browser_tap_to_play": "Atinge videoclipul ca să pornească",
+  "browser_popup_blocked": "Fereastră de reclamă blocată",
+  "browser_popup_open": "Deschide oricum",
+  "xtream_all": "Toate",
+  "xtream_loading": "Se încarcă catalogul…",
+  "xtream_error": "Furnizorul tău nu răspunde. Încearcă mai târziu.",
+  "xtream_empty": "Furnizorul tău nu are nimic aici.",
+  "xtream_search": "Caută un titlu"
  },
  "plurals": {
   "browser_found": {

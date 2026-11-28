@@ -479,7 +479,15 @@
   "amb_failed": "माहौल शुरू नहीं हो सका। कनेक्शन जाँचें और फिर कोशिश करें।",
   "amb_no_photos": "पहले वैयक्तिकरण में अपनी तस्वीरें चुनें।",
   "amb_credits_note": "तस्वीरें Wikimedia Commons से, स्क्रीन पर श्रेय सहित। रेडियो Radio Browser निर्देशिका से।",
-  "amb_change": "माहौल बदलें"
+  "amb_change": "माहौल बदलें",
+  "browser_tap_to_play": "चलाने के लिए वीडियो पर टैप करें",
+  "browser_popup_blocked": "विज्ञापन विंडो ब्लॉक की गई",
+  "browser_popup_open": "फिर भी खोलें",
+  "xtream_all": "सभी",
+  "xtream_loading": "कैटलॉग लोड हो रहा है…",
+  "xtream_error": "आपका प्रदाता जवाब नहीं दे रहा। बाद में फिर कोशिश करें।",
+  "xtream_empty": "आपके प्रदाता के पास यहाँ कुछ नहीं है।",
+  "xtream_search": "शीर्षक खोजें"
  },
  "plurals": {
   "browser_found": {

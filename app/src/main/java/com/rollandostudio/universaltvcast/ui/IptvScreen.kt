@@ -39,6 +39,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.LiveTv
+import androidx.compose.material.icons.rounded.Movie
+import androidx.compose.material.icons.rounded.VideoLibrary
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.CalendarViewDay
@@ -371,6 +374,14 @@ private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
     var group by rememberSaveable { mutableStateOf<String?>(null) }
     // Deux vues des mêmes chaînes : la mosaïque, ou « En ce moment » (ce qui passe sur chacune).
     var onNow by rememberSaveable { mutableStateOf(false) }
+    // Abonnement « Xtream » : ses films et ses séries, à côté des chaînes (puces Chaînes / Films / Séries).
+    val lists by IptvStore.lists.collectAsState()
+    val accounts = remember(lists) { com.rollandostudio.universaltvcast.data.Xtream.accounts(lists) }
+    var section by rememberSaveable { mutableStateOf<String?>(null) } // null : chaînes ; "MOVIES" / "SERIES"
+    val vodKind = section?.let { com.rollandostudio.universaltvcast.data.Xtream.Kind.valueOf(it) }
+    var vodCats by remember(section) { mutableStateOf<List<String>>(emptyList()) }
+    var vodCat by rememberSaveable(section) { mutableStateOf<String?>(null) }
+    val vodState = androidx.compose.foundation.lazy.grid.rememberLazyGridState()
     val all = channels.orEmpty()
     val groups = remember(all) {
         // Le pays du téléphone en premier (les listes classées par pays les nomment en anglais), puis les plus fournis.
@@ -420,12 +431,20 @@ private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
     val saving by com.rollandostudio.universaltvcast.data.Power.saving.collectAsState()
     // Rien dessous tant qu'on est tout en haut : pas de verre fumé (pas de bandeau inutile).
     val overContent by remember { androidx.compose.runtime.derivedStateOf {
-        if (onNow) nowState.firstVisibleItemIndex > 0 || nowState.firstVisibleItemScrollOffset > 0
+        if (vodKind != null) vodState.firstVisibleItemIndex > 0 || vodState.firstVisibleItemScrollOffset > 0
+        else if (onNow) nowState.firstVisibleItemIndex > 0 || nowState.firstVisibleItemScrollOffset > 0
         else gridState.firstVisibleItemIndex > 0 || gridState.firstVisibleItemScrollOffset > 0
     } }
     Box(Modifier.fillMaxSize().nestedScroll(conn).clipToBounds()) {
         Box(Modifier.fillMaxSize().hazeSource(glass)) {
         when {
+            vodKind != null -> com.rollandostudio.universaltvcast.ui.XtreamCatalog(
+                kind = vodKind, accounts = accounts, query = query, category = vodCat, onCategories = { vodCats = it },
+                state = vodState,
+                contentPadding = PaddingValues(top = headerDp,
+                    bottom = 16.dp + androidx.compose.foundation.layout.WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()),
+                onClose = onClose,
+            )
             channels == null -> Box(Modifier.fillMaxWidth().padding(top = headerDp + 32.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
             onNow && shown.isNotEmpty() -> NowOnList(
                 // Les chaînes qu'on regarde d'abord, comme dans la mosaïque.
@@ -490,9 +509,21 @@ private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
                 } else Modifier)
                 .padding(bottom = 10.dp),
         ) {
-            SearchPill(query, { query = it })
+            SearchPill(query, { query = it }, if (vodKind != null) R.string.xtream_search else R.string.iptv_search)
             LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(6.dp),
                 verticalAlignment = Alignment.CenterVertically) {
+                // Abonnement Xtream : chaînes, films ou séries, d'abord.
+                if (accounts.isNotEmpty()) {
+                    item { Pill(stringResource(R.string.home_channels), section == null, icon = Icons.Rounded.LiveTv) { section = null } }
+                    item { Pill(stringResource(R.string.fav_icon_movie), section == "MOVIES", icon = Icons.Rounded.Movie) { section = "MOVIES" } }
+                    item { Pill(stringResource(R.string.fav_icon_series), section == "SERIES", icon = Icons.Rounded.VideoLibrary) { section = "SERIES" } }
+                    item { Box(Modifier.padding(horizontal = 4.dp).width(1.dp).height(20.dp).background(c.outlineVariant)) }
+                }
+                if (vodKind != null) {
+                    // Catégories du fournisseur pour les films ou les séries.
+                    item { Pill(stringResource(R.string.xtream_all), vodCat == null) { vodCat = null } }
+                    items(vodCats) { g -> Pill(g, vodCat == g) { vodCat = if (vodCat == g) null else g } }
+                } else {
                 // La vue « En ce moment » d'abord, séparée des catégories (elle se combine avec elles et la recherche).
                 item { Pill(stringResource(R.string.epg_now), onNow, icon = Icons.Rounded.Schedule) { onNow = !onNow } }
                 if (groups.size > 1) {
@@ -501,6 +532,7 @@ private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
                     }
                     item { Pill(stringResource(R.string.iptv_all), group == null) { group = null } }
                     items(groups) { g -> Pill(g, group == g) { group = if (group == g) null else g } }
+                }
                 }
             }
         }
@@ -524,13 +556,13 @@ private fun ChannelBrowser(channels: List<Iptv.Channel>?, onClose: () -> Unit) {
 
 /** Recherche en forme de pilule, comme la barre d'adresse du navigateur. */
 @Composable
-private fun SearchPill(query: String, onChange: (String) -> Unit) {
+private fun SearchPill(query: String, onChange: (String) -> Unit, hint: Int = R.string.iptv_search) {
     val c = MaterialTheme.colorScheme
     androidx.compose.material3.TextField(
         value = query, onValueChange = onChange, singleLine = true,
         leadingIcon = { Icon(Icons.Rounded.Search, null) },
         trailingIcon = { if (query.isNotEmpty()) IconButton(onClick = { onChange("") }) { Icon(Icons.Rounded.Close, stringResource(R.string.cd_clear)) } },
-        placeholder = { Text(stringResource(R.string.iptv_search)) },
+        placeholder = { Text(stringResource(hint)) },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         shape = RoundedCornerShape(50),
         colors = androidx.compose.material3.TextFieldDefaults.colors(

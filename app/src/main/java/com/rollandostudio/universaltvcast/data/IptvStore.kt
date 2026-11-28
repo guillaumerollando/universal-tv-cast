@@ -93,7 +93,11 @@ object IptvStore {
     /** Les chaînes d'une liste (lues une fois, puis gardées en mémoire). */
     suspend fun channels(id: String): List<Iptv.Channel> = withContext(Dispatchers.IO) {
         synchronized(cache) { cache[id] }?.let { return@withContext it }
-        val list = runCatching { Iptv.parse(File(dir, "$id.m3u").readText()) }.getOrDefault(emptyList())
+        val parsed = runCatching { Iptv.parse(File(dir, "$id.m3u").readText()) }.getOrDefault(emptyList())
+        // Abonnement « Xtream » : ses films et séries (souvent dans la même liste) ont leurs onglets à eux ; les chaînes
+        // ne gardent que le direct.
+        val xtream = _lists.value.firstOrNull { it.id == id }?.let { Xtream.accountOf(it.source) } != null
+        val list = if (xtream) parsed.filterNot { it.url.contains("/movie/") || it.url.contains("/series/") } else parsed
         synchronized(cache) { cache[id] = list }
         list
     }

@@ -36,7 +36,7 @@ data class WebProblem(val kind: Kind, val url: String, val code: Int = 0) {
  * Lance la lecture dans la page, son coupé : vidéos déjà là, sinon le bouton de lecture du lecteur (vidéo.js, JW Player,
  * Plyr, boutons « Lecture / Play »). Dans la page et dans les cadres du même site.
  */
-private const val NUDGE_PLAY = """(function(){function go(d){try{
+private const val NUDGE_PLAY = """(function(){if(window.__tvcastNudge){window.__tvcastNudge();return}function go(d){try{
 var vs=d.querySelectorAll('video');vs.forEach(function(v){try{v.muted=true;var p=v.play();if(p&&p.catch)p.catch(function(){})}catch(e){}});
 var b=d.querySelector('.vjs-big-play-button,.jw-display-icon-container,.plyr__control--overlaid,[data-plyr="play"],button[aria-label*="play" i],button[aria-label*="lecture" i],button[title*="play" i],button[title*="lecture" i],.play-button,.playButton,.btn-play');
 if(b&&!vs.length)b.click();
@@ -60,6 +60,7 @@ class BrowserController(context: Context) {
 
     init {
         com.rollandostudio.universaltvcast.cast.TvCast.pausePageMedia = ::pauseMedia
+        AdBlock.load(context)
         sniffer.onUserPlay = { mainHandler.post { onUserPlay() } }
         sniffer.onVideoPress = { mainHandler.post { longPress = LongPress(null, video = true) } }
         // Requêtes faites par le « service worker » d'un site (il charge parfois la vidéo à la place de la page) :
@@ -69,7 +70,7 @@ class BrowserController(context: Context) {
         ) runCatching {
             androidx.webkit.ServiceWorkerControllerCompat.getInstance().setServiceWorkerClient(object : androidx.webkit.ServiceWorkerClientCompat() {
                 override fun shouldInterceptRequest(request: WebResourceRequest): WebResourceResponse? {
-                    if (Library.adBlock.value && adsAllowedHost == null && AdBlock.isAd(request.url)) {
+                    if (Library.adBlock.value && adsAllowedHost == null && AdBlock.isAd(request.url, pageSite)) {
                         blockedCount++
                         return WebResourceResponse("text/plain", "utf-8", ByteArrayInputStream(ByteArray(0)))
                     }
@@ -118,6 +119,15 @@ class BrowserController(context: Context) {
     var onAutoCast: (() -> Unit)? = null
     /** Épisode suivant introuvable en arrière-plan : on montre la page pour que l'utilisateur lance la vidéo. */
     var onAutoGiveUp: (() -> Unit)? = null
+    /**
+     * Reprise d'un épisode qui ne démarre pas toute seule après quelques secondes (lecteur qui attend qu'on le touche) :
+     * la page s'affiche pour que l'utilisateur touche la vidéo. L'attente continue : la vidéo partira dès qu'elle sera là.
+     */
+    var onAutoShowPage: (() -> Unit)? = null
+    /** Page montrée pendant une reprise : l'écran invite à toucher la vidéo. */
+    var tapToPlay by mutableStateOf(false)
+    private var armedAt = 0L
+    private var pageShown = false
 
     private fun pageKey(u: String) = u.substringBefore('#')
 
@@ -138,11 +148,13 @@ class BrowserController(context: Context) {
         load(next)
         arm(background = true, waitMs = 25_000)
         // Beaucoup de lecteurs ne chargent la vidéo qu'à la lecture : on la lance dans la page (son coupé).
-        for (d in listOf(3000L, 6000L, 10_000L, 15_000L)) mainHandler.postDelayed({ nudgePlayback() }, d)
+        for (d in listOf(2000L, 3500L, 5000L, 7000L, 10_000L, 15_000L, 20_000L)) mainHandler.postDelayed({ nudgePlayback() }, d)
     }
 
     private fun arm(background: Boolean, waitMs: Long) {
         autoSeenAt = 0L
+        armedAt = System.currentTimeMillis()
+        pageShown = false
         autoBackground = background
         autoUntil = System.currentTimeMillis() + waitMs
         mainHandler.removeCallbacks(autoCheck)
@@ -167,11 +179,22 @@ class BrowserController(context: Context) {
                     autoOpened += page
                     android.util.Log.i("TvCastWeb", "vidéo lancée : passage automatique au lecteur (${if (autoBackground) "épisode suivant" else "lecture dans la page"})")
                     restoreGesture()
+                    tapToPlay = false
                     castFound(best)
                     onAutoCast?.invoke()
                 }
+                // Reprise : rien après 6 s, la page s'affiche (« Touche la vidéo pour la lancer ») sans arrêter l'attente.
+                autoBackground && !pageShown && best == null && System.currentTimeMillis() - armedAt > 6000 -> {
+                    pageShown = true
+                    android.util.Log.i("TvCastWeb", "reprise : la vidéo ne part pas seule, on montre la page")
+                    tapToPlay = true
+                    mainHandler.postDelayed({ tapToPlay = false }, 8000)
+                    onAutoShowPage?.invoke()
+                    mainHandler.postDelayed(this, 400)
+                }
                 System.currentTimeMillis() > autoUntil -> {
                     autoUntil = 0L
+                    tapToPlay = false
                     restoreGesture()
                     // Vidéo lancée (ou cherchée) par l'utilisateur et rien de repéré : on le lui dit, avec une issue.
                     if (manualSearch || !autoBackground) {
@@ -179,7 +202,7 @@ class BrowserController(context: Context) {
                         manualSearch = false
                         notFound = true
                     }
-                    if (autoBackground) { android.util.Log.i("TvCastWeb", "épisode suivant : pas de vidéo repérée, on montre la page"); onAutoGiveUp?.invoke() }
+                    if (autoBackground && !pageShown) { android.util.Log.i("TvCastWeb", "épisode suivant : pas de vidéo repérée, on montre la page"); onAutoGiveUp?.invoke() }
                 }
                 else -> mainHandler.postDelayed(this, 400)
             }
@@ -246,10 +269,74 @@ class BrowserController(context: Context) {
     var canGoBack by mutableStateOf(false)
     var canGoForward by mutableStateOf(false)
     var started by mutableStateOf(false)
-    /** Barre d'adresse visible (cachée quand on descend dans la page, réaffichée en remontant). */
-    var barVisible by mutableStateOf(true)
+    /**
+     * Part visible de la barre d'adresse (1 = entière, 0 = cachée) : elle suit le doigt comme l'en-tête des autres
+     * écrans, se cache en descendant dans la page et revient en remontant. La barre d'onglets suit la même valeur.
+     */
+    var barShown by androidx.compose.runtime.mutableFloatStateOf(1f)
+    /** Hauteur de la barre d'adresse en pixels (mesurée par l'écran). */
+    var barPx = 150f
+    var barVisible: Boolean
+        get() = barShown > 0f
+        set(v) { barShown = if (v) 1f else 0f }
     /** Nombre de pubs bloquées depuis le lancement (pour le journal). */
     @Volatile var blockedCount = 0
+    /** Site de la page affichée : ce qui en vient n'est jamais pris pour une pub. */
+    @Volatile private var pageSite: String? = null
+    /**
+     * Fenêtre ou redirection vers un autre site, bloquée parce qu'elle ne venait pas d'un lien touché (pub « pop-under »
+     * qui s'ouvre en touchant la vidéo) : un bandeau propose quand même de l'ouvrir.
+     */
+    var blockedJump by mutableStateOf<String?>(null)
+    /** Dernier toucher dans la page : quand, et le lien touché s'il y en avait un. */
+    private var tapAt = 0L
+    private var tapLink: String? = null
+
+    /**
+     * Saut vers [target] (nouvelle fenêtre, ou la page qui part ailleurs) : accepté s'il reste sur le site visité, ou
+     * s'il va là où mène le lien que l'on vient de toucher. Sinon, c'est presque toujours une pub qui détourne le
+     * toucher (touche la vidéo → la page de pub s'ouvre) : bloqué, avec le bandeau « Ouvrir quand même ».
+     */
+    private fun jumpAllowed(target: Uri): Boolean {
+        if (!Library.adBlock.value || adsAllowedHost != null) return true
+        val to = AdBlock.site(target.host) ?: return true
+        if (to == pageSite) return true
+        if (System.currentTimeMillis() - tapAt > 4000) return false
+        // Le lien sous le doigt, relu maintenant (au moment du toucher, la vue web ne l'a pas toujours encore à jour).
+        val link = linkUnderFinger() ?: tapLink
+        return link != null && AdBlock.site(Uri.parse(link).host) == to && !AdBlock.blocked(target)
+    }
+
+    /** Adresse du lien touché en dernier dans la page (lien texte ou image), ou null. */
+    private fun linkUnderFinger(): String? = runCatching {
+        val hit = webView.hitTestResult
+        when (hit.type) {
+            WebView.HitTestResult.SRC_ANCHOR_TYPE -> hit.extra
+            WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE -> {
+                val msg = mainHandler.obtainMessage()
+                webView.requestFocusNodeHref(msg)
+                msg.data.getString("url") ?: hit.extra
+            }
+            else -> null
+        }
+    }.getOrNull()
+
+    private fun blockJump(target: String) {
+        blockedCount++
+        android.util.Log.i("TvCastWeb", "saut vers un autre site bloqué (pas un lien touché) : ${Uri.parse(target).host}")
+        blockedJump = target
+        mainHandler.removeCallbacks(clearJump)
+        mainHandler.postDelayed(clearJump, 6000)
+    }
+    private val clearJump = Runnable { blockedJump = null }
+
+    /** « Ouvrir quand même » : le saut bloqué est chargé ici. */
+    fun openBlockedJump() {
+        val u = blockedJump ?: return
+        blockedJump = null
+        tapLink = u; tapAt = System.currentTimeMillis()
+        webView.loadUrl(u)
+    }
     private var lastPage: String? = null
 
     val webView: WebView = WebView(context).apply {
@@ -282,15 +369,20 @@ class BrowserController(context: Context) {
             longPress = LongPress(link)
             true
         }
-        setOnScrollChangeListener { _, _, y, _, oldY ->
+        // Chaque toucher : le lien touché (s'il y en a un) sert à reconnaître une vraie ouverture de lien d'une pub.
+        setOnTouchListener { _, e ->
+            if (e.actionMasked == android.view.MotionEvent.ACTION_UP) { tapAt = System.currentTimeMillis(); tapLink = linkUnderFinger() }
+            false
+        }
+        setOnScrollChangeListener { v, _, y, _, oldY ->
             val dy = y - oldY
-            val show = when {
-                y < 60 -> true
-                dy > 14 -> false
-                dy < -14 -> true
-                else -> barVisible
+            barShown = when {
+                y < 60 -> 1f
+                // En bas de la page, la vue qui grandit (barres cachées) fait reculer le défilement : on l'ignore,
+                // sinon les barres reviendraient d'elles-mêmes.
+                dy < 0 && !v.canScrollVertically(1) -> barShown
+                else -> (barShown - dy / barPx).coerceIn(0f, 1f)
             }
-            if (show != barVisible) barVisible = show
         }
         CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
         addJavascriptInterface(sniffer.Bridge(), "TvCastBridge")
@@ -300,7 +392,7 @@ class BrowserController(context: Context) {
         }
         webViewClient = object : WebViewClient() {
             override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
-                if (Library.adBlock.value && adsAllowedHost == null && AdBlock.isAd(request.url)) {
+                if (Library.adBlock.value && adsAllowedHost == null && AdBlock.isAd(request.url, pageSite)) {
                     blockedCount++
                     return WebResourceResponse("text/plain", "utf-8", ByteArrayInputStream(ByteArray(0)))
                 }
@@ -311,7 +403,12 @@ class BrowserController(context: Context) {
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
                 val scheme = request.url.scheme
                 if (scheme != "http" && scheme != "https") return true // intent://, market://… : on reste ici.
-                if (Library.adBlock.value && adsAllowedHost == null && AdBlock.blocked(request.url)) return true
+                if (Library.adBlock.value && adsAllowedHost == null && AdBlock.blocked(request.url)) { blockedCount++; return true }
+                // La page part vers un autre site sans qu'on ait touché de lien (pas une redirection du serveur) :
+                // la pub qui remplace l'épisode quand on touche la vidéo.
+                if (request.isForMainFrame && !request.isRedirect && !jumpAllowed(request.url)) {
+                    blockJump(request.url.toString()); return true
+                }
                 return false
             }
 
@@ -341,6 +438,7 @@ class BrowserController(context: Context) {
 
             override fun onPageStarted(view: WebView, u: String, favicon: Bitmap?) {
                 barVisible = true
+                if (!u.startsWith("about:")) pageSite = AdBlock.site(Uri.parse(u).host)
                 if (!u.startsWith("about:")) {
                     if (problem?.url != u) problem = null
                     mainStatus = 0
@@ -361,6 +459,7 @@ class BrowserController(context: Context) {
             }
 
             override fun doUpdateVisitedHistory(view: WebView, u: String, isReload: Boolean) {
+                if (!u.startsWith("about:")) pageSite = AdBlock.site(Uri.parse(u).host)
                 // Sites « une seule page » : l'adresse change sans rechargement ; la liste doit suivre.
                 newPage(u)
                 if (!u.startsWith("about:")) this@BrowserController.url = u
@@ -395,7 +494,9 @@ class BrowserController(context: Context) {
                     view.post { v.destroy() }
                     val u = Uri.parse(url)
                     if (u.scheme != "http" && u.scheme != "https") return
-                    if (Library.adBlock.value && adsAllowedHost == null && AdBlock.blocked(u)) return
+                    if (Library.adBlock.value && adsAllowedHost == null && AdBlock.blocked(u)) { blockedCount++; return }
+                    // Fenêtre ouverte en touchant autre chose qu'un lien vers ce site (la vidéo…) : pub « pop-under ».
+                    if (!jumpAllowed(u)) { blockJump(url); return }
                     android.util.Log.i("TvCastWeb", "lien « nouvel onglet » ouvert ici : ${u.host}")
                     view.loadUrl(url)
                 }

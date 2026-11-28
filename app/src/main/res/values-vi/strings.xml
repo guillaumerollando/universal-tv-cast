@@ -481,6 +481,14 @@
     <string name="amb_no_photos">Hãy chọn ảnh của bạn trong Cá nhân hóa trước.</string>
     <string name="amb_credits_note">Ảnh từ Wikimedia Commons, ghi nguồn trên màn hình. Đài radio từ danh bạ Radio Browser.</string>
     <string name="amb_change">Đổi không khí</string>
+    <string name="browser_tap_to_play">Chạm vào video để phát</string>
+    <string name="browser_popup_blocked">Đã chặn cửa sổ quảng cáo</string>
+    <string name="browser_popup_open">Vẫn mở</string>
+    <string name="xtream_all">Tất cả</string>
+    <string name="xtream_loading">Đang tải danh mục…</string>
+    <string name="xtream_error">Nhà cung cấp của bạn không phản hồi. Hãy thử lại sau.</string>
+    <string name="xtream_empty">Nhà cung cấp của bạn không có gì ở đây.</string>
+    <string name="xtream_search">Tìm tên phim</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

@@ -481,6 +481,14 @@
     <string name="amb_no_photos">Pilih foto Anda lebih dulu di Personalisasi.</string>
     <string name="amb_credits_note">Foto dari Wikimedia Commons, dengan kredit di layar. Radio dari direktori Radio Browser.</string>
     <string name="amb_change">Ganti suasana</string>
+    <string name="browser_tap_to_play">Ketuk video untuk memutarnya</string>
+    <string name="browser_popup_blocked">Jendela iklan diblokir</string>
+    <string name="browser_popup_open">Tetap buka</string>
+    <string name="xtream_all">Semua</string>
+    <string name="xtream_loading">Memuat katalog…</string>
+    <string name="xtream_error">Penyedia Anda tidak merespons. Coba lagi nanti.</string>
+    <string name="xtream_empty">Penyedia Anda tidak punya apa-apa di sini.</string>
+    <string name="xtream_search">Cari judul</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

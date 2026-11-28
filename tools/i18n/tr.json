@@ -479,7 +479,15 @@
   "amb_failed": "Ambiyans başlatılamadı. Bağlantını kontrol edip tekrar dene.",
   "amb_no_photos": "Önce Kişiselleştirme'den fotoğraflarını seç.",
   "amb_credits_note": "Fotoğraflar Wikimedia Commons'tan, ekranda künyesiyle. Radyolar Radio Browser dizininden.",
-  "amb_change": "Ambiyansı değiştir"
+  "amb_change": "Ambiyansı değiştir",
+  "browser_tap_to_play": "Başlatmak için videoya dokunun",
+  "browser_popup_blocked": "Reklam penceresi engellendi",
+  "browser_popup_open": "Yine de aç",
+  "xtream_all": "Tümü",
+  "xtream_loading": "Katalog yükleniyor…",
+  "xtream_error": "Sağlayıcınız yanıt vermiyor. Daha sonra tekrar deneyin.",
+  "xtream_empty": "Sağlayıcınızın burada bir şeyi yok.",
+  "xtream_search": "Başlık ara"
  },
  "plurals": {
   "browser_found": {

@@ -481,6 +481,14 @@
     <string name="amb_no_photos">Välj dina foton i Anpassning först.</string>
     <string name="amb_credits_note">Foton från Wikimedia Commons, med källa på skärmen. Radiokanaler från katalogen Radio Browser.</string>
     <string name="amb_change">Byt stämning</string>
+    <string name="browser_tap_to_play">Tryck på videon för att starta den</string>
+    <string name="browser_popup_blocked">Annonsfönster blockerat</string>
+    <string name="browser_popup_open">Öppna ändå</string>
+    <string name="xtream_all">Alla</string>
+    <string name="xtream_loading">Läser in katalogen…</string>
+    <string name="xtream_error">Din leverantör svarar inte. Försök igen senare.</string>
+    <string name="xtream_empty">Din leverantör har inget här.</string>
+    <string name="xtream_search">Sök en titel</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videor</item>

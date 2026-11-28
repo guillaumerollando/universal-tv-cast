@@ -481,6 +481,14 @@
     <string name="amb_no_photos">先にカスタマイズで写真を選んでください。</string>
     <string name="amb_credits_note">写真はWikimedia Commonsから、クレジットを画面に表示します。ラジオはRadio Browserのディレクトリから。</string>
     <string name="amb_change">アンビエンスを変更</string>
+    <string name="browser_tap_to_play">動画をタップして再生</string>
+    <string name="browser_popup_blocked">広告ウィンドウをブロックしました</string>
+    <string name="browser_popup_open">それでも開く</string>
+    <string name="xtream_all">すべて</string>
+    <string name="xtream_loading">カタログを読み込み中…</string>
+    <string name="xtream_error">プロバイダーが応答しません。後でもう一度お試しください。</string>
+    <string name="xtream_empty">プロバイダーにはここに何もありません。</string>
+    <string name="xtream_search">タイトルを検索</string>
     <plurals name="browser_found">
         <item quantity="other">%d 本の動画</item>
     </plurals>

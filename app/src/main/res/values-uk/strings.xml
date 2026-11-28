@@ -481,6 +481,14 @@
     <string name="amb_no_photos">Спершу виберіть фото в Персоналізації.</string>
     <string name="amb_credits_note">Фото з Wikimedia Commons, авторство вказано на екрані. Радіо з каталогу Radio Browser.</string>
     <string name="amb_change">Змінити атмосферу</string>
+    <string name="browser_tap_to_play">Торкніться відео, щоб запустити</string>
+    <string name="browser_popup_blocked">Рекламне вікно заблоковано</string>
+    <string name="browser_popup_open">Усе одно відкрити</string>
+    <string name="xtream_all">Усі</string>
+    <string name="xtream_loading">Завантаження каталогу…</string>
+    <string name="xtream_error">Твій провайдер не відповідає. Спробуй пізніше.</string>
+    <string name="xtream_empty">У твого провайдера тут нічого немає.</string>
+    <string name="xtream_search">Шукати назву</string>
     <plurals name="browser_found">
         <item quantity="one">%d відео</item>
         <item quantity="few">%d відео</item>

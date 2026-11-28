@@ -117,6 +117,14 @@
     <string name="tip_notif_body">Durante la riproduzione, Universal TV Cast mostra i comandi (pausa, ±10 s, stop) nelle notifiche e sulla schermata di blocco, per controllare la TV senza riaprire l’app. Nient’altro: mai pubblicità, mai messaggi.</string>
     <string name="action_notif_allow">Mostra il telecomando</string>
     <string name="action_no_thanks">No, grazie</string>
+    <string name="browser_tap_to_play">Tocca il video per avviarlo</string>
+    <string name="browser_popup_blocked">Finestra pubblicitaria bloccata</string>
+    <string name="browser_popup_open">Apri comunque</string>
+    <string name="xtream_all">Tutti</string>
+    <string name="xtream_loading">Caricamento del catalogo…</string>
+    <string name="xtream_error">Il tuo fornitore non risponde. Riprova più tardi.</string>
+    <string name="xtream_empty">Il tuo fornitore non ha niente qui.</string>
+    <string name="xtream_search">Cerca un titolo</string>
     <string name="action_dont_show">Non mostrare più</string>
     <string name="help_section">Risoluzione dei problemi</string>
     <string name="state_expanded">aperto</string>

@@ -479,7 +479,15 @@
   "amb_failed": "Suasana tidak dapat dimulai. Periksa koneksi Anda lalu coba lagi.",
   "amb_no_photos": "Pilih foto Anda lebih dulu di Personalisasi.",
   "amb_credits_note": "Foto dari Wikimedia Commons, dengan kredit di layar. Radio dari direktori Radio Browser.",
-  "amb_change": "Ganti suasana"
+  "amb_change": "Ganti suasana",
+  "browser_tap_to_play": "Ketuk video untuk memutarnya",
+  "browser_popup_blocked": "Jendela iklan diblokir",
+  "browser_popup_open": "Tetap buka",
+  "xtream_all": "Semua",
+  "xtream_loading": "Memuat katalog…",
+  "xtream_error": "Penyedia Anda tidak merespons. Coba lagi nanti.",
+  "xtream_empty": "Penyedia Anda tidak punya apa-apa di sini.",
+  "xtream_search": "Cari judul"
  },
  "plurals": {
   "browser_found": {

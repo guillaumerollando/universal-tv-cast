@@ -479,7 +479,15 @@
   "amb_failed": "氛围无法启动。请检查网络连接后重试。",
   "amb_no_photos": "请先在个性化中选择你的照片。",
   "amb_credits_note": "照片来自 Wikimedia Commons,屏幕上会注明出处。电台来自 Radio Browser 目录。",
-  "amb_change": "更换氛围"
+  "amb_change": "更换氛围",
+  "browser_tap_to_play": "点按视频开始播放",
+  "browser_popup_blocked": "已拦截广告弹窗",
+  "browser_popup_open": "仍然打开",
+  "xtream_all": "全部",
+  "xtream_loading": "正在加载目录…",
+  "xtream_error": "你的提供商没有响应，请稍后再试。",
+  "xtream_empty": "你的提供商这里没有内容。",
+  "xtream_search": "搜索标题"
  },
  "plurals": {
   "browser_found": {

@@ -479,7 +479,15 @@
   "amb_failed": "เริ่มบรรยากาศไม่ได้ ตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง",
   "amb_no_photos": "เลือกรูปของคุณในการปรับแต่งก่อน",
   "amb_credits_note": "ภาพจาก Wikimedia Commons แสดงเครดิตบนหน้าจอ วิทยุจากไดเรกทอรี Radio Browser",
-  "amb_change": "เปลี่ยนบรรยากาศ"
+  "amb_change": "เปลี่ยนบรรยากาศ",
+  "browser_tap_to_play": "แตะวิดีโอเพื่อเริ่มเล่น",
+  "browser_popup_blocked": "บล็อกหน้าต่างโฆษณาแล้ว",
+  "browser_popup_open": "เปิดต่อไป",
+  "xtream_all": "ทั้งหมด",
+  "xtream_loading": "กำลังโหลดแคตตาล็อก…",
+  "xtream_error": "ผู้ให้บริการของคุณไม่ตอบสนอง โปรดลองอีกครั้งภายหลัง",
+  "xtream_empty": "ผู้ให้บริการของคุณไม่มีรายการที่นี่",
+  "xtream_search": "ค้นหาชื่อเรื่อง"
  },
  "plurals": {
   "browser_found": {

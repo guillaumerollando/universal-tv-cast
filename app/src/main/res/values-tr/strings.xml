@@ -481,6 +481,14 @@
     <string name="amb_no_photos">Önce Kişiselleştirme\'den fotoğraflarını seç.</string>
     <string name="amb_credits_note">Fotoğraflar Wikimedia Commons\'tan, ekranda künyesiyle. Radyolar Radio Browser dizininden.</string>
     <string name="amb_change">Ambiyansı değiştir</string>
+    <string name="browser_tap_to_play">Başlatmak için videoya dokunun</string>
+    <string name="browser_popup_blocked">Reklam penceresi engellendi</string>
+    <string name="browser_popup_open">Yine de aç</string>
+    <string name="xtream_all">Tümü</string>
+    <string name="xtream_loading">Katalog yükleniyor…</string>
+    <string name="xtream_error">Sağlayıcınız yanıt vermiyor. Daha sonra tekrar deneyin.</string>
+    <string name="xtream_empty">Sağlayıcınızın burada bir şeyi yok.</string>
+    <string name="xtream_search">Başlık ara</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d video</item>

@@ -479,7 +479,15 @@
   "amb_failed": "분위기를 시작하지 못했어요. 연결을 확인하고 다시 시도해 주세요.",
   "amb_no_photos": "먼저 맞춤 설정에서 사진을 골라 주세요.",
   "amb_credits_note": "사진은 Wikimedia Commons 제공이며 화면에 출처를 표시해요. 라디오는 Radio Browser 디렉터리에서 가져와요.",
-  "amb_change": "분위기 바꾸기"
+  "amb_change": "분위기 바꾸기",
+  "browser_tap_to_play": "동영상을 탭해 재생하세요",
+  "browser_popup_blocked": "광고 창을 차단했습니다",
+  "browser_popup_open": "그래도 열기",
+  "xtream_all": "전체",
+  "xtream_loading": "카탈로그 불러오는 중…",
+  "xtream_error": "제공업체가 응답하지 않습니다. 나중에 다시 시도하세요.",
+  "xtream_empty": "제공업체에 여기 항목이 없습니다.",
+  "xtream_search": "제목 검색"
  },
  "plurals": {
   "browser_found": {

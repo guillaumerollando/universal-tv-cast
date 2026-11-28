@@ -1,6 +1,9 @@
 package com.rollandostudio.universaltvcast.browser
 
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material.icons.rounded.TouchApp
+import androidx.compose.material.icons.rounded.Block
+import androidx.compose.material3.Surface
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.ContentCopy
 import androidx.compose.runtime.LaunchedEffect
@@ -73,6 +76,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
@@ -125,18 +131,24 @@ fun BrowserScreen(b: BrowserController) {
     val keyboard = androidx.compose.ui.platform.LocalSoftwareKeyboardController.current
     androidx.compose.runtime.LaunchedEffect(imeVisible) { if (!imeVisible && editing) focus.clearFocus() }
 
-    // La marge sous la barre d'état (donnée par l'écran) reste fixe ; seule la barre d'adresse glisse.
-    val slide = androidx.compose.animation.core.tween<androidx.compose.ui.unit.IntSize>(260, easing = androidx.compose.animation.core.FastOutSlowInEasing)
+    // La marge sous la barre d'état (donnée par l'écran) reste fixe ; seule la barre d'adresse bouge. Comme l'en-tête
+    // des autres écrans : elle suit le doigt, rétrécit et s'efface en descendant, revient en remontant.
+    // Toujours entière en cas de problème : sans elle, plus moyen de réessayer ni de changer d'adresse.
+    val forced = (editing && imeVisible) || !b.started || b.problem != null
+    LaunchedEffect(forced) { if (forced) b.barShown = 1f }
+    val shown = if (forced) 1f else b.barShown
+    var barH by remember { androidx.compose.runtime.mutableIntStateOf(0) }
+    val density = androidx.compose.ui.platform.LocalDensity.current
     Column(Modifier.fillMaxSize()) {
-        androidx.compose.animation.AnimatedVisibility(
-            // Toujours visible en cas de problème : sans elle, plus moyen de réessayer ni de changer d'adresse.
-            visible = b.barVisible || (editing && imeVisible) || !b.started || b.problem != null,
-            enter = androidx.compose.animation.expandVertically(slide, expandFrom = Alignment.Top) +
-                androidx.compose.animation.fadeIn(androidx.compose.animation.core.tween(200)),
-            exit = androidx.compose.animation.shrinkVertically(slide, shrinkTowards = Alignment.Top) +
-                androidx.compose.animation.fadeOut(androidx.compose.animation.core.tween(160)),
+        Box(
+            Modifier.fillMaxWidth()
+                .then(if (barH > 0) Modifier.height(with(density) { (barH * shown).toDp() }) else Modifier)
+                .clipToBounds().graphicsLayer { alpha = shown },
+            contentAlignment = Alignment.BottomStart,
         ) {
-        Row(Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().wrapContentHeight(Alignment.Bottom, unbounded = true)
+            .onSizeChanged { barH = it.height; b.barPx = it.height.toFloat().coerceAtLeast(1f) }
+            .padding(horizontal = 4.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
             if (b.started) IconButton(onClick = { b.goHome() }) {
                 Icon(Icons.Rounded.Home, stringResource(R.string.cd_browser_home))
             } else IconButton(onClick = { b.webView.goBack() }, enabled = b.canGoBack) {
@@ -223,6 +235,35 @@ fun BrowserScreen(b: BrowserController) {
             b.problem?.takeIf { b.started }?.let { p -> ProblemPanel(p, b) }
             // Ce que l'appli fait toute seule avec les favoris, dit clairement (et pas de surprise).
             BookmarkNotice(Modifier.align(Alignment.TopCenter).padding(12.dp))
+            // Reprise qui ne démarre pas seule, et pub « pop-under » bloquée : dits en haut de la page.
+            Column(Modifier.align(Alignment.TopCenter).padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                androidx.compose.animation.AnimatedVisibility(b.tapToPlay, enter = androidx.compose.animation.fadeIn() + scaleIn(),
+                    exit = androidx.compose.animation.fadeOut() + scaleOut()) {
+                    Surface(shape = RoundedCornerShape(50), color = c.primary, contentColor = c.onPrimary, shadowElevation = 6.dp,
+                        modifier = Modifier.semantics { liveRegion = androidx.compose.ui.semantics.LiveRegionMode.Polite }) {
+                        Row(Modifier.padding(horizontal = 16.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Rounded.TouchApp, null, Modifier.size(20.dp))
+                            Spacer(Modifier.width(8.dp))
+                            Text(stringResource(R.string.browser_tap_to_play), style = MaterialTheme.typography.labelLarge)
+                        }
+                    }
+                }
+                val jump = b.blockedJump
+                androidx.compose.animation.AnimatedVisibility(jump != null, enter = androidx.compose.animation.fadeIn() + scaleIn(),
+                    exit = androidx.compose.animation.fadeOut() + scaleOut()) {
+                    Surface(shape = RoundedCornerShape(50), color = c.inverseSurface, contentColor = c.inverseOnSurface, shadowElevation = 6.dp) {
+                        Row(Modifier.padding(start = 16.dp, end = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Rounded.Block, null, Modifier.size(18.dp))
+                            Spacer(Modifier.width(8.dp))
+                            Text(stringResource(R.string.browser_popup_blocked), style = MaterialTheme.typography.labelLarge)
+                            TextButton(onClick = { b.openBlockedJump() }) {
+                                Text(stringResource(R.string.browser_popup_open), color = c.inversePrimary)
+                            }
+                        }
+                    }
+                }
+            }
             // Série : bouton « Épisode 13 → » quand l'adresse contient un numéro d'épisode.
             val ep = remember(b.url) { Episodes.find(b.url) }
             androidx.compose.animation.AnimatedVisibility(

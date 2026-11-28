@@ -479,7 +479,15 @@
   "amb_failed": "Stämningen kunde inte startas. Kontrollera anslutningen och försök igen.",
   "amb_no_photos": "Välj dina foton i Anpassning först.",
   "amb_credits_note": "Foton från Wikimedia Commons, med källa på skärmen. Radiokanaler från katalogen Radio Browser.",
-  "amb_change": "Byt stämning"
+  "amb_change": "Byt stämning",
+  "browser_tap_to_play": "Tryck på videon för att starta den",
+  "browser_popup_blocked": "Annonsfönster blockerat",
+  "browser_popup_open": "Öppna ändå",
+  "xtream_all": "Alla",
+  "xtream_loading": "Läser in katalogen…",
+  "xtream_error": "Din leverantör svarar inte. Försök igen senare.",
+  "xtream_empty": "Din leverantör har inget här.",
+  "xtream_search": "Sök en titel"
  },
  "plurals": {
   "browser_found": {

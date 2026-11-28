@@ -481,6 +481,14 @@
     <string name="amb_no_photos">Alegeți mai întâi fotografiile în Personalizare.</string>
     <string name="amb_credits_note">Fotografii de pe Wikimedia Commons, cu credit pe ecran. Posturi de radio din directorul Radio Browser.</string>
     <string name="amb_change">Schimbă atmosfera</string>
+    <string name="browser_tap_to_play">Atinge videoclipul ca să pornească</string>
+    <string name="browser_popup_blocked">Fereastră de reclamă blocată</string>
+    <string name="browser_popup_open">Deschide oricum</string>
+    <string name="xtream_all">Toate</string>
+    <string name="xtream_loading">Se încarcă catalogul…</string>
+    <string name="xtream_error">Furnizorul tău nu răspunde. Încearcă mai târziu.</string>
+    <string name="xtream_empty">Furnizorul tău nu are nimic aici.</string>
+    <string name="xtream_search">Caută un titlu</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>

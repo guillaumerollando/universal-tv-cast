@@ -479,7 +479,15 @@
   "amb_failed": "アンビエンスを開始できませんでした。接続を確認して、もう一度お試しください。",
   "amb_no_photos": "先にカスタマイズで写真を選んでください。",
   "amb_credits_note": "写真はWikimedia Commonsから、クレジットを画面に表示します。ラジオはRadio Browserのディレクトリから。",
-  "amb_change": "アンビエンスを変更"
+  "amb_change": "アンビエンスを変更",
+  "browser_tap_to_play": "動画をタップして再生",
+  "browser_popup_blocked": "広告ウィンドウをブロックしました",
+  "browser_popup_open": "それでも開く",
+  "xtream_all": "すべて",
+  "xtream_loading": "カタログを読み込み中…",
+  "xtream_error": "プロバイダーが応答しません。後でもう一度お試しください。",
+  "xtream_empty": "プロバイダーにはここに何もありません。",
+  "xtream_search": "タイトルを検索"
  },
  "plurals": {
   "browser_found": {

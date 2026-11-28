@@ -479,7 +479,15 @@
   "amb_failed": "氛圍無法啟動。請檢查連線後重試。",
   "amb_no_photos": "請先在個人化中選擇你的照片。",
   "amb_credits_note": "照片來自 Wikimedia Commons,螢幕上會標示出處。電台來自 Radio Browser 目錄。",
-  "amb_change": "更換氛圍"
+  "amb_change": "更換氛圍",
+  "browser_tap_to_play": "點一下影片開始播放",
+  "browser_popup_blocked": "已封鎖廣告彈出視窗",
+  "browser_popup_open": "仍要開啟",
+  "xtream_all": "全部",
+  "xtream_loading": "正在載入目錄…",
+  "xtream_error": "你的供應商沒有回應，請稍後再試。",
+  "xtream_empty": "你的供應商這裡沒有內容。",
+  "xtream_search": "搜尋標題"
  },
  "plurals": {
   "browser_found": {

@@ -481,6 +481,14 @@
     <string name="amb_no_photos">पहले वैयक्तिकरण में अपनी तस्वीरें चुनें।</string>
     <string name="amb_credits_note">तस्वीरें Wikimedia Commons से, स्क्रीन पर श्रेय सहित। रेडियो Radio Browser निर्देशिका से।</string>
     <string name="amb_change">माहौल बदलें</string>
+    <string name="browser_tap_to_play">चलाने के लिए वीडियो पर टैप करें</string>
+    <string name="browser_popup_blocked">विज्ञापन विंडो ब्लॉक की गई</string>
+    <string name="browser_popup_open">फिर भी खोलें</string>
+    <string name="xtream_all">सभी</string>
+    <string name="xtream_loading">कैटलॉग लोड हो रहा है…</string>
+    <string name="xtream_error">आपका प्रदाता जवाब नहीं दे रहा। बाद में फिर कोशिश करें।</string>
+    <string name="xtream_empty">आपके प्रदाता के पास यहाँ कुछ नहीं है।</string>
+    <string name="xtream_search">शीर्षक खोजें</string>
     <plurals name="browser_found">
         <item quantity="one">%d वीडियो</item>
         <item quantity="other">%d वीडियो</item>

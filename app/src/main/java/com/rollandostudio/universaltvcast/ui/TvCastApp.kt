@@ -168,11 +168,18 @@ fun TvCastApp() {
     LaunchedEffect(browser) {
         browser.onAutoCast = { Nav.nextLoading.value = false; Nav.resuming.value = null; Nav.tab.value = Tab.PLAYER }
         browser.onAutoGiveUp = { Nav.nextLoading.value = false; Nav.resuming.value = null; Nav.tab.value = Tab.BROWSER }
+        browser.onAutoShowPage = { Nav.nextLoading.value = false; Nav.resuming.value = null; Nav.tab.value = Tab.BROWSER }
     }
     // « Épisode suivant » depuis l'écran de lecture : chargé en arrière-plan, la vidéo part toute seule.
     val nextRequest by Nav.nextEpisode.collectAsState()
     LaunchedEffect(nextRequest) {
         nextRequest?.let { url ->
+            // Film ou épisode d'un abonnement IPTV (épisode suivant) : rouvert directement, sans le navigateur.
+            com.rollandostudio.universaltvcast.data.Xtream.mediaFor(url)?.let { m ->
+                TvCast.open(m); Nav.tab.value = Tab.PLAYER
+                Nav.nextEpisode.value = null; Nav.resuming.value = null; Nav.nextLoading.value = false
+                return@LaunchedEffect
+            }
             // Vidéo du réseau (épisode suivant d'un dossier, « Reprendre ») : rouverte directement, sans le navigateur.
             val lan = com.rollandostudio.universaltvcast.lan.LanStore.mediaFor(url)
             if (lan != null) {
@@ -278,6 +285,8 @@ fun TvCastApp() {
         }
     }
     val headerDp = with(androidx.compose.ui.platform.LocalDensity.current) { (headerPx - headerHidden).toDp() }
+    // Part visible des barres du navigateur (adresse en haut, onglets en bas), qui suivent le doigt ensemble.
+    val browserBars = browser.barShown
     Scaffold(
         containerColor = androidx.compose.ui.graphics.Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,
@@ -325,7 +334,13 @@ fun TvCastApp() {
             }
             }
         },
-        bottomBar = { PillTabBar(tab, state.active, haze) { Nav.iptv.value = null; Nav.tab.value = it } },
+        bottomBar = {
+            // Sur le navigateur, la barre d'onglets part et revient avec la barre d'adresse (toute la place au site).
+            Box(Modifier.graphicsLayer {
+                val f = if (tab == Tab.BROWSER) browserBars else 1f
+                translationY = size.height * (1f - f); alpha = f
+            }) { PillTabBar(tab, state.active, haze) { Nav.iptv.value = null; Nav.tab.value = it } }
+        },
     ) { padding ->
         // Les écrans défilent sous la barre d'onglets (sauf le navigateur) et finissent au-dessus d'elle.
         val bottom = padding.calculateBottomPadding()
@@ -334,7 +349,7 @@ fun TvCastApp() {
             // Pas de flou derrière la barre d'onglets sur le navigateur : la capture continue de la page web la faisait
             // clignoter (et la page ne passe pas sous la barre).
             .then(if (tab != Tab.BROWSER) Modifier.hazeSource(haze) else Modifier)
-            .then(if (tab == Tab.BROWSER) Modifier.padding(bottom = bottom) else Modifier)) {
+            .then(if (tab == Tab.BROWSER) Modifier.padding(bottom = bottom * browserBars) else Modifier)) {
             androidx.compose.runtime.CompositionLocalProvider(LocalBottomInset provides if (tab == Tab.BROWSER) 0.dp else bottom) {
             when (tab) {
                 Tab.HOME -> HomeScreen(

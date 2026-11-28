@@ -481,6 +481,14 @@
     <string name="amb_no_photos">Najpierw wybierz zdjęcia w Personalizacji.</string>
     <string name="amb_credits_note">Zdjęcia z Wikimedia Commons, z autorstwem na ekranie. Radia z katalogu Radio Browser.</string>
     <string name="amb_change">Zmień nastrój</string>
+    <string name="browser_tap_to_play">Stuknij wideo, aby je uruchomić</string>
+    <string name="browser_popup_blocked">Zablokowano okno z reklamą</string>
+    <string name="browser_popup_open">Otwórz mimo to</string>
+    <string name="xtream_all">Wszystkie</string>
+    <string name="xtream_loading">Wczytywanie katalogu…</string>
+    <string name="xtream_error">Twój dostawca nie odpowiada. Spróbuj później.</string>
+    <string name="xtream_empty">Twój dostawca nic tu nie ma.</string>
+    <string name="xtream_search">Szukaj tytułu</string>
     <plurals name="browser_found">
         <item quantity="one">%d wideo</item>
         <item quantity="few">%d wideo</item>

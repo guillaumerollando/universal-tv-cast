@@ -1783,3 +1783,29 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   - lecteur : sans image large, l'affiche du film sert de visuel (au lieu du cadre vide).
 - Pas fait : registre des fiches cs / ro / ru / uk (vouvoiement, l'appli tutoie) à trancher ; produit `pack_soutien`
   à créer dans la Console ; page de confidentialité à compléter (achat Google Play, Wikimedia Commons, Radio Browser).
+
+## 2026-11-28 (nuit, suite) — Pubs, reprise des animés, barres du navigateur, films et séries IPTV
+- **Pubs** (constat sur Anime-sama : le site a peu de pubs ; elles viennent des lecteurs intégrés, qui ouvrent une
+  pub « pop-under » au premier toucher de la vidéo et l'ouvraient dans notre onglet, à la place de l'épisode) :
+  - règle « anti pop-under » : une nouvelle fenêtre ou une page qui part vers un autre site n'est acceptée que si
+    l'on a touché un lien vers ce site (redirections du serveur et liens du même site toujours acceptés) ; sinon
+    bloquée, avec le bandeau « Fenêtre de pub bloquée · Ouvrir quand même » (6 s) ;
+  - liste EasyList + Liste FR (celles de Brave / uBlock / Adblock Plus, GPL-3.0) ramenée à ~54 000 domaines,
+    embarquée (`assets/adblock-hosts.txt.gz`, 448 Ko ; refaite par `python3 -I tools/adblock.py`), chargée en
+    arrière-plan ; ce qui vient du site visité lui-même n'est jamais bloqué. Pas de règles cosmétiques (trop lourd).
+- **Reprise d'un épisode** : le « coup de pouce » qui lance la vidéo passe maintenant dans tous les cadres, y compris
+  les lecteurs venant d'un autre site (message relayé de cadre en cadre ; avant, il n'atteignait que la page), plus
+  tôt et plus souvent ; jamais sur un vrai lien. Filet demandé par Guillaume : rien après ~6 s → la page s'affiche avec
+  « Touche la vidéo pour la lancer », et l'attente continue (la vidéo part seule vers le lecteur dès qu'elle est là).
+- **Navigateur** : la barre d'adresse suit le doigt comme l'en-tête des autres écrans (même modèle : elle rétrécit et
+  s'efface au fil du défilement), et la barre d'onglets part et revient avec elle (toute la place au site).
+- **IPTV, films et séries** : pour une liste Xtream, puces Chaînes / Films / Séries ; mur d'affiches, catégories du
+  fournisseur, recherche, note ; une série ouvre ses saisons et épisodes ; « Épisode suivant » et « Reprendre »
+  (y compris après redémarrage). Catalogues lus au fil de l'eau, 12 h en cache. Les films et séries mêlés à la liste
+  M3U sont retirés de la mosaïque des chaînes. L'appli reste un lecteur : rien n'est fourni, seulement ce que sert le
+  fournisseur de l'utilisateur avec ses identifiants (comme les lecteurs IPTV du Store).
+- Vérifié sur émulateur avec une page d'essai (lecteur intégré d'un autre site, lancé au toucher, pub pop-under) et un
+  faux fournisseur Xtream : pub bloquée (fenêtre + redirection), vrai lien vers un autre site ouvert, reprise à froid
+  lancée seule en 4,5 s, lecteur qui exige un vrai toucher → page montrée à 5 s puis lecture dès le toucher ; barres ;
+  films, séries, épisode, épisode suivant. 68 tests, 0 échec.
+- Pas vérifié : sur Anime-sama même (Cloudflare bloque les essais automatiques) et sur un vrai abonnement Xtream.

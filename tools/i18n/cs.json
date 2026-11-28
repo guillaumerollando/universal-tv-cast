@@ -479,7 +479,15 @@
   "amb_failed": "Atmosféru se nepodařilo spustit. Zkontrolujte připojení a zkuste to znovu.",
   "amb_no_photos": "Nejdřív si v Přizpůsobení vyberte fotky.",
   "amb_credits_note": "Fotky z Wikimedia Commons, s uvedením autorů na obrazovce. Rádia z adresáře Radio Browser.",
-  "amb_change": "Změnit atmosféru"
+  "amb_change": "Změnit atmosféru",
+  "browser_tap_to_play": "Klepněte na video pro spuštění",
+  "browser_popup_blocked": "Reklamní okno zablokováno",
+  "browser_popup_open": "Přesto otevřít",
+  "xtream_all": "Vše",
+  "xtream_loading": "Načítání katalogu…",
+  "xtream_error": "Váš poskytovatel neodpovídá. Zkuste to později.",
+  "xtream_empty": "Váš poskytovatel tu nic nemá.",
+  "xtream_search": "Hledat titul"
  },
  "plurals": {
   "browser_found": {

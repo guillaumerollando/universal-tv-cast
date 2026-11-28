@@ -118,6 +118,14 @@
     <string name="tip_notif_body">While a video plays, Universal TV Cast shows its controls (pause, ±10 s, stop) in your notifications and on the lock screen, so you can control the TV without opening the app. Nothing else: never ads, never messages.</string>
     <string name="action_notif_allow">Show the remote</string>
     <string name="action_no_thanks">No thanks</string>
+    <string name="browser_tap_to_play">Tap the video to start it</string>
+    <string name="browser_popup_blocked">Pop-up ad blocked</string>
+    <string name="browser_popup_open">Open anyway</string>
+    <string name="xtream_all">All</string>
+    <string name="xtream_loading">Loading the catalog…</string>
+    <string name="xtream_error">Your provider isn’t responding. Try again later.</string>
+    <string name="xtream_empty">Nothing here from your provider.</string>
+    <string name="xtream_search">Search a title</string>
     <string name="action_dont_show">Don’t show again</string>
     <string name="help_section">Troubleshooting</string>
     <string name="state_expanded">expanded</string>

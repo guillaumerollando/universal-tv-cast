@@ -117,6 +117,14 @@
     <string name="tip_notif_body">Während der Wiedergabe zeigt Universal TV Cast seine Tasten (Pause, ±10 s, Stopp) in den Benachrichtigungen und auf dem Sperrbildschirm, damit du den Fernseher ohne die App steuern kannst. Sonst nichts: nie Werbung, nie Nachrichten.</string>
     <string name="action_notif_allow">Fernbedienung anzeigen</string>
     <string name="action_no_thanks">Nein danke</string>
+    <string name="browser_tap_to_play">Tippe auf das Video, um es zu starten</string>
+    <string name="browser_popup_blocked">Werbefenster blockiert</string>
+    <string name="browser_popup_open">Trotzdem öffnen</string>
+    <string name="xtream_all">Alle</string>
+    <string name="xtream_loading">Katalog wird geladen…</string>
+    <string name="xtream_error">Dein Anbieter antwortet nicht. Versuch es später noch einmal.</string>
+    <string name="xtream_empty">Dein Anbieter hat hier nichts.</string>
+    <string name="xtream_search">Titel suchen</string>
     <string name="action_dont_show">Nicht mehr anzeigen</string>
     <string name="help_section">Fehlerbehebung</string>
     <string name="state_expanded">aufgeklappt</string>

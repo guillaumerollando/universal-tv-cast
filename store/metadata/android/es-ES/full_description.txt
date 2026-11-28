@@ -1,0 +1,41 @@
+Tu móvil, tu tele, nada en medio. Universal TV Cast envía a tu smart TV vídeos, canales de TV en directo, tus fotos y las películas de tu red de casa, sin anuncios y sin tener que pagar nada.
+
+Gratis. Sin anuncios. Sin cuenta. Código abierto.
+
+★ Gratis y sin anuncios, de verdad
+Sin anuncios, sin ventanas antes de cada envío, sin límite de duración, sin suscripción, sin registro. Todo es gratis. El código es abierto (GPL-3.0) y público en GitHub: cualquiera puede comprobar lo que hace la app. Sin rastreo ni estadísticas.
+
+★ Funciona con casi cualquier tele
+La mayoría de las smart TV entienden DLNA / UPnP, y también funcionan los dispositivos Google Cast. La app encuentra sola las teles encendidas. ¿No hay ninguna tele cerca? El vídeo se reproduce en el móvil, a pantalla completa o en una pequeña ventana flotante.
+
+★ Vídeos de la web, directos a la tele
+Abre una web en el navegador integrado: la app detecta el vídeo de la página y lo envía a la tele. Las ventanas emergentes y los anuncios del navegador se bloquean. Las emisiones que muchas teles no leen (HLS, DASH) se recomponen al vuelo en un único flujo limpio.
+
+★ Canales de TV en directo
+Importa tus listas M3U o Xtream, o empieza con los canales gratuitos de tu país. Guía de programación («Ahora» y parrilla por canal), zapping rápido y pausa del directo.
+
+★ Tu red de casa
+Películas y series en un NAS, un router o un ordenador: las carpetas compartidas (Windows, Mac, Linux, NAS) y los servidores multimedia DLNA se encuentran solos. Tus vídeos aparecen en un muro de carteles, las series ordenadas por temporada, con marcas de visto y barras de progreso. No se copia nada en el móvil.
+
+★ Tus fotos y vídeos
+Las fotos de las vacaciones en la pantalla grande, en presentación o una a una.
+
+★ Sigue donde lo dejaste
+«Continuar» recuerda el minuto en el que paraste, y el siguiente episodio ya está listo. Favoritos con el nombre, el icono y el color que quieras, y widgets en la pantalla de inicio.
+
+★ Un mando de verdad
+Reproducir, pausa, ±10 s, barra de progreso, volumen de la tele con los botones del móvil y controles en la notificación. Subtítulos (SRT, VTT, ASS) con ajuste de sincronía y elección del idioma de audio.
+
+★ Desde otras apps
+Usa «Abrir con» o «Compartir» con un enlace de vídeo en otra app, y va directo a la tele.
+
+★ Pack de apoyo, si quieres
+Nada útil depende de él: la app sigue completa y gratis. Si quieres apoyarla, una compra única desbloquea los extras divertidos: el modo Ambiente (una presentación sin fin de bonitas fotos con licencia libre o de las tuyas, con la hora y una radio online de fondo), colores de acento, negro OLED, pantallas de espera para la tele e iconos de la app.
+
+Preguntas
+• ¿Los servicios de pago de películas y series? Protegen sus vídeos (DRM): ninguna app de envío puede mandarlos a una tele DLNA. La app te lo dice con franqueza en lugar de fallar sin avisar.
+• ¿Mi tele no aparece? Comprueba que está encendida y en la misma red Wi-Fi que el móvil. También puedes añadirla con su dirección IP.
+• ¿Un vídeo no se reproduce en la tele? Algunas teles no leen todos los formatos (HEVC, AV1, algunos códecs de audio). En ese caso se reproduce en el móvil.
+
+Hecho por Rollando Studio. Sencillo, eficaz, de calidad.
+Universal TV Cast es una app independiente, sin relación con los fabricantes de televisores ni con las webs que visitas. Eres responsable de los contenidos que reproduces.

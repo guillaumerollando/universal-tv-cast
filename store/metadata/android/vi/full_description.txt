@@ -1,0 +1,41 @@
+Điện thoại của bạn, TV của bạn, không gì ở giữa. Universal TV Cast gửi video, kênh TV trực tiếp, ảnh của bạn và phim trong mạng gia đình lên smart TV, không quảng cáo và không có gì phải trả phí.
+
+Miễn phí. Không quảng cáo. Không cần tài khoản. Mã nguồn mở.
+
+★ Miễn phí, không quảng cáo, thật sự
+Không quảng cáo, không cửa sổ bật lên trước khi truyền, không giới hạn độ dài video, không gói thuê bao, không cần đăng ký. Mọi tính năng đều miễn phí. Mã nguồn mở (GPL-3.0) và công khai trên GitHub: ai cũng có thể kiểm tra ứng dụng làm gì. Không theo dõi, không thu thập thống kê.
+
+★ Dùng được với hầu hết TV
+Phần lớn smart TV hiểu DLNA / UPnP, và các thiết bị Google Cast cũng được hỗ trợ. Ứng dụng tự tìm các TV đang bật. Không có TV gần đó? Video sẽ phát trên điện thoại, toàn màn hình hoặc trong một cửa sổ nổi nhỏ.
+
+★ Video trên web, thẳng lên TV
+Mở một trang web trong trình duyệt tích hợp: ứng dụng nhận ra video trên trang và gửi lên TV. Cửa sổ bật lên và quảng cáo trong trình duyệt đều bị chặn. Các luồng mà nhiều TV không đọc được (HLS, DASH) được ghép lại ngay lập tức thành một luồng duy nhất, gọn gàng.
+
+★ Kênh TV trực tiếp
+Nhập danh sách M3U hoặc Xtream của bạn, hoặc bắt đầu với các kênh miễn phí ở quốc gia của bạn. Lịch phát sóng ("Đang phát" và bảng theo từng kênh), chuyển kênh nhanh và tạm dừng truyền hình trực tiếp.
+
+★ Mạng gia đình của bạn
+Phim lẻ và phim bộ trên NAS, bộ định tuyến hoặc máy tính: thư mục chia sẻ (Windows, Mac, Linux, NAS) và máy chủ đa phương tiện DLNA được tự động tìm thấy. Video của bạn hiển thị thành bức tường áp phích, phim bộ xếp theo mùa, có đánh dấu đã xem và thanh tiến trình. Không có gì bị sao chép vào điện thoại.
+
+★ Ảnh và video của bạn
+Ảnh đi du lịch trên màn hình lớn, dạng trình chiếu hoặc từng ảnh một.
+
+★ Xem tiếp từ chỗ đã dừng
+"Xem tiếp" nhớ phút bạn đã dừng, và tập tiếp theo đã sẵn sàng. Mục yêu thích với tên, biểu tượng và màu sắc tùy ý, cùng tiện ích trên màn hình chính.
+
+★ Điều khiển thực thụ
+Phát, tạm dừng, ±10 giây, thanh tua, chỉnh âm lượng TV bằng nút của điện thoại, điều khiển trong thông báo. Phụ đề (SRT, VTT, ASS) có chỉnh lệch thời gian, chọn ngôn ngữ âm thanh.
+
+★ Từ ứng dụng khác
+Dùng "Mở bằng" hoặc "Chia sẻ" một liên kết video từ ứng dụng khác, và video sẽ lên TV.
+
+★ Gói ủng hộ, nếu bạn muốn
+Không có tính năng quan trọng nào phụ thuộc vào gói này: ứng dụng vẫn đầy đủ và miễn phí. Nếu muốn ủng hộ, một lần mua duy nhất sẽ mở khóa các tiện ích vui: chế độ Không khí (trình chiếu bất tận những bức ảnh đẹp có giấy phép tự do hoặc ảnh của chính bạn, kèm đồng hồ và radio trực tuyến làm nền), màu nhấn, đen OLED, màn hình chờ cho TV, biểu tượng ứng dụng.
+
+Câu hỏi
+• Các dịch vụ xem phim trả phí (gói thuê bao phim lẻ và phim bộ)? Họ bảo vệ video của mình (DRM): không ứng dụng truyền nào có thể gửi chúng lên TV DLNA. Ứng dụng sẽ nói thẳng với bạn thay vì lặng lẽ thất bại.
+• TV của tôi không hiện ra? Hãy kiểm tra TV đã bật và dùng cùng mạng Wi-Fi với điện thoại. Bạn cũng có thể thêm TV bằng địa chỉ IP.
+• Một video không phát được trên TV? Một số TV không đọc được mọi định dạng (HEVC, AV1, một số codec âm thanh). Khi đó video sẽ phát trên điện thoại.
+
+Được tạo bởi Rollando Studio. Đơn giản, hiệu quả, chất lượng.
+Universal TV Cast là ứng dụng độc lập, không liên kết với các nhà sản xuất TV hay các trang web bạn truy cập. Bạn chịu trách nhiệm về nội dung mình phát.

@@ -1,0 +1,41 @@
+Seu celular, sua TV, nada no meio. O Universal TV Cast envia para a sua smart TV vídeos, canais de TV ao vivo, suas fotos e os filmes da sua rede de casa, sem anúncios e sem nada pago para usar.
+
+Grátis. Sem anúncios. Sem conta. Código aberto.
+
+★ Grátis e sem anúncios, de verdade
+Sem anúncios, sem pop-ups antes de transmitir, sem limite de duração, sem assinatura, sem cadastro. Todos os recursos são grátis. O código é aberto (GPL-3.0) e público no GitHub: qualquer pessoa pode conferir o que o app faz. Sem rastreamento, sem estatísticas.
+
+★ Funciona com quase qualquer TV
+A maioria das smart TVs entende DLNA / UPnP, e os aparelhos Google Cast também são compatíveis. O app encontra sozinho as TVs ligadas. Nenhuma TV por perto? O vídeo toca no celular, em tela cheia ou numa pequena janela flutuante.
+
+★ Vídeos da web, direto na TV
+Abra um site no navegador integrado: o app encontra o vídeo da página e envia para a TV. Pop-ups e anúncios no navegador são bloqueados. Transmissões que muitas TVs não conseguem ler (HLS, DASH) são remontadas na hora em um único fluxo limpo.
+
+★ Canais de TV ao vivo
+Importe suas listas M3U ou Xtream, ou comece com os canais grátis do seu país. Guia de programação ("Agora" e grade por canal), zapping rápido e pausa ao vivo.
+
+★ Sua rede de casa
+Filmes e séries em um NAS, um roteador ou um computador: pastas compartilhadas (Windows, Mac, Linux, NAS) e servidores de mídia DLNA são encontrados automaticamente. Seus vídeos aparecem num mural de pôsteres, as séries organizadas por temporada, com marcação de assistido e barra de progresso. Nada é copiado para o celular.
+
+★ Suas fotos e vídeos
+As fotos das férias na tela grande, em apresentação ou uma por uma.
+
+★ Continue de onde parou
+"Continuar" lembra o minuto em que você parou, e o próximo episódio já fica pronto. Favoritos com nome, ícone e cor do seu jeito, widgets na tela inicial.
+
+★ Um controle remoto de verdade
+Play, pausa, ±10 s, barra de progresso, volume da TV pelos botões do celular, controles na notificação. Legendas (SRT, VTT, ASS) com ajuste de sincronia e escolha do idioma do áudio.
+
+★ A partir de outros apps
+Use "Abrir com" ou "Compartilhar" num link de vídeo em outro app, e ele vai direto para a TV.
+
+★ Pacote de apoio, se você quiser
+Nada de útil depende dele: o app continua completo e grátis. Se quiser apoiar, uma compra única libera os extras divertidos: o modo Ambiente (uma apresentação sem fim de fotos bonitas com licença livre ou das suas, com a hora e uma rádio online ao fundo), cores de destaque, preto OLED, telas de espera para a TV e ícones do app.
+
+Perguntas
+• Serviços de streaming pagos (assinaturas de filmes e séries)? Eles protegem os vídeos (DRM): nenhum app de transmissão consegue enviá-los para uma TV DLNA. O app avisa com sinceridade em vez de falhar em silêncio.
+• Minha TV não aparece? Verifique se ela está ligada e na mesma rede Wi-Fi do celular. Você também pode adicioná-la pelo endereço IP.
+• Um vídeo não toca na TV? Algumas TVs não leem todos os formatos (HEVC, AV1, alguns codecs de áudio). Aí ele toca no celular.
+
+Feito por Rollando Studio. Simples, eficiente, com qualidade.
+O Universal TV Cast é um app independente, sem vínculo com fabricantes de TV nem com os sites que você visita. Você é responsável pelo conteúdo que reproduz.

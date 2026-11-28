@@ -1,0 +1,41 @@
+Telefon, telewizor i nic pomiędzy. Universal TV Cast wysyła na Twój smart TV filmy, kanały telewizyjne na żywo, Twoje zdjęcia i nagrania z sieci domowej – bez reklam i bez płatnych blokad.
+
+Za darmo. Bez reklam. Bez konta. Open source.
+
+★ Naprawdę za darmo i bez reklam
+Bez reklam, bez wyskakujących okien przed przesłaniem, bez limitu długości wideo, bez subskrypcji, bez rejestracji. Wszystkie funkcje są bezpłatne. Kod jest otwarty (GPL-3.0) i publiczny na GitHub: każdy może sprawdzić, co robi aplikacja. Bez śledzenia, bez analityki.
+
+★ Działa z prawie każdym telewizorem
+Większość telewizorów smart obsługuje DLNA / UPnP, a urządzenia Google Cast również są obsługiwane. Aplikacja sama znajduje włączone telewizory. Brak telewizora w pobliżu? Wideo odtworzy się na telefonie, na pełnym ekranie lub w małym pływającym okienku.
+
+★ Wideo z internetu prosto na telewizor
+Otwórz stronę we wbudowanej przeglądarce: aplikacja wykryje wideo na stronie i wyśle je na telewizor. Wyskakujące okna i reklamy w przeglądarce są blokowane. Strumienie, których wiele telewizorów nie potrafi odczytać (HLS, DASH), są na bieżąco składane w jeden czysty strumień.
+
+★ Kanały TV na żywo
+Zaimportuj swoje listy M3U lub Xtream albo zacznij od darmowych kanałów ze swojego kraju. Program TV („Teraz” i siatka dla każdego kanału), szybkie przełączanie i pauza na żywo.
+
+★ Twoja sieć domowa
+Filmy i seriale na NAS, routerze lub komputerze: udostępnione foldery (Windows, Mac, Linux, NAS) i serwery multimediów DLNA są wykrywane automatycznie. Nagrania wyświetlają się jako ściana plakatów, seriale są uporządkowane według sezonów, z oznaczeniem obejrzanych i paskami postępu. Nic nie jest kopiowane na telefon.
+
+★ Twoje zdjęcia i filmy
+Zdjęcia z wakacji na dużym ekranie, jako pokaz slajdów lub jedno po drugim.
+
+★ Oglądaj od miejsca, w którym przerwano
+„Kontynuuj” pamięta minutę, w której przerwano oglądanie, a następny odcinek czeka gotowy. Ulubione z własną nazwą, ikoną i kolorem, widżety na ekranie głównym.
+
+★ Prawdziwy pilot
+Odtwarzanie, pauza, ±10 s, pasek przewijania, głośność telewizora przyciskami telefonu, sterowanie z powiadomienia. Napisy (SRT, VTT, ASS) z przesunięciem czasu i wybór języka dźwięku.
+
+★ Z innych aplikacji
+Użyj „Otwórz za pomocą” lub „Udostępnij” przy linku do wideo w innej aplikacji, a trafi on prosto na telewizor.
+
+★ Pakiet wsparcia, jeśli chcesz
+Nic ważnego od niego nie zależy: aplikacja pozostaje kompletna i bezpłatna. Jeśli chcesz ją wesprzeć, jednorazowy zakup odblokowuje miłe dodatki: tryb Nastrój (niekończący się pokaz pięknych zdjęć na wolnej licencji lub Twoich własnych, z zegarem i radiem internetowym w tle), kolory akcentu, czerń OLED, ekrany oczekiwania na telewizorze i ikony aplikacji.
+
+Pytania
+• Płatne serwisy streamingowe (subskrypcje filmów i seriali)? Chronią swoje filmy (DRM): żadna aplikacja do przesyłania nie może wysłać ich na telewizor DLNA. Aplikacja mówi o tym uczciwie, zamiast po cichu zawodzić.
+• Mój telewizor się nie pojawia? Sprawdź, czy jest włączony i podłączony do tej samej sieci Wi-Fi co telefon. Możesz go też dodać po adresie IP.
+• Wideo nie odtwarza się na telewizorze? Niektóre telewizory nie odczytują wszystkich formatów (HEVC, AV1, niektóre kodeki audio). Wtedy odtwarza się na telefonie.
+
+Stworzone przez Rollando Studio. Prosto, skutecznie, solidnie.
+Universal TV Cast to niezależna aplikacja, niepowiązana z producentami telewizorów ani ze stronami, które odwiedzasz. Odpowiadasz za treści, które odtwarzasz.

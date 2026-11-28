@@ -1766,3 +1766,20 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   enregistrements du direct effacés au démarrage) ; ménage au démarrage pour celui du navigateur intégré (vidé si le
   cache dépasse 150 Mo en tout).
 - Traductions : 38 nouveaux textes (sauvegarde, ambiance) dans les 16 autres langues ; plus aucun texte manquant.
+
+## 2026-11-28 (nuit) — Fiches Play Store, captures, corrections trouvées en route
+- Fiche du store dans `store/` (format fastlane, comme Ruban LED) : titre « Universal TV Cast », description courte et
+  longue en 24 langues (les 23 de l'appli + espagnol d'Amérique latine), même discours que Ruban LED (« Gratuite. Sans
+  pub. Sans compte. Open source. », rubriques ★, Questions, signature, mention d'indépendance), aucun nom de service
+  tiers (les services payants protégés sont évoqués sans les nommer). Longueurs contrôlées (courte ≤ 80, longue ≤ 4000).
+- Captures fr-FR et en-US (7-8 chacune), icône 512 et bannière 1024 × 500 ; faites sur émulateur avec des films libres
+  de la Blender Foundation servis par un vrai serveur DLNA (rygel) et la fausse télé. Détails et crédits :
+  `store/README.md`.
+- Corrigé en préparant la démo :
+  - affiches posées à côté des films (« Film.jpg », « poster.jpg ») : prises aussi sur un serveur multimédia DLNA
+    (avant : seulement dans les dossiers partagés SMB) ; elles suivent le film dans le lecteur et « Reprendre » ;
+  - annuaire des affiches : un fichier de film daté n'accepte plus un résultat d'une autre année (ni sans année,
+    sauf titre identique) : « Big Buck Bunny 2008 » donnait « Big Buck Massacre » (2026) ou « The Big Bunny » ;
+  - lecteur : sans image large, l'affiche du film sert de visuel (au lieu du cadre vide).
+- Pas fait : registre des fiches cs / ro / ru / uk (vouvoiement, l'appli tutoie) à trancher ; produit `pack_soutien`
+  à créer dans la Console ; page de confidentialité à compléter (achat Google Play, Wikimedia Commons, Radio Browser).

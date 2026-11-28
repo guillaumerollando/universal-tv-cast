@@ -1,0 +1,41 @@
+Your phone, your TV, nothing in between. Universal TV Cast sends videos, live TV channels, your photos and the films on your home network to your smart TV, with no ads and no paywall.
+
+Free. No ads. No account. Open source.
+
+★ Free, no ads, for real
+No ads, no pop-ups before casting, no video length limit, no subscription, no sign-up. Every feature is free. The code is open source (GPL-3.0) and public on GitHub: anyone can check what the app does. No tracking, no analytics.
+
+★ Works with almost any TV
+Most smart TVs understand DLNA / UPnP, and Google Cast devices are supported too. The app finds the TVs that are switched on by itself. No TV nearby? The video plays on your phone instead, full screen or in a small floating window.
+
+★ Web videos, straight to the TV
+Open a site in the built-in browser: the app spots the video on the page and sends it to the TV. Pop-ups and ads in the browser are blocked. Streams that many TVs can't read (HLS, DASH) are reassembled on the fly into one clean stream.
+
+★ Live TV channels
+Import your M3U or Xtream playlists, or start with free channels from your country. Programme guide ("On now" and a grid per channel), quick zapping and live pause.
+
+★ Your home network
+Films and series on a NAS, a box or a computer: shared folders (Windows, Mac, Linux, NAS) and DLNA media servers are found automatically. Your videos show up as a poster wall, series sorted by season, with watched marks and progress bars. Nothing is copied to the phone.
+
+★ Your photos and videos
+Show the holiday photos on the big screen, as a slideshow or one by one.
+
+★ Pick up where you left off
+"Continue watching" remembers the minute you stopped, and the next episode is ready. Favorites with custom names, icons and colors, home screen widgets.
+
+★ A real remote
+Play, pause, ±10 s, seek bar, TV volume with your phone's buttons, controls in the notification. Subtitles (SRT, VTT, ASS) with timing offset, choice of audio language.
+
+★ From other apps
+"Open with" or "Share" a video link from another app, and it goes to the TV.
+
+★ Optional supporter pack
+Nothing useful depends on it: the app stays complete and free. If you want to support it, a one-time purchase unlocks the fun extras: Ambiance mode (an endless slideshow of beautiful open-licensed photos or your own, with the time and an internet radio in the background), accent colors, OLED black, TV idle screens, app icons.
+
+Questions
+• Paid streaming services (film and series subscriptions)? They protect their videos (DRM): no casting app can send them to a DLNA TV. The app tells you honestly instead of failing silently.
+• My TV doesn't show up? Check that it is on and on the same Wi-Fi as the phone. You can also add it by its IP address.
+• A video won't play on the TV? Some TVs don't read every format (HEVC, AV1, some audio codecs). It then plays on the phone.
+
+Made by Rollando Studio. Simple, efficient, quality.
+Universal TV Cast is an independent app, not affiliated with TV makers or the websites you visit. You are responsible for the content you play.

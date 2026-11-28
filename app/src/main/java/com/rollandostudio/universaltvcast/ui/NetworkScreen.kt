@@ -162,7 +162,15 @@ fun NetworkScreen(onClose: () -> Unit, start: LanStore.Folder? = null) {
                             val dev = if (d.controlUrl != null) d
                                 else d.location?.let { runCatching { MediaServers.describe(it) }.getOrNull() }
                                     ?: MediaServers.probe(d.host, d.port.takeIf { it > 0 }) ?: error("introuvable")
-                            MediaServers.browse(dev, place.ref ?: "0").filter { it.folder || it.kind != LanEntry.Kind.PHOTO }
+                            // Photos écartées, sauf à côté de vidéos : ce sont alors leurs affiches (« Film.jpg », « poster.jpg »).
+                            val all = MediaServers.browse(dev, place.ref ?: "0")
+                            fun base(n: String) = n.substringBeforeLast('.').lowercase()
+                            val videos = all.filter { it.kind == LanEntry.Kind.VIDEO }.map { base(it.name) }.toSet()
+                            all.filter { e ->
+                                e.folder || e.kind != LanEntry.Kind.PHOTO || base(e.name).let { b ->
+                                    videos.isNotEmpty() && (b in videos || videos.any { b.startsWith("$it-") } || b in setOf("poster", "folder", "cover"))
+                                }
+                            }
                         }
                         place.ref == null -> Smb.shares(d)
                         else -> Smb.list(d, place.ref)

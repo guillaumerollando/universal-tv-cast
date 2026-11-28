@@ -112,6 +112,8 @@ suspend fun loadLocalThumb(ctx: android.content.Context, uri: android.net.Uri, s
 
 @Composable
 fun LocalImage(uri: String, modifier: Modifier = Modifier, side: Int = 512, contentScale: ContentScale = ContentScale.Crop) {
+    // Image d'un serveur multimédia du réseau : adresse http, chargée comme une image distante.
+    if (uri.startsWith("http")) { RemoteImage(uri, modifier, contentScale, maxSide = side); return }
     val ctx = androidx.compose.ui.platform.LocalContext.current
     val img: ImageBitmap? by produceState<ImageBitmap?>(null, uri) {
         value = loadLocalThumb(ctx, android.net.Uri.parse(uri), side)?.asImageBitmap()

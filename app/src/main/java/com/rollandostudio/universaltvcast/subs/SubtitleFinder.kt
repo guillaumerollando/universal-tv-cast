@@ -127,8 +127,17 @@ object SubtitleFinder {
             val m = metas.getJSONObject(i)
             // Seuls les résultats dont le nom ressemble au titre cherché comptent.
             if (!similar(p.title, m.optString("name"))) continue
-            if (best == null) best = m
             val ri = m.optString("releaseInfo")
+            // Fichier de film (pas un épisode) dont l'année est connue des deux côtés et ne colle pas (à un an près) :
+            // une autre œuvre au titre voisin (« Big Buck Bunny 2008 » → « Big Buck Massacre », 2026, ou une série
+            // homonyme). Mieux vaut pas d'image qu'une image fausse.
+            // Sans année connue chez l'annuaire, seul un titre identique compte (« The Big Bunny » ≠ « Big Buck Bunny »).
+            val y = ri.take(4).toIntOrNull()
+            if (!p.isSeries && p.year != null) {
+                val same = words(p.title) == words(m.optString("name"))
+                if (if (y != null) kotlin.math.abs(y - p.year) > 1 else !same) continue
+            }
+            if (best == null) best = m
             if (p.year != null && ri.startsWith(p.year.toString())) { best = m; break }
         }
         val b = best ?: return null

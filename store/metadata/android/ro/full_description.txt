@@ -1,0 +1,41 @@
+Telefonul, televizorul și nimic între ele. Universal TV Cast trimite pe televizorul dumneavoastră smart videoclipuri, canale TV în direct, fotografiile dvs. și filmele din rețeaua de acasă, fără reclame și fără nimic de plătit.
+
+Gratuit. Fără reclame. Fără cont. Open source.
+
+★ Gratuit și fără reclame, cu adevărat
+Fără reclame, fără ferestre pop-up înainte de proiectare, fără limită de durată, fără abonament, fără înregistrare. Toate funcțiile sunt gratuite. Codul este open source (GPL-3.0) și public pe GitHub: oricine poate verifica ce face aplicația. Fără urmărire, fără statistici.
+
+★ Funcționează cu aproape orice televizor
+Majoritatea televizoarelor smart înțeleg DLNA / UPnP, iar dispozitivele Google Cast sunt și ele acceptate. Aplicația găsește singură televizoarele pornite. Niciun televizor în apropiere? Videoclipul rulează pe telefon, pe tot ecranul sau într-o fereastră mică plutitoare.
+
+★ Videoclipuri de pe web, direct pe televizor
+Deschideți un site în browserul integrat: aplicația detectează videoclipul din pagină și îl trimite pe televizor. Ferestrele pop-up și reclamele din browser sunt blocate. Fluxurile pe care multe televizoare nu le pot citi (HLS, DASH) sunt reasamblate din mers într-un singur flux curat.
+
+★ Canale TV în direct
+Importați listele M3U sau Xtream ori începeți cu canalele gratuite din țara dvs. Ghid TV („Acum” și grilă pentru fiecare canal), zapping rapid și pauză în direct.
+
+★ Rețeaua de acasă
+Filme și seriale pe un NAS, un router sau un calculator: folderele partajate (Windows, Mac, Linux, NAS) și serverele media DLNA sunt găsite automat. Videoclipurile apar ca un perete de afișe, serialele sunt ordonate pe sezoane, cu marcaj de vizionat și bare de progres. Nimic nu este copiat pe telefon.
+
+★ Fotografiile și videoclipurile dvs.
+Pozele din vacanță pe ecranul mare, în prezentare sau una câte una.
+
+★ Continuați de unde ați rămas
+„Continuă de unde ai rămas” reține minutul la care v-ați oprit, iar episodul următor este deja pregătit. Favorite cu nume, pictogramă și culoare alese de dvs., widgeturi pe ecranul de pornire.
+
+★ O telecomandă adevărată
+Redare, pauză, ±10 s, bară de derulare, volumul televizorului din butoanele telefonului, comenzi în notificare. Subtitrări (SRT, VTT, ASS) cu decalaj de sincronizare și alegerea limbii audio.
+
+★ Din alte aplicații
+Folosiți „Deschide cu” sau „Distribuie” pentru un link video dintr-o altă aplicație, iar acesta ajunge pe televizor.
+
+★ Pachet de susținere, dacă doriți
+Nimic util nu depinde de el: aplicația rămâne completă și gratuită. Dacă doriți să o susțineți, o achiziție unică deblochează extraopțiunile distractive: modul Atmosferă (o prezentare fără sfârșit cu fotografii frumoase cu licență liberă sau ale dvs., cu ora și un radio online pe fundal), culori de accent, negru OLED, ecrane de așteptare pentru televizor, pictograme pentru aplicație.
+
+Întrebări
+• Serviciile de streaming plătite (abonamente la filme și seriale)? Își protejează videoclipurile (DRM): nicio aplicație de proiectare nu le poate trimite pe un televizor DLNA. Aplicația vă spune sincer, în loc să eșueze în tăcere.
+• Televizorul nu apare? Verificați dacă este pornit și conectat la aceeași rețea Wi-Fi ca telefonul. Îl puteți adăuga și după adresa IP.
+• Un videoclip nu rulează pe televizor? Unele televizoare nu citesc toate formatele (HEVC, AV1, unele codecuri audio). Atunci rulează pe telefon.
+
+Realizat de Rollando Studio. Simplu, eficient, de calitate.
+Universal TV Cast este o aplicație independentă, fără legătură cu producătorii de televizoare sau cu site-urile pe care le vizitați. Sunteți responsabil pentru conținutul pe care îl redați.

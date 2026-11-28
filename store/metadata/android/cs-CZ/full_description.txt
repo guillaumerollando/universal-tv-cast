@@ -1,0 +1,41 @@
+Váš telefon, vaše televize, nic mezi tím. Universal TV Cast posílá na vaši chytrou televizi videa, živé TV kanály, vaše fotky i filmy z domácí sítě – bez reklam a bez placení.
+
+Zdarma. Bez reklam. Bez účtu. Open source.
+
+★ Zdarma a bez reklam, opravdu
+Žádné reklamy, žádná vyskakovací okna před odesláním, žádný limit délky videa, žádné předplatné, žádná registrace. Všechny funkce jsou zdarma. Kód je open source (GPL-3.0) a veřejně dostupný na GitHub: kdokoli si může ověřit, co aplikace dělá. Žádné sledování, žádná analytika.
+
+★ Funguje s téměř každou televizí
+Většina chytrých televizí rozumí DLNA / UPnP a podporována jsou i zařízení Google Cast. Aplikace sama najde zapnuté televize. Žádná televize poblíž? Video se přehraje v telefonu, na celou obrazovku nebo v malém plovoucím okně.
+
+★ Videa z webu přímo na televizi
+Otevřete web ve vestavěném prohlížeči: aplikace na stránce najde video a pošle ho na televizi. Vyskakovací okna a reklamy v prohlížeči jsou blokované. Streamy, které mnoho televizí neumí přečíst (HLS, DASH), se za běhu složí do jednoho čistého streamu.
+
+★ Živé TV kanály
+Importujte své seznamy M3U nebo Xtream, nebo začněte s bezplatnými kanály ze své země. TV program („Právě běží“ a přehled pro každý kanál), rychlé přepínání a pozastavení živého vysílání.
+
+★ Vaše domácí síť
+Filmy a seriály na NAS, routeru nebo počítači: sdílené složky (Windows, Mac, Linux, NAS) a mediální servery DLNA se najdou automaticky. Videa se zobrazí jako stěna plakátů, seriály seřazené podle řad, se značkou zhlédnutí a ukazatelem průběhu. Nic se do telefonu nekopíruje.
+
+★ Vaše fotky a videa
+Fotky z dovolené na velké obrazovce, jako prezentace nebo jedna po druhé.
+
+★ Pokračujte tam, kde jste skončili
+„Pokračovat“ si pamatuje minutu, kde jste přestali, a další díl je hned připravený. Oblíbené s vlastním názvem, ikonou a barvou, widgety na domovské obrazovce.
+
+★ Skutečný ovladač
+Přehrát, pauza, ±10 s, posuvník, hlasitost televize tlačítky telefonu, ovládání v oznámení. Titulky (SRT, VTT, ASS) s posunem časování, volba jazyka zvuku.
+
+★ Z jiných aplikací
+Použijte „Otevřít v aplikaci“ nebo „Sdílet“ u odkazu na video v jiné aplikaci a video se pošle rovnou na televizi.
+
+★ Podpůrný balíček, pokud chcete
+Nic důležitého na něm nezávisí: aplikace zůstává úplná a zdarma. Pokud ji chcete podpořit, jednorázový nákup odemkne zábavné doplňky: režim Atmosféra (nekonečná prezentace krásných fotek s volnou licencí nebo vašich vlastních, s časem a internetovým rádiem v pozadí), barvy zvýraznění, černou pro OLED, klidové obrazovky pro televizi a ikony aplikace.
+
+Otázky
+• Placené streamovací služby (předplatné filmů a seriálů)? Svá videa chrání (DRM): žádná aplikace pro odesílání je nemůže poslat na televizi DLNA. Aplikace vám to řekne na rovinu, místo aby potichu selhala.
+• Moje televize se nezobrazuje? Zkontrolujte, že je zapnutá a ve stejné síti Wi-Fi jako telefon. Můžete ji také přidat podle IP adresy.
+• Video se na televizi nepřehraje? Některé televize nečtou všechny formáty (HEVC, AV1, některé zvukové kodeky). Pak se přehraje v telefonu.
+
+Vytvořilo Rollando Studio. Jednoduše, účinně, kvalitně.
+Universal TV Cast je nezávislá aplikace bez vazby na výrobce televizí nebo weby, které navštěvujete. Za přehrávaný obsah odpovídáte vy.

@@ -1,0 +1,41 @@
+Ponsel Anda, TV Anda, tanpa perantara. Universal TV Cast mengirim video, saluran TV langsung, foto Anda, dan film dari jaringan rumah ke smart TV Anda, tanpa iklan dan tanpa biaya apa pun.
+
+Gratis. Tanpa iklan. Tanpa akun. Open source.
+
+★ Gratis dan tanpa iklan, sungguhan
+Tanpa iklan, tanpa pop-up sebelum cast, tanpa batas durasi video, tanpa langganan, tanpa pendaftaran. Semua fitur gratis. Kodenya open source (GPL-3.0) dan terbuka di GitHub: siapa pun bisa memeriksa apa yang dilakukan aplikasi ini. Tanpa pelacakan, tanpa analitik.
+
+★ Bisa dipakai di hampir semua TV
+Sebagian besar smart TV mendukung DLNA / UPnP, dan perangkat Google Cast juga didukung. Aplikasi menemukan sendiri TV yang sedang menyala. Tidak ada TV di dekat Anda? Video diputar di ponsel, dalam layar penuh atau di jendela mengambang kecil.
+
+★ Video dari web, langsung ke TV
+Buka situs di browser bawaan: aplikasi mendeteksi video di halaman dan mengirimkannya ke TV. Pop-up dan iklan di browser diblokir. Stream yang tidak bisa dibaca banyak TV (HLS, DASH) disusun ulang secara langsung menjadi satu stream yang bersih.
+
+★ Saluran TV langsung
+Impor daftar putar M3U atau Xtream Anda, atau mulai dengan saluran gratis dari negara Anda. Panduan acara ("Sedang tayang" dan jadwal per saluran), pindah saluran dengan cepat, dan jeda siaran langsung.
+
+★ Jaringan rumah Anda
+Film dan serial di NAS, router, atau komputer: folder bersama (Windows, Mac, Linux, NAS) dan server media DLNA ditemukan otomatis. Video Anda tampil sebagai dinding poster, serial diurutkan per musim, dengan tanda sudah ditonton dan bilah progres. Tidak ada yang disalin ke ponsel.
+
+★ Foto dan video Anda
+Foto liburan di layar besar, sebagai slideshow atau satu per satu.
+
+★ Lanjutkan dari terakhir kali
+"Lanjutkan tontonan" mengingat menit terakhir Anda berhenti, dan episode berikutnya sudah siap. Favorit dengan nama, ikon, dan warna pilihan Anda, serta widget di layar utama.
+
+★ Remote sungguhan
+Putar, jeda, ±10 dtk, bilah geser, volume TV lewat tombol ponsel, kontrol di notifikasi. Subtitle (SRT, VTT, ASS) dengan penyesuaian waktu, dan pilihan bahasa audio.
+
+★ Dari aplikasi lain
+Gunakan "Buka dengan" atau "Bagikan" pada tautan video di aplikasi lain, dan video langsung tampil di TV.
+
+★ Paket dukungan, jika Anda mau
+Tidak ada fitur penting yang bergantung padanya: aplikasi tetap lengkap dan gratis. Jika ingin mendukung, satu kali pembelian membuka ekstra yang seru: mode Suasana (slideshow tanpa akhir berisi foto indah berlisensi bebas atau foto Anda sendiri, dengan jam dan radio internet di latar belakang), warna aksen, hitam OLED, layar tunggu untuk TV, dan ikon aplikasi.
+
+Pertanyaan
+• Layanan streaming berbayar (langganan film dan serial)? Layanan ini melindungi videonya (DRM): tidak ada aplikasi cast yang bisa mengirimnya ke TV DLNA. Aplikasi memberi tahu Anda dengan jujur, bukan gagal diam-diam.
+• TV saya tidak muncul? Pastikan TV menyala dan terhubung ke Wi-Fi yang sama dengan ponsel. Anda juga bisa menambahkannya lewat alamat IP.
+• Video tidak bisa diputar di TV? Beberapa TV tidak bisa membaca semua format (HEVC, AV1, beberapa codec audio). Video lalu diputar di ponsel.
+
+Dibuat oleh Rollando Studio. Sederhana, efisien, berkualitas.
+Universal TV Cast adalah aplikasi independen, tidak berafiliasi dengan produsen TV maupun situs yang Anda kunjungi. Anda bertanggung jawab atas konten yang Anda putar.

@@ -1,0 +1,41 @@
+Ton téléphone, ta télé, rien entre les deux. Universal TV Cast envoie sur ta télé les vidéos, les chaînes en direct, tes photos et les films de ton réseau, sans pub et sans rien de payant pour s'en servir.
+
+Gratuite. Sans pub. Sans compte. Open source.
+
+★ Gratuite et sans pub, vraiment
+Pas de pub, pas de fenêtre avant chaque envoi, pas de limite de durée, pas d'abonnement, pas d'inscription. Tout est gratuit. Le code est open source (GPL-3.0) et public sur GitHub : chacun peut vérifier ce que fait l'appli. Aucun pistage, aucune mesure d'audience.
+
+★ Marche avec presque toutes les télés
+La plupart des télés connectées comprennent le DLNA / UPnP, et les appareils Google Cast sont pris en charge. L'appli trouve toute seule les télés allumées. Pas de télé à côté ? La vidéo se lit sur le téléphone, en plein écran ou dans une petite fenêtre.
+
+★ Les vidéos du web, direct sur la télé
+Ouvre un site dans le navigateur intégré : l'appli repère la vidéo de la page et l'envoie sur la télé. Les fenêtres surgissantes et les pubs du navigateur sont bloquées. Les flux que beaucoup de télés lisent mal (HLS, DASH) sont recollés à la volée en un seul flux propre.
+
+★ Les chaînes en direct
+Importe tes listes M3U ou Xtream, ou commence avec les chaînes gratuites de ton pays. Guide des programmes (« En ce moment » et grille par chaîne), zapping rapide, pause du direct.
+
+★ Ton réseau à la maison
+Films et séries sur un NAS, une box ou un ordinateur : dossiers partagés (Windows, Mac, Linux, NAS) et serveurs multimédias DLNA trouvés tout seuls. Tes vidéos s'affichent en mur d'affiches, les séries rangées par saison, avec vu et barre d'avancement. Rien n'est copié sur le téléphone.
+
+★ Tes photos et vidéos
+Les photos des vacances sur grand écran, en diaporama ou une par une.
+
+★ Reprends où tu t'étais arrêté
+« Reprendre » garde la minute où tu t'es arrêté, et l'épisode suivant est prêt. Favoris avec nom, icône et couleur à ton goût, widgets sur l'écran d'accueil.
+
+★ Une vraie télécommande
+Lecture, pause, ±10 s, barre de lecture, volume de la télé avec les boutons du téléphone, commandes dans la notification. Sous-titres (SRT, VTT, ASS) avec décalage, choix de la langue audio.
+
+★ Depuis les autres applis
+« Ouvrir avec » ou « Partager » un lien vidéo depuis une autre appli, et il part sur la télé.
+
+★ Pack soutien, si tu veux
+Rien d'utile n'en dépend : l'appli reste entière et gratuite. Si tu veux la soutenir, un achat unique ouvre les petits plus : le mode Ambiance (un diaporama sans fin de belles photos libres ou des tiennes, avec l'heure et une radio en ligne en fond), couleurs d'accent, noir intégral OLED, écrans d'attente de la télé, icônes de l'appli.
+
+Questions
+• Les services payants de films et séries ? Ils protègent leurs vidéos (DRM) : aucune appli de cast ne peut les envoyer sur une télé DLNA. L'appli te le dit franchement au lieu d'échouer sans rien dire.
+• Ma télé n'apparaît pas ? Vérifie qu'elle est allumée et sur le même Wi-Fi que le téléphone. Tu peux aussi l'ajouter par son adresse IP.
+• Une vidéo ne se lit pas sur la télé ? Certaines télés ne lisent pas tous les formats (HEVC, AV1, certains sons). Elle se lit alors sur le téléphone.
+
+Fait par Rollando Studio. Simple, efficace, de qualité.
+Universal TV Cast est une appli indépendante, sans lien avec les fabricants de télés ni les sites que tu visites. Tu es responsable des contenus que tu lis.

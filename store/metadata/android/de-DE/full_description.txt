@@ -1,0 +1,41 @@
+Dein Handy, dein Fernseher, nichts dazwischen. Universal TV Cast schickt Videos, Live-TV-Sender, deine Fotos und die Filme aus deinem Heimnetz auf deinen Smart-TV – ohne Werbung und ohne Bezahlschranke.
+
+Gratis. Ohne Werbung. Ohne Konto. Open Source.
+
+★ Gratis und werbefrei, wirklich
+Keine Werbung, keine Pop-ups vor dem Streamen, keine Längenbegrenzung, kein Abo, keine Anmeldung. Alle Funktionen sind kostenlos. Der Code ist Open Source (GPL-3.0) und öffentlich auf GitHub: Jeder kann nachprüfen, was die App macht. Kein Tracking, keine Analyse.
+
+★ Läuft mit fast jedem Fernseher
+Die meisten Smart-TVs verstehen DLNA / UPnP, und Geräte mit Google Cast werden ebenfalls unterstützt. Die App findet eingeschaltete Fernseher von selbst. Kein Fernseher in der Nähe? Dann läuft das Video auf dem Handy, im Vollbild oder in einem kleinen schwebenden Fenster.
+
+★ Videos aus dem Web, direkt auf den Fernseher
+Öffne eine Seite im eingebauten Browser: Die App erkennt das Video auf der Seite und schickt es an den Fernseher. Pop-ups und Werbung im Browser werden blockiert. Streams, die viele Fernseher nicht lesen können (HLS, DASH), werden live zu einem sauberen Stream zusammengesetzt.
+
+★ Live-TV-Sender
+Importiere deine M3U- oder Xtream-Listen oder starte mit den kostenlosen Sendern deines Landes. Programmführer („Jetzt läuft“ und Raster pro Sender), schnelles Zappen und Live-Pause.
+
+★ Dein Heimnetz
+Filme und Serien auf einem NAS, einem Router oder einem Computer: Freigegebene Ordner (Windows, Mac, Linux, NAS) und DLNA-Medienserver werden automatisch gefunden. Deine Videos erscheinen als Posterwand, Serien nach Staffeln sortiert, mit Gesehen-Markierung und Fortschrittsbalken. Nichts wird aufs Handy kopiert.
+
+★ Deine Fotos und Videos
+Die Urlaubsfotos auf dem großen Bildschirm, als Diashow oder einzeln.
+
+★ Weiterschauen, wo du aufgehört hast
+„Weiterschauen“ merkt sich die Minute, an der du gestoppt hast, und die nächste Folge steht schon bereit. Favoriten mit eigenem Namen, Symbol und eigener Farbe, Widgets für den Startbildschirm.
+
+★ Eine echte Fernbedienung
+Wiedergabe, Pause, ±10 s, Suchleiste, TV-Lautstärke über die Tasten deines Handys, Steuerung in der Benachrichtigung. Untertitel (SRT, VTT, ASS) mit Zeitversatz, Auswahl der Audiosprache.
+
+★ Aus anderen Apps
+Teile einen Videolink aus einer anderen App über „Öffnen mit“ oder „Teilen“, und er landet auf dem Fernseher.
+
+★ Unterstützer-Paket, wenn du magst
+Nichts Wichtiges hängt davon ab: Die App bleibt vollständig und kostenlos. Wenn du sie unterstützen möchtest, schaltet ein einmaliger Kauf die netten Extras frei: den Ambiente-Modus (eine endlose Diashow mit schönen, frei lizenzierten Fotos oder deinen eigenen, mit Uhrzeit und Internetradio im Hintergrund), Akzentfarben, OLED-Schwarz, Ruhebildschirme für den Fernseher und App-Symbole.
+
+Fragen
+• Kostenpflichtige Streamingdienste (Film- und Serien-Abos)? Sie schützen ihre Videos (DRM): Keine Cast-App kann sie an einen DLNA-Fernseher senden. Die App sagt dir das ehrlich, statt stillschweigend zu scheitern.
+• Mein Fernseher wird nicht angezeigt? Prüfe, ob er eingeschaltet und im selben Wi-Fi-Netz wie das Handy ist. Du kannst ihn auch über seine IP-Adresse hinzufügen.
+• Ein Video läuft nicht auf dem Fernseher? Manche Fernseher lesen nicht jedes Format (HEVC, AV1, einige Audio-Codecs). Dann läuft es auf dem Handy.
+
+Gemacht von Rollando Studio. Einfach, effizient, hochwertig.
+Universal TV Cast ist eine unabhängige App und steht in keiner Verbindung zu TV-Herstellern oder den Websites, die du besuchst. Du bist selbst für die Inhalte verantwortlich, die du abspielst.

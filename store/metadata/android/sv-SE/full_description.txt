@@ -1,0 +1,41 @@
+Din mobil, din tv, inget emellan. Universal TV Cast skickar videor, tv-kanaler live, dina foton och filmerna i ditt hemnätverk till din smart-tv – utan reklam och utan betalvägg.
+
+Gratis. Ingen reklam. Inget konto. Öppen källkod.
+
+★ Gratis och reklamfri, på riktigt
+Ingen reklam, inga popup-fönster innan du castar, ingen tidsgräns, ingen prenumeration, ingen registrering. Alla funktioner är gratis. Koden är öppen (GPL-3.0) och offentlig på GitHub: vem som helst kan kontrollera vad appen gör. Ingen spårning, ingen statistik.
+
+★ Fungerar med nästan alla tv-apparater
+De flesta smart-tv-apparater förstår DLNA / UPnP, och enheter med Google Cast stöds också. Appen hittar själv de tv-apparater som är påslagna. Ingen tv i närheten? Då spelas videon upp i mobilen, i helskärm eller i ett litet flytande fönster.
+
+★ Videor från webben, direkt till tv:n
+Öppna en sajt i den inbyggda webbläsaren: appen hittar videon på sidan och skickar den till tv:n. Popup-fönster och reklam i webbläsaren blockeras. Strömmar som många tv-apparater inte kan läsa (HLS, DASH) sätts ihop i farten till en enda ren ström.
+
+★ Tv-kanaler live
+Importera dina M3U- eller Xtream-listor, eller börja med gratiskanalerna i ditt land. Programguide (”Just nu” och tablå per kanal), snabb zappning och paus i direktsändning.
+
+★ Ditt hemnätverk
+Filmer och serier på en NAS, en router eller en dator: delade mappar (Windows, Mac, Linux, NAS) och DLNA-mediaservrar hittas automatiskt. Dina videor visas som en affischvägg, serierna sorterade per säsong, med sedd-markering och förloppsindikatorer. Inget kopieras till mobilen.
+
+★ Dina foton och videor
+Semesterbilderna på den stora skärmen, som bildspel eller en i taget.
+
+★ Fortsätt där du slutade
+”Fortsätt där du slutade” minns minuten där du stannade, och nästa avsnitt står redo. Favoriter med egna namn, ikoner och färger, widgetar på startskärmen.
+
+★ En riktig fjärrkontroll
+Spela, pausa, ±10 s, sökfält, tv-volym med mobilens knappar, kontroller i aviseringen. Undertexter (SRT, VTT, ASS) med tidsförskjutning och val av ljudspråk.
+
+★ Från andra appar
+Använd ”Öppna med” eller ”Dela” på en videolänk i en annan app, så hamnar den på tv:n.
+
+★ Stödpaket, om du vill
+Inget viktigt hänger på det: appen förblir komplett och gratis. Vill du stödja den låser ett engångsköp upp de roliga extrafunktionerna: Stämningsläget (ett oändligt bildspel med vackra, fritt licensierade foton eller dina egna, med klockan och en internetradio i bakgrunden), accentfärger, OLED-svart, vilskärmar för tv:n och appikoner.
+
+Frågor
+• Betalda streamingtjänster (prenumerationer på filmer och serier)? De skyddar sina videor (DRM): ingen cast-app kan skicka dem till en DLNA-tv. Appen säger det ärligt i stället för att tyst misslyckas.
+• Min tv syns inte? Kontrollera att den är påslagen och på samma Wi-Fi som mobilen. Du kan också lägga till den med dess IP-adress.
+• En video spelas inte upp på tv:n? Vissa tv-apparater läser inte alla format (HEVC, AV1, vissa ljudkodekar). Då spelas den upp i mobilen.
+
+Gjord av Rollando Studio. Enkelt, effektivt, kvalitet.
+Universal TV Cast är en oberoende app, utan koppling till tv-tillverkare eller de webbplatser du besöker. Du ansvarar själv för innehållet du spelar upp.

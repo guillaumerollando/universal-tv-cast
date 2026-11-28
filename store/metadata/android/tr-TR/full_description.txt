@@ -1,0 +1,41 @@
+Telefonunuz, TV'niz ve arada hiçbir şey. Universal TV Cast; videoları, canlı TV kanallarını, fotoğraflarınızı ve ev ağınızdaki filmleri akıllı TV'nize gönderir. Reklam yok, ücretli duvar yok.
+
+Ücretsiz. Reklamsız. Hesap gerekmez. Açık kaynak.
+
+★ Gerçekten ücretsiz ve reklamsız
+Reklam yok, yansıtmadan önce açılır pencere yok, video süresi sınırı yok, abonelik yok, kayıt yok. Tüm özellikler ücretsiz. Kod açık kaynaklıdır (GPL-3.0) ve GitHub'da herkese açıktır: uygulamanın ne yaptığını herkes kontrol edebilir. İzleme yok, analiz yok.
+
+★ Neredeyse her TV ile çalışır
+Akıllı TV'lerin çoğu DLNA / UPnP'yi anlar; Google Cast cihazları da desteklenir. Uygulama açık olan TV'leri kendisi bulur. Yakında TV yok mu? Video telefonunuzda, tam ekran ya da küçük bir yüzen pencerede oynatılır.
+
+★ Web videoları, doğrudan TV'ye
+Yerleşik tarayıcıda bir site açın: uygulama sayfadaki videoyu bulur ve TV'ye gönderir. Tarayıcıdaki açılır pencereler ve reklamlar engellenir. Birçok TV'nin okuyamadığı yayınlar (HLS, DASH) anında tek ve temiz bir akışa dönüştürülür.
+
+★ Canlı TV kanalları
+M3U veya Xtream listelerinizi içe aktarın ya da ülkenizdeki ücretsiz kanallarla başlayın. Yayın akışı ("Şimdi yayında" ve kanal başına program tablosu), hızlı kanal değiştirme ve canlı yayını duraklatma.
+
+★ Ev ağınız
+NAS, modem veya bilgisayardaki filmler ve diziler: paylaşılan klasörler (Windows, Mac, Linux, NAS) ve DLNA medya sunucuları otomatik olarak bulunur. Videolarınız bir afiş duvarı olarak görünür; diziler sezona göre sıralanır, izlendi işaretleri ve ilerleme çubuklarıyla. Telefona hiçbir şey kopyalanmaz.
+
+★ Fotoğraflarınız ve videolarınız
+Tatil fotoğrafları büyük ekranda, slayt gösterisi olarak ya da tek tek.
+
+★ Kaldığınız yerden devam edin
+"Kaldığın yerden devam et" durduğunuz dakikayı hatırlar ve sonraki bölüm hazır bekler. İstediğiniz ad, simge ve renkle favoriler, ana ekran widget'ları.
+
+★ Gerçek bir kumanda
+Oynat, duraklat, ±10 sn, ilerleme çubuğu, telefon tuşlarıyla TV sesi, bildirimde kontroller. Zamanlaması ayarlanabilen altyazılar (SRT, VTT, ASS), ses dili seçimi.
+
+★ Diğer uygulamalardan
+Başka bir uygulamadaki video bağlantısını "Birlikte aç" veya "Paylaş" ile gönderin, doğrudan TV'ye gitsin.
+
+★ İsteğe bağlı destek paketi
+Önemli hiçbir şey ona bağlı değil: uygulama eksiksiz ve ücretsiz kalır. Desteklemek isterseniz, tek seferlik bir satın alma eğlenceli ekstraların kilidini açar: Ambiyans modu (serbest lisanslı güzel fotoğraflardan ya da kendi fotoğraflarınızdan oluşan, saat ve arka planda internet radyosuyla sonsuz bir slayt gösterisi), vurgu renkleri, OLED siyahı, TV bekleme ekranları, uygulama simgeleri.
+
+Sorular
+• Ücretli yayın hizmetleri (film ve dizi abonelikleri)? Bu hizmetler videolarını korur (DRM): hiçbir yansıtma uygulaması onları DLNA TV'ye gönderemez. Uygulama sessizce başarısız olmak yerine bunu size dürüstçe söyler.
+• TV'm görünmüyor mu? Açık olduğunu ve telefonla aynı Wi-Fi ağında olduğunu kontrol edin. TV'yi IP adresiyle de ekleyebilirsiniz.
+• Bir video TV'de oynatılmıyor mu? Bazı TV'ler her biçimi okuyamaz (HEVC, AV1, bazı ses kodekleri). Bu durumda video telefonda oynatılır.
+
+Rollando Studio tarafından yapıldı. Basit, verimli, kaliteli.
+Universal TV Cast bağımsız bir uygulamadır; TV üreticileriyle veya ziyaret ettiğiniz sitelerle bir bağlantısı yoktur. Oynattığınız içerikten siz sorumlusunuz.

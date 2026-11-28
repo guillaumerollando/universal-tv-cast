@@ -110,7 +110,10 @@ internal fun LanFolderView(
         return art.firstOrNull { base(it.name) == "$b-poster" } ?: art.firstOrNull { base(it.name) == b }
             ?: art.firstOrNull { base(it.name) == "$b-thumb" }
     }
-    fun uriOf(e: LanEntry): String? = e.device?.takeIf { it.kind == LanDevice.Kind.SHARE }?.let { Smb.contentUri(it, e.ref).toString() }
+    // Image voisine : chemin content:// pour un dossier partagé, adresse http (ou sa miniature) pour un serveur multimédia.
+    fun uriOf(e: LanEntry): String? = e.device?.let { d ->
+        if (d.kind == LanDevice.Kind.SHARE) Smb.contentUri(d, e.ref).toString() else e.thumb ?: e.ref.takeIf { it.startsWith("http") }
+    }
 
     // Titres et affiches : d'abord le nom du fichier (tout de suite), puis l'annuaire, au fil de l'eau.
     val infos = remember(entries) { mutableStateMapOf<String, Catalog.Info>() }
@@ -179,7 +182,12 @@ internal fun LanFolderView(
         .entries.sortedByDescending { it.value }.map { it.key }
     val others = entries.filter { !it.folder && it.kind != LanEntry.Kind.VIDEO && it !in art }
     val order = playOrder(videos0)
-    val play = { v: LanEntry -> onPlay(v, order, infos.toMap()) }
+    // L'affiche posée à côté du film (serveur multimédia : adresse http) part avec lui : lecteur, « Reprendre ».
+    fun withArt(): Map<String, Catalog.Info> = videos0.associate { v ->
+        val i = info(v)
+        v.name to (sidecar(v)?.let(::uriOf)?.takeIf { it.startsWith("http") }?.let { i.copy(poster = it) } ?: i)
+    }
+    val play = { v: LanEntry -> onPlay(v, order, withArt()) }
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(108.dp),

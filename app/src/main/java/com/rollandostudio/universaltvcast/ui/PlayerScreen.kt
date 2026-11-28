@@ -134,9 +134,10 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
         return
     }
     val c = MaterialTheme.colorScheme
-    val film = media.backdropUrl != null
     // Une chaîne reste une chaîne même si son flux ne répond pas (écran de chaîne, zapping pour passer à une autre).
     val channel = state.live || media.channel != null
+    // Un film : une image large, ou à défaut son affiche (posée à côté du fichier sur le réseau, par exemple).
+    val film = media.backdropUrl != null || (!channel && media.posterUrl != null)
     val iptvOpen by Nav.iptv.collectAsState()
     // Lueur aux couleurs de l'image : dessinée par l'éclairage de fond de l'appli (voir TvCastApp), en-tête compris.
     LaunchedEffect(state.onPhone, media.url) { com.rollandostudio.universaltvcast.cast.PhoneEngine.glow.value = null }
@@ -341,7 +342,8 @@ private fun FilmHeader(state: CastState) {
             .background(MaterialTheme.colorScheme.surfaceContainerHighest)
             .semantics(mergeDescendants = true) { contentDescription = desc; liveRegion = LiveRegionMode.Polite },
     ) {
-        RemoteImage(media.backdropUrl, Modifier.matchParentSize())
+        // Pas d'image large : l'affiche du film (posée à côté du fichier, par exemple), recadrée sur son centre.
+        RemoteImage(media.backdropUrl ?: media.posterUrl, Modifier.matchParentSize())
         Box(
             Modifier.matchParentSize().background(
                 Brush.verticalGradient(0f to Color.Transparent, 0.45f to Color.Black.copy(alpha = 0.15f), 1f to Color.Black.copy(alpha = 0.85f))

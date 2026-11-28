@@ -1,0 +1,41 @@
+Je telefoon, je tv, niets ertussen. Universal TV Cast stuurt video's, live tv-zenders, je foto's en de films op je thuisnetwerk naar je smart-tv, zonder reclame en zonder betaalmuur.
+
+Gratis. Geen reclame. Geen account. Open source.
+
+★ Gratis en zonder reclame, echt waar
+Geen reclame, geen pop-ups voor het casten, geen tijdslimiet, geen abonnement, geen registratie. Alle functies zijn gratis. De code is open source (GPL-3.0) en openbaar op GitHub: iedereen kan nagaan wat de app doet. Geen tracking, geen statistieken.
+
+★ Werkt met bijna elke tv
+De meeste smart-tv's begrijpen DLNA / UPnP, en apparaten met Google Cast worden ook ondersteund. De app vindt zelf de tv's die aanstaan. Geen tv in de buurt? Dan speelt de video af op je telefoon, schermvullend of in een klein zwevend venster.
+
+★ Video's van het web, rechtstreeks op de tv
+Open een site in de ingebouwde browser: de app vindt de video op de pagina en stuurt hem naar de tv. Pop-ups en advertenties in de browser worden geblokkeerd. Streams die veel tv's niet kunnen lezen (HLS, DASH) worden direct samengevoegd tot één schone stream.
+
+★ Live tv-zenders
+Importeer je M3U- of Xtream-lijsten, of begin met de gratis zenders van je land. Programmagids ('Nu op tv' en een schema per zender), snel zappen en live pauzeren.
+
+★ Je thuisnetwerk
+Films en series op een NAS, een router of een computer: gedeelde mappen (Windows, Mac, Linux, NAS) en DLNA-mediaservers worden automatisch gevonden. Je video's verschijnen als een posterwand, series per seizoen gesorteerd, met bekeken-vinkjes en voortgangsbalken. Er wordt niets naar je telefoon gekopieerd.
+
+★ Je foto's en video's
+De vakantiefoto's op het grote scherm, als diashow of één voor één.
+
+★ Verder kijken waar je was gebleven
+'Verder kijken' onthoudt de minuut waarop je stopte, en de volgende aflevering staat al klaar. Favorieten met je eigen naam, icoon en kleur, widgets op je startscherm.
+
+★ Een echte afstandsbediening
+Afspelen, pauzeren, ±10 s, zoekbalk, tv-volume met de knoppen van je telefoon, bediening in de melding. Ondertiteling (SRT, VTT, ASS) met tijdverschuiving en keuze van de audiotaal.
+
+★ Vanuit andere apps
+Gebruik 'Openen met' of 'Delen' op een videolink in een andere app, en hij gaat naar de tv.
+
+★ Steunpakket, als je wilt
+Niets belangrijks hangt ervan af: de app blijft compleet en gratis. Wil je hem steunen, dan ontgrendelt een eenmalige aankoop de leuke extra's: de Sfeer-modus (een eindeloze diashow van mooie, vrij gelicentieerde foto's of je eigen foto's, met de tijd en een internetradio op de achtergrond), accentkleuren, OLED-zwart, wachtschermen voor de tv en app-iconen.
+
+Vragen
+• Betaalde streamingdiensten (abonnementen voor films en series)? Die beveiligen hun video's (DRM): geen enkele cast-app kan ze naar een DLNA-tv sturen. De app zegt het je eerlijk, in plaats van stilletjes te falen.
+• Mijn tv verschijnt niet? Controleer of hij aanstaat en op hetzelfde Wi-Fi-netwerk zit als je telefoon. Je kunt hem ook toevoegen via zijn IP-adres.
+• Een video speelt niet af op de tv? Sommige tv's lezen niet elk formaat (HEVC, AV1, sommige audiocodecs). Dan speelt hij af op je telefoon.
+
+Gemaakt door Rollando Studio. Eenvoudig, efficiënt, kwaliteit.
+Universal TV Cast is een onafhankelijke app, niet verbonden aan tv-fabrikanten of de websites die je bezoekt. Je bent zelf verantwoordelijk voor de content die je afspeelt.

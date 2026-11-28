@@ -525,7 +525,21 @@
   "open_ia_feature": "Фильмы в общественном достоянии",
   "open_ia_cartoons": "Классические мультфильмы",
   "open_ia_silent": "Немое кино",
-  "open_ia_prelinger": "Архив Прелинджера"
+  "open_ia_prelinger": "Архив Прелинджера",
+  "iptv_my_sources": "Мои источники",
+  "sources_free_manage": "Свободные источники",
+  "sources_change": "Изменить источники",
+  "sources_where": "Этот экран есть в Поиске (справа вверху) и в Настройках.",
+  "open_peertube": "PeerTube",
+  "pack_locked": "Пакет поддержки",
+  "clock_big": "Крупные",
+  "clock_thin": "Тонкие",
+  "clock_analog": "Стрелки",
+  "clock_flip": "Ретро",
+  "clock_bg_glow": "Свечение",
+  "clock_bg_gradient": "Градиент",
+  "clock_bg_black": "Чёрный",
+  "amb_custom": "Другое…"
  },
  "plurals": {
   "browser_found": {

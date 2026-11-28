@@ -50,6 +50,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -192,7 +193,8 @@ fun StyleSheet(onDismiss: () -> Unit) {
             item {
                 // Aperçu : la même image que celle envoyée à la télé (refaite à chaque réglage, et chaque minute).
                 val tick by produceState(0L) { while (true) { value = System.currentTimeMillis() / 60_000; kotlinx.coroutines.delay(5_000) } }
-                val img by produceState<androidx.compose.ui.graphics.ImageBitmap?>(null, unlocked, accent, idle, message, live, photos, tick) {
+                val face by Look.clockFace.collectAsState(); val clockBg by Look.clockBg.collectAsState()
+                val img by produceState<androidx.compose.ui.graphics.ImageBitmap?>(null, unlocked, accent, idle, message, live, photos, tick, face, clockBg) {
                     value = withContext(Dispatchers.Default) {
                         runCatching { IdleScreen.jpeg(context).let { BitmapFactory.decodeByteArray(it, 0, it.size) }.asImageBitmap() }.getOrNull()
                     }
@@ -211,6 +213,24 @@ fun StyleSheet(onDismiss: () -> Unit) {
                             if (i == Look.Idle.PHOTO && photos.isEmpty())
                                 pick.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                         }, label = { Text(stringResource(label)) })
+                    }
+                }
+            }
+            // Horloge : son style et son fond (la couleur suit celle de l'appli).
+            if (idle == Look.Idle.CLOCK) item {
+                val face by Look.clockFace.collectAsState(); val clockBg by Look.clockBg.collectAsState()
+                Column(dim, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    androidx.compose.foundation.lazy.LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        items(listOf(Look.ClockFace.BIG to R.string.clock_big, Look.ClockFace.THIN to R.string.clock_thin,
+                            Look.ClockFace.ANALOG to R.string.clock_analog, Look.ClockFace.FLIP to R.string.clock_flip)) { (f, label) ->
+                            FilterChip(selected = face == f, enabled = enabled, onClick = { Look.setClockFace(f) }, label = { Text(stringResource(label)) })
+                        }
+                    }
+                    androidx.compose.foundation.lazy.LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        items(listOf(Look.ClockBg.GLOW to R.string.clock_bg_glow, Look.ClockBg.GRADIENT to R.string.clock_bg_gradient,
+                            Look.ClockBg.BLACK to R.string.clock_bg_black)) { (b, label) ->
+                            FilterChip(selected = clockBg == b, enabled = enabled, onClick = { Look.setClockBg(b) }, label = { Text(stringResource(label)) })
+                        }
                     }
                 }
             }

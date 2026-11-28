@@ -525,7 +525,21 @@
   "open_ia_feature": "퍼블릭 도메인 영화",
   "open_ia_cartoons": "고전 만화",
   "open_ia_silent": "무성 영화",
-  "open_ia_prelinger": "Prelinger 아카이브"
+  "open_ia_prelinger": "Prelinger 아카이브",
+  "iptv_my_sources": "내 소스",
+  "sources_free_manage": "무료 소스",
+  "sources_change": "소스 변경",
+  "sources_where": "이 화면은 검색(오른쪽 위)과 설정에 있습니다.",
+  "open_peertube": "PeerTube",
+  "pack_locked": "후원자 팩",
+  "clock_big": "대형",
+  "clock_thin": "가는 글꼴",
+  "clock_analog": "아날로그",
+  "clock_flip": "레트로",
+  "clock_bg_glow": "글로우",
+  "clock_bg_gradient": "그라데이션",
+  "clock_bg_black": "검정",
+  "amb_custom": "기타…"
  },
  "plurals": {
   "browser_found": {

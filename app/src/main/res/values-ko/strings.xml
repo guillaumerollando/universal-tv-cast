@@ -527,6 +527,20 @@
     <string name="open_ia_cartoons">고전 만화</string>
     <string name="open_ia_silent">무성 영화</string>
     <string name="open_ia_prelinger">Prelinger 아카이브</string>
+    <string name="iptv_my_sources">내 소스</string>
+    <string name="sources_free_manage">무료 소스</string>
+    <string name="sources_change">소스 변경</string>
+    <string name="sources_where">이 화면은 검색(오른쪽 위)과 설정에 있습니다.</string>
+    <string name="open_peertube">PeerTube</string>
+    <string name="pack_locked">후원자 팩</string>
+    <string name="clock_big">대형</string>
+    <string name="clock_thin">가는 글꼴</string>
+    <string name="clock_analog">아날로그</string>
+    <string name="clock_flip">레트로</string>
+    <string name="clock_bg_glow">글로우</string>
+    <string name="clock_bg_gradient">그라데이션</string>
+    <string name="clock_bg_black">검정</string>
+    <string name="amb_custom">기타…</string>
     <plurals name="browser_found">
         <item quantity="other">동영상 %d개</item>
     </plurals>

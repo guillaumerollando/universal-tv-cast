@@ -525,7 +525,21 @@
   "open_ia_feature": "Фільми в суспільному надбанні",
   "open_ia_cartoons": "Класичні мультфільми",
   "open_ia_silent": "Німе кіно",
-  "open_ia_prelinger": "Архів Прелінджера"
+  "open_ia_prelinger": "Архів Прелінджера",
+  "iptv_my_sources": "Мої джерела",
+  "sources_free_manage": "Вільні джерела",
+  "sources_change": "Змінити джерела",
+  "sources_where": "Цей екран є в Пошуку (праворуч угорі) та в Налаштуваннях.",
+  "open_peertube": "PeerTube",
+  "pack_locked": "Пакет підтримки",
+  "clock_big": "Великі",
+  "clock_thin": "Тонкі",
+  "clock_analog": "Стрілки",
+  "clock_flip": "Ретро",
+  "clock_bg_glow": "Сяйво",
+  "clock_bg_gradient": "Градієнт",
+  "clock_bg_black": "Чорний",
+  "amb_custom": "Інше…"
  },
  "plurals": {
   "browser_found": {

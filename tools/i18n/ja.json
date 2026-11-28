@@ -525,7 +525,21 @@
   "open_ia_feature": "パブリックドメイン映画",
   "open_ia_cartoons": "クラシックアニメ",
   "open_ia_silent": "サイレント映画",
-  "open_ia_prelinger": "Prelingerアーカイブ"
+  "open_ia_prelinger": "Prelingerアーカイブ",
+  "iptv_my_sources": "マイソース",
+  "sources_free_manage": "フリーソース",
+  "sources_change": "ソースを変更",
+  "sources_where": "この画面は検索（右上）と設定にあります。",
+  "open_peertube": "PeerTube",
+  "pack_locked": "サポーターパック",
+  "clock_big": "特大",
+  "clock_thin": "細字",
+  "clock_analog": "アナログ",
+  "clock_flip": "レトロ",
+  "clock_bg_glow": "グロー",
+  "clock_bg_gradient": "グラデーション",
+  "clock_bg_black": "黒",
+  "amb_custom": "その他…"
  },
  "plurals": {
   "browser_found": {

@@ -525,7 +525,21 @@
   "open_ia_feature": "Filmy z volného díla",
   "open_ia_cartoons": "Klasické animované filmy",
   "open_ia_silent": "Němé filmy",
-  "open_ia_prelinger": "Archiv Prelinger"
+  "open_ia_prelinger": "Archiv Prelinger",
+  "iptv_my_sources": "Moje zdroje",
+  "sources_free_manage": "Volné zdroje",
+  "sources_change": "Změnit mé zdroje",
+  "sources_where": "Tuto obrazovku najdete v Hledat (vpravo nahoře) a v Nastavení.",
+  "open_peertube": "PeerTube",
+  "pack_locked": "Balíček podpory",
+  "clock_big": "Obří",
+  "clock_thin": "Tenké",
+  "clock_analog": "Ručičky",
+  "clock_flip": "Retro",
+  "clock_bg_glow": "Záře",
+  "clock_bg_gradient": "Přechod",
+  "clock_bg_black": "Černá",
+  "amb_custom": "Jiné…"
  },
  "plurals": {
   "browser_found": {

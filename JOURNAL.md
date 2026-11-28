@@ -1869,3 +1869,23 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - **« Pour commencer » → « À découvrir »**, gardé en bas de l'accueil même avec des sources (plus de contenu).
 - Vérifié sur émulateur : rangées Archive et Blender Studio, « À découvrir » en bas, « night » / « tom » / « info »
   (chaînes franceinfo, TV5Monde Info, Africa 24, Puissance TV par son programme) ; 68 tests, 0 échec.
+
+## 2026-11-28 — Retours de Guillaume : sources plus faciles, horloges, Ambiance
+- Écran « Sources » : menu « Mes sources » (au lieu de « Mes listes ») et « Sources libres » (ouvre l'écran des
+  sources) ; lien « Changer mes sources » sous les rangées de l'accueil ; phrase « Tu retrouves cet écran dans
+  Rechercher (en haut à droite) et dans les Réglages » en bas de l'écran Sources. Rangée PeerTube nommée « PeerTube ».
+- Recherche Internet Archive : licence libre déclarée **ou** collection du domaine public par nature (Prelinger,
+  films muets, dessins animés anciens) : beaucoup de films n'avaient pas le champ licence (« chaplin » 11 → 16,
+  « popeye » 50, « betty boop » 70).
+- « Caster autre chose » : Album, Réseau, Lien, puis **Ambiance** (avec un petit cadenas tant que le pack n'est pas
+  pris) ; idem chez le nouveau venu.
+- Prix du pack : déjà prévu (« Soutenir · <prix> ») ; il apparaîtra quand le produit `pack_soutien` existera dans la
+  Play Console (le prix vient de Google, dans la monnaie de chaque pays).
+- **Horloge** (écran d'attente, pack) : plus de « by Rollando Studio » ; 4 styles (Géante, Fine, Aiguilles, Rétro) et
+  3 fonds (Lueur, Dégradé, Noir), toujours à la couleur d'accent.
+- **Ambiance** : durées 30 s, 1 min, 2 min, 5 min ou « Autre… » (curseur de 10 s à 1 h) ; crédit de la photo plus
+  discret ; photos Wikimedia plus « fond d'écran » (JPEG seulement, larges 1,4:1 à 2,2:1, 2400 px au moins, pas de
+  cartes ni de panoramas). Unsplash / Pexels écartés : clé et compte développeur obligatoires.
+- Vérifié sur émulateur : ordre des tuiles, 4 horloges et 3 fonds dans l'aperçu ; 68 tests, 0 échec.
+- Pas vérifié : la nouvelle sélection de photos Ambiance (assez de photos par thème ?) et le cadenas (version de
+  débogage = pack ouvert).

@@ -525,7 +525,21 @@
   "open_ia_feature": "सार्वजनिक डोमेन की फ़िल्में",
   "open_ia_cartoons": "क्लासिक कार्टून",
   "open_ia_silent": "मूक फ़िल्में",
-  "open_ia_prelinger": "Prelinger अभिलेखागार"
+  "open_ia_prelinger": "Prelinger अभिलेखागार",
+  "iptv_my_sources": "मेरे स्रोत",
+  "sources_free_manage": "मुक्त स्रोत",
+  "sources_change": "मेरे स्रोत बदलें",
+  "sources_where": "यह स्क्रीन खोजें (ऊपर दाएँ) और सेटिंग्स में मिलेगी।",
+  "open_peertube": "PeerTube",
+  "pack_locked": "समर्थक पैक",
+  "clock_big": "बड़ी",
+  "clock_thin": "पतली",
+  "clock_analog": "सुइयाँ",
+  "clock_flip": "रेट्रो",
+  "clock_bg_glow": "चमक",
+  "clock_bg_gradient": "ग्रेडिएंट",
+  "clock_bg_black": "काला",
+  "amb_custom": "अन्य…"
  },
  "plurals": {
   "browser_found": {

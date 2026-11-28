@@ -459,6 +459,10 @@ internal fun SourcesSheet(onDismiss: () -> Unit) {
                     onDismiss(); Nav.network.value = true
                 }
             }
+            item {
+                Text(stringResource(R.string.sources_where), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 8.dp))
+            }
         }
     }
 }

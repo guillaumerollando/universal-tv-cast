@@ -525,7 +525,21 @@
   "open_ia_feature": "أفلام من الملك العام",
   "open_ia_cartoons": "رسوم متحركة كلاسيكية",
   "open_ia_silent": "أفلام صامتة",
-  "open_ia_prelinger": "أرشيف Prelinger"
+  "open_ia_prelinger": "أرشيف Prelinger",
+  "iptv_my_sources": "مصادري",
+  "sources_free_manage": "مصادر حرة",
+  "sources_change": "غيّر مصادري",
+  "sources_where": "تجد هذه الشاشة في البحث (أعلى اليمين) وفي الإعدادات.",
+  "open_peertube": "PeerTube",
+  "pack_locked": "حزمة الدعم",
+  "clock_big": "عملاقة",
+  "clock_thin": "رفيعة",
+  "clock_analog": "عقارب",
+  "clock_flip": "كلاسيكية",
+  "clock_bg_glow": "توهج",
+  "clock_bg_gradient": "تدرج",
+  "clock_bg_black": "أسود",
+  "amb_custom": "أخرى…"
  },
  "plurals": {
   "browser_found": {

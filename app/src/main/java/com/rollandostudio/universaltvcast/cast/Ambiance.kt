@@ -84,13 +84,13 @@ object Ambiance {
         _theme.value = runCatching { Theme.valueOf(p.getString("theme", "LANDSCAPES")!!) }.getOrDefault(Theme.LANDSCAPES)
         _mood.value = runCatching { Mood.valueOf(p.getString("mood", "LOUNGE")!!) }.getOrDefault(Mood.LOUNGE)
         _clock.value = p.getBoolean("clock", true)
-        _seconds.value = p.getInt("seconds", 30)
+        _seconds.value = p.getInt("seconds", 60).coerceIn(10, 3600)
     }
 
     fun setTheme(t: Theme) { _theme.value = t; prefs.edit().putString("theme", t.name).apply() }
     fun setMood(m: Mood) { _mood.value = m; prefs.edit().putString("mood", m.name).apply() }
     fun setClock(on: Boolean) { _clock.value = on; prefs.edit().putBoolean("clock", on).apply() }
-    fun setSeconds(s: Int) { _seconds.value = s; prefs.edit().putInt("seconds", s).apply(); current?.slideMs = s * 1000L }
+    fun setSeconds(s0: Int) { val s = s0.coerceIn(10, 3600); _seconds.value = s; prefs.edit().putInt("seconds", s).apply(); current?.slideMs = s * 1000L }
 
     @Volatile private var current: SlideStream? = null
     @Volatile private var feed: Radio.Feed? = null
@@ -207,7 +207,8 @@ object Ambiance {
         }
         val time = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFFFFFFFF.toInt(); textSize = 120f; typeface = bold; setShadowLayer(18f, 0f, 3f, 0x66000000) }
         val date = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xE6FFFFFF.toInt(); textSize = 40f; typeface = regular; setShadowLayer(12f, 0f, 2f, 0x66000000) }
-        val small = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xB3FFFFFF.toInt(); textSize = 22f; typeface = regular; textAlign = Paint.Align.RIGHT; setShadowLayer(8f, 0f, 1f, 0x88000000.toInt()) }
+        // Crédit de la photo : obligatoire (licence), mais discret.
+        val small = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0x73FFFFFF; textSize = 18f; typeface = regular; textAlign = Paint.Align.RIGHT; setShadowLayer(6f, 0f, 1f, 0x66000000) }
         val timeFmt = android.text.format.DateFormat.getTimeFormat(app)
         val dateFmt = java.text.SimpleDateFormat("EEEE d MMMM", java.util.Locale.getDefault())
         return { c ->
@@ -218,7 +219,7 @@ object Ambiance {
                 c.drawText(timeFmt.format(now), 96f, SlideStream.H - 150f, time)
                 c.drawText(dateFmt.format(now).replaceFirstChar { it.titlecase() }, 100f, SlideStream.H - 92f, date)
             }
-            credit?.let { c.drawText(it, SlideStream.W - 48f, SlideStream.H - 40f, small) }
+            credit?.let { c.drawText(it, SlideStream.W - 40f, SlideStream.H - 28f, small) }
         }
     }
 
@@ -260,7 +261,8 @@ object Ambiance {
             val o = try { JSONObject(c.inputStream.use { String(it.readBytes()) }) } finally { c.disconnect() }
             val a = o.getJSONObject("query").getJSONArray("categorymembers")
             val list = (0 until a.length()).map { a.getJSONObject(it).getString("title") }
-                .filter { t -> listOf(".jpg", ".jpeg", ".png").any { t.lowercase().endsWith(it) } }
+                // Photos seulement (les PNG sont souvent des schémas ou des cartes), pas de panoramas ni de cartes.
+                .filter { t -> t.lowercase().let { l -> (l.endsWith(".jpg") || l.endsWith(".jpeg")) && !Regex("map|carte|diagram|panorama|pano").containsMatchIn(l) } }
             cache.parentFile?.mkdirs(); cache.writeText(list.joinToString("\n"))
             list
         }.onFailure { Log.i(TAG, "catégorie $category : ${it.message}") }.getOrDefault(emptyList())
@@ -275,7 +277,8 @@ object Ambiance {
         val pages = o.getJSONObject("query").getJSONObject("pages")
         val info = pages.getJSONObject(pages.keys().next()).getJSONArray("imageinfo").getJSONObject(0)
         val w = info.optInt("width"); val h = info.optInt("height")
-        if (w <= 0 || h <= 0 || w < h * 1.2) return@runCatching null // portrait ou carré : mal sur une télé
+        // Un vrai fond d'écran : large comme une télé (de 4:3 un peu large à 2,2:1, pas de panorama étiré), et grand.
+        if (w <= 0 || h <= 0 || w < h * 1.4 || w > h * 2.2 || w < 2400) return@runCatching null
         val thumb = info.optString("thumburl").ifBlank { return@runCatching null }
         val meta = info.optJSONObject("extmetadata")
         fun field(k: String) = meta?.optJSONObject(k)?.optString("value").orEmpty()

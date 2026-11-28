@@ -527,6 +527,20 @@
     <string name="open_ia_cartoons">经典动画</string>
     <string name="open_ia_silent">默片</string>
     <string name="open_ia_prelinger">Prelinger 档案</string>
+    <string name="iptv_my_sources">我的来源</string>
+    <string name="sources_free_manage">免费来源</string>
+    <string name="sources_change">更改我的来源</string>
+    <string name="sources_where">可在“搜索”（右上角）和“设置”中找到此屏幕。</string>
+    <string name="open_peertube">PeerTube</string>
+    <string name="pack_locked">支持者礼包</string>
+    <string name="clock_big">巨大</string>
+    <string name="clock_thin">纤细</string>
+    <string name="clock_analog">指针</string>
+    <string name="clock_flip">复古</string>
+    <string name="clock_bg_glow">光晕</string>
+    <string name="clock_bg_gradient">渐变</string>
+    <string name="clock_bg_black">黑色</string>
+    <string name="amb_custom">其他…</string>
     <plurals name="browser_found">
         <item quantity="other">%d 个视频</item>
     </plurals>

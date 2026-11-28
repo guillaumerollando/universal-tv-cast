@@ -525,7 +525,21 @@
   "open_ia_feature": "Kamu malı filmler",
   "open_ia_cartoons": "Klasik çizgi filmler",
   "open_ia_silent": "Sessiz filmler",
-  "open_ia_prelinger": "Prelinger Arşivi"
+  "open_ia_prelinger": "Prelinger Arşivi",
+  "iptv_my_sources": "Kaynaklarım",
+  "sources_free_manage": "Özgür kaynaklar",
+  "sources_change": "Kaynaklarımı değiştir",
+  "sources_where": "Bu ekranı Ara (sağ üst) ve Ayarlar'da bulabilirsiniz.",
+  "open_peertube": "PeerTube",
+  "pack_locked": "Destek paketi",
+  "clock_big": "Dev",
+  "clock_thin": "İnce",
+  "clock_analog": "Akrep",
+  "clock_flip": "Retro",
+  "clock_bg_glow": "Işıltı",
+  "clock_bg_gradient": "Geçiş",
+  "clock_bg_black": "Siyah",
+  "amb_custom": "Diğer…"
  },
  "plurals": {
   "browser_found": {

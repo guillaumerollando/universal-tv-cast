@@ -525,7 +525,21 @@
   "open_ia_feature": "Filmer i allmän egendom",
   "open_ia_cartoons": "Klassiska tecknade filmer",
   "open_ia_silent": "Stumfilmer",
-  "open_ia_prelinger": "Prelinger-arkivet"
+  "open_ia_prelinger": "Prelinger-arkivet",
+  "iptv_my_sources": "Mina källor",
+  "sources_free_manage": "Fria källor",
+  "sources_change": "Ändra mina källor",
+  "sources_where": "Du hittar den här skärmen under Sök (uppe till höger) och i Inställningar.",
+  "open_peertube": "PeerTube",
+  "pack_locked": "Supporterpaket",
+  "clock_big": "Jättestor",
+  "clock_thin": "Tunn",
+  "clock_analog": "Visare",
+  "clock_flip": "Retro",
+  "clock_bg_glow": "Sken",
+  "clock_bg_gradient": "Toning",
+  "clock_bg_black": "Svart",
+  "amb_custom": "Annat…"
  },
  "plurals": {
   "browser_found": {

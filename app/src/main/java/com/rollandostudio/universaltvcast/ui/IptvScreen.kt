@@ -177,6 +177,9 @@ fun IptvScreen(onClose: () -> Unit, startWith: String? = null) {
     val errLoad = stringResource(R.string.iptv_err_load)
     val all = rememberAllChannels(refreshTick)
     val freeOn by com.rollandostudio.universaltvcast.data.Xtream.freeOn.collectAsState()
+    // Des films ou des séries en plus des chaînes (abonnement, Films libres) : c'est l'écran des « Sources ».
+    val vodHere = freeOn || lists.any { com.rollandostudio.universaltvcast.data.Xtream.accountOf(it.source) != null }
+    val myLists = if (vodHere) R.string.iptv_my_sources else R.string.iptv_my_lists
 
     fun import(source: String) {
         if (busy) return
@@ -204,17 +207,17 @@ fun IptvScreen(onClose: () -> Unit, startWith: String? = null) {
             Row(Modifier.fillMaxWidth().height(64.dp).padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = onClose) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.cd_back)) }
                 // Catalogue libre seul (pas de liste de chaînes) : « Films et séries ».
-                // Des films ou des séries en plus des chaînes (abonnement, Films libres) : c'est l'écran des « Sources ».
-                val vodHere = freeOn || lists.any { com.rollandostudio.universaltvcast.data.Xtream.accountOf(it.source) != null }
                 Text(stringResource(if (vodHere) R.string.sources_title else R.string.home_channels), style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.weight(1f).semantics { heading() })
                 if (lists.isNotEmpty() || freeOn) {
                     IconButton(onClick = { adding = true }) { Icon(Icons.Rounded.Add, stringResource(R.string.iptv_add)) }
                     var menu by remember { mutableStateOf(false) }
                     Box {
-                        IconButton(onClick = { menu = true }) { Icon(Icons.Rounded.MoreVert, stringResource(R.string.iptv_my_lists)) }
+                        IconButton(onClick = { menu = true }) { Icon(Icons.Rounded.MoreVert, stringResource(myLists)) }
                         DropdownMenu(menu, onDismissRequest = { menu = false }, shape = RoundedCornerShape(16.dp)) {
-                            DropdownMenuItem(text = { Text(stringResource(R.string.iptv_my_lists)) }, onClick = { menu = false; showLists = true })
+                            DropdownMenuItem(text = { Text(stringResource(myLists)) }, onClick = { menu = false; showLists = true })
+                            // Les sources ouvertes (Films libres, PeerTube, Internet Archive) se règlent ici aussi.
+                            DropdownMenuItem(text = { Text(stringResource(R.string.sources_free_manage)) }, onClick = { menu = false; Nav.sources.value = true })
                             if (hiddenChannels.isNotEmpty()) DropdownMenuItem(
                                 text = { Text(stringResource(R.string.iptv_hidden_title) + " (${hiddenChannels.size})") },
                                 onClick = { menu = false; showHidden = true },
@@ -247,7 +250,7 @@ fun IptvScreen(onClose: () -> Unit, startWith: String? = null) {
     // Mes listes : d'où viennent les chaînes ; mettre à jour, supprimer.
     if (showLists) AlertDialog(
         onDismissRequest = { showLists = false },
-        title = { Text(stringResource(R.string.iptv_my_lists)) },
+        title = { Text(stringResource(myLists)) },
         text = {
             LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 if (freeOn) item(key = "free") {

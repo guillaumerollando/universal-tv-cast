@@ -22,6 +22,10 @@ object Look {
     }
 
     enum class Idle { CLASSIC, PHOTO, CLOCK }
+    /** Style de l'horloge (écran d'attente) : chiffres géants, fins, cadran à aiguilles, cartes rétro. */
+    enum class ClockFace { BIG, THIN, ANALOG, FLIP }
+    /** Fond de l'horloge : lueur de la couleur d'accent, dégradé franc, noir intégral. */
+    enum class ClockBg { GLOW, GRADIENT, BLACK }
 
     /** Icônes de l'appli (alias du lanceur) : la première est celle d'origine. */
     enum class Icon(val alias: String) {
@@ -46,6 +50,10 @@ object Look {
     val live: StateFlow<Boolean> = _live
     private val _icon = MutableStateFlow(Icon.NIGHT)
     val icon: StateFlow<Icon> = _icon
+    private val _clockFace = MutableStateFlow(ClockFace.BIG)
+    val clockFace: StateFlow<ClockFace> = _clockFace
+    private val _clockBg = MutableStateFlow(ClockBg.GLOW)
+    val clockBg: StateFlow<ClockBg> = _clockBg
     private val _photos = MutableStateFlow<List<File>>(emptyList())
     val photos: StateFlow<List<File>> = _photos
 
@@ -57,6 +65,8 @@ object Look {
         _idle.value = runCatching { Idle.valueOf(p.getString("idle", "CLASSIC")!!) }.getOrDefault(Idle.CLASSIC)
         _message.value = p.getString("message", "").orEmpty()
         _live.value = p.getBoolean("live", false)
+        _clockFace.value = runCatching { ClockFace.valueOf(p.getString("clock_face", "BIG")!!) }.getOrDefault(ClockFace.BIG)
+        _clockBg.value = runCatching { ClockBg.valueOf(p.getString("clock_bg", "GLOW")!!) }.getOrDefault(ClockBg.GLOW)
         _icon.value = runCatching { Icon.valueOf(p.getString("icon", "NIGHT")!!) }.getOrDefault(Icon.NIGHT)
         _photos.value = photoDir().listFiles()?.filter { it.extension == "jpg" }?.sortedBy { it.name }.orEmpty()
     }
@@ -75,6 +85,8 @@ object Look {
     fun setIdle(i: Idle) { _idle.value = i; prefs.edit().putString("idle", i.name).apply() }
     fun setMessage(m: String) { _message.value = m.take(60); prefs.edit().putString("message", m.take(60)).apply() }
     fun setLive(on: Boolean) { _live.value = on; prefs.edit().putBoolean("live", on).apply() }
+    fun setClockFace(f: ClockFace) { _clockFace.value = f; prefs.edit().putString("clock_face", f.name).apply() }
+    fun setClockBg(b: ClockBg) { _clockBg.value = b; prefs.edit().putString("clock_bg", b.name).apply() }
 
     /**
      * Choisit l'icône de l'écran d'accueil (un alias du lanceur). Elle n'est posée qu'en quittant l'appli ([applyIcon]) :

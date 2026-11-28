@@ -525,7 +525,21 @@
   "open_ia_feature": "公有領域電影",
   "open_ia_cartoons": "經典動畫",
   "open_ia_silent": "默片",
-  "open_ia_prelinger": "Prelinger 檔案"
+  "open_ia_prelinger": "Prelinger 檔案",
+  "iptv_my_sources": "我的來源",
+  "sources_free_manage": "免費來源",
+  "sources_change": "變更我的來源",
+  "sources_where": "可在「搜尋」（右上角）和「設定」中找到此畫面。",
+  "open_peertube": "PeerTube",
+  "pack_locked": "支持者禮包",
+  "clock_big": "巨大",
+  "clock_thin": "纖細",
+  "clock_analog": "指針",
+  "clock_flip": "復古",
+  "clock_bg_glow": "光暈",
+  "clock_bg_gradient": "漸層",
+  "clock_bg_black": "黑色",
+  "amb_custom": "其他…"
  },
  "plurals": {
   "browser_found": {

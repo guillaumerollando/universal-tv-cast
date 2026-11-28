@@ -104,8 +104,11 @@ object OpenSources {
     }
 
     // ---- Internet Archive ----
+    // Licence libre déclarée, ou collection du domaine public par nature (archives Prelinger, films muets, dessins
+    // animés anciens) : beaucoup de ces films n'ont pas le champ « licence » rempli.
     private const val ARCHIVE_SCOPE = "mediatype:movies AND collection:(feature_films OR short_films OR prelinger OR silent_films OR " +
-        "classic_cartoons OR animationandcartoons) AND (licenseurl:*publicdomain* OR licenseurl:*creativecommons*)"
+        "classic_cartoons OR animationandcartoons) AND (licenseurl:*publicdomain* OR licenseurl:*creativecommons* OR " +
+        "collection:(prelinger OR silent_films OR classic_cartoons))"
 
     suspend fun archive(query: String): List<Hit> = withContext(Dispatchers.IO) {
         val q = "title:(${query.replace(Regex("[():\"]"), " ")}) AND $ARCHIVE_SCOPE"
@@ -144,7 +147,7 @@ object OpenSources {
     suspend fun homeRows(): List<Row> {
         val on = _on.value
         val wanted = buildList {
-            if (Source.PEERTUBE in on) add(Triple("pt-blender", com.rollandostudio.universaltvcast.R.string.open_blender_studio,
+            if (Source.PEERTUBE in on) add(Triple("pt-blender", com.rollandostudio.universaltvcast.R.string.open_peertube,
                 suspend { peertubeChannel("video.blender.org", "/api/v1/videos?sort=-publishedAt&count=24&isLocal=true") }))
             if (Source.ARCHIVE in on) {
                 add(Triple("ia-feature", com.rollandostudio.universaltvcast.R.string.open_ia_feature, suspend { archiveCollection("feature_films") }))

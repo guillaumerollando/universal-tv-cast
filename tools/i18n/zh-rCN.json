@@ -525,7 +525,21 @@
   "open_ia_feature": "公有领域电影",
   "open_ia_cartoons": "经典动画",
   "open_ia_silent": "默片",
-  "open_ia_prelinger": "Prelinger 档案"
+  "open_ia_prelinger": "Prelinger 档案",
+  "iptv_my_sources": "我的来源",
+  "sources_free_manage": "免费来源",
+  "sources_change": "更改我的来源",
+  "sources_where": "可在“搜索”（右上角）和“设置”中找到此屏幕。",
+  "open_peertube": "PeerTube",
+  "pack_locked": "支持者礼包",
+  "clock_big": "巨大",
+  "clock_thin": "纤细",
+  "clock_analog": "指针",
+  "clock_flip": "复古",
+  "clock_bg_glow": "光晕",
+  "clock_bg_gradient": "渐变",
+  "clock_bg_black": "黑色",
+  "amb_custom": "其他…"
  },
  "plurals": {
   "browser_found": {

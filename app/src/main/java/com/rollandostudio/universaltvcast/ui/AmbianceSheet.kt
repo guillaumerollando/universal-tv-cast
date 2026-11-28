@@ -155,12 +155,23 @@ fun AmbianceSheet(onDismiss: () -> Unit) {
                 }
             }
             item {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(stringResource(R.string.amb_each), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
-                    listOf(15 to "15 s", 30 to "30 s", 60 to "1 min").forEach { (s, label) ->
-                        FilterChip(selected = seconds == s, onClick = { Ambiance.setSeconds(s) }, label = { Text(label) })
+                // Durée de chaque photo : des choix tout faits, ou « Autre » (de 10 s à 1 h).
+                val presets = listOf(30, 60, 120, 300)
+                var custom by remember { mutableStateOf(false) }
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(stringResource(R.string.amb_each), style = MaterialTheme.typography.bodyLarge)
+                    androidx.compose.foundation.lazy.LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        items(presets.size) { i ->
+                            val v = presets[i]
+                            FilterChip(selected = seconds == v, onClick = { Ambiance.setSeconds(v) }, label = { Text(durationLabel(v)) })
+                        }
+                        item {
+                            FilterChip(selected = seconds !in presets, onClick = { custom = true },
+                                label = { Text(if (seconds in presets) stringResource(R.string.amb_custom) else durationLabel(seconds)) })
+                        }
                     }
                 }
+                if (custom) DurationDialog(seconds, onDismiss = { custom = false }) { Ambiance.setSeconds(it); custom = false }
             }
             item {
                 if (unlocked) {
@@ -251,4 +262,33 @@ fun AmbiancePlayer(state: CastState) {
         if (settings) AmbianceSheet(onDismiss = { settings = false })
         androidx.compose.material3.TextButton(onClick = { settings = true }) { Text(stringResource(R.string.amb_change)) }
     }
+}
+
+
+/** « 30 s », « 1 min », « 1 min 30 », « 1 h ». */
+private fun durationLabel(s: Int): String = when {
+    s >= 3600 -> "1 h"
+    s >= 60 && s % 60 == 0 -> "${s / 60} min"
+    s >= 60 -> "${s / 60} min ${s % 60}"
+    else -> "$s s"
+}
+
+/** Durée au choix : un curseur de 10 secondes à 1 heure (pas de plus en plus larges). */
+@Composable
+private fun DurationDialog(current: Int, onDismiss: () -> Unit, onPick: (Int) -> Unit) {
+    val steps = remember { (listOf(10, 15, 20, 30, 45) + (1..9).map { it * 60 } + listOf(600, 900, 1200, 1800, 2700, 3600)) }
+    var i by remember { mutableStateOf(steps.indexOfFirst { it >= current }.takeIf { it >= 0 } ?: 3) }
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.amb_each)) },
+        text = {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(durationLabel(steps[i]), style = MaterialTheme.typography.headlineMedium)
+                androidx.compose.material3.Slider(value = i.toFloat(), onValueChange = { i = it.toInt() },
+                    valueRange = 0f..(steps.size - 1).toFloat(), steps = steps.size - 2)
+            }
+        },
+        confirmButton = { androidx.compose.material3.TextButton(onClick = { onPick(steps[i]) }) { Text(stringResource(R.string.action_save)) } },
+        dismissButton = { androidx.compose.material3.TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
+    )
 }

@@ -525,7 +525,21 @@
   "open_ia_feature": "Phim phạm vi công cộng",
   "open_ia_cartoons": "Hoạt hình cổ điển",
   "open_ia_silent": "Phim câm",
-  "open_ia_prelinger": "Lưu trữ Prelinger"
+  "open_ia_prelinger": "Lưu trữ Prelinger",
+  "iptv_my_sources": "Nguồn của tôi",
+  "sources_free_manage": "Nguồn tự do",
+  "sources_change": "Đổi nguồn của tôi",
+  "sources_where": "Màn hình này có trong Tìm kiếm (góc trên phải) và trong Cài đặt.",
+  "open_peertube": "PeerTube",
+  "pack_locked": "Gói ủng hộ",
+  "clock_big": "Khổng lồ",
+  "clock_thin": "Mảnh",
+  "clock_analog": "Kim",
+  "clock_flip": "Cổ điển",
+  "clock_bg_glow": "Phát sáng",
+  "clock_bg_gradient": "Chuyển màu",
+  "clock_bg_black": "Đen",
+  "amb_custom": "Khác…"
  },
  "plurals": {
   "browser_found": {

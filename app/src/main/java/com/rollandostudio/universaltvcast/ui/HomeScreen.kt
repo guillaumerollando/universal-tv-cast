@@ -48,6 +48,8 @@ import androidx.compose.material.icons.rounded.LiveTv
 import androidx.compose.material.icons.rounded.Movie
 import androidx.compose.material.icons.rounded.PhotoLibrary
 import androidx.compose.material.icons.rounded.Lan
+import androidx.compose.material.icons.rounded.Lock
+import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material.icons.rounded.Star
@@ -265,6 +267,14 @@ fun HomeScreen(
                     }
                 }
             }
+            // Sous les rangées des sources : de quoi en ajouter ou en retirer, sans chercher dans les réglages.
+            if (openOn.isNotEmpty() || freeFilms) item {
+                TextButton(onClick = { Nav.sources.value = true }, modifier = Modifier.padding(start = 8.dp)) {
+                    Icon(Icons.Rounded.Tune, null, Modifier.size(18.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.sources_change))
+                }
+            }
             // La découverte continue pas à pas : ce qui n'a pas encore été essayé reste proposé (une liste de chaînes,
             // un site), et disparaît une fois fait. Toujours en bas, même avec des sources : du contenu en plus.
             item {
@@ -332,8 +342,8 @@ fun HomeScreen(
         item {
             LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
                 item { ActionTile(Icons.Rounded.LiveTv, stringResource(R.string.home_lists_tile), ActionColors.LISTS) { Nav.iptv.value = "" } }
-                item { ActionTile(Icons.Rounded.AutoAwesome, stringResource(R.string.amb_title), AMBIANCE_COLOR) { Nav.ambiance.value = true } }
                 item { ActionTile(Icons.Rounded.FolderOpen, stringResource(R.string.home_files_tile), ActionColors.FILES, onClick = onPickFile) }
+                item { AmbianceTile() }
             }
         }
 
@@ -624,21 +634,31 @@ private fun CastActionsRow(
     LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
         // Pas de « Sites web » ici : l'onglet Navigateur est là pour ça (il reste dans les grandes tuiles du nouveau venu).
         item { ActionTile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), ActionColors.ALBUM, onClick = onPickPhotos) }
-        item { ActionTile(Icons.Rounded.AutoAwesome, stringResource(R.string.amb_title), AMBIANCE_COLOR) { Nav.ambiance.value = true } }
         item { ActionTile(Icons.Rounded.Lan, stringResource(R.string.home_network), ActionColors.NETWORK, onClick = onNetwork) }
         item { ActionTile(Icons.Rounded.Link, stringResource(R.string.home_link_tile), ActionColors.LINK, highlight = highlightLink, onClick = onPasteLink) }
+        // Ambiance (pack soutien) après les façons de caster du quotidien ; cadenas tant que le pack n'est pas pris.
+        item { AmbianceTile() }
         if (showLists) item { ActionTile(Icons.Rounded.LiveTv, stringResource(R.string.home_lists_tile), ActionColors.LISTS) { Nav.iptv.value = "" } }
         item { ActionTile(Icons.Rounded.FolderOpen, stringResource(R.string.home_files_tile), ActionColors.FILES, onClick = onPickFile) }
     }
 }
 
-/** Une tuile d'action, au format des favoris : fond à sa couleur, icône et nom en blanc. */
+/** Une tuile d'action, au format des favoris : fond à sa couleur, icône et nom en blanc. [locked] : petit cadenas. */
 @Composable
-private fun ActionTile(icon: ImageVector, label: String, color: Long, highlight: Boolean = false, onClick: () -> Unit) {
+private fun ActionTile(icon: ImageVector, label: String, color: Long, highlight: Boolean = false, locked: Boolean = false, onClick: () -> Unit) {
     FavTileFrame(label, emptyList(), onClick, background = favBrush(Color(color)),
         modifier = Modifier.highlightGlow(highlight, ChannelTiles.corner)) {
         Icon(icon, null, tint = Color.White, modifier = Modifier.align(Alignment.Center).padding(bottom = 14.dp).size(24.dp))
+        if (locked) Icon(Icons.Rounded.Lock, stringResource(R.string.pack_locked), tint = Color.White.copy(alpha = 0.85f),
+            modifier = Modifier.align(Alignment.TopEnd).padding(6.dp).size(14.dp))
     }
+}
+
+/** La tuile Ambiance : cadenas discret tant que le pack soutien n'est pas pris (le toucher présente le pack). */
+@Composable
+private fun AmbianceTile() {
+    val unlocked by com.rollandostudio.universaltvcast.data.Supporter.unlocked.collectAsState()
+    ActionTile(Icons.Rounded.AutoAwesome, stringResource(R.string.amb_title), AMBIANCE_COLOR, locked = !unlocked) { Nav.ambiance.value = true }
 }
 
 /** Grande tuile du nouveau venu : la même couleur que la petite, avec une ligne d'explication. */

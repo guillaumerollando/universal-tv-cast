@@ -525,7 +525,21 @@
   "open_ia_feature": "Filme din domeniul public",
   "open_ia_cartoons": "Desene animate clasice",
   "open_ia_silent": "Filme mute",
-  "open_ia_prelinger": "Arhivele Prelinger"
+  "open_ia_prelinger": "Arhivele Prelinger",
+  "iptv_my_sources": "Sursele mele",
+  "sources_free_manage": "Surse libere",
+  "sources_change": "Schimbă sursele mele",
+  "sources_where": "Găsești acest ecran în Caută (dreapta sus) și în Setări.",
+  "open_peertube": "PeerTube",
+  "pack_locked": "Pachet de susținere",
+  "clock_big": "Uriaș",
+  "clock_thin": "Subțire",
+  "clock_analog": "Ace",
+  "clock_flip": "Retro",
+  "clock_bg_glow": "Strălucire",
+  "clock_bg_gradient": "Degradeu",
+  "clock_bg_black": "Negru",
+  "amb_custom": "Altul…"
  },
  "plurals": {
   "browser_found": {

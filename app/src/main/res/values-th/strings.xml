@@ -527,6 +527,20 @@
     <string name="open_ia_cartoons">การ์ตูนคลาสสิก</string>
     <string name="open_ia_silent">ภาพยนตร์เงียบ</string>
     <string name="open_ia_prelinger">คลัง Prelinger</string>
+    <string name="iptv_my_sources">แหล่งของฉัน</string>
+    <string name="sources_free_manage">แหล่งเสรี</string>
+    <string name="sources_change">เปลี่ยนแหล่งของฉัน</string>
+    <string name="sources_where">หน้านี้อยู่ในค้นหา (มุมขวาบน) และในการตั้งค่า</string>
+    <string name="open_peertube">PeerTube</string>
+    <string name="pack_locked">แพ็กผู้สนับสนุน</string>
+    <string name="clock_big">ใหญ่</string>
+    <string name="clock_thin">บาง</string>
+    <string name="clock_analog">เข็ม</string>
+    <string name="clock_flip">เรโทร</string>
+    <string name="clock_bg_glow">เรืองแสง</string>
+    <string name="clock_bg_gradient">ไล่สี</string>
+    <string name="clock_bg_black">ดำ</string>
+    <string name="amb_custom">อื่นๆ…</string>
     <plurals name="browser_found">
         <item quantity="other">%d วิดีโอ</item>
     </plurals>

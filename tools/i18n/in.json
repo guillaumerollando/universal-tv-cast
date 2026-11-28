@@ -525,7 +525,21 @@
   "open_ia_feature": "Film domain publik",
   "open_ia_cartoons": "Kartun klasik",
   "open_ia_silent": "Film bisu",
-  "open_ia_prelinger": "Arsip Prelinger"
+  "open_ia_prelinger": "Arsip Prelinger",
+  "iptv_my_sources": "Sumber saya",
+  "sources_free_manage": "Sumber bebas",
+  "sources_change": "Ubah sumber saya",
+  "sources_where": "Layar ini ada di Cari (kanan atas) dan di Setelan.",
+  "open_peertube": "PeerTube",
+  "pack_locked": "Paket pendukung",
+  "clock_big": "Raksasa",
+  "clock_thin": "Tipis",
+  "clock_analog": "Jarum",
+  "clock_flip": "Retro",
+  "clock_bg_glow": "Pendar",
+  "clock_bg_gradient": "Gradasi",
+  "clock_bg_black": "Hitam",
+  "amb_custom": "Lainnya…"
  },
  "plurals": {
   "browser_found": {

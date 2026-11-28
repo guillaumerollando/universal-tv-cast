@@ -525,7 +525,21 @@
   "open_ia_feature": "ภาพยนตร์สาธารณสมบัติ",
   "open_ia_cartoons": "การ์ตูนคลาสสิก",
   "open_ia_silent": "ภาพยนตร์เงียบ",
-  "open_ia_prelinger": "คลัง Prelinger"
+  "open_ia_prelinger": "คลัง Prelinger",
+  "iptv_my_sources": "แหล่งของฉัน",
+  "sources_free_manage": "แหล่งเสรี",
+  "sources_change": "เปลี่ยนแหล่งของฉัน",
+  "sources_where": "หน้านี้อยู่ในค้นหา (มุมขวาบน) และในการตั้งค่า",
+  "open_peertube": "PeerTube",
+  "pack_locked": "แพ็กผู้สนับสนุน",
+  "clock_big": "ใหญ่",
+  "clock_thin": "บาง",
+  "clock_analog": "เข็ม",
+  "clock_flip": "เรโทร",
+  "clock_bg_glow": "เรืองแสง",
+  "clock_bg_gradient": "ไล่สี",
+  "clock_bg_black": "ดำ",
+  "amb_custom": "อื่นๆ…"
  },
  "plurals": {
   "browser_found": {

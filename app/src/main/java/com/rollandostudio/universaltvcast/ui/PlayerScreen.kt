@@ -156,6 +156,7 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
             Modifier
                 .fillMaxWidth()
                 .aspectRatio(16f / 9f)
+                .castAura(c.primary, 28.dp, state.phase == Phase.PLAYING)
                 .clip(RoundedCornerShape(28.dp))
                 .background(Brush.linearGradient(listOf(c.primaryContainer, c.surfaceContainerHighest, c.secondaryContainer))),
             contentAlignment = Alignment.Center,
@@ -171,8 +172,6 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
                 Spacer(Modifier.height(12.dp))
                 Box(Modifier.semantics { liveRegion = LiveRegionMode.Polite }) { CastStatus(state, c.onPrimaryContainer) }
             }
-            // Le liseré qui fait le tour du cadre : le même pour une chaîne, un film, une vidéo.
-            if (state.phase == Phase.PLAYING) CastRim(c.primary, 28.dp, Modifier.matchParentSize())
             if (state.phase == Phase.LOADING || state.phase == Phase.SENDING || state.phase == Phase.BUFFERING) {
                 LinearProgressIndicator(Modifier.fillMaxWidth().align(Alignment.BottomCenter))
             }
@@ -335,6 +334,7 @@ private fun FilmHeader(state: CastState) {
         Modifier
             .fillMaxWidth()
             .aspectRatio(16f / 9f)
+            .castAura(MaterialTheme.colorScheme.primary, 28.dp, state.phase == Phase.PLAYING && state.active && !state.onPhone)
             .clip(RoundedCornerShape(28.dp))
             .background(MaterialTheme.colorScheme.surfaceContainerHighest)
             .semantics(mergeDescendants = true) { contentDescription = desc; liveRegion = LiveRegionMode.Polite },
@@ -362,8 +362,6 @@ private fun FilmHeader(state: CastState) {
             Spacer(Modifier.height(8.dp))
             CastStatus(state, Color.White.copy(alpha = 0.92f))
         }
-        // Film, série, vidéo d'un site : pas de halo sur l'image, seulement le liseré qui fait le tour (comme partout).
-        if (state.phase == Phase.PLAYING && state.active && !state.onPhone) CastRim(MaterialTheme.colorScheme.primary, 28.dp, Modifier.matchParentSize())
         if (state.phase == Phase.LOADING || state.phase == Phase.SENDING || state.phase == Phase.BUFFERING) {
             LinearProgressIndicator(Modifier.fillMaxWidth().align(Alignment.BottomCenter))
         }
@@ -442,21 +440,20 @@ internal fun Progress(s: CastState) {
 @Composable
 private fun ChannelHeader(s: CastState) {
     val m = s.media ?: return
+    val playing = s.phase == Phase.PLAYING && !s.onPhone
     Box(
-        Modifier.fillMaxWidth().aspectRatio(16f / 9f).clip(RoundedCornerShape(28.dp))
+        Modifier.fillMaxWidth().aspectRatio(16f / 9f).castAura(MaterialTheme.colorScheme.primary, 28.dp, playing).clip(RoundedCornerShape(28.dp))
             .semantics(mergeDescendants = true) { liveRegion = LiveRegionMode.Polite },
     ) {
         // Le logo de la chaîne (ou son nom) sur un fond assorti, comme sur l'accueil.
-        // En lecture sur la télé : un halo qui respire derrière le logo, sur le fond, et le liseré qui fait le tour.
-        val playing = s.phase == Phase.PLAYING && !s.onPhone
+        // En lecture sur la télé : le cadre rayonne autour (castAura) ; sur un fond sombre, un halo respire aussi
+        // derrière le logo (sur un fond clair, il ne ferait qu'une ombre grise).
         ChannelArt(
             name = m.channel ?: m.title, logo = m.posterUrl, streamUrl = m.url, pad = 56.dp,
             textStyle = MaterialTheme.typography.displaySmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
             modifier = Modifier.matchParentSize(),
-            underlay = if (playing) ({ _ -> CastHalo(MaterialTheme.colorScheme.primary, size = 360.dp) }) else null,
+            underlay = if (playing) ({ ink -> if (ink == Color.White) CastHalo(Color.White, size = 360.dp) }) else null,
         )
-        // Couleur d'accent, comme partout : visible aussi sur les logos à fond blanc.
-        if (playing) CastRim(MaterialTheme.colorScheme.primary, 28.dp, Modifier.matchParentSize())
         // Voile sombre en bas : l'état de la lecture reste lisible sur n'importe quel fond.
         Box(Modifier.align(Alignment.BottomCenter).fillMaxWidth().height(64.dp)
             .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(alpha = 0.55f)))))

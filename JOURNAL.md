@@ -1679,3 +1679,8 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   TV3V, Nova, France 2) : le liseré y était blanc, le halo gris. Halo et liseré sont maintenant à la couleur d'accent
   partout. Une seule ligne d'état sous les trois cadres (`CastStatus`) : barres qui dansent (immobiles en pause) puis
   « En lecture · nom de la télé » ; « Lecture sur la télé » devient « En lecture » (23 langues).
+- Toujours invisible sur fond blanc (retour de Guillaume) : la lueur et le liseré passent à l'extérieur du cadre,
+  sur le fond sombre de l'appli, façon Ambilight (`Modifier.castAura` : lueur qui respire en contours dégradés,
+  liseré qui tourne juste au bord extérieur). Le halo intérieur ne reste que derrière un logo sur fond sombre (et
+  derrière la télé du cadre par défaut) ; sur un fond clair il n'en reste rien. Vérifié sur émulateur (chaîne violette,
+  cadre par défaut). Pas vu : une vraie chaîne à fond blanc.

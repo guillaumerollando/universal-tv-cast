@@ -445,6 +445,9 @@
     <string name="fav_rename">Переименовать</string>
     <string name="fav_move_left">Переместить влево</string>
     <string name="fav_move_right">Переместить вправо</string>
+    <string name="home_files_tile">Файлы</string>
+    <string name="home_lists_tile">Списки ТВ</string>
+    <string name="start_tv_tile">Бесплатное ТВ</string>
     <plurals name="browser_found">
         <item quantity="one">%d видео</item>
         <item quantity="few">%d видео</item>

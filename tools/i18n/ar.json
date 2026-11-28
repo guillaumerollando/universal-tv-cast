@@ -443,7 +443,10 @@
   "fav_icon_star": "مفضلة",
   "fav_rename": "إعادة التسمية",
   "fav_move_left": "نقل إلى اليسار",
-  "fav_move_right": "نقل إلى اليمين"
+  "fav_move_right": "نقل إلى اليمين",
+  "home_files_tile": "الملفات",
+  "home_lists_tile": "قوائم التلفزيون",
+  "start_tv_tile": "تلفزيون مجاني"
  },
  "plurals": {
   "browser_found": {

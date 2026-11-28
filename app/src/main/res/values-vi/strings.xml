@@ -445,6 +445,9 @@
     <string name="fav_rename">Đổi tên</string>
     <string name="fav_move_left">Chuyển sang trái</string>
     <string name="fav_move_right">Chuyển sang phải</string>
+    <string name="home_files_tile">Tệp</string>
+    <string name="home_lists_tile">Danh sách TV</string>
+    <string name="start_tv_tile">TV miễn phí</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

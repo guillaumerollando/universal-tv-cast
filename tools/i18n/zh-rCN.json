@@ -443,7 +443,10 @@
   "fav_icon_star": "收藏",
   "fav_rename": "重命名",
   "fav_move_left": "左移",
-  "fav_move_right": "右移"
+  "fav_move_right": "右移",
+  "home_files_tile": "文件",
+  "home_lists_tile": "电视列表",
+  "start_tv_tile": "免费电视"
  },
  "plurals": {
   "browser_found": {

@@ -1759,6 +1759,18 @@
   "fav_move_right": {
    "en": "Move right",
    "fr": "Déplacer à droite"
+  },
+  "home_files_tile": {
+   "en": "Files",
+   "fr": "Fichiers"
+  },
+  "home_lists_tile": {
+   "en": "TV lists",
+   "fr": "Listes TV"
+  },
+  "start_tv_tile": {
+   "en": "Free TV",
+   "fr": "TV gratuite"
   }
  },
  "plurals": {

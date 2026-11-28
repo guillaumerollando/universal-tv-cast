@@ -445,6 +445,9 @@
     <string name="fav_rename">Redenumiți</string>
     <string name="fav_move_left">Mutați la stânga</string>
     <string name="fav_move_right">Mutați la dreapta</string>
+    <string name="home_files_tile">Fișiere</string>
+    <string name="home_lists_tile">Liste TV</string>
+    <string name="start_tv_tile">TV gratuit</string>
     <plurals name="browser_found">
         <item quantity="one">%d videoclip</item>
         <item quantity="few">%d videoclipuri</item>

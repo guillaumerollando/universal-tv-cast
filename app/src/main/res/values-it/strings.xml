@@ -200,6 +200,9 @@
     <string name="net_help_nas_title">NAS o router con disco</string>
     <string name="net_help_nas">Attiva il suo «server multimediale» (DLNA o UPnP) nelle impostazioni: comparirà qui da solo, senza password. Funzionano anche le cartelle condivise, con il tuo account del NAS.</string>
     <string name="home_link_short">Video, diretta o lista di canali</string>
+    <string name="home_files_tile">File</string>
+    <string name="home_lists_tile">Liste TV</string>
+    <string name="start_tv_tile">TV gratuita</string>
     <string name="home_files_other">Sfoglia i file (musica…)</string>
     <string name="home_resume">Riprendi</string>
     <string name="home_bookmarks_empty">Tocca ★ su un sito o sull’episodio di una serie: la riprenderai qui, dove eri rimasto.</string>

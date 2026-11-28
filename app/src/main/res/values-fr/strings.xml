@@ -200,6 +200,9 @@
     <string name="net_help_nas_title">NAS ou box avec un disque</string>
     <string name="net_help_nas">Active son « serveur multimédia » (DLNA ou UPnP) dans ses réglages : il apparaît ici tout seul, sans mot de passe. Ses dossiers partagés marchent aussi, avec ton identifiant du NAS.</string>
     <string name="home_link_short">Vidéo, direct ou liste de chaînes</string>
+    <string name="home_files_tile">Fichiers</string>
+    <string name="home_lists_tile">Listes TV</string>
+    <string name="start_tv_tile">TV gratuite</string>
     <string name="home_files_other">Parcourir les fichiers (musique…)</string>
     <string name="home_resume">Reprendre</string>
     <string name="home_bookmarks_empty">Touche ★ sur un site ou sur l’épisode d’une série : tu la reprendras ici, là où tu en es.</string>

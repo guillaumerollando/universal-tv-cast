@@ -443,7 +443,10 @@
   "fav_icon_star": "Yêu thích",
   "fav_rename": "Đổi tên",
   "fav_move_left": "Chuyển sang trái",
-  "fav_move_right": "Chuyển sang phải"
+  "fav_move_right": "Chuyển sang phải",
+  "home_files_tile": "Tệp",
+  "home_lists_tile": "Danh sách TV",
+  "start_tv_tile": "TV miễn phí"
  },
  "plurals": {
   "browser_found": {

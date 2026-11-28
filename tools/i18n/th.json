@@ -443,7 +443,10 @@
   "fav_icon_star": "รายการโปรด",
   "fav_rename": "เปลี่ยนชื่อ",
   "fav_move_left": "ย้ายไปทางซ้าย",
-  "fav_move_right": "ย้ายไปทางขวา"
+  "fav_move_right": "ย้ายไปทางขวา",
+  "home_files_tile": "ไฟล์",
+  "home_lists_tile": "รายการทีวี",
+  "start_tv_tile": "ทีวีฟรี"
  },
  "plurals": {
   "browser_found": {

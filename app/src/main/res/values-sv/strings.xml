@@ -445,6 +445,9 @@
     <string name="fav_rename">Byt namn</string>
     <string name="fav_move_left">Flytta åt vänster</string>
     <string name="fav_move_right">Flytta åt höger</string>
+    <string name="home_files_tile">Filer</string>
+    <string name="home_lists_tile">Tv-listor</string>
+    <string name="start_tv_tile">Gratis-tv</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="other">%d videor</item>

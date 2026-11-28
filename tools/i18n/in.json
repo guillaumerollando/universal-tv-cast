@@ -443,7 +443,10 @@
   "fav_icon_star": "Favorit",
   "fav_rename": "Ganti nama",
   "fav_move_left": "Pindah ke kiri",
-  "fav_move_right": "Pindah ke kanan"
+  "fav_move_right": "Pindah ke kanan",
+  "home_files_tile": "File",
+  "home_lists_tile": "Daftar TV",
+  "start_tv_tile": "TV gratis"
  },
  "plurals": {
   "browser_found": {

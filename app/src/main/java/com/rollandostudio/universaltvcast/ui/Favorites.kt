@@ -213,17 +213,18 @@ fun siteItems(recents: List<com.rollandostudio.universaltvcast.data.Recent>, boo
 internal fun FavTileFrame(
     label: String, menu: List<Pair<String, () -> Unit>>, onClick: () -> Unit,
     background: androidx.compose.ui.graphics.Brush? = null, showLabel: Boolean = true,
+    modifier: Modifier = Modifier,
     art: @Composable androidx.compose.foundation.layout.BoxScope.() -> Unit,
 ) {
     var open by remember { mutableStateOf(false) }
     val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
     Box {
         Box(
-            Modifier.width(ChannelTiles.width).aspectRatio(16f / 10f).clip(RoundedCornerShape(ChannelTiles.corner))
+            modifier.width(ChannelTiles.width).aspectRatio(16f / 10f).clip(RoundedCornerShape(ChannelTiles.corner))
                 .then(if (background != null) Modifier.background(background) else Modifier)
                 .combinedClickable(
                     role = Role.Button, onClick = onClick,
-                    onLongClick = { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); open = true },
+                    onLongClick = if (menu.isEmpty()) null else ({ haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); open = true }),
                 )
                 .semantics {
                     contentDescription = label

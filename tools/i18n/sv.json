@@ -443,7 +443,10 @@
   "fav_icon_star": "Favorit",
   "fav_rename": "Byt namn",
   "fav_move_left": "Flytta åt vänster",
-  "fav_move_right": "Flytta åt höger"
+  "fav_move_right": "Flytta åt höger",
+  "home_files_tile": "Filer",
+  "home_lists_tile": "Tv-listor",
+  "start_tv_tile": "Gratis-tv"
  },
  "plurals": {
   "browser_found": {

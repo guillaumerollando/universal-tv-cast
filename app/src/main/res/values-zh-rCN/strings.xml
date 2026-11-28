@@ -445,6 +445,9 @@
     <string name="fav_rename">重命名</string>
     <string name="fav_move_left">左移</string>
     <string name="fav_move_right">右移</string>
+    <string name="home_files_tile">文件</string>
+    <string name="home_lists_tile">电视列表</string>
+    <string name="start_tv_tile">免费电视</string>
     <plurals name="browser_found">
         <item quantity="other">%d 个视频</item>
     </plurals>

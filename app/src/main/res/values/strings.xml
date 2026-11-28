@@ -201,6 +201,9 @@
     <string name="net_help_nas_title">NAS or router with a drive</string>
     <string name="net_help_nas">Turn on its “media server” (DLNA or UPnP) in its settings: it shows up here on its own, without a password. Its shared folders work too, with your NAS account.</string>
     <string name="home_link_short">Video, live stream or channel list</string>
+    <string name="home_files_tile">Files</string>
+    <string name="home_lists_tile">TV lists</string>
+    <string name="start_tv_tile">Free TV</string>
     <string name="home_files_other">Browse files (music…)</string>
     <string name="home_resume">Pick up where you left off</string>
     <string name="home_bookmarks_empty">Tap ★ on a site or on a series episode: you’ll pick it up here, right where you left off.</string>

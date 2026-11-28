@@ -443,7 +443,10 @@
   "fav_icon_star": "Favorit",
   "fav_rename": "Redenumiți",
   "fav_move_left": "Mutați la stânga",
-  "fav_move_right": "Mutați la dreapta"
+  "fav_move_right": "Mutați la dreapta",
+  "home_files_tile": "Fișiere",
+  "home_lists_tile": "Liste TV",
+  "start_tv_tile": "TV gratuit"
  },
  "plurals": {
   "browser_found": {

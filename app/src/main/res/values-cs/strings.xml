@@ -445,6 +445,9 @@
     <string name="fav_rename">Přejmenovat</string>
     <string name="fav_move_left">Posunout doleva</string>
     <string name="fav_move_right">Posunout doprava</string>
+    <string name="home_files_tile">Soubory</string>
+    <string name="home_lists_tile">Seznamy TV</string>
+    <string name="start_tv_tile">TV zdarma</string>
     <plurals name="browser_found">
         <item quantity="one">%d video</item>
         <item quantity="few">%d videa</item>

@@ -443,7 +443,10 @@
   "fav_icon_star": "Вибране",
   "fav_rename": "Перейменувати",
   "fav_move_left": "Перемістити ліворуч",
-  "fav_move_right": "Перемістити праворуч"
+  "fav_move_right": "Перемістити праворуч",
+  "home_files_tile": "Файли",
+  "home_lists_tile": "Списки ТБ",
+  "start_tv_tile": "Безкоштовне ТБ"
  },
  "plurals": {
   "browser_found": {

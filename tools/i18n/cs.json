@@ -443,7 +443,10 @@
   "fav_icon_star": "Oblíbené",
   "fav_rename": "Přejmenovat",
   "fav_move_left": "Posunout doleva",
-  "fav_move_right": "Posunout doprava"
+  "fav_move_right": "Posunout doprava",
+  "home_files_tile": "Soubory",
+  "home_lists_tile": "Seznamy TV",
+  "start_tv_tile": "TV zdarma"
  },
  "plurals": {
   "browser_found": {

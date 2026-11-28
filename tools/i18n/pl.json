@@ -443,7 +443,10 @@
   "fav_icon_star": "Ulubione",
   "fav_rename": "Zmień nazwę",
   "fav_move_left": "Przesuń w lewo",
-  "fav_move_right": "Przesuń w prawo"
+  "fav_move_right": "Przesuń w prawo",
+  "home_files_tile": "Pliki",
+  "home_lists_tile": "Listy TV",
+  "start_tv_tile": "Darmowa TV"
  },
  "plurals": {
   "browser_found": {

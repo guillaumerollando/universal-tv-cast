@@ -443,7 +443,10 @@
   "fav_icon_star": "पसंदीदा",
   "fav_rename": "नाम बदलें",
   "fav_move_left": "बाईं ओर ले जाएँ",
-  "fav_move_right": "दाईं ओर ले जाएँ"
+  "fav_move_right": "दाईं ओर ले जाएँ",
+  "home_files_tile": "फ़ाइलें",
+  "home_lists_tile": "टीवी सूचियाँ",
+  "start_tv_tile": "मुफ़्त टीवी"
  },
  "plurals": {
   "browser_found": {

@@ -119,39 +119,6 @@ private fun starterSitesFor(known: Set<String>, dismissed: Set<String>, countrie
 /** Identifiant de la carte des chaînes gratuites dans les suggestions écartées. */
 private const val FREE_TV = "free-tv"
 
-/**
- * Une suggestion qu'on peut écarter : appui long → « Ne plus proposer » (le même geste que pour retirer une carte
- * ailleurs dans l'appli), aussi proposé aux lecteurs d'écran.
- */
-@Composable
-private fun Dismissable(id: String, onClick: () -> Unit, content: @Composable (Modifier) -> Unit) {
-    var menu by remember { mutableStateOf(false) }
-    val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
-    val label = stringResource(R.string.start_dismiss)
-    androidx.compose.foundation.layout.Box {
-        content(
-            Modifier.clip(RoundedCornerShape(18.dp))
-                .combinedClickable(
-                    role = androidx.compose.ui.semantics.Role.Button,
-                    onClick = onClick,
-                    onLongClick = { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.LongPress); menu = true },
-                )
-                .semantics {
-                    customActions = listOf(androidx.compose.ui.semantics.CustomAccessibilityAction(label) {
-                        com.rollandostudio.universaltvcast.data.Library.dismissStarter(id); true
-                    })
-                }
-        )
-        androidx.compose.material3.DropdownMenu(expanded = menu, onDismissRequest = { menu = false }, shape = RoundedCornerShape(16.dp)) {
-            androidx.compose.material3.DropdownMenuItem(
-                text = { Text(label) },
-                leadingIcon = { Icon(androidx.compose.material.icons.Icons.Rounded.Close, null) },
-                onClick = { menu = false; com.rollandostudio.universaltvcast.data.Library.dismissStarter(id) },
-            )
-        }
-    }
-}
-
 /** « Pour commencer » : de quoi essayer l'appli tout de suite, avec du contenu gratuit et légal. */
 @Composable
 fun StarterSection(
@@ -163,12 +130,38 @@ fun StarterSection(
     val sites = run { val ctx0 = LocalContext.current; remember(known, dismissed) { starterSitesFor(known, dismissed, phoneCountries(ctx0)) } }
     val channels = showChannels && FREE_TV !in dismissed
     if (!channels && !(showSites && sites.isNotEmpty())) return
-    Column(Modifier.padding(horizontal = 16.dp)) {
-        // Titre collé à son contenu, comme les autres rubriques ; l'espace est entre les cartes.
-        SectionTitle(stringResource(R.string.start_title), Modifier.semantics { heading() })
-        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            if (channels) FreeChannelsCard(onPasteLink)
-            if (showSites && sites.isNotEmpty()) StarterSites(onBrowse, known)
+    var freeTv by remember { mutableStateOf(false) }
+    if (freeTv) FreeChannelsDialog(onDismiss = { freeTv = false }, onPasteLink = { freeTv = false; onPasteLink() })
+    Column {
+        SectionTitle(stringResource(R.string.start_title), Modifier.padding(horizontal = 16.dp).semantics { heading() })
+        // Une rangée de tuiles, au format des favoris : les chaînes gratuites, puis des sites gratuits et légaux.
+        androidx.compose.foundation.lazy.LazyRow(contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
+            if (channels) item(key = FREE_TV) {
+                FavTileFrame(stringResource(R.string.start_tv_tile), dismissMenu(FREE_TV), onClick = { freeTv = true },
+                    background = favBrush(androidx.compose.ui.graphics.Color(ActionColors.LISTS))) {
+                    Icon(Icons.Rounded.LiveTv, null, tint = androidx.compose.ui.graphics.Color.White,
+                        modifier = Modifier.align(Alignment.Center).padding(bottom = 14.dp).size(24.dp))
+                }
+            }
+            if (showSites) items(sites.size, key = { sites[it].host }) { i -> StarterSiteTile(sites[i], onBrowse) }
+        }
+    }
+}
+
+/** « Ne plus proposer » (appui long) pour une suggestion. */
+@Composable
+private fun dismissMenu(id: String): List<Pair<String, () -> Unit>> =
+    listOf(stringResource(R.string.start_dismiss) to { com.rollandostudio.universaltvcast.data.Library.dismissStarter(id) })
+
+/** Un site suggéré, en tuile comme un site en favori : son icône sur sa couleur, son nom. */
+@Composable
+private fun StarterSiteTile(s: StarterSite, onBrowse: (String) -> Unit) {
+    FavTileFrame(s.name, dismissMenu(s.host), onClick = { onBrowse(s.url) },
+        background = favBrush(androidx.compose.ui.graphics.Color(com.rollandostudio.universaltvcast.data.Channels.colorFor(s.host)))) {
+        androidx.compose.foundation.layout.Box(Modifier.align(Alignment.Center).padding(bottom = 14.dp).size(26.dp)) {
+            SiteIcon(s.host, size = 26)
+            RemoteImage(s.icon, Modifier.size(26.dp).clip(RoundedCornerShape(7.dp)), contentScale = androidx.compose.ui.layout.ContentScale.Crop, maxSide = 128)
         }
     }
 }
@@ -178,53 +171,38 @@ fun StarterSection(
  * « Coller un lien ». L'utilisateur apprend le geste, et comprend qu'il marche avec toute autre liste.
  */
 @Composable
-fun FreeChannelsCard(onPasteLink: () -> Unit) {
+private fun FreeChannelsDialog(onDismiss: () -> Unit, onPasteLink: () -> Unit) {
     val ctx = LocalContext.current
     var copied by remember { mutableStateOf(false) }
-    // Repliée par défaut : sur l'accueil, elle ne prend qu'une ligne ; on la déplie pour voir le lien.
-    var open by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
     val c = MaterialTheme.colorScheme
-    Dismissable(FREE_TV, onClick = { open = !open }) { press -> Card(
-        colors = CardDefaults.cardColors(containerColor = c.surfaceContainerHigh),
-        shape = RoundedCornerShape(20.dp),
-        modifier = Modifier.fillMaxWidth().then(press).animateContentSize(),
-    ) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Rounded.LiveTv, null, Modifier.size(28.dp), tint = c.primary)
-                Spacer(Modifier.width(14.dp))
-                Column(Modifier.weight(1f)) {
-                    Text(stringResource(R.string.start_tv_title), style = MaterialTheme.typography.titleMedium)
-                    Text(stringResource(R.string.start_tv_sub), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(Icons.Rounded.LiveTv, null, tint = c.primary) },
+        title = { Text(stringResource(R.string.start_tv_title)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(stringResource(R.string.start_tv_sub), style = MaterialTheme.typography.bodyMedium)
+                // Le lien, en entier, sélectionnable : c'est lui qu'on apprend à coller.
+                androidx.compose.material3.Surface(shape = RoundedCornerShape(12.dp), color = c.surfaceContainerHighest, modifier = Modifier.fillMaxWidth()) {
+                    androidx.compose.foundation.text.selection.SelectionContainer {
+                        Text(FREE_TV_LIST, style = MaterialTheme.typography.bodySmall.copy(fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace),
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp))
+                    }
                 }
-                Icon(if (open) androidx.compose.material.icons.Icons.Rounded.ExpandLess else androidx.compose.material.icons.Icons.Rounded.ExpandMore,
-                    null, tint = c.onSurfaceVariant)
+                Text(stringResource(R.string.start_tv_steps), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
             }
-            if (open) {
-            // Le lien, en entier, sélectionnable : c'est lui qu'on apprend à coller.
-            androidx.compose.material3.Surface(shape = RoundedCornerShape(12.dp), color = c.surfaceContainerHighest, modifier = Modifier.fillMaxWidth()) {
-                androidx.compose.foundation.text.selection.SelectionContainer {
-                    Text(FREE_TV_LIST, style = MaterialTheme.typography.bodySmall.copy(fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace),
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp))
-                }
-            }
-            Text(stringResource(R.string.start_tv_steps), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                androidx.compose.material3.FilledTonalButton(
-                    onClick = {
-                        (ctx.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager)
-                            .setPrimaryClip(android.content.ClipData.newPlainText("M3U", FREE_TV_LIST))
-                        copied = true
-                    },
-                    modifier = Modifier.weight(1f),
-                ) { Text(stringResource(if (copied) R.string.start_copied else R.string.start_copy), maxLines = 1) }
-                androidx.compose.material3.OutlinedButton(onClick = onPasteLink, modifier = Modifier.weight(1f)) {
-                    Text(stringResource(R.string.home_link), maxLines = 1)
-                }
-            }
-            }
-        }
-    } }
+        },
+        confirmButton = {
+            androidx.compose.material3.TextButton(onClick = onPasteLink) { Text(stringResource(R.string.home_link)) }
+        },
+        dismissButton = {
+            androidx.compose.material3.TextButton(onClick = {
+                (ctx.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager)
+                    .setPrimaryClip(android.content.ClipData.newPlainText("M3U", FREE_TV_LIST))
+                copied = true
+            }) { Text(stringResource(if (copied) R.string.start_copied else R.string.start_copy)) }
+        },
+    )
 }
 
 /** Quelques sites gratuits et légaux à essayer dans le navigateur de l'appli. */
@@ -235,29 +213,9 @@ fun StarterSites(onBrowse: (String) -> Unit, known: Set<String> = emptySet()) {
     val list = run { val ctx0 = LocalContext.current; remember(known, dismissed) { starterSitesFor(known, dismissed, phoneCountries(ctx0)) } }
     if (list.isEmpty()) return
     Text(stringResource(R.string.start_sites_title), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
-    // Une rangée qui défile : quelques sites sans allonger l'accueil ; cartes de même hauteur.
-    Row(
-        Modifier.height(androidx.compose.foundation.layout.IntrinsicSize.Max).horizontalScroll(rememberScrollState()),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        list.forEach { s ->
-            androidx.compose.foundation.layout.Box(Modifier.width(156.dp).fillMaxHeight()) { Dismissable(s.host, onClick = { onBrowse(s.url) }) { press -> Card(
-                colors = CardDefaults.cardColors(containerColor = c.surfaceContainerHigh),
-                shape = RoundedCornerShape(18.dp),
-                modifier = Modifier.fillMaxSize().then(press),
-            ) {
-                Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    androidx.compose.foundation.layout.Box(Modifier.size(36.dp)) {
-                        SiteIcon(s.host, size = 36)
-                        RemoteImage(s.icon, Modifier.size(36.dp).androidx_clip(), contentScale = androidx.compose.ui.layout.ContentScale.Crop, maxSide = 128)
-                    }
-                    Text(s.name, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    Text(stringResource(s.desc), style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant,
-                        maxLines = 2, overflow = TextOverflow.Ellipsis)
-                }
-            } } }
-        }
+    // Mêmes tuiles que sur l'accueil.
+    androidx.compose.foundation.lazy.LazyRow(horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
+        items(list.size, key = { list[it].host }) { i -> StarterSiteTile(list[i], onBrowse) }
     }
 }
 
-private fun Modifier.androidx_clip() = this.clip(RoundedCornerShape(10.dp))

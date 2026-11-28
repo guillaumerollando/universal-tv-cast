@@ -200,6 +200,9 @@
     <string name="net_help_nas_title">NAS oder Router mit Festplatte</string>
     <string name="net_help_nas">Schalte in seinen Einstellungen den „Medienserver“ (DLNA oder UPnP) ein: Er erscheint hier von selbst, ohne Passwort. Seine freigegebenen Ordner gehen auch, mit deinem NAS-Konto.</string>
     <string name="home_link_short">Video, Livestream oder Senderliste</string>
+    <string name="home_files_tile">Dateien</string>
+    <string name="home_lists_tile">TV-Listen</string>
+    <string name="start_tv_tile">Gratis-TV</string>
     <string name="home_files_other">Dateien durchsuchen (Musik…)</string>
     <string name="home_resume">Weiterschauen</string>
     <string name="home_bookmarks_empty">Tippe auf ★ bei einer Seite oder einer Folge: Hier machst du genau dort weiter, wo du warst.</string>

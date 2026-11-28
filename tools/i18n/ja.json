@@ -443,7 +443,10 @@
   "fav_icon_star": "お気に入り",
   "fav_rename": "名前を変更",
   "fav_move_left": "左へ移動",
-  "fav_move_right": "右へ移動"
+  "fav_move_right": "右へ移動",
+  "home_files_tile": "ファイル",
+  "home_lists_tile": "TVリスト",
+  "start_tv_tile": "無料TV"
  },
  "plurals": {
   "browser_found": {

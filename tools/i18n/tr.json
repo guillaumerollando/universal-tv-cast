@@ -443,7 +443,10 @@
   "fav_icon_star": "Favori",
   "fav_rename": "Yeniden adlandır",
   "fav_move_left": "Sola taşı",
-  "fav_move_right": "Sağa taşı"
+  "fav_move_right": "Sağa taşı",
+  "home_files_tile": "Dosyalar",
+  "home_lists_tile": "TV listeleri",
+  "start_tv_tile": "Ücretsiz TV"
  },
  "plurals": {
   "browser_found": {

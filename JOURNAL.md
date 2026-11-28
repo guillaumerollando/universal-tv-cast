@@ -1690,3 +1690,15 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - Finalement (retour de Guillaume, « un peu too much ») : la lueur et le liseré autour du cadre sont retirés. Restent
   le halo qui respire (derrière un logo sur fond sombre, et derrière la télé du cadre par défaut) et les barres de
   « En lecture », qui suffisent aussi sur un logo à fond blanc.
+
+## 2026-11-28 — Accueil uniformisé (tuiles, marges, couleurs)
+- Toutes les rangées partent à 16 dp, alignées sur les titres (les favoris et les chaînes partaient à 10 dp).
+- « Caster autre chose » : une rangée de tuiles au format des favoris, une couleur par action (`ActionColors` :
+  sites web bleu, album rose, réseau vert, lien ambre, listes TV lavande, fichiers gris-bleu) ; les liens texte
+  « Listes de chaînes » / « Parcourir les fichiers » deviennent des tuiles. La tuile « Lien » garde sa lueur « c'est ici ».
+- « Pour commencer » : une rangée de tuiles (« TV gratuite », puis les sites suggérés à leur couleur) ; l'explication
+  des chaînes gratuites s'ouvre dans une fenêtre (lien, copier, coller) ; appui long : « Ne plus proposer ». Le
+  navigateur montre les mêmes tuiles de sites.
+- Nouveau venu : les quatre grandes tuiles prennent les couleurs des actions (dégradé, texte blanc) au lieu du gris
+  Android ; listes TV et fichiers en petites tuiles dessous.
+- Vérifié par captures sur émulateur (habitué et nouveau venu, données d'essai sauvegardées puis remises).

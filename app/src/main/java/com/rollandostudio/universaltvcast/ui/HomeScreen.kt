@@ -64,6 +64,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -186,7 +188,7 @@ fun HomeScreen(
                 Column {
                     SectionHeader(stringResource(if (folders.isEmpty() && favChannels.isEmpty()) R.string.home_sites else R.string.home_favorites), null) {}
                     // Même rangée que les chaînes : tuiles 16:10 serrées ; un favori déplacé glisse à sa nouvelle place.
-                    LazyRow(contentPadding = PaddingValues(horizontal = ChannelTiles.edge), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
+                    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
                         items(minOf(favs.size, ROW_MAX), key = { favs[it].first }) { i -> Box(Modifier.animateItem()) { favTile(i) } }
                         if (favs.size > ROW_MAX) item(key = "f-all") {
                             SeeAllTile(stringResource(R.string.home_see_all), Modifier.width(ChannelTiles.width).aspectRatio(16f / 10f), ChannelTiles.corner) { showAll = 2 }
@@ -197,7 +199,7 @@ fun HomeScreen(
             if (channels.isNotEmpty()) item {
                 Column {
                     SectionHeader(stringResource(R.string.home_channels), null) {}
-                    LazyRow(contentPadding = PaddingValues(horizontal = ChannelTiles.edge), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
+                    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
                         items(channels.take(ROW_MAX), key = { "c" + it.key }) { ch -> ChannelTile(ch, onBrowse) }
                         // Toujours au bout : toutes les chaînes des listes importées (bien plus que les récentes).
                         item(key = "c-all") {
@@ -208,18 +210,10 @@ fun HomeScreen(
                     }
                 }
             }
-            item { Column {
+            item { Column(Modifier.bringIntoViewRequester(linkSpot)) {
                 SectionHeader(stringResource(R.string.home_cast_more), null) {}
-                Column(Modifier.padding(horizontal = 16.dp).bringIntoViewRequester(linkSpot)) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        SmallTile(Icons.Rounded.Public, stringResource(R.string.home_browse_tile), Modifier.weight(1f)) { onBrowse(null) }
-                        SmallTile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), Modifier.weight(1f), onClick = onPickPhotos)
-                        SmallTile(Icons.Rounded.Lan, stringResource(R.string.home_network), Modifier.weight(1f), onClick = onNetwork)
-                        SmallTile(Icons.Rounded.Link, stringResource(R.string.home_link_tile), Modifier.weight(1f), highlight = showLink,
-                            onClick = { showLink = false; onPasteLink() })
-                    }
-                    MoreSources(onPickFile, showLists = channels.isEmpty()) // sinon, déjà en tête de « Chaînes »
-                }
+                CastActionsRow(onBrowse = { onBrowse(null) }, onPickPhotos = onPickPhotos, onNetwork = onNetwork,
+                    onPasteLink = { showLink = false; onPasteLink() }, onPickFile = onPickFile, showLists = channels.isEmpty(), highlightLink = showLink)
             } }
             // La découverte continue pas à pas : ce qui n'a pas encore été essayé reste proposé (une liste de chaînes,
             // un site), et disparaît une fois fait.
@@ -268,19 +262,25 @@ fun HomeScreen(
             }
         }
 
-        // Les quatre façons de caster, en grille.
+        // Les quatre façons de caster, en grandes tuiles aux couleurs des actions (les mêmes que « Caster autre chose »).
         item {
             Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Tile(Icons.Rounded.Public, stringResource(R.string.home_browse_tile), stringResource(R.string.home_browse_short), Modifier.weight(1f)) { onBrowse(null) }
-                    Tile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), stringResource(R.string.home_photos_short), Modifier.weight(1f), onClick = onPickPhotos)
+                    BigActionTile(Icons.Rounded.Public, stringResource(R.string.home_browse_tile), stringResource(R.string.home_browse_short), ActionColors.WEB, Modifier.weight(1f)) { onBrowse(null) }
+                    BigActionTile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), stringResource(R.string.home_photos_short), ActionColors.ALBUM, Modifier.weight(1f), onClick = onPickPhotos)
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Tile(Icons.Rounded.Lan, stringResource(R.string.home_network), stringResource(R.string.home_network_short), Modifier.weight(1f), onClick = onNetwork)
-                    Tile(Icons.Rounded.Link, stringResource(R.string.home_link), stringResource(R.string.home_link_short), Modifier.weight(1f),
+                    BigActionTile(Icons.Rounded.Lan, stringResource(R.string.home_network), stringResource(R.string.home_network_short), ActionColors.NETWORK, Modifier.weight(1f), onClick = onNetwork)
+                    BigActionTile(Icons.Rounded.Link, stringResource(R.string.home_link), stringResource(R.string.home_link_short), ActionColors.LINK, Modifier.weight(1f),
                         highlight = showLinkTile, onClick = { showLinkTile = false; onPasteLink() })
                 }
-                MoreSources(onPickFile)
+            }
+        }
+        // Les autres sources (listes de chaînes, fichiers) : en tuiles, comme sur l'accueil d'un habitué.
+        item {
+            LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
+                item { ActionTile(Icons.Rounded.LiveTv, stringResource(R.string.home_lists_tile), ActionColors.LISTS) { Nav.iptv.value = "" } }
+                item { ActionTile(Icons.Rounded.FolderOpen, stringResource(R.string.home_files_tile), ActionColors.FILES, onClick = onPickFile) }
             }
         }
 
@@ -522,110 +522,8 @@ private fun ChannelTile(r: Recent, onBrowse: (String?) -> Unit) {
     }
 }
 
-/** Une façon de caster, en petit (accueil des habitués). */
-@Composable
-private fun SmallTile(icon: ImageVector, title: String, modifier: Modifier, highlight: Boolean = false, onClick: () -> Unit) {
-    val c = MaterialTheme.colorScheme
-    // Même repère « c'est ici » que la grande tuile : lueur ambrée en fondu, sans contour.
-    val level by androidx.compose.animation.core.animateFloatAsState(
-        if (highlight) 1f else 0f,
-        androidx.compose.animation.core.tween(if (highlight) 450 else 1100, easing = androidx.compose.animation.core.FastOutSlowInEasing),
-        label = "repère",
-    )
-    val pulse = androidx.compose.animation.core.rememberInfiniteTransition(label = "repère")
-    val beat by pulse.animateFloat(0.25f, 1f, androidx.compose.animation.core.infiniteRepeatable(
-        androidx.compose.animation.core.tween(650), androidx.compose.animation.core.RepeatMode.Reverse), label = "repère")
-    val glow = beat * level
-    Surface(onClick = onClick, shape = RoundedCornerShape(18.dp),
-        color = if (level > 0f) c.primary.copy(alpha = (0.10f + 0.10f * beat) * level).compositeOver(c.surfaceContainerHigh) else c.surfaceContainerHigh,
-        modifier = modifier.height(70.dp).then(if (level > 0f) Modifier
-            .drawBehind {
-                val r = size.maxDimension * (0.95f + 0.35f * glow)
-                drawCircle(
-                    androidx.compose.ui.graphics.Brush.radialGradient(
-                        listOf(c.primary.copy(alpha = 0.85f * glow), c.primary.copy(alpha = 0.35f * glow), androidx.compose.ui.graphics.Color.Transparent),
-                        center = center, radius = r,
-                    ),
-                    radius = r, center = center,
-                )
-            }
-            .shadow((18 * glow).dp, RoundedCornerShape(18.dp), clip = false, ambientColor = c.primary, spotColor = c.primary)
-        else Modifier)) {
-        Column(Modifier.padding(horizontal = 4.dp, vertical = 8.dp), horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween) {
-            Box(Modifier.size(32.dp).clip(CircleShape).background(c.primary.copy(alpha = 0.16f)), contentAlignment = Alignment.Center) {
-                Icon(icon, null, tint = c.primary, modifier = Modifier.size(20.dp))
-            }
-            Text(title, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-        }
-    }
-}
 
-@Composable
-private fun Tile(icon: ImageVector, title: String, sub: String, modifier: Modifier, highlight: Boolean = false, onClick: () -> Unit) {
-    val c = MaterialTheme.colorScheme
-    // Mise en surbrillance (« c'est ici ») : une lueur ambrée qui pulse autour de la tuile, comme la lumière de la vidéo.
-    // Pas de contour : la lueur suffit. Elle s'allume et s'éteint en fondu (« level »), jamais d'un coup.
-    val level by androidx.compose.animation.core.animateFloatAsState(
-        if (highlight) 1f else 0f,
-        androidx.compose.animation.core.tween(if (highlight) 450 else 1100, easing = androidx.compose.animation.core.FastOutSlowInEasing),
-        label = "repère",
-    )
-    val pulse = androidx.compose.animation.core.rememberInfiniteTransition(label = "repère")
-    val beat by pulse.animateFloat(0.25f, 1f, androidx.compose.animation.core.infiniteRepeatable(
-        androidx.compose.animation.core.tween(650), androidx.compose.animation.core.RepeatMode.Reverse), label = "repère")
-    val glow = beat * level
-    Surface(
-        onClick = onClick, shape = RoundedCornerShape(22.dp),
-        color = if (level > 0f) c.primary.copy(alpha = (0.10f + 0.10f * beat) * level).compositeOver(c.surfaceContainerHigh) else c.surfaceContainerHigh,
-        modifier = modifier.height(118.dp).then(if (level > 0f) Modifier
-            .drawBehind {
-                // Halo : un dégradé ambré qui déborde largement de la tuile et respire.
-                val r = size.maxDimension * (0.95f + 0.35f * glow)
-                drawCircle(
-                    androidx.compose.ui.graphics.Brush.radialGradient(
-                        listOf(c.primary.copy(alpha = 0.85f * glow), c.primary.copy(alpha = 0.35f * glow), androidx.compose.ui.graphics.Color.Transparent),
-                        center = center, radius = r,
-                    ),
-                    radius = r, center = center,
-                )
-            }
-            // Ombre lumineuse ambrée sous la tuile (lumière qui en émane).
-            .shadow((22 * glow).dp, RoundedCornerShape(22.dp), clip = false, ambientColor = c.primary, spotColor = c.primary)
-        else Modifier),
-    ) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.SpaceBetween) {
-            Box(Modifier.size(42.dp).clip(CircleShape).background(c.primary.copy(alpha = 0.16f)), contentAlignment = Alignment.Center) {
-                Icon(icon, null, tint = c.primary, modifier = Modifier.size(24.dp))
-            }
-            Column {
-                Text(title, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(sub, style = MaterialTheme.typography.bodySmall, color = c.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            }
-        }
-    }
-}
 
-/** Les autres sources, en liens discrets : listes de chaînes (IPTV) et fichiers d'autres applis. */
-@Composable
-private fun MoreSources(onPickFile: () -> Unit, showLists: Boolean = true) {
-    // Deux liens discrets, serrés sous les tuiles.
-    val pad = PaddingValues(horizontal = 4.dp, vertical = 0.dp)
-    androidx.compose.runtime.CompositionLocalProvider(androidx.compose.material3.LocalMinimumInteractiveComponentSize provides 40.dp) {
-    Column(Modifier.fillMaxWidth().padding(top = 2.dp)) {
-        if (showLists) TextButton(onClick = { Nav.iptv.value = "" }, contentPadding = pad, modifier = Modifier.heightIn(min = 36.dp)) {
-            Icon(Icons.Rounded.LiveTv, null, Modifier.size(18.dp))
-            Spacer(Modifier.width(8.dp))
-            Text(stringResource(R.string.iptv_title))
-        }
-        TextButton(onClick = onPickFile, contentPadding = pad, modifier = Modifier.heightIn(min = 36.dp)) {
-            Icon(Icons.Rounded.FolderOpen, null, Modifier.size(18.dp))
-            Spacer(Modifier.width(8.dp))
-            Text(stringResource(R.string.home_files_other))
-        }
-    }
-    }
-}
 
 /**
  * Titre de rubrique de l'accueil, au plus près de son contenu : le lien « Tout voir » éventuel reste petit pour ne pas
@@ -680,4 +578,88 @@ private fun SeeAllCard(onClick: () -> Unit) {
         Text(stringResource(R.string.home_see_all), style = MaterialTheme.typography.titleSmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold),
             color = c.primary, maxLines = 1, modifier = Modifier.padding(horizontal = 2.dp))
     }
+}
+
+/** Couleur de chaque façon de caster : la même partout (tuiles de l'accueil, grandes tuiles du nouveau venu). */
+internal object ActionColors {
+    const val WEB = 0xFF7EB8FF
+    const val ALBUM = 0xFFFF8AC6
+    const val NETWORK = 0xFF7FE0B8
+    const val LINK = 0xFFFFB86B
+    const val LISTS = 0xFFC4A8FF
+    const val FILES = 0xFF9FB4C4
+}
+
+/**
+ * « Caster autre chose » : une rangée de tuiles au format des favoris et des chaînes, une couleur par action.
+ * [highlightLink] : la tuile « Lien » s'allume (on vient de copier le lien des chaînes gratuites).
+ */
+@Composable
+private fun CastActionsRow(
+    onBrowse: () -> Unit, onPickPhotos: () -> Unit, onNetwork: () -> Unit, onPasteLink: () -> Unit, onPickFile: () -> Unit,
+    showLists: Boolean, highlightLink: Boolean,
+) {
+    LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
+        item { ActionTile(Icons.Rounded.Public, stringResource(R.string.home_browse_tile), ActionColors.WEB, onClick = onBrowse) }
+        item { ActionTile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), ActionColors.ALBUM, onClick = onPickPhotos) }
+        item { ActionTile(Icons.Rounded.Lan, stringResource(R.string.home_network), ActionColors.NETWORK, onClick = onNetwork) }
+        item { ActionTile(Icons.Rounded.Link, stringResource(R.string.home_link_tile), ActionColors.LINK, highlight = highlightLink, onClick = onPasteLink) }
+        if (showLists) item { ActionTile(Icons.Rounded.LiveTv, stringResource(R.string.home_lists_tile), ActionColors.LISTS) { Nav.iptv.value = "" } }
+        item { ActionTile(Icons.Rounded.FolderOpen, stringResource(R.string.home_files_tile), ActionColors.FILES, onClick = onPickFile) }
+    }
+}
+
+/** Une tuile d'action, au format des favoris : fond à sa couleur, icône et nom en blanc. */
+@Composable
+private fun ActionTile(icon: ImageVector, label: String, color: Long, highlight: Boolean = false, onClick: () -> Unit) {
+    FavTileFrame(label, emptyList(), onClick, background = favBrush(Color(color)),
+        modifier = Modifier.highlightGlow(highlight, ChannelTiles.corner)) {
+        Icon(icon, null, tint = Color.White, modifier = Modifier.align(Alignment.Center).padding(bottom = 14.dp).size(24.dp))
+    }
+}
+
+/** Grande tuile du nouveau venu : la même couleur que la petite, avec une ligne d'explication. */
+@Composable
+private fun BigActionTile(icon: ImageVector, title: String, sub: String, color: Long, modifier: Modifier, highlight: Boolean = false, onClick: () -> Unit) {
+    Surface(onClick = onClick, shape = RoundedCornerShape(22.dp), color = Color.Transparent,
+        modifier = modifier.height(118.dp).highlightGlow(highlight, 22.dp)) {
+        Column(Modifier.background(favBrush(Color(color))).padding(16.dp), verticalArrangement = Arrangement.SpaceBetween) {
+            Box(Modifier.size(42.dp).clip(CircleShape).background(Color.White.copy(alpha = 0.18f)), contentAlignment = Alignment.Center) {
+                Icon(icon, null, tint = Color.White, modifier = Modifier.size(24.dp))
+            }
+            Column {
+                Text(title, style = MaterialTheme.typography.titleMedium.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.Bold),
+                    color = Color.White, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(sub, style = MaterialTheme.typography.bodySmall, color = Color.White.copy(alpha = 0.85f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
+        }
+    }
+}
+
+/**
+ * « C'est ici » : une lueur ambrée qui pulse autour de la tuile (sans contour), allumée et éteinte en fondu.
+ */
+private fun Modifier.highlightGlow(highlight: Boolean, corner: androidx.compose.ui.unit.Dp): Modifier = composed {
+    val c = MaterialTheme.colorScheme
+    val level by androidx.compose.animation.core.animateFloatAsState(
+        if (highlight) 1f else 0f,
+        androidx.compose.animation.core.tween(if (highlight) 450 else 1100, easing = androidx.compose.animation.core.FastOutSlowInEasing),
+        label = "repère",
+    )
+    val pulse = androidx.compose.animation.core.rememberInfiniteTransition(label = "repère")
+    val beat by pulse.animateFloat(0.25f, 1f, androidx.compose.animation.core.infiniteRepeatable(
+        androidx.compose.animation.core.tween(650), androidx.compose.animation.core.RepeatMode.Reverse), label = "repère")
+    val glow = beat * level
+    if (level <= 0f) this else this
+        .drawBehind {
+            val r = size.maxDimension * (0.95f + 0.35f * glow)
+            drawCircle(
+                androidx.compose.ui.graphics.Brush.radialGradient(
+                    listOf(c.primary.copy(alpha = 0.85f * glow), c.primary.copy(alpha = 0.35f * glow), Color.Transparent),
+                    center = center, radius = r,
+                ),
+                radius = r, center = center,
+            )
+        }
+        .shadow((18 * glow).dp, RoundedCornerShape(corner), clip = false, ambientColor = c.primary, spotColor = c.primary)
 }

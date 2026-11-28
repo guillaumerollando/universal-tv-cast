@@ -200,6 +200,9 @@
     <string name="net_help_nas_title">NAS of router met schijf</string>
     <string name="net_help_nas">Zet de „mediaserver” (DLNA of UPnP) aan in de instellingen: die verschijnt hier vanzelf, zonder wachtwoord. Gedeelde mappen werken ook, met je NAS-account.</string>
     <string name="home_link_short">Video, livestream of zenderlijst</string>
+    <string name="home_files_tile">Bestanden</string>
+    <string name="home_lists_tile">Tv-lijsten</string>
+    <string name="start_tv_tile">Gratis tv</string>
     <string name="home_files_other">Bestanden bekijken (muziek…)</string>
     <string name="home_resume">Verder kijken</string>
     <string name="home_bookmarks_empty">Tik op ★ bij een site of een aflevering: hier ga je verder waar je was.</string>

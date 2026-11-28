@@ -443,7 +443,10 @@
   "fav_icon_star": "Избранное",
   "fav_rename": "Переименовать",
   "fav_move_left": "Переместить влево",
-  "fav_move_right": "Переместить вправо"
+  "fav_move_right": "Переместить вправо",
+  "home_files_tile": "Файлы",
+  "home_lists_tile": "Списки ТВ",
+  "start_tv_tile": "Бесплатное ТВ"
  },
  "plurals": {
   "browser_found": {

@@ -541,6 +541,9 @@
     <string name="clock_bg_gradient">漸層</string>
     <string name="clock_bg_black">黑色</string>
     <string name="amb_custom">其他…</string>
+    <string name="sources_added_title">已新增來源</string>
+    <string name="sources_added_body">它的電影和影片在首頁和「搜尋」中。之後要新增或移除來源：搜尋（右上角圖示）或 設定 › 來源。</string>
+    <string name="sources_added_ok">知道了</string>
     <plurals name="browser_found">
         <item quantity="other">%d 部影片</item>
     </plurals>

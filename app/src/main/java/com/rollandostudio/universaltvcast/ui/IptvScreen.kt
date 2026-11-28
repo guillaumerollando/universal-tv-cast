@@ -187,7 +187,12 @@ fun IptvScreen(onClose: () -> Unit, startWith: String? = null) {
         error = null
         scope.launch {
             runCatching { IptvStore.import(ctx, source) }
-                .onSuccess { adding = false; refreshTick++ }
+                .onSuccess {
+                    adding = false; refreshTick++
+                    // Un abonnement (films, séries) : la première fois, on dit où tout retrouver.
+                    if (com.rollandostudio.universaltvcast.data.Xtream.accountOf(source) != null &&
+                        com.rollandostudio.universaltvcast.data.OpenSources.firstAdd()) Nav.sourceAdded.value = true
+                }
                 .onFailure { error = if (it is IptvStore.NotAList) errNotList else errLoad }
             busy = false
         }

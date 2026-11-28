@@ -541,6 +541,9 @@
     <string name="clock_bg_gradient">Gradasi</string>
     <string name="clock_bg_black">Hitam</string>
     <string name="amb_custom">Lainnya…</string>
+    <string name="sources_added_title">Sumber ditambahkan</string>
+    <string name="sources_added_body">Film dan videonya ada di Beranda dan Cari. Untuk menambah atau menghapus sumber nanti: Cari (ikon kanan atas) atau Setelan › Sumber.</string>
+    <string name="sources_added_ok">Mengerti</string>
     <plurals name="browser_found">
         <item quantity="other">%d video</item>
     </plurals>

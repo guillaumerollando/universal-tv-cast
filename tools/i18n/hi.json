@@ -539,7 +539,10 @@
   "clock_bg_glow": "चमक",
   "clock_bg_gradient": "ग्रेडिएंट",
   "clock_bg_black": "काला",
-  "amb_custom": "अन्य…"
+  "amb_custom": "अन्य…",
+  "sources_added_title": "स्रोत जोड़ा गया",
+  "sources_added_body": "इसकी फ़िल्में और वीडियो होम और खोजें में हैं। बाद में स्रोत जोड़ने या हटाने के लिए: खोजें (ऊपर दाएँ आइकन) या सेटिंग्स › स्रोत।",
+  "sources_added_ok": "समझ गया"
  },
  "plurals": {
   "browser_found": {

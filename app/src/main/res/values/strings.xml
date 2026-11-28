@@ -178,6 +178,9 @@
     <string name="clock_bg_gradient">Gradient</string>
     <string name="clock_bg_black">Black</string>
     <string name="amb_custom">Other…</string>
+    <string name="sources_added_title">Source added</string>
+    <string name="sources_added_body">Its films and videos are on Home and in Search. To add or remove a source later: Search (icon at the top right) or Settings › Sources.</string>
+    <string name="sources_added_ok">Got it</string>
     <string name="action_dont_show">Don’t show again</string>
     <string name="help_section">Troubleshooting</string>
     <string name="state_expanded">expanded</string>

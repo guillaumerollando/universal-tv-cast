@@ -146,6 +146,8 @@ object Nav {
     val sources = MutableStateFlow(false)
     /** Ouvrir la fenêtre « Colle un lien » depuis un autre écran (abonnement IPTV de l'écran Sources). */
     val pasteLink = MutableStateFlow(false)
+    /** Fenêtre « Source ajoutée » (première source ou premier abonnement). */
+    val sourceAdded = MutableStateFlow(false)
     /** L'appli est réduite en petite fenêtre « image dans l'image » : seule la vidéo est montrée. */
     val pip = MutableStateFlow(false)
     /** Page « Réseau » (ordinateurs, NAS) ouverte par-dessus l'accueil. */
@@ -414,6 +416,8 @@ fun TvCastApp() {
     if (ambianceOpen) AmbianceSheet(onDismiss = { Nav.ambiance.value = false })
     val sourcesOpen by Nav.sources.collectAsState()
     if (sourcesOpen) SourcesSheet(onDismiss = { Nav.sources.value = false })
+    val sourceAdded by Nav.sourceAdded.collectAsState()
+    if (sourceAdded) SourceAddedDialog { Nav.sourceAdded.value = false }
     val showHelp by Nav.help.collectAsState()
     if (showHelp) HelpSheet(onDismiss = { Nav.help.value = false })
     if (showLink) LinkDialog(onDismiss = { showLink = false })
@@ -567,7 +571,12 @@ private fun LinkDialog(onDismiss: () -> Unit) {
         scope.launch {
             if (com.rollandostudio.universaltvcast.data.IptvStore.looksLikeList(url)) {
                 runCatching { com.rollandostudio.universaltvcast.data.IptvStore.import(ctx, url) }
-                    .onSuccess { Nav.iptv.value = it.id; onDismiss() }
+                    .onSuccess {
+                        Nav.iptv.value = it.id; onDismiss()
+                        // Un abonnement (films, séries) : la première fois, on dit où tout retrouver.
+                        if (com.rollandostudio.universaltvcast.data.Xtream.accountOf(url) != null &&
+                            com.rollandostudio.universaltvcast.data.OpenSources.firstAdd()) Nav.sourceAdded.value = true
+                    }
                     .onFailure { error = errLoad; busy = false }
             } else cast(url)
         }

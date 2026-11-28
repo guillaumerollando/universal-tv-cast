@@ -539,7 +539,10 @@
   "clock_bg_glow": "Poświata",
   "clock_bg_gradient": "Gradient",
   "clock_bg_black": "Czarny",
-  "amb_custom": "Inny…"
+  "amb_custom": "Inny…",
+  "sources_added_title": "Dodano źródło",
+  "sources_added_body": "Jego filmy i wideo są na stronie głównej i w Szukaj. Aby później dodać lub usunąć źródło: Szukaj (ikona w prawym górnym rogu) lub Ustawienia › Źródła.",
+  "sources_added_ok": "Rozumiem"
  },
  "plurals": {
   "browser_found": {

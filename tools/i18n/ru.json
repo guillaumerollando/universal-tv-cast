@@ -539,7 +539,10 @@
   "clock_bg_glow": "Свечение",
   "clock_bg_gradient": "Градиент",
   "clock_bg_black": "Чёрный",
-  "amb_custom": "Другое…"
+  "amb_custom": "Другое…",
+  "sources_added_title": "Источник добавлен",
+  "sources_added_body": "Его фильмы и видео — на главной и в Поиске. Чтобы потом добавить или убрать источник: Поиск (значок справа вверху) или Настройки › Источники.",
+  "sources_added_ok": "Понятно"
  },
  "plurals": {
   "browser_found": {

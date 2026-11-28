@@ -541,6 +541,9 @@
     <string name="clock_bg_gradient">تدرج</string>
     <string name="clock_bg_black">أسود</string>
     <string name="amb_custom">أخرى…</string>
+    <string name="sources_added_title">تمت إضافة المصدر</string>
+    <string name="sources_added_body">أفلامه وفيديوهاته في الصفحة الرئيسية وفي البحث. لإضافة مصدر أو إزالته لاحقًا: البحث (الأيقونة أعلى اليمين) أو الإعدادات › المصادر.</string>
+    <string name="sources_added_ok">فهمت</string>
     <plurals name="browser_found">
         <item quantity="zero">%d فيديو</item>
         <item quantity="one">%d فيديو</item>

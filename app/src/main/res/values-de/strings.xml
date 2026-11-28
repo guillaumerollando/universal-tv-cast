@@ -177,6 +177,9 @@
     <string name="clock_bg_gradient">Verlauf</string>
     <string name="clock_bg_black">Schwarz</string>
     <string name="amb_custom">Andere…</string>
+    <string name="sources_added_title">Quelle hinzugefügt</string>
+    <string name="sources_added_body">Ihre Filme und Videos findest du auf der Startseite und unter Suchen. Quellen später hinzufügen oder entfernen: Suchen (Symbol oben rechts) oder Einstellungen › Quellen.</string>
+    <string name="sources_added_ok">Verstanden</string>
     <string name="action_dont_show">Nicht mehr anzeigen</string>
     <string name="help_section">Fehlerbehebung</string>
     <string name="state_expanded">aufgeklappt</string>

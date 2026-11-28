@@ -539,7 +539,10 @@
   "clock_bg_glow": "Strălucire",
   "clock_bg_gradient": "Degradeu",
   "clock_bg_black": "Negru",
-  "amb_custom": "Altul…"
+  "amb_custom": "Altul…",
+  "sources_added_title": "Sursă adăugată",
+  "sources_added_body": "Filmele și videoclipurile ei sunt pe Acasă și în Caută. Ca să adaugi sau să elimini o sursă mai târziu: Caută (pictograma din dreapta sus) sau Setări › Surse.",
+  "sources_added_ok": "Am înțeles"
  },
  "plurals": {
   "browser_found": {

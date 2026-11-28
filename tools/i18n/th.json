@@ -539,7 +539,10 @@
   "clock_bg_glow": "เรืองแสง",
   "clock_bg_gradient": "ไล่สี",
   "clock_bg_black": "ดำ",
-  "amb_custom": "อื่นๆ…"
+  "amb_custom": "อื่นๆ…",
+  "sources_added_title": "เพิ่มแหล่งแล้ว",
+  "sources_added_body": "ภาพยนตร์และวิดีโออยู่ที่หน้าแรกและในค้นหา หากต้องการเพิ่มหรือลบแหล่งภายหลัง: ค้นหา (ไอคอนมุมขวาบน) หรือ การตั้งค่า › แหล่งที่มา",
+  "sources_added_ok": "เข้าใจแล้ว"
  },
  "plurals": {
   "browser_found": {

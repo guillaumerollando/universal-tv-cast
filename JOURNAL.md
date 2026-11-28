@@ -1889,3 +1889,7 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - Vérifié sur émulateur : ordre des tuiles, 4 horloges et 3 fonds dans l'aperçu ; 68 tests, 0 échec.
 - Pas vérifié : la nouvelle sélection de photos Ambiance (assez de photos par thème ?) et le cadenas (version de
   débogage = pack ouvert).
+- Fenêtre « Source ajoutée » (une seule fois) : à la première source ouverte activée ou au premier abonnement
+  importé, elle dit où voir le contenu (accueil, Rechercher) et où retrouver ses sources (Rechercher, Réglages ›
+  Sources). Vérifié sur émulateur.
+- Prix du pack soutien décidé : 2,99 € (noté dans `store/README.md`).

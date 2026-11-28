@@ -38,6 +38,14 @@ object OpenSources {
         _on.value = prefs!!.getStringSet("on", emptySet())!!.mapNotNull { runCatching { Source.valueOf(it) }.getOrNull() }.toSet()
     }
 
+    /** Vrai une seule fois : la première source ajoutée, on dit où retrouver ses sources. */
+    fun firstAdd(): Boolean {
+        val p = prefs ?: return false
+        if (p.getBoolean("hint_shown", false)) return false
+        p.edit().putBoolean("hint_shown", true).apply()
+        return true
+    }
+
     fun set(s: Source, enabled: Boolean) {
         _on.value = if (enabled) _on.value + s else _on.value - s
         prefs?.edit()?.putStringSet("on", _on.value.map { it.name }.toSet())?.apply()

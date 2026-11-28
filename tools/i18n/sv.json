@@ -539,7 +539,10 @@
   "clock_bg_glow": "Sken",
   "clock_bg_gradient": "Toning",
   "clock_bg_black": "Svart",
-  "amb_custom": "Annat…"
+  "amb_custom": "Annat…",
+  "sources_added_title": "Källa tillagd",
+  "sources_added_body": "Dess filmer och videor finns på Hem och under Sök. Lägg till eller ta bort en källa senare: Sök (ikonen uppe till höger) eller Inställningar › Källor.",
+  "sources_added_ok": "Uppfattat"
  },
  "plurals": {
   "browser_found": {

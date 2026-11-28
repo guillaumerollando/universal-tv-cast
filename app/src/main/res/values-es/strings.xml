@@ -177,6 +177,9 @@
     <string name="clock_bg_gradient">Degradado</string>
     <string name="clock_bg_black">Negro</string>
     <string name="amb_custom">Otra…</string>
+    <string name="sources_added_title">Fuente añadida</string>
+    <string name="sources_added_body">Sus películas y vídeos están en Inicio y en Buscar. Para añadir o quitar una fuente más tarde: Buscar (icono arriba a la derecha) o Ajustes › Fuentes.</string>
+    <string name="sources_added_ok">Entendido</string>
     <string name="action_dont_show">No volver a mostrar</string>
     <string name="help_section">Solución de problemas</string>
     <string name="state_expanded">abierto</string>

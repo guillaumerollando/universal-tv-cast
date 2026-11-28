@@ -541,6 +541,9 @@
     <string name="clock_bg_gradient">Gradient</string>
     <string name="clock_bg_black">Czarny</string>
     <string name="amb_custom">Inny…</string>
+    <string name="sources_added_title">Dodano źródło</string>
+    <string name="sources_added_body">Jego filmy i wideo są na stronie głównej i w Szukaj. Aby później dodać lub usunąć źródło: Szukaj (ikona w prawym górnym rogu) lub Ustawienia › Źródła.</string>
+    <string name="sources_added_ok">Rozumiem</string>
     <plurals name="browser_found">
         <item quantity="one">%d wideo</item>
         <item quantity="few">%d wideo</item>

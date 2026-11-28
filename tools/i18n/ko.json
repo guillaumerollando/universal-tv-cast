@@ -539,7 +539,10 @@
   "clock_bg_glow": "글로우",
   "clock_bg_gradient": "그라데이션",
   "clock_bg_black": "검정",
-  "amb_custom": "기타…"
+  "amb_custom": "기타…",
+  "sources_added_title": "소스가 추가되었습니다",
+  "sources_added_body": "영화와 동영상은 홈과 검색에 있습니다. 나중에 소스를 추가하거나 삭제하려면: 검색(오른쪽 위 아이콘) 또는 설정 › 소스.",
+  "sources_added_ok": "확인"
  },
  "plurals": {
   "browser_found": {

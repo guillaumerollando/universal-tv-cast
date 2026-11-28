@@ -34,7 +34,7 @@ commencer » ont été retirés (« Ne plus proposer ») pour ne montrer aucune 
 
 - **Catégorie** : Vidéo (Video Players & Editors). Tags : cast, DLNA, TV
 - **Gratuite**, sans pub. **Un produit intégré** : `pack_soutien` (achat unique, non consommable, « Pack soutien »),
-  à créer dans la Console avant la sortie (prix conseillé : ~2-3 €). Rien d'utile n'en dépend.
+  à créer dans la Console avant la sortie, **prix décidé : 2,99 €** (Guillaume, 2026-11-28 ; Google le convertit pour les autres pays). Le bouton « Soutenir · <prix> » l'affiche tout seul une fois le produit créé. Rien d'utile n'en dépend.
 - **Sécurité des données** : aucune donnée collectée ni partagée par l'appli (pas de SDK tiers, pas de compte, pas de
   mesure d'audience). Les achats passent par Google Play (déclaré par Google). Requêtes sortantes sans donnée
   personnelle : titres ou identifiants de films vers des annuaires publics (Cinemeta et Kitsu pour les affiches,

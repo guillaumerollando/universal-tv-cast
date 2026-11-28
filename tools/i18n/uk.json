@@ -539,7 +539,10 @@
   "clock_bg_glow": "Сяйво",
   "clock_bg_gradient": "Градієнт",
   "clock_bg_black": "Чорний",
-  "amb_custom": "Інше…"
+  "amb_custom": "Інше…",
+  "sources_added_title": "Джерело додано",
+  "sources_added_body": "Його фільми й відео — на головній і в Пошуку. Щоб потім додати чи прибрати джерело: Пошук (значок праворуч угорі) або Налаштування › Джерела.",
+  "sources_added_ok": "Зрозуміло"
  },
  "plurals": {
   "browser_found": {

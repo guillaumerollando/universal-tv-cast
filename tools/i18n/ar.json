@@ -539,7 +539,10 @@
   "clock_bg_glow": "توهج",
   "clock_bg_gradient": "تدرج",
   "clock_bg_black": "أسود",
-  "amb_custom": "أخرى…"
+  "amb_custom": "أخرى…",
+  "sources_added_title": "تمت إضافة المصدر",
+  "sources_added_body": "أفلامه وفيديوهاته في الصفحة الرئيسية وفي البحث. لإضافة مصدر أو إزالته لاحقًا: البحث (الأيقونة أعلى اليمين) أو الإعدادات › المصادر.",
+  "sources_added_ok": "فهمت"
  },
  "plurals": {
   "browser_found": {

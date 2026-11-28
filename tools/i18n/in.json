@@ -539,7 +539,10 @@
   "clock_bg_glow": "Pendar",
   "clock_bg_gradient": "Gradasi",
   "clock_bg_black": "Hitam",
-  "amb_custom": "Lainnya…"
+  "amb_custom": "Lainnya…",
+  "sources_added_title": "Sumber ditambahkan",
+  "sources_added_body": "Film dan videonya ada di Beranda dan Cari. Untuk menambah atau menghapus sumber nanti: Cari (ikon kanan atas) atau Setelan › Sumber.",
+  "sources_added_ok": "Mengerti"
  },
  "plurals": {
   "browser_found": {

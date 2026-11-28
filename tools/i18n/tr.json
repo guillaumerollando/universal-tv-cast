@@ -539,7 +539,10 @@
   "clock_bg_glow": "Işıltı",
   "clock_bg_gradient": "Geçiş",
   "clock_bg_black": "Siyah",
-  "amb_custom": "Diğer…"
+  "amb_custom": "Diğer…",
+  "sources_added_title": "Kaynak eklendi",
+  "sources_added_body": "Filmleri ve videoları Ana sayfa'da ve Ara'da. Daha sonra kaynak eklemek veya kaldırmak için: Ara (sağ üstteki simge) ya da Ayarlar › Kaynaklar.",
+  "sources_added_ok": "Anladım"
  },
  "plurals": {
   "browser_found": {

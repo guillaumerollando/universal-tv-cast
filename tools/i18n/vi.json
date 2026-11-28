@@ -539,7 +539,10 @@
   "clock_bg_glow": "Phát sáng",
   "clock_bg_gradient": "Chuyển màu",
   "clock_bg_black": "Đen",
-  "amb_custom": "Khác…"
+  "amb_custom": "Khác…",
+  "sources_added_title": "Đã thêm nguồn",
+  "sources_added_body": "Phim và video của nguồn có ở Trang chủ và Tìm kiếm. Để thêm hoặc xóa nguồn sau này: Tìm kiếm (biểu tượng góc trên phải) hoặc Cài đặt › Nguồn.",
+  "sources_added_ok": "Đã hiểu"
  },
  "plurals": {
   "browser_found": {

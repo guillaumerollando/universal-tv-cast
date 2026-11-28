@@ -434,6 +434,10 @@ internal fun SourcesSheet(onDismiss: () -> Unit) {
     val open by OpenSources.on.collectAsState()
     val free by Xtream.freeOn.collectAsState()
     val c = MaterialTheme.colorScheme
+    // Première source ajoutée : une petite fenêtre dit où la retrouver (personne ne doit se sentir perdu).
+    var hint by remember { mutableStateOf(false) }
+    fun added(on: Boolean) { if (on && OpenSources.firstAdd()) hint = true }
+    if (hint) SourceAddedDialog { hint = false }
     ModalBottomSheet(onDismissRequest = onDismiss) {
         LazyColumn(contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 32.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             item {
@@ -441,9 +445,9 @@ internal fun SourcesSheet(onDismiss: () -> Unit) {
                 Text(stringResource(R.string.sources_sub), style = MaterialTheme.typography.bodyMedium, color = c.onSurfaceVariant)
                 Spacer(Modifier.height(6.dp))
             }
-            item { SourceRow(Icons.Rounded.Movie, stringResource(R.string.free_title), stringResource(R.string.free_sub), free) { Xtream.setFree(it) } }
-            item { SourceRow(Icons.Rounded.PlayCircle, "PeerTube", stringResource(R.string.sources_peertube), OpenSources.Source.PEERTUBE in open) { OpenSources.set(OpenSources.Source.PEERTUBE, it) } }
-            item { SourceRow(Icons.Rounded.AccountBalance, "Internet Archive", stringResource(R.string.sources_archive), OpenSources.Source.ARCHIVE in open) { OpenSources.set(OpenSources.Source.ARCHIVE, it) } }
+            item { SourceRow(Icons.Rounded.Movie, stringResource(R.string.free_title), stringResource(R.string.free_sub), free) { Xtream.setFree(it); added(it) } }
+            item { SourceRow(Icons.Rounded.PlayCircle, "PeerTube", stringResource(R.string.sources_peertube), OpenSources.Source.PEERTUBE in open) { OpenSources.set(OpenSources.Source.PEERTUBE, it); added(it) } }
+            item { SourceRow(Icons.Rounded.AccountBalance, "Internet Archive", stringResource(R.string.sources_archive), OpenSources.Source.ARCHIVE in open) { OpenSources.set(OpenSources.Source.ARCHIVE, it); added(it) } }
             item {
                 Spacer(Modifier.height(6.dp))
                 Text(stringResource(R.string.sources_yours), style = MaterialTheme.typography.titleSmall, color = c.primary)
@@ -541,4 +545,17 @@ private fun TvHitCard(t: TvHit) {
                 modifier = Modifier.padding(horizontal = 2.dp))
         }
     }
+}
+
+
+/** « Source ajoutée » : où voir son contenu, et où retrouver ses sources. Montrée une seule fois. */
+@Composable
+internal fun SourceAddedDialog(onDismiss: () -> Unit) {
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(Icons.Rounded.Tune, null) },
+        title = { Text(stringResource(R.string.sources_added_title)) },
+        text = { Text(stringResource(R.string.sources_added_body)) },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.sources_added_ok)) } },
+    )
 }

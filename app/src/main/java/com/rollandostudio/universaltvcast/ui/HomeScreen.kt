@@ -344,6 +344,9 @@ fun HomeScreen(
                 item { ActionTile(Icons.Rounded.LiveTv, stringResource(R.string.home_lists_tile), ActionColors.LISTS) { Nav.iptv.value = "" } }
                 item { ActionTile(Icons.Rounded.FolderOpen, stringResource(R.string.home_files_tile), ActionColors.FILES, onClick = onPickFile) }
                 item { AmbianceTile() }
+                val presets = com.rollandostudio.universaltvcast.cast.Ambiance.presets.value
+                if (com.rollandostudio.universaltvcast.data.Supporter.unlocked.value)
+                    items(presets.size, key = { "p" + presets[it].name }) { i -> PresetTile(presets[i]) }
             }
         }
 
@@ -634,10 +637,13 @@ private fun CastActionsRow(
     // Ambiance (pack soutien) : en deuxième pour qui a le pack (c'est son petit plaisir) ; sinon après les façons de
     // caster du quotidien, avec un cadenas.
     val unlocked by com.rollandostudio.universaltvcast.data.Supporter.unlocked.collectAsState()
+    val presets by com.rollandostudio.universaltvcast.cast.Ambiance.presets.collectAsState()
     LazyRow(contentPadding = PaddingValues(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
         // Pas de « Sites web » ici : l'onglet Navigateur est là pour ça (il reste dans les grandes tuiles du nouveau venu).
         item { ActionTile(Icons.Rounded.PhotoLibrary, stringResource(R.string.home_photos), ActionColors.ALBUM, onClick = onPickPhotos) }
         if (unlocked) item(key = "amb") { AmbianceTile() }
+        // Ambiances favorites, juste après : un toucher et elles partent sur la télé.
+        if (unlocked) items(presets.size, key = { "p" + presets[it].name }) { i -> PresetTile(presets[i]) }
         item { ActionTile(Icons.Rounded.Lan, stringResource(R.string.home_network), ActionColors.NETWORK, onClick = onNetwork) }
         item { ActionTile(Icons.Rounded.Link, stringResource(R.string.home_link_tile), ActionColors.LINK, highlight = highlightLink, onClick = onPasteLink) }
         if (!unlocked) item(key = "amb") { AmbianceTile() }
@@ -654,6 +660,25 @@ private fun ActionTile(icon: ImageVector, label: String, color: Long, highlight:
         Icon(icon, null, tint = Color.White, modifier = Modifier.align(Alignment.Center).padding(bottom = 14.dp).size(24.dp))
         if (locked) Icon(Icons.Rounded.Lock, stringResource(R.string.pack_locked), tint = Color.White.copy(alpha = 0.85f),
             modifier = Modifier.align(Alignment.TopEnd).padding(6.dp).size(14.dp))
+    }
+}
+
+/** Une ambiance favorite : sa tuile à la couleur de l'Ambiance ; sans télé choisie, on la choisit d'abord. */
+@Composable
+private fun PresetTile(p: com.rollandostudio.universaltvcast.cast.Ambiance.Preset) {
+    val A = com.rollandostudio.universaltvcast.cast.Ambiance
+    // Le nom en entier (sur deux lignes) : c'est lui qui distingue les ambiances. Appui long : la retirer.
+    FavTileFrame(p.name, listOf(stringResource(R.string.amb_radio_forget) to { A.deletePreset(p) }), onClick = {
+        if (TvCast.state.value.renderer == null) { A.applyPreset(p, start = false); Nav.tvs.value = true }
+        else { A.applyPreset(p, start = true); Nav.tab.value = Tab.PLAYER }
+    }, background = favBrush(Color(AMBIANCE_COLOR)), showLabel = false) {
+        Column(Modifier.fillMaxSize().padding(horizontal = 8.dp, vertical = 6.dp), horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center) {
+            Icon(Icons.Rounded.AutoAwesome, null, tint = Color.White.copy(alpha = 0.85f), modifier = Modifier.size(16.dp))
+            Spacer(Modifier.height(3.dp))
+            Text(p.name, style = MaterialTheme.typography.labelSmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.Bold, lineHeight = 13.sp),
+                color = Color.White, maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+        }
     }
 }
 

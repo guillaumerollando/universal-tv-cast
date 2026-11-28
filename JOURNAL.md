@@ -1923,3 +1923,4 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
 - **Mes ambiances** : « Garder cette ambiance » (photos, musique et radio, heure, durée) sous un nom proposé
   (« Paysages · FIP Reggae ») ; toucher la lance sur la télé, appui long pour la retirer (12 au plus).
 - Vérifié sur émulateur : recherche « reggae », enregistrement d'une ambiance ; 68 tests, 0 échec.
+- Ambiances favorites aussi sur l'accueil : une tuile chacune dans « Caster autre chose », juste après Ambiance (nom sur deux lignes ; toucher = lancer sur la télé, appui long = retirer).

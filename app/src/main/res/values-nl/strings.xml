@@ -238,7 +238,7 @@
     <string name="phase_loading">Video voorbereiden…</string>
     <string name="phase_sending">Naar de tv sturen…</string>
     <string name="phase_buffering">Laden op de tv…</string>
-    <string name="phase_playing">Speelt af op de tv</string>
+    <string name="phase_playing">Speelt af</string>
     <string name="phase_paused">Gepauzeerd</string>
     <string name="phase_stopped">Gestopt</string>
     <string name="phase_ready">Klaar om te casten</string>

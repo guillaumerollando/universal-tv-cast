@@ -102,7 +102,7 @@
     <string name="phase_loading">वीडियो तैयार हो रहा है…</string>
     <string name="phase_sending">टीवी पर भेजा जा रहा है…</string>
     <string name="phase_buffering">टीवी पर लोड हो रहा है…</string>
-    <string name="phase_playing">टीवी पर चल रहा है</string>
+    <string name="phase_playing">चल रहा है</string>
     <string name="phase_paused">रुका हुआ</string>
     <string name="phase_stopped">बंद</string>
     <string name="phase_ready">कास्ट के लिए तैयार</string>

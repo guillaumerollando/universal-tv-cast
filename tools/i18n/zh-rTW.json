@@ -101,7 +101,7 @@
   "phase_loading": "正在準備影片…",
   "phase_sending": "正在傳送到電視…",
   "phase_buffering": "電視正在載入…",
-  "phase_playing": "正在電視上播放",
+  "phase_playing": "正在播放",
   "phase_paused": "已暫停",
   "phase_stopped": "已停止",
   "phase_ready": "準備投放",

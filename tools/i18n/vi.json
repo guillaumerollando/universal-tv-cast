@@ -101,7 +101,7 @@
   "phase_loading": "Đang chuẩn bị video…",
   "phase_sending": "Đang gửi lên TV…",
   "phase_buffering": "Đang tải trên TV…",
-  "phase_playing": "Đang phát trên TV",
+  "phase_playing": "Đang phát",
   "phase_paused": "Đã tạm dừng",
   "phase_stopped": "Đã dừng",
   "phase_ready": "Sẵn sàng truyền",

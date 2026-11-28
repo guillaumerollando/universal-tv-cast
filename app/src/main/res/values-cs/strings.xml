@@ -102,7 +102,7 @@
     <string name="phase_loading">Připravuji video…</string>
     <string name="phase_sending">Posílám do televize…</string>
     <string name="phase_buffering">Načítání v televizi…</string>
-    <string name="phase_playing">Hraje v televizi</string>
+    <string name="phase_playing">Přehrává se</string>
     <string name="phase_paused">Pozastaveno</string>
     <string name="phase_stopped">Zastaveno</string>
     <string name="phase_ready">Připraveno k odeslání</string>

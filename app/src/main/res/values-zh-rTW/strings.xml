@@ -102,7 +102,7 @@
     <string name="phase_loading">正在準備影片…</string>
     <string name="phase_sending">正在傳送到電視…</string>
     <string name="phase_buffering">電視正在載入…</string>
-    <string name="phase_playing">正在電視上播放</string>
+    <string name="phase_playing">正在播放</string>
     <string name="phase_paused">已暫停</string>
     <string name="phase_stopped">已停止</string>
     <string name="phase_ready">準備投放</string>

@@ -102,7 +102,7 @@
     <string name="phase_loading">Förbereder videon…</string>
     <string name="phase_sending">Skickar till tv:n…</string>
     <string name="phase_buffering">Laddar på tv:n…</string>
-    <string name="phase_playing">Spelas på tv:n</string>
+    <string name="phase_playing">Spelas</string>
     <string name="phase_paused">Pausad</string>
     <string name="phase_stopped">Stoppad</string>
     <string name="phase_ready">Redo att casta</string>

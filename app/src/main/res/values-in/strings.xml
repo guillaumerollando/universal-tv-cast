@@ -102,7 +102,7 @@
     <string name="phase_loading">Menyiapkan video…</string>
     <string name="phase_sending">Mengirim ke TV…</string>
     <string name="phase_buffering">Memuat di TV…</string>
-    <string name="phase_playing">Diputar di TV</string>
+    <string name="phase_playing">Sedang diputar</string>
     <string name="phase_paused">Dijeda</string>
     <string name="phase_stopped">Dihentikan</string>
     <string name="phase_ready">Siap di-cast</string>

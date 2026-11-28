@@ -101,7 +101,7 @@
   "phase_loading": "동영상 준비 중…",
   "phase_sending": "TV로 보내는 중…",
   "phase_buffering": "TV에서 로드 중…",
-  "phase_playing": "TV에서 재생 중",
+  "phase_playing": "재생 중",
   "phase_paused": "일시정지됨",
   "phase_stopped": "정지됨",
   "phase_ready": "전송 준비 완료",

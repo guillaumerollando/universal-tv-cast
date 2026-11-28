@@ -102,7 +102,7 @@
     <string name="phase_loading">Video hazırlanıyor…</string>
     <string name="phase_sending">TV\'ye gönderiliyor…</string>
     <string name="phase_buffering">TV\'de yükleniyor…</string>
-    <string name="phase_playing">TV\'de oynatılıyor</string>
+    <string name="phase_playing">Oynatılıyor</string>
     <string name="phase_paused">Duraklatıldı</string>
     <string name="phase_stopped">Durduruldu</string>
     <string name="phase_ready">Yansıtmaya hazır</string>

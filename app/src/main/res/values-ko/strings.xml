@@ -102,7 +102,7 @@
     <string name="phase_loading">동영상 준비 중…</string>
     <string name="phase_sending">TV로 보내는 중…</string>
     <string name="phase_buffering">TV에서 로드 중…</string>
-    <string name="phase_playing">TV에서 재생 중</string>
+    <string name="phase_playing">재생 중</string>
     <string name="phase_paused">일시정지됨</string>
     <string name="phase_stopped">정지됨</string>
     <string name="phase_ready">전송 준비 완료</string>

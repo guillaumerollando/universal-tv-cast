@@ -101,7 +101,7 @@
   "phase_loading": "Se pregătește videoclipul…",
   "phase_sending": "Se trimite la TV…",
   "phase_buffering": "Se încarcă pe TV…",
-  "phase_playing": "Se redă pe TV",
+  "phase_playing": "În redare",
   "phase_paused": "Întrerupt",
   "phase_stopped": "Oprit",
   "phase_ready": "Gata de proiectare",

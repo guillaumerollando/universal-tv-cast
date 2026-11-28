@@ -101,7 +101,7 @@
   "phase_loading": "Förbereder videon…",
   "phase_sending": "Skickar till tv:n…",
   "phase_buffering": "Laddar på tv:n…",
-  "phase_playing": "Spelas på tv:n",
+  "phase_playing": "Spelas",
   "phase_paused": "Pausad",
   "phase_stopped": "Stoppad",
   "phase_ready": "Redo att casta",

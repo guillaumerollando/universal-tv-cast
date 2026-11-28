@@ -101,7 +101,7 @@
   "phase_loading": "جارٍ تجهيز الفيديو…",
   "phase_sending": "جارٍ الإرسال إلى التلفزيون…",
   "phase_buffering": "جارٍ التحميل على التلفزيون…",
-  "phase_playing": "قيد التشغيل على التلفزيون",
+  "phase_playing": "قيد التشغيل",
   "phase_paused": "متوقف مؤقتًا",
   "phase_stopped": "متوقف",
   "phase_ready": "جاهز للبث",

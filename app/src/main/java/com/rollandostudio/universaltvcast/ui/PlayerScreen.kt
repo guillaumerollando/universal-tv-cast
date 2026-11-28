@@ -168,15 +168,8 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
                         Icon(if (state.active) Icons.Rounded.Tv else Icons.Rounded.Movie, null, Modifier.size(44.dp), tint = c.onPrimaryContainer)
                     }
                 }
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    phaseLabel(state), style = MaterialTheme.typography.titleMedium, color = c.onPrimaryContainer,
-                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
-                )
-                state.renderer?.let {
-                    Text(stringResource(R.string.player_on_tv, it.name), style = MaterialTheme.typography.bodyMedium,
-                        color = c.onPrimaryContainer.copy(alpha = 0.8f))
-                }
+                Spacer(Modifier.height(12.dp))
+                Box(Modifier.semantics { liveRegion = LiveRegionMode.Polite }) { CastStatus(state, c.onPrimaryContainer) }
             }
             // Le liseré qui fait le tour du cadre : le même pour une chaîne, un film, une vidéo.
             if (state.phase == Phase.PLAYING) CastRim(c.primary, 28.dp, Modifier.matchParentSize())
@@ -367,22 +360,30 @@ private fun FilmHeader(state: CastState) {
                 )
             }
             Spacer(Modifier.height(8.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                if (state.active) EqualizerBars(active = state.phase == Phase.PLAYING, color = MaterialTheme.colorScheme.primary)
-                else LiveDot(active = false)
-                Spacer(Modifier.width(8.dp))
-                Text(
-                    phaseLabel(state) + (state.renderer?.let { " · " + it.name } ?: ""),
-                    style = MaterialTheme.typography.labelLarge, color = Color.White.copy(alpha = 0.9f),
-                    maxLines = 1, overflow = TextOverflow.Ellipsis,
-                )
-            }
+            CastStatus(state, Color.White.copy(alpha = 0.92f))
         }
         // Film, série, vidéo d'un site : pas de halo sur l'image, seulement le liseré qui fait le tour (comme partout).
         if (state.phase == Phase.PLAYING && state.active && !state.onPhone) CastRim(MaterialTheme.colorScheme.primary, 28.dp, Modifier.matchParentSize())
         if (state.phase == Phase.LOADING || state.phase == Phase.SENDING || state.phase == Phase.BUFFERING) {
             LinearProgressIndicator(Modifier.fillMaxWidth().align(Alignment.BottomCenter))
         }
+    }
+}
+
+/**
+ * Ligne d'état sous chaque cadre (chaîne, film, vidéo) : l'indicateur (barres qui dansent en lecture, immobiles en
+ * pause) puis « En lecture · Salon ». La même partout.
+ */
+@Composable
+private fun CastStatus(state: CastState, color: Color) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        if (state.active) EqualizerBars(active = state.phase == Phase.PLAYING, color = MaterialTheme.colorScheme.primary)
+        else LiveDot(active = false)
+        Spacer(Modifier.width(8.dp))
+        Text(
+            phaseLabel(state) + (state.renderer?.takeIf { state.active }?.let { " · " + it.name } ?: ""),
+            style = MaterialTheme.typography.labelLarge, color = color, maxLines = 1, overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 
@@ -452,18 +453,14 @@ private fun ChannelHeader(s: CastState) {
             name = m.channel ?: m.title, logo = m.posterUrl, streamUrl = m.url, pad = 56.dp,
             textStyle = MaterialTheme.typography.displaySmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
             modifier = Modifier.matchParentSize(),
-            underlay = if (playing) ({ ink -> CastHalo(ink, size = 360.dp) }) else null,
+            underlay = if (playing) ({ _ -> CastHalo(MaterialTheme.colorScheme.primary, size = 360.dp) }) else null,
         )
-        if (playing) CastRim(Color.White.copy(alpha = 0.8f), 28.dp, Modifier.matchParentSize())
+        // Couleur d'accent, comme partout : visible aussi sur les logos à fond blanc.
+        if (playing) CastRim(MaterialTheme.colorScheme.primary, 28.dp, Modifier.matchParentSize())
         // Voile sombre en bas : l'état de la lecture reste lisible sur n'importe quel fond.
         Box(Modifier.align(Alignment.BottomCenter).fillMaxWidth().height(64.dp)
             .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(alpha = 0.55f)))))
-        Column(Modifier.align(Alignment.BottomStart).padding(18.dp)) {
-            Text(
-                phaseLabel(s) + (s.renderer?.let { " · " + it.name } ?: ""),
-                style = MaterialTheme.typography.labelLarge, color = Color.White.copy(alpha = 0.92f), maxLines = 1, overflow = TextOverflow.Ellipsis,
-            )
-        }
+        Box(Modifier.align(Alignment.BottomStart).padding(18.dp)) { CastStatus(s, Color.White.copy(alpha = 0.92f)) }
         if (s.phase == Phase.LOADING || s.phase == Phase.SENDING || s.phase == Phase.BUFFERING) {
             LinearProgressIndicator(Modifier.fillMaxWidth().align(Alignment.BottomCenter))
         }

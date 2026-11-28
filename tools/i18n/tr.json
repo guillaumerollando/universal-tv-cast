@@ -101,7 +101,7 @@
   "phase_loading": "Video hazırlanıyor…",
   "phase_sending": "TV'ye gönderiliyor…",
   "phase_buffering": "TV'de yükleniyor…",
-  "phase_playing": "TV'de oynatılıyor",
+  "phase_playing": "Oynatılıyor",
   "phase_paused": "Duraklatıldı",
   "phase_stopped": "Durduruldu",
   "phase_ready": "Yansıtmaya hazır",

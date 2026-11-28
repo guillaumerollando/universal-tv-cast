@@ -101,7 +101,7 @@
   "phase_loading": "वीडियो तैयार हो रहा है…",
   "phase_sending": "टीवी पर भेजा जा रहा है…",
   "phase_buffering": "टीवी पर लोड हो रहा है…",
-  "phase_playing": "टीवी पर चल रहा है",
+  "phase_playing": "चल रहा है",
   "phase_paused": "रुका हुआ",
   "phase_stopped": "बंद",
   "phase_ready": "कास्ट के लिए तैयार",

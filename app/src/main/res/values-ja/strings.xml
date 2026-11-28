@@ -102,7 +102,7 @@
     <string name="phase_loading">動画を準備中…</string>
     <string name="phase_sending">テレビに送信中…</string>
     <string name="phase_buffering">テレビで読み込み中…</string>
-    <string name="phase_playing">テレビで再生中</string>
+    <string name="phase_playing">再生中</string>
     <string name="phase_paused">一時停止中</string>
     <string name="phase_stopped">停止</string>
     <string name="phase_ready">キャストの準備完了</string>

@@ -101,7 +101,7 @@
   "phase_loading": "กำลังเตรียมวิดีโอ…",
   "phase_sending": "กำลังส่งไปยังทีวี…",
   "phase_buffering": "กำลังโหลดบนทีวี…",
-  "phase_playing": "กำลังเล่นบนทีวี",
+  "phase_playing": "กำลังเล่น",
   "phase_paused": "หยุดชั่วคราว",
   "phase_stopped": "หยุดแล้ว",
   "phase_ready": "พร้อมแคสต์",

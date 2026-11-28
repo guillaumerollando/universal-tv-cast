@@ -347,7 +347,7 @@ S = {
 "phase_loading": ["Preparing the video…", "Préparation de la vidéo…", "Preparando el vídeo…", "Video wird vorbereitet…", "Preparazione del video…", "Video voorbereiden…", "Preparando o vídeo…"],
 "phase_sending": ["Sending to the TV…", "Envoi à la télé…", "Enviando a la TV…", "Wird an den Fernseher gesendet…", "Invio alla TV…", "Naar de tv sturen…", "Enviando para a TV…"],
 "phase_buffering": ["Loading on the TV…", "Chargement sur la télé…", "Cargando en la TV…", "Lädt auf dem Fernseher…", "Caricamento sulla TV…", "Laden op de tv…", "Carregando na TV…"],
-"phase_playing": ["Playing on the TV", "Lecture sur la télé", "Reproduciendo en la TV", "Läuft auf dem Fernseher", "In riproduzione sulla TV", "Speelt af op de tv", "Tocando na TV"],
+"phase_playing": ["Playing", "En lecture", "Reproduciendo", "Wiedergabe", "In riproduzione", "Speelt af", "Reproduzindo"],
 "phase_paused": ["Paused", "En pause", "En pausa", "Pausiert", "In pausa", "Gepauzeerd", "Pausado"],
 "phase_stopped": ["Stopped", "Arrêté", "Detenido", "Gestoppt", "Interrotto", "Gestopt", "Parado"],
 "phase_ready": ["Ready to cast", "Prêt à caster", "Listo para enviar", "Bereit zum Streamen", "Pronto da trasmettere", "Klaar om te casten", "Pronto para transmitir"],

@@ -101,7 +101,7 @@
   "phase_loading": "Menyiapkan video…",
   "phase_sending": "Mengirim ke TV…",
   "phase_buffering": "Memuat di TV…",
-  "phase_playing": "Diputar di TV",
+  "phase_playing": "Sedang diputar",
   "phase_paused": "Dijeda",
   "phase_stopped": "Dihentikan",
   "phase_ready": "Siap di-cast",

@@ -1675,3 +1675,7 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   Halo : 1,8 s par souffle ; liseré : un tour en 5,5 s ; plus lents en économie d'énergie, immobiles (bien visibles)
   si les animations sont coupées dans Android.
 - Vérifié sur émulateur (fausse télé) : chaîne et cadre par défaut, par captures. Pas vu : un film avec image.
+- Corrigé (retour de Guillaume) : rien ne se voyait sur ses chaînes, dont les logos sont sur fond blanc (Ciné Nanar,
+  TV3V, Nova, France 2) : le liseré y était blanc, le halo gris. Halo et liseré sont maintenant à la couleur d'accent
+  partout. Une seule ligne d'état sous les trois cadres (`CastStatus`) : barres qui dansent (immobiles en pause) puis
+  « En lecture · nom de la télé » ; « Lecture sur la télé » devient « En lecture » (23 langues).

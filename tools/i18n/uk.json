@@ -101,7 +101,7 @@
   "phase_loading": "Готуємо відео…",
   "phase_sending": "Надсилання на телевізор…",
   "phase_buffering": "Завантаження на телевізорі…",
-  "phase_playing": "Грає на телевізорі",
+  "phase_playing": "Відтворення",
   "phase_paused": "Пауза",
   "phase_stopped": "Зупинено",
   "phase_ready": "Готово до трансляції",

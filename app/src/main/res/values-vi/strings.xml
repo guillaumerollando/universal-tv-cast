@@ -102,7 +102,7 @@
     <string name="phase_loading">Đang chuẩn bị video…</string>
     <string name="phase_sending">Đang gửi lên TV…</string>
     <string name="phase_buffering">Đang tải trên TV…</string>
-    <string name="phase_playing">Đang phát trên TV</string>
+    <string name="phase_playing">Đang phát</string>
     <string name="phase_paused">Đã tạm dừng</string>
     <string name="phase_stopped">Đã dừng</string>
     <string name="phase_ready">Sẵn sàng truyền</string>

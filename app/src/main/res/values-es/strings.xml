@@ -238,7 +238,7 @@
     <string name="phase_loading">Preparando el vídeo…</string>
     <string name="phase_sending">Enviando a la TV…</string>
     <string name="phase_buffering">Cargando en la TV…</string>
-    <string name="phase_playing">Reproduciendo en la TV</string>
+    <string name="phase_playing">Reproduciendo</string>
     <string name="phase_paused">En pausa</string>
     <string name="phase_stopped">Detenido</string>
     <string name="phase_ready">Listo para enviar</string>

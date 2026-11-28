@@ -101,7 +101,7 @@
   "phase_loading": "Przygotowuję wideo…",
   "phase_sending": "Wysyłam na telewizor…",
   "phase_buffering": "Ładowanie na telewizorze…",
-  "phase_playing": "Odtwarzanie na telewizorze",
+  "phase_playing": "Odtwarzanie",
   "phase_paused": "Wstrzymano",
   "phase_stopped": "Zatrzymano",
   "phase_ready": "Gotowe do przesłania",

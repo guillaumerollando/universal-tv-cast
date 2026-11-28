@@ -101,7 +101,7 @@
   "phase_loading": "Připravuji video…",
   "phase_sending": "Posílám do televize…",
   "phase_buffering": "Načítání v televizi…",
-  "phase_playing": "Hraje v televizi",
+  "phase_playing": "Přehrává se",
   "phase_paused": "Pozastaveno",
   "phase_stopped": "Zastaveno",
   "phase_ready": "Připraveno k odeslání",

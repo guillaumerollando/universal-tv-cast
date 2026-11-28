@@ -21,6 +21,8 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
+import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 
 /** Vrai si les animations décoratives doivent s'arrêter : coupées dans Android (accessibilité), ou économie d'énergie. */
@@ -35,21 +37,30 @@ fun animationsOff(): Boolean {
     return system || saving
 }
 
-/** Ondes qui partent de la télé pendant la lecture : le signal envoyé par le téléphone. */
+/**
+ * Ondes qui partent de la télé pendant la lecture : le signal envoyé par le téléphone. Elles débordent librement
+ * de leur place (taille imposée, quel que soit le cadre) : c'est le cadre autour qui les coupe à ses bords.
+ */
 @Composable
 fun CastWaves(color: Color, modifier: Modifier = Modifier, size: Dp = 170.dp, inner: Dp = 40.dp) {
     val still = animationsOff()
     val t = rememberInfiniteTransition(label = "ondes")
-    val p by t.animateFloat(0f, 1f, infiniteRepeatable(tween(2400, easing = LinearEasing)), label = "phase")
-    Canvas(modifier.size(size)) {
+    val p by t.animateFloat(0f, 1f, infiniteRepeatable(tween(2600, easing = LinearEasing)), label = "phase")
+    Canvas(modifier.requiredSize(size)) {
         val maxR = this.size.minDimension / 2
-        val minR = inner.toPx() // les ondes partent du bord de la télé, jamais de l'intérieur
+        val minR = inner.toPx() // les ondes partent du bord de ce qu'elles entourent, jamais de l'intérieur
+        // Un halo doux au centre, puis trois anneaux qui s'éloignent en s'effaçant.
+        drawCircle(
+            Brush.radialGradient(listOf(color.copy(alpha = color.alpha * 0.35f), Color.Transparent), center, minR * 1.9f),
+            radius = minR * 1.9f,
+        )
         for (i in 0 until 3) {
             val f = if (still) (i + 1) / 3.5f else (p + i / 3f) % 1f
+            val fade = (1f - f) * (1f - f)
             drawCircle(
-                color = color.copy(alpha = (1f - f) * 0.5f),
+                color = color.copy(alpha = color.alpha * fade),
                 radius = minR + (maxR - minR) * f,
-                style = Stroke(width = 2.5.dp.toPx()),
+                style = Stroke(width = (3.dp.toPx() * (1f - f * 0.5f))),
             )
         }
     }

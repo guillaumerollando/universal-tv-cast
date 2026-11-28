@@ -161,9 +161,12 @@ fun PlayerScreen(state: CastState, onChooseTv: () -> Unit) {
             contentAlignment = Alignment.Center,
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.size(96.dp)) {
-                    if (state.phase == Phase.PLAYING) CastWaves(c.onPrimaryContainer, size = 150.dp)
-                    Icon(if (state.active) Icons.Rounded.Tv else Icons.Rounded.Movie, null, Modifier.size(56.dp), tint = c.onPrimaryContainer)
+                // La télé dans un disque, les ondes qui en partent sur tout le cadre pendant la lecture.
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.size(88.dp)) {
+                    if (state.phase == Phase.PLAYING) CastWaves(c.onPrimaryContainer.copy(alpha = 0.5f), size = 420.dp, inner = 44.dp)
+                    Box(Modifier.size(88.dp).clip(CircleShape).background(c.onPrimaryContainer.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
+                        Icon(if (state.active) Icons.Rounded.Tv else Icons.Rounded.Movie, null, Modifier.size(44.dp), tint = c.onPrimaryContainer)
+                    }
                 }
                 Spacer(Modifier.height(8.dp))
                 Text(
@@ -439,15 +442,14 @@ private fun ChannelHeader(s: CastState) {
             .semantics(mergeDescendants = true) { liveRegion = LiveRegionMode.Polite },
     ) {
         // Le logo de la chaîne (ou son nom) sur un fond assorti, comme sur l'accueil.
+        // En lecture sur la télé : les ondes de diffusion passent derrière le logo, sur le fond (« ça passe »).
+        val playing = s.phase == Phase.PLAYING && !s.onPhone
         ChannelArt(
             name = m.channel ?: m.title, logo = m.posterUrl, streamUrl = m.url, pad = 56.dp,
             textStyle = MaterialTheme.typography.displaySmall.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold),
-            modifier = Modifier.matchParentSize().padding(bottom = 0.dp),
+            modifier = Modifier.matchParentSize(),
+            underlay = if (playing) ({ ink -> CastWaves(ink.copy(alpha = 0.28f), size = 520.dp, inner = 70.dp) }) else null,
         )
-        // En lecture sur la télé : les ondes de diffusion autour du logo (« ça passe »).
-        if (s.phase == Phase.PLAYING && !s.onPhone) Box(Modifier.align(Alignment.Center)) {
-            CastWaves(Color.White.copy(alpha = 0.45f), size = 230.dp)
-        }
         // Voile sombre en bas : l'état de la lecture reste lisible sur n'importe quel fond.
         Box(Modifier.align(Alignment.BottomCenter).fillMaxWidth().height(64.dp)
             .background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(alpha = 0.55f)))))

@@ -1622,3 +1622,13 @@ restent dans `docs/design/` pour mémoire. Gardé : tuile claire du widget pour 
   gras et ce que c'est dessous (appareil du dossier ou « Réseau », « Chaîne TV », adresse du site). Appui long :
   personnaliser / renommer, déplacer, retirer. Vérifié sur émulateur avec un site (Arte, ajouté à gauche) et le NAS.
 - Pas vérifié à l'écran : une chaîne en favori (pas de liste de chaînes sur l'émulateur).
+
+## 2026-11-28 — Ondes de diffusion et zapper
+- Cadre par défaut (vidéo sans vignette) : les ondes étaient dessinées dans une boîte plus petite qu'elles (un mince
+  anneau écrasé). Elles ont maintenant leur taille propre et s'étendent sur tout le cadre (coupées par ses bords),
+  avec un halo ; la télé est posée dans un disque.
+- Chaîne en lecture sur la télé : les ondes passent derrière le logo (ou le nom), sur le fond de la chaîne
+  (`ChannelArt(underlay)`), sombres sur un fond clair, claires sinon.
+- Zapper : la rangée de chaînes déborde de la marge de l'écran et défile bord à bord (plus de coupure nette).
+- Vérifié sur émulateur avec la fausse télé : cadre par défaut et en-tête de chaîne (sans logo). Pas vu : un vrai
+  logo détouré dessus, le zapper rempli (pas de liste de chaînes sur l'émulateur).

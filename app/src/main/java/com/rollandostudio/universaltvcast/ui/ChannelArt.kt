@@ -141,6 +141,8 @@ fun ChannelArt(
     textStyle: TextStyle,
     pad: Dp = 10.dp,
     label: String = name,
+    /** Dessiné entre le fond et le logo (les ondes de diffusion), avec une encre lisible sur ce fond. */
+    underlay: (@Composable (ink: Color) -> Unit)? = null,
 ) {
     // Le logo fourni ; s'il manque ou ne se charge pas, celui de la même chaîne dans une liste importée.
     // Logo déjà prêt : posé tout de suite (pas de nom qui s'affiche puis se remplace à chaque retour sur l'écran).
@@ -172,6 +174,12 @@ fun ChannelArt(
         ChannelArtColors.background[url] = android.graphics.Color.argb(255, (solid.red * 255).toInt(), (solid.green * 255).toInt(), (solid.blue * 255).toInt())
     }
     Box(modifier.background(bg), contentAlignment = Alignment.Center) {
+        if (underlay != null) {
+            // Fond clair (logo sombre) : ondes sombres ; sinon claires.
+            val lightBg = l != null && l.background == null && kotlin.math.abs(l.ink - brand.luminance()) <= 0.3f && l.ink < 0.35f ||
+                l?.background?.let { it.luminance() > 0.55f } == true
+            underlay(if (lightBg) Color.Black else Color.White)
+        }
         if (l == null) Text(
             label, color = Color.White, maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center,
             style = textStyle, modifier = Modifier.padding(horizontal = pad),

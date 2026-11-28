@@ -77,6 +77,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -643,7 +644,16 @@ fun ZapSection(media: Media) {
             }
         }
         if (suggestions.isNotEmpty()) {
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap)) {
+            // Bord à bord : la rangée déborde de la marge de l'écran, les chaînes défilent jusqu'au bord sans être coupées net.
+            LazyRow(
+                Modifier.layout { m, cs ->
+                    val extra = 32.dp.roundToPx()
+                    val p = m.measure(cs.copy(minWidth = cs.maxWidth + extra, maxWidth = cs.maxWidth + extra))
+                    layout(cs.maxWidth, p.height) { p.place(-extra / 2, 0) }
+                },
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(ChannelTiles.gap),
+            ) {
                 items(suggestions, key = { "z" + it.url }) { ch ->
                     ChannelArt(
                         name = ch.name, logo = ch.logo, streamUrl = null, pad = ChannelTiles.logoPad,
